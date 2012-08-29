@@ -1,0 +1,15 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server" AsyncPostBackTimeout="5000" />
+    <asp:ContentPlaceHolder ID="PageBody" runat="server">
+    </asp:ContentPlaceHolder>
+    </form>
+</body>
+</html>

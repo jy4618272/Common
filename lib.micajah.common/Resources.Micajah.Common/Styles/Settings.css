@@ -1,0 +1,75 @@
+﻿.Nm
+{
+    color: #3c357a;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.On
+{
+    color: Green;
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+.Off
+{
+    color: Red;
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+.Rbl
+{
+    color: Black;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.Tc1, .Tc2
+{
+    border-top: #dedded 1px solid;
+    border-bottom: #dedded 1px solid;
+    padding: 5px 12px 5px 12px;
+    color: Black;
+    font-size: 11px;
+}
+
+.Tc1
+{
+    background-color: White;
+}
+
+.Tc2
+{
+    background-color: #f7f5ff;
+}
+
+a.Lm, a.Lm:hover
+{
+    font-size: 11pt;
+}
+
+a.Ml
+{
+    margin-left: 23px;
+}
+
+/* Overrides DetailMenu styles */
+.Mp_Dm td
+{
+    background-color: #f2f2f2 !important;
+    color: Black !important;
+}
+
+.Mp_Dm td a, .Mp_Dm td a:hover
+{
+    font-size: 12pt !important;
+}
+
+.Mp_Dm td.D
+{
+    background-color: #f8f8f8 !important;
+    color: #333333 !important;
+    font-size: 11px !important;
+}

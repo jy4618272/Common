@@ -1,0 +1,128 @@
+﻿.Mp_Dm 
+{
+    line-height: 1.231;
+}
+
+.Mp_Dm ul
+{
+    width: 660px;
+    font-size: 13px;
+}
+
+.Mp_Dm a
+{
+    text-decoration: none;
+    margin: 0;
+}
+
+.Mp_Dm h1
+{
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.Mp_Dm p, .Mp_Dm h2
+{
+    margin: 0;
+    padding: 0;
+    line-height: 1em;
+    font-weight: normal;
+}
+
+.Mp_Dm p
+{
+    font-size: 12px;
+    margin-top: 4px;
+    color: #999999;
+}
+
+.Mp_Dm li
+{
+    padding: 10px 0 10px 45px;
+    margin: 0;
+    border: 1px solid #fff;
+    background-image: url($Arrow.png$);
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    min-height: 27px;
+    list-style-type: none;
+}
+
+.Mp_Dm li:hover
+{
+    background-color: #ffffe8;
+    border-top: 1px solid #ffffb8;
+    border-bottom: 1px solid #ffffb8;
+}
+
+.Mp_Dm li h2
+{
+    margin-bottom: 5px;
+    margin-right: 15px;
+    vertical-align: middle;
+    display: inline;
+    font-size: 23px;
+}
+
+.Mp_Dm li a
+{
+    color: #42657c;
+    line-height: 1em;
+}
+
+.Mp_Dm li span
+{
+    padding: 1px 8px 3px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px 4px 4px 4px;
+    margin-left: 10px;
+    background-color: #d0e0eb;
+    z-index: 99999;
+    font-size: 13px;
+}
+
+.Mp_Dm li span:hover
+{
+    background-color: #88abc2;
+    color: #fff !important;
+}
+
+.Mp_Dm li span a
+{
+    color: #49708a;
+    font-size: 9px;
+}
+
+.Mp_Dm li span a:hover
+{
+    color: #fff;
+}
+
+/* ------------ Detail menu group ------------ */
+.Mp_Dm li.G
+{
+    background-image: none;
+    padding-left: 0;
+}
+
+.Mp_Dm li.G:hover
+{
+    background-color: inherit;
+    border: 1px solid #fff;
+}
+
+/* ------------ Detail menu checkbox item ------------ */
+.Mp_Dm li.Cb
+{
+    background-image: url($CheckBox.png$);
+    background-position: 5px 5px;
+}
+
+.Mp_Dm li.Cbc
+{
+    background-image: url($CheckBoxChecked.png$);
+    background-position: 5px 5px;
+}

@@ -1,0 +1,702 @@
+﻿html
+{
+    font-size: 100%;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+html, body, form
+{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    font: 13px/1.231 'Helvetica Neue' , Arial, 'Liberation Sans' , FreeSans, Sans-serif;
+    color: #555;
+}
+
+h1
+{
+    font-size: 25px;
+    font-weight: normal;
+}
+
+h2
+{
+    font-size: 23px;
+    font-weight: normal;
+}
+
+h3
+{
+    font-size: 21px;
+    font-weight: normal;
+}
+
+h4
+{
+    font-size: 19px;
+    font-weight: normal;
+}
+
+h5
+{
+    font-size: 17px;
+    font-weight: normal;
+}
+
+h6
+{
+    font-size: 15px;
+    font-weight: normal;
+}
+
+p, dl, hr, h1, h2, h3, h4, h5, h6, pre, address, fieldset, figure
+{
+    margin-bottom: 20px;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section
+{
+    display: block;
+}
+
+audio[controls], canvas, video
+{
+    display: inline-block; 
+    *display: inline;
+    *zoom: 1;
+}
+
+::-moz-selection
+{
+    background: #127ee9;
+    color: #fff;
+    text-shadow: none;
+}
+
+::selection
+{
+    background: #127ee9;
+    color: #fff;
+    text-shadow: none;
+}
+
+a
+{
+    font-family: Arial, Sans-Serif;
+    color: #333;
+}
+
+a:focus
+{
+    outline: thin dotted;
+}
+
+a:hover, a:active
+{
+    outline: 0;
+}
+
+abbr[title]
+{
+    border-bottom: 1px dotted;
+}
+
+b, strong
+{
+    font-weight: bold;
+}
+
+blockquote
+{
+    margin: 13px 40px;
+}
+
+dfn
+{
+    font-style: italic;
+}
+
+hr
+{
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 13px 0;
+    padding: 0;
+    clear: both;
+    height: 0;
+}
+
+ins
+{
+    background: #ff9;
+    color: #000;
+    text-decoration: none;
+}
+
+mark
+{
+    background: #ff0;
+    color: #000;
+    font-style: italic;
+    font-weight: bold;
+}
+
+pre, code, kbd, samp
+{
+    font-family: monospace, monospace;
+    _font-family: 'courier new' , monospace;
+    font-size: 13px;
+}
+
+pre
+{
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+q
+{
+    quotes: none;
+}
+
+q:before, q:after
+{
+    content: "";
+    content: none;
+}
+
+small
+{
+    font-size: 85%;
+}
+
+sub, sup
+{
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup
+{
+    top: -7px;
+}
+
+sub
+{
+    bottom: -4px;
+}
+
+ul, ol
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+dd
+{
+    margin: 0;
+}
+
+img
+{
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+svg:not(:root)
+{
+    overflow: hidden;
+}
+
+figure
+{
+    margin: 0;
+}
+
+fieldset
+{
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+legend
+{
+    border: 0;
+    padding: 0;
+    *margin-left: -7px;
+}
+
+/* Errors */
+.ErrorMessage, .ErrorMessage a, .ErrorMessage a:hover, a.ErrorMessage, a.ErrorMessage:hover
+{
+    font-size: 14px;
+    color: Red;
+}
+
+.Error
+{
+    color: #665252 !important;
+    font-size: 14px;
+    background-color: transparent;
+    font-weight: normal;
+    line-height: normal;
+    background-image: url($NotificationCross.png$);
+    background-position: left 12px;
+    background-repeat: no-repeat;
+    padding: 12px 0 2px 22px !important;
+    margin: 0 0 0 5px;
+    position: absolute;
+}
+
+.Error, .Error a, .Error a:hover
+{
+    color: #665252 !important;
+    font-size: 14px;
+    background-color: transparent;
+    font-weight: normal;
+    line-height: normal;
+}
+
+.Error.Block
+{
+    position: static !important;
+}
+
+/* Inputs */
+input[type=text], input[type=password], select, textarea
+{
+    padding: 10px !important;
+    border: solid 1px #CCC !important;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    outline: 0 !important;
+    font: normal 14px/100% Verdana, Tahoma, sans-serif;
+    color: #222;
+    margin: 0;
+    vertical-align: baseline;
+    line-height: normal;
+    *vertical-align: middle;
+    *overflow: visible;
+}
+
+textarea
+{
+    overflow: auto;
+    vertical-align: top;
+}
+
+select
+{
+    min-width: 50%;
+}
+
+input[type=text]:hover, input[type=password]:hover, select:hover, textarea:hover
+{
+    border-color: #80BFFF !important;
+}
+
+input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus
+{
+    border-color: #0053A6 !important;
+}
+
+input[type=text].Large, input[type=password].Large, select.Large, textarea.Large
+{
+    font-size: 18px !important;
+    padding: 12px 10px !important;
+}
+
+input[type=text].Invalid, input[type=password].Invalid, select.Invalid, textarea.Invalid
+{
+    background-color: #ffcece !important;
+    border-color: #df8f8f !important;
+    color: #665252;
+}
+
+select.Invalid option
+{
+    background-color: #ffcece !important;
+    color: #665252;
+}
+
+input[type=checkbox], input[type=radio], input[type=image]
+{
+    box-sizing: border-box;
+    border: none;
+    width: auto;
+    margin-right: 5px;
+    padding: 0;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    outline: 0;
+    background-color: transparent;
+    vertical-align: middle\9;
+    vertical-align: middle/;
+}
+
+/* Buttons */
+input[type=button], input[type=reset], input[type=submit], button, .Button,
+input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus,
+input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover
+{
+    cursor: pointer;
+    outline: none !important;
+    font-weight: bold;
+    margin: 0;
+    padding: 8.84px 29.46px;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    width: auto;
+    text-decoration: none;
+    font-family: Sans-Serif;
+    font-size: 14.7px;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: baseline;
+    line-height: normal;
+    color: #444444;
+    background-color: White;
+    border: 1px solid #acacac;
+    *vertical-align: middle;
+    *overflow: visible;
+}
+
+input[type=button], input[type=reset], input[type=submit], button, .Button
+{
+    color: #444444;
+    background-color: White;
+    border: 1px solid #acacac;
+}
+
+input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus
+{
+    color: #444444;
+    border: 1px solid #0053a6;
+}
+
+input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover
+{
+    color: #1874cd;
+    border: 1px solid #1874cd;
+}
+
+input[type=button].Small, input[type=reset].Small, input[type=submit].Small, button.Small, .Button.Small
+{
+    font-size: 12.6px !important;
+    padding: 7.56px 25.2px !important;
+}
+
+input[type=button].Large, input[type=reset].Large, input[type=submit].Large, button.Large, .Button.Large
+{
+    font-size: 18.2px !important;
+    padding: 10.92px 36.4px !important;
+}
+
+input[type=button].X-Large, input[type=reset].X-Large, input[type=submit].X-Large, button.X-Large, .Button.X-Large
+{
+    font-size: 21px !important;
+    padding: 12.6px 42px !important;
+}
+
+/* Green Buttons */
+input[type=button].Green, input[type=reset].Green, input[type=submit].Green, button.Green, .Button.Green
+{
+    color: White;
+    background-color: #92C74F;
+    border: 1px solid #79A541;
+}
+
+input[type=button].Green:hover, input[type=reset].Green:hover, input[type=submit].Green:hover, button.Green:hover, .Button.Green:hover
+{
+    color: White;
+    background-color: #39f;
+    border: 1px solid #39f;
+}
+
+input[type=button].Green:active, input[type=reset].Green:active, input[type=submit].Green:active, button.Green:active, .Button.Green:active
+{
+    color: White;
+    background-color: #28597a;
+    border: 1px solid #28597a;
+}
+
+/* Blue Buttons */
+input[type=button].Blue, input[type=reset].Blue, input[type=submit].Blue, button.Blue, .Button.Blue
+{
+    color: White;
+    background-color: #058dc7;
+    border: 1px solid #058dc7;
+}
+
+input[type=button].Blue:hover, input[type=reset].Blue:hover, input[type=submit].Blue:hover, button.Blue:hover, .Button.Blue:hover
+{
+    color: White;
+    background-color: #09a0e1;
+    border: 1px solid #09a0e1;
+}
+
+/* Red Negative Buttons */
+input[type=button].Red.Negative, input[type=reset].Red.Negative, input[type=submit].Red.Negative, button.Red.Negative, .Button.Red.Negative
+{
+    color: #900;
+    background-color: White;
+    border: 1px solid #acacac;
+}
+
+input[type=button].Red.Negative:focus, input[type=reset].Red.Negative:focus, input[type=submit].Red.Negative:focus, button.Red.Negative:focus, .Button.Red.Negative:focus,
+input[type=button].Red.Negative:hover, input[type=reset].Red.Negative:hover, input[type=submit].Red.Negative:hover, button.Red.Negative:hover, .Button.Red.Negative:hover
+{
+    color: White;
+    background-color: #d74040;
+    border: 1px solid #ab2222;
+}
+
+input[type=button].Red.Negative:active, input[type=reset].Red.Negative:active, input[type=submit].Red.Negative:active, button.Red.Negative:active, .Button.Red.Negative:active
+{
+    color: White;
+    background-color: #ad2323;
+    border: 1px solid #b33630;
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner
+{
+    border: 0;
+    padding: 0;
+}
+
+/* Links */
+a.Link
+{
+    font-family: Arial, Sans-Serif;
+    font-size: 17px;
+    padding: 7px;
+    color: #28597a;
+    outline: none !important;
+}
+
+a.Link:focus, a.Link:hover
+{
+    color: White !important;
+    background-color: #28597a !important;
+}
+
+a.Delete
+{
+    font-family: Arial, Sans-Serif;
+    font-size: 17px;
+    padding: 7px;
+    color: Maroon !important;
+    outline: none !important;
+}
+
+a.Delete:focus, a.Delete:hover
+{
+    color: White !important;
+    background-color: Maroon !important;
+}
+
+a.Cancel
+{
+    font-family: Arial, Sans-Serif;
+    font-size: 17px;
+    padding: 7px;
+    color: Gray !important;
+    outline: none !important;
+}
+
+a.Cancel:focus, a.Cancel:hover
+{
+    background-color: Gray !important;
+    color: White !important;
+}
+
+/*-- Pills --*/
+.Pill
+{
+	padding: 3px 8px;
+	margin: 0 5px;	
+	text-decoration: none !important;
+	font-weight: normal;
+	-webkit-border-radius: 8px;
+	-moz-border-radius:8px;
+	border-radius: 8px 8px 8px 8px;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.Pill.Red
+{
+	background-color: #910003;
+	color: #fff !important;
+}
+
+a.Pill.Red:hover
+{
+	background-color: #cb2226;
+}
+
+.Pill.Green
+{
+	background-color: #61a319;
+	color: #fff !important;
+}
+
+a.Pill.Green:hover
+{
+    background-color: #a0c874;
+}
+
+.Pill.Gray
+{
+	background-color: #4f5970;
+	color: #fff !important;
+}
+
+a.Pill.Gray:hover
+{
+    background-color: #9cbbe6;
+}
+
+.Pill.LightGray
+{
+	background-color: #dadbdf;
+	color: #555555 !important;
+}
+
+a.Pill.LightGray:hover
+{
+	background-color: #bbc2d3;
+}
+
+.Pill.Blue
+{
+    background-color: #058DC7;
+    color: white !important;
+}
+
+.Pill.DarkBlue
+{
+    background-color: #004174;
+    color: white !important;
+}
+
+/* DateTimePicker */
+.DatePicker_Modern .rcCalPopup, .DatePicker_Modern .rcTimePopup
+{
+    left: 22px !important;
+}
+
+.DatePicker_Modern input[type=text].rdfd_
+{
+    padding: 0 !important;
+}
+
+/* Combobox */
+.ComboBox_Modern input[type=text].rcbInput
+{
+    padding-right: 17px !important;
+    width: 100%;
+    font: normal 14px/100% Verdana, Tahoma, sans-serif;
+}
+
+.ComboBox_Modern .rcbInputCell
+{
+    margin: 0 10px 0 0 !important;
+    padding: 0 !important;
+    background-position: right 10px !important;
+    background-repeat: no-repeat !important;
+    background: none !important;
+}
+
+.ComboBox_Modern .rcbArrowCell
+{
+    width: 17px !important;
+}
+
+.ComboBox_Modern .rcbArrowCellRight
+{
+    background-image: url($DropArrow.png$) !important;
+    background-position: right 10px !important;
+    background-repeat: no-repeat !important;
+}
+
+.ComboBox_Modern .rcbArrowCellRight a
+{
+    width: 17px !important;
+    height: 19px !important;
+}
+
+.ComboBox_Modern .rcbDisabled .rcbArrowCellRight
+{
+    background-image: url($DropArrowDisabled.png$) !important;
+    background-position: right 10px !important;
+    background-repeat: no-repeat !important;
+}
+
+.ComboBox_DropDown_Modern
+{
+    padding-left: 10px !important;
+    padding-right: 3px !important;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.ComboBox_DropDown_Modern div
+{
+    border: 1px solid #646464 !important;
+    background-color: White !important;
+}
+
+.ComboBox_DropDown_Modern .rcbItem
+{
+    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
+    margin: 0 !important;
+}
+
+.ComboBox_DropDown_Modern.Invalid .rcbItem
+{
+    background-color: #ffcece !important;
+    color: #665252;
+}
+
+.ComboBox_DropDown_Modern .rcbHovered
+{
+    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
+    background-color: Highlight !important;
+    color: White !important;
+    margin: 0 !important;
+}
+
+.rcbSlide
+{
+    margin-top: -10px !important;
+}
+
+/* FireFox fixes */
+@-moz-document url-prefix()
+{
+    .Error
+    {
+        position: static;
+    }
+}

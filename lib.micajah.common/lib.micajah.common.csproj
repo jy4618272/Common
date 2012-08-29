@@ -1,0 +1,2164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{10D2CA35-30D2-4291-9133-4F675C8B3B29}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Micajah.Common</RootNamespace>
+    <AssemblyName>Micajah.Common3</AssemblyName>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Micajah.Common.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>Migrated rules for lib.micajah.common.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>Migrated rules for lib.micajah.common.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ChargifyNET, Version=1.0.7.1, Culture=neutral, PublicKeyToken=a614d333e4502959, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\ChargifyNET.dll</HintPath>
+    </Reference>
+    <Reference Include="Micajah.Common.LdapAdapter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5584840979da6ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Micajah.Common.LdapAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Web.Design, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Telerik.Web.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\CacheManager.cs" />
+    <Compile Include="Application\StartTheadItem.cs" />
+    <Compile Include="Bll\Handlers\ActionHandler.cs" />
+    <Compile Include="Bll\Handlers\ChargifyHandler.cs" />
+    <Compile Include="Bll\Handlers\SettingHandler.cs" />
+    <Compile Include="Bll\Handlers\LdapHandler.cs" />
+    <Compile Include="Bll\LdapProcess.cs" />
+    <Compile Include="Bll\Providers\ChargifyProvider.cs" />
+    <Compile Include="Bll\Providers\EmailProvider.cs" />
+    <Compile Include="Bll\Providers\ViewStateProvider.cs" />
+    <Compile Include="Bll\StartThread.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Bll\Entity.cs" />
+    <Compile Include="Bll\EntityEvent.cs" />
+    <Compile Include="Bll\EntityField.cs" />
+    <Compile Include="Bll\EntityNodeType.cs" />
+    <Compile Include="Bll\Instance.cs" />
+    <Compile Include="Bll\Handlers\ResourceHandler.cs" />
+    <Compile Include="Bll\Interfaces.cs" />
+    <Compile Include="Bll\MeasureUnit.cs" />
+    <Compile Include="Bll\MimeType.cs" />
+    <Compile Include="Bll\Organization.cs" />
+    <Compile Include="Bll\Providers\ActionProvider.cs" />
+    <Compile Include="Application\WebApplication.cs" />
+    <Compile Include="Bll\BreadcrumbCollection.cs" />
+    <Compile Include="Bll\Providers\EmailSuffixProvider.cs" />
+    <Compile Include="Bll\Providers\LdapInfoProvider.cs" />
+    <Compile Include="Bll\Providers\CountryProvider.cs" />
+    <Compile Include="Bll\Providers\CustomUrlProvider.cs" />
+    <Compile Include="Bll\Providers\DatabaseProvider.cs" />
+    <Compile Include="Bll\Providers\MessageProvider.cs" />
+    <Compile Include="Bll\Providers\ResourceProvider.cs" />
+    <Compile Include="Bll\Providers\EntityFieldProvider.cs" />
+    <Compile Include="Bll\Providers\EntityNodeProvider.cs" />
+    <Compile Include="Bll\Providers\EntityNodesRelatedEntityNodes.cs" />
+    <Compile Include="Bll\Providers\InstanceProvider.cs" />
+    <Compile Include="Bll\Enums.cs" />
+    <Compile Include="Bll\Providers\GroupProvider.cs" />
+    <Compile Include="Bll\Providers\LoginProvider.cs" />
+    <Compile Include="Bll\Providers\MeasureUnitsProvider.cs" />
+    <Compile Include="Bll\Providers\RecurringScheduleProvider.cs" />
+    <Compile Include="Bll\Providers\RuleEngineProvider.cs" />
+    <Compile Include="Bll\RecurringSchedule\DailyRecurrenceRule.cs" />
+    <Compile Include="Bll\RecurringSchedule\DateHelper.cs" />
+    <Compile Include="Bll\RecurringSchedule\HourlyRecurrenceRule.cs" />
+    <Compile Include="Bll\RecurringSchedule\MonthlyRecurrenceRule.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrenceDay.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrenceFrequency.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrenceMonth.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrencePattern.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrenceRange.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrenceRule.cs" />
+    <Compile Include="Bll\RecurringSchedule\RecurrenceRuleConverter.cs" />
+    <Compile Include="Bll\RecurringSchedule\WeeklyRecurrenceRule.cs" />
+    <Compile Include="Bll\RecurringSchedule\YearlyRecurrenceRule.cs" />
+    <Compile Include="Bll\ResourceDefaultValueAttribute.cs" />
+    <Compile Include="Bll\Rule.cs" />
+    <Compile Include="Bll\RulesEngine.cs" />
+    <Compile Include="Bll\Setting.cs" />
+    <Compile Include="Configuration\ActionDetailMenuElement.cs" />
+    <Compile Include="Configuration\ActionElement.cs" />
+    <Compile Include="Configuration\ActionSubmenuElement.cs" />
+    <Compile Include="Configuration\BaseConfigurationElement.cs" />
+    <Compile Include="Configuration\BaseConfigurationElementCollection.cs" />
+    <Compile Include="Configuration\BaseConfigurationSection.cs" />
+    <Compile Include="Configuration\BreadcrumbsElement.cs" />
+    <Compile Include="Configuration\CurrencyElement.cs" />
+    <Compile Include="Configuration\EntityEventElement.cs" />
+    <Compile Include="Configuration\EntityHierarchyElement.cs" />
+    <Compile Include="Configuration\EntityFieldValueElement.cs" />
+    <Compile Include="Configuration\DetailMenuElement.cs" />
+    <Compile Include="Configuration\EntityElement.cs" />
+    <Compile Include="Configuration\EntityFieldElement.cs" />
+    <Compile Include="Configuration\EntityNodeTypeElement.cs" />
+    <Compile Include="Configuration\FooterElement.cs" />
+    <Compile Include="Configuration\FrameworkConfiguration.cs" />
+    <Compile Include="Configuration\CopyrightElement.cs" />
+    <Compile Include="Configuration\CustomUrlElement.cs" />
+    <Compile Include="Configuration\EmailElement.cs" />
+    <Compile Include="Configuration\HeaderElement.cs" />
+    <Compile Include="Configuration\HelpLinkElement.cs" />
+    <Compile Include="Configuration\Interfaces.cs" />
+    <Compile Include="Configuration\LeftAreaElement.cs" />
+    <Compile Include="Configuration\LoginElement.cs" />
+    <Compile Include="Configuration\MainMenuElement.cs" />
+    <Compile Include="Configuration\MasterPageElement.cs" />
+    <Compile Include="Configuration\PasswordElement.cs" />
+    <Compile Include="Configuration\RoleElement.cs" />
+    <Compile Include="Configuration\RulesEngineElement.cs" />
+    <Compile Include="Configuration\RulesEngineInputElement.cs" />
+    <Compile Include="Configuration\RulesEngineOutputElement.cs" />
+    <Compile Include="Configuration\SecurityElement.cs" />
+    <Compile Include="Configuration\SettingElement.cs" />
+    <Compile Include="Configuration\SettingValueElement.cs" />
+    <Compile Include="Configuration\StartThreadElement.cs" />
+    <Compile Include="Configuration\SubmenuElement.cs" />
+    <Compile Include="Configuration\SupportElement.cs" />
+    <Compile Include="Configuration\WebApplicationElement.cs" />
+    <Compile Include="Dal\CommonDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Dal\OrganizationDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Dal\TableAdapters\OrganizationsLdapGroupsTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EmailTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EmailSuffixTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\GroupMappingsTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\CustomUrlTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\MessageTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\ResetPasswordRequestTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\ResourceTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\CountryTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EntityFieldsValuesTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EntityFieldListsValuesTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EntityFieldTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EntityNodesRelatedEntityNodesTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\InvitedLoginTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\RecurringScheduleTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EntityNodeTypeTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\EntityNodeTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\RuleParametersTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\RuleTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\TableAdaptersHolder.cs" />
+    <Compile Include="Dal\TableAdapters\UnitsOfMeasureAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\UnitsOfMeasureConversionAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\UsersInstancesTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\VersionTableAdapter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Pages\Enums.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\LdapAdapter\ApplicationLogger.cs" />
+    <Compile Include="Security\LdapAdapter\LdapIntegration.cs" />
+    <Compile Include="Security\LdapAdapter\LdapServer.cs" />
+    <Compile Include="WebControls\AdminControls\AccountSettingsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\ChargifySubscribeControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\LogosControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\LdapIntegrationControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\StartControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\UserLdapInfoControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\LdapGroupMappingsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\OrganizationLdapSettingsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\CustomUrlsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\InstanceProfileControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\EntitiesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\EntityControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\EntityFieldListValuesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\EntityFieldsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\InviteUsersControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\MeasureUnitsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\NodeTypeControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\OrganizationProfileControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\RecurringScheduleControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\RuleParametersControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\RulesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\RulesEngineControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\StyleSheetEditControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\InstancesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\GroupsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\GroupsInstancesRolesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\SettingsDiagnosticControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\UserOrganizationControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
+    <Compile Include="WebControls\WebEventHandler.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\CustomField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebControls\CustomFieldsForm.cs" />
+    <Compile Include="WebControls\EntityTreeView.cs" />
+    <Compile Include="WebControls\HyperLinkField.cs" />
+    <Compile Include="WebControls\ImageField.cs" />
+    <Compile Include="WebControls\ImageUpload.cs" />
+    <Compile Include="WebControls\LogOn.cs" />
+    <Compile Include="WebControls\MessageList.cs" />
+    <Compile Include="WebControls\NoticeMessageBox.cs" />
+    <Compile Include="WebControls\RecurrenceSchedule.cs" />
+    <Compile Include="WebControls\RecurrenceScheduleInternalControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SchemeColorSet.cs" />
+    <Compile Include="WebControls\SecurityControls\ActiveInstanceControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\ActiveOrganizationControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\ChangePasswordControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\Hello.cs" />
+    <Compile Include="WebControls\SecurityControls\LogOnAsUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\ProfileControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\ResetPasswordControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\SignupOrganizationControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\SignupUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\SupportControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SettingList.cs" />
+    <Compile Include="WebControls\SetupControls\ActionsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\BaseEditFormControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\EntitiesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\FrameworkControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\RoleEditControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\SettingsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\WebsitesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dal\TableAdapters\OrganizationsUsersTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\OrganizationTableAdapter.cs" />
+    <Compile Include="Pages\PageAdapter.cs" />
+    <Compile Include="Pages\PageStatePersister.cs" />
+    <Compile Include="Bll\Action.cs" />
+    <Compile Include="Bll\Providers\OrganizationProvider.cs" />
+    <Compile Include="Bll\Providers\ResourceVirtualPathProvider.cs" />
+    <Compile Include="Bll\Providers\RoleProvider.cs" />
+    <Compile Include="Bll\Providers\SettingProvider.cs" />
+    <Compile Include="Bll\Providers\DatabaseServerProvider.cs" />
+    <Compile Include="Bll\Providers\UserProvider.cs" />
+    <Compile Include="Bll\Providers\WebsiteProvider.cs" />
+    <Compile Include="WebControls\SetupControls\BaseControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\DatabasesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\OrganizationsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\RolesControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\DatabaseServersControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\Breadcrumbs.cs" />
+    <Compile Include="WebControls\DetailMenu.cs" />
+    <Compile Include="WebControls\Enums.cs" />
+    <Compile Include="WebControls\EventArgs.cs" />
+    <Compile Include="WebControls\Footer.cs" />
+    <Compile Include="WebControls\Header.cs" />
+    <Compile Include="WebControls\Interfaces.cs" />
+    <Compile Include="WebControls\MainMenu.cs" />
+    <Compile Include="WebControls\SecurityControls\PasswordRecoveryControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\Submenu.cs" />
+    <Compile Include="WebControls\TemplateField.cs" />
+    <Compile Include="WebControls\TextField.cs" />
+    <Compile Include="WebControls\AdminControls\UsersControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dal\Enums.cs" />
+    <Compile Include="Dal\TableAdapters\DatabaseTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\InstanceTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\GroupsInstancesActionsTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\GroupsInstancesRolesTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\GroupTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\Interfaces.cs" />
+    <Compile Include="Dal\TableAdapters\OrganizationDataSetTableAdapters.cs" />
+    <Compile Include="Dal\TableAdapters\DatabaseServerTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\SettingsValuesTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\CommonDataSetTableAdapters.cs" />
+    <Compile Include="Dal\TableAdapters\UsersGroupsTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\WebsiteTableAdapter.cs" />
+    <Compile Include="WebControls\SecurityControls\LogOnControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\LogOffControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Security\Enums.cs" />
+    <Compile Include="Security\UserContext.cs" />
+    <Compile Include="Bll\Support.cs" />
+    <Compile Include="WebControls\AdvancedGridView.cs" />
+    <Compile Include="WebControls\BaseValidatedControl.cs" />
+    <Compile Include="WebControls\BaseValidatedField.cs" />
+    <Compile Include="WebControls\AutoGeneratedButtonsField.cs" />
+    <Compile Include="WebControls\CommonGridView.cs">
+    </Compile>
+    <Compile Include="WebControls\ButtonField.cs" />
+    <Compile Include="WebControls\CustomPagerSettings.cs">
+    </Compile>
+    <Compile Include="WebControls\GroupField.cs" />
+    <Compile Include="WebControls\TreeView.cs" />
+    <Compile Include="WebControls\UpdateProgress.cs" />
+    <Compile Include="WebControls\CheckBoxList.cs" />
+    <Compile Include="WebControls\CheckBoxListField.cs" />
+    <Compile Include="WebControls\ComboBox.cs" />
+    <Compile Include="WebControls\ComboBoxField.cs" />
+    <Compile Include="WebControls\DatePicker.cs" />
+    <Compile Include="WebControls\DateRange.cs" />
+    <Compile Include="WebControls\CheckBox.cs" />
+    <Compile Include="WebControls\CheckBoxField.cs" />
+    <Compile Include="WebControls\DatePickerField.cs" />
+    <Compile Include="WebControls\HtmlEditor.cs" />
+    <Compile Include="WebControls\HtmlEditorField.cs" />
+    <Compile Include="WebControls\RadioButtonList.cs" />
+    <Compile Include="WebControls\RadioButtonListField.cs" />
+    <Compile Include="WebControls\TextBox.cs" />
+    <Compile Include="WebControls\Link.cs" />
+    <Compile Include="WebControls\MagicForm.cs" />
+    <Compile Include="WebControls\TextBoxField.cs" />
+    <Compile Include="WebControls\TextEditor.cs" />
+    <Compile Include="WebControls\TextEditorField.cs" />
+    <Compile Include="Dal\TableAdapters\BaseTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\UserTableAdapter.cs">
+    </Compile>
+    <Compile Include="WebControls\ControlList.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pages\MasterPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dal\OrganizationDataSet.xsc">
+      <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\OrganizationDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>OrganizationDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Dal\OrganizationDataSet.xss">
+      <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\CommonDataSet.xsc">
+      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\CommonDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CommonDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Dal\CommonDataSet.xss">
+      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Micajah.Common.snk" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v65.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v66.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v67.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v68.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v69.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v71.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v72.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v73.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v74.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v63.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v74.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v62.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v61.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v60.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v59.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v58.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v57.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v56.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v56.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v55.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v54.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v53.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v52.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v51.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v50.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v49.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v48.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v47.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v47.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v46.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v45.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v44.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v43.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v42.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v41.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v40.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v39.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v39.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v38.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v37.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v36.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v35.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v34.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v33.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v33.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v32.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v31.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v31.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v30.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v29.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v27.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v28.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v27.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v25.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v26.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v26.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v24.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v24.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v19.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v18.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v17.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v15.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v16.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v14.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v13.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v12.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v12.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v11.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v11.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v10.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v9.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v9.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v8.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v7.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v6.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v5.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\v.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v4.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\post.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\pre.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
+    <None Include="Migrated rules for lib.micajah.common.ruleset" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientRed.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientBrown\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientBrown\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientGray\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientGray\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientOlive\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientOlive\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientOrange\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientOrange\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientViolet\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientViolet\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientYellow\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientYellow\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientBrown.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientGray.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientOlive.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientOrange.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientViolet.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientYellow.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardBlue.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardBrown.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardGray.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardOlive.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardOrange.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardViolet.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardYellow.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Security\ChangePassword.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\CommonGridView.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ComboBox.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\DateRange.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\HtmlEditor.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Entities.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Entities.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\MeasureUnits.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\MeasureUnits.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Tree.aspx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Entity.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Entities.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\RecurrenceScheduleControl.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\Control.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\Folder.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\HyperLink.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\Page.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.EntitiesControl\Entity.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.EntitiesControl\Event.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.EntitiesControl\Field.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\accept.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\anchor.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_cascade.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_double.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_form.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_form_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_form_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_form_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_form_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_get.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_home.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_osx.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_osx_terminal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_put.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_side_boxes.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_side_contract.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_side_expand.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_side_list.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_side_tree.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_split.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_tile_horizontal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_tile_vertical.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_view_columns.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_view_detail.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_view_gallery.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_view_icons.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_view_list.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_view_tile.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_xp.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\application_xp_terminal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_branch.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_divide.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_down.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_in.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_inout.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_join.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_merge.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_out.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_redo.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_refresh.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_refresh_small.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_rotate_anticlockwise.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_rotate_clockwise.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_switch.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_turn_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_turn_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_undo.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\arrow_up.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\asterisk_orange.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\asterisk_yellow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\attach.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_bronze_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_bronze_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_bronze_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_gold_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_gold_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_gold_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_silver_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_silver_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\award_star_silver_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_put.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\basket_remove.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bell.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bell_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bell_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bell_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bell_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bell_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bin.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bin_closed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bin_empty.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bomb.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_addresses.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_next.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_open.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\book_previous.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\box.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bricks.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\brick_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\briefcase.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bug_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\building_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_arrow_bottom.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_arrow_down.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_arrow_top.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_arrow_up.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_black.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_disk.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_feed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_green.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_orange.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_picture.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_pink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_purple.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_star.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_toggle_minus.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_toggle_plus.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_white.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_wrench.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\bullet_yellow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cake.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calculator.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calculator_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calculator_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calculator_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calculator_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calculator_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_view_day.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_view_month.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\calendar_view_week.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\camera_small.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cancel.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\car.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_put.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cart_remove.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\car_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\car_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd_burn.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd_eject.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cd_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_bar.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_bar_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_bar_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_bar_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_bar_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_bar_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_curve_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_line.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_line_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_line_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_line_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_line_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_line_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_organisation.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_organisation_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_organisation_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_pie.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_pie_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_pie_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_pie_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_pie_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\chart_pie_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_pause.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_play.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\clock_stop.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cog.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cog_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cog_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cog_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cog_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cog_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\coins.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\coins_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\coins_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\color_swatch.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\color_wheel.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comment.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comments.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comments_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comments_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comment_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comment_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\comment_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\compress.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\computer_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\connect.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\contrast.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\contrast_decrease.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\contrast_high.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\contrast_increase.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\contrast_low.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\controller.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\controller_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\controller_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\controller_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_eject.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_eject_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_end.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_end_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_equalizer.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_equalizer_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_fastforward.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_fastforward_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_pause.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_pause_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_play.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_play_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_repeat.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_repeat_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_rewind.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_rewind_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_start.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_start_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_stop.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\control_stop_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\creditcards.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cross.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\css.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\css_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\css_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\css_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\css_valid.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cup_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cursor.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cut.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\cut_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_connect.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_refresh.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_save.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\database_table.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_next.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\date_previous.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\disconnect.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\disk.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\disk_multiple.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\door.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\door_in.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\door_open.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\door_out.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drink_empty.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_burn.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_cd.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_cd_empty.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_disk.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_network.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_rename.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_user.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\drive_web.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\dvd_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_attach.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_open.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\email_open_image.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_evilgrin.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_grin.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_happy.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_smile.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_surprised.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_tongue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_unhappy.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_waii.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\emoticon_wink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\error_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\error_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\error_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\exclamation.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\eye.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_disk.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\feed_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\female.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\film_save.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\find.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_green.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_orange.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_pink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_purple.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\flag_yellow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_bell.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_brick.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_bug.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_camera.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_database.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_explore.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_feed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_find.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_heart.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_image.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_lightbulb.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_page.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_page_white.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_palette.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_picture.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_star.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_table.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_user.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\folder_wrench.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\font.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\font_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\font_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\font_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\group_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\heart.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\heart_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\heart_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\help.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\hourglass.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\hourglass_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\hourglass_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\hourglass_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\hourglass_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\house.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\house_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\house_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\html.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\html_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\html_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\html_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\html_valid.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\image.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\images.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\image_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\image_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\image_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\image_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\information.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ipod.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ipod_cast.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ipod_cast_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ipod_cast_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ipod_sound.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\joystick.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\joystick_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\joystick_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\joystick_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\keyboard.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\keyboard_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\keyboard_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\keyboard_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\key_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\key_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\key_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layers.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_content.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_header.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\layout_sidebar.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightbulb.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightbulb_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightbulb_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightbulb_off.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightning_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightning_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lightning_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link_break.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\link_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock_break.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lock_open.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry_flatbed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\lorry_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\magifier_zoom_out.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\magnifier.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\magnifier_zoom_in.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\male.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\map.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\map_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\map_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\map_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\map_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\map_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_bronze_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_bronze_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_bronze_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_bronze_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_bronze_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_gold_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_gold_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_gold_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_gold_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_gold_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_silver_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_silver_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_silver_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_silver_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\medal_silver_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money_dollar.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money_euro.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money_pound.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\money_yen.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\monitor_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\mouse.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\mouse_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\mouse_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\mouse_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\music.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\new.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\newspaper.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\newspaper_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\newspaper_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\newspaper_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\newspaper_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\note.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\note_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\note_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\note_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\note_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\note_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\overlays.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\package.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\package_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\package_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\package_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\package_green.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\package_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_attach.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_code.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_copy.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_excel.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_find.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_green.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_paintbrush.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_paste.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_refresh.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_save.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_acrobat.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_actionscript.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_c.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_camera.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_cd.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_code.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_code_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_coldfusion.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_compressed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_copy.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_cplusplus.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_csharp.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_cup.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_database.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_dvd.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_excel.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_find.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_flash.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_freehand.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_get.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_h.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_horizontal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_medal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_office.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_paint.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_paintbrush.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_paste.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_php.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_picture.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_powerpoint.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_put.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_ruby.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_stack.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_star.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_swoosh.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_text.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_text_width.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_tux.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_vector.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_visualstudio.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_width.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_word.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_world.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_wrench.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_white_zip.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_word.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\page_world.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\paintbrush.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\paintcan.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\palette.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\paste_plain.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\paste_word.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pencil.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pencil_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pencil_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pencil_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\phone.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\phone_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\phone_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\phone_sound.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\photo.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\photos.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\photo_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\photo_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\photo_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pictures.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_empty.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\picture_save.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pilcrow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pill.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pill_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pill_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\pill_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_disabled.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\plugin_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\printer.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\printer_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\printer_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\printer_empty.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\printer_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rainbow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_disk.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_magnify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_picture.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_user.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\report_word.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\resultset_first.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\resultset_last.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\resultset_next.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\resultset_previous.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rosette.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rss.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rss_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rss_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rss_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\rss_valid.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_get.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\ruby_put.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_code.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_code_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_palette.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\script_save.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_chart.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_compressed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_connect.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_database.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\server_uncompressed.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shading.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_align_bottom.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_align_center.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_align_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_align_middle.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_align_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_align_top.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_flip_horizontal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_flip_vertical.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_group.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_handles.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_move_back.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_move_backwards.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_move_forwards.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_move_front.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_rotate_anticlockwise.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_rotate_clockwise.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_square_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shape_ungroup.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shield.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shield_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shield_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\shield_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sitemap.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sitemap_color.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sound.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sound_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sound_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sound_low.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sound_mute.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sound_none.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\spellcheck.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_8ball.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_basketball.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_football.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_golf.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_raquet.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_shuttlecock.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_soccer.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sport_tennis.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\star.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\status_away.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\status_busy.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\status_offline.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\status_online.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\stop.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\style.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\style_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\style_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\style_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\style_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\sum.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tab.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_multiple.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_refresh.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_relationship.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_row_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_row_insert.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_save.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\table_sort.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tab_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tab_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tab_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tab_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_blue_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_blue_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_blue_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_green.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_orange.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_pink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_purple.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tag_yellow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\telephone_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\television.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\television_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\television_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\textfield.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\textfield_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\textfield_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\textfield_key.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\textfield_rename.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_align_center.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_align_justify.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_align_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_align_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_allcaps.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_bold.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_columns.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_dropcaps.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_heading_1.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_heading_2.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_heading_3.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_heading_4.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_heading_5.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_heading_6.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_horizontalrule.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_indent.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_indent_remove.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_italic.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_kerning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_letterspacing.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_letter_omega.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_linespacing.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_list_bullets.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_list_numbers.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_lowercase.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_padding_bottom.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_padding_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_padding_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_padding_top.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_replace.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_signature.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_smallcaps.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_strikethrough.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_subscript.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_superscript.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_underline.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\text_uppercase.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\thumb_down.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\thumb_up.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tick.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\time.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\timeline_marker.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\time_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\time_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\time_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit_blue.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\transmit_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\tux.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_comment.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_female.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_gray.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_green.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_orange.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_red.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\user_suit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vcard.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vcard_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vcard_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vcard_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vector.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vector_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\vector_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\wand.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\weather_clouds.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\weather_cloudy.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\weather_lightning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\weather_rain.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\weather_snow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\weather_sun.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\webcam.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\webcam_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\webcam_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\webcam_error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\world.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\world_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\world_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\world_edit.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\world_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\world_link.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\wrench.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\wrench_orange.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\xhtml.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\xhtml_add.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\xhtml_delete.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\xhtml_go.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\xhtml_valid.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\zoom.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\zoom_in.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\zoom_out.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Schedule.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Trees.aspx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\NodeType.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\NodeType.aspx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\InviteUsers.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\InviteUsers.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v21.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v21.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v22.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v23.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v16.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v20.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Rules.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Rules.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\RuleParameters.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\RuleParameters.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\RulesEngine.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\RulesEngine.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v22.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\EntitiesFields.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\EntityFields.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\EntityFields.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\UserOrganization.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\UserOrganization.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\EntityFieldListValues.aspx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\EntityFieldListValues.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TextEditorLiteToolBarConfiguration.xml" />
+    <EmbeddedResource Include="Resources\TextEditorStandardToolBarConfiguration.xml" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\SideBySide.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\OrganizationProfile.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\OrganizationProfile.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\spacer.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ImageUpload.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ImageUpload.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\StyleSheetLoader.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\InstanceProfile.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\InstanceProfile.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\checked.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\unchecked.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\ImageUpload.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\OrganizationLdapSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\OrganizationLdapSettings.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\CustomUrls.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\CustomUrls.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\LdapGroupMappings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\LdapGroupMappings.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Support.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Support.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\UserLdapInfo.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\UserLdapInfo.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\LdapIntegration.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\LdapIntegration.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ResetPassword.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ResetPassword.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MicajahCommonConfig.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v75.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v75.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v76.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v76.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\Settings.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Settings.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Settings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v77.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v77.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v78.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v78.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v79.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v80.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v80.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v81.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\CommonGridView.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicForm.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v82.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v83.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v84.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v84.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v85.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v86.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v87.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v88.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v89.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v89.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.Pages.MasterPage\Overlay.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Decorated.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v90.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Logos.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Logos.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v91.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v92.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v93.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v95.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v94.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\AccountSettings.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\AccountSettings.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v96.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\ChargifySubscribe.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\ChargifySubscribe.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\NotificationCross.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v97.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v97.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SecurityControls.SignupOrganizationControl\Tick.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\blank.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.fancybox-1.3.4.pack.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\jquery.fancybox-1.3.4.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox-x.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox-y.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_close.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_loading.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_nav_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_nav_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_e.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_n.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_ne.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_nw.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_s.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_se.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_sw.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_shadow_w.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_left.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_main.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_over.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_right.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v98.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\WebEventHandler.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\WebEventHandler.ascx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\GlobalModern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\SignupOrganization.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicFormModern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropArrow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropArrowDisabled.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\CommonGridViewModern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\LogOn.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\LogOnModern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\OnOffSwitch.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\OnOffSwitch.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\Off.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\On.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery-1.7.2.min.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\SliderCenter.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\SliderLeft.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\SliderRight.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Search.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\TextBox.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\NoticeMessageBox.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Close.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Information.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Success.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Warning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\ErrorSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\InformationSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\SuccessSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\WarningSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropArrow.png" />
+    <Content Include="Runtime\ChargifyNET.dll" />
+    <Content Include="Runtime\ChargifyNET.pdb" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\GlobalNavigationConfigurationLink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\PageHelpLink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Modern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\Arrow.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\CheckBox.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\CheckBoxChecked.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Start.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Start.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\SignupOrg.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\SignupOrg.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\Validator.js" />
+    <Content Include="Runtime\Micajah.Common.LdapAdapter.dll" />
+    <Content Include="Runtime\Telerik.Web.Design.dll" />
+    <Content Include="Runtime\Telerik.Web.UI.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\CustomStyleSheetEdit.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Instances.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Groups.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\GroupsInstancesRoles.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\SettingsDiagnostic.ascx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Users.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ActiveInstance.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ActiveOrganization.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ChangePassword.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Login.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\LoginAsUser.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Logoff.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\PasswordRecovery.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Profile.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\SignupUser.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Actions.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Databases.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Framework.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Organizations.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\RoleEdit.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Roles.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\DatabaseServers.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Websites.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\DropArrow.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropDownList.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.UpdateProgress\Loader.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientBlue\MainMenuItemLeft.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientBlue\MainMenuItemRight.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Minus.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Plus.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\CustomStyleSheetEdit.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Instance.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Group.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\GroupsInstancesRoles.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\GroupSettingsInInstance.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\SettingsDiagnostic.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\User.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ActiveInstance.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ActiveOrganization.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Login.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Security\LoginAsUser.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Logoff.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\PasswordRecovery.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Security\Profile.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\SignupUser.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Actions.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Databases.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Framework.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Organizations.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\RoleEdit.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Roles.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\DatabaseServers.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Websites.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\MasterPage.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\TreeView.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\UpdateProgress.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v2.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v64.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Reflective.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Standard.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\Global.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Gradient.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientBlue.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Standard.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardRed.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabs.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsBlue.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsBrown.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsGray.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsOlive.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsOrange.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsRed.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsViolet.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\StandardTabsYellow.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources.Micajah.Common\Images\NewFolder1\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

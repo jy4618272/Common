@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib.micajah.common", "lib.micajah.common\lib.micajah.common.csproj", "{10D2CA35-30D2-4291-9133-4F675C8B3B29}"
+EndProject
+Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "db.micajah.common", "db.micajah.common\db.micajah.common.dbproj", "{67CBC824-A49E-4E9B-A947-360F3DFE65C3}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "web.micajah.common", "web.micajah.common", "{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = ""
+		SccAuxPath = ""
+		SccLocalPath = ""
+		SccProvider = ""
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
+		ProjectReferences = "{10D2CA35-30D2-4291-9133-4F675C8B3B29}|Micajah.Common3.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/web.micajah.common"
+		Debug.AspNetCompiler.PhysicalPath = "web.micajah.common\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\web.micajah.common\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "true"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/web.micajah.common"
+		Release.AspNetCompiler.PhysicalPath = "web.micajah.common\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\web.micajah.common\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "true"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "41638"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Release|.NET = Release|.NET
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|.NET.ActiveCfg = Release|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|.NET.ActiveCfg = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|.NET.ActiveCfg = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|.NET.Build.0 = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|Any CPU.ActiveCfg = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|Mixed Platforms.Build.0 = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|.NET.ActiveCfg = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|.NET.Build.0 = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|Any CPU.ActiveCfg = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
+		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|Mixed Platforms.Build.0 = Debug|.NET
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

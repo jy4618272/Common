@@ -1,0 +1,44 @@
+/* ------------ Main menu colors -------------------------------------------------------------------------------------------------------------------------------*/
+div.Mp_Mm
+{
+    color: White;
+}
+
+div.Mp_Mmb
+{
+    background-color: #5c2d91;
+}
+
+/* ------------ Main menu item colors ----- */
+
+div.Mp_Mm ul li
+{
+    background-color: #3d1063;
+}
+
+div.Mp_Mm ul li a, div.Mp_Mm ul li a:hover
+{
+    color: White;
+}
+
+/* ------------ Hovered main menu item colors ----- */
+div.Mp_Mm ul li:hover, div.Mp_Mm ul li.hover
+{
+    background-color: #4d207a;
+}
+
+div.Mp_Mm ul li:hover a, div.Mp_Mm ul li:hover a:hover, div.Mp_Mm ul li.hover a, div.Mp_Mm ul li.hover a:hover
+{
+    color: White;
+}
+
+/* ------------ Selected main menu item colors ----- */
+div.Mp_Mm ul li.S
+{
+    background-color: #5c2d91;
+}
+
+div.Mp_Mm ul li.S a, div.Mp_Mm ul li.S a:hover
+{
+    color: White;
+}

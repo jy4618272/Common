@@ -1,0 +1,104 @@
+﻿p, b, span, a, a:hover, td
+{
+    font-size: 14px;
+}
+
+a.Large, a:hover.Large
+{
+    font-family: Arial, Sans-Serif;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+a.Return, a:hover.Return
+{
+    font-family: Calibri, Arial;
+    font-size: 14px;
+}
+
+a.Return.Bold, a:hover.Return.Bold
+{
+    font-weight: bold;
+}
+
+a.Large.Return, a:hover.Large.Return
+{
+    font-family: Calibri, Arial;
+    font-size: 18px;
+}
+
+.Caption, .Caption span, .Caption td, .Caption a, .Caption a:hover
+{
+    font-family: Calibri, Arial;
+    font-size: 24px;
+}
+
+span.Large
+{
+    font-family: Calibri, Arial;
+    font-size: 20px;
+    white-space: nowrap;
+}
+
+input.Large
+{
+    font-size: 18px;
+    padding: 11px 16px;
+}
+
+input.Medium
+{
+    font-size: 14px;
+    padding: 4px 6px;
+}
+
+input.Btn
+{
+    font-size: 14px;
+    font-weight: bold;
+    height: 35px;
+    width: 165px;
+}
+
+* + html input.Btn
+{
+    vertical-align: middle;
+}
+
+.FormTable tr
+{
+    vertical-align: top;
+}
+
+.FormTable .Pl
+{
+    padding-left: 4px;
+}
+
+.Mp_Hdr
+{
+    position: absolute !important;
+    top: 5px;
+    width: 100%;
+    padding: 0 !important;
+    z-index: -1;
+}
+
+.Mp_Hdr div, .Mp_Hdr div a, .Mp_Hdr div a:hover
+{
+    font-family: Calibri, Arial;
+    font-size: 27px !important;
+    font-weight: normal !important;
+    line-height: normal !important;
+    color: #333333 !important;
+}
+
+.Mp_Hdr .A
+{
+    padding-left: 7px;
+}
+
+.Mp_Hdr .G
+{
+    padding-right: 7px;
+}

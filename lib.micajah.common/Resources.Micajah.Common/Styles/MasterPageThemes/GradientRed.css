@@ -1,0 +1,92 @@
+/* ------------ Header -----------------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_Hdr div.G
+{
+	color: #c1c5ca;
+}
+
+.Mp_Hdr div.G a
+{
+	color: #9e0b0f;
+}
+
+.Mp_Hdr div.G a:hover
+{
+	color: Blue;
+}
+
+/* ------------ Main menu --------------------------------------------------------------------------------------------------------------------------------------*/
+div.Mp_Mm
+{
+	color: White;
+}
+
+div.Mp_Mmb
+{
+	background-color: #d71920;
+}
+
+/* ------------ Main menu item ------------ */
+div.Mp_Mm ul li, div.Mp_Mm ul li:hover, div.Mp_Mm ul li.hover, div.Mp_Mm ul li.S
+{
+	background-image: url($MainMenuItemRight.gif$);
+}
+
+div.Mp_Mm ul li a, div.Mp_Mm ul li a:hover, div.Mp_Mm ul li:hover a, div.Mp_Mm ul li:hover a:hover, div.Mp_Mm ul li.hover a, div.Mp_Mm ul li.hover a:hover, div.Mp_Mm ul li.S a, div.Mp_Mm ul li.S a:hover
+{
+	background-image: url($MainMenuItemLeft.gif$);
+}
+
+div.Mp_Mm ul li
+{
+	background-color: #9e0b0f;
+}
+
+div.Mp_Mm ul li a, div.Mp_Mm ul li a:hover
+{
+	color: White;
+}
+
+/* ------------ Hovered main menu item ------------ */
+div.Mp_Mm ul li:hover, div.Mp_Mm ul li.hover
+{
+	background-color: #c4161c;
+}
+
+div.Mp_Mm ul li:hover a, div.Mp_Mm ul li:hover a:hover, div.Mp_Mm ul li.hover a, div.Mp_Mm ul li.hover a:hover
+{
+	color: White;
+}
+
+/* ------------ Selected main menu item ------------ */
+div.Mp_Mm ul li.S
+{
+	background-color: #d71920;
+}
+
+div.Mp_Mm ul li.S a, div.Mp_Mm ul li.S a:hover
+{
+	color: White;
+}
+
+/* ------------ Submenu ----------------------------------------------------------------------------------------------------------------------------------------*/
+/* ------------ Submenu first level item ------------ */
+.Mp_Sm .F
+{
+	color: #9e0b0f;
+}
+
+.Mp_Sm a.F:hover
+{
+	color: Blue;
+}
+
+/* ------------ Submenu second level item ------------ */
+.Mp_Sm a.S
+{
+	color: #333333;
+}
+
+.Mp_Sm a.S:hover
+{
+	color: Blue;
+}

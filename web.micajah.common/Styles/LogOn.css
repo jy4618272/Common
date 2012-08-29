@@ -1,0 +1,69 @@
+@charset "iso-8859-1";
+/* Common definations */
+html, body { height: 100%; width: 100%; }
+body { font-family: "TrebuchetMS", Tahoma, Verdana, Arial, sans-serif; font-size: 12px; padding: 0; margin: 0; background: #fff; line-height: 16px; }
+img { border: 0; }
+/* Blocks definations */
+div.lb { height: 198px; }
+html>body div.lb { height: auto; min-height: 198px; }
+
+div.lbb { height: 100px; }
+html>body div.lbb { height: auto; min-height: 100px; }
+
+div#loginbox { width: 70%; background: #fff; margin: 40px auto 2em auto; }
+div#login-box-bottom { width: 100%; background: url(../images/login-box-bottom.gif) repeat-x left bottom; }
+div#login-box-left { width: 100%; background: url(../images/login-box-left.gif) repeat-y left top; }
+div#login-box-right { width: 100%; background: url(../images/login-box-right.gif) repeat-y right top; }
+div#login-box-top { width: 100%; background: url(../images/login-box-top.gif) repeat-x left top; }
+div#login-box-left-top { width: 100%; background: url(../images/login-box-left-top.gif) no-repeat left top; }
+div#login-box-right-top { width: 100%; background: url(../images/login-box-right-top.gif) no-repeat right top; }
+div#login-box-right-bottom { width: 100%; background: url(../images/login-box-right-bottom.gif) no-repeat right bottom; }
+div#login-box-left-bottom { width: 100%; background: url(../images/login-box-left-bottom.gif) no-repeat left bottom; }
+div#loginbox div.cont { padding: 20px; }
+div#loginbox table { width: 100%; }
+
+/*div.nb { height: 200px; }*/
+html>body div.nb { height: auto; /*min-height: 200px;*/ }
+div#notices-box { width: 70%; background: #fff; margin: 0 auto; }
+div#notices-box div.t { width: 100%; background: url(../images/notices-top.gif) repeat-x left top; }
+div#notices-box div.b { width: 100%; background: url(../images/notices-bottom.gif) repeat-x left bottom; }
+div#notices-box div.l { width: 100%; background: url(../images/notices-left.gif) repeat-y left top; }
+div#notices-box div.r { width: 100%; background: url(../images/notices-right.gif) repeat-y right top; }
+div#notices-box div.t-l { width: 100%; background: url(../images/notices-top-left.gif) no-repeat left top; }
+div#notices-box div.t-r { width: 100%; background: url(../images/notices-top-right.gif) no-repeat right top; }
+div#notices-box div.b-r { width: 100%; background: url(../images/notices-bottom-right.gif) no-repeat right bottom; }
+div#notices-box div.b-l { width: 100%; background: url(../images/notices-bottom-left.gif) no-repeat left bottom; }
+div#notices-box div.c { padding: 20px; }
+
+div.text-box { width: 70%; margin: 0 auto 1em auto; }
+
+div.text-box p, div.text-box ul, div.text-box li, div.text-box div, div.text-box span, div.text-box img, div.text-box code, div.text-box pre { display: inline; }
+
+div#powered-by { width: 70%; height: 55px; margin: 1em auto 1em auto; }
+div#powered-by div { float: right; display: inline; }
+
+form, ul, li { margin: 0; padding: 0; }
+li { margin: 0 0 0.5em 0; padding-left: 20px; background: url(../images/bul.gif) no-repeat 3px 3px; list-style: none; }
+
+td.column-1 { width: 30%; }
+td.column-2 { width: 70%; }
+td.column-left { text-align: right; padding-right: 10px; }
+td.column-right { padding-left: 5px; }
+h1 { color: #425f9d; font-size: 18px; font-weight: normal; margin: 0 0 0.5em 0; }
+h1.bn { padding-left: 20px; }
+div#loginbox input.text { width: 300px; border: 1px solid #7e7e7e; background: #fff; }
+a { color: #425f9d; text-decoration: underline; }
+a:visited { color: #425f9d; text-decoration: underline; }
+a:hover { color: #425f9d; text-decoration: underline; }
+input#login-button { border: 0; width: 232px; height: 34px; margin: 10px 0 0 0; }
+
+/* bigNotices section */
+div.bn-first-column { display: block; }
+div.bn-second-column { display: block; }
+div.bn-item { padding-left: 20px; background: url(../images/bul.gif) no-repeat 3px 3px; margin: 0 0 10px 0; }
+div.bn-item-title { font-weight: bold; }
+div.bn-item-date { color: #666; }
+div.bn-item-author { font-style: italic; color: #666; }
+div.bn-item-description { color: #666; }
+
+input.p5 {padding:5px;}

@@ -1,0 +1,202 @@
+.Cgv_T
+{
+    border-collapse: collapse;
+}
+
+.Cgv_T a
+{
+    color: Black;
+}
+
+.Cgv_T a:hover
+{
+    color: Blue;
+}
+
+.Cgv_H a, .Cgv_H a:hover, .Cgv_H th
+{
+    color: White;
+    background-color: #444444;
+}
+
+td.Cgv_C, td.Cgv_A, td.Cgv_E, .Cgv_Er td, .Cgv_H th, td.Cgv_Ci, td.Cgv_Crbo, td.Cgv_P
+{
+    font-size: 11px;
+    padding: 3px 6px 3px 6px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.Cgv_Er, .Cgv_P td
+{
+    border-width: 1px;
+    border-style: solid;
+}
+
+tr.Cgv_P td table td, tr.Cgv_P td table td
+{
+    border: 0 none;
+}
+
+td.Cgv_Ci
+{
+    padding: 15px 25px 15px 0;
+    border-left: 0 none !important;
+}
+
+td.Cgv_Crbo
+{
+    border-right: 0 none !important;
+}
+
+.Cgv_F
+{
+    font-size: 11px;
+    padding-left: 6px;
+}
+
+.Cgv_P
+{
+    border-style: solid;
+    border-width: 1px;
+}
+
+tr.Cgv_P td
+{
+    padding: 3px 6px 3px 6px;
+}
+
+.Cgv_P td, tr.Cgv_P td table td
+{
+    font-size: 11px;
+    padding: 0 5px 0 4px;
+}
+
+tr.Cgv_P td table td span, tr.Cgv_P td.Cgv_P table td a, tr.Cgv_P td.Cgv_P table td a:hover
+{
+    font-size: 11px;
+}
+
+tr.Cgv_P td table td a, tr.Cgv_P td table td a:hover
+{
+    font-size: 16px;
+}
+
+.Cgv_Cpt, .Cgv_T caption, .Cgv_Search, .Cgv_CptTxt
+{
+    font-weight: bold;
+    font-size: 12px;
+    text-align: left;
+    line-height: 20px;
+}
+
+.Cgv_CptTxt
+{
+    float: left;
+}
+
+.Cgv_CptCtrls
+{
+    float: right !important;
+    text-align: right;
+    font-size: 11px;
+    line-height: 20px;
+}
+
+.Cgv_Cpt, .Cgv_T caption
+{
+    padding-bottom: 3px;
+}
+
+.Cgv_CptCtrls a, .Cgv_CptCtrls a:hover
+{
+    font-size: 11px;
+    font-weight: normal;
+    margin: 0 5px 0 4px;
+}
+
+a.Cgv_AddNew, a.Cgv_AddNew:hover
+{
+    font-size: 13px;
+    margin-right: 0 !important;
+}
+
+.Cgv_B, .Cgv_Db
+{
+    padding: 3px 6px 3px 6px;
+    text-align: center;
+    white-space: nowrap;
+    width: 1px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.Cgv_Db a:hover
+{
+    color: Red;
+}
+
+.Cgv_Search
+{
+    float: left;
+}
+
+.Cgv_Search input[type=text]
+{
+    width: 255px;
+}
+
+.Cgv_Search input[type=submit]
+{
+    margin-left: 5px;
+}
+
+.Cgv_Filter
+{
+    padding: 3px 6px 3px 6px;
+    min-height: 20px;
+}
+
+.Cgv_Filter a
+{
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+.Cgv_Filter ul
+{
+    display: inline;
+}
+
+.Cgv_Filter li
+{
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.Cgv_Filter ul li.DropMenu ul
+{
+    position: absolute;
+    width: auto;
+    min-width: 100px;
+    background-color: White;
+    border: 1px solid Black;
+    color: #777 !important;
+    padding: 3px 0 3px 0;
+    display: none;
+}
+
+.Cgv_Filter ul li.DropMenu:hover ul, .Cgv_Filter ul li.DropMenu ul li
+{
+    display: block;
+}
+
+.Cgv_Filter ul li.DropMenu ul li a
+{
+    padding: 3px 8px;
+    margin: 0;
+    font-weight: normal;
+    display: block;
+}

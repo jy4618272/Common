@@ -1,0 +1,166 @@
+﻿.Notification
+{
+    background-position: 8px center !important;
+    background-repeat: no-repeat !important;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    margin: 0 0 15px;
+    padding: 0 !important;
+    position: relative;
+    width: 99.8%;
+    line-height: 1.5em;
+}
+
+.Notification, .Notification a, .Notification a:hover
+{
+    font-family: "Helvetica Neue" , Arial, "Liberation Sans" , FreeSans, Sans-serif;
+    font-size: 13px;
+    color: #665252;
+    font-weight: normal;
+}
+
+.Notification.Normal
+{
+    min-height: 50px;
+}
+
+.Notification.Small
+{
+    background-position: 10px center !important;
+}
+
+.Notification h4
+{
+    padding: 0;
+    margin: 0;
+}
+
+.Notification h4, .Notification span
+{
+    font-size: 19px;
+    font-weight: normal;
+}
+
+.Notification p
+{
+    margin: 0;
+}
+
+.Notification div
+{
+    display: block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.5em;
+}
+
+.Notification.Normal div
+{
+    padding: 10px 10px 10px 55px;
+}
+
+.Notification.Small div
+{
+    padding: 10px 10px 10px 36px;
+}
+
+.Notification .Close
+{
+    background: url($Close.png$) no-repeat;
+    height: 10px;
+    width: 10px;
+    color: #990000;
+    font-size: 9px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    text-decoration: none;
+}
+
+.Notification.Error
+{
+    background-color: #ffcece;
+    border-color: #df8f8f;
+    color: #665252;
+}
+
+.Notification.Error.Normal
+{
+    background-image: url($Error.png$);
+}
+
+.Notification.Error.Small
+{
+    background-image: url($ErrorSmall.png$);
+}
+
+.Notification.Error span
+{
+    color: #BD3633;
+}
+
+.Notification.Information
+{
+    background-color: #dbe3ff;
+    border-color: #a2b4ee;
+    color: #585b66;
+}
+
+.Notification.Information.Normal
+{
+    background-image: url($Information.png$);
+}
+
+.Notification.Information.Small
+{
+    background-image: url($InformationSmall.png$);
+}
+
+.Notification.Information span
+{
+    color: #3D3DB7;
+}
+
+.Notification.Success
+{
+    background-color: #d5ffce;
+    border-color: #9adf8f;
+    color: #556652;
+}
+
+.Notification.Success.Normal
+{
+    background-image: url($Success.png$);
+}
+
+.Notification.Success.Small
+{
+    background-image: url($SuccessSmall.png$);
+}
+
+.Notification.Success span
+{
+    color: #3DA033;
+}
+
+.Notification.Warning
+{
+    background: #fffbcc url($Warning.png$);
+    border-color: #e6db55;
+    color: #666452;
+}
+
+.Notification.Warning.Normal
+{
+    background-image: url($Warning.png$);
+}
+
+.Notification.Warning.Small
+{
+    background-image: url($WarningSmall.png$);
+}
+
+.Notification.Warning span
+{
+    color: #e8ad07;
+}

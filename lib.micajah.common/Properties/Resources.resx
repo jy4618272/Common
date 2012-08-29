@@ -1,0 +1,2470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionsControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ActionsControl_EditForm_SubmenuItemImageUrlField_HeaderText" xml:space="preserve">
+    <value>Image URL</value>
+  </data>
+  <data name="ActionsControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ActionsControl_EditForm_NavigateUrlField_HeaderText" xml:space="preserve">
+    <value>Navigate URL</value>
+  </data>
+  <data name="ActionsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="ActionsControl_EditForm_OrderNumberField_HeaderText" xml:space="preserve">
+    <value>Order number</value>
+  </data>
+  <data name="ActionsControl_EditForm_ShowInDetailMenuField_Text" xml:space="preserve">
+    <value>Show in detail menu</value>
+  </data>
+  <data name="ActionsControl_EditForm_VisibleField_Text" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_ButtonsSeparator" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_CancelButton_Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_CloseButton_Text" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_CreateButton_Text" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_DeleteButton_Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_EditButton_Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_SaveButton_Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_SelectButton_Text" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_SendButton_Text" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="DatabasesControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DatabasesControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DatabasesControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="DatabasesControl_EditForm_PasswordField_HeaderText" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="DatabasesControl_EditForm_DatabaseServerIdField_HeaderText" xml:space="preserve">
+    <value>Database Server</value>
+  </data>
+  <data name="DatabasesControl_EditForm_UserNameField_HeaderText" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="DatabasesControl_ErrorMessage_NoDatabaseServer" xml:space="preserve">
+    <value>No active Database Servers. Please &lt;a href="{0}"&gt;click here&lt;/a&gt; to add a Database Server.</value>
+  </data>
+  <data name="DatabasesControl_List_Caption" xml:space="preserve">
+    <value>Databases</value>
+  </data>
+  <data name="DatabasesControl_List_DatabaseIdColumn_HeaderText" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="DatabasesControl_List_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DatabasesControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DateRange_DateRangeLabel_Text" xml:space="preserve">
+    <value>Date Range</value>
+  </data>
+  <data name="DateRange_EndDateLabel_Text" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="DateRange_StartDateLabel_Text" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_DeleteButton_ConfirmText" xml:space="preserve">
+    <value>Do you really want to delete it?</value>
+  </data>
+  <data name="UserContext_ErrorMessage_NoSelectedOrganization" xml:space="preserve">
+    <value>No selected Organization.</value>
+  </data>
+  <data name="LoginElement_FailureText" xml:space="preserve">
+    <value>Your log in attempt was not successful. Please try again.</value>
+  </data>
+  <data name="LoginElement_LoginButtonText" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="LoginElement_LoginLabelText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LoginElement_PasswordLabelText" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LogoffControl_LogoffLink_Text" xml:space="preserve">
+    <value>Log Out Now</value>
+  </data>
+  <data name="LogOffControl_OrganizationLabel_Text" xml:space="preserve">
+    <value>Switch to another organization:</value>
+  </data>
+  <data name="LogOffControl_TitleLabel_Text" xml:space="preserve">
+    <value>You are about to log out...</value>
+  </data>
+  <data name="MagicForm_Caption_EditMode" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="MagicForm_Caption_InsertMode" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="MagicForm_Caption_ReadOnlyMode" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="MagicForm_RequiredInformation_Text" xml:space="preserve">
+    <value>Required</value>
+  </data>
+  <data name="CommonGridView_AddLink_Text" xml:space="preserve">
+    <value>Add New</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_DatabaseIdField_HeaderText" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="OrganizationsControl_List_Caption" xml:space="preserve">
+    <value>Organizations</value>
+  </data>
+  <data name="OrganizationsControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ChangePasswordControl_EditForm_PasswordCompareValidator_ErrorMessage" xml:space="preserve">
+    <value>The confirm new password must match the new password entry</value>
+  </data>
+  <data name="RoleEditControl_EditForm_ActionField_HeaderText" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="RoleEditControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="RoleEditControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RoleEditControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="RolesControl_List_Caption" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="RolesControl_List_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="RolesControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DatabaseServersControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DatabaseServersControl_EditForm_InstanceNameField_HeaderText" xml:space="preserve">
+    <value>Instance name</value>
+  </data>
+  <data name="DatabaseServersControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DatabaseServersControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Database Server</value>
+  </data>
+  <data name="DatabaseServersControl_EditForm_WebSiteIdField_HeaderText" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="DatabaseServersControl_ErrorMessage_NoWebsite" xml:space="preserve">
+    <value>No active Websites. Please &lt;a href="{0}"&gt;click here&lt;/a&gt; to add a Website.</value>
+  </data>
+  <data name="DatabaseServersControl_List_Caption" xml:space="preserve">
+    <value>Database Servers</value>
+  </data>
+  <data name="DatabaseServersControl_List_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DatabaseServersControl_List_FullNameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="StandardDateRange_LastFiscalYear" xml:space="preserve">
+    <value>Last Fiscal Year</value>
+  </data>
+  <data name="StandardDateRange_LastMonth" xml:space="preserve">
+    <value>Last Month</value>
+  </data>
+  <data name="StandardDateRange_LastWeek" xml:space="preserve">
+    <value>Last Week</value>
+  </data>
+  <data name="StandardDateRange_LastYear" xml:space="preserve">
+    <value>Last Year</value>
+  </data>
+  <data name="StandardDateRange_Next30Days" xml:space="preserve">
+    <value>Next 30 Days</value>
+  </data>
+  <data name="StandardDateRange_Next365Days" xml:space="preserve">
+    <value>Next 365 Days</value>
+  </data>
+  <data name="StandardDateRange_Next90Days" xml:space="preserve">
+    <value>Next 90 Days</value>
+  </data>
+  <data name="StandardDateRange_NextFiscalYear" xml:space="preserve">
+    <value>Next Fiscal Year</value>
+  </data>
+  <data name="StandardDateRange_NextMonth" xml:space="preserve">
+    <value>Next Month</value>
+  </data>
+  <data name="StandardDateRange_NextWeek" xml:space="preserve">
+    <value>Next Week</value>
+  </data>
+  <data name="StandardDateRange_NextYear" xml:space="preserve">
+    <value>Next Year</value>
+  </data>
+  <data name="StandardDateRange_Rolling30Days" xml:space="preserve">
+    <value>Past 30 Days</value>
+  </data>
+  <data name="StandardDateRange_Rolling365Days" xml:space="preserve">
+    <value>Past 365 Days</value>
+  </data>
+  <data name="StandardDateRange_Rolling90Days" xml:space="preserve">
+    <value>Past 90 Days</value>
+  </data>
+  <data name="StandardDateRange_ThisFiscalYear" xml:space="preserve">
+    <value>This Fiscal Year</value>
+  </data>
+  <data name="StandardDateRange_ThisMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="StandardDateRange_ThisWeek" xml:space="preserve">
+    <value>This Week</value>
+  </data>
+  <data name="StandardDateRange_ThisYear" xml:space="preserve">
+    <value>ThisYear</value>
+  </data>
+  <data name="StandardDateRange_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="TextBox_IntegerValidator_ErrorMessage" xml:space="preserve">
+    <value>The value must be integer</value>
+  </data>
+  <data name="ChangePasswordControl_EditForm_ConfirmNewPasswordField_HeaderText" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="ChangePasswordControl_EditForm_NewPasswordField_HeaderText" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="ChangePasswordControl_EditForm_ObjectName" xml:space="preserve">
+    <value>My Password</value>
+  </data>
+  <data name="UsersControl_EditForm_EmailField_HeaderText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="UsersControl_EditForm_FirstNameField_HeaderText" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="UsersControl_EditForm_LastNameField_HeaderText" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="UsersControl_EditForm_MiddleNameField_HeaderText" xml:space="preserve">
+    <value>Middle name</value>
+  </data>
+  <data name="UsersControl_EditForm_ObjectName" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="UsersControl_List_Caption" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="UsersControl_List_EmailColumn_HeaderText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="UsersControl_List_LastLoginDateColumn_HeaderText" xml:space="preserve">
+    <value>Last Log In</value>
+  </data>
+  <data name="CheckBox_RequiredValidator_ErrorMessage" xml:space="preserve">
+    <value>You must check it</value>
+  </data>
+  <data name="ComboBox_RequiredValidator_ErrorMessage1" xml:space="preserve">
+    <value>You must select an item</value>
+  </data>
+  <data name="TextBox_LengthInfoStringFormat1" xml:space="preserve">
+    <value>chars</value>
+  </data>
+  <data name="TextBox_LengthInfoStringFormat2" xml:space="preserve">
+    <value>chars of {0} max</value>
+  </data>
+  <data name="TextBox_RangeValidator_ErrorMessage" xml:space="preserve">
+    <value>Invalid data type</value>
+  </data>
+  <data name="TextBox_RegularExpressionValidator_ErrorMessage" xml:space="preserve">
+    <value>Invalid data type</value>
+  </data>
+  <data name="TextBox_RequiredValidator_ErrorMessage" xml:space="preserve">
+    <value>A value is required</value>
+  </data>
+  <data name="WebsitesControl_EditForm_AdminContactInfoField_HeaderText" xml:space="preserve">
+    <value>Admin contact information</value>
+  </data>
+  <data name="WebsitesControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="WebsitesControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="WebsitesControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="WebsitesControl_EditForm_UrlField_HeaderText" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="WebsitesControl_List_Caption" xml:space="preserve">
+    <value>Websites</value>
+  </data>
+  <data name="WebsitesControl_List_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="WebsitesControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="UsersControl_NoGroupError_Message" xml:space="preserve">
+    <value>No active Groups.</value>
+  </data>
+  <data name="RoleEditControl_EditForm_RankField_HeaderText" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="RolesControl_List_RankColumn_HeaderText" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="ActiveOrganizationControl_SetupLink_Text" xml:space="preserve">
+    <value>Go to Micajah.Common Setup</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_AdminEmailField_HeaderText" xml:space="preserve">
+    <value>Administrator e-mail</value>
+  </data>
+  <data name="DateRange_CompareValidator_ErrorMessage" xml:space="preserve">
+    <value>End date must be greater than the start date</value>
+  </data>
+  <data name="DateRange_RequiredValidator_ErrorMessage" xml:space="preserve">
+    <value>You must enter the values</value>
+  </data>
+  <data name="LogOnControl_PasswordRecoveryLink_Text" xml:space="preserve">
+    <value>Forget?</value>
+  </data>
+  <data name="PasswordRecoveryControl_DescriptionLabel_FailureText" xml:space="preserve">
+    <value>We were unable to access your information. Please try again.</value>
+  </data>
+  <data name="PasswordRecoveryControl_DescriptionLabel_SuccessText" xml:space="preserve">
+    <value>We have sent an email to you.&lt;br /&gt;It includes information on changing and confirming your new password.</value>
+  </data>
+  <data name="PasswordRecoveryControl_LogOnPageLink_Text" xml:space="preserve">
+    <value>Return to log in page</value>
+  </data>
+  <data name="PasswordRecoveryControl_SubmitButton_Text" xml:space="preserve">
+    <value>Send Password</value>
+  </data>
+  <data name="PasswordRecoveryControl_TitleLabel_FailureText" xml:space="preserve">
+    <value>Password retrieval unsuccessful!</value>
+  </data>
+  <data name="PasswordRecoveryControl_TitleLabel_SuccessText" xml:space="preserve">
+    <value>Now check your email</value>
+  </data>
+  <data name="PasswordRecoveryControl_TitleLabel_Text" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="EmailNotification_ResetPassword_Subject" xml:space="preserve">
+    <value>Your {0} reset password request</value>
+  </data>
+  <data name="ActiveInstanceControl_DescriptionLabel_Text" xml:space="preserve">
+    <value>Select Instance</value>
+  </data>
+  <data name="InstanceProvider_ErrorMessage_NoActiveInstances" xml:space="preserve">
+    <value>There are no active Instances in Organization "{0}"</value>
+  </data>
+  <data name="UserContext_ErrorMessage_NoGroups" xml:space="preserve">
+    <value>No Groups for your account in the Organization.</value>
+  </data>
+  <data name="UserContext_ErrorMessage_NoGroupsInstancesRoles" xml:space="preserve">
+    <value>There are no Roles for User's Groups inside Instances of Organization "{0}".</value>
+  </data>
+  <data name="InstancesControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="InstancesControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="InstancesControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="InstancesControl_List_Caption" xml:space="preserve">
+    <value>Instances</value>
+  </data>
+  <data name="InstancesControl_List_InstanceIdColumn_HeaderText" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="InstancesControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GroupsControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="GroupsControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GroupsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="GroupsControl_List_Caption" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="GroupsControl_List_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="GroupsControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GroupsControl_NoInstanceError_Message" xml:space="preserve">
+    <value>No active Instances.</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_List_InstanceNameColumn_HeaderText" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_List_RoleNameColumn_HeaderText" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_EditForm_InstanceListField_HeaderText" xml:space="preserve">
+    <value>Instances</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Group Role</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_EditForm_RoleListField_HeaderText" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="GroupsControl_List_RolesLinkColumns_Text" xml:space="preserve">
+    <value>Roles &amp; Settings</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_List_Caption" xml:space="preserve">
+    <value>Group Roles</value>
+  </data>
+  <data name="UsersControl_EditForm_GroupIdField_HeaderText" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="LoginProvider_ErrorMessage_PasswordTooSimple" xml:space="preserve">
+    <value>Password must be alphanumeric with at least {0} characters and must contains at least {1} complex character like @#&amp;*.</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_List_ActionsLinkColumn_Text" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_ActionsTable_Caption" xml:space="preserve">
+    <value>Group Role Actions</value>
+  </data>
+  <data name="ActiveOrganizationControl_DescriptionLabel_Text" xml:space="preserve">
+    <value>Select Organization</value>
+  </data>
+  <data name="InstanceProvider_FirstInstance_Name" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="FrameworkControl_AssemblyList_CultureColumn_HeaderText" xml:space="preserve">
+    <value>Culture</value>
+  </data>
+  <data name="FrameworkControl_AssemblyList_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="FrameworkControl_AssemblyList_PublicKeyTokenColumn_HeaderText" xml:space="preserve">
+    <value>PublicKeyToken</value>
+  </data>
+  <data name="FrameworkControl_AssemblyList_VersionColumn_HeaderText" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="ProfileControl_EditForm_EmailField_HeaderText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="ProfileControl_EditForm_FirstNameField_HeaderText" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="ProfileControl_EditForm_LastNameField_HeaderText" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="ProfileControl_EditForm_MiddleNameField_HeaderText" xml:space="preserve">
+    <value>Middle name</value>
+  </data>
+  <data name="ProfileControl_EditForm_ObjectName" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="LoginProvider_ErrorMessage_LoginAlreadyExists" xml:space="preserve">
+    <value>The login name '{0}' is already in use. Please use a different login name. Original login name - '{1}'.</value>
+  </data>
+  <data name="DatabaseServersControl_EditForm_PortField_HeaderText" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="FrameworkControl_ClearApplicationDataLink_Text" xml:space="preserve">
+    <value>Clear all data cached by application</value>
+  </data>
+  <data name="FrameworkControl_TitleLabel1_Text" xml:space="preserve">
+    <value>Framework management</value>
+  </data>
+  <data name="FrameworkControl_TitleLabel2_Text" xml:space="preserve">
+    <value>Framework information</value>
+  </data>
+  <data name="ActiveInstanceControl_LogoffDescriptionLabel_Text" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="ActiveInstanceControl_LogoffLink_Text" xml:space="preserve">
+    <value>Click here to log out.</value>
+  </data>
+  <data name="ActiveOrganizationControl_OrText" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="ActiveOrganizationControl_LogoffLink_Text" xml:space="preserve">
+    <value>Click here to log out.</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_LogoImageField_HeaderText" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_WebSiteUrlField_HeaderText" xml:space="preserve">
+    <value>Website URL</value>
+  </data>
+  <data name="DatabasesControl_List_DatabaseServerFullNameColumn_HeaderText" xml:space="preserve">
+    <value>Database Server</value>
+  </data>
+  <data name="FrameworkControl_AssemblyList_Caption" xml:space="preserve">
+    <value>Assemblies</value>
+  </data>
+  <data name="Header_SearchButton_Text" xml:space="preserve">
+    <value>Go!</value>
+  </data>
+  <data name="CommonGridView_EmptyDataText" xml:space="preserve">
+    <value>No Data Found.</value>
+  </data>
+  <data name="RoleEditControl_EditForm_ShortNameField_HeaderText" xml:space="preserve">
+    <value>Short name</value>
+  </data>
+  <data name="RolesControl_List_ShortNameColumn_HeaderText" xml:space="preserve">
+    <value>Short name</value>
+  </data>
+  <data name="RolesControl_List_StartActionColumn_HeaderText" xml:space="preserve">
+    <value>Start page</value>
+  </data>
+  <data name="RoleEditControl_StartAction_ToolTip" xml:space="preserve">
+    <value>This is start action for the role</value>
+  </data>
+  <data name="ActionsControl_EditForm_InstanceRequiredField_Text" xml:space="preserve">
+    <value>Instance required</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_EditForm_InsertErrorMessage" xml:space="preserve">
+    <value>The role is already assigned to this or another group</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_RemoveButton_Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_RemoveButton_ConfirmText" xml:space="preserve">
+    <value>Do you really want to remove it?</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_UpdateButton_Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="FrameworkControl_DbInfoLabel_Text" xml:space="preserve">
+    <value>The current version of the database is {0}.</value>
+  </data>
+  <data name="FrameworkControl_DbNeedUpgradeLabel_Text" xml:space="preserve">
+    <value>It needs upgrade to version {0}.</value>
+  </data>
+  <data name="FrameworkControl_UpgradeLink_Text" xml:space="preserve">
+    <value>Please click here to upgrade the database</value>
+  </data>
+  <data name="FrameworkControl_TitleLabel3_Text" xml:space="preserve">
+    <value>Database version</value>
+  </data>
+  <data name="UsersControl_ErrorMessage_UserInOrganizationExists" xml:space="preserve">
+    <value>The user already exists in current organization.</value>
+  </data>
+  <data name="Hello_HelloNoteLabel_Text" xml:space="preserve">
+    <value>Hello,</value>
+  </data>
+  <data name="Hello_RoleLabel_Text" xml:space="preserve">
+    <value>You are logged in to {0} as {1}</value>
+  </data>
+  <data name="ExceptionMessage_ApplicationNameIsEmpty" xml:space="preserve">
+    <value>Micajah.Common.Application.WebApplicationSettings.ApplicationName can't be empty.</value>
+  </data>
+  <data name="ExceptionMessage_ImageButtonTypeIsNotSupported" xml:space="preserve">
+    <value>System.Web.UI.WebControls.ButtonType.Image is not supported.</value>
+  </data>
+  <data name="ExceptionMessage_ObjectNameIsEmpty" xml:space="preserve">
+    <value>ObjectName can't be empty.</value>
+  </data>
+  <data name="LogOnAsUserControl_List_Caption" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="LogOnAsUserControl_List_EmailColumn_HeaderText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LogOnAsUserControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="LogOnAsUserControl_List_LastLoginDateColumn_HeaderText" xml:space="preserve">
+    <value>Last Log In</value>
+  </data>
+  <data name="InstanceProvider_ErrorMessage_InstanceAlreadyExists" xml:space="preserve">
+    <value>The Instance "{0}" already exists</value>
+  </data>
+  <data name="GroupProvider_ErrorMessage_GroupAlreadyExists" xml:space="preserve">
+    <value>The Group "{0}" already exists</value>
+  </data>
+  <data name="OrganizationProvider_ErrorMessage_OrganizationAlreadyExists" xml:space="preserve">
+    <value>The Organization "{0}" already exists.</value>
+  </data>
+  <data name="Support_InvalidEmail" xml:space="preserve">
+    <value>The E-mail supplied is invalid.</value>
+  </data>
+  <data name="Support_InvalidUrl" xml:space="preserve">
+    <value>The URL supplied is invalid.</value>
+  </data>
+  <data name="RoleEditControl_EditForm_StartActionValidator_ErrorMessage" xml:space="preserve">
+    <value>You must select a start page for the role from the tree</value>
+  </data>
+  <data name="RoleEditControl_EditForm_RankField_ValidationErrorMessage" xml:space="preserve">
+    <value>Rank must be number greater than or equal to {0}.</value>
+  </data>
+  <data name="RoleProvider_ErrorMessage_RoleNameAlreadyExists" xml:space="preserve">
+    <value>The Role "{0}" already exists</value>
+  </data>
+  <data name="RoleProvider_ErrorMessage_RoleRankAlreadyExists" xml:space="preserve">
+    <value>The Role with rank "{0}" already exists</value>
+  </data>
+  <data name="RoleProvider_ErrorMessage_RoleShortNameAlreadyExists" xml:space="preserve">
+    <value>The Role with short name "{0}" already exists</value>
+  </data>
+  <data name="OrganizationsControl_List_DatabaseNameColumn_HeaderText" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="OrganizationsControl_List_DatabaseServerFullNameColumn_HeaderText" xml:space="preserve">
+    <value>Database Server</value>
+  </data>
+  <data name="CheckBoxList_RequiredValidator_ErrorMessage" xml:space="preserve">
+    <value>You must check an item</value>
+  </data>
+  <data name="DatabaseProvider_ErrorMessage_NoDatabase" xml:space="preserve">
+    <value>The Database with Id={0} doesn't exist</value>
+  </data>
+  <data name="OrganizationProvider_ErrorMessage_NoOrganization" xml:space="preserve">
+    <value>The Organization with Id={0} doesn't exist.</value>
+  </data>
+  <data name="DatabaseServerProvider_ErrorMessage_NoDatabaseServer" xml:space="preserve">
+    <value>The Database Server with Id={0} doesn't exist</value>
+  </data>
+  <data name="WebsiteProvider_ErrorMessage_NoWebsite" xml:space="preserve">
+    <value>The Website with Id={0} doesn't exist</value>
+  </data>
+  <data name="NoticeMessageBox_ErrorTitle" xml:space="preserve">
+    <value>Oops!</value>
+  </data>
+  <data name="NoticeMessageBox_InformationTitle" xml:space="preserve">
+    <value>FYI.</value>
+  </data>
+  <data name="NoticeMessageBox_SuccessTitle" xml:space="preserve">
+    <value>Yeah!</value>
+  </data>
+  <data name="NoticeMessageBox_WarningTitle" xml:space="preserve">
+    <value>Heads Up!</value>
+  </data>
+  <data name="GroupProvider_OrganizationAdministratorGroupName" xml:space="preserve">
+    <value>Organization Administrators</value>
+  </data>
+  <data name="UserProvider_ErrorMessage_YouMustBeOrganizationAdministrator" xml:space="preserve">
+    <value>You must be organization administrator, because there is no other administrator for the organization except you.</value>
+  </data>
+  <data name="SignupUserControl_ErrorMessage_LoginInOrganizationExists" xml:space="preserve">
+    <value>The login already exists in "{0}" organization.</value>
+  </data>
+  <data name="SignupUserControl_ConfirmPasswordLabel_Text" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="SignupUserControl_SubmitButton_Text" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="SignupUserControl_LoginPageLink_Text_ReturnToLoginPage" xml:space="preserve">
+    <value>Return to log in page</value>
+  </data>
+  <data name="SignupUserControl_DescriptionLabel_Text_AddUserToOrganization" xml:space="preserve">
+    <value>Your account &lt;b&gt;"{0}"&lt;/b&gt;&lt;br&gt;has been created successfully!</value>
+  </data>
+  <data name="SignupUserControl_TitleLabel_SuccessText" xml:space="preserve">
+    <value>Finished!</value>
+  </data>
+  <data name="SignupUserControl_TitleLabel_Text" xml:space="preserve">
+    <value>Create Your Account</value>
+  </data>
+  <data name="SignupUserControl_PasswordCompareValidator_ErrorMessage" xml:space="preserve">
+    <value>The confirm password must match the password entry</value>
+  </data>
+  <data name="LogOnControl_SignupUserButton_Text" xml:space="preserve">
+    <value>Register New User Account</value>
+  </data>
+  <data name="LogOnControl_SignupUserTitleLabel_Text" xml:space="preserve">
+    <value>New Users</value>
+  </data>
+  <data name="SignupUserControl_DescriptionLabel_Text_UserExists" xml:space="preserve">
+    <value>The login you entered was located in our database but was not associated with this organization/instance.&lt;br&gt;You will have to enter your correct password in the input box below to complete this operation.&lt;br&gt;If you have forgotten your password you should &lt;a href="{0}"'&gt;click here&lt;/a&gt; to recover the password first.</value>
+  </data>
+  <data name="SignupUserControl_ErrorMessage_PasswordSuppliedDoesNotMatchCurrentPassword" xml:space="preserve">
+    <value>Password supplied does not match the current password.</value>
+  </data>
+  <data name="SignupUserControl_Step1Button_Text" xml:space="preserve">
+    <value>Change Login</value>
+  </data>
+  <data name="SignupUserControl_LoginPageLink_Text_ClickHereToLogin" xml:space="preserve">
+    <value>Click Here to Log In</value>
+  </data>
+  <data name="GroupsControl_List_SettingsLinkColumns_Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="GroupsInstancesRolesControl_List_SettingsLinkColumn_Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="FrameworkControl_ErrorMesage_InvalidDatabaseVersion" xml:space="preserve">
+    <value>The database version is invalid.</value>
+  </data>
+  <data name="SettingsControl_SettingValueUndefined" xml:space="preserve">
+    <value>Undefined</value>
+  </data>
+  <data name="SettingsDiagnosticControl_InstanceListLabel_Text" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="SettingsDiagnosticControl_GroupListLabel_Text" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="SettingsDiagnosticControl_SubmitButton_Text" xml:space="preserve">
+    <value>Diagnose {0}</value>
+  </data>
+  <data name="SettingsDiagnosticControl_UserListLabel_Text" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="SettingsDiagnosticControl_FormTable_ObjectName_GroupsSettings" xml:space="preserve">
+    <value>Groups Settings</value>
+  </data>
+  <data name="SettingsDiagnosticControl_FormTable_ObjectName_UserSettings" xml:space="preserve">
+    <value>User Settings</value>
+  </data>
+  <data name="SettingsDiagnosticControl_SwitchButton_Text" xml:space="preserve">
+    <value>Switch to {0}</value>
+  </data>
+  <data name="SettingProvider_ErrorMessage_SettingShortNameAlreadyExists" xml:space="preserve">
+    <value>The Setting with short name "{0}" already exists</value>
+  </data>
+  <data name="ActionsControl_EditForm_ButtonIconUrlField_HeaderText" xml:space="preserve">
+    <value>Button icon URL</value>
+  </data>
+  <data name="ActionsControl_EditForm_GroupInDetailMenuField_Text" xml:space="preserve">
+    <value>Group in detail menu</value>
+  </data>
+  <data name="ActionsControl_EditForm_HighlightInDetailMenuField_Text" xml:space="preserve">
+    <value>Highlight in detail menu</value>
+  </data>
+  <data name="ActionsControl_EditForm_ShowChildrenInDetailMenuField_Text" xml:space="preserve">
+    <value>Show children in detail menu</value>
+  </data>
+  <data name="ActionsControl_EditForm_DetailMenuGroupField_Text" xml:space="preserve">
+    <value>Detail menu</value>
+  </data>
+  <data name="DetailMenu_OtherLinks_Caption" xml:space="preserve">
+    <value>Other links:</value>
+  </data>
+  <data name="CustomStyleSheetEditControl_FormTable_ObjectName" xml:space="preserve">
+    <value>StyleSheet</value>
+  </data>
+  <data name="UpdateProgress_NoUpdatePanel" xml:space="preserve">
+    <value>No UpdatePanel found for AssociatedUpdatePanelID '{0}'.</value>
+  </data>
+  <data name="UpdateProgress_ProgressText" xml:space="preserve">
+    <value>Please wait, saving your request ....</value>
+  </data>
+  <data name="UpdateProgress_FailureText" xml:space="preserve">
+    <value>Save Error! Try again.</value>
+  </data>
+  <data name="UpdateProgress_SuccessText" xml:space="preserve">
+    <value>Saved Successfully!</value>
+  </data>
+  <data name="ActionsControl_EditForm_AlternativeParentsField_Text" xml:space="preserve">
+    <value>Alternative Parents</value>
+  </data>
+  <data name="FrameworkControl_UpgradeLink_ConfirmText" xml:space="preserve">
+    <value>Do you really want to start the databases upgrade process?\r\nMake sure the databases are backed up before!</value>
+  </data>
+  <data name="LogOffControl_LogoffLabel_Text" xml:space="preserve">
+    <value>Or log out completely:</value>
+  </data>
+  <data name="OrganizationProvider_MasterDatabaseText" xml:space="preserve">
+    <value>Master Database</value>
+  </data>
+  <data name="FrameworkControl_DbNeedUpgradeNotesLabel_Text" xml:space="preserve">
+    <value>Make sure the databases are backed up before the upgrading!</value>
+  </data>
+  <data name="LogOffControl_InstanceDescriptionLabel_Text" xml:space="preserve">
+    <value>Select another instance:</value>
+  </data>
+  <data name="Footer_CopyrightInformationFormatString" xml:space="preserve">
+    <value>&amp;copy; {0} {1}.</value>
+  </data>
+  <data name="UsersControl_PwdForm_ObjectName" xml:space="preserve">
+    <value>User Password</value>
+  </data>
+  <data name="RolesControl_BuiltInRoleUrl" xml:space="preserve">
+    <value>Inherited from highest non built-in role</value>
+  </data>
+  <data name="UsersControl_UserDetailMenu_TitleFormatString" xml:space="preserve">
+    <value>Edit {0}</value>
+  </data>
+  <data name="Header_SearchTextBox_EmptyText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Header_SearchButton_ToolTip" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="UsersControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="UsersControl_EditForm_EditMode_ObjectName" xml:space="preserve">
+    <value>User Profile</value>
+  </data>
+  <data name="UsersControl_EditUserGroupsForm_ObjectName" xml:space="preserve">
+    <value>User's Groups</value>
+  </data>
+  <data name="OrganizationsControl_DatabaseDoesntExistOrInactive" xml:space="preserve">
+    <value>The Database with Id={0} which is associated with the organization doesn't exist or inactive.</value>
+  </data>
+  <data name="Footer_EngineeredByFormatString" xml:space="preserve">
+    <value>Engineered by {0}.</value>
+  </data>
+  <data name="Footer_MicajahCompanyName" xml:space="preserve">
+    <value>Micajah</value>
+  </data>
+  <data name="ActionsControl_EditForm_AuthenticationRequiredField_Text" xml:space="preserve">
+    <value>Authentication required</value>
+  </data>
+  <data name="Hello_VisitorText" xml:space="preserve">
+    <value>Visitor</value>
+  </data>
+  <data name="MeasureUnitsProvider_ErrorMessage_ConversionAlreadyExists" xml:space="preserve">
+    <value>This measure unit conversion already exists in system.</value>
+  </data>
+  <data name="MeasureUnitsProvider_ErrorMessage_FactorCannotBeZero" xml:space="preserve">
+    <value>Conversion factor cannot be zero or negative.</value>
+  </data>
+  <data name="MeasureUnitsProvider_ErrorMessage_IncorrectIdentifier" xml:space="preserve">
+    <value>Incorrect input measure unit identifiers.</value>
+  </data>
+  <data name="MeasureUnitsProvider_ErrorMessage_CannotFindByMeasureUnitId" xml:space="preserve">
+    <value>Cannot found the measure unit by current identifier.</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_GroupNameField_HeaderText" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_PluralAbbrvField_HeaderText" xml:space="preserve">
+    <value>Plural Abbreviation</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_PluralNameField_HeaderText" xml:space="preserve">
+    <value>Plural Name</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_SingularAbbrvField_HeaderText" xml:space="preserve">
+    <value>Singular Abbreviation</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_SingularNameField_HeaderText" xml:space="preserve">
+    <value>Singular Name</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Measure Unit</value>
+  </data>
+  <data name="MeasureUnitsControl_List_Caption" xml:space="preserve">
+    <value>Units of Measure</value>
+  </data>
+  <data name="MeasureUnitsControl_List_GroupNameColumn_HeaderText" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="MeasureUnitsControl_List_PluralAbbrvColumn_HeaderText" xml:space="preserve">
+    <value>Plural Abbreviation</value>
+  </data>
+  <data name="MeasureUnitsControl_List_PluralNameColumn_HeaderText" xml:space="preserve">
+    <value>Plural Name</value>
+  </data>
+  <data name="MeasureUnitsControl_List_SingularAbbrvColumn_HeaderText" xml:space="preserve">
+    <value>Singular Abbreviation</value>
+  </data>
+  <data name="MeasureUnitsControl_List_SingularNameColumn_HeaderText" xml:space="preserve">
+    <value>Singular Name</value>
+  </data>
+  <data name="MeasureUnitsControl_ConversionList_Caption" xml:space="preserve">
+    <value>Measure Unit Conversion</value>
+  </data>
+  <data name="MeasureUnitsControl_ConversionList_ConversionFactorColumn_HeaderText" xml:space="preserve">
+    <value>Conversion Factor</value>
+  </data>
+  <data name="MeasureUnitsControl_ConversionList_SourceColumn_HeaderText" xml:space="preserve">
+    <value>Source Measure Unit</value>
+  </data>
+  <data name="MeasureUnitsControl_ConversionList_TargetColumn_HeaderText" xml:space="preserve">
+    <value>Target Measure Unit</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_Caption" xml:space="preserve">
+    <value>Built-In Units of Measure</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_GroupNameColumn_HeaderText" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_PluralAbbrvColumn_HeaderText" xml:space="preserve">
+    <value>Plural Abbreviation</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_PluralNameColumn_HeaderText" xml:space="preserve">
+    <value>Plural Name</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_SingularAbbrvColumn_HeaderText" xml:space="preserve">
+    <value>Singular Abbreviation</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_SingularNameColumn_HeaderText" xml:space="preserve">
+    <value>Singular Name</value>
+  </data>
+  <data name="EntitiesControl_ActionDescriptionFormat" xml:space="preserve">
+    <value>Manage the {0}</value>
+  </data>
+  <data name="EntityControl_RestrictErrorLabel_Text" xml:space="preserve">
+    <value>Restrict hierarchy max depth or entity max depth is exceeded</value>
+  </data>
+  <data name="ComboBox_RequiredValidator_ErrorMessage2" xml:space="preserve">
+    <value>You must enter a value or select an item</value>
+  </data>
+  <data name="MeasureUnitsControl_EditForm_LocalNameField_HeaderText" xml:space="preserve">
+    <value>Unit Type</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_LocalNameColumn_HeaderText" xml:space="preserve">
+    <value>Unit Type</value>
+  </data>
+  <data name="MeasureUnitsControl_List_LocalNameColumn_HeaderText" xml:space="preserve">
+    <value>Unit Type</value>
+  </data>
+  <data name="ExceptionMessage_ArgumentsIsEmpty" xml:space="preserve">
+    <value>The identifier argument cannot be empty</value>
+  </data>
+  <data name="UsersControl_InviteUsersLink_Text" xml:space="preserve">
+    <value>Invite Users</value>
+  </data>
+  <data name="InviteUsersControl_DescriptionLabel_Text" xml:space="preserve">
+    <value>Enter email addresses for the people you want to invite (maximum {0} emails per send) and select the groups for them. Each person will get an email with a special link. They can click the link to create an account and log in.</value>
+  </data>
+  <data name="InviteUsersControl_FormTable_Caption" xml:space="preserve">
+    <value>Invite Users</value>
+  </data>
+  <data name="InviteUsersControl_SendButton_Text" xml:space="preserve">
+    <value>Invite these people</value>
+  </data>
+  <data name="InviteUsersControl_EmailHintLabel_Text" xml:space="preserve">
+    <value>(separated by commas)</value>
+  </data>
+  <data name="InviteUsersControl_EmailLabel_Text" xml:space="preserve">
+    <value>Email addresses</value>
+  </data>
+  <data name="InviteUsersControl_MessageHintLabel_Text" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="InviteUsersControl_MessageLabel_Text" xml:space="preserve">
+    <value>Add a message to the email</value>
+  </data>
+  <data name="EmailNotification_InviteUser_Subject" xml:space="preserve">
+    <value>You have been invited by {0} to set up an account on {1}</value>
+  </data>
+  <data name="InviteUsersControl_GroupsLabel_Text" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="UsersControl_InvitedUsersList_Caption" xml:space="preserve">
+    <value>These people have been invited but they haven't set up their account yet</value>
+  </data>
+  <data name="UsersControl_InvitedUsersList_DeleteColumn_ConfirmText" xml:space="preserve">
+    <value>Do you really want to cancel this invitation?</value>
+  </data>
+  <data name="UsersControl_InvitedUsersList_DeleteColumn_Text" xml:space="preserve">
+    <value>Cancel invitation</value>
+  </data>
+  <data name="UsersControl_InvitedUsersList_LoginNameColumn_DataFormatString" xml:space="preserve">
+    <value>{0} - Waiting acceptance</value>
+  </data>
+  <data name="UsersControl_InvitedUsersList_LoginNameColumn_HeaderText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="RuleParametersControl_List_Caption" xml:space="preserve">
+    <value>Input Parameters</value>
+  </data>
+  <data name="RuleParametersControl_List_EntityNodeTypeIdColumn_HeaderText" xml:space="preserve">
+    <value>Entity Name</value>
+  </data>
+  <data name="RuleParametersControl_List_FieldNameColumn_HeaderText" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="RuleParametersControl_List_TermColumn_HeaderText" xml:space="preserve">
+    <value>Term</value>
+  </data>
+  <data name="RuleParametersControl_List_TypeNameColumn_HeaderText" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="RuleParametersControl_List_ValueColumn_HeaderText" xml:space="preserve">
+    <value>Entity Value</value>
+  </data>
+  <data name="RulesControl_EditForm_ActiveField_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="RulesControl_EditForm_DisplayNameField_HeaderText" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="RulesControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RulesControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Rule</value>
+  </data>
+  <data name="RulesControl_List_ActiveColumn_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="RulesControl_List_Caption" xml:space="preserve">
+    <value>Rules</value>
+  </data>
+  <data name="RulesControl_List_CreatedByColumn_HeaderText" xml:space="preserve">
+    <value>Who Created</value>
+  </data>
+  <data name="RulesControl_List_CreatedDateColumn_HeaderText" xml:space="preserve">
+    <value>Created Date</value>
+  </data>
+  <data name="RulesControl_List_DisplayNameColumn_HeaderText" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="RulesControl_List_LastUsedDateColumn_HeaderText" xml:space="preserve">
+    <value>Last Used Date</value>
+  </data>
+  <data name="RulesControl_List_LastUsedUserColumn_HeaderText" xml:space="preserve">
+    <value>Who Last Used</value>
+  </data>
+  <data name="RulesControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RulesControl_List_InputParametersLinkColumns_HeaderText" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="RulesControl_List_UsedQtyColumn_HeaderText" xml:space="preserve">
+    <value>Used Qty</value>
+  </data>
+  <data name="RulesControl_ButtonUpdateOrder_Text" xml:space="preserve">
+    <value>Update Order Numbers</value>
+  </data>
+  <data name="Entity_ErrorMessage_CannotFound" xml:space="preserve">
+    <value>Cannot found Entity.</value>
+  </data>
+  <data name="RulesControl_FormRuleEngine_DisplayNameField_HeaderText" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="RulesControl_FormRuleEngine_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RulesControl_FormRuleEngine_ObjectName" xml:space="preserve">
+    <value>Rules Engine</value>
+  </data>
+  <data name="RulesEngineControl_List_Caption" xml:space="preserve">
+    <value>Rules Engine</value>
+  </data>
+  <data name="RulesEngineControl_List_DisplayNameColumn_HeaderText" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="RulesEngineControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RulesControl_EditForm_OrderNumberField_HeaderText" xml:space="preserve">
+    <value>Order Number</value>
+  </data>
+  <data name="RulesControl_List_OutputParametersLinkColumns_HeaderText" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="RulesControl_List_ParametersLinkColumns_HeaderGroup" xml:space="preserve">
+    <value>Parameters</value>
+  </data>
+  <data name="RulesControl_List_InputParametersLinkColumns_Text" xml:space="preserve">
+    <value>In-Params</value>
+  </data>
+  <data name="RulesControl_List_OutputParametersLinkColumns_Text" xml:space="preserve">
+    <value>Out-Params</value>
+  </data>
+  <data name="NodeTypesControl_ActionDescriptionFormat" xml:space="preserve">
+    <value>Manage the {0} Node Types</value>
+  </data>
+  <data name="EntitiesControl_EntityFieldsActionDescriptionFormat" xml:space="preserve">
+    <value>Manage the Custom Fields of the {0}</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_ActiveField_Text" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_AllowDBNullField_Text" xml:space="preserve">
+    <value>Allow DBNull</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_DataTypeIdField_HeaderText" xml:space="preserve">
+    <value>Data type</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_DefaultValueField_HeaderText" xml:space="preserve">
+    <value>Default value</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_MaxLengthField_HeaderText" xml:space="preserve">
+    <value>Max length</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_MaxValueField_HeaderText" xml:space="preserve">
+    <value>Max value</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_MinValueField_HeaderText" xml:space="preserve">
+    <value>Min value</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_OrderNumberField_HeaderText" xml:space="preserve">
+    <value>Order number</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_ReadOnlyField_Text" xml:space="preserve">
+    <value>Read only</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_UniqueField_Text" xml:space="preserve">
+    <value>Unique</value>
+  </data>
+  <data name="EntityFieldsControl_List_ActiveColumn_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="EntityFieldsControl_List_AllowDBNullColumn_HeaderText" xml:space="preserve">
+    <value>Allow DBNull</value>
+  </data>
+  <data name="EntityFieldsControl_List_Caption" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="EntityFieldsControl_List_DataTypeIdColumn_HeaderText" xml:space="preserve">
+    <value>Data type</value>
+  </data>
+  <data name="EntityFieldsControl_List_DefaultValueColumn_HeaderText" xml:space="preserve">
+    <value>Default value</value>
+  </data>
+  <data name="EntityFieldsControl_List_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EntityFieldsControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EntityFieldsControl_List_ReadOnlyColumn_HeaderText" xml:space="preserve">
+    <value>Read only</value>
+  </data>
+  <data name="EntityFieldsControl_List_UniqueColumn_HeaderText" xml:space="preserve">
+    <value>Unique</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_EntityFieldTypeIdField_HeaderText" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="EntityFieldsControl_List_EditValuesButton_ToolTip" xml:space="preserve">
+    <value>Edit values</value>
+  </data>
+  <data name="EntityFieldListValuesControl_CustomNameFormat" xml:space="preserve">
+    <value>{0} Values</value>
+  </data>
+  <data name="EntityFieldListValuesControl_EditForm_ActiveField_Text" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="EntityFieldListValuesControl_EditForm_DefaultField_Text" xml:space="preserve">
+    <value>Is Default</value>
+  </data>
+  <data name="EntityFieldListValuesControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EntityFieldListValuesControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="EntityFieldListValuesControl_EditForm_ValueField_HeaderText" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="EntityFieldListValuesControl_List_ActiveColumn_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="EntityFieldListValuesControl_List_Caption" xml:space="preserve">
+    <value>Values</value>
+  </data>
+  <data name="EntityFieldListValuesControl_List_DefaultColumn_HeaderText" xml:space="preserve">
+    <value>Is Default</value>
+  </data>
+  <data name="EntityFieldListValuesControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EntityFieldListValuesControl_List_ValueColumn_HeaderText" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="UserOrganizationControl_SaveButton_Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="UserOrganizationControl_SaveLabel_Text" xml:space="preserve">
+    <value>Save Completed</value>
+  </data>
+  <data name="ChangePasswordControl_EditForm_CaptionFormat" xml:space="preserve">
+    <value>{0} Password</value>
+  </data>
+  <data name="NodeTypeControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Node Type</value>
+  </data>
+  <data name="NodeTypeControl_EditForm_OrderNumberField_HeaderText" xml:space="preserve">
+    <value>Hierarchy Level</value>
+  </data>
+  <data name="NodeTypeControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="MasterPage_HelpLink_Text1" xml:space="preserve">
+    <value>Page Help [?]</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_InstanceList_AllInstancesItem_Text" xml:space="preserve">
+    <value>All Instances</value>
+  </data>
+  <data name="EntityFieldsControl_List_InstanceIdField_HeaderText" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_DecimalDigitsField_HeaderText" xml:space="preserve">
+    <value>Decimal places</value>
+  </data>
+  <data name="EntityFieldsControl_EditForm_LengthField_HeaderText" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="EntityFieldDataType_DateTime_Name" xml:space="preserve">
+    <value>Date &amp; Time</value>
+  </data>
+  <data name="EntityFieldDataType_Numeric_Name" xml:space="preserve">
+    <value>Numeric</value>
+  </data>
+  <data name="EntityFieldDataType_Text_Name" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="EntityFieldDataType_YesNo_Name" xml:space="preserve">
+    <value>Yes/No</value>
+  </data>
+  <data name="EntityFieldType_MultipleSelectList_Name" xml:space="preserve">
+    <value>List (multiple select)</value>
+  </data>
+  <data name="EntityFieldType_SingleSelectList_Name" xml:space="preserve">
+    <value>List (single select)</value>
+  </data>
+  <data name="EntityFieldType_Value_Name" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="EntityControl_DescriptionLabel_Text" xml:space="preserve">
+    <value>&lt;li&gt;Move Item:&lt;br /&gt;Drag and drop item into its new parent item.&lt;/li&gt;&lt;li&gt;Merge Item:&lt;br /&gt;Drag and drop source item into some level destination item.&lt;/li&gt;&lt;li&gt;&lt;nobr&gt;Copy Item without subitem:&lt;/nobr&gt;&lt;br /&gt;&amp;lt;Ctrl&amp;gt; key + drag and drop item into its new parent item.&lt;/li&gt;&lt;li&gt;Context menu:&lt;br /&gt;right or left mouse click.&lt;/li&gt;</value>
+  </data>
+  <data name="EntitiesControl_NodeTypes" xml:space="preserve">
+    <value> Node Types</value>
+  </data>
+  <data name="ProfileControl_EditForm_CityField_HeaderText" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="ProfileControl_EditForm_CountryField_HeaderText" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="ProfileControl_EditForm_DepartmentField_HeaderText" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="ProfileControl_EditForm_MobilePhoneField_HeaderText" xml:space="preserve">
+    <value>Mobile phone</value>
+  </data>
+  <data name="ProfileControl_EditForm_PhoneField_HeaderText" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="ProfileControl_EditForm_PostalCodeField_HeaderText" xml:space="preserve">
+    <value>Postal code</value>
+  </data>
+  <data name="ProfileControl_EditForm_StateField_HeaderText" xml:space="preserve">
+    <value>State/Province</value>
+  </data>
+  <data name="ProfileControl_EditForm_Street2Field_HeaderText" xml:space="preserve">
+    <value>Street2</value>
+  </data>
+  <data name="ProfileControl_EditForm_StreetField_HeaderText" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="ProfileControl_EditForm_TitleField_HeaderText" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="UsersControl_EditForm_CityField_HeaderText" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="UsersControl_EditForm_CountryField_HeaderText" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="UsersControl_EditForm_DepartmentField_HeaderText" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="UsersControl_EditForm_MobilePhoneField_HeaderText" xml:space="preserve">
+    <value>Mobile phone</value>
+  </data>
+  <data name="UsersControl_EditForm_PhoneField_HeaderText" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="UsersControl_EditForm_PostalCodeField_HeaderText" xml:space="preserve">
+    <value>Postal code</value>
+  </data>
+  <data name="UsersControl_EditForm_StateField_HeaderText" xml:space="preserve">
+    <value>State/Province</value>
+  </data>
+  <data name="UsersControl_EditForm_Street2Field_HeaderText" xml:space="preserve">
+    <value>Street2</value>
+  </data>
+  <data name="UsersControl_EditForm_StreetField_HeaderText" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="UsersControl_EditForm_TitleField_HeaderText" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="EntityControl_AddNodeType" xml:space="preserve">
+    <value>Add Node Type</value>
+  </data>
+  <data name="EntityControl_EditNodeType" xml:space="preserve">
+    <value>Edit Node Type</value>
+  </data>
+  <data name="EntityNodeProvider_Root" xml:space="preserve">
+    <value> Root</value>
+  </data>
+  <data name="ProfileControl_EditForm_FaxField_HeaderText" xml:space="preserve">
+    <value>Fax</value>
+  </data>
+  <data name="UsersControl_EditForm_FaxField_HeaderText" xml:space="preserve">
+    <value>Fax</value>
+  </data>
+  <data name="CountryProvider_ErrorMessage_CountryNameAlreadyExists" xml:space="preserve">
+    <value>The Country "{0}" already exists</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TextEditorLiteToolBarConfiguration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TextEditorLiteToolBarConfiguration.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="TextEditorStandardToolBarConfiguration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TextEditorStandardToolBarConfiguration.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="MeasureUnitsControl_List_ConversionColumn_Text" xml:space="preserve">
+    <value>Conversion</value>
+  </data>
+  <data name="EntityTreeView_Block" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="EntityTreeView_SelectWithAllChildNodes" xml:space="preserve">
+    <value>Select With All Child Nodes</value>
+  </data>
+  <data name="MeasureUnitsControl_GlobalList_AddUnitColumn_Text" xml:space="preserve">
+    <value>Add Unit</value>
+  </data>
+  <data name="OrganizationProfileControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Organization Profile</value>
+  </data>
+  <data name="EntityTreeView_Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="EntityTreeView_Unselect" xml:space="preserve">
+    <value>Unselect</value>
+  </data>
+  <data name="ImageUpload_ClosePopupWindowButton_Text" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ImageUpload_DeletingConfirmationText" xml:space="preserve">
+    <value>Do you really want to delete it?</value>
+  </data>
+  <data name="ImageUpload_FileNotExists" xml:space="preserve">
+    <value>File not exists</value>
+  </data>
+  <data name="ImageUpload_FilePathIsEmpty" xml:space="preserve">
+    <value>File path is empty</value>
+  </data>
+  <data name="ImageUpload_InvalidFileExtension" xml:space="preserve">
+    <value>Invalid file extension</value>
+  </data>
+  <data name="ImageUpload_InvalidFileSize" xml:space="preserve">
+    <value>Invalid file size</value>
+  </data>
+  <data name="ImageUpload_InvalidUrl" xml:space="preserve">
+    <value>Invalid URL</value>
+  </data>
+  <data name="ImageUpload_NoImageLabel_Text" xml:space="preserve">
+    <value>No Image</value>
+  </data>
+  <data name="ImageUpload_OpenLink_ToolTip" xml:space="preserve">
+    <value>Click here to attach an image</value>
+  </data>
+  <data name="ImageUpload_PopupWindow_Title" xml:space="preserve">
+    <value>Attach Image</value>
+  </data>
+  <data name="ImageUpload_UploadButton_Text" xml:space="preserve">
+    <value>Upload Selected Image</value>
+  </data>
+  <data name="ImageUpload_UploadTypeList_FromMyComputerItem_Text" xml:space="preserve">
+    <value>Get a file from &lt;b&gt;my computer&lt;/b&gt;</value>
+  </data>
+  <data name="ImageUpload_UploadTypeList_FromWebItem_Text" xml:space="preserve">
+    <value>Get a file from &lt;b&gt;the web&lt;/b&gt;</value>
+  </data>
+  <data name="ImageUpload_UrlIsEmpty" xml:space="preserve">
+    <value>URL is empty</value>
+  </data>
+  <data name="ImageUpload_DeleteText" xml:space="preserve">
+    <value>delete</value>
+  </data>
+  <data name="ImageUpload_FileIsNotSaved" xml:space="preserve">
+    <value>File is not saved to the repository</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Instance Profile</value>
+  </data>
+  <data name="ActiveOrganizationControl_LogOnAsAnotherUserLink_Text" xml:space="preserve">
+    <value>Log In as another User</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_FiscalYearStartDay_HeaderText" xml:space="preserve">
+    <value>Fiscal Year Start Day</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_FiscalYearStartMonth_HeaderText" xml:space="preserve">
+    <value>Fiscal Year Start Month</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_WeekStartsDay_HeaderText" xml:space="preserve">
+    <value>Week Starts On</value>
+  </data>
+  <data name="GroupProvider_OrganizationAdministratorGroupDescription" xml:space="preserve">
+    <value>The built-in Group for the Organization's Administrators</value>
+  </data>
+  <data name="GroupProvider_InstanceAdministratorGroup_Description" xml:space="preserve">
+    <value>The built-in Group for the Instance's Administrators</value>
+  </data>
+  <data name="GroupProvider_InstanceAdministratorGroup_Name" xml:space="preserve">
+    <value>{0} Administrators</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapDomainField_HeaderText" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapUpdatePasswordField_HeaderText" xml:space="preserve">
+    <value>Update Password</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapServerAddressField_HeaderText" xml:space="preserve">
+    <value>LDAP Server Address</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapServerPortField_HeaderText" xml:space="preserve">
+    <value>Server Secure SSL Port</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapUserNameField_HeaderText" xml:space="preserve">
+    <value>Login / User Name</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>LDAP Integration</value>
+  </data>
+  <data name="CustomUrlsControl_DnsAddressCaptionLabel_Text" xml:space="preserve">
+    <value>Your DNS CName Record:</value>
+  </data>
+  <data name="CustomUrlProvider_CustomUrlAlreadyExists" xml:space="preserve">
+    <value>Custom URL already exists</value>
+  </data>
+  <data name="CustomUrlsControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CustomUrlsControl_EditForm_ObjectName_Instance" xml:space="preserve">
+    <value>Instance Custom URLs</value>
+  </data>
+  <data name="CustomUrlsControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Custom URLs</value>
+  </data>
+  <data name="CustomUrlsControl_EditForm_FullCustomUrlField_HeaderText" xml:space="preserve">
+    <value>Full Custom URL</value>
+  </data>
+  <data name="CustomUrlsControl_EditForm_PartialCustomUrlField_HeaderText" xml:space="preserve">
+    <value>Partial Custom URL</value>
+  </data>
+  <data name="CustomUrlsControl_List_Caption" xml:space="preserve">
+    <value>Custom URLs</value>
+  </data>
+  <data name="CustomUrlsControl_List_FullCustomUrlColumn_HeaderText" xml:space="preserve">
+    <value>Full Custom URL</value>
+  </data>
+  <data name="CustomUrlsControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Organization/Instance</value>
+  </data>
+  <data name="CustomUrlsControl_List_PartialCustomUrlColumn_HeaderText" xml:space="preserve">
+    <value>Partial Custom URL</value>
+  </data>
+  <data name="CustomUrlsControl_EditForm_ObjectName_Organization" xml:space="preserve">
+    <value>Organization Custom URLs</value>
+  </data>
+  <data name="CustomUrlsControl_CustomUrlsValidator_ErrorMessage" xml:space="preserve">
+    <value>You must enter a full or/and partial custom URL</value>
+  </data>
+  <data name="CustomUrlProvider_UrlReserved" xml:space="preserve">
+    <value>URL is reserved</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated" xml:space="preserve">
+    <value>Your account in the Organization "{0}" is inactivated.</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapConfirmNewPasswordField_HeaderText" xml:space="preserve">
+    <value>Confirm New Password</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapConfirmNewPassword_HeaderText" xml:space="preserve">
+    <value>Confirm New Password</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_EditForm_LdapUpdatePassword_HeaderText" xml:space="preserve">
+    <value>Update Password</value>
+  </data>
+  <data name="ImageUpload_ButtonSeparator_Text" xml:space="preserve">
+    <value>&amp;nbsp;&amp;nbsp;or&amp;nbsp;&amp;nbsp;</value>
+  </data>
+  <data name="LdapGroupMappingsControl_ActionsTable_Caption" xml:space="preserve">
+    <value>Add Group to Mappings</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_ActiveField_Text" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_ExpirationTimeField_HeaderText" xml:space="preserve">
+    <value>Expiration time</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_GraceDaysField_HeaderText" xml:space="preserve">
+    <value>Grace days</value>
+  </data>
+  <data name="OrganizationsControl_List_ActiveColumn_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="OrganizationsControl_List_UpdateActiveButton_ActivateText" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="OrganizationsControl_List_UpdateActiveButton_InactivateText" xml:space="preserve">
+    <value>Inactivate</value>
+  </data>
+  <data name="UsersControl_List_ActiveColumn_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ActiveOrganizationControl_OrganizationList_ExpirationLink_Text" xml:space="preserve">
+    <value>(Expired: {0} grace days)</value>
+  </data>
+  <data name="ActiveOrganizationControl_OrganizationList_ExpiredLabel_Text" xml:space="preserve">
+    <value>(Expired)</value>
+  </data>
+  <data name="SupportControl_EmailLabel_Text" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="SupportControl_PhoneLabel_Text" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="SupportControl_TitleLabel_Text" xml:space="preserve">
+    <value>Contact {0} for assistance.</value>
+  </data>
+  <data name="SupportControl_ReturnBackLink_Text" xml:space="preserve">
+    <value>&lt; Return back</value>
+  </data>
+  <data name="SupportControl_GracePeriodText" xml:space="preserve">
+    <value>Your grace period will end in {0} day(s).</value>
+  </data>
+  <data name="SupportControl_OrganizationHasExpiredText" xml:space="preserve">
+    <value>The {0} account has expired.</value>
+  </data>
+  <data name="OrganizationProvider_ErrorMessage_OrganizationHasExpired" xml:space="preserve">
+    <value>The account of the Organization "{0}" has expired.</value>
+  </data>
+  <data name="OrganizationProvider_ErrorMessage_OrganizationIsInactive" xml:space="preserve">
+    <value>The Organization "{0}" is inactive.</value>
+  </data>
+  <data name="ChangePasswordControl_CurrentPasswordIsNotValid" xml:space="preserve">
+    <value>The current password is not valid</value>
+  </data>
+  <data name="ChangePasswordControl_EditForm_CurrentPasswordField_HeaderText" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="ChangePasswordControl_CurrentPasswordRequired" xml:space="preserve">
+    <value>The current password is required</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapDomainField_HeaderText" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapSecurityIdField_HeaderText" xml:space="preserve">
+    <value>Security Id</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapUserAliasField_HeaderText" xml:space="preserve">
+    <value>User Alias</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapUserIdField_HeaderText" xml:space="preserve">
+    <value>User Id</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_ObjectName" xml:space="preserve">
+    <value>User Ldap Details</value>
+  </data>
+  <data name="EmailNotification_ResetPassword_Body" xml:space="preserve">
+    <value>Hi.
+
+To reset your password, just visit:
+{PasswordResetPageUrl}
+
+{ApplicationUrl}</value>
+  </data>
+  <data name="EmailNotification_InviteUser_Body" xml:space="preserve">
+    <value>{AdditionalMessage}
+Hi.
+
+You have been invited by {InvitedByFullName} to set up an account on {ApplicationName}.
+
+To create your account in 10 seconds, just visit:
+{SignUpUserPageUrl}
+
+To find out more about {ApplicationName}, visit:
+{ApplicationUrl}
+
+If you have further questions, you can email {InvitedByFullName} at {InvitedByEmail}</value>
+  </data>
+  <data name="ResetPasswordControl_ConfirmPasswordLabel_Text" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="ResetPasswordControl_DescriptionLabel_FailureText" xml:space="preserve">
+    <value>We were unable to access your information. Please try again.</value>
+  </data>
+  <data name="ResetPasswordControl_DescriptionLabel_SuccessText" xml:space="preserve">
+    <value>Your new password has been set.</value>
+  </data>
+  <data name="ResetPasswordControl_DescriptionLabel_Text" xml:space="preserve">
+    <value>Enter your new password in the input box below to complete the operation.</value>
+  </data>
+  <data name="ResetPasswordControl_LoginPageLink_Text_ReturnToLoginPage" xml:space="preserve">
+    <value>Return to log in page</value>
+  </data>
+  <data name="ResetPasswordControl_PasswordCompareValidator_ErrorMessage" xml:space="preserve">
+    <value>The confirm new password must match the new password entry</value>
+  </data>
+  <data name="ResetPasswordControl_SubmitButton_Text" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="ResetPasswordControl_TitleLabel_FailureText" xml:space="preserve">
+    <value>Password changing unsuccessful!</value>
+  </data>
+  <data name="ResetPasswordControl_TitleLabel_SuccessText" xml:space="preserve">
+    <value>Password successfully changed</value>
+  </data>
+  <data name="ResetPasswordControl_TitleLabel_Text" xml:space="preserve">
+    <value>Create Your New Password</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_EmailSuffixesField_HeaderText" xml:space="preserve">
+    <value>Email Suffixes</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapOUPathField_HeaderText" xml:space="preserve">
+    <value>OU Path</value>
+  </data>
+  <data name="LoginElement_LdapLoginLabelText" xml:space="preserve">
+    <value>Login | Email</value>
+  </data>
+  <data name="MicajahCommonConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MicajahCommonConfig.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="RolesControl_List_Row_ToolTip" xml:space="preserve">
+    <value>Click to view the role</value>
+  </data>
+  <data name="ActionsControl_EditForm_LearnMoreUrlField_HeaderText" xml:space="preserve">
+    <value>Learn more URL</value>
+  </data>
+  <data name="ActionsControl_EditForm_ShowDescriptionInDetailMenuField_Text" xml:space="preserve">
+    <value>Show description in detail menu</value>
+  </data>
+  <data name="SettingsControl_LearnMoreLink_Text" xml:space="preserve">
+    <value>Learn More</value>
+  </data>
+  <data name="SettingsControl_OnOffSwitch_OffText" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="SettingsControl_OnOffSwitch_OnText" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="NodeTypeControl_List_Caption" xml:space="preserve">
+    <value>Node Types</value>
+  </data>
+  <data name="NodeTypeControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NodeTypeControl_List_OrderNumberColumn_HeaderText" xml:space="preserve">
+    <value>Hierarchy Level</value>
+  </data>
+  <data name="RulesControl_EditForm_InstanceList_AllInstancesItem_Text" xml:space="preserve">
+    <value>All Instances</value>
+  </data>
+  <data name="NodeTypeControl_EditForm_InstanceList_AllInstancesItem_Text" xml:space="preserve">
+    <value>All Instances</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_FirstNameField_HeaderText" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LastNameField_HeaderText" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapDomainFullField_HeaderText" xml:space="preserve">
+    <value>Domain Full</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_LdapUPNField_HeaderText" xml:space="preserve">
+    <value>UPN</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_LdapDomainsField_HeaderText" xml:space="preserve">
+    <value>Ldap Domains</value>
+  </data>
+  <data name="ActionsControl_EditForm_SubmenuGroupField_Text" xml:space="preserve">
+    <value>Submenu</value>
+  </data>
+  <data name="ActionsControl_EditForm_SubmenuItemTypeField_HeaderText" xml:space="preserve">
+    <value>Item Type</value>
+  </data>
+  <data name="ActionsControl_EditForm_SubmenuItemWidthField_HeaderText" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="UsersControl_EditUserActiveForm_CaptionFormat" xml:space="preserve">
+    <value>Activate/Inactivate User</value>
+  </data>
+  <data name="UsersControl_EditUserActiveForm_Organization" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="UsersControl_EditUserActiveForm_ObjectName" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_RealActivatedLogins_Text" xml:space="preserve">
+    <value>Users have been Activated - {0}</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_RealCreatedLogins_Text" xml:space="preserve">
+    <value>Users have been Created  - {0}</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_RealDeactivatedLogins_Text" xml:space="preserve">
+    <value>Users have been Inactivated - {0}</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_TestActivatedLogins_Text" xml:space="preserve">
+    <value>Users to be Activated - {0} </value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_TestCreatedLogins_Text" xml:space="preserve">
+    <value>Users to be Created  - {0}</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_TestDeactivatedLogins_Text" xml:space="preserve">
+    <value>Users to be Inactivated  - {0}</value>
+  </data>
+  <data name="SettingsControl_PaidUpgradeLink_Text" xml:space="preserve">
+    <value>Paid Upgrade $</value>
+  </data>
+  <data name="MessageList_FromToSeparator" xml:space="preserve">
+    <value> to </value>
+  </data>
+  <data name="InstancesControl_EditForm_BetaField_Text" xml:space="preserve">
+    <value>Enable Beta features for this Instance</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
+    <value>Date Format</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_UtcOffsetField_HeaderText" xml:space="preserve">
+    <value>UTC Offset</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_WorkingDaysField_HeaderText" xml:space="preserve">
+    <value>Working Days</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_BetaField_Text" xml:space="preserve">
+    <value>Enable Beta features for this Organization</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_CanceledTimeField_HeaderText" xml:space="preserve">
+    <value>Canceled time</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_CreatedTimeField_HeaderText" xml:space="preserve">
+    <value>Created time</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_TrialField_Text" xml:space="preserve">
+    <value>Trial</value>
+  </data>
+  <data name="ActiveInstanceControl_YouAreLoggedIntoAnotherInstance" xml:space="preserve">
+    <value>We have detected you are logged into another Instance in another browser.&lt;br /&gt;To proceed, select another Instance below.</value>
+  </data>
+  <data name="ActiveOrganizationControl_YouAreLoggedIntoAnotherOrganization" xml:space="preserve">
+    <value>We have detected you are logged into another Organization in another browser.&lt;br /&gt;To proceed, select another Organization below.</value>
+  </data>
+  <data name="AutoGeneratedButtonsField_CloseButtonSeparator" xml:space="preserve">
+    <value> &amp; </value>
+  </data>
+  <data name="DateRange_ErrorMessage_Separator" xml:space="preserve">
+    <value>. </value>
+  </data>
+  <data name="DetailMenu_Ellipsis" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="InstanceProvider_ErrorMessage_NoInstance" xml:space="preserve">
+    <value>The Instance with Id={0} doesn't exist in the Organization "{1}"</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YouAreNotAssociatedWithInstances" xml:space="preserve">
+    <value>You are not associated with any Instance in the Organization or your account is inactivated in the Instances.</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YouAreNotAssociatedWithOrganizations" xml:space="preserve">
+    <value>You are not associated with the Organizations.</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YourAccountIsDeleted" xml:space="preserve">
+    <value>Your account is deleted.</value>
+  </data>
+  <data name="LogOnControl_YouAreLoggedFromAnotherComputer" xml:space="preserve">
+    <value>The same login being used on more than one computer at one time. You will need to login again.</value>
+  </data>
+  <data name="MasterPage_Title_Separator" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="OrganizationProfileControl_WeekStartsDayList_Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="OrganizationProfileControl_WeekStartsDayList_Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="LogOnAsUserControl_InstanceListLabel_Text" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="LogOnAsUserControl_OrganizationListLabel_Text" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="LogOnAsUserControl_RoleListLabel_Text" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="LogOnAsUserControl_SearchTable_Caption" xml:space="preserve">
+    <value>Search Users</value>
+  </data>
+  <data name="MeasureUnitsControl_AddFromBuiltInLink_Text" xml:space="preserve">
+    <value>Add New From Library</value>
+  </data>
+  <data name="MeasureUnitsControl_AddNewLink_Text" xml:space="preserve">
+    <value>Add New</value>
+  </data>
+  <data name="LdapGroupMappingsControl_AddGroupLiteral_Text" xml:space="preserve">
+    <value>App Group</value>
+  </data>
+  <data name="LdapGroupMappingsControl_DomainLiteral_Text" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="LdapGroupMappingsControl_LdapGroupLiteral_Text" xml:space="preserve">
+    <value>Ldap Group</value>
+  </data>
+  <data name="UserLdapInfoControl_GetUserGroupsButton_Text" xml:space="preserve">
+    <value>Retrieve List of User's Groups</value>
+  </data>
+  <data name="UserLdapInfoControl_OrgMembershipCount_Text" xml:space="preserve">
+    <value>User is a member of more than one organization.</value>
+  </data>
+  <data name="RuleParametersControl_LookupText" xml:space="preserve">
+    <value>Lookup</value>
+  </data>
+  <data name="RuleParametersControl_RuleParameterCaption_Text" xml:space="preserve">
+    <value>Rule Parameter</value>
+  </data>
+  <data name="RulesControl_List_OrderNumberColumn_HeaderText" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="InstancesControl_EditForm_ActiveField_Text" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Error_403" xml:space="preserve">
+    <value>Access is denied. You do not have permission to view this page.</value>
+  </data>
+  <data name="Error_404" xml:space="preserve">
+    <value>File not found. The resource you are looking for might have been removed, had its name changed, or is temporarily unavailable.</value>
+  </data>
+  <data name="Error_401" xml:space="preserve">
+    <value>Access is denied due to invalid credentials.</value>
+  </data>
+  <data name="OrganizationsControl_ActiveValueList_ActiveItem_Text" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="OrganizationsControl_ActiveValueList_AllItem_Text" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="OrganizationsControl_ActiveValueList_InactiveItem_Text" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="OrganizationsControl_DatabaseList_MasterDatabaseItem_Text" xml:space="preserve">
+    <value>[{0}]</value>
+  </data>
+  <data name="RecurrenceRule_DeserializationFailed" xml:space="preserve">
+    <value>Deserialization failed.</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormatsList_Postfix_12Hours" xml:space="preserve">
+    <value> AM/PM</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormatsList_Postfix_24Hours" xml:space="preserve">
+    <value> 24HR</value>
+  </data>
+  <data name="InstanceProfileControl_OffsetsList_Item_Text" xml:space="preserve">
+    <value>UTC ({0}) ({1})</value>
+  </data>
+  <data name="InstancesControl_List_ActiveColumn_HeaderText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ActiveInstanceControl_ConfigureOrganization" xml:space="preserve">
+    <value>To configure the Organization &lt;a href="{0}"&gt;click here&lt;/a&gt;.</value>
+  </data>
+  <data name="LogOnControl_InstanceIsInactive" xml:space="preserve">
+    <value>The Instance is inactive.</value>
+  </data>
+  <data name="LogOnControl_OrganizationIsNotFound" xml:space="preserve">
+    <value>The Organization doesn't exist.</value>
+  </data>
+  <data name="OrganizationsControl_ActiveValueList_DeletedItem_Text" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="LogOnControl_OrganizationIsDeleted" xml:space="preserve">
+    <value>The Organization is deleted.</value>
+  </data>
+  <data name="OrganizationProvider_ErrorMessage_OrganizationIsDeleted" xml:space="preserve">
+    <value>The Organization "{0}" is deleted.</value>
+  </data>
+  <data name="LogOnControl_OrganizationIsInactive" xml:space="preserve">
+    <value>The Organization is inactive.</value>
+  </data>
+  <data name="OrganizationsControl_List_UpdateActiveButton_UndeleteText" xml:space="preserve">
+    <value>Undelete</value>
+  </data>
+  <data name="Error_404_ActionNotFound" xml:space="preserve">
+    <value>Action not found.</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_GetDomainsButton_Text" xml:space="preserve">
+    <value>Diagnostics Retrieve List of Domains</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_GetGroupsButton_Text" xml:space="preserve">
+    <value>Diagnostics Retrieve List of Groups</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_GetRealAdReplicationInfo_Text" xml:space="preserve">
+    <value>Start Real AD Replication</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_GetTestAdReplicationInfo_Text" xml:space="preserve">
+    <value>Simulate AD Replication</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_PingLdapServerButton_Text" xml:space="preserve">
+    <value>Connect to LDAP Server</value>
+  </data>
+  <data name="LdapInfoProvider_DirectoryOperationError_Text" xml:space="preserve">
+    <value>&lt;b&gt;Directory operation error:&lt;/b&gt;&lt;br/&gt;Message: {0}&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_LdapError_Text" xml:space="preserve">
+    <value>&lt;b&gt;LDAP Error:&lt;/b&gt;&lt;br/&gt;Error Code: {0} &lt;br/&gt;Message: {1}&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_MissingDomain_Text" xml:space="preserve">
+    <value>&lt;b&gt;Error:&lt;/b&gt;&lt;br/&gt;Domain is missing&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_MissingPassword_Text" xml:space="preserve">
+    <value>&lt;b&gt;Error:&lt;/b&gt;&lt;br/&gt;Password is missing&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_MissingServerAddress_Text" xml:space="preserve">
+    <value>&lt;b&gt;Error:&lt;/b&gt;&lt;br/&gt;LDAP server address is missing&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_MissingServerPort_Text" xml:space="preserve">
+    <value>&lt;b&gt;Error:&lt;/b&gt;&lt;br/&gt;LDAP server port is missing&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_MissingUserName_Text" xml:space="preserve">
+    <value>&lt;b&gt;Error:&lt;/b&gt;&lt;br/&gt;User name is missing&lt;br/&gt;</value>
+  </data>
+  <data name="LdapInfoProvider_Success_Text" xml:space="preserve">
+    <value>&lt;b&gt;Success&lt;/b&gt;&lt;br/&gt;</value>
+  </data>
+  <data name="UserLdapInfoControl_UserGroupsCommonGridView_GroupNameColumn_HeaderText" xml:space="preserve">
+    <value>App Groups</value>
+  </data>
+  <data name="UserLdapInfoControl_UserGroupsCommonGridView_LdapGroupNameColumn_HeaderText" xml:space="preserve">
+    <value>Ldap Groups</value>
+  </data>
+  <data name="UserLdapInfoControl_ClearUserLdapInfoButton_Text" xml:space="preserve">
+    <value>Clear all current Ldap information and Connection</value>
+  </data>
+  <data name="UserLdapInfoControl_ReconnectUserToLdapButton_Text" xml:space="preserve">
+    <value>Reconnect user to Ldap</value>
+  </data>
+  <data name="UserLdapInfoControl_UserGroupsNoteLabel_Text" xml:space="preserve">
+    <value>&lt;br/&gt;User groups are marked as &lt;b&gt;BOLD&lt;/b&gt; text&lt;br/&gt; 
+Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_PrimaryEmailField_HeaderText" xml:space="preserve">
+    <value>Primary Email</value>
+  </data>
+  <data name="UserLdapInfoControl_EditForm_SecondaryEmailsField_HeaderText" xml:space="preserve">
+    <value>Secondary Emails</value>
+  </data>
+  <data name="SignupUserControl_CaptchaLabel_Text" xml:space="preserve">
+    <value>Input Code</value>
+  </data>
+  <data name="SignupUserControl_CaptchaControl_ErrorMessage" xml:space="preserve">
+    <value>The code you entered is not valid</value>
+  </data>
+  <data name="LogosControl_List_InstanceType_Text" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="LogosControl_List_LogoColumn_HeaderText" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="LogosControl_List_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="LogosControl_List_OrganisationType_Text" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="LogosControl_List_TypeColumn_HeaderText" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="LogosControl_EditForm_ObjectName_Organzation" xml:space="preserve">
+    <value>Organization logo</value>
+  </data>
+  <data name="LogosControl_EditForm_ObjectName_Instance" xml:space="preserve">
+    <value>Instance logo</value>
+  </data>
+  <data name="LoginProvider_ErrorMessage_PasswordTooShort" xml:space="preserve">
+    <value>Password must be alphanumeric with at least {0} characters.</value>
+  </data>
+  <data name="LogosControl_List_CommandColumn_EditText" xml:space="preserve">
+    <value>Upload Logo</value>
+  </data>
+  <data name="UsersControl_EditForm_SecondaryEmailsField_HeaderText" xml:space="preserve">
+    <value>Secondary Emails</value>
+  </data>
+  <data name="EmailNotification_YourNewPassword" xml:space="preserve">
+    <value>New password: {0}</value>
+  </data>
+  <data name="EmailNotification_YourAccountPasswordHasBeenChanged" xml:space="preserve">
+    <value>Your {0} account's password has been changed successfully.</value>
+  </data>
+  <data name="EmailNotification_LoginLink" xml:space="preserve">
+    <value>To login click the following link:
+{0}</value>
+  </data>
+  <data name="EmailNotification_YouAreAssociatedToTheFollowingInstances" xml:space="preserve">
+    <value>You are associated to the following instances: {0}.</value>
+  </data>
+  <data name="EmailNotification_YourAccountForOrganizationWasCreated" xml:space="preserve">
+    <value>Your {0} account for {1} was created.</value>
+  </data>
+  <data name="EmailNotification_YourAccountForOrganizationWasUpdated" xml:space="preserve">
+    <value>Your {0} account for {1} was updated.</value>
+  </data>
+  <data name="EmailNotification_YourAccountWasCreated" xml:space="preserve">
+    <value>Your {0} account was created.</value>
+  </data>
+  <data name="EmailNotification_YourLogin" xml:space="preserve">
+    <value>Your login: {0}</value>
+  </data>
+  <data name="EmailNotification_YourPassword" xml:space="preserve">
+    <value>The password: {0}</value>
+  </data>
+  <data name="EmailNotification_YourLoginOfAccountHasBeenChanged" xml:space="preserve">
+    <value>Your login of {0} account has been changed.</value>
+  </data>
+  <data name="EmailNotification_YourNewLogin" xml:space="preserve">
+    <value>New login: {0}</value>
+  </data>
+  <data name="ResetPasswordControl_PasswordLabel_Text" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LimitGridLabel_Text" xml:space="preserve">
+    <value>This is an example listing of your replication data.&lt;br/&gt;</value>
+  </data>
+  <data name="LoginProvider_ErrorMessage_LDAPConnectionError" xml:space="preserve">
+    <value>Your Organization's LDAP is not responding. Please login using your email and local password.  &lt;br/&gt;If you do not remember your password please use the Forget Password link for retrieval.</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LimitGroupGridLabel_Text" xml:space="preserve">
+    <value>This is an example listing of groups data.&lt;br/&gt;</value>
+  </data>
+  <data name="UserLdapInfoControl_UpdateProgress_Text" xml:space="preserve">
+    <value>Please wait, processing your request...</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_UpdateProgress_Text" xml:space="preserve">
+    <value>Please wait, processing your request...&lt;br/&gt;</value>
+  </data>
+  <data name="LdapGroupMappingsControl_UpdateProgress_Text" xml:space="preserve">
+    <value>Please wait, processing your request...&lt;br/&gt;&lt;br/&gt;</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_CheckPortButton_Text" xml:space="preserve">
+    <value>Check for Open Port</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_CheckPortResultLabel_Text_Closed" xml:space="preserve">
+    <value>Port {0} is &lt;b&gt;Closed&lt;/b&gt;&lt;br/&gt;</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_CheckPortResultLabel_Text_Open" xml:space="preserve">
+    <value>Port {0} is &lt;b&gt;Open&lt;/b&gt;&lt;br/&gt;</value>
+  </data>
+  <data name="OrganizationsControl_EditForm_BillingPlan_HeaderText" xml:space="preserve">
+    <value>Billing Plan</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_CheckLdapServerAddress_ErrorText" xml:space="preserve">
+    <value>Please use a valid external WAN IP Address</value>
+  </data>
+  <data name="StartControl_HideLink_Text" xml:space="preserve">
+    <value>Hide Start-up Page</value>
+  </data>
+  <data name="DetailMenu_LearnMoreLink_Text" xml:space="preserve">
+    <value>Learn More</value>
+  </data>
+  <data name="DetailMenu_VideoLink_Text" xml:space="preserve">
+    <value>Watch a Video</value>
+  </data>
+  <data name="SignupOrganizationControl_AgreeLabel_Text" xml:space="preserve">
+    <value>By clicking the button above I agree to {0} and {1}.</value>
+  </data>
+  <data name="SignupOrganizationControl_ConfirmPasswordLabel_Text" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="SignupOrganizationControl_CurrencyLabel_Text" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="SignupOrganizationControl_CustomizeLiteral_Text" xml:space="preserve">
+    <value>Customize your {0}</value>
+  </data>
+  <data name="SignupOrganizationControl_EmailAndPasswordLabel_Text" xml:space="preserve">
+    <value>Email and Password</value>
+  </data>
+  <data name="SignupOrganizationControl_EmailLabel1_Text" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="SignupOrganizationControl_FirstNameLabel_Text" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="SignupOrganizationControl_HowYouHearAboutUsLabel_Text" xml:space="preserve">
+    <value>How'd You Hear About Us</value>
+  </data>
+  <data name="SignupOrganizationControl_LastNameLabel_Text" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="SignupOrganizationControl_LocalSettingsLabel_Text" xml:space="preserve">
+    <value>Local Settings</value>
+  </data>
+  <data name="SignupOrganizationControl_OrganizationAddressLabel_Text" xml:space="preserve">
+    <value>Company Address</value>
+  </data>
+  <data name="SignupOrganizationControl_OrganizationNameHelpText1_Text" xml:space="preserve">
+    <value>Acme Inc. or Your Name</value>
+  </data>
+  <data name="SignupOrganizationControl_OrganizationNameLabel1_Text" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="SignupOrganizationControl_OrganizationUrlLabel_Text" xml:space="preserve">
+    <value>Company URL</value>
+  </data>
+  <data name="SignupOrganizationControl_PasswordCompareValidator_ErrorMessage" xml:space="preserve">
+    <value>Passwords do not match</value>
+  </data>
+  <data name="SignupOrganizationControl_PasswordLabel_Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="SignupOrganizationControl_PersonalInformationLabel_Text" xml:space="preserve">
+    <value>Personal Information</value>
+  </data>
+  <data name="SignupOrganizationControl_PrivacyPolicyLink_Text" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="SignupOrganizationControl_Step1Button_Text" xml:space="preserve">
+    <value>Create Your Account</value>
+  </data>
+  <data name="SignupOrganizationControl_Step2Button_Text" xml:space="preserve">
+    <value>Login to {0}</value>
+  </data>
+  <data name="SignupOrganizationControl_Step3Button_Text" xml:space="preserve">
+    <value>Continue &gt;</value>
+  </data>
+  <data name="SignupOrganizationControl_TermsLink_Text" xml:space="preserve">
+    <value>Terms of Use</value>
+  </data>
+  <data name="SignupOrganizationControl_TimeZoneLabel_Text" xml:space="preserve">
+    <value>Time Zone</value>
+  </data>
+  <data name="SignupOrganizationControl_WebsiteLabel_Text" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="DatabasesControl_EditForm_PrivateField_Text" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="MasterPage_HelpLink_Text2" xml:space="preserve">
+    <value>Page Help</value>
+  </data>
+  <data name="InstanceProvider_ErrorMessage_InstanceIsInactive" xml:space="preserve">
+    <value>The Instance "{0}" is inactive.</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_ActiveField_Text" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_BetaField_Text" xml:space="preserve">
+    <value>Enable Beta features for this Instance</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_NameField_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_EmailSuffixesField_HeaderText" xml:space="preserve">
+    <value>Email Suffixes</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_EnableSignUpUserField_Text" xml:space="preserve">
+    <value>Enable User sign up on the login screen</value>
+  </data>
+  <data name="LdapProcessLog_CantConnectToLDAP" xml:space="preserve">
+    <value>Can't connect to LDAP.</value>
+  </data>
+  <data name="LdapProcessLog_ConnectedToLDAP" xml:space="preserve">
+    <value>Connected to LDAP.</value>
+  </data>
+  <data name="LdapProcessLog_FoundMappedGroups" xml:space="preserve">
+    <value>Found {0} mapped groups.</value>
+  </data>
+  <data name="LdapProcessLog_FoundUsers" xml:space="preserve">
+    <value>System has received {0} users from all mapped groups.</value>
+  </data>
+  <data name="LdapProcessLog_GettingUsersFromMappedGroups" xml:space="preserve">
+    <value>Getting users from mapped groups...</value>
+  </data>
+  <data name="LdapProcessLog_RealReplicationUsersActivated" xml:space="preserve">
+    <value>{0} users were activated.</value>
+  </data>
+  <data name="LdapProcessLog_RealReplicationUsersCreated" xml:space="preserve">
+    <value>{0} users were created.</value>
+  </data>
+  <data name="LdapProcessLog_RealReplicationUsersInactivated" xml:space="preserve">
+    <value>{0} users were inactivated.</value>
+  </data>
+  <data name="LdapProcessLog_ReplicationFinished" xml:space="preserve">
+    <value>Replication finished. Replication process took {0} minutes.</value>
+  </data>
+  <data name="LdapProcessLog_ReplicationStarted" xml:space="preserve">
+    <value>Replication started.</value>
+  </data>
+  <data name="LdapProcessLog_TestReplicationUsersActivated" xml:space="preserve">
+    <value>{0} users will be activated.</value>
+  </data>
+  <data name="LdapProcessLog_TestReplicationUsersCreated" xml:space="preserve">
+    <value>{0} users will be created.</value>
+  </data>
+  <data name="LdapProcessLog_TestReplicationUsersInactivated" xml:space="preserve">
+    <value>{0} users will be inactivated.</value>
+  </data>
+  <data name="LdapProcessLog_UpdateFinished" xml:space="preserve">
+    <value>Update is finished.</value>
+  </data>
+  <data name="LdapProcessLog_UpdatingUserAccounts" xml:space="preserve">
+    <value>Updating {0} user accounts.</value>
+  </data>
+  <data name="UserContext_ErrorMessage_NoGroupsInstanceRoles" xml:space="preserve">
+    <value>There are no Roles for User's Groups inside Instance "{0}".</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YourAccountInInstanceIsInactivated" xml:space="preserve">
+    <value>Your account in the Instance "{0}" is inactivated.</value>
+  </data>
+  <data name="LoginProvider_ErrorMessage_FoundMoreThanOneLDAPConnection" xml:space="preserve">
+    <value>User found in more than one organizations with different LDAP settings. Please login using your email and local password.  &lt;br/&gt;If you do not remember your password please use the Forget Password link for retrieval.</value>
+  </data>
+  <data name="SignupOrganizationControl_Email1_ErrorMessage" xml:space="preserve">
+    <value>A valid email is required</value>
+  </data>
+  <data name="SignupOrganizationControl_Email1_ValidationErrorMessage" xml:space="preserve">
+    <value>Invalid email</value>
+  </data>
+  <data name="SignupOrganizationControl_FirstName_ErrorMessage" xml:space="preserve">
+    <value>First name is required</value>
+  </data>
+  <data name="SignupOrganizationControl_LastName_ErrorMessage" xml:space="preserve">
+    <value>Last name is required</value>
+  </data>
+  <data name="SignupOrganizationControl_OrganizationName1_ErrorMessage" xml:space="preserve">
+    <value>Company name is required</value>
+  </data>
+  <data name="SignupOrganizationControl_Password_ErrorMessage" xml:space="preserve">
+    <value>Password is required</value>
+  </data>
+  <data name="SignupOrganizationControl_Website_ValidationErrorMessage" xml:space="preserve">
+    <value>Invalid website URL</value>
+  </data>
+  <data name="SignupOrganizationControl_ConfirmPassword_ErrorMessage" xml:space="preserve">
+    <value>Password confirmation is required</value>
+  </data>
+  <data name="SignupOrganizationControl_EmailValidator1_ErrorMessage" xml:space="preserve">
+    <value>Email is already in use</value>
+  </data>
+  <data name="SignupOrganizationControl_LoginLink_Text" xml:space="preserve">
+    <value>Login Here</value>
+  </data>
+  <data name="SignupOrganizationControl_CaptchaLabel_Text" xml:space="preserve">
+    <value>Input code</value>
+  </data>
+  <data name="SignupOrganizationControl_CaptchaValidator_ErrorMessage" xml:space="preserve">
+    <value>The code you entered is not valid</value>
+  </data>
+  <data name="SignupOrganizationControl_Step2ValidationSummary_HeaderText" xml:space="preserve">
+    <value>Please correct all fields marked in red</value>
+  </data>
+  <data name="ActionsControl_EditForm_IconUrlField_HeaderText" xml:space="preserve">
+    <value>Icon URL</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_Description_Text" xml:space="preserve">
+    <value>To set up your system to replicate user data over LDAP please review the follow article. &lt;a style="font-size: medium;" href="http://login.bigwebapps.com/portal/KBArticleView.aspx?dept=6f5bg5&amp;org=rn062f&amp;tkt=fvegqv" target="_blank"&gt;Setup LDAP Integration&lt;/a&gt;</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep1_Text" xml:space="preserve">
+    <value>Step 1</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep2_Text" xml:space="preserve">
+    <value>Step 2</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep3_Text" xml:space="preserve">
+    <value>Step 3</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep4_Text" xml:space="preserve">
+    <value>Step 4</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep5_Text" xml:space="preserve">
+    <value>Step 5</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep6_Text" xml:space="preserve">
+    <value>Step 6</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep7_Text" xml:space="preserve">
+    <value>Step 7</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetup_Text" xml:space="preserve">
+    <value>LDAP Setup Check</value>
+  </data>
+  <data name="CheckBox_CheckedText" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="CheckBox_UncheckedText" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="CommonGridView_SearchEmptyText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="CommonGridView_SearchButtonText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="GroupsControl_NoInstanceError_Description" xml:space="preserve">
+    <value>Please &lt;a href="{0}"&gt;click here&lt;/a&gt; to add an Instance.</value>
+  </data>
+  <data name="UsersControl_NoGroupError_Description" xml:space="preserve">
+    <value>Please &lt;a href="{0}"&gt;click here&lt;/a&gt; to add a Group.</value>
+  </data>
+  <data name="NoticeMessageBox_CloseLink_ToolTip" xml:space="preserve">
+    <value>Close this notification</value>
+  </data>
+</root>

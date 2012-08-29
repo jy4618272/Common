@@ -1,0 +1,18 @@
+/* ------------ Main menu colors -------------------------------------------------------------------------------------------------------------------------------*/
+td.Mp_Mm
+{
+    color: White;
+    background-color: #fcaf17;
+}
+
+/* ------------ Main menu item colors ----- */
+td.Mp_Mm a
+{
+    color: White;
+}
+
+/* ------------ Selected main menu item colors ----- */
+td.Mp_Mm a:hover, td.Mp_Mm a.S
+{
+    color: White;
+}

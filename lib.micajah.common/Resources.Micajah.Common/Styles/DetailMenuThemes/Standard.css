@@ -1,0 +1,130 @@
+/* ------------ Detail menu ------------------------------------------------------------------------------------------------------------------------------------*/
+table.Mp_Dm
+{
+	position: relative;
+	left: -5px;
+	background-color: White;
+}
+
+table.Mp_Dm a, table.Mp_Dm a:hover
+{
+	font-size: 14px;
+}
+
+table.Mp_Dm td
+{
+	vertical-align: middle;
+	text-align: left;
+}
+
+table.Mp_Dm td div
+{
+	padding: 10px 0 10px 0;
+}
+
+table.Mp_Dm td div div
+{
+	padding: 5px 0 0 0;
+	font-size: 11px;
+}
+
+table.Mp_Dm td td.P
+{
+	padding: 0 5px 0 0;
+}
+
+p.Mp_Dm_T
+{
+	font-size: 22px;
+	font-weight: bold;
+	margin: 0;
+}
+
+/* ------------ Detail menu group ------------ */
+table.Mp_Dm td.G div div
+{
+	color: #898989;
+}
+
+table.Mp_Dm td.G span
+{
+    font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333333;
+}
+
+/* ------------ Detail menu item ------------ */
+table.Mp_Dm td.I div div
+{
+	color: #898989;
+}
+
+table.Mp_Dm td.I a
+{
+	color: #333333;
+}
+
+table.Mp_Dm td.I a:hover
+{
+	color: Gray;
+}
+
+/* ------------ Detail menu alternated item ------------ */
+table.Mp_Dm td.A div div
+{
+	color: #898989;
+}
+
+table.Mp_Dm td.A a
+{
+	color: #333333;
+}
+
+table.Mp_Dm td.A a:hover
+{
+	color: Gray;
+}
+
+/* ------------ Detail menu highlighted item ------------ */
+table.Mp_Dm td.H div div
+{
+	color: #898989;
+}
+
+table.Mp_Dm td.H a
+{
+	font-weight: bold;
+	color: #333333;
+}
+
+table.Mp_Dm td.H a:hover
+{
+	font-weight: bold;
+	color: Gray;
+}
+
+/* ------------ Detail menu child item ------------ */
+table.Mp_Dm div.C
+{
+	padding: 5px 0 0 0;
+}
+
+table.Mp_Dm div.C a, table.Mp_Dm div.C a:hover
+{
+	font-size: 11px;
+	font-weight: normal;
+}
+
+/* ------------ Other links ------------ */
+table.Mp_Om a
+{
+	font-size: 11px;
+	color: Gray;
+}
+
+table.Mp_Om a:hover
+{
+	font-size: 11px;
+	color: #333333;
+}

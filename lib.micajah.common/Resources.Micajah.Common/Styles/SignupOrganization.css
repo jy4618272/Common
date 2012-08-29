@@ -1,0 +1,80 @@
+﻿.Logo
+{
+    width: 100%;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.LightBlue
+{
+    background-color: #e9eff5;
+    padding: 10px 20px 10px 15px;
+    overflow: hidden;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    float: left;
+    width: 372px;
+}
+
+.Agree
+{
+    padding: 40px 0 50px 0;
+    font-family: Calibri, Arial, Sans-Serif;
+    font-size: 14px;
+    color: #999999;
+    text-align: center;
+}
+
+.Agree a
+{
+    text-decoration: none;
+    font-family: Calibri, Arial, Sans-Serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #999999;
+}
+
+.Agree a:hover
+{
+    text-decoration: underline;
+}
+
+span.ErrorMessage.Step3Val
+{
+    padding-top: 15px !important;
+    background-position: left 15px !important;
+}
+
+small
+{
+    font-size: 10px;
+    color: #777;
+    display: block;
+    text-align: right;
+}
+
+.RadCaptcha_Default p
+{
+    display: inline;
+}
+.RadCaptcha_Default, .RadCaptcha_Default div
+{
+    display: inline;
+}
+.RadCaptcha_Default img
+{
+    margin-bottom: 20px;
+}
+.Summary
+{
+    text-align: left;
+    position: inherit;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 250px;
+}
+.Summary ul
+{
+    display: none;
+}

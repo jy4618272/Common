@@ -1,0 +1,131 @@
+.Mf_T
+{
+    border-collapse: collapse;
+}
+
+.Mf_Cpt, .Mf_T caption, .Mf_Cpt td
+{
+    background-color: White;
+    padding-bottom: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.Mf_CptCtrls
+{
+    background-color: White;
+    text-align: right;
+    font-size: 11px;
+    padding-bottom: 3px;
+}
+
+.Mf_CptCtrls a, .Mf_CptCtrls a:hover, .Mf_Cpt a, .Mf_Cpt a:hover
+{
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.Mf_H, .Mf_H a, .Mf_F, .Mf_F a
+{
+    font-weight: bold;
+    color: White;
+    text-align: left;
+}
+
+.Mf_H, .Mf_F
+{
+    background-color: #444444;
+    padding: 3px 5px 3px 6px;
+    border-top: solid 1px;
+    border-left: none 0;
+    border-right: none 0;
+    border-bottom: solid 1px;
+}
+
+td.Mf_R
+{
+    padding: 3px 6px 3px 6px;
+    color: #5c5c5c;
+}
+
+.Mf_Rf
+{
+    padding-top: 12px !important;
+    border-top: solid 1px;
+}
+
+.Mf_Rl
+{
+    padding-bottom: 12px !important;
+    border-bottom: solid 1px;
+}
+
+.Mf_Rpl
+{
+    padding-left: 11px !important;
+}
+
+.Mf_HcPl
+{
+    padding-left: 60px !important;
+}
+
+.Mf_B
+{
+    padding: 10px 6px 10px 5px;
+    background-color: White;
+    border-top: solid 1px;
+    border-left: none 0;
+    border-right: none 0;
+    border-bottom: none 0;
+    color: Black;
+}
+
+.Mf_B, .Mf_B input, .Mf_B td
+{
+    font-weight: bold;
+}
+
+.Mf_B input, .Mf_B td
+{
+    color: Black;
+}
+
+.Mf_B input
+{ 
+    *vertical-align:middle;
+}
+
+.Mf_B a
+{
+    color: Blue;
+}
+
+.Mf_B a:hover
+{
+    color: Blue !important;
+}
+
+.Mf_B a.Delete
+{
+    color: #9e0c0f !important;
+}
+
+.Mf_B a.Delete:hover
+{
+    color: Red !important;
+}
+
+.Mf_B a.Cancel
+{
+    color: #5c5c5c !important;
+}
+
+.Mf_Rq
+{
+    font-size: 9px !important;
+    font-weight: normal !important;
+    color: Black !important;
+}

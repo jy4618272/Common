@@ -1,0 +1,384 @@
+/* ------------ Header -----------------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_Hdr
+{
+    padding: 5px 7px 5px 7px;
+    height: 45px;
+    position: relative;
+    z-index: 2002;
+    background-color: White;
+}
+
+.Mp_Hdr div.A
+{
+    font-weight: bold;
+    font-size: 21px;
+    white-space: nowrap;
+    float: left;
+    max-width: 40%;
+    height: 45px;
+    line-height: 45px;
+    vertical-align: middle;
+}
+
+.Mp_Hdr div.A a, .Mp_Hdr div.A a:hover
+{
+    font-weight: bold;
+    font-size: 21px;
+    text-decoration: none;
+}
+
+.Mp_Hdr div.G
+{
+    vertical-align: top;
+    text-align: right;
+    font-size: 12px;
+    float: right;
+    max-width: 60%;
+    height: 100%;
+}
+
+.Mp_Hdr div.G div
+{
+    float: right;
+}
+
+.Mp_Hdr div.G a, .Mp_Hdr div.G a:hover
+{
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.Mp_HdrOff
+{
+    height: 10px;
+    position: relative;
+    z-index: 2002;
+    background-color: White;
+}
+
+/* ------------ Header colors ----------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_Hdr div.G a
+{
+    color: #333333;
+}
+
+.Mp_Hdr div.G a:hover
+{
+    color: Blue;
+}
+
+/* ------------ Bread crumbs -----------------------------------------------------------------------------------------------------------------------------------*/
+div.Mp_B
+{
+    padding: 0 12px 10px 12px;
+    text-align: left;
+}
+
+div.Mp_B table
+{
+    width: 100%;
+}
+
+div.Mp_B table tr td, div.Mp_B table tr td a, div.Mp_B table tr td a:hover
+{
+    font-size: 11px;
+}
+
+div.Mp_B table tr td span.L
+{
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.Mp_H
+{
+    float: right;
+    position: absolute;
+    z-index: 2003;
+    right: 7px;
+}
+
+.Mp_HMmOnHdrOn
+{
+    top: 60px;
+}
+
+.Mp_HMmOn
+{
+    top: 17px;
+}
+
+.Mp_H a, .Mp_H a:hover
+{
+    font-size: 11px;
+}
+
+.Mp_HMmOnHdrOn a, .Mp_HMmOnHdrOn a:hover, .Mp_HMmOn a, .Mp_HMmOn a:hover
+{
+    color: White;
+}
+
+/* ------------ Left area --------------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_L
+{
+    vertical-align: top;
+    padding-top: 5px;
+    padding-bottom: 40px;
+    float: left; 
+    position: relative;
+    left: 0;
+    z-index: 2002;
+    text-align: left;
+}
+
+.Mp_L a, .Mp_L a:hover
+{
+    text-decoration: underline;
+    font-size: 11px;
+}
+
+.Mp_La
+{
+    position: fixed;
+    _position: absolute;
+    z-index: 2001;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+/* ------------ Left area colors -------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_La, div.Mp_Sm
+{
+    background-color: #ffffc3;
+}
+
+/* ------------ Page content -----------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_Pm
+{
+    width: 100%;
+    float: left;
+}
+
+.Mp_Pc
+{
+    padding-top: 5px;
+    height: 100%;
+    vertical-align: top;
+    background-color: White;
+    _float: left;
+    _margin-left: 0 !important;
+}
+
+.Mp_PcSlgOnFtrOn
+{
+    padding-bottom: 167px;
+}
+
+.Mp_PcSlgOn
+{
+    padding-bottom: 100px;
+}
+
+.Mp_Pmc
+{
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.Mp_NnFtr
+{
+    position: relative;
+    z-index: 2002;
+    width: 100%;
+    min-height: 100%;
+    _height: 100%;
+}
+
+p.ErrorMessage
+{
+    margin-top: 9px;
+}
+
+/* ------------ Main menu --------------------------------------------------------------------------------------------------------------------------------------*/
+div.Mp_Mm
+{
+    font-size: 12px;
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    position: relative;
+    z-index: 2002;
+    text-align: left;
+}
+
+/* ------------ Main menu item ------------ */
+div.Mp_Mm a
+{
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+/* ------------ Selected main menu item ------------ */
+div.Mp_Mm a:hover, div.Mp_Mm a.S
+{
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* ------------ Submenu ----------------------------------------------------------------------------------------------------------------------------------------*/
+div.Mp_Sm
+{
+    position: relative;
+    z-index: 2002;
+    text-align: center;
+    padding: 5px;
+}
+
+ul.Mp_Sm
+{
+    width: 100%;
+    list-style:none;
+    margin-top: 0px;
+    margin-left:0px;    
+    padding-top: 3px;    
+    padding-left:0px;
+}
+
+ul.Mp_Sm li ul
+{
+    list-style:none;
+    margin-left:0px;
+    padding-left:0px;
+}
+
+ul.Mp_Sm li, .Mp_Lah
+{    
+    padding-bottom: 8px;
+    margin-left:0px;
+    padding-left:7px;
+}
+
+ul.Mp_Sm li.L
+{    
+    padding-bottom: 0px;
+    margin-left:0px;
+}
+
+ul.Mp_Sm li ul li
+{
+    margin-left:0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left:16px;
+}
+
+/* ------------ Submenu first level item ------------ */
+.Mp_Sm a.F, .Mp_Sm a.F:hover, .Mp_Sm span.F, .Mp_Sm input.F 
+{    
+    font-weight: bold;
+    font-size: 13px;
+}
+/* ------------ Submenu second level item ------------ */
+.Mp_Sm a.S, .Mp_Sm a.S:hover
+{
+    font-size: 12px;
+}
+
+/* ------------ Submenu colors ---------------------------------------------------------------------------------------------------------------------------------*/
+/* ------------ Submenu first level item colors ----- */
+.Mp_Sm a.F
+{
+    color: #333333;
+}
+
+.Mp_Sm a.F:hover
+{
+    color: Blue;
+}
+
+/* ------------ Submenu second level item colors ----- */
+ul.Mp_Sm tr td.S
+{
+    color: #333333;
+}
+
+.Mp_Sm a.S
+{
+    color: #333333;
+}
+
+.Mp_Sm a.S:hover
+{
+    color: Blue;
+}
+
+/* ------------ Footer -----------------------------------------------------------------------------------------------------------------------------------------*/
+.Mp_SlgC
+{
+    height: 0;
+    max-height: 0;
+    width: 100%;
+    position: relative;
+    z-index: 2004;
+    float: left; 
+}
+
+.Mp_Slg
+{
+    height: 66px;
+    font-family: Calibri, Arial;
+    font-size: 27px;
+    font-weight: normal;
+    color: #333333;
+    padding-right: 7px;
+    text-align: right;
+    position: absolute;
+    z-index: 2004;
+    right: 0;
+    bottom: 0;
+}
+
+.Mp_SlgTxt
+{
+    padding-top: 10px;
+}
+
+.Mp_SlgImg
+{
+    padding-top: 17px;
+}
+
+.Mp_Ftr
+{
+    height: 66px;
+    margin-top: -67px;
+    position: relative;
+    z-index: 2003;
+    width: 100%;
+    float: left;
+    text-align: center;
+    background-color: White;
+    border-top: 1px solid #dcdcdc;
+}
+
+.Mp_Ftr div, .Mp_Ftr a, .Mp_Ftr a:hover
+{
+    color: #9d9d9d;
+    font-size: 10px;
+}
+
+.Mp_Ftr div 
+{
+    padding-top: 17px;
+}
+
+.Mp_Ftr div.L
+{
+    position: absolute;
+    left: 0;
+    padding-left: 7px;
+    text-align: left;
+}

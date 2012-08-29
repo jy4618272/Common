@@ -1,0 +1,64 @@
+﻿p, span, a, a:hover
+{
+    font-size: 14px;
+}
+
+a.Large, a:hover.Large
+{
+    font-family: Arial, Sans-Serif;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.Caption, .Caption span, .Caption td, .Caption a, .Caption a:hover
+{
+    font-weight: normal !important;
+    font-size: 25px !important;
+    text-align: left;
+    color: #555;
+}
+
+.Mp_Hdr
+{
+    position: absolute !important;
+    top: 5px;
+    width: 100%;
+    padding: 0 !important;
+    z-index: -1;
+    background: transparent none !important;
+    filter: none !important;
+}
+
+.Mp_Hdr div, .Mp_Hdr div a, .Mp_Hdr div a:hover
+{
+    font-family: Calibri, Arial;
+    font-size: 27px !important;
+    font-weight: normal !important;
+    line-height: normal !important;
+    color: #333333 !important;
+}
+
+.Mp_Hdr .A
+{
+    padding-left: 7px;
+}
+
+.Mp_Hdr .G
+{
+    padding-right: 7px;
+}
+
+.RadCaptcha_Default p
+{
+    display: inline;
+}
+
+.RadCaptcha_Default, .RadCaptcha_Default div
+{
+    display: inline;
+}
+
+.RadCaptcha_Default img
+{
+    margin-bottom: 20px;
+}

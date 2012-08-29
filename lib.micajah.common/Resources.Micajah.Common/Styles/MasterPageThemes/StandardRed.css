@@ -1,0 +1,18 @@
+/* ------------ Main menu colors -------------------------------------------------------------------------------------------------------------------------------*/
+div.Mp_Mm
+{
+    color: White;
+    background-color: #d71920;
+}
+
+/* ------------ Main menu item colors ----- */
+div.Mp_Mm a
+{
+    color: White;
+}
+
+/* ------------ Selected main menu item colors ----- */
+div.Mp_Mm a:hover, div.Mp_Mm a.S
+{
+    color: White;
+}
