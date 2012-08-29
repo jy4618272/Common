@@ -1959,6 +1959,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\Validator.js" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.dll" />
+    <Content Include="Runtime\Micajah.Common.LdapAdapter.pdb" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />
   </ItemGroup>
