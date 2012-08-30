@@ -543,16 +543,13 @@ namespace Micajah.Common.Bll.Providers
             Type booleanType = typeof(bool);
             string columnName = svTable.ValueColumn.ColumnName;
             string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instanceId);
-            object value1 = null;
-            object value2 = null;
-            string newValue = null;
 
             foreach (Guid groupId in groupIdList)
             {
                 foreach (Setting setting in settings)
                 {
                     svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, filter, setting.SettingId, groupId));
-                    newValue = null;
+                    string newValue = null;
 
                     if (svRow.Length > 0)
                     {
@@ -577,8 +574,16 @@ namespace Micajah.Common.Bll.Providers
                     {
                         if ((setting.SettingType == SettingType.CheckBox) || (setting.SettingType == SettingType.OnOffSwitch))
                         {
-                            value1 = Support.ConvertStringToType(setting.Value, booleanType);
-                            value2 = Support.ConvertStringToType(newValue, booleanType);
+                            object value1 = null;
+                            object value2 = null;
+
+                            bool val = false;
+                            if (bool.TryParse(setting.Value, out val))
+                                value1 = val;
+
+                            if (bool.TryParse(newValue, out val))
+                                value2 = val;
+
                             if (!((value1 == null) || (value2 == null)))
                             {
                                 newValue = ((((bool)value1) && ((bool)value2)) ? "true" : "false");
@@ -720,7 +725,7 @@ namespace Micajah.Common.Bll.Providers
                     svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, "{0}='{1}' AND {2}='{3}'", svTable.SettingIdColumn.ColumnName, setting.SettingId, svTable.OrganizationIdColumn.ColumnName, organizationId));
                     foreach (DataRow _row in svRow)
                     {
-                        bool _checked=false;
+                        bool _checked = false;
                         if (bool.TryParse(_row[columnName].ToString(), out _checked) && _checked)
                         {
                             setting.Value = _row[columnName].ToString();

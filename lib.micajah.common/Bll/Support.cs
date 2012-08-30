@@ -270,21 +270,36 @@ namespace Micajah.Common.Bll
             {
                 if (conversionType != null)
                 {
-                    try
+                    if (conversionType == typeof(bool))
                     {
-                        if (conversionType.IsEnum)
-                            valueObj = Convert.ChangeType(Enum.Parse(conversionType, value), conversionType, CultureInfo.CurrentCulture);
-                        else if (conversionType == typeof(Unit))
-                            valueObj = Unit.Parse(value, CultureInfo.InvariantCulture);
-                        else if (conversionType == typeof(Guid))
-                            valueObj = new Guid(value);
-                        else
-                            valueObj = Convert.ChangeType(value, conversionType, CultureInfo.CurrentCulture);
+                        bool val = false;
+                        if (bool.TryParse(value, out val))
+                            valueObj = val;
                     }
-                    catch (ArgumentException) { }
-                    catch (FormatException) { }
-                    catch (InvalidCastException) { }
-                    catch (OverflowException) { }
+                    else if (conversionType == typeof(int))
+                    {
+                        int val = 0;
+                        if (int.TryParse(value, out val))
+                            valueObj = val;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (conversionType.IsEnum)
+                                valueObj = Convert.ChangeType(Enum.Parse(conversionType, value), conversionType, CultureInfo.CurrentCulture);
+                            else if (conversionType == typeof(Unit))
+                                valueObj = Unit.Parse(value, CultureInfo.InvariantCulture);
+                            else if (conversionType == typeof(Guid))
+                                valueObj = new Guid(value);
+                            else
+                                valueObj = Convert.ChangeType(value, conversionType, CultureInfo.CurrentCulture);
+                        }
+                        catch (ArgumentException) { }
+                        catch (FormatException) { }
+                        catch (InvalidCastException) { }
+                        catch (OverflowException) { }
+                    }
                 }
             }
 
@@ -1024,19 +1039,22 @@ namespace Micajah.Common.Bll
                 if (!string.IsNullOrEmpty(bcc))
                     msg.Bcc.Add(bcc);
 
-                args.MailMessage = msg;
-
-                WebApplication.RaiseEmailSending(args);
-
-                if (!args.Cancel)
+                if (args != null)
                 {
-                    SmtpClient client = new SmtpClient(args.SmtpServer);
-                    if (args.Async)
-                        client.SendAsync(args.MailMessage, null);
-                    else
-                        client.Send(args.MailMessage);
+                    args.MailMessage = msg;
 
-                    sent = true;
+                    WebApplication.RaiseEmailSending(args);
+
+                    if (!args.Cancel)
+                    {
+                        SmtpClient client = new SmtpClient(args.SmtpServer);
+                        if (args.Async)
+                            client.SendAsync(args.MailMessage, null);
+                        else
+                            client.Send(args.MailMessage);
+
+                        sent = true;
+                    }
                 }
             }
             finally

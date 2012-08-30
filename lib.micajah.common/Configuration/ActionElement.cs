@@ -312,11 +312,12 @@ namespace Micajah.Common.Configuration
         {
             if (!m_IsLoaded)
             {
-                object obj = Support.ConvertStringToType(this.OriginalVisible, typeof(bool));
-                if (obj != null) m_OriginalVisible = m_Visible = (bool)obj;
+                bool val = false;
+                if (bool.TryParse(this.OriginalVisible, out val))
+                    m_OriginalVisible = m_Visible = val;
 
-                obj = Support.ConvertStringToType(this.OriginalInstanceRequired, typeof(bool));
-                if (obj != null) m_OriginalInstanceRequired = m_InstanceRequired = (bool)obj;
+                if (bool.TryParse(this.OriginalInstanceRequired, out val))
+                    m_OriginalInstanceRequired = m_InstanceRequired = val;
 
                 m_IsLoaded = true;
             }

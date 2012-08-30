@@ -256,8 +256,10 @@ namespace Micajah.Common.Configuration
         {
             if (!m_VisibleIsLoaded)
             {
-                object obj = Support.ConvertStringToType(this.OriginalVisible, typeof(bool));
-                if (obj != null) m_Visible = (bool)obj;
+                bool val = false;
+                if (bool.TryParse(this.OriginalVisible, out val))
+                    m_Visible = val;
+
                 m_VisibleIsLoaded = true;
             }
         }

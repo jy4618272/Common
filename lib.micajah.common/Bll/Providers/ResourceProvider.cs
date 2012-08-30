@@ -317,18 +317,19 @@ namespace Micajah.Common.Bll.Providers
 
                 if (parts.Length > 1)
                 {
-                    obj = Support.ConvertStringToType(parts[1], typeof(int));
-                    if (obj != null) width = (int)obj;
+                    int val = 0;
+                    if (int.TryParse(parts[1], out val))
+                        width = val;
 
                     if (parts.Length > 2)
                     {
-                        obj = Support.ConvertStringToType(parts[2], typeof(int));
-                        if (obj != null) height = (int)obj;
+                        if (int.TryParse(parts[1], out val))
+                            height = val;
 
                         if (parts.Length > 3)
                         {
-                            obj = Support.ConvertStringToType(parts[3], typeof(int));
-                            if (obj != null) align = (int)obj;
+                            if (int.TryParse(parts[1], out val))
+                                align = val;
                         }
                     }
                 }
