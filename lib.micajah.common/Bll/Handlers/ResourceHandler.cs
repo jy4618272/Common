@@ -59,8 +59,8 @@ namespace Micajah.Common.Bll.Handlers
                 }
             }
 
-            if (content == null)
-                throw new HttpException(404, Resources.Error_404);
+            //if (content == null)
+            //    throw new HttpException(404, Resources.Error_404);
         }
 
         #endregion
