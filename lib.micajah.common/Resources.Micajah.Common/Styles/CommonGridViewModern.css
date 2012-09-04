@@ -321,7 +321,6 @@ div.Cgv_Hm a
     list-style: none;
     margin: 0;
     padding: 0;
-    float: left;
 }
 
 .Cgv_Filter ul li.DropMenu ul
@@ -354,7 +353,6 @@ div.Cgv_Hm a
 .Cgv_Filter ul li.DropMenu ul li
 {
     display: block;
-    float: none;
 }
 
 .Cgv_Filter ul li.DropMenu a
