@@ -323,12 +323,12 @@ namespace Micajah.Common.Bll.Providers
 
                     if (parts.Length > 2)
                     {
-                        if (int.TryParse(parts[1], out val))
+                        if (int.TryParse(parts[2], out val))
                             height = val;
 
                         if (parts.Length > 3)
                         {
-                            if (int.TryParse(parts[1], out val))
+                            if (int.TryParse(parts[3], out val))
                                 align = val;
                         }
                     }
