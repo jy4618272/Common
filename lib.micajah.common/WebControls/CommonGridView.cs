@@ -1091,6 +1091,9 @@ namespace Micajah.Common.WebControls
 
                         if (this.ShowAddLink)
                         {
+                            if (!addCaptionControls)
+                                pnl2.Controls.Add(new LiteralControl("&nbsp;"));
+
                             m_AddLink = new LinkButton();
                             m_AddLink.ID = "btnAdd";
                             m_AddLink.Text = this.AddLinkCaption;
