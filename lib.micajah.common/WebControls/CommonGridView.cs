@@ -1885,6 +1885,8 @@ namespace Micajah.Common.WebControls
                 Table table = this.Controls[0] as Table;
                 if (table != null)
                 {
+                    m_MaxColSpan = null;
+
                     if (rowsCount == 0)
                         this.HeaderRow = this.CreateHeaderRow(dataBinding, table.Rows);
 
