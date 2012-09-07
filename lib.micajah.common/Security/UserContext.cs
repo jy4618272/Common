@@ -854,7 +854,7 @@ namespace Micajah.Common.Security
                                 returnUrl = ctx.Request.QueryString["returnurl"];
                         }
                     }
-                    WebApplication.LoginProvider.SignOut(true, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId.Value, returnUrl));
+                    (new LoginProvider()).SignOut(true, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId.Value, returnUrl));
                 }
             }
         }
