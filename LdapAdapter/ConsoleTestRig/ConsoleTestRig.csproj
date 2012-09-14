@@ -172,6 +172,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Micajah.Common.LdapAdapter\Micajah.Common.LdapAdapter.csproj">
+      <Project>{5B501FFD-C276-4872-92DE-0B300C0E639D}</Project>
+      <Name>Micajah.Common.LdapAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

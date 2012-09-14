@@ -276,6 +276,11 @@ namespace ConsoleTestRig
 			return server;
 		}
 
+        public void CreateUserEmails(System.Collections.ObjectModel.ReadOnlyCollection<string> altEmails, IUser user)
+        {
+            
+        }
+
 		#endregion
 	}
 }

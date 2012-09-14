@@ -1114,7 +1114,7 @@ namespace Micajah.Common.LdapAdapter
                         }
 
                         //Check if group is Domain User group or group is member of Domain User group
-                        if (group.SamAccountName == "Domain User" || ((group.GroupMembers != null) && (group.GroupMembers.Count(x => x.Contains("Domain User"))) > 0))
+                        if (group.SamAccountName == "Domain Users" || ((group.GroupMembers != null) && (group.GroupMembers.Count(x => x.Contains("Domain Users"))) > 0))
                         {
                             //sR = new SearchRequest(RootDN, "(&(objectClass=user)(primaryGroupID=513))", System.DirectoryServices.Protocols.SearchScope.Subtree, new string[] { "cn", "DistinguishedName", "givenName", "mail", "mobile", "objectCategory", "objectGUID", "objectSid", "sAMAccountName", "sn", "userAccountControl", "userPrincipalName", "primaryGroupID", "proxyAddresses", "memeberof" });
                             //PageResultRequestControl pageRequest = new PageResultRequestControl(int.MaxValue);
@@ -1736,6 +1736,22 @@ namespace Micajah.Common.LdapAdapter
                         entry = sResp.Entries[i];
                         groupDN = getAttributeStringValue(entry.Attributes, "DistinguishedName");
                         AddLDAPGroupToLists(entry, user.MemberOfGroups.Contains(groupDN), ref selectedGroups, ref list);
+                    }
+                }
+
+                if (user.PrimaryGroupId == "513")
+                {
+                    sR = new SearchRequest(RootDN, "(&(objectClass=group)(cn=Domain Users))", System.DirectoryServices.Protocols.SearchScope.Subtree, new string[] { "objectGuid", "name", "DistinguishedName", "sAMAccountName", "objectSid", "member", "memberOf" });
+                    sResp = (SearchResponse)ldapConn.SendRequest(sR, new TimeSpan(1, 0, 0));
+
+                    if (sResp.Entries.Count > 0)
+                    {
+                        for (int i = 0; i < sResp.Entries.Count; i++)
+                        {
+                            entry = sResp.Entries[i];
+                            groupDN = getAttributeStringValue(entry.Attributes, "DistinguishedName");
+                            AddLDAPGroupToLists(entry, user.MemberOfGroups.Contains(groupDN), ref selectedGroups, ref list);
+                        }
                     }
                 }
             }

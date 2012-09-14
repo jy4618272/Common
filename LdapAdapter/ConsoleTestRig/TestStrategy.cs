@@ -49,7 +49,7 @@ namespace ConsoleTestRig
 			myPass = Console.ReadLine();
 			Console.WriteLine("");
 
-			Response<AuthenticationStatus> isAuth = server.AuthenticateUser(myLogin, myPass, true);
+			Response<AuthenticationStatus> isAuth = server.AuthenticateUser(myLogin, myPass, true, Guid.NewGuid());
 			if (isAuth.ResponseValue == AuthenticationStatus.Authenticated)
 			{
 				Console.WriteLine("{0} - User is Authenticated!", myLogin);
@@ -140,7 +140,7 @@ namespace ConsoleTestRig
 					Console.WriteLine(string.Format("({0})", data.Tables[0].Rows[i].Field<string>("ExpectedOutput")));
 					Console.WriteLine();
 
-					Response<AuthenticationStatus> isAuth = server.AuthenticateUser(data.Tables[0].Rows[i].Field<string>("LoginInput"), data.Tables[0].Rows[i].Field<string>("PasswordInput"), true);
+					Response<AuthenticationStatus> isAuth = server.AuthenticateUser(data.Tables[0].Rows[i].Field<string>("LoginInput"), data.Tables[0].Rows[i].Field<string>("PasswordInput"), true, Guid.NewGuid());
 					if (isAuth.ResponseValue == AuthenticationStatus.Authenticated)
 					{
 						Console.WriteLine("{0} - User is Authenticated!", data.Tables[0].Rows[i].Field<string>("LoginInput"));
@@ -176,7 +176,7 @@ namespace ConsoleTestRig
 
 				if (group != null)
 				{
-					var users = group.Users;
+					var users = group.DistinguishedName;
 					if (users.Count > 0)
 					{
 						Console.WriteLine("List of users:");
