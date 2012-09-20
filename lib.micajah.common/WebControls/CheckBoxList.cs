@@ -268,7 +268,10 @@ namespace Micajah.Common.WebControls
         {
             base.OnPreRender(e);
             m_Validator.ControlToValidate = this.ClientID;
-            if (this.Required && this.Visible && this.Enabled) ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Cbl_Validation", ClientScript, true);
+            if (this.Required && this.Visible && this.Enabled)
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Cbl_Validation", ClientScript, true);
+            else
+                m_Validator.Enabled = m_Validator.Visible = false;
         }
 
         /// <summary>
