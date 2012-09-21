@@ -46,6 +46,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         private Guid m_OrgId;
         private Guid m_InstanceId;
         private Guid m_RoleId;
+        private UserContext m_UserContext;
 
         #endregion
 
@@ -53,6 +54,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void LoadResources()
         {
+            List.Columns[2].HeaderText = Resources.LogOnAsUserControl_List_LastLoginDateColumn_HeaderText;
+
             OrganizationListLabel.Text = Resources.LogOnAsUserControl_OrganizationListLabel_Text;
             InstanceListLabel.Text = Resources.LogOnAsUserControl_InstanceListLabel_Text;
             RoleListLabel.Text = Resources.LogOnAsUserControl_RoleListLabel_Text;
@@ -103,6 +106,8 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            m_UserContext = UserContext.Current;
+
             this.LoadResources();
             this.ParseParams();
 
@@ -241,6 +246,18 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 ErrorDiv.InnerHtml = Resources.LoginElement_FailureText;
                 ErrorDiv.Visible = true;
+            }
+        }
+
+        protected void List_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e == null) return;
+
+            object obj = DataBinder.Eval(e.Row.DataItem, "LastLoginDate");
+            if (!Support.IsNullOrDBNull(obj))
+            {
+                Literal lit = (Literal)e.Row.FindControl("LastLoginDateLiteral");
+                lit.Text = Support.GetDisplayDate((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
             }
         }
 

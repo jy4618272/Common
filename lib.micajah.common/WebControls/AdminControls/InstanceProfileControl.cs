@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -60,105 +61,6 @@ namespace Micajah.Common.WebControls.AdminControls
         private void Redirect()
         {
             RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
-        }
-
-        #endregion
-
-        #region Helpdesk Date Methods
-
-        private static string FormatTimePart(int TimePart)
-        {
-            if (TimePart < 10) return "0" + TimePart.ToString(CultureInfo.InvariantCulture);
-            else return TimePart.ToString(CultureInfo.InvariantCulture);
-        }
-
-        private static string DisplayTime(DateTime date, int userHourOffset, int dateFormat, bool omitUtc)
-        {
-            return DisplayServerBasedTime(date, userHourOffset, 5, dateFormat, omitUtc);
-        }
-
-        private static string DisplayServerBasedTime(DateTime date, int userHourOffset, int serverHourOffset, int dateFormat, bool omitUtc)
-        {
-            date = DateTimeAddHoursOffset(date, userHourOffset);
-
-            string sResult = string.Empty;
-            //12:00AM/PM
-            if (dateFormat == 0 || dateFormat == 2)
-            {
-                if (date.Hour > 12) sResult = FormatTimePart(date.Hour - 12) + ":" + FormatTimePart(date.Minute) + "PM";
-                else if (date.Hour == 12) sResult = FormatTimePart(date.Hour) + ":" + FormatTimePart(date.Minute) + "PM";
-                else if ((date.Hour < 12) && (date.Hour != 0)) sResult = FormatTimePart(date.Hour) + ":" + FormatTimePart(date.Minute) + "AM";
-                else if (date.Hour == 0) sResult = "12:" + FormatTimePart(date.Minute) + "AM";
-            }
-            //24:00 (UTC)
-            else if (dateFormat == 1 || dateFormat == 3) sResult = FormatTimePart(date.Hour) + ":" + FormatTimePart(date.Minute);
-            if (omitUtc) sResult += " (UTC" + Convert.ToString(userHourOffset - serverHourOffset, CultureInfo.InvariantCulture) + ")";
-            return sResult;
-        }
-
-        public static DateTime DateTimeAddHoursOffset(DateTime date, int hourOffset)
-        {
-            TimeSpan _difMin = date - DateTime.MinValue;
-            TimeSpan _difMax = DateTime.MaxValue - date;
-            if (date == DateTime.MinValue) return DateTime.MinValue;
-            else if (date == DateTime.MaxValue) return DateTime.MaxValue;
-            else if (hourOffset < 0 && _difMin.TotalHours < Math.Abs(hourOffset)) return DateTime.MinValue;
-            else if (hourOffset > 0 && _difMax.TotalHours < hourOffset) return DateTime.MaxValue;
-            else return date.AddHours(hourOffset);
-        }
-
-        public static string DisplayServerBasedDate(DateTime date, int userHourOffset, int serverHourOffset, int dateFormat, bool omitUtc)
-        {
-            date = DateTimeAddHoursOffset(date, userHourOffset);
-
-            string sResult = string.Empty;
-            //MM/DD/YYYY
-            if (dateFormat == 0 || dateFormat == 1) sResult = date.Month.ToString(CultureInfo.InvariantCulture) + "/" + date.Day.ToString(CultureInfo.InvariantCulture) + "/" + date.Year.ToString(CultureInfo.InvariantCulture);
-            //DD/MM/YYYY
-            else if (dateFormat == 2 || dateFormat == 3) sResult = date.Day.ToString(CultureInfo.InvariantCulture) + "/" + date.Month.ToString(CultureInfo.InvariantCulture) + "/" + date.Year.ToString(CultureInfo.InvariantCulture);
-            if (omitUtc) sResult += " (UTC" + Convert.ToString(userHourOffset - serverHourOffset, CultureInfo.InvariantCulture) + ")";
-            return sResult;
-        }
-
-        public static string DisplayDate(DateTime date, int userHourOffset, int dateFormat, bool omitUtc)
-        {
-            return DisplayServerBasedDate(date, userHourOffset, 5, dateFormat, omitUtc);
-        }
-
-        private static string DisplayDateTime(DateTime date, int HourOffset, int DateFormat, bool OmitUtc)
-        {
-            return DisplayDate(date, HourOffset, DateFormat, false) + " " + DisplayTime(date, HourOffset, DateFormat, OmitUtc);
-        }
-
-        private static string DisplayDateMask(int DateFormat)
-        {
-            switch (DateFormat)
-            {
-                case 0:
-                    return "mm/dd/yyyy";
-                case 1:
-                    return "mm/dd/yyyy";
-                case 2:
-                    return "dd/mm/yyyy";
-                case 3:
-                    return "dd/mm/yyyy";
-                default:
-                    return "dd/mm/yyyy";
-            }
-        }
-
-        private static string DisplayTimeMask(int DateFormat)
-        {
-            //12:00AM/PM
-            if (DateFormat == 0 || DateFormat == 2) return "hh:mm";
-            //24:00 (UTC)
-            else if (DateFormat == 1 || DateFormat == 3) return "HH:mm";
-            return "hh:mm";
-        }
-
-        private static string DisplayDateTimeMask(int DateFormat)
-        {
-            return DisplayDateMask(DateFormat) + " " + DisplayTimeMask(DateFormat);
         }
 
         #endregion
@@ -256,13 +158,11 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (list == null) return;
 
-            // TODO: +5 should be removed and date and time should be converted to UTC.
-
-            DateTime dateTime = DateTime.Now;
+            DateTime dateTime = Support.DateTimeAddHoursOffset(DateTime.UtcNow, UserContext.Current.UtcOffset);
             for (int i = -12; i <= 14; i++)
             {
-                list.Items.Add(new RadComboBoxItem(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProfileControl_OffsetsList_Item_Text, i, DisplayDateTime(dateTime, i + 5, dateFormat, false))
-                    , Convert.ToDecimal(i + 5).ToString("0.00", CultureInfo.CurrentCulture)));
+                list.Items.Add(new RadComboBoxItem(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProfileControl_OffsetsList_Item_Text, i, Support.GetDisplayDateTime(dateTime, i, dateFormat, true))
+                    , Convert.ToDecimal(i).ToString("0.00", CultureInfo.CurrentCulture)));
             }
 
             if (!string.IsNullOrEmpty(selectedValue))
@@ -273,13 +173,11 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (list == null) return;
 
-            // TODO: +5 should be removed and date and time should be converted to UTC.
-
-            DateTime dateTime = DateTime.Now;
+            DateTime dateTime = Support.DateTimeAddHoursOffset(DateTime.UtcNow, UserContext.Current.UtcOffset);
             for (int i = -12; i <= 14; i++)
             {
-                list.Items.Add(new ListItem(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProfileControl_OffsetsList_Item_Text, i, DisplayDateTime(dateTime, i + 5, dateFormat, false))
-                    , Convert.ToDecimal(i + 5).ToString("0.00", CultureInfo.CurrentCulture)));
+                list.Items.Add(new ListItem(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProfileControl_OffsetsList_Item_Text, i, Support.GetDisplayDateTime(dateTime, i, dateFormat, true))
+                    , Convert.ToDecimal(i).ToString("0.00", CultureInfo.CurrentCulture)));
             }
 
             if (!string.IsNullOrEmpty(selectedValue))
@@ -292,14 +190,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             for (int i = 0; i < 4; i++)
             {
-                string postfix = string.Empty;
-
-                if (i == 0 || i == 2)
-                    postfix = Resources.InstanceProfileControl_DateFormatsList_Postfix_12Hours;
-                else if (i == 1 || i == 3)
-                    postfix = Resources.InstanceProfileControl_DateFormatsList_Postfix_24Hours;
-
-                list.Items.Add(new RadComboBoxItem(DisplayDateTimeMask(i) + postfix, i.ToString(CultureInfo.InvariantCulture)));
+                list.Items.Add(new RadComboBoxItem(Resources.ResourceManager.GetString("InstanceProfileControl_DateFormat_" + i.ToString(CultureInfo.InvariantCulture)), i.ToString(CultureInfo.InvariantCulture)));
             }
 
             list.SelectedValue = selectedValue;
@@ -311,14 +202,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             for (int i = 0; i < 4; i++)
             {
-                string postfix = string.Empty;
-
-                if (i == 0 || i == 2)
-                    postfix = Resources.InstanceProfileControl_DateFormatsList_Postfix_12Hours;
-                else if (i == 1 || i == 3)
-                    postfix = Resources.InstanceProfileControl_DateFormatsList_Postfix_24Hours;
-
-                list.Items.Add(new ListItem(DisplayDateTimeMask(i) + postfix, i.ToString(CultureInfo.InvariantCulture)));
+                list.Items.Add(new ListItem(Resources.ResourceManager.GetString("InstanceProfileControl_DateFormat_" + i.ToString(CultureInfo.InvariantCulture)), i.ToString(CultureInfo.InvariantCulture)));
             }
 
             list.SelectedValue = selectedValue;

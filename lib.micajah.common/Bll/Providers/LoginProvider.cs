@@ -1668,7 +1668,7 @@ namespace Micajah.Common.Bll.Providers
                     row.OrganizationId = organizationId;
                     row.GroupId = groupId;
                     row.InvitedBy = invitedByLoginId;
-                    row.CreatedTime = DateTime.Now;
+                    row.CreatedTime = DateTime.UtcNow;
                     table.AddInvitedLoginRow(row);
 
                     Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, FrameworkConfiguration.Current.WebApplication.Email.SmtpServer, true, EmailSendingReason.InviteUser);
@@ -1821,7 +1821,7 @@ namespace Micajah.Common.Bll.Providers
                     row = table.NewResetPasswordRequestRow();
                     row.ResetPasswordRequestId = Guid.NewGuid();
                     row.LoginId = loginId;
-                    row.CreatedTime = DateTime.Now;
+                    row.CreatedTime = DateTime.UtcNow;
                     table.AddResetPasswordRequestRow(row);
 
                     WebApplication.CommonDataSetTableAdapters.ResetPasswordRequestTableAdapter.Update(table);

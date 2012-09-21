@@ -767,7 +767,7 @@ namespace Micajah.Common.Bll.Providers
         {
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
                 , null, null, null
-                , DateTime.Today.AddDays(DefaultExpirationDays), DefaultGraceDays, true, null, true
+                , DateTime.UtcNow.Date.AddDays(DefaultExpirationDays), DefaultGraceDays, true, null, true
                 , street, street2, city, state, postalCode, country, currency
                 , utcOffset, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone

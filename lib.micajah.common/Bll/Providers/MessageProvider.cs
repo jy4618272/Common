@@ -34,7 +34,7 @@ namespace Micajah.Common.Bll.Providers
             if (adapters != null)
             {
                 messageId = Guid.NewGuid();
-                adapters.MessageTableAdapter.Insert(messageId, parentMessageId, localObjectType, localObjectId, fromUserId, toUserId, subject, text, DateTime.Now);
+                adapters.MessageTableAdapter.Insert(messageId, parentMessageId, localObjectType, localObjectId, fromUserId, toUserId, subject, text, DateTime.UtcNow);
             }
             return messageId;
         }

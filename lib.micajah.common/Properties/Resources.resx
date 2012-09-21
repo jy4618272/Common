@@ -2009,12 +2009,6 @@ If you have further questions, you can email {InvitedByFullName} at {InvitedByEm
   <data name="RecurrenceRule_DeserializationFailed" xml:space="preserve">
     <value>Deserialization failed.</value>
   </data>
-  <data name="InstanceProfileControl_DateFormatsList_Postfix_12Hours" xml:space="preserve">
-    <value> AM/PM</value>
-  </data>
-  <data name="InstanceProfileControl_DateFormatsList_Postfix_24Hours" xml:space="preserve">
-    <value> 24HR</value>
-  </data>
   <data name="InstanceProfileControl_OffsetsList_Item_Text" xml:space="preserve">
     <value>UTC ({0}) ({1})</value>
   </data>
@@ -2466,5 +2460,17 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="NoticeMessageBox_CloseLink_ToolTip" xml:space="preserve">
     <value>Close this notification</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormat_0" xml:space="preserve">
+    <value>M/d/yyyy h:m AM/PM</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormat_1" xml:space="preserve">
+    <value>M/d/yyyy H:m 24HR</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormat_2" xml:space="preserve">
+    <value>d/M/yyyy h:m AM/PM</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormat_3" xml:space="preserve">
+    <value>d/M/yyyy H:m 24HR</value>
   </data>
 </root>

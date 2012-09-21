@@ -105,12 +105,12 @@ namespace Micajah.Common.WebControls.SecurityControls
                         else
                             cookie.Path = WebApplication.CreateApplicationAbsoluteUrl(loginUrl);
                     }
-                    cookie.Expires = DateTime.Now.AddYears(1);
+                    cookie.Expires = DateTime.UtcNow.AddYears(1);
                     cookie.HttpOnly = true;
                     cookie.Value = value;
                 }
                 else
-                    cookie.Expires = DateTime.Now.AddYears(-1);
+                    cookie.Expires = DateTime.UtcNow.AddYears(-1);
 
                 cookies.Add(cookie);
             }

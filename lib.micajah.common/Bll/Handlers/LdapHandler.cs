@@ -66,7 +66,7 @@ namespace Micajah.Common.Bll.Handlers
                                         for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
                                         {
                                             drGroup = dvGroups.Table.Rows[j];
-                                            WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), org.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.Now);
+                                            WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), org.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.UtcNow);
                                         }
                                     }
                                 }
@@ -147,7 +147,7 @@ namespace Micajah.Common.Bll.Handlers
                                     for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
                                     {
                                         drGroup = dvGroups.Table.Rows[j];
-                                        WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), organization.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.Now);
+                                        WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), organization.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.UtcNow);
                                     }
                                 }
                             }
@@ -233,8 +233,8 @@ namespace Micajah.Common.Bll.Handlers
                     ldapProcess.MessageCreatedLogins = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationLdapSettingsControl_TestCreatedLogins_Text, 0);
                 }
                 
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationStarted) });
-                DateTime startDate = DateTime.Now;
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationStarted) });
+                DateTime startDate = DateTime.UtcNow;
 
                 // Get all mapped ldap groups users
                 users = LdapInfoProvider.GetMappedGroupsUsers(organizationId, ref ldapProcess);
@@ -329,16 +329,16 @@ namespace Micajah.Common.Bll.Handlers
 
                     if (isRealReplication)
                     {
-                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdatingUserAccounts, users.Count) });
+                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdatingUserAccounts, users.Count) });
                         LocalUsersCheckGroups(organizationId, activeLMLogins, users, orgTable, groupMappings);
-                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdateFinished) });
+                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdateFinished) });
                     }
 
                     LocalUsersCreate(localLogins, ldapActiveLogins, organizationId, ref ldapProcess, users, orgTable, groupMappings, isRealReplication);
                 }
 
                 ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationFinished, Math.Round((DateTime.Now - startDate).TotalMinutes, 1)) });
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationFinished, Math.Round((DateTime.UtcNow - startDate).TotalMinutes, 1)) });
             }
             catch (Exception ex)
             {
@@ -423,7 +423,7 @@ namespace Micajah.Common.Bll.Handlers
                     ldapProcess.DataDeactivatedLogins = Micajah.Common.Bll.Support.TrimDataView(newTable.DefaultView, 25);
                 }
 
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersInactivated : Resources.LdapProcessLog_TestReplicationUsersInactivated, count) });
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersInactivated : Resources.LdapProcessLog_TestReplicationUsersInactivated, count) });
             }
             finally
             {
@@ -470,7 +470,7 @@ namespace Micajah.Common.Bll.Handlers
                     newTable.DefaultView.Sort = "LoginName";
                     ldapProcess.DataActivatedLogins = Micajah.Common.Bll.Support.TrimDataView(newTable.DefaultView, 25);
                 }
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersActivated : Resources.LdapProcessLog_TestReplicationUsersActivated, count) });
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersActivated : Resources.LdapProcessLog_TestReplicationUsersActivated, count) });
             }
             finally
             {
@@ -598,7 +598,7 @@ namespace Micajah.Common.Bll.Handlers
                     ldapProcess.DataCreatedLogins = Micajah.Common.Bll.Support.TrimDataView(newTable.DefaultView, 25);
                 }
 
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersCreated : Resources.LdapProcessLog_TestReplicationUsersCreated, count) });
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersCreated : Resources.LdapProcessLog_TestReplicationUsersCreated, count) });
             }
             finally
             {

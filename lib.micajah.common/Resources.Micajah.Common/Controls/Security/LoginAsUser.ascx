@@ -65,12 +65,15 @@
         <br />
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="UserId" Width="700px"
             Visible="False" EnableSelect="True" OnAction="List_Action" AutoGenerateColumns="False"
-            DataSourceID="EntityListDataSource" PageSize="50">
+            DataSourceID="EntityListDataSource" PageSize="50" OnRowDataBound="List_RowDataBound">
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />
                 <mits:TextBoxField DataField="Email" SortExpression="Email" />
-                <mits:TextBoxField DataField="LastLoginDate" DataFormatString="{0:d}" SortExpression="LastLoginDate" 
-                    HeaderStyle-Width="70px" ItemStyle-HorizontalAlign="Right" />
+                <mits:TemplateField SortExpression="LastLoginDate" ItemStyle-HorizontalAlign="Right" HeaderStyle-Width="70px">
+                    <ItemTemplate>
+                        <asp:Literal ID="LastLoginDateLiteral" runat="server"></asp:Literal>
+                    </ItemTemplate>
+                </mits:TemplateField>
             </columns>
         </mits:CommonGridView>
         <asp:ObjectDataSource ID="OrganizationsDataSource" runat="server" SelectMethod="GetOrganizations"

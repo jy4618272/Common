@@ -195,7 +195,7 @@ namespace Micajah.Common.WebControls.SetupControls
 
         #endregion
 
-        #region Overriden Methods        
+        #region Overriden Methods
 
         protected override void OnInit(EventArgs e)
         {
@@ -376,10 +376,9 @@ namespace Micajah.Common.WebControls.SetupControls
             System.Collections.ObjectModel.ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
             foreach (TimeZoneInfo timeZoneInfo in timeZones)
             {
-                timeZoneList.Items.Add(new ListItem(timeZoneInfo.DisplayName, (timeZoneInfo.BaseUtcOffset.TotalHours - 5).ToString(CultureInfo.InvariantCulture)));
+                timeZoneList.Items.Add(new ListItem(timeZoneInfo.DisplayName, timeZoneInfo.BaseUtcOffset.TotalHours.ToString(CultureInfo.InvariantCulture)));
             }
             // TODO: Sort the list accoding to value.
-            // TODO: Offset should be UTC 0, not 5 (Atlanta).
         }
 
         #endregion

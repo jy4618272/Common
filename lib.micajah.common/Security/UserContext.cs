@@ -43,6 +43,8 @@ namespace Micajah.Common.Security
         private const string StateKey = "mc.State";
         private const string PostalCodeKey = "mc.PostalCode";
         private const string CountryKey = "mc.Country";
+        private const string UtcOffsetKey = "mc.UtcOffsetKey";
+        private const string DateFormatKey = "mc.DateFormatKey";
         private const string RoleIdListKey = "mc.RoleIdList";
         private const string SelectedInstanceIdKey = "mc.SelectedInstanceId";
         private const string SelectedOrganizationIdKey = "mc.SelectedOrganizationId";
@@ -155,6 +157,8 @@ namespace Micajah.Common.Security
                     s_ReservedKeys.Add(StateKey);
                     s_ReservedKeys.Add(PostalCodeKey);
                     s_ReservedKeys.Add(CountryKey);
+                    s_ReservedKeys.Add(UtcOffsetKey);
+                    s_ReservedKeys.Add(DateFormatKey);
                     s_ReservedKeys.Add(RoleIdListKey);
                     s_ReservedKeys.Add(RoleIdKey);
                     s_ReservedKeys.Add(SelectedInstanceIdKey);
@@ -364,6 +368,46 @@ namespace Micajah.Common.Security
         {
             get { return (string)base[CountryKey]; }
             set { base[CountryKey] = value; }
+        }
+
+        /// <summary>
+        /// Gets the UTC offset, in hours, of the user's time zone.
+        /// </summary>
+        public decimal UtcOffset
+        {
+            get
+            {
+                decimal value = 2;
+                if (base[UtcOffsetKey] == null)
+                {
+                    Instance inst = this.SelectedInstance;
+                    if (inst != null)
+                        value = inst.UtcOffset;
+                }
+                else
+                    value = (decimal)base[UtcOffsetKey];
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the date format.
+        /// </summary>
+        public int DateFormat
+        {
+            get
+            {
+                int value = 2;
+                if (base[DateFormatKey] == null)
+                {
+                    Instance inst = this.SelectedInstance;
+                    if (inst != null)
+                        value = inst.DateFormat;
+                }
+                else
+                    value = (int)base[UtcOffsetKey];
+                return value;
+            }
         }
 
         /// <summary>
@@ -650,6 +694,8 @@ namespace Micajah.Common.Security
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = WebApplication.CreateApplicationAbsoluteUrl(startUrl);
             SelectedInstanceId = Guid.Empty;
+            base[UtcOffsetKey] = null;
+            base[DateFormatKey] = null;
             base[SelectedInstanceIdKey] = newInstance.InstanceId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
@@ -714,6 +760,8 @@ namespace Micajah.Common.Security
                 SelectedOrganizationChanging(this, new UserContextSelectedOrganizationChangingEventArgs() { Organization = newOrganization });
 
             SelectedOrganizationId = Guid.Empty;
+            base[UtcOffsetKey] = null;
+            base[DateFormatKey] = null;
             base[SelectedOrganizationIdKey] = newOrganization.OrganizationId;
             base[ActionIdListKey] = actionIdList;
             base[GroupIdListKey] = groupIdList;
@@ -1033,7 +1081,7 @@ namespace Micajah.Common.Security
 
             RefreshDetails(this, userRow);
 
-            userRow.LastLoginDate = DateTime.Now;
+            userRow.LastLoginDate = DateTime.UtcNow;
             newOrganization.TableAdapters.UserTableAdapter.Update(userRow);
 
             if (SelectedOrganizationChanged != null)

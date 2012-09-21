@@ -1236,7 +1236,7 @@ namespace Micajah.Common.Pages
             HttpContext ctx = HttpContext.Current;
             if (ctx != null)
             {
-                ctx.Response.Cache.SetExpires(DateTime.Now.AddYears(-1));
+                ctx.Response.Cache.SetExpires(DateTime.UtcNow.AddYears(-1));
                 ctx.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
                 ctx.Response.Cache.SetNoStore();
                 ctx.Response.Cache.SetNoServerCaching();

@@ -495,7 +495,7 @@ namespace Micajah.Common.Bll
             {
                 if (ExpirationTime.HasValue)
                 {
-                    if (m_ExpirationTime.Value.Date < DateTime.Now)
+                    if (m_ExpirationTime.Value.Date < DateTime.UtcNow)
                         return true;
                 }
                 return false;
@@ -512,7 +512,7 @@ namespace Micajah.Common.Bll
                 int days = 0;
                 if (Expired)
                 {
-                    days = (int)(m_ExpirationTime.Value.Date.AddDays(m_GraceDays) - DateTime.Today).TotalDays;
+                    days = (int)(m_ExpirationTime.Value.Date.AddDays(m_GraceDays) - DateTime.UtcNow.Date).TotalDays;
                     if (days < 0) days = 0;
                 }
                 return days;

@@ -208,7 +208,7 @@ namespace Micajah.Common.Bll
                 UserContext.Current.SelectedOrganization.OrganizationId,
                 this.RuleId,
                 UserContext.Current.UserId,
-                DateTime.Now);
+                DateTime.UtcNow);
             int count = table.Count;
             if (count == 0) return true;
             int result = 0;

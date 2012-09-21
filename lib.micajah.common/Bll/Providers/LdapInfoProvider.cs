@@ -542,19 +542,19 @@ namespace Micajah.Common.Bll.Providers
                 i++;
             }
             
-            ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundMappedGroups, i) });
+            ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundMappedGroups, i) });
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
                 if (server.Initialize())
                 {                    
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ConnectedToLDAP, i) });
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_GettingUsersFromMappedGroups, i) });
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ConnectedToLDAP, i) });
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_GettingUsersFromMappedGroups, i) });
                     users = server.GetUsers(groupNames);
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundUsers, users.Count) });
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundUsers, users.Count) });
                 }
                 else
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.Now, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_CantConnectToLDAP, i) });
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_CantConnectToLDAP, i) });
             }
 
             return users;

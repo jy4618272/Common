@@ -278,13 +278,6 @@ END
 
 GO
 
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_MC_RecurringSchedule_UpdatedTime]') AND type = 'D')
-BEGIN
-ALTER TABLE [dbo].[Mc_RecurringSchedule] DROP CONSTRAINT [DF_MC_RecurringSchedule_UpdatedTime]
-END
-
-GO
-
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_MC_RecurringSchedule_Deleted]') AND type = 'D')
 BEGIN
 ALTER TABLE [dbo].[Mc_RecurringSchedule] DROP CONSTRAINT [DF_MC_RecurringSchedule_Deleted]
@@ -316,13 +309,6 @@ GO
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Rule_UsedQty]') AND type = 'D')
 BEGIN
 ALTER TABLE [dbo].[Mc_Rule] DROP CONSTRAINT [DF_Mc_Rule_UsedQty]
-END
-
-GO
-
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Rule_CreatedDate]') AND type = 'D')
-BEGIN
-ALTER TABLE [dbo].[Mc_Rule] DROP CONSTRAINT [DF_Mc_Rule_CreatedDate]
 END
 
 GO
@@ -1240,9 +1226,6 @@ GO
 ALTER TABLE [dbo].[Mc_RecurringSchedule] ADD  CONSTRAINT [DF_Table_1_EntityType]  DEFAULT (N'') FOR [LocalEntityType]
 GO
 
-ALTER TABLE [dbo].[Mc_RecurringSchedule] ADD  CONSTRAINT [DF_MC_RecurringSchedule_UpdatedTime]  DEFAULT (getdate()) FOR [UpdatedTime]
-GO
-
 ALTER TABLE [dbo].[Mc_RecurringSchedule] ADD  CONSTRAINT [DF_MC_RecurringSchedule_Deleted]  DEFAULT ((0)) FOR [Deleted]
 GO
 
@@ -1256,9 +1239,6 @@ ALTER TABLE [dbo].[Mc_Rule] ADD  CONSTRAINT [DF_Mc_RuleEngine_DisplayName]  DEFA
 GO
 
 ALTER TABLE [dbo].[Mc_Rule] ADD  CONSTRAINT [DF_Mc_Rule_UsedQty]  DEFAULT ((0)) FOR [UsedQty]
-GO
-
-ALTER TABLE [dbo].[Mc_Rule] ADD  CONSTRAINT [DF_Mc_Rule_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 GO
 
 ALTER TABLE [dbo].[Mc_Rule] ADD  CONSTRAINT [DF_Mc_Rule_Active]  DEFAULT ((1)) FOR [Active]

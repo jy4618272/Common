@@ -34,6 +34,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected ObjectDataSource GroupDataSource;
 
         private ComboBox m_CountryList;
+        private UserContext m_UserContext;
 
         #endregion
 
@@ -159,8 +160,8 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             Guid userId = (Guid)e.Keys["UserId"];
-            UserContext ctx = UserContext.Current;
-            if (ctx.UserId == userId && ctx.IsOrganizationAdministrator) e.Cancel = true;
+            if (m_UserContext.UserId == userId && m_UserContext.IsOrganizationAdministrator)
+                e.Cancel = true;
         }
 
         protected void PasswordForm_PasswordUpdated(object sender, EventArgs e)
@@ -182,7 +183,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (WebApplication.LoginProvider.LoginNameExists(loginName))
                 {
-                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, UserContext.Current.SelectedOrganization.OrganizationId))
+                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.SelectedOrganization.OrganizationId))
                     {
                         ErrorDiv.InnerHtml = Resources.UsersControl_ErrorMessage_UserInOrganizationExists;
                         ErrorDiv.Visible = true;
@@ -349,7 +350,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void AppGroupDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
-            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganization.OrganizationId;
+            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganization.OrganizationId;
         }
 
         protected void InvitedUsersListDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
@@ -361,7 +362,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InvitedUsersListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
-            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganization.OrganizationId;
+            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganization.OrganizationId;
         }
 
         protected virtual void InvitedUsersListDataSource_Selected(object sender, ObjectDataSourceStatusEventArgs e)
@@ -458,6 +459,8 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             base.LoadResources();
 
+            List.Columns[2].HeaderText = Resources.UsersControl_List_LastLoginDateColumn_HeaderText;
+
             PasswordForm.ObjectName = Resources.UsersControl_PwdForm_ObjectName;
             LoadResources(EditUserGroupsForm, this.GetType().BaseType.Name);
             LoadResources(EditUserActiveForm, this.GetType().BaseType.Name);
@@ -510,9 +513,11 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void OnLoad(EventArgs e)
         {
+            m_UserContext = UserContext.Current;
+
             if (!IsPostBack)
             {
-                if (UserContext.Current.SelectedOrganization.DataSet.Group.Rows.Count == 0)
+                if (m_UserContext.SelectedOrganization.DataSet.Group.Rows.Count == 0)
                 {
                     MasterPage.Message = Resources.UsersControl_NoGroupError_Message;
                     MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.UsersControl_NoGroupError_Description, WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsPageVirtualPath));
@@ -522,6 +527,18 @@ namespace Micajah.Common.WebControls.AdminControls
             }
 
             base.OnLoad(e);
+        }
+
+        protected void List_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e == null) return;
+
+            object obj = DataBinder.Eval(e.Row.DataItem, "LastLoginDate");
+            if (!Support.IsNullOrDBNull(obj))
+            {
+                Literal lit = (Literal)e.Row.FindControl("LastLoginDateLiteral");
+                lit.Text = Support.GetDisplayDate((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+            }
         }
 
         protected override void List_Action(object sender, CommonGridViewActionEventArgs e)

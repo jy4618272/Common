@@ -17,7 +17,7 @@
         </mits:MagicForm>
         <br />
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="RuleId" DataSourceID="EntityListDataSource"
-            Width="700px">
+            Width="700px" OnRowDataBound="List_RowDataBound">
             <captioncontrols>
                 <asp:LinkButton ID="ButtonUpdateOrder" runat="server" OnInit="ButtonUpdateOrder_Init" OnClick="ButtonUpdateOrder_Click"></asp:LinkButton>
             </captioncontrols>
@@ -39,13 +39,21 @@
                         <%# Eval("LastUsedUser") != DBNull.Value ? Micajah.Common.Bll.Providers.RuleEngineProvider.GetDisplayUserName((Guid)Eval("LastUsedUser"), (Guid)Eval("OrganizationId")) : string.Empty %>
                     </ItemTemplate>
                 </mits:TemplateField>
-                <mits:TextBoxField DataField="LastUsedDate" SortExpression="LastUsedDate"/>
+                <mits:TemplateField SortExpression="LastUsedDate" ItemStyle-HorizontalAlign="Right">
+                    <ItemTemplate>
+                        <asp:Literal ID="LastUsedDateLiteral" runat="server"></asp:Literal>
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TemplateField SortExpression="CreatedBy">
                     <ItemTemplate>
                         <%# Micajah.Common.Bll.Providers.RuleEngineProvider.GetDisplayUserName((Guid)Eval("CreatedBy"), (Guid)Eval("OrganizationId"))%>
                     </ItemTemplate>
                 </mits:TemplateField>
-                <mits:TextBoxField DataField="CreatedDate" SortExpression="CreatedDate" />
+                <mits:TemplateField SortExpression="CreatedDate" ItemStyle-HorizontalAlign="Right">
+                    <ItemTemplate>
+                        <asp:Literal ID="CreatedDateLiteral" runat="server"></asp:Literal>
+                    </ItemTemplate>
+                </mits:TemplateField>
             </columns>
         </mits:CommonGridView>
         <mits:MagicForm ID="EditForm" runat="server" DataSourceID="EntityDataSource" DataKeyNames="RuleId"

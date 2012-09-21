@@ -548,10 +548,10 @@ namespace Micajah.Common.Application
             {
                 foreach (StartThread startThread in startThreads)
                 {
-                    DateTime now = DateTime.Now;
+                    DateTime now = DateTime.UtcNow;
                     int startHour = 0;
                     int startMinute = 0;
-                    DateTime startDate = DateTime.Now;
+                    DateTime startDate = DateTime.UtcNow;
                     string[] startTime = startThread.StartTime.Split(':');
 
                     if (startTime.Length == 2)
@@ -560,9 +560,9 @@ namespace Micajah.Common.Application
                         startMinute = Convert.ToInt32(startTime[1], CultureInfo.InvariantCulture);
 
                         if ((now.Hour > startHour) || ((now.Hour == startHour) && (now.Minute >= startMinute)))
-                            startDate = DateTime.Today.AddDays(1).AddHours(startHour);
+                            startDate = DateTime.UtcNow.Date.AddDays(1).AddHours(startHour);
                         else
-                            startDate = DateTime.Today.AddHours(startHour);
+                            startDate = DateTime.UtcNow.Date.AddHours(startHour);
 
                         startDate = startDate.AddMinutes(startMinute);
 

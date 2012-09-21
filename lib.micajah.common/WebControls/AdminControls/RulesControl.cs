@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Application;
+using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
@@ -18,6 +20,8 @@ namespace Micajah.Common.WebControls.AdminControls
         protected ComboBox InstanceList;
         protected MagicForm FormRuleEngine;
         protected ObjectDataSource InstancesDataSource;
+
+        private UserContext m_UserContext;
 
         #endregion
 
@@ -44,8 +48,7 @@ namespace Micajah.Common.WebControls.AdminControls
             ComboBox comboBox = sender as ComboBox;
             if (comboBox != null)
             {
-                UserContext user = UserContext.Current;
-                if (user.IsOrganizationAdministrator)
+                if (m_UserContext.IsOrganizationAdministrator)
                 {
                     using (RadComboBoxItem item = new RadComboBoxItem(Resources.RulesControl_EditForm_InstanceList_AllInstancesItem_Text, string.Empty))
                     {
@@ -77,6 +80,25 @@ namespace Micajah.Common.WebControls.AdminControls
             LinkButton link = sender as LinkButton;
             if (link != null)
                 link.Text = Resources.RulesControl_ButtonUpdateOrder_Text;
+        }
+
+        protected void List_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e == null) return;
+
+            object obj = DataBinder.Eval(e.Row.DataItem, "LastUsedDate");
+            if (!Support.IsNullOrDBNull(obj))
+            {
+                Literal lit = (Literal)e.Row.FindControl("LastUsedDateLiteral");
+                lit.Text = Support.GetDisplayDateTime((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+            }
+
+            obj = DataBinder.Eval(e.Row.DataItem, "CreatedDate");
+            if (!Support.IsNullOrDBNull(obj))
+            {
+                Literal lit = (Literal)e.Row.FindControl("CreatedDateLiteral");
+                lit.Text = Support.GetDisplayDateTime((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+            }
         }
 
         #endregion
@@ -113,19 +135,25 @@ namespace Micajah.Common.WebControls.AdminControls
             if (tempField != null)
                 tempField.HeaderText = Resources.RulesControl_List_LastUsedUserColumn_HeaderText;
 
+            List.Columns[7].HeaderText = Resources.RulesControl_List_LastUsedDateColumn_HeaderText;
+
             tempField = (List.Columns[8] as TemplateField);
             if (tempField != null)
                 tempField.HeaderText = Resources.RulesControl_List_CreatedByColumn_HeaderText;
 
+            List.Columns[9].HeaderText = Resources.RulesControl_List_CreatedDateColumn_HeaderText;
+
             Initialize(FormRuleEngine);
             FormRuleEngine.Visible = true;
             FormRuleEngine.AutoGenerateEditButton = FormRuleEngine.AutoGenerateInsertButton = false;
+
             LoadResources(FormRuleEngine, this.GetType().BaseType.Name);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             if (!this.IsPostBack)
             {
                 if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
@@ -136,6 +164,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 else
                     SearchPanel.Visible = false;
             }
+
+            m_UserContext = UserContext.Current;
         }
 
         #endregion

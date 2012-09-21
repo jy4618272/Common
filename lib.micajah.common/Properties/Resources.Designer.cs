@@ -2472,20 +2472,38 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  AM/PM.
+        ///   Looks up a localized string similar to M/d/yyyy h:m AM/PM.
         /// </summary>
-        internal static string InstanceProfileControl_DateFormatsList_Postfix_12Hours {
+        internal static string InstanceProfileControl_DateFormat_0 {
             get {
-                return ResourceManager.GetString("InstanceProfileControl_DateFormatsList_Postfix_12Hours", resourceCulture);
+                return ResourceManager.GetString("InstanceProfileControl_DateFormat_0", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  24HR.
+        ///   Looks up a localized string similar to M/d/yyyy H:m 24HR.
         /// </summary>
-        internal static string InstanceProfileControl_DateFormatsList_Postfix_24Hours {
+        internal static string InstanceProfileControl_DateFormat_1 {
             get {
-                return ResourceManager.GetString("InstanceProfileControl_DateFormatsList_Postfix_24Hours", resourceCulture);
+                return ResourceManager.GetString("InstanceProfileControl_DateFormat_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to d/M/yyyy h:m AM/PM.
+        /// </summary>
+        internal static string InstanceProfileControl_DateFormat_2 {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_DateFormat_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to d/M/yyyy H:m 24HR.
+        /// </summary>
+        internal static string InstanceProfileControl_DateFormat_3 {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_DateFormat_3", resourceCulture);
             }
         }
         

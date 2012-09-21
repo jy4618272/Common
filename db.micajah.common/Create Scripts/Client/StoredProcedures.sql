@@ -367,12 +367,13 @@ BEGIN
 	SET NOCOUNT OFF;
 
 	INSERT INTO dbo.Mc_Instance (InstanceId, PseudoId, OrganizationId, [Name], [Description], EnableSignUpUser, ExternalId, UtcOffset, [DateFormat], WorkingDays, Active, CanceledTime, Trial, Beta, Deleted, CreatedTime) 
-	VALUES (@InstanceId, @PseudoId, @OrganizationId, @Name, @Description, @EnableSignUpUser, @ExternalId, @UtcOffset, @DateFormat, @WorkingDays, @Active, @CanceledTime, @Trial, @Beta, @Deleted, GETDATE());
+	VALUES (@InstanceId, @PseudoId, @OrganizationId, @Name, @Description, @EnableSignUpUser, @ExternalId, @UtcOffset, @DateFormat, @WorkingDays, @Active, @CanceledTime, @Trial, @Beta, @Deleted, GETUTCDATE());
 	
 	SELECT InstanceId, PseudoId, OrganizationId, [Name], [Description], EnableSignUpUser, ExternalId, UtcOffset, [DateFormat], WorkingDays, Active, CanceledTime, Trial, Beta, Deleted, CreatedTime 
 	FROM dbo.Mc_Instance 
 	WHERE (InstanceId = @InstanceId);
 END
+
 
 GO
 
@@ -914,7 +915,6 @@ BEGIN
 		ON (u.UserId = uo.UserId)
 	WHERE (u.Email = @Email) AND (@OrganizationId IS NULL OR uo.OrganizationId = @OrganizationId);
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1955,7 +1955,6 @@ BEGIN
 		ON (u.UserId = uo.UserId)
 	WHERE (u.UserId = @UserId) AND (@OrganizationId IS NULL OR uo.OrganizationId = @OrganizationId);
 END
-
 GO
 
 SET ANSI_NULLS ON

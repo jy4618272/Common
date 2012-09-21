@@ -29,7 +29,7 @@ namespace Micajah.Common.Bll.Providers
 
                 command = new SqlCommand("[dbo].[Mc_DeleteViewState]", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@Now", SqlDbType.DateTime).Value = DateTime.Now;
+                command.Parameters.Add("@Now", SqlDbType.DateTime).Value = DateTime.UtcNow;
                 command.ExecuteNonQuery();
             }
             finally
@@ -113,7 +113,7 @@ namespace Micajah.Common.Bll.Providers
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
                 command.Parameters.Add("@ViewState", SqlDbType.VarBinary).Value = bytes;
-                command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.Now.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewStateExpirationTimeout);
+                command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewStateExpirationTimeout);
                 command.ExecuteNonQuery();
             }
             finally

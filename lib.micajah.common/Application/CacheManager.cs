@@ -53,7 +53,7 @@ namespace Micajah.Common.Application
         /// <param name="value">The item to be added to the cache.</param>
         public void Add(string key, object value)
         {
-            this.Add(key, value, null, DateTime.Now.AddHours(23.5), TimeSpan.Zero, CacheItemPriority.Normal, null);
+            this.Add(key, value, null, DateTime.UtcNow.AddHours(23.5), TimeSpan.Zero, CacheItemPriority.Normal, null);
         }
 
         /// <summary>

@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Data;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
-using Micajah.Common.Configuration;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
-using ChargifyNET;
-using ChargifyNET.Configuration;
-using System.Configuration;
 using System.IO;
 using System.Web;
+using System.Web.UI;
+using ChargifyNET;
+using Micajah.Common.Bll.Providers;
 
 namespace Micajah.Common.WebControls
 {
@@ -59,33 +46,33 @@ namespace Micajah.Common.WebControls
             string _CrLf = Environment.NewLine;
             string _post = "Postback Headers:" + _CrLf;
             foreach (string _key in Request.Headers)
-                _post += "     "+_key + ": " + Request.Headers[_key] + _CrLf;
-            _post+="Postback Data:"+_CrLf;
+                _post += "     " + _key + ": " + Request.Headers[_key] + _CrLf;
+            _post += "Postback Data:" + _CrLf;
             foreach (string _key in Request.Form.AllKeys)
-                _post += "     " + _key + ": " + Request.Form[_key] +_CrLf;
-//            _post+="Postback Content: "+data+_CrLf;
+                _post += "     " + _key + ": " + Request.Form[_key] + _CrLf;
+            //            _post+="Postback Content: "+data+_CrLf;
             ChargifyConnect _chargify = null;
-            try {_chargify=ChargifyProvider.CreateChargify();}
-            catch (Exception _ex) 
+            try { _chargify = ChargifyProvider.CreateChargify(); }
+            catch (Exception _ex)
             {
-                _post+="ERROR: "+_ex.ToString()+_CrLf;
+                _post += "ERROR: " + _ex.ToString() + _CrLf;
                 SaveLogToFile("ChargifyWebHook", _post);
-                return;            
+                return;
             }
             if (!data.IsChargifyWebhookContentValid(signature, _chargify.SharedKey))
             {
                 _post += "ERROR: Webhook Content is Not Valid." + _CrLf;
                 SaveLogToFile("ChargifyWebHook", _post);
-                return;            
+                return;
             }
             if (string.IsNullOrEmpty(Request.Form["event"]) || Request.Form["event"] == "renewal_success")
             {
-                _post += "ERROR: event type is empty or is not renewal_success."+_CrLf;
+                _post += "ERROR: event type is empty or is not renewal_success." + _CrLf;
                 SaveLogToFile("ChargifyWebHook", _post);
-                return;            
+                return;
             }
 
-            Guid _orgId=Guid.Empty;
+            Guid _orgId = Guid.Empty;
 
             if (string.IsNullOrEmpty(Request.Form["payload[subscription][customer][reference]"]))
             {
@@ -94,14 +81,14 @@ namespace Micajah.Common.WebControls
                 return;
             }
             try { _orgId = new Guid(Request.Form["payload[subscription][customer][reference]"]); }
-            catch (Exception _ex) 
-            { 
+            catch (Exception _ex)
+            {
                 _post += "ERROR: Can't parse Organization Guid! " + _ex.ToString() + _CrLf;
                 SaveLogToFile("ChargifyWebHook", _post);
-                return;            
+                return;
             }
-            
-            DateTime _expDate=DateTime.MinValue;
+
+            DateTime _expDate = DateTime.MinValue;
 
             if (string.IsNullOrEmpty(Request.Form["payload[subscription][current_period_ends_at]"]))
             {
@@ -135,21 +122,21 @@ namespace Micajah.Common.WebControls
 
             //logPrefix used to create log files format :
             // dd/mm/yyyy hh:mm:ss AM/PM ==> Log Message
-            string logPrefix = DateTime.Now.ToShortDateString().ToString() + " " + DateTime.Now.ToLongTimeString().ToString() + " ==> ";
+            string logPrefix = DateTime.UtcNow.ToShortDateString() + " " + DateTime.UtcNow.ToLongTimeString() + " ==> ";
 
             //this variable used to create log filename format "
             //for example filename : ErrorLogYYYYMMDD
-            string year = DateTime.Now.Year.ToString();
-            string month = DateTime.Now.Month.ToString();
-            string day = DateTime.Now.Day.ToString();
+            string year = DateTime.UtcNow.Year.ToString();
+            string month = DateTime.UtcNow.Month.ToString();
+            string day = DateTime.UtcNow.Day.ToString();
             string filename = "ChargifyWebHooks_Log_" + year + "_" + month + "_" + day + ".txt";
 
 
             string path = HttpContext.Current.Request.MapPath("~/temp");
             if (path == null || path.Length == 0) throw new Exception("Can't create Log File. Application setting LogFile.Path is undefined.");
-            StreamWriter sw = new StreamWriter(path +"\\"+ filename, true);
+            StreamWriter sw = new StreamWriter(path + "\\" + filename, true);
             sw.WriteLine(logPrefix + MsgType);
-            foreach (string _line in Msg.Split(new string[]{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)) sw.WriteLine(_line);
+            foreach (string _line in Msg.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) sw.WriteLine(_line);
             sw.Flush();
             sw.Close();
         }

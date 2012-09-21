@@ -127,20 +127,6 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[
 ALTER TABLE [dbo].[Mc_InvitedLogin] DROP CONSTRAINT [FK_Mc_InvitedLogin_Mc_Organization]
 GO
 
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_InvitedLogin_InvitedLoginId]') AND type = 'D')
-BEGIN
-ALTER TABLE [dbo].[Mc_InvitedLogin] DROP CONSTRAINT [DF_Mc_InvitedLogin_InvitedLoginId]
-END
-
-GO
-
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_InvitedLogin_CreatedTime]') AND type = 'D')
-BEGIN
-ALTER TABLE [dbo].[Mc_InvitedLogin] DROP CONSTRAINT [DF_Mc_InvitedLogin_CreatedTime]
-END
-
-GO
-
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Login_LoginId]') AND type = 'D')
 BEGIN
 ALTER TABLE [dbo].[Mc_Login] DROP CONSTRAINT [DF_Mc_Login_LoginId]
@@ -1089,12 +1075,6 @@ REFERENCES [dbo].[Mc_Organization] ([OrganizationId])
 GO
 
 ALTER TABLE [dbo].[Mc_InvitedLogin] CHECK CONSTRAINT [FK_Mc_InvitedLogin_Mc_Organization]
-GO
-
-ALTER TABLE [dbo].[Mc_InvitedLogin] ADD  CONSTRAINT [DF_Mc_InvitedLogin_InvitedLoginId]  DEFAULT (newid()) FOR [InvitedLoginId]
-GO
-
-ALTER TABLE [dbo].[Mc_InvitedLogin] ADD  CONSTRAINT [DF_Mc_InvitedLogin_CreatedTime]  DEFAULT (getdate()) FOR [CreatedTime]
 GO
 
 ALTER TABLE [dbo].[Mc_Login] ADD  CONSTRAINT [DF_Mc_Login_LoginId]  DEFAULT (newid()) FOR [LoginId]

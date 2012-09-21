@@ -132,7 +132,7 @@ namespace Micajah.Common.WebControls
                     }
 
                     li = new HtmlGenericControl("li");
-                    li.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.Today.Year, CompanyName);
+                    li.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.UtcNow.Year, CompanyName);
                     ul2.Controls.Add(li);
 
                     if (FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.VisibleEngineeredBy)
@@ -176,7 +176,7 @@ namespace Micajah.Common.WebControls
                         leftDiv.InnerHtml = sb.ToString();
                     }
 
-                    copyrightDiv.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.Today.Year, CompanyName);
+                    copyrightDiv.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.UtcNow.Year, CompanyName);
                     if (FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.VisibleEngineeredBy)
                         copyrightDiv.InnerHtml += "<br />" + string.Format(CultureInfo.InvariantCulture, Resources.Footer_EngineeredByFormatString, BaseControl.GetHyperlink("http://www.micajah.com", Resources.Footer_MicajahCompanyName));
 

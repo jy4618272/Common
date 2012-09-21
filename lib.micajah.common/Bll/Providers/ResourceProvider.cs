@@ -780,7 +780,7 @@ namespace Micajah.Common.Bll.Providers
                                     if (h.HasValue) row.Height = h.Value;
                                     if (a.HasValue) row.Align = a.Value;
                                     row.Temporary = temporary;
-                                    row.CreatedTime = DateTime.Now;
+                                    row.CreatedTime = DateTime.UtcNow;
 
                                     table.AddResourceRow(row);
                                     resourceTableAdapter.Update(row);
@@ -918,7 +918,7 @@ namespace Micajah.Common.Bll.Providers
                 if (h.HasValue) row.Height = h.Value;
                 if (a.HasValue) row.Align = a.Value;
                 row.Temporary = temporary;
-                row.CreatedTime = DateTime.Now;
+                row.CreatedTime = DateTime.UtcNow;
 
                 WebApplication.CommonDataSet.Resource.AddResourceRow(row);
                 WebApplication.CommonDataSetTableAdapters.ResourceTableAdapter.Update(row);

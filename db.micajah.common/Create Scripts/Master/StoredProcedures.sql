@@ -328,6 +328,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [dbo].[Mc_InsertEmailSuffix]
 (
 	@EmailSuffixId uniqueidentifier,
@@ -346,6 +347,7 @@ BEGIN
 	FROM dbo.Mc_EmailSuffix
 	WHERE EmailSuffixId = @EmailSuffixId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -353,6 +355,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertGroupMappings]
 (
@@ -375,6 +378,7 @@ BEGIN
 	FROM dbo.Mc_GroupMappings 
 	WHERE (GroupId = @GroupId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -382,6 +386,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertEmail]
@@ -401,6 +406,7 @@ BEGIN
 	WHERE (Email = @Email)
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -408,6 +414,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertDatabase]
 (
@@ -432,6 +439,7 @@ BEGIN
 	WHERE (DatabaseId = @DatabaseId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -439,6 +447,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertDatabaseServer]
@@ -464,6 +473,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -471,6 +481,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertOrganizationLdapGroup]
@@ -492,6 +503,7 @@ BEGIN
     VALUES(@Id,@OrganizationId, @DomainId, @Domain, @ObjectGUID, @Name, @DistinguishedName, @CreatedTime)
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -499,6 +511,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertOrganizationLogin]
 (
@@ -518,6 +531,7 @@ BEGIN
 	FROM dbo.Mc_OrganizationsLogins
 	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -525,6 +539,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertOrganization]
 (
@@ -560,7 +575,7 @@ BEGIN
 		, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, ExpirationTime, GraceDays, Active, CanceledTime, Trial, Deleted, CreatedTime, BillingPlan
 		, Street, Street2, City, [State], PostalCode, Country, Currency) 
 	VALUES (@OrganizationId, @PseudoId, @Name, @Description, @WebsiteUrl, @DatabaseId
-		, @FiscalYearStartMonth, @FiscalYearStartDay, @WeekStartsDay, @ExpirationTime, @GraceDays, @Active, @CanceledTime, @Trial, @Deleted, GETDATE(), @BillingPlan
+		, @FiscalYearStartMonth, @FiscalYearStartDay, @WeekStartsDay, @ExpirationTime, @GraceDays, @Active, @CanceledTime, @Trial, @Deleted, GETUTCDATE(), @BillingPlan
 		, @Street, @Street2, @City, @State, @PostalCode, @Country, @Currency);
 	
 	SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
@@ -571,6 +586,7 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -578,6 +594,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertInvitedLogin]
 (
@@ -599,6 +616,7 @@ BEGIN
 	FROM dbo.Mc_InvitedLogin
 	WHERE (InvitedLoginId = @InvitedLoginId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -606,6 +624,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertLogin]
@@ -627,6 +646,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -634,6 +654,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetResources]
 (
@@ -650,6 +671,7 @@ BEGIN
 	ORDER BY CreatedTime, Name;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -657,6 +679,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetUnitsOfMeasure]
 AS
@@ -675,6 +698,7 @@ BEGIN
 	ORDER BY [OrganizationId] asc, [GroupName] asc, [SingularName] asc;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -682,6 +706,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetResource]
 (
@@ -717,6 +742,7 @@ BEGIN
 	WHERE (ResourceId = @ResId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -724,6 +750,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetResetPasswordRequest]
 (
@@ -738,6 +765,7 @@ BEGIN
 	WHERE (ResetPasswordRequestId = @ResetPasswordRequestId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -745,6 +773,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetResetPasswordRequestsByLoginId]
 (
@@ -759,6 +788,7 @@ BEGIN
 	WHERE (LoginId = @LoginId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -766,6 +796,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertCountry]
@@ -786,6 +817,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -793,6 +825,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertCustomUrl]
 (
@@ -813,6 +846,7 @@ BEGIN
 	FROM dbo.Mc_CustomUrl
 	WHERE CustomUrlId = @CustomUrlId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -820,6 +854,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetWebsites]
 AS
@@ -831,6 +866,7 @@ BEGIN
 	WHERE (Deleted = 0);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -838,6 +874,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetUnitsOfMeasureConversion]
 (
@@ -857,6 +894,7 @@ BEGIN
 	AND (@UnitOfMeasureTo IS NULL OR UnitOfMeasureTo = @UnitOfMeasureTo);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -864,6 +902,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetViewState]
 (
@@ -878,6 +917,7 @@ BEGIN
     WHERE (ViewStateId = @ViewStateId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -885,6 +925,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateOrganization]
 (
@@ -939,6 +980,7 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -946,6 +988,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateOrganizationLogin]
 (
@@ -967,6 +1010,7 @@ BEGIN
 	FROM dbo.Mc_OrganizationsLogins
 	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -974,6 +1018,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateLoginSession]
 (
@@ -989,6 +1034,7 @@ BEGIN
 	WHERE LoginId = @LoginId;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -996,6 +1042,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateLogin]
 (
@@ -1023,6 +1070,7 @@ BEGIN
 	WHERE (LoginId = @LoginId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1030,6 +1078,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateLoginLdapInfo]    
 (    
@@ -1061,6 +1110,7 @@ BEGIN
  FROM dbo.Mc_OrganizationsLogins    
  WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);    
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1068,6 +1118,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureOverride]
 (
@@ -1150,6 +1201,7 @@ BEGIN
 	end
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1157,6 +1209,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_UpdateWebsite]
@@ -1182,6 +1235,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1189,6 +1243,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureConversion]
 (
@@ -1216,6 +1271,7 @@ BEGIN
 	AND OrganizationId = @OrganizationId;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1223,6 +1279,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateResource]
 (
@@ -1246,6 +1303,7 @@ BEGIN
 	FROM dbo.Mc_Resource 
 	WHERE ResourceId = @ResourceId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1253,6 +1311,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasure]
 (
@@ -1292,6 +1351,7 @@ BEGIN
 	AND [OrganizationId] = @OrganizationId;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1299,6 +1359,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertUnitsOfMeasureConversion]
 (
@@ -1331,6 +1392,7 @@ BEGIN
 	AND UnitOfMeasureTo = @UnitOfMeasureTo
 	AND OrganizationId = @OrganizationId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1338,6 +1400,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertViewState]
 (
@@ -1353,6 +1416,7 @@ BEGIN
 	VALUES (@ViewStateId, @ViewState, @ExpirationTime);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1360,6 +1424,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertUnitsOfMeasure]
 (
@@ -1407,6 +1472,7 @@ BEGIN
 	WHERE [UnitsOfMeasureId] = @UnitsOfMeasureId
 	AND [OrganizationId] = @OrganizationId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1414,6 +1480,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertResetPasswordRequest]
 (
@@ -1432,6 +1499,7 @@ BEGIN
 	FROM dbo.Mc_ResetPasswordRequest
 	WHERE (ResetPasswordRequestId = @ResetPasswordRequestId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1439,6 +1507,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_InsertResource]
 (
@@ -1466,6 +1535,7 @@ BEGIN
 	FROM dbo.Mc_Resource 
 	WHERE ResourceId = @ResourceId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1473,6 +1543,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_UpdateDatabaseServer]
@@ -1499,6 +1570,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1506,6 +1578,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateEmailSuffix]
 (
@@ -1524,6 +1597,7 @@ BEGIN
 	FROM dbo.Mc_EmailSuffix
 	WHERE EmailSuffixId = @EmailSuffixId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1531,6 +1605,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateDatabase]
 (
@@ -1556,6 +1631,7 @@ BEGIN
 	WHERE (DatabaseId = @DatabaseId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1563,6 +1639,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertWebsite]
@@ -1587,6 +1664,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1594,6 +1672,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_UpdateCustomUrl]
 (
@@ -1613,6 +1692,7 @@ BEGIN
 	FROM dbo.Mc_CustomUrl
 	WHERE CustomUrlId = @CustomUrlId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1620,6 +1700,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
@@ -1650,12 +1731,13 @@ BEGIN
 			, '00000000-0000-0000-0000-000000000000' as [ObjectGUID]
 			, '' as [Name]
 			, '' as [DistinguishedName]
-			, GETDATE() as [CreatedTime]
+			, GETUTCDATE() as [CreatedTime]
 		FROM [dbo].[Mc_OrganizationsLdapGroups]
 		WHERE (OrganizationId = @OrganizationId)
 	) A	
 	ORDER BY Domain
 END
+
 
 GO
 
@@ -1664,6 +1746,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetCustomUrl]
 (
@@ -1678,6 +1761,7 @@ BEGIN
 	WHERE (CustomUrlId = @CustomUrlId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1685,6 +1769,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetCustomUrls]
 (
@@ -1716,6 +1801,7 @@ BEGIN
 		);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1723,6 +1809,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetCountries]
 AS
@@ -1734,6 +1821,7 @@ BEGIN
 	ORDER BY [Name];
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1741,6 +1829,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasureConversion]
 (
@@ -1758,6 +1847,7 @@ BEGIN
 	AND OrganizationId = @OrganizationId;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1765,6 +1855,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteViewState]
 (
@@ -1778,6 +1869,7 @@ BEGIN
 	WHERE ExpirationTime < @Now;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1785,6 +1877,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetEmail]
@@ -1800,6 +1893,7 @@ BEGIN
 	WHERE (Email = @Email)
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1807,6 +1901,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetEmails]
@@ -1822,6 +1917,7 @@ BEGIN
 	WHERE (LoginId = @LoginId)
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1829,6 +1925,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetDatabaseServers]
 AS
@@ -1840,6 +1937,7 @@ BEGIN
 	WHERE (Deleted = 0);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1847,6 +1945,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetCustomUrlsByOrganizationId]
 (
@@ -1861,6 +1960,7 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1868,6 +1968,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetDatabases]
 AS
@@ -1879,6 +1980,7 @@ BEGIN
 	WHERE (Deleted = 0);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1886,6 +1988,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteGroupMapping]
 (
@@ -1900,6 +2003,7 @@ BEGIN
 	DELETE FROM dbo.Mc_GroupMappings
 	WHERE GroupId = @GroupId AND LdapDomainId = @LdapDomainId AND LdapGroupId = @LdapGroupId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1907,6 +2011,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteInvitedLogin]
 (
@@ -1919,8 +2024,9 @@ BEGIN
 	DELETE FROM dbo.Mc_InvitedLogin
 	WHERE 
 		(InvitedLoginId = @InvitedLoginId)
-		OR (DATEDIFF(DAY, CreatedTime, GETDATE()) >= 30);
+		OR (DATEDIFF(DAY, CreatedTime, GETUTCDATE()) >= 30);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1928,6 +2034,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteEmailSuffixes]  
 (  
@@ -1947,6 +2054,7 @@ BEGIN
    DELETE FROM dbo.Mc_EmailSuffix  
    WHERE OrganizationId = @OrganizationId AND InstanceId IS NULL;  
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1954,6 +2062,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteCustomUrl]
 (
@@ -1966,6 +2075,7 @@ BEGIN
 	DELETE FROM dbo.Mc_CustomUrl
 	WHERE CustomUrlId = @CustomUrlId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1973,6 +2083,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_DeleteEmail]  
@@ -1986,6 +2097,7 @@ BEGIN
 	WHERE LoginId = @LoginId
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -1993,6 +2105,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteResource]
 (
@@ -2003,13 +2116,14 @@ BEGIN
 	SET NOCOUNT OFF;
 	
 	DECLARE @Date datetime;
-	SET @Date = DATEADD(day, -1, GETDATE());
+	SET @Date = DATEADD(DAY, -1, GETUTCDATE());
 
 	DELETE FROM dbo.Mc_Resource
 	WHERE (ResourceId = @ResourceId) 
 		OR (ParentResourceId = @ResourceId)
 		OR ((Temporary = 1) AND (CreatedTime <= @Date));
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -2017,6 +2131,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasure]
 (
@@ -2036,6 +2151,7 @@ BEGIN
 	AND UnitsOfMeasureId = @UnitsOfMeasureId;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2043,6 +2159,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_DeleteResetPasswordRequest]
 (
@@ -2055,8 +2172,9 @@ BEGIN
 	DELETE FROM dbo.Mc_ResetPasswordRequest
 	WHERE 
 		(ResetPasswordRequestId = @ResetPasswordRequestId)
-		OR (DATEDIFF(MINUTE, CreatedTime, GETDATE()) > 60);
+		OR (DATEDIFF(MINUTE, CreatedTime, GETUTCDATE()) > 60);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -2064,6 +2182,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_DeleteOrganizationLdapGroup]
@@ -2079,6 +2198,7 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId) AND (Domain = @Domain)
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2086,6 +2206,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_DeleteOrganizationLogin]
@@ -2102,6 +2223,7 @@ BEGIN
 END
 
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2109,6 +2231,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationLogin]    
 (    
@@ -2126,6 +2249,7 @@ BEGIN
  WHERE (ol.OrganizationId = @OrganizationId) AND (ol.LoginId = @LoginId);    
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2133,6 +2257,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizations]  
 AS  
@@ -2146,6 +2271,7 @@ BEGIN
  FROM dbo.Mc_Organization   
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2153,6 +2279,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginsByOrganizationId]      
 (      
@@ -2169,6 +2296,7 @@ BEGIN
 		ON (ol.LoginId = l.LoginId) AND (ol.OrganizationId = @OrganizationId) AND (l.Deleted = 0);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2176,6 +2304,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginByEmail]      
@@ -2198,6 +2327,7 @@ BEGIN
  ORDER BY o.LdapServerAddress DESC;  
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2205,6 +2335,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginByLoginName]
 (
@@ -2220,6 +2351,7 @@ BEGIN
 		ON l.LoginId = e.LoginId AND e.Email = @LoginName
 	WHERE (l.LoginName = @LoginName OR e.Email IS NOT NULL);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -2227,6 +2359,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsAll]
@@ -2251,6 +2384,7 @@ BEGIN
 	ORDER BY [Name]
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2258,6 +2392,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]
@@ -2281,6 +2416,7 @@ BEGIN
 	ORDER BY [Name]
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2288,6 +2424,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroups]
@@ -2312,6 +2449,7 @@ BEGIN
 	ORDER BY [Name]
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2319,6 +2457,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsByLdapDomain]
 (
@@ -2337,6 +2476,7 @@ BEGIN
 	ORDER BY o.LdapServerAddress DESC;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2344,6 +2484,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsByLoginId]
 (  
@@ -2362,6 +2503,7 @@ BEGIN
 		ON (ol.OrganizationId = o.OrganizationId) AND (ol.LoginId = @LoginId) AND (o.Deleted = 0) AND (o.Active = 1) AND (ol.Active = 1);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2369,6 +2511,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffixesByOrganizationId]  
 (  
@@ -2387,6 +2530,7 @@ BEGIN
  WHERE ((OrganizationId = @OrganizationId) AND (InstanceId IS NOT NULL));  
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2394,6 +2538,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetGroupMappings]
 (
@@ -2408,6 +2553,7 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2415,6 +2561,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffixesByInstanceId]  
 (  
@@ -2429,6 +2576,7 @@ BEGIN
  WHERE (InstanceId = @InstanceId);  
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2436,6 +2584,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffix]
 (
@@ -2450,6 +2599,7 @@ BEGIN
 	WHERE (EmailSuffixId = @EmailSuffixId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2457,6 +2607,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffixes]  
 (  
@@ -2478,6 +2629,7 @@ BEGIN
   );  
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2485,6 +2637,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetLogin]
 (
@@ -2498,6 +2651,7 @@ BEGIN
 	FROM dbo.Mc_Login
 	WHERE LoginId = @LoginId;
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -2505,6 +2659,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginByDomainName]      
 (      
@@ -2531,6 +2686,7 @@ BEGIN
  ORDER BY o.LdapServerAddress DESC;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2538,6 +2694,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetLdapServerDetails]
 (
@@ -2553,6 +2710,7 @@ BEGIN
 		OrganizationId = @OrganizationId;
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2560,6 +2718,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetInvitedLogin]
 (
@@ -2574,6 +2733,7 @@ BEGIN
 	WHERE (InvitedLoginId = @InvitedLoginId);
 END
 
+
 GO
 
 SET ANSI_NULLS ON
@@ -2581,6 +2741,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [dbo].[Mc_GetInvitedLoginsByOrganizationId]
 (
@@ -2594,5 +2755,6 @@ BEGIN
 	FROM dbo.Mc_InvitedLogin
 	WHERE (OrganizationId = @OrganizationId);
 END
+
 
 GO

@@ -644,7 +644,7 @@ namespace Micajah.Common.WebControls
 
             if (!IsPostBack)
             {
-                DateTime currDate = DateTime.Now;
+                DateTime currDate = DateTime.UtcNow;
                 DatePickerStartDate.SelectedDate = currDate;
                 DatePickerEndDate.SelectedDate = currDate.AddHours(1);
                 ComboBoxYearly_EveryMonth.SelectedValue = currDate.ToString("MMMM", new CultureInfo("en-US"));
@@ -695,7 +695,7 @@ namespace Micajah.Common.WebControls
             //    args.StartDate,
             //    args.EndDate,
             //    args.RecurrenceRule,
-            //    DateTime.Now,
+            //    DateTime.UtcNow,
             //    (UserContext.Current != null ? UserContext.Current.UserId : Guid.Empty),
             //    false);
             if (Updated != null) Updated(this, args);

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using ChargifyNET;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
 using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
 using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
-using ChargifyNET;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -155,14 +152,14 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     _expDate = _custSubscr.CurrentPeriodEndsAt;
                     if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr.SubscriptionID, OrganizationId);
-                    TotalAmount=m_TotalSum;
+                    TotalAmount = m_TotalSum;
                     lCCStatus.Text = "Credit Card Registered.";
                     lblPurchase.Text = "<br/>Purchase HelpDesk using on another one month to " + _expDate.Value.AddMonths(1).ToString("dd MMMM yyyy") + " for ";
                     lblPurchaseSum.Text = "$" + m_TotalSum.ToString("0.00");
                     lSumPerMonth.Text = "$" + TotalAmount.ToString("0.00") + " per Month";
                     lblPurchase.Visible = true;
                     lblPurchaseSum.Visible = true;
-                    TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.Now);
+                    TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
                     ChargifyPayButton.Visible = true;
                 }
                 else lCCStatus.Text = "No Credit Card on File.";
@@ -240,7 +237,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (setting == null) return;
             if (setting.SettingId == SettingProvider.MasterPageCustomStyleSheetSettingId) return;
-            
+
             string _val = setting.Value;
 
             if (CurrentBillingPlan == BillingPlan.Free)
@@ -298,8 +295,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     _lbl.Font.Bold = true;
                     _lbl.Text = _val;
                     container.Controls.Add(_lbl);
-                    decimal _priceMonth = _paidQty>0 ? _paidQty * setting.Price : 0;
-                    _lblPrice.Text = (setting.UsageCountLimit>0 ? setting.UsageCountLimit.ToString()+" * $0.0/each" : string.Empty) + (_paidQty>0 ? (setting.UsageCountLimit>0 ? " + " : string.Empty) + _paidQty.ToString()+ " * $" + setting.Price.ToString("0.00") + "/each" : string.Empty) +" = $"+_priceMonth.ToString("0.00")+"/month";
+                    decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
+                    _lblPrice.Text = (setting.UsageCountLimit > 0 ? setting.UsageCountLimit.ToString() + " * $0.0/each" : string.Empty) + (_paidQty > 0 ? (setting.UsageCountLimit > 0 ? " + " : string.Empty) + _paidQty.ToString() + " * $" + setting.Price.ToString("0.00") + "/each" : string.Empty) + " = $" + _priceMonth.ToString("0.00") + "/month";
                     m_TotalSum += _priceMonth;
                     if (pricecontainer != null) pricecontainer.Controls.Add(_lblPrice);
                 }

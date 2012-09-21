@@ -1,30 +1,21 @@
 ﻿using System;
-using System.Data;
-using System.Collections.Specialized;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
-using Micajah.Common.Configuration;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
 using ChargifyNET;
-using ChargifyNET.Configuration;
-using System.Configuration;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
     public class ChargifySubscribeControl : UserControl
     {
-
         #region Overriden Methods
+
         protected const string ControlIdPrefix = "v";
         protected MagicForm mfChargifyCustomer;
-        protected ChargifyConnect mChargify=null;
+        protected ChargifyConnect mChargify = null;
 
         protected ChargifyConnect Chargify
         {
@@ -33,9 +24,10 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected bool IsNewSubscription
         {
-            get {return ViewState["IsNewSubscription"]==null ? true : (bool)ViewState["IsNewSubscription"]; }
+            get { return ViewState["IsNewSubscription"] == null ? true : (bool)ViewState["IsNewSubscription"]; }
             set { ViewState["IsNewSubscription"] = value; }
         }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -44,10 +36,10 @@ namespace Micajah.Common.WebControls.AdminControls
 
             DataTable _dt = new DataTable("Years");
             _dt.Columns.Add(new DataColumn("Year", typeof(string)));
-            for (int _year = DateTime.Now.Year; _year < DateTime.Now.Year + 5; _year++)
+            for (int _year = DateTime.UtcNow.Year; _year < DateTime.UtcNow.Year + 5; _year++)
             {
-                DataRow _r=_dt.NewRow();
-                _r["Year"]=_year.ToString();
+                DataRow _r = _dt.NewRow();
+                _r["Year"] = _year.ToString();
                 _dt.Rows.Add(_r);
             }
             ComboBoxField _cmbf = (ComboBoxField)mfChargifyCustomer.Fields[7];
@@ -74,7 +66,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 _row["Email"] = _cust.Email;
                 _row["FirstName"] = _cust.FirstName;
                 _row["LastName"] = _cust.LastName;
-                IDictionary<int,ISubscription> _subscrList=Chargify.GetSubscriptionListForCustomer(_cust.ChargifyID);
+                IDictionary<int, ISubscription> _subscrList = Chargify.GetSubscriptionListForCustomer(_cust.ChargifyID);
                 if (_subscrList.Count > 0)
                 {
                     ICreditCardView _cc = null;
@@ -102,19 +94,19 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             string _OrgIdStr = UserContext.Current.SelectedOrganization.OrganizationId.ToString();
 
-            ICustomer _cust=IsNewSubscription ? new Customer() : Chargify.LoadCustomer(_OrgIdStr);
+            ICustomer _cust = IsNewSubscription ? new Customer() : Chargify.LoadCustomer(_OrgIdStr);
 
-            _cust.SystemID=_OrgIdStr;
+            _cust.SystemID = _OrgIdStr;
             _cust.Organization = UserContext.Current.SelectedOrganization.Name;
-            _cust.Email=e.NewValues["Email"].ToString();
-            _cust.FirstName=e.NewValues["FirstName"].ToString();
-            _cust.LastName=e.NewValues["LastName"].ToString();
+            _cust.Email = e.NewValues["Email"].ToString();
+            _cust.FirstName = e.NewValues["FirstName"].ToString();
+            _cust.LastName = e.NewValues["LastName"].ToString();
 
             CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, e.NewValues["CCNumber"].ToString(), int.Parse(e.NewValues["CCExpirationYear"].ToString()), int.Parse(e.NewValues["CCExpirationMonth"].ToString()), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
             if (IsNewSubscription)
             {
-                _cust=Chargify.CreateCustomer(_cust);
+                _cust = Chargify.CreateCustomer(_cust);
                 try
                 {
                     Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
@@ -136,7 +128,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, UserContext.Current.SelectedOrganization.OrganizationId);
                 try
                 {
-                    if (_custSubscr!=null) Chargify.UpdateSubscriptionCreditCard(_custSubscr, _ccattr);
+                    if (_custSubscr != null) Chargify.UpdateSubscriptionCreditCard(_custSubscr, _ccattr);
                     else Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
                 }
                 catch (ChargifyException cex)

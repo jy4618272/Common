@@ -69,6 +69,7 @@
     <Folder Include="Create Scripts\Common" />
     <Folder Include="Create Scripts\Master" />
     <Folder Include="Properties" />
+    <Folder Include="Change Scripts\v99" />
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Change Scripts\v74\Mc_Action_ConvertToXml.sql" />
@@ -82,6 +83,18 @@
     <NotInBuild Include="Create Scripts\Master\Tables.sql" />
     <NotInBuild Include="Create Scripts\Master\TablesData.sql" />
     <NotInBuild Include="Create Scripts\Master\Triggers.sql" />
+    <NotInBuild Include="Change Scripts\v99\Master.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
+    <NotInBuild Include="Change Scripts\v99\Client.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
+    <NotInBuild Include="Change Scripts\v99\GetUTCDateTime.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
+    <NotInBuild Include="Change Scripts\v99\ReadMe.txt">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />

@@ -75,7 +75,7 @@ namespace Micajah.Common.Bll.Providers
                 row.SetLastUsedUserNull();
                 row.SetLastUsedDateNull();
                 row.CreatedBy = UserContext.Current != null ? UserContext.Current.UserId : Guid.Empty;
-                row.CreatedDate = DateTime.Now;
+                row.CreatedDate = DateTime.UtcNow;
             }
 
             row.Name = name;

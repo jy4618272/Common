@@ -133,9 +133,14 @@ namespace Micajah.Common.WebControls.SetupControls
 
             if (this.ExpirationTime.IsEmpty)
                 e.InputParameters["expirationTime"] = null;
+            else
+                e.InputParameters["expirationTime"] = this.ExpirationTime.SelectedDate.ToUniversalTime();
 
             if (this.CanceledTime.IsEmpty)
                 e.InputParameters["canceledTime"] = null;
+            else
+                e.InputParameters["canceledTime"] = this.CanceledTime.SelectedDate.ToUniversalTime();
+
             EntityDataSource.Selected += new ObjectDataSourceStatusEventHandler(EntityDataSource_Selected);
         }
 
@@ -238,14 +243,14 @@ namespace Micajah.Common.WebControls.SetupControls
             switch (e.CommandName)
             {
                 case "Inactivate":
-                case "Activate":                    
+                case "Activate":
                     if (obj != null)
                     {
                         OrganizationProvider.UpdateOrganizationActive((Guid)obj, (e.CommandName == "Activate"));
                         List.DataBind();
                     }
                     break;
-                case "UnDelete":                    
+                case "UnDelete":
                     if (obj != null)
                     {
                         OrganizationProvider.UndeleteOrganization((Guid)obj);

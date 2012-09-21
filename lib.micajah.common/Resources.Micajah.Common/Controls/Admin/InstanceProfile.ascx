@@ -23,12 +23,12 @@
                 </mits:TemplateField>
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
-                        <mits:ComboBox ID="UtcOffsetList" runat="server" Width="250px" />
+                        <mits:ComboBox ID="UtcOffsetList" runat="server" Width="270px" />
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
-                        <mits:ComboBox ID="DateFormatList" runat="server" Width="250px" />
+                        <mits:ComboBox ID="DateFormatList" runat="server" Width="270px" />
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:CheckBoxField DataField="EnableSignUpUser" />

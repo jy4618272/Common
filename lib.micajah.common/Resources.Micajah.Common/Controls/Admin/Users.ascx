@@ -13,15 +13,18 @@
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="UserId" DataSourceID="EntityListDataSource"
-            Width="700px" OnRowDeleting="List_RowDeleting">
+            Width="700px" OnRowDataBound="List_RowDataBound" OnRowDeleting="List_RowDeleting">
             <captioncontrols>
                 <asp:HyperLink ID="InviteUsersLink" runat="server" CssClass="Cgv_AddNew" OnInit="InviteUsersLink_Init"></asp:HyperLink>
             </captioncontrols>
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />
                 <mits:TextBoxField DataField="Email" SortExpression="Email" />
-                <mits:TextBoxField DataField="LastLoginDate" DataFormatString="{0:d}" SortExpression="LastLoginDate" 
-                    HeaderStyle-Width="70px" ItemStyle-HorizontalAlign="Right" />
+                <mits:TemplateField SortExpression="LastLoginDate" HeaderStyle-Width="70px" ItemStyle-HorizontalAlign="Right">
+                    <ItemTemplate>
+                        <asp:Literal ID="LastLoginDateLiteral" runat="server"></asp:Literal>
+                    </ItemTemplate>
+                </mits:TemplateField>
             </columns>
         </mits:CommonGridView>
         <div id="InvitedUsersDiv" runat="server" style="padding-top: 20px;">

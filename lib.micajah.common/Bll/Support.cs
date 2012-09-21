@@ -186,6 +186,94 @@ namespace Micajah.Common.Bll
 
         #region Public Methods
 
+        #region Date and Time
+
+        public static DateTime DateTimeAddHoursOffset(DateTime date, decimal utcOffset)
+        {
+            try
+            {
+                return date.AddHours(Convert.ToDouble(utcOffset, CultureInfo.CurrentCulture));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                if (utcOffset < 0)
+                    return DateTime.MinValue;
+                else if (utcOffset > 0)
+                    return DateTime.MaxValue;
+            }
+
+            return date;
+        }
+
+        public static string GetDisplayDateFormatString(int dateFormat)
+        {
+            switch (dateFormat)
+            {
+                case 0:
+                case 1:
+                    return "M/d/yyyy";
+                default:
+                    return "d/M/yyyy";
+            }
+        }
+
+        public static string GetDisplayTimeFormatString(int dateFormat)
+        {
+            switch (dateFormat)
+            {
+                case 1:
+                case 3:
+                    return "H:m"; // 24:00
+                default:
+                    return "t"; // 12:00AM/PM
+            }
+        }
+
+        public static string GetDisplayDateTimeFormatString(int dateFormat)
+        {
+            return GetDisplayDateFormatString(dateFormat) + Html32TextWriter.SpaceChar + GetDisplayTimeFormatString(dateFormat);
+        }
+
+        public static string GetDisplayTime(DateTime date, decimal utcOffset, int dateFormat, bool omitUtc)
+        {
+            date = DateTimeAddHoursOffset(date, utcOffset);
+
+            string result = string.Format(CultureInfo.CurrentCulture, "{0:" + GetDisplayTimeFormatString(dateFormat) + "}", date);
+
+            if (!omitUtc)
+                result += string.Format(CultureInfo.InvariantCulture, " (UTC{0})", utcOffset);
+
+            return result;
+        }
+
+        public static string GetDisplayDate(DateTime date, decimal utcOffset, int dateFormat, bool omitUtc)
+        {
+            date = DateTimeAddHoursOffset(date, utcOffset);
+
+            string result = string.Format(CultureInfo.CurrentCulture, "{0:" + GetDisplayDateFormatString(dateFormat).Replace("/", "\\/") + "}", date);
+            if (!omitUtc)
+                result += string.Format(CultureInfo.InvariantCulture, " (UTC{0})", utcOffset);
+
+            return result;
+        }
+
+        public static string GetDisplayDateTime(DateTime date, decimal utcOffset, int dateFormat, bool omitUtc)
+        {
+            return GetDisplayDate(date, utcOffset, dateFormat, true) + Html32TextWriter.SpaceChar + GetDisplayTime(date, utcOffset, dateFormat, omitUtc);
+        }
+
+        public static string ToShortString(DateTime date)
+        {
+            return string.Format(CultureInfo.CurrentCulture, DateTimeShortFormat, date);
+        }
+
+        public static string ToLongString(DateTime date)
+        {
+            return string.Format(CultureInfo.CurrentCulture, DateTimeLongFormat, date);
+        }
+
+        #endregion
+
         public static string Trim(string[] value, TrimSide trimSide, string delimiter, int maxLength, bool highlightLastElement)
         {
             string result = string.Empty;
@@ -383,16 +471,6 @@ namespace Micajah.Common.Bll
                 groupIdString = sb.ToString();
             }
             return groupIdString;
-        }
-
-        public static string ToShortString(DateTime date)
-        {
-            return string.Format(CultureInfo.CurrentCulture, DateTimeShortFormat, date);
-        }
-
-        public static string ToLongString(DateTime date)
-        {
-            return string.Format(CultureInfo.CurrentCulture, DateTimeLongFormat, date);
         }
 
         /// <summary>
