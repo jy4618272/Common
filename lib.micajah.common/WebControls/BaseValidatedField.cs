@@ -403,28 +403,18 @@ namespace Micajah.Common.WebControls
             m_EditMode = ((rowState & DataControlRowState.Edit) == DataControlRowState.Edit);
             m_InsertMode = ((rowState & DataControlRowState.Insert) == DataControlRowState.Insert);
 
-            if (cell == null) return;
-
-            switch (cellType)
-            {
-                case DataControlCellType.Header:
-                    cell.ApplyStyle(HeaderStyle);
-                    break;
-                case DataControlCellType.DataCell:
-                    cell.ApplyStyle(ItemStyle);
-                    break;
-                case DataControlCellType.Footer:
-                    cell.ApplyStyle(FooterStyle);
-                    break;
-            }
-
             base.InitializeCell(cell, cellType, rowState, rowIndex);
 
-            if (cellType == DataControlCellType.Header) cell.ToolTip = ToolTip;
-
-            if (base.Control is CommonGridView)
+            if (cell != null)
             {
-                if (this.ColumnSpan > 1) cell.ColumnSpan = this.ColumnSpan;
+                if (cellType == DataControlCellType.Header)
+                    cell.ToolTip = ToolTip;
+
+                if (base.Control is CommonGridView)
+                {
+                    if (this.ColumnSpan > 1)
+                        cell.ColumnSpan = this.ColumnSpan;
+                }
             }
         }
 

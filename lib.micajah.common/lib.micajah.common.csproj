@@ -1746,9 +1746,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\EntityFieldListValues.aspx">
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\EntityFieldListValues.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\EntityFieldListValues.ascx" />
     <EmbeddedResource Include="Resources\TextEditorLiteToolBarConfiguration.xml" />
     <EmbeddedResource Include="Resources\TextEditorStandardToolBarConfiguration.xml" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\SideBySide.css" />

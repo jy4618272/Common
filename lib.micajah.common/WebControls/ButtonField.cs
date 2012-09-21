@@ -110,26 +110,19 @@ namespace Micajah.Common.WebControls
         public override void InitializeCell(DataControlFieldCell cell, DataControlCellType cellType, DataControlRowState rowState, int rowIndex)
         {
             base.InitializeCell(cell, cellType, rowState, rowIndex);
+
             if (cell != null)
             {
-                switch (cellType)
+                if (cellType == DataControlCellType.DataCell)
                 {
-                    case DataControlCellType.DataCell:
-                        if (cell.Controls.Count > 0)
-                        {
-                            WebControl control = cell.Controls[0] as WebControl;
-                            if (control != null)
-                            {
-                                control.MergeStyle(this.ControlStyle);
-                                control.Attributes.Add("onclick", this.OnClientClick);
-                            }
-                        }
-                        if (this.ColumnSpan > 1)
-                            cell.ColumnSpan = this.ColumnSpan;
-                        break;
-                    case DataControlCellType.Header:
-                        cell.MergeStyle(this.HeaderStyle);
-                        break;
+                    if (cell.Controls.Count > 0)
+                    {
+                        WebControl control = cell.Controls[0] as WebControl;
+                        if (control != null)
+                            control.Attributes.Add("onclick", this.OnClientClick);
+                    }
+                    if (this.ColumnSpan > 1)
+                        cell.ColumnSpan = this.ColumnSpan;
                 }
             }
         }

@@ -2047,11 +2047,7 @@ namespace Micajah.Common.WebControls
             if (RowEditing != null) RowEditing(this, e);
         }
 
-        /// <summary>
-        /// Override Render method for show custom pager and use standard color schemes
-        /// </summary>
-        /// <param name="writer"></param>
-        public override void RenderControl(HtmlTextWriter writer)
+        protected override void RenderContents(HtmlTextWriter writer)
         {
             if (writer == null || (!this.Visible)) return;
 
