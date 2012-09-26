@@ -28,7 +28,14 @@ namespace Micajah.Common.Bll
     {
         #region Members
 
+        /// <summary>
+        /// d-MMM-yyyy
+        /// </summary>
         public const string DateShortFormat = "d-MMM-yyyy";
+
+        /// <summary>
+        /// {0:d-MMM-yyyy}
+        /// </summary>
         public const string DateShortFormatString = "{0:d-MMM-yyyy}";
 
         /// <summary>
@@ -206,7 +213,7 @@ namespace Micajah.Common.Bll
 
         public static string GetLongDateTimeFormat(int timeFormat)
         {
-            return ((timeFormat == 0) ? "MMM d, yyyy hh:mm tt" : "MMM d, yyyy HH:mm");
+            return ((timeFormat == 0) ? "MMM d, yyyy h:mm tt" : "MMM d, yyyy H:mm");
         }
 
         public static string GetLongDateTimeFormatString()
@@ -321,12 +328,17 @@ namespace Micajah.Common.Bll
         {
             if (timeZone != null)
                 utcDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZone);
-            return string.Format(UnitedStatesCulture, ((timeFormat == 0) ? "{0:t}" : "{0:HH:mm}"), utcDate);
+            return string.Format(UnitedStatesCulture, ((timeFormat == 0) ? "{0:h:mm tt}" : "{0:H:mm}"), utcDate);
         }
 
         public static string ToLongDateTimeString(DateTime date)
         {
             return ToLongDateTimeString(date, null);
+        }
+
+        public static string ToLongDateTimeString(DateTime date, int timeFormat)
+        {
+            return ToLongDateTimeString(date, null, timeFormat, false);
         }
 
         public static string ToLongDateTimeString(DateTime utcDate, TimeZoneInfo timeZone)
