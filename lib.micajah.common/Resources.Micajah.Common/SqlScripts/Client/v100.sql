@@ -157,7 +157,7 @@ IF @@TRANCOUNT = 1
    [Deleted] [bit] NOT NULL CONSTRAINT [DF_Mc_Instance_Deleted] DEFAULT ((0)),
    [CreatedTime] [datetime] NULL,
    [TimeZoneId] [nvarchar] (100) NOT NULL CONSTRAINT [DF_Mc_Instance_TimeZoneId] DEFAULT (N''),
-   [TimeFormat] [int] NOT NULL CONSTRAINT [DF_Mc_Instance_DateFormat] DEFAULT ((0))
+   [TimeFormat] [int] NOT NULL CONSTRAINT [DF_Mc_Instance_TimeFormat] DEFAULT ((0))
 ) ON [PRIMARY]
 
 IF @@ERROR <> 0

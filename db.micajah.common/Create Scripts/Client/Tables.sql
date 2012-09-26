@@ -227,9 +227,9 @@ END
 
 GO
 
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_DateFormat]') AND type = 'D')
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_TimeFormat]') AND type = 'D')
 BEGIN
-ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_DateFormat]
+ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_TimeFormat]
 END
 
 GO
@@ -1183,7 +1183,7 @@ GO
 ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_TimeZoneId]  DEFAULT (N'') FOR [TimeZoneId]
 GO
 
-ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_DateFormat]  DEFAULT ((0)) FOR [TimeFormat]
+ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_TimeFormat]  DEFAULT ((0)) FOR [TimeFormat]
 GO
 
 ALTER TABLE [dbo].[Mc_Message]  WITH CHECK ADD  CONSTRAINT [FK_Mc_Message_Mc_Message] FOREIGN KEY([ParentMessageId])
