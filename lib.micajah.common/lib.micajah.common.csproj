@@ -1936,6 +1936,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropArrow.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v99.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v99.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v100.sql" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

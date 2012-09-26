@@ -300,11 +300,6 @@ textarea
     vertical-align: top;
 }
 
-select
-{
-    min-width: 50%;
-}
-
 input[type=text]:hover, input[type=password]:hover, select:hover, textarea:hover
 {
     border-color: #80BFFF !important;

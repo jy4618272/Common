@@ -49,8 +49,6 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="UtcOffset" msprop:Generator_ColumnVarNameInTable="columnUtcOffset" msprop:Generator_ColumnPropNameInRow="UtcOffset" msprop:Generator_ColumnPropNameInTable="UtcOffsetColumn" msprop:Generator_UserColumnName="UtcOffset" type="xs:decimal" default="0" />
-              <xs:element name="DateFormat" msprop:Generator_ColumnVarNameInTable="columnDateFormat" msprop:Generator_ColumnPropNameInRow="DateFormat" msprop:Generator_ColumnPropNameInTable="DateFormatColumn" msprop:Generator_UserColumnName="DateFormat" type="xs:int" default="0" />
               <xs:element name="WorkingDays" msprop:Generator_ColumnVarNameInTable="columnWorkingDays" msprop:Generator_ColumnPropNameInRow="WorkingDays" msprop:Generator_ColumnPropNameInTable="WorkingDaysColumn" msprop:Generator_UserColumnName="WorkingDays" default="1111100">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
@@ -59,11 +57,13 @@
                 </xs:simpleType>
               </xs:element>
               <xs:element name="Active" msprop:Generator_ColumnVarNameInTable="columnActive" msprop:Generator_ColumnPropNameInRow="Active" msprop:Generator_ColumnPropNameInTable="ActiveColumn" msprop:Generator_UserColumnName="Active" type="xs:boolean" default="true" />
-              <xs:element name="CanceledTime" msprop:Generator_ColumnVarNameInTable="columnCanceledTime" msprop:Generator_ColumnPropNameInRow="CanceledTime" msprop:Generator_ColumnPropNameInTable="CanceledTimeColumn" msprop:Generator_UserColumnName="CanceledTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="CanceledTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCanceledTime" msprop:Generator_ColumnPropNameInRow="CanceledTime" msprop:Generator_ColumnPropNameInTable="CanceledTimeColumn" msprop:Generator_UserColumnName="CanceledTime" type="xs:dateTime" minOccurs="0" />
               <xs:element name="Trial" msprop:Generator_ColumnVarNameInTable="columnTrial" msprop:Generator_ColumnPropNameInRow="Trial" msprop:Generator_ColumnPropNameInTable="TrialColumn" msprop:Generator_UserColumnName="Trial" type="xs:boolean" default="false" />
               <xs:element name="Beta" msprop:Generator_ColumnVarNameInTable="columnBeta" msprop:Generator_ColumnPropNameInRow="Beta" msprop:Generator_ColumnPropNameInTable="BetaColumn" msprop:Generator_UserColumnName="Beta" type="xs:boolean" default="false" />
               <xs:element name="Deleted" msprop:Generator_ColumnVarNameInTable="columnDeleted" msprop:Generator_ColumnPropNameInRow="Deleted" msprop:Generator_ColumnPropNameInTable="DeletedColumn" msprop:Generator_UserColumnName="Deleted" type="xs:boolean" default="false" />
-              <xs:element name="CreatedTime" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="CreatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TimeZoneId" msprop:Generator_ColumnVarNameInTable="columnTimeZoneId" msprop:Generator_ColumnPropNameInRow="TimeZoneId" msprop:Generator_ColumnPropNameInTable="TimeZoneIdColumn" msprop:Generator_UserColumnName="TimeZoneId" type="xs:string" default="" />
+              <xs:element name="TimeFormat" msprop:Generator_ColumnVarNameInTable="columnTimeFormat" msprop:Generator_ColumnPropNameInRow="TimeFormat" msprop:Generator_ColumnPropNameInTable="TimeFormatColumn" msprop:Generator_UserColumnName="TimeFormat" type="xs:int" default="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -231,7 +231,7 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="LastLoginDate" msprop:Generator_ColumnVarNameInTable="columnLastLoginDate" msprop:Generator_ColumnPropNameInRow="LastLoginDate" msprop:Generator_ColumnPropNameInTable="LastLoginDateColumn" msprop:Generator_UserColumnName="LastLoginDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="LastLoginDate" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnLastLoginDate" msprop:Generator_ColumnPropNameInRow="LastLoginDate" msprop:Generator_ColumnPropNameInTable="LastLoginDateColumn" msprop:Generator_UserColumnName="LastLoginDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="Deleted" msprop:Generator_ColumnVarNameInTable="columnDeleted" msprop:Generator_ColumnPropNameInRow="Deleted" msprop:Generator_ColumnPropNameInTable="DeletedColumn" msprop:Generator_UserColumnName="Deleted" type="xs:boolean" default="false" />
               <xs:element name="OrganizationId" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" minOccurs="0" />
               <xs:element name="OrganizationAdministrator" msprop:Generator_ColumnVarNameInTable="columnOrganizationAdministrator" msprop:Generator_ColumnPropNameInRow="OrganizationAdministrator" msprop:Generator_ColumnPropNameInTable="OrganizationAdministratorColumn" msprop:Generator_UserColumnName="OrganizationAdministrator" type="xs:boolean" minOccurs="0" />
@@ -278,8 +278,8 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="StartDate" msprop:Generator_ColumnVarNameInTable="columnStartDate" msprop:Generator_ColumnPropNameInRow="StartDate" msprop:Generator_ColumnPropNameInTable="StartDateColumn" msprop:Generator_UserColumnName="StartDate" type="xs:dateTime" />
-              <xs:element name="EndDate" msprop:Generator_ColumnVarNameInTable="columnEndDate" msprop:Generator_ColumnPropNameInRow="EndDate" msprop:Generator_ColumnPropNameInTable="EndDateColumn" msprop:Generator_UserColumnName="EndDate" type="xs:dateTime" />
+              <xs:element name="StartDate" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnStartDate" msprop:Generator_ColumnPropNameInRow="StartDate" msprop:Generator_ColumnPropNameInTable="StartDateColumn" msprop:Generator_UserColumnName="StartDate" type="xs:dateTime" />
+              <xs:element name="EndDate" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnEndDate" msprop:Generator_ColumnPropNameInRow="EndDate" msprop:Generator_ColumnPropNameInTable="EndDateColumn" msprop:Generator_UserColumnName="EndDate" type="xs:dateTime" />
               <xs:element name="RecurrenceRule" msprop:Generator_ColumnVarNameInTable="columnRecurrenceRule" msprop:Generator_ColumnPropNameInRow="RecurrenceRule" msprop:Generator_ColumnPropNameInTable="RecurrenceRuleColumn" msprop:Generator_UserColumnName="RecurrenceRule">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
@@ -287,7 +287,7 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="UpdatedTime" msprop:Generator_ColumnVarNameInTable="columnUpdatedTime" msprop:Generator_ColumnPropNameInRow="UpdatedTime" msprop:Generator_ColumnPropNameInTable="UpdatedTimeColumn" msprop:Generator_UserColumnName="UpdatedTime" type="xs:dateTime" />
+              <xs:element name="UpdatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnUpdatedTime" msprop:Generator_ColumnPropNameInRow="UpdatedTime" msprop:Generator_ColumnPropNameInTable="UpdatedTimeColumn" msprop:Generator_UserColumnName="UpdatedTime" type="xs:dateTime" />
               <xs:element name="UpdatedBy" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUpdatedBy" msprop:Generator_ColumnPropNameInRow="UpdatedBy" msprop:Generator_ColumnPropNameInTable="UpdatedByColumn" msprop:Generator_UserColumnName="UpdatedBy" type="xs:string" />
               <xs:element name="Deleted" msprop:Generator_ColumnVarNameInTable="columnDeleted" msprop:Generator_ColumnPropNameInRow="Deleted" msprop:Generator_ColumnPropNameInTable="DeletedColumn" msprop:Generator_UserColumnName="Deleted" type="xs:boolean" />
             </xs:sequence>
@@ -386,9 +386,9 @@
               </xs:element>
               <xs:element name="UsedQty" msprop:Generator_ColumnVarNameInTable="columnUsedQty" msprop:Generator_ColumnPropNameInRow="UsedQty" msprop:Generator_ColumnPropNameInTable="UsedQtyColumn" msprop:Generator_UserColumnName="UsedQty" type="xs:int" />
               <xs:element name="LastUsedUser" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnLastUsedUser" msprop:Generator_ColumnPropNameInRow="LastUsedUser" msprop:Generator_ColumnPropNameInTable="LastUsedUserColumn" msprop:Generator_UserColumnName="LastUsedUser" type="xs:string" minOccurs="0" />
-              <xs:element name="LastUsedDate" msprop:Generator_ColumnVarNameInTable="columnLastUsedDate" msprop:Generator_ColumnPropNameInRow="LastUsedDate" msprop:Generator_ColumnPropNameInTable="LastUsedDateColumn" msprop:Generator_UserColumnName="LastUsedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="LastUsedDate" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnLastUsedDate" msprop:Generator_ColumnPropNameInRow="LastUsedDate" msprop:Generator_ColumnPropNameInTable="LastUsedDateColumn" msprop:Generator_UserColumnName="LastUsedDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="CreatedBy" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnCreatedBy" msprop:Generator_ColumnPropNameInRow="CreatedBy" msprop:Generator_ColumnPropNameInTable="CreatedByColumn" msprop:Generator_UserColumnName="CreatedBy" type="xs:string" />
-              <xs:element name="CreatedDate" msprop:Generator_ColumnVarNameInTable="columnCreatedDate" msprop:Generator_ColumnPropNameInRow="CreatedDate" msprop:Generator_ColumnPropNameInTable="CreatedDateColumn" msprop:Generator_UserColumnName="CreatedDate" type="xs:dateTime" />
+              <xs:element name="CreatedDate" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedDate" msprop:Generator_ColumnPropNameInRow="CreatedDate" msprop:Generator_ColumnPropNameInTable="CreatedDateColumn" msprop:Generator_UserColumnName="CreatedDate" type="xs:dateTime" />
               <xs:element name="OrderNumber" msprop:Generator_ColumnVarNameInTable="columnOrderNumber" msprop:Generator_ColumnPropNameInRow="OrderNumber" msprop:Generator_ColumnPropNameInTable="OrderNumberColumn" msprop:Generator_UserColumnName="OrderNumber" type="xs:int" />
               <xs:element name="Active" msprop:Generator_ColumnVarNameInTable="columnActive" msprop:Generator_ColumnPropNameInRow="Active" msprop:Generator_ColumnPropNameInTable="ActiveColumn" msprop:Generator_UserColumnName="Active" type="xs:boolean" />
             </xs:sequence>
@@ -552,7 +552,7 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="CreatedTime" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" />
+              <xs:element name="CreatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

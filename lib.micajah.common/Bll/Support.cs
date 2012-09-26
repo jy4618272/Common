@@ -28,8 +28,8 @@ namespace Micajah.Common.Bll
     {
         #region Members
 
-        public const string DateTimeShortFormat = "{0:d-MMM-yyyy}";
-        public const string DateTimeLongFormat = "{0:MMM d, yyyy H:mm}";
+        public const string DateShortFormat = "d-MMM-yyyy";
+        public const string DateShortFormatString = "{0:d-MMM-yyyy}";
 
         /// <summary>
         /// The regular expression to match an e-mail address.
@@ -50,6 +50,7 @@ namespace Micajah.Common.Bll
         private const string TrimCut = " ... ";
 
         private static CspParameters s_RsaCspParameters;
+        private static CultureInfo s_UnitedStatesCulture;
 
         #endregion
 
@@ -68,6 +69,16 @@ namespace Micajah.Common.Bll
                     s_RsaCspParameters.Flags = CspProviderFlags.UseMachineKeyStore;
                 }
                 return s_RsaCspParameters;
+            }
+        }
+
+        private static CultureInfo UnitedStatesCulture
+        {
+            get
+            {
+                if (s_UnitedStatesCulture == null)
+                    s_UnitedStatesCulture = new CultureInfo("en-US");
+                return s_UnitedStatesCulture;
             }
         }
 
@@ -188,88 +199,163 @@ namespace Micajah.Common.Bll
 
         #region Date and Time
 
-        public static DateTime DateTimeAddHoursOffset(DateTime date, decimal utcOffset)
+        public static string GetLongDateTimeFormat()
         {
-            try
+            return GetLongDateTimeFormat(0);
+        }
+
+        public static string GetLongDateTimeFormat(int timeFormat)
+        {
+            return ((timeFormat == 0) ? "MMM d, yyyy hh:mm tt" : "MMM d, yyyy HH:mm");
+        }
+
+        public static string GetLongDateTimeFormatString()
+        {
+            return GetLongDateTimeFormatString(0);
+        }
+
+        public static string GetLongDateTimeFormatString(int timeFormat)
+        {
+            return "{0:" + GetLongDateTimeFormat(timeFormat) + "}";
+        }
+
+        public static string GetTimeZoneId(double hoursOffset)
+        {
+            switch (((hoursOffset > 0) ? "+" : string.Empty) + TimeSpan.FromHours(hoursOffset).ToString().Substring(0, ((hoursOffset < 0) ? 6 : 5)))
             {
-                return date.AddHours(Convert.ToDouble(utcOffset, CultureInfo.CurrentCulture));
+                case "00:00":
+                    return "UTC";
+                case "+01:00":
+                    return "Central Europe Standard Time";
+                case "+02:00":
+                    return "E. Europe Standard Time";
+                case "+03:00":
+                    return "Arabic Standard Time";
+                case "+03:30":
+                    return "Iran Standard Time";
+                case "+04:00":
+                    return "Russian Standard Time";
+                case "+04:30":
+                    return "Afghanistan Standard Time";
+                case "+05:00":
+                    return "West Asia Standard Time";
+                case "+05:30":
+                    return "India Standard Time";
+                case "+05:45":
+                    return "Nepal Standard Time";
+                case "+06:00":
+                    return "Central Asia Standard Time";
+                case "+06:30":
+                    return "Myanmar Standard Time";
+                case "+07:00":
+                    return "SE Asia Standard Time";
+                case "+08:00":
+                    return "North Asia Standard Time";
+                case "+09:00":
+                    return "North Asia East Standard Time";
+                case "+09:30":
+                    return "Cen. Australia Standard Time";
+                case "+10:00":
+                    return "West Pacific Standard Time";
+                case "+11:00":
+                    return "Central Pacific Standard Time";
+                case "+12:00":
+                    return "UTC+12";
+                case "+13:00":
+                    return "Samoa Standard Time";
+                case "-01:00":
+                    return "Azores Standard Time";
+                case "-02:00":
+                    return "UTC-02";
+                case "-03:00":
+                    return "E. South America Standard Time";
+                case "-03:30":
+                    return "Newfoundland Standard Time";
+                case "-04:00":
+                    return "Atlantic Standard Time";
+                case "-04:30":
+                    return "Venezuela Standard Time";
+                case "-05:00":
+                    return "Eastern Standard Time";
+                case "-06:00":
+                    return "Central Standard Time";
+                case "-07:00":
+                    return "Mountain Standard Time";
+                case "-08:00":
+                    return "Pacific Standard Time";
+                case "-09:00":
+                    return "Alaskan Standard Time";
+                case "-10:00":
+                    return "Hawaiian Standard Time";
+                case "-11:00":
+                    return "UTC-11";
+                case "-12:00":
+                    return "Dateline Standard Time";
             }
-            catch (ArgumentOutOfRangeException)
+            return "UTC";
+        }
+
+        public static string ToShortDateString(DateTime date)
+        {
+            return ToShortDateString(date, null);
+        }
+
+        public static string ToShortDateString(DateTime utcDate, TimeZoneInfo timeZone)
+        {
+            if (timeZone != null)
+                utcDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZone);
+            return string.Format(CultureInfo.CurrentCulture, DateShortFormatString, utcDate);
+        }
+
+        public static string ToShortTimeString(DateTime date)
+        {
+            return ToShortTimeString(date, 0);
+        }
+
+        public static string ToShortTimeString(DateTime date, int timeFormat)
+        {
+            return ToShortTimeString(date, null, timeFormat);
+        }
+
+        public static string ToShortTimeString(DateTime utcDate, TimeZoneInfo timeZone, int timeFormat)
+        {
+            if (timeZone != null)
+                utcDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZone);
+            return string.Format(UnitedStatesCulture, ((timeFormat == 0) ? "{0:t}" : "{0:HH:mm}"), utcDate);
+        }
+
+        public static string ToLongDateTimeString(DateTime date)
+        {
+            return ToLongDateTimeString(date, null);
+        }
+
+        public static string ToLongDateTimeString(DateTime utcDate, TimeZoneInfo timeZone)
+        {
+            return ToLongDateTimeString(utcDate, timeZone, 0, false);
+        }
+
+        public static string ToLongDateTimeString(DateTime utcDate, TimeZoneInfo timeZone, int timeFormat)
+        {
+            return ToLongDateTimeString(utcDate, timeZone, timeFormat, false);
+        }
+
+        public static string ToLongDateTimeString(DateTime utcDate, TimeZoneInfo timeZone, int timeFormat, bool omitUtc)
+        {
+            string format = GetLongDateTimeFormatString(timeFormat);
+            if (timeZone != null)
             {
-                if (utcOffset < 0)
-                    return DateTime.MinValue;
-                else if (utcOffset > 0)
-                    return DateTime.MaxValue;
+                utcDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZone);
+                if (!omitUtc)
+                {
+                    format += " (UTC";
+                    if (timeZone.BaseUtcOffset.TotalHours < 0)
+                        format += timeZone.BaseUtcOffset.ToString().Substring(0, ((timeZone.BaseUtcOffset.TotalHours < 0) ? 6 : 5));
+                    else if (timeZone.BaseUtcOffset.TotalHours > 0)
+                        format += "+" + timeZone.BaseUtcOffset.ToString().Substring(0, ((timeZone.BaseUtcOffset.TotalHours < 0) ? 6 : 5));
+                    format += ")";
+                }
             }
-
-            return date;
-        }
-
-        public static string GetDisplayDateFormatString(int dateFormat)
-        {
-            switch (dateFormat)
-            {
-                case 0:
-                case 1:
-                    return "M/d/yyyy";
-                default:
-                    return "d/M/yyyy";
-            }
-        }
-
-        public static string GetDisplayTimeFormatString(int dateFormat)
-        {
-            switch (dateFormat)
-            {
-                case 1:
-                case 3:
-                    return "H:m"; // 24:00
-                default:
-                    return "t"; // 12:00AM/PM
-            }
-        }
-
-        public static string GetDisplayDateTimeFormatString(int dateFormat)
-        {
-            return GetDisplayDateFormatString(dateFormat) + Html32TextWriter.SpaceChar + GetDisplayTimeFormatString(dateFormat);
-        }
-
-        public static string GetDisplayTime(DateTime date, decimal utcOffset, int dateFormat, bool omitUtc)
-        {
-            date = DateTimeAddHoursOffset(date, utcOffset);
-
-            string result = string.Format(CultureInfo.CurrentCulture, "{0:" + GetDisplayTimeFormatString(dateFormat) + "}", date);
-
-            if (!omitUtc)
-                result += string.Format(CultureInfo.InvariantCulture, " (UTC{0})", utcOffset);
-
-            return result;
-        }
-
-        public static string GetDisplayDate(DateTime date, decimal utcOffset, int dateFormat, bool omitUtc)
-        {
-            date = DateTimeAddHoursOffset(date, utcOffset);
-
-            string result = string.Format(CultureInfo.CurrentCulture, "{0:" + GetDisplayDateFormatString(dateFormat).Replace("/", "\\/") + "}", date);
-            if (!omitUtc)
-                result += string.Format(CultureInfo.InvariantCulture, " (UTC{0})", utcOffset);
-
-            return result;
-        }
-
-        public static string GetDisplayDateTime(DateTime date, decimal utcOffset, int dateFormat, bool omitUtc)
-        {
-            return GetDisplayDate(date, utcOffset, dateFormat, true) + Html32TextWriter.SpaceChar + GetDisplayTime(date, utcOffset, dateFormat, omitUtc);
-        }
-
-        public static string ToShortString(DateTime date)
-        {
-            return string.Format(CultureInfo.CurrentCulture, DateTimeShortFormat, date);
-        }
-
-        public static string ToLongString(DateTime date)
-        {
-            return string.Format(CultureInfo.CurrentCulture, DateTimeLongFormat, date);
+            return string.Format(CultureInfo.CurrentCulture, format, utcDate);
         }
 
         #endregion

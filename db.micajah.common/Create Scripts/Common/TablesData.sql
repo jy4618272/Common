@@ -1,6 +1,6 @@
 BEGIN TRANSACTION
 
-INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (99)
+INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (100)
 
 COMMIT TRANSACTION
 GO

@@ -26,8 +26,6 @@ namespace Micajah.Common.Bll
         private Guid? m_LogoImageResourceId;
         private bool m_EnableSignupUser;
         private string m_ExternalId;
-        private decimal m_UtcOffset;
-        private int m_DateFormat;
         private string m_WorkingDays;
         private bool m_Active;
         private DateTime? m_CanceledTime;
@@ -62,6 +60,7 @@ namespace Micajah.Common.Bll
             m_ExternalId = string.Empty;
             m_WorkingDays = "1111100";
             m_Active = true;
+            this.TimeZoneId = string.Empty;
         }
 
         #endregion
@@ -194,22 +193,14 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets or sets the utc offset of the instance.
+        /// Gets ot sets the time zone identifier.
         /// </summary>
-        public decimal UtcOffset
-        {
-            get { return m_UtcOffset; }
-            set { m_UtcOffset = value; }
-        }
+        public string TimeZoneId { get; set; }
 
         /// <summary>
-        /// Gets or sets the date format of the instance.
+        /// Gets ot sets the time format.
         /// </summary>
-        public int DateFormat
-        {
-            get { return m_DateFormat; }
-            set { m_DateFormat = value; }
-        }
+        public int TimeFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the working days of the instance.
@@ -436,8 +427,8 @@ namespace Micajah.Common.Bll
                 m_EnableSignupUser = row.EnableSignUpUser;
 
                 m_ExternalId = row.ExternalId;
-                m_UtcOffset = row.UtcOffset;
-                m_DateFormat = row.DateFormat;
+                this.TimeZoneId = row.TimeZoneId;
+                this.TimeFormat = row.TimeFormat;
                 m_WorkingDays = row.WorkingDays;
                 m_Active = row.Active;
                 m_CanceledTime = (row.IsCanceledTimeNull() ? null : new DateTime?(row.CanceledTime));

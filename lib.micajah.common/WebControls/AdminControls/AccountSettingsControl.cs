@@ -14,10 +14,8 @@ namespace Micajah.Common.WebControls.AdminControls
 {
     public class AccountSettingsControl : UserControl
     {
-
         #region Overriden Methods
         protected const string ControlIdPrefix = "v";
-        private CheckBoxList m_PaidSettingsList;
         private Guid m_OrgId = Guid.Empty;
         private Guid m_InstId = Guid.Empty;
 

@@ -1880,11 +1880,8 @@ If you have further questions, you can email {InvitedByFullName} at {InvitedByEm
   <data name="InstancesControl_EditForm_BetaField_Text" xml:space="preserve">
     <value>Enable Beta features for this Instance</value>
   </data>
-  <data name="InstanceProfileControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
-    <value>Date Format</value>
-  </data>
-  <data name="InstanceProfileControl_EditForm_UtcOffsetField_HeaderText" xml:space="preserve">
-    <value>UTC Offset</value>
+  <data name="InstanceProfileControl_EditForm_TimeZoneField_HeaderText" xml:space="preserve">
+    <value>Time Zone</value>
   </data>
   <data name="InstanceProfileControl_EditForm_WorkingDaysField_HeaderText" xml:space="preserve">
     <value>Working Days</value>
@@ -2008,9 +2005,6 @@ If you have further questions, you can email {InvitedByFullName} at {InvitedByEm
   </data>
   <data name="RecurrenceRule_DeserializationFailed" xml:space="preserve">
     <value>Deserialization failed.</value>
-  </data>
-  <data name="InstanceProfileControl_OffsetsList_Item_Text" xml:space="preserve">
-    <value>UTC ({0}) ({1})</value>
   </data>
   <data name="InstancesControl_List_ActiveColumn_HeaderText" xml:space="preserve">
     <value>Active</value>
@@ -2461,16 +2455,13 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="NoticeMessageBox_CloseLink_ToolTip" xml:space="preserve">
     <value>Close this notification</value>
   </data>
-  <data name="InstanceProfileControl_DateFormat_0" xml:space="preserve">
-    <value>M/d/yyyy h:m AM/PM</value>
+  <data name="InstanceProfileControl_EditForm_TimeFormatField_HeaderText" xml:space="preserve">
+    <value>Time Format</value>
   </data>
-  <data name="InstanceProfileControl_DateFormat_1" xml:space="preserve">
-    <value>M/d/yyyy H:m 24HR</value>
+  <data name="InstanceProfileControl_TimeFormat_12Hr" xml:space="preserve">
+    <value>AM/PM</value>
   </data>
-  <data name="InstanceProfileControl_DateFormat_2" xml:space="preserve">
-    <value>d/M/yyyy h:m AM/PM</value>
-  </data>
-  <data name="InstanceProfileControl_DateFormat_3" xml:space="preserve">
-    <value>d/M/yyyy H:m 24HR</value>
+  <data name="InstanceProfileControl_TimeFormat_24Hr" xml:space="preserve">
+    <value>24HR</value>
   </data>
 </root>

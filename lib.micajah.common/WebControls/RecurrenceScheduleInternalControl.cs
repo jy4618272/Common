@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using Micajah.Common.Bll.Providers;
 using Micajah.Common.Bll.RecurringSchedule;
 using Micajah.Common.Security;
 
@@ -144,8 +143,17 @@ namespace Micajah.Common.WebControls
             }
             set
             {
-                DatePickerEndDate.SelectedDate = value; // DateHelper.AssumeUtc(value);
+                DatePickerEndDate.SelectedDate = value;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the date and time format.
+        /// </summary>
+        public string DateFormat
+        {
+            get { return DatePickerStartDate.DateFormat; }
+            set { DatePickerStartDate.DateFormat = DatePickerEndDate.DateFormat = value; }
         }
 
         public TimeSpan Duration
@@ -189,14 +197,14 @@ namespace Micajah.Common.WebControls
                 if (rrule.Range.EventDuration.Equals(TimeSpan.FromDays(1.0)))
                 {
                     CheckBoxAllDay.Checked = true;
-                    DatePickerStartDate.DateFormat = "M/dd/yyyy";
-                    DatePickerEndDate.DateFormat = "M/dd/yyyy";
+                    //DatePickerStartDate.DateFormat = "M/dd/yyyy";
+                    //DatePickerEndDate.DateFormat = "M/dd/yyyy";
                 }
                 else
                 {
                     CheckBoxAllDay.Checked = false;
-                    DatePickerStartDate.DateFormat = "M/dd/yyyy h:mm tt";
-                    DatePickerEndDate.DateFormat = "M/dd/yyyy h:mm tt";
+                    //DatePickerStartDate.DateFormat = "M/dd/yyyy h:mm tt";
+                    //DatePickerEndDate.DateFormat = "M/dd/yyyy h:mm tt";
                 }
 
                 if (rrule.Pattern.Frequency != RecurrenceFrequency.None)

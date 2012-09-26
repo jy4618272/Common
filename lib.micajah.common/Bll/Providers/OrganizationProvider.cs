@@ -85,7 +85,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="postalCode">The organization's postal code.</param>
         /// <param name="country">The organization's country.</param>
         /// <param name="currency">The organization's currency.</param>
-        /// <param name="utcOffset">The UTC offset of the organization's first instance.</param>
+        /// <param name="timeZoneId">The time zone identifier.</param>
         /// <param name="templateInstanceId">The identifier of the template instance for the organization's first instance.</param>
         /// <param name="adminEmail">The e-mail address of the organization administrator.</param>
         /// <param name="password">The password of the organization administrator.</param>
@@ -101,7 +101,7 @@ namespace Micajah.Common.Bll.Providers
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
             , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial
             , string street, string street2, string city, string state, string postalCode, string country, string currency
-            , decimal utcOffset, Guid? templateInstanceId
+            , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
             , bool sendNotificationEmail, bool refreshAllData)
         {
@@ -130,10 +130,10 @@ namespace Micajah.Common.Bll.Providers
             if (fiscalYearStartMonth.HasValue) row.FiscalYearStartMonth = fiscalYearStartMonth.Value;
             if (fiscalYearStartDay.HasValue) row.FiscalYearStartDay = fiscalYearStartDay.Value;
             if (weekStartsDay.HasValue) row.WeekStartsDay = weekStartsDay.Value;
-            if (expirationTime.HasValue) row.ExpirationTime = expirationTime.Value.Date;
+            if (expirationTime.HasValue) row.ExpirationTime = expirationTime.Value;
             row.GraceDays = graceDays;
             row.Active = active;
-            if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value.Date;
+            if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             row.Trial = trial;
             if (street != null) row.Street = street;
             if (street2 != null) row.Street2 = street2;
@@ -179,7 +179,7 @@ namespace Micajah.Common.Bll.Providers
                       , 0, 0, out password);
             }
 
-            InstanceProvider.InsertFirstInstance(utcOffset, templateInstanceId, organizationId
+            InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
                 , adminEmail, password
                 , sendNotificationEmail, refreshAllData);
 
@@ -270,7 +270,7 @@ namespace Micajah.Common.Bll.Providers
             if (expirationTime.HasValue)
             {
                 if (expirationTime != DateTime.MinValue)
-                    row.ExpirationTime = expirationTime.Value.Date;
+                    row.ExpirationTime = expirationTime.Value;
             }
             else
                 row.SetExpirationTimeNull();
@@ -679,7 +679,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
-                , 0, null
+                , null, null
                 , adminEmail, null, null, null, null, null, null, null
                 , true, true);
         }
@@ -705,7 +705,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
-                , 0, null
+                , null, null
                 , adminEmail, null, firstName, lastName, middleName, null, null, null
                 , sendNotificationEmail, true);
         }
@@ -730,7 +730,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null
                 , expirationTime, graceDays, active, canceledTime, trial
                 , null, null, null, null, null, null, null
-                , 0, null
+                , null, null
                 , adminEmail, null, null, null, null, null, null, null
                 , true, true);
         }
@@ -748,7 +748,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="postalCode">The organization's postal code.</param>
         /// <param name="country">The organization's country.</param>
         /// <param name="currency">The organization's currency.</param>
-        /// <param name="utcOffset">The UTC offset of the organization's first instance.</param>
+        /// <param name="timeZoneId">The time zone identifier.</param>
         /// <param name="templateInstanceId">The identifier of the template instance for the organization's first instance.</param>
         /// <param name="adminEmail">The e-mail address of the organization administrator.</param>
         /// <param name="password">The password of the organization administrator.</param>
@@ -761,7 +761,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the newly created organization.</returns>
         public static Guid InsertOrganization(string name, string description, string websiteUrl
             , string street, string street2, string city, string state, string postalCode, string country, string currency
-            , decimal utcOffset, Guid? templateInstanceId
+            , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string title, string phone, string mobilePhone
             , bool sendNotificationEmail)
         {
@@ -769,7 +769,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null
                 , DateTime.UtcNow.Date.AddDays(DefaultExpirationDays), DefaultGraceDays, true, null, true
                 , street, street2, city, state, postalCode, country, currency
-                , utcOffset, templateInstanceId
+                , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
                 , sendNotificationEmail, true);
         }
@@ -891,14 +891,14 @@ namespace Micajah.Common.Bll.Providers
         /// Updates the details of specified organization.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization.</param>
-        /// <param name="ExpirationTime">The organization Expiration Time.</param>
+        /// <param name="expirationTime">The organization Expiration Time.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
-        public static void UpdateOrganization(Guid organizationId, DateTime ExpirationTime)
+        public static void UpdateOrganization(Guid organizationId, DateTime expirationTime)
         {
             CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
             CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
 
-            row.ExpirationTime = ExpirationTime;
+            row.ExpirationTime = expirationTime;
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
