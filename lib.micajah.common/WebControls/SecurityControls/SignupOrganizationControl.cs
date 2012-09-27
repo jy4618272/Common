@@ -241,7 +241,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
             InstanceRequiredValidator.ErrorMessage = Resources.CheckBoxList_RequiredValidator_ErrorMessage;
 
-            CustomizeLiteral.Text = string.Format(CultureInfo.InvariantCulture, Resources.SignupOrganizationControl_CustomizeLiteral_Text, FrameworkConfiguration.Current.WebApplication.Name);
+            CustomizeLiteral.Text = Resources.SignupOrganizationControl_CustomizeLiteral_Text;
             Step3Button.Text = Resources.SignupOrganizationControl_Step3Button_Text;
 
             if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))

@@ -2222,7 +2222,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Currency</value>
   </data>
   <data name="SignupOrganizationControl_CustomizeLiteral_Text" xml:space="preserve">
-    <value>Customize your {0}</value>
+    <value>Select a Setup Preference</value>
   </data>
   <data name="SignupOrganizationControl_EmailAndPasswordLabel_Text" xml:space="preserve">
     <value>Email and Password</value>

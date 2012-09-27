@@ -5582,7 +5582,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customize your {0}.
+        ///   Looks up a localized string similar to Select a Setup Preference.
         /// </summary>
         internal static string SignupOrganizationControl_CustomizeLiteral_Text {
             get {
