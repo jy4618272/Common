@@ -37,6 +37,14 @@
     margin: 12px 0;
 }
 
+.Mp_Hdr .Al
+{
+    float: left;
+    height: 50px;
+    line-height: 50px;
+    padding-right: 15px;
+}
+
 /*------------ Search ------------ */
 .Mp_Hdr .S
 {
@@ -77,104 +85,130 @@
 {
     height: 50px;
     width: auto;
-    padding: 0 15px;
 }
 
-.Mp_Hdr ul.Mm li:hover:after
+.Mp_Hdr .G ul.Mm
 {
-    border-color: transparent transparent #4c4c4c transparent;
+    padding: 0 15px;
 }
 
 .Mp_Hdr ul.Mm li
 {
+    height: 50px;
     margin: 0;
     float: left;
     position: relative;
     z-index: 99999;
+    border-left: 1px solid #245d89;
+}
+
+.Mp_Hdr ul.Mm li:last-child
+{
+    border-right: 1px solid #245d89;
+}
+
+.Mp_Hdr ul.Mm li:hover
+{
+    background-color: #276da3;
 }
 
 .Mp_Hdr ul.Mm li a
 {
     display: block;
-    font: normal 13px/50px Arial, sans-serif;
-    padding: 0 15px;
+    font: bold 13px/50px Arial, sans-serif;
     position: relative;
     color: #fff;
-}
-
-.Mp_Hdr ul.Mm li:hover:after
-{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 44%;
-    border-style: solid;
-    border-width: 6px;
-    width: 0;
-    height: 0;
-}
-
-.Mp_Hdr ul.Mm li.Cfg
-{
-    display: block;
-    width: 20px;
+    margin: 0;
     height: 50px;
-    background: no-repeat center center;
-    background-image: url($GlobalNavigationConfigurationLink.png$);
-    padding: 0 10px 0 0;
 }
 
-/*------------ Configuration submenu ------------ */
+.Mp_Hdr .G ul.Mm li a
+{
+    padding: 0 10px;
+}
+
+/*------------ Drop menu ------------ */
+.Mp_Hdr ul.Mm li img.Avtr
+{
+    border: 1px solid #f1f1f1 !important;
+    padding: 1px;
+    border-radius: 2px 2px 2px 2px;
+    background-color: #ffffff;
+    height: 24px;
+    margin: 0 10px 0 0;
+    width: 24px;
+}
+
+.Mp_Hdr ul.Mm li.Dm img
+{
+    vertical-align: middle;
+}
+
 .Mp_Hdr ul.Mm li ul.Sm
 {
-    top: 50px;
-    background: #4c4c4c;
-    border-top: 3px solid #4c4c4c;
-    border-bottom: 3px solid #4c4c4c;
+    top: 37px;
+    position: absolute;
+    margin: 7px 0 0 25px;
+    background-color: #058dc7;
+    border-radius: 4px 4px 4px 4px;
+    padding: 4px;
     display: none;
 }
 
 .Mp_Hdr ul.Mm li:hover ul.Sm
 {
     display: block;
+}
+
+.Mp_Hdr ul.Mm li:hover ul.Sm:after
+{
+    content: '';
+    display: block;
     position: absolute;
-    right: 0;
+    top: -10px;
+    left: 50px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #058dc7 transparent;
 }
 
 .Mp_Hdr ul.Mm li ul.Sm li
 {
-    border-bottom: 1px solid #686868;
-    position: relative;
-    width: 150px;
+    float: none;
+    display: block;
+    margin: 0;
+    min-width: 100px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #058dc7;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid #09A0E1;
+    height: auto;
 }
 
 .Mp_Hdr ul.Mm li ul.Sm li:hover
 {
-    background: #686868;
-}
-
-.Mp_Hdr ul.Mm li ul.Sm li:first-child
-{
-    margin-left: 0;
+    background: #09a0e1;
 }
 
 .Mp_Hdr ul.Mm li ul.Sm li:last-child
 {
-    border-bottom: none;
-}
-
-.Mp_Hdr ul.Mm li ul.Sm li:hover:after
-{
-    content: '';
-    position: absolute;
-    border: 0;
+    border: none;
 }
 
 .Mp_Hdr ul.Mm li ul.Sm li a
 {
-    color: #f4f4f4;
     display: block;
-    font: normal 11px/30px Arial, sans-serif;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 8px 10px;
+    height: auto;
+    line-height: normal;
 }
 
 /* ------------ Bread crumbs -----------------------------------------------------------------------------------------------------------------------------------*/
@@ -255,7 +289,6 @@ div.Mp_B span.L
 .Mp_Mm ul
 {
     padding: 8px 0;
-    margin-left: -8px;
     float: left;
     width: 100%;
 }
@@ -275,34 +308,30 @@ div.Mp_B span.L
     margin: 0 5px 0 0;
     text-decoration: none !important;
     font-weight: bold;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px 5px 5px 5px;
+    font-size: 14px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px 4px 4px 4px;
+    border: 1px solid transparent;
 }
 
 /*------------ Selected and hovered main menu item ------------ */
 .Mp_Mm ul li a:hover, .Mp_Mm ul li.S a
 {
-    background-color: #dadbdf;
-    color: #555555 !important;
+    background-color: #e5e5e5;
+    color: #222222;
+    text-shadow: 0px 1px 0px #f1f1f1;
+    border: 1px solid #dcdcdc;
 }
 
-/*------------ Page help link ------------ */
-.Mp_Mm ul li.Ph
+/*------------ Active main menu item ------------ */
+.Mp_Mm ul li a:active
 {
-    float: right;
-    font-size: 11.2px;
-    margin-left: 10px;
-    padding: 0 0 0 10px;
-    background: no-repeat left center;
-    background-image: url($PageHelpLink.png$);
-}
-
-.Mp_Mm ul li.Ph a, .Mp_Mm ul li.Ph a:hover
-{
-    font-size: 11.2px;
-    background-color: transparent;
-    color: #979797;
+    text-shadow: -1px -1px 0 #058dc7;
+    box-shadow: inset 0px 1px 0px 0px #63a8dd;
+    color: #ffffff;
+    background-color: #09a0e1;
+    border: 1px solid #058dc7;
 }
 
 /*------------ Submenu ----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -368,7 +397,6 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
 .Mp_Smt ul
 {
     padding: 8px 0;
-    margin-left: -8px;
     float: left;
     width: 100%;
 }
@@ -387,14 +415,38 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
     padding: 5px 8px;
     margin: 0 5px 0 0;
     text-decoration: none !important;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 14px;
+    border: 1px solid transparent;
 }
 
 .Mp_Smt ul li a:hover
 {
-    background-color: #dadbdf;
+    background-color: #e5e5e5;
+    color: #222222;
+    text-shadow: 0px 1px 0px #f1f1f1;
+    border: 1px solid #dcdcdc;
+}
+
+.Mp_Smt ul li.S a
+{
+    color: white;
+    font-weight: bold;
+    background-color: #2e7dba;
+    border-color: #045f86;
+    text-shadow: -1px -1px 0 #045f86;
+    box-shadow: inset 0px 1px 0px 0px #63a8dd;
+}
+
+.Mp_Smt ul li a:active, .Mp_Smt ul li.S:hover a
+{
+    text-shadow: -1px -1px 0 #058dc7;
+    box-shadow: inset 0px 1px 0px 0px #63a8dd;
+    color: #ffffff;
+    background-color: #09a0e1;
+    border: 1px solid #058dc7;
 }
 
 /*------------ Footer -----------------------------------------------------------------------------------------------------------------------------------------*/

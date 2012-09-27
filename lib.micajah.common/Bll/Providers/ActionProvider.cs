@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
+using Micajah.Common.Pages;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls;
 
@@ -132,6 +133,11 @@ namespace Micajah.Common.Bll.Providers
                             {
                                 if (row.ActionId == LoginGlobalNavigationLinkActionId)
                                     row.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl();
+                                else if (row.ActionId == MyAccountGlobalNavigationLinkActionId)
+                                {
+                                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                                        row.OrderNumber = -row.OrderNumber;
+                                }
                                 coll.Add(CreateAction(row));
                             }
 

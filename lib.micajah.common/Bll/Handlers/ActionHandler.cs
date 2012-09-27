@@ -1,6 +1,7 @@
 ﻿using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
 using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Handlers
@@ -87,6 +88,8 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.LdapServerSettingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
                     accessDenied = !(FrameworkConfiguration.Current.WebApplication.EnableLdap && UserContext.Current.SelectedOrganization.Beta);
+                else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
+                    accessDenied = (UserContext.Current.SelectedOrganization == null);
             }
 
             return accessDenied;
@@ -102,13 +105,16 @@ namespace Micajah.Common.Bll.Handlers
             if (action == null)
                 return null;
 
-            if ((action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId) || (action.ActionId == ActionProvider.MyAccountPageActionId))
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
             {
-                UserContext user = UserContext.Current;
-                if (user != null)
+                if ((action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId) || (action.ActionId == ActionProvider.MyAccountPageActionId))
                 {
-                    string name = user.FirstName + " " + user.LastName;
-                    return ((name.Trim().Length > 0) ? name : user.LoginName);
+                    UserContext user = UserContext.Current;
+                    if (user != null)
+                    {
+                        string name = user.FirstName + System.Web.UI.Html32TextWriter.SpaceChar + user.LastName;
+                        return ((name.Trim().Length > 0) ? name : user.LoginName);
+                    }
                 }
             }
 
