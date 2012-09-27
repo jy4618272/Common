@@ -523,6 +523,26 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
+        /// Computes the MD5 hash value for the specified string.
+        /// </summary>
+        /// <param name="value">The string to compute the hash code for.</param>
+        /// <returns>The computed hash code.</returns>
+        public static string CalculateMD5Hash(string value)
+        {
+            MD5 md5 = MD5.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(value);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
         /// Returns an System.Object with the specified System.Type and whose value is equivalent to the specified value.
         /// </summary>
         /// <param name="value">A System.String.</param>
