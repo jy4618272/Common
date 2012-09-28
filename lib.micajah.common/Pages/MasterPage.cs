@@ -968,7 +968,7 @@ namespace Micajah.Common.Pages
         private void RenderTopSubmenu(HtmlTextWriter writer)
         {
             if (writer == null || m_TopSubmenu == null || this.IsSetupPage) return;
-            if ((m_TopSubmenu != null) && (m_TopSubmenu.Items.Count == 0)) return;
+            if ((m_TopSubmenu != null) && (m_TopSubmenu.Items != null) && (m_TopSubmenu.Items.Count == 0)) return;
 
             RenderControl(writer, m_TopSubmenu);
         }

@@ -91,8 +91,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
         /// <param name="externalId">The external id.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="active">The active status.</param>
         /// <param name="canceledTime">The canceled time.</param>
@@ -106,7 +106,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="configure">true to configure the instance.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         private static Guid InsertInstance(string name, string description, bool enableSignupUser
-            , string externalId, decimal utcOffset, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
+            , string externalId, string timeZoneId, int timeFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
             , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg, Guid? templateInstanceId)
         {
             if (refreshOrganizationData) WebApplication.RefreshAllData();
@@ -131,11 +131,11 @@ namespace Micajah.Common.Bll.Providers
             row.OrganizationId = organizationId;
             row.EnableSignUpUser = (templateInstance == null) ? enableSignupUser : templateInstance.EnableSignupUser;
             row.ExternalId = ((externalId == null) ? string.Empty : externalId);
-            row.UtcOffset = utcOffset;
-            row.DateFormat = (templateInstance == null) ? dateFormat : templateInstance.DateFormat;
+            row.TimeZoneId = ((timeZoneId == null) ? string.Empty : timeZoneId);
+            row.TimeFormat = (templateInstance == null) ? timeFormat : templateInstance.TimeFormat;
             row.WorkingDays = (templateInstance == null) ? string.IsNullOrEmpty(workingDays) ? "1111100" : workingDays : templateInstance.WorkingDays;
             row.Active = active;
-            if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value.Date;
+            if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             row.Trial = (templateInstance == null) ? trial : templateInstance.Trial;
             row.Beta = (templateInstance == null) ? beta : templateInstance.Beta;
             row.Deleted = false;
@@ -226,11 +226,11 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
-        internal static Guid InsertFirstInstance(decimal utcOffset, Guid? templateInstanceId, Guid organizationId
+        internal static Guid InsertFirstInstance(string timeZoneId, Guid? templateInstanceId, Guid organizationId
             , string adminEmail, string adminPassword
             , bool sendNotificationEmail, bool refreshOrganiationData)
         {
-            return InsertInstance(Resources.InstanceProvider_FirstInstance_Name, null, false, null, utcOffset, 0, null, true, null, false, false, null, organizationId
+            return InsertInstance(Resources.InstanceProvider_FirstInstance_Name, null, false, null, timeZoneId, 0, null, true, null, false, false, null, organizationId
                 , adminEmail, adminPassword, sendNotificationEmail, refreshOrganiationData, false, true, templateInstanceId);
         }
 
@@ -358,6 +358,35 @@ namespace Micajah.Common.Bll.Providers
                 OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 if (adapters != null)
                     adapters.InstanceTableAdapter.Update(ds.Instance);
+            }
+        }
+
+        internal static void UpdateInstancesTimeZoneId()
+        {
+            System.Collections.ObjectModel.ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
+            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
+
+            foreach (CommonDataSet.OrganizationRow organizationRow in table)
+            {
+                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationRow.OrganizationId);
+                if (ds != null)
+                {
+                    foreach (OrganizationDataSet.InstanceRow instanceRow in ds.Instance)
+                    {
+                        double hoursOffset = 0;
+                        if (double.TryParse(instanceRow.TimeZoneId.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), out hoursOffset))
+                        {
+                            instanceRow.TimeZoneId = string.Empty;
+                            instanceRow.TimeZoneId = Support.GetTimeZoneId(hoursOffset);
+                        }
+                        else
+                            instanceRow.TimeZoneId = string.Empty;
+                    }
+
+                    OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationRow.OrganizationId);
+                    if (adapters != null)
+                        adapters.InstanceTableAdapter.Update(ds.Instance);
+                }
             }
         }
 
@@ -619,7 +648,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertInstance(string name, string description, bool active, bool beta)
         {
-            return InsertInstance(name, description, false, null, 0, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, null);
+            return InsertInstance(name, description, false, null, null, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, null);
         }
 
         /// <summary>
@@ -628,8 +657,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="name">The name of the instance.</param>
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="active">The active status.</param>
         /// <param name="beta">The beta status.</param>
@@ -637,9 +666,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="adminEmail">The e-mail address of the instance administrator.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static Guid InsertInstance(string name, string description, bool enableSignupUser, decimal utcOffset, int dateFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
+        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int timeFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
         {
-            return InsertInstance(name, description, enableSignupUser, null, utcOffset, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null);
+            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null);
         }
 
         /// <summary>
@@ -650,8 +679,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
         /// <param name="externalId">The external id.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="active">The active status.</param>
         /// <param name="canceledTime">The canceled time.</param>
@@ -660,9 +689,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
-        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, decimal utcOffset, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
+        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int timeFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
         {
-            return InsertInstance(name, description, enableSignupUser, externalId, utcOffset, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null);
+            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null);
         }
 
         /// <summary>
@@ -672,15 +701,15 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="name">The name of the instance.</param>
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="beta">The beta status.</param>
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
-        public static void UpdateInstance(Guid instanceId, string name, string description, bool enableSignupUser, decimal? utcOffset, int? dateFormat, string workingDays, bool? beta, string emailSuffixes)
+        public static void UpdateInstance(Guid instanceId, string name, string description, bool enableSignupUser, string timeZoneId, int? timeFormat, string workingDays, bool? beta, string emailSuffixes)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, null, utcOffset, dateFormat, workingDays, null, null, null, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId);
+            UpdateInstance(instanceId, name, description, enableSignupUser, null, timeZoneId, timeFormat, workingDays, null, null, null, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId);
         }
 
         /// <summary>
@@ -704,16 +733,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="name">The name of the instance.</param>
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="active">The active status.</param>
         /// <param name="beta">The beta status.</param>
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
-        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, decimal? utcOffset, int? dateFormat, string workingDays, bool? active, bool? beta, string emailSuffixes)
+        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string timeZoneId, int? timeFormat, string workingDays, bool? active, bool? beta, string emailSuffixes)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, null, utcOffset, dateFormat, workingDays, active, null, null, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId);
+            UpdateInstance(instanceId, name, description, enableSignupUser, null, timeZoneId, timeFormat, workingDays, active, null, null, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId);
         }
 
         /// <summary>
@@ -724,8 +753,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
         /// <param name="externalId">The external id.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="active">The active status.</param>
         /// <param name="canceledTime">The canceled time.</param>
@@ -733,9 +762,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="beta">The beta status.</param>
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
-        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, decimal? utcOffset, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId)
+        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, externalId, utcOffset, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, true);
+            UpdateInstance(instanceId, name, description, enableSignupUser, externalId, timeZoneId, timeFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, true);
         }
 
         /// <summary>
@@ -746,8 +775,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="description">The instance description.</param>
         /// <param name="enableSignupUser">The value indicating that the sign up user is enabled for the instance.</param>
         /// <param name="externalId">The external id.</param>
-        /// <param name="utcOffset">The utc time offset.</param>
-        /// <param name="dateFormat">The date format.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="workingDays">The working days.</param>
         /// <param name="active">The active status.</param>
         /// <param name="canceledTime">The canceled time.</param>
@@ -756,7 +785,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
         /// <param name="raiseEvent">Whether the Micajah.Common.Bll.Providers.InstanceProvider.InstanceUpdated event will be raised.</param>
-        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, decimal? utcOffset, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent)
+        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent)
         {
             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
             if (ds == null) return;
@@ -782,11 +811,11 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             if (enableSignupUser.HasValue) row.EnableSignUpUser = enableSignupUser.Value;
             if (externalId != null) row.ExternalId = Support.TrimString(externalId, table.ExternalIdColumn.MaxLength);
-            if (utcOffset.HasValue) row.UtcOffset = utcOffset.Value;
-            if (dateFormat.HasValue) row.DateFormat = dateFormat.Value;
+            if (timeZoneId != null) row.TimeZoneId = timeZoneId;
+            if (timeFormat.HasValue) row.TimeFormat = timeFormat.Value;
             if (workingDays != null) row.WorkingDays = workingDays;
             if (active.HasValue) row.Active = active.Value;
-            if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value.Date;
+            if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
             row.Deleted = false;
@@ -805,7 +834,7 @@ namespace Micajah.Common.Bll.Providers
                 EmailSuffixProvider.DeleteEmailSuffixes(organizationId, instanceId);
                 if (!String.IsNullOrEmpty(emailSuffixes))
                 {
-                    emailSuffixes = emailSuffixes.Replace(" ", "");
+                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
                     EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixes);
 
                     inst.EmailSuffixes = emailSuffixes;
@@ -835,7 +864,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateInstance(Instance instance, bool raiseEvent)
         {
             if (instance != null)
-                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.UtcOffset, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent);
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent);
         }
 
         /// <summary>

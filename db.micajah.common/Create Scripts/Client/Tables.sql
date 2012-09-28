@@ -185,20 +185,6 @@ END
 
 GO
 
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_UtcOffset]') AND type = 'D')
-BEGIN
-ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_UtcOffset]
-END
-
-GO
-
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_DateFormat]') AND type = 'D')
-BEGIN
-ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_DateFormat]
-END
-
-GO
-
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_WorkingDays]') AND type = 'D')
 BEGIN
 ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_WorkingDays]
@@ -230,6 +216,20 @@ GO
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_Deleted]') AND type = 'D')
 BEGIN
 ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_Deleted]
+END
+
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_TimeZoneId]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_TimeZoneId]
+END
+
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_TimeFormat]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_TimeFormat]
 END
 
 GO
@@ -776,8 +776,6 @@ CREATE TABLE [dbo].[Mc_Instance](
 	[Description] [nvarchar](1024) NOT NULL,
 	[EnableSignUpUser] [bit] NOT NULL,
 	[ExternalId] [nvarchar](255) NOT NULL,
-	[UTCOffset] [decimal](4, 2) NOT NULL,
-	[DateFormat] [int] NOT NULL,
 	[WorkingDays] [char](7) NOT NULL,
 	[Active] [bit] NOT NULL,
 	[CanceledTime] [datetime] NULL,
@@ -785,6 +783,8 @@ CREATE TABLE [dbo].[Mc_Instance](
 	[Beta] [bit] NOT NULL,
 	[Deleted] [bit] NOT NULL,
 	[CreatedTime] [datetime] NULL,
+	[TimeZoneId] [nvarchar](100) NOT NULL,
+	[TimeFormat] [int] NOT NULL,
  CONSTRAINT [PK_Mc_Instance] PRIMARY KEY CLUSTERED 
 (
 	[InstanceId] ASC
@@ -1165,12 +1165,6 @@ GO
 ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_ExternalId]  DEFAULT (N'') FOR [ExternalId]
 GO
 
-ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_UtcOffset]  DEFAULT ((0)) FOR [UTCOffset]
-GO
-
-ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_DateFormat]  DEFAULT ((0)) FOR [DateFormat]
-GO
-
 ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_WorkingDays]  DEFAULT ((1111100)) FOR [WorkingDays]
 GO
 
@@ -1184,6 +1178,12 @@ ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_Beta]  DEFAULT (
 GO
 
 ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_Deleted]  DEFAULT ((0)) FOR [Deleted]
+GO
+
+ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_TimeZoneId]  DEFAULT (N'') FOR [TimeZoneId]
+GO
+
+ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_TimeFormat]  DEFAULT ((0)) FOR [TimeFormat]
 GO
 
 ALTER TABLE [dbo].[Mc_Message]  WITH CHECK ADD  CONSTRAINT [FK_Mc_Message_Mc_Message] FOREIGN KEY([ParentMessageId])

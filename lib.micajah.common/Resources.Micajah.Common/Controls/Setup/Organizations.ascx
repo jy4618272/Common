@@ -76,7 +76,7 @@
                 <mits:CheckBoxField DataField="Trial" DefaultChecked="False" />
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
-                        <%# Eval("CreatedTime") %>
+                        <asp:Literal ID="CreatedTimeLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:TemplateField>

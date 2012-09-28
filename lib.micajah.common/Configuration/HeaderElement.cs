@@ -26,6 +26,16 @@ namespace Micajah.Common.Configuration
         #region Public Properties
 
         /// <summary>
+        /// Gets or sets the URL of the application logo's image that will be displayed in the header.
+        /// </summary>
+        [ConfigurationProperty("logoImageUrl")]
+        public string LogoImageUrl
+        {
+            get { return (string)this["logoImageUrl"]; }
+            set { this["logoImageUrl"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets a value that indicates whether the header is visible and rendered.
         /// </summary>
         [ConfigurationProperty("visible")]

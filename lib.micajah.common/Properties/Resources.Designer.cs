@@ -2472,42 +2472,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to M/d/yyyy h:m AM/PM.
-        /// </summary>
-        internal static string InstanceProfileControl_DateFormat_0 {
-            get {
-                return ResourceManager.GetString("InstanceProfileControl_DateFormat_0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to M/d/yyyy H:m 24HR.
-        /// </summary>
-        internal static string InstanceProfileControl_DateFormat_1 {
-            get {
-                return ResourceManager.GetString("InstanceProfileControl_DateFormat_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to d/M/yyyy h:m AM/PM.
-        /// </summary>
-        internal static string InstanceProfileControl_DateFormat_2 {
-            get {
-                return ResourceManager.GetString("InstanceProfileControl_DateFormat_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to d/M/yyyy H:m 24HR.
-        /// </summary>
-        internal static string InstanceProfileControl_DateFormat_3 {
-            get {
-                return ResourceManager.GetString("InstanceProfileControl_DateFormat_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         internal static string InstanceProfileControl_EditForm_ActiveField_Text {
@@ -2522,15 +2486,6 @@ namespace Micajah.Common.Properties {
         internal static string InstanceProfileControl_EditForm_BetaField_Text {
             get {
                 return ResourceManager.GetString("InstanceProfileControl_EditForm_BetaField_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Date Format.
-        /// </summary>
-        internal static string InstanceProfileControl_EditForm_DateFormatField_HeaderText {
-            get {
-                return ResourceManager.GetString("InstanceProfileControl_EditForm_DateFormatField_HeaderText", resourceCulture);
             }
         }
         
@@ -2580,11 +2535,20 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UTC Offset.
+        ///   Looks up a localized string similar to Time Format.
         /// </summary>
-        internal static string InstanceProfileControl_EditForm_UtcOffsetField_HeaderText {
+        internal static string InstanceProfileControl_EditForm_TimeFormatField_HeaderText {
             get {
-                return ResourceManager.GetString("InstanceProfileControl_EditForm_UtcOffsetField_HeaderText", resourceCulture);
+                return ResourceManager.GetString("InstanceProfileControl_EditForm_TimeFormatField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Zone.
+        /// </summary>
+        internal static string InstanceProfileControl_EditForm_TimeZoneField_HeaderText {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_EditForm_TimeZoneField_HeaderText", resourceCulture);
             }
         }
         
@@ -2598,11 +2562,20 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UTC ({0}) ({1}).
+        ///   Looks up a localized string similar to AM/PM.
         /// </summary>
-        internal static string InstanceProfileControl_OffsetsList_Item_Text {
+        internal static string InstanceProfileControl_TimeFormat_12Hr {
             get {
-                return ResourceManager.GetString("InstanceProfileControl_OffsetsList_Item_Text", resourceCulture);
+                return ResourceManager.GetString("InstanceProfileControl_TimeFormat_12Hr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 24HR.
+        /// </summary>
+        internal static string InstanceProfileControl_TimeFormat_24Hr {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_TimeFormat_24Hr", resourceCulture);
             }
         }
         
@@ -5609,7 +5582,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customize your {0}.
+        ///   Looks up a localized string similar to Select a Setup Preference.
         /// </summary>
         internal static string SignupOrganizationControl_CustomizeLiteral_Text {
             get {

@@ -241,7 +241,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
             InstanceRequiredValidator.ErrorMessage = Resources.CheckBoxList_RequiredValidator_ErrorMessage;
 
-            CustomizeLiteral.Text = string.Format(CultureInfo.InvariantCulture, Resources.SignupOrganizationControl_CustomizeLiteral_Text, FrameworkConfiguration.Current.WebApplication.Name);
+            CustomizeLiteral.Text = Resources.SignupOrganizationControl_CustomizeLiteral_Text;
             Step3Button.Text = Resources.SignupOrganizationControl_Step3Button_Text;
 
             if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
@@ -363,7 +363,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 Step2Panel.Visible = false;
                 Step3Panel.Visible = false;
 
-                BaseControl.FillTimeZoneList(TimeZoneList);
+                BaseControl.TimeZoneListDataBind(TimeZoneList, null);
                 this.FillCurrencyList();
 
                 OrganizationName1.Focus();
@@ -615,16 +615,13 @@ function InstanceRequiredValidation(source, arguments) {{
             Page.Validate("Step3");
             if (!Page.IsValid) return;
 
-            decimal utcOffset = decimal.Zero;
-            if (!decimal.TryParse(TimeZoneList.SelectedValue, out utcOffset)) utcOffset = decimal.Zero;
-
             Guid? templateInstanceId = null;
             if (!string.IsNullOrEmpty(SelectedInstance.Text))
                 templateInstanceId = new Guid(SelectedInstance.Text);
 
             Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, this.WebSiteUrl
                 , null, null, null, null, null, null, CurrencyList.SelectedValue
-                , utcOffset, templateInstanceId
+                , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
                 , true);
 

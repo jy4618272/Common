@@ -9,7 +9,9 @@ using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
+using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using Micajah.Common.Bll;
 
 namespace Micajah.Common.WebControls
 {
@@ -50,7 +52,9 @@ namespace Micajah.Common.WebControls
 
             HtmlGenericControl rightContainer = null;
             Control links = null;
+            HyperLink link = null;
             HtmlGenericControl div = null;
+            HtmlGenericControl li = null;
 
             try
             {
@@ -62,6 +66,21 @@ namespace Micajah.Common.WebControls
 
                 if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
                 {
+                    HtmlGenericControl ul = (HtmlGenericControl)links;
+
+                    if (this.MasterPage.VisibleHelpLink)
+                    {
+                        link = new HyperLink();
+                        link.ToolTip = Resources.MasterPage_HelpLink_Text2;
+                        link.ImageUrl = ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorResource(MasterPageTheme.Modern, MasterPageThemeColor.NotSet, "Help.png"), true);
+                        link.NavigateUrl = "#";
+                        link.Attributes["onclick"] = this.MasterPage.HelpLinkOnClick;
+
+                        li = new HtmlGenericControl("li");
+                        li.Controls.Add(link);
+                        ul.Controls.Add(li);
+                    }
+
                     rightContainer.Controls.Add(links);
                 }
                 else
@@ -89,12 +108,65 @@ namespace Micajah.Common.WebControls
                 if (rightContainer != null) rightContainer.Dispose();
                 if (links != null) links.Dispose();
                 if (div != null) div.Dispose();
+                if (link != null) link.Dispose();
+                if (li != null) li.Dispose();
+            }
+        }
+
+        private Control CreateApplicationLogo()
+        {
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                return null;
+
+            if (!this.MasterPage.IsSetupPage)
+            {
+                if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl))
+                    return null;
+            }
+
+            HtmlGenericControl div = null;
+            HtmlGenericControl ul = null;
+            HtmlGenericControl li = null;
+            HyperLink link = null;
+
+            try
+            {
+                div = new HtmlGenericControl("div");
+                div.Attributes["class"] = "Al";
+
+                ul = new HtmlGenericControl("ul");
+                ul.Attributes["class"] = "Mm";
+                div.Controls.Add(ul);
+
+                li = new HtmlGenericControl("li");
+                ul.Controls.Add(li);
+
+                link = new HyperLink();
+                link.ImageUrl = FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl;
+                if (this.MasterPage.IsSetupPage)
+                {
+                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(ActionProvider.SetupPageActionId);
+                    if (action != null)
+                        link.NavigateUrl = action.AbsoluteNavigateUrl;
+                }
+                else
+                    link.NavigateUrl = this.MasterPage.HeaderLogoNavigateUrl;
+                li.Controls.Add(link);
+
+                return div;
+            }
+            finally
+            {
+                if (div != null) ul.Dispose();
+                if (ul != null) ul.Dispose();
+                if (li != null) li.Dispose();
+                if (link != null) link.Dispose();
             }
         }
 
         private Control CreateLogo()
         {
-            if (!this.MasterPage.VisibleHeaderLogo)
+            if ((!this.MasterPage.VisibleHeaderLogo) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl))
                 return null;
 
             string text = this.MasterPage.HeaderLogoText;
@@ -360,7 +432,27 @@ namespace Micajah.Common.WebControls
                         if (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId)
                         {
                             li = new HtmlGenericControl("li");
-                            li.Attributes["class"] = "Cfg";
+                            li.Attributes["class"] = "Dm";
+
+                            HyperLink usernameLink = new HyperLink();
+                            usernameLink.NavigateUrl = "#";
+                            li.Controls.Add(usernameLink);
+
+                            Image avatarImg = new Image();
+                            avatarImg.CssClass = "Avtr";
+                            avatarImg.ImageUrl = "http://www.gravatar.com/avatar/" + Support.CalculateMD5Hash(user.Email.ToLowerInvariant()) + "?s=24";
+                            usernameLink.Controls.Add(avatarImg);
+
+                            string name = user.FirstName + Html32TextWriter.SpaceChar + user.LastName;
+
+                            LiteralControl literal = new LiteralControl();
+                            literal.Text = ((name.Trim().Length > 0) ? name : user.LoginName);
+                            usernameLink.Controls.Add(literal);
+
+                            Image dropMenuImg = new Image();
+                            dropMenuImg.ImageUrl = ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorResource(MasterPageTheme.Modern, MasterPageThemeColor.NotSet, "DropMenu.png"), true);
+                            usernameLink.Controls.Add(dropMenuImg);
+
                             ul.Controls.Add(li);
 
                             ul2 = new HtmlGenericControl("ul");
@@ -422,6 +514,10 @@ namespace Micajah.Common.WebControls
             {
                 headerContainer = new HtmlGenericControl("div");
                 headerContainer.Attributes["class"] = "Mp_Hdr";
+
+                ctrl = this.CreateApplicationLogo();
+                if (ctrl != null)
+                    headerContainer.Controls.Add(ctrl);
 
                 ctrl = this.CreateLogo();
                 if (ctrl != null)

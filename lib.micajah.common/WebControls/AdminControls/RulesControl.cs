@@ -90,14 +90,14 @@ namespace Micajah.Common.WebControls.AdminControls
             if (!Support.IsNullOrDBNull(obj))
             {
                 Literal lit = (Literal)e.Row.FindControl("LastUsedDateLiteral");
-                lit.Text = Support.GetDisplayDateTime((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+                lit.Text = Support.ToShortDateString((DateTime)obj, m_UserContext.TimeZone);
             }
 
             obj = DataBinder.Eval(e.Row.DataItem, "CreatedDate");
             if (!Support.IsNullOrDBNull(obj))
             {
                 Literal lit = (Literal)e.Row.FindControl("CreatedDateLiteral");
-                lit.Text = Support.GetDisplayDateTime((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+                lit.Text = Support.ToShortDateString((DateTime)obj, m_UserContext.TimeZone);
             }
         }
 

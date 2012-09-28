@@ -173,12 +173,12 @@
         <setting id="97F2F811-BB75-4550-AE92-007202A4BA29" type="Value" name="Start Menu Checked Items" shortName="StartMenuCheckedItems" />
       </settings>
     </action>
-    <action id="00000000-0000-0000-0000-000000000005" type="GlobalNavigationLink" name="My Account" description="Edit personal settings" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" orderNumber="-10000" handle="true" authenticationRequired="true" instanceRequired="false" />
     <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="10000" authenticationRequired="true" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="10001" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" />
-    <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="10004" authenticationRequired="true" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000043" type="GlobalNavigationLink" name="Log In" description="Log In" navigateUrl="/web.micajah.common/mc/login.aspx" orderNumber="10005" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000006" type="GlobalNavigationLink" name="Log Out" description="Log Out" navigateUrl="/mc/logoff.aspx" orderNumber="10005" authenticationRequired="true" instanceRequired="false" />
+    <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="10001" authenticationRequired="true" instanceRequired="false" />
+    <action id="00000000-0000-0000-0000-000000000043" type="GlobalNavigationLink" name="Log In" description="Log In" navigateUrl="/web.micajah.common/mc/login.aspx" orderNumber="10002" instanceRequired="false" />
+    <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="10000" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" />
+    <action id="00000000-0000-0000-0000-000000000005" type="GlobalNavigationLink" name="My Profile" description="Edit personal settings" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" handle="true" orderNumber="10010" authenticationRequired="true" instanceRequired="false" />
+    <action id="00000000-0000-0000-0000-000000000006" type="GlobalNavigationLink" name="Log Out" description="Log Out" navigateUrl="/mc/logoff.aspx" orderNumber="10020" authenticationRequired="true" instanceRequired="false" />
   </actions>
   <settings>
     <setting id="00000000-0000-0000-0000-000000000066" type="Value" name="The custom style sheet for the master page" shortName="CustomStyleSheet" levels="Organization" defaultValue="" />

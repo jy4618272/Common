@@ -43,8 +43,8 @@ namespace Micajah.Common.Security
         private const string StateKey = "mc.State";
         private const string PostalCodeKey = "mc.PostalCode";
         private const string CountryKey = "mc.Country";
-        private const string UtcOffsetKey = "mc.UtcOffsetKey";
-        private const string DateFormatKey = "mc.DateFormatKey";
+        private const string TimeZoneIdKey = "mc.TimeZoneId";
+        private const string TimeFormatKey = "mc.TimeFormat";
         private const string RoleIdListKey = "mc.RoleIdList";
         private const string SelectedInstanceIdKey = "mc.SelectedInstanceId";
         private const string SelectedOrganizationIdKey = "mc.SelectedOrganizationId";
@@ -158,8 +158,8 @@ namespace Micajah.Common.Security
                     s_ReservedKeys.Add(StateKey);
                     s_ReservedKeys.Add(PostalCodeKey);
                     s_ReservedKeys.Add(CountryKey);
-                    s_ReservedKeys.Add(UtcOffsetKey);
-                    s_ReservedKeys.Add(DateFormatKey);
+                    s_ReservedKeys.Add(TimeZoneIdKey);
+                    s_ReservedKeys.Add(TimeFormatKey);
                     s_ReservedKeys.Add(RoleIdListKey);
                     s_ReservedKeys.Add(RoleIdKey);
                     s_ReservedKeys.Add(SelectedInstanceIdKey);
@@ -372,43 +372,54 @@ namespace Micajah.Common.Security
         }
         
         /// <summary>
-        /// Gets the UTC offset, in hours, of the user's time zone.
+        /// Gets the time zone identifier.
         /// </summary>
-        public decimal UtcOffset
+        public string TimeZoneId
         {
             get
             {
-                decimal value = 2;
-                if (base[UtcOffsetKey] == null)
+                string value = "Eastern Standard Time";
+                if (base[TimeZoneIdKey] == null)
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                        value = inst.UtcOffset;
+                    {
+                        if (!string.IsNullOrEmpty(inst.TimeZoneId))
+                            base[TimeZoneIdKey] = value = inst.TimeZoneId;
+                    }
                 }
                 else
-                    value = (decimal)base[UtcOffsetKey];
+                    value = (string)base[TimeZoneIdKey];
                 return value;
             }
         }
 
         /// <summary>
-        /// Gets the date format.
+        /// Gets the time format.
         /// </summary>
-        public int DateFormat
+        public int TimeFormat
         {
             get
             {
-                int value = 2;
-                if (base[DateFormatKey] == null)
+                int value = 0;
+                if (base[TimeFormatKey] == null)
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                        value = inst.DateFormat;
+                        base[TimeFormatKey] = value = inst.TimeFormat;
                 }
                 else
-                    value = (int)base[UtcOffsetKey];
+                    value = (int)base[TimeFormatKey];
                 return value;
             }
+        }
+
+        /// <summary>
+        /// Gets the time zone.
+        /// </summary>
+        public TimeZoneInfo TimeZone
+        {
+            get { return TimeZoneInfo.FindSystemTimeZoneById(this.TimeZoneId); }
         }
 
         /// <summary>
@@ -794,8 +805,8 @@ namespace Micajah.Common.Security
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = WebApplication.CreateApplicationAbsoluteUrl(startUrl);
             SelectedInstanceId = Guid.Empty;
-            base[UtcOffsetKey] = null;
-            base[DateFormatKey] = null;
+            base[TimeZoneIdKey] = null;
+            base[TimeFormatKey] = null;
             base[SelectedInstanceIdKey] = newInstance.InstanceId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
@@ -860,8 +871,8 @@ namespace Micajah.Common.Security
                 SelectedOrganizationChanging(this, new UserContextSelectedOrganizationChangingEventArgs() { Organization = newOrganization });
 
             SelectedOrganizationId = Guid.Empty;
-            base[UtcOffsetKey] = null;
-            base[DateFormatKey] = null;
+            base[TimeZoneIdKey] = null;
+            base[TimeFormatKey] = null;
             base[SelectedOrganizationIdKey] = newOrganization.OrganizationId;
             base[ActionIdListKey] = actionIdList;
             base[GroupIdListKey] = groupIdList;

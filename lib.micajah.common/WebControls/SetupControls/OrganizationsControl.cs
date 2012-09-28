@@ -27,6 +27,7 @@ namespace Micajah.Common.WebControls.SetupControls
         private ImageUpload m_LogoImageUpload;
         private DatePicker m_ExpirationTime;
         private DatePicker m_CanceledTime;
+        private UserContext m_UserContext;
 
         #endregion
 
@@ -134,12 +135,12 @@ namespace Micajah.Common.WebControls.SetupControls
             if (this.ExpirationTime.IsEmpty)
                 e.InputParameters["expirationTime"] = null;
             else
-                e.InputParameters["expirationTime"] = this.ExpirationTime.SelectedDate.ToUniversalTime();
+                e.InputParameters["expirationTime"] = TimeZoneInfo.ConvertTimeToUtc(this.ExpirationTime.SelectedDate, m_UserContext.TimeZone);
 
             if (this.CanceledTime.IsEmpty)
                 e.InputParameters["canceledTime"] = null;
             else
-                e.InputParameters["canceledTime"] = this.CanceledTime.SelectedDate.ToUniversalTime();
+                e.InputParameters["canceledTime"] = TimeZoneInfo.ConvertTimeToUtc(this.CanceledTime.SelectedDate, m_UserContext.TimeZone);
 
             EntityDataSource.Selected += new ObjectDataSourceStatusEventHandler(EntityDataSource_Selected);
         }
@@ -187,6 +188,8 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             SearchPanel.Visible = false;
 
+            object obj = null;
+
             if (this.DatabaseList != null)
             {
                 using (RadComboBoxItem item = new RadComboBoxItem(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationsControl_DatabaseList_MasterDatabaseItem_Text, Resources.OrganizationProvider_MasterDatabaseText), string.Empty))
@@ -199,13 +202,28 @@ namespace Micajah.Common.WebControls.SetupControls
                     this.DatabaseList.Items.Insert(0, item);
                 }
 
-                object obj = DataBinder.Eval(EditForm.DataItem, "DatabaseId");
+                obj = DataBinder.Eval(EditForm.DataItem, "DatabaseId");
                 if (Support.IsNullOrDBNull(obj)) obj = string.Empty;
 
                 RadComboBoxItem item1 = this.DatabaseList.FindItemByValue(obj.ToString());
                 if (item1 != null)
                     this.DatabaseList.SelectedValue = obj.ToString();
             }
+
+            obj = DataBinder.Eval(EditForm.DataItem, "CreatedTime");
+            if (!Support.IsNullOrDBNull(obj))
+            {
+                Literal lit = (Literal)EditForm.FindControl("CreatedTimeLiteral");
+                lit.Text = Support.ToShortDateString((DateTime)obj, m_UserContext.TimeZone);
+            }
+
+            obj = DataBinder.Eval(EditForm.DataItem, "ExpirationTime");
+            if (!Support.IsNullOrDBNull(obj))
+                this.ExpirationTime.SelectedDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)obj, m_UserContext.TimeZone);
+
+            obj = DataBinder.Eval(EditForm.DataItem, "CanceledTime");
+            if (!Support.IsNullOrDBNull(obj))
+                this.CanceledTime.SelectedDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)obj, m_UserContext.TimeZone);
         }
 
         protected void List_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -273,6 +291,8 @@ namespace Micajah.Common.WebControls.SetupControls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            m_UserContext = UserContext.Current;
 
             if (!this.IsPostBack)
                 this.ActiveValueListDataBind();

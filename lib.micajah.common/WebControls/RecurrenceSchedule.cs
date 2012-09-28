@@ -82,6 +82,24 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
+        /// Gets or sets the date and time format.
+        /// </summary>
+        [Browsable(false)]
+        public string DateFormat
+        {
+            get
+            {
+                EnsureChildControls();
+                return m_RecurrenceScheduleInternalControl.DateFormat;
+            }
+            set
+            {
+                EnsureChildControls();
+                m_RecurrenceScheduleInternalControl.DateFormat = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the duration of the schedule.
         /// </summary>
         [Browsable(false)]

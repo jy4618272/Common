@@ -72,6 +72,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 RecurrenceScheduleControl.OrganizationId = m_UserContext.SelectedOrganization.OrganizationId;
                 if (m_UserContext.SelectedInstance != null)
                     RecurrenceScheduleControl.InstanceId = m_UserContext.SelectedInstance.InstanceId;
+                RecurrenceScheduleControl.DateFormat = Support.GetLongDateTimeFormat(m_UserContext.TimeFormat);
             }
 
             this.MasterPage.VisibleBreadcrumbs = true;
@@ -106,7 +107,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 case CommandActions.Add:
                     List.Visible = false;
                     RecurrenceScheduleControl.Visible = true;
-                    DateTime currDate = Support.DateTimeAddHoursOffset(DateTime.UtcNow, m_UserContext.UtcOffset);
+                    DateTime currDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, m_UserContext.TimeZone);
                     RecurrenceScheduleControl.RecurringScheduleId = Guid.NewGuid();
                     RecurrenceScheduleControl.DateStart = currDate;
                     RecurrenceScheduleControl.DateEnd = currDate.AddHours(1);
@@ -123,8 +124,8 @@ namespace Micajah.Common.WebControls.AdminControls
                         List.Visible = false;
                         RecurrenceScheduleControl.Visible = true;
                         RecurrenceScheduleControl.RecurringScheduleId = recurringScheduleId;
-                        RecurrenceScheduleControl.DateStart = Support.DateTimeAddHoursOffset(row.StartDate, m_UserContext.UtcOffset);
-                        RecurrenceScheduleControl.DateEnd = Support.DateTimeAddHoursOffset(row.EndDate, m_UserContext.UtcOffset);
+                        RecurrenceScheduleControl.DateStart = TimeZoneInfo.ConvertTimeFromUtc(row.StartDate, m_UserContext.TimeZone);
+                        RecurrenceScheduleControl.DateEnd = TimeZoneInfo.ConvertTimeFromUtc(row.EndDate, m_UserContext.TimeZone);
                         RecurrenceScheduleControl.Description = row.Name;
                         RecurrenceScheduleControl.LocalEntityId = row.LocalEntityId;
                         RecurrenceScheduleControl.LocalEntityType = row.LocalEntityType;
@@ -145,14 +146,14 @@ namespace Micajah.Common.WebControls.AdminControls
             if (!Support.IsNullOrDBNull(obj))
             {
                 Literal lit = (Literal)e.Row.FindControl("StartDateLiteral");
-                lit.Text = Support.GetDisplayDateTime((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+                lit.Text = Support.ToLongDateTimeString((DateTime)obj, m_UserContext.TimeZone, m_UserContext.TimeFormat, true);
             }
 
             obj = DataBinder.Eval(e.Row.DataItem, "EndDate");
             if (!Support.IsNullOrDBNull(obj))
             {
                 Literal lit = (Literal)e.Row.FindControl("EndDateLiteral");
-                lit.Text = Support.GetDisplayDateTime((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+                lit.Text = Support.ToLongDateTimeString((DateTime)obj, m_UserContext.TimeZone, m_UserContext.TimeFormat, true);
             }
         }
 
@@ -169,8 +170,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     e.LocalEntityType,
                     e.LocalEntityId,
                     e.Name,
-                    e.StartDate.ToUniversalTime(),
-                    e.EndDate.ToUniversalTime(),
+                    TimeZoneInfo.ConvertTimeToUtc(e.StartDate, m_UserContext.TimeZone),
+                    TimeZoneInfo.ConvertTimeToUtc(e.EndDate, m_UserContext.TimeZone),
                     e.RecurrenceRule,
                     DateTime.UtcNow,
                     (m_UserContext != null ? m_UserContext.UserId : Guid.Empty),

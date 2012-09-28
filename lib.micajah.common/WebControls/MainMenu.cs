@@ -8,7 +8,6 @@ using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
-using Micajah.Common.Properties;
 using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls
@@ -135,22 +134,7 @@ namespace Micajah.Common.WebControls
                             ul.Controls.Add(CreateLinkAsListItem(item, ((item.ActionId == mainMenuItemId) ? "S" : null)));
                         }
 
-                        if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
-                        {
-                            if (this.MasterPage.VisibleHelpLink)
-                            {
-                                link = new HyperLink();
-                                link.Text = Resources.MasterPage_HelpLink_Text2;
-                                link.NavigateUrl = "#";
-                                link.Attributes["onclick"] = this.MasterPage.HelpLinkOnClick;
-
-                                li = new HtmlGenericControl("li");
-                                li.Attributes["class"] = "Ph";
-                                li.Controls.Add(link);
-                                ul.Controls.Add(li);
-                            }
-                        }
-                        else
+                        if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                         {
                             div2 = new HtmlGenericControl("div");
                             div2.Attributes["class"] = "Mp_Mmb";

@@ -1936,11 +1936,12 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropArrow.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v99.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v99.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v100.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropMenu.png" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\GlobalNavigationConfigurationLink.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\PageHelpLink.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\Help.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Modern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\Arrow.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\CheckBox.png" />
@@ -2151,9 +2152,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources.Micajah.Common\Images\NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -57,7 +57,6 @@ namespace Micajah.Common.Bll.Providers
 
         internal const string ActionsPageVirtualPath = VirtualRootShortPath + "setup/actions.aspx";
         internal const string DatabasesPageVirtualPath = VirtualRootShortPath + "setup/databases.aspx";
-        internal const string SetupPageVirtualPath = VirtualRootShortPath + "setup/setup.aspx";
         internal const string FrameworkPageVirtualPath = VirtualRootShortPath + "setup/framework.aspx";
         internal const string OrganizationsPageVirtualPath = VirtualRootShortPath + "setup/organizations.aspx";
         internal const string RolesPageVirtualPath = VirtualRootShortPath + "setup/roles.aspx";
@@ -357,7 +356,7 @@ namespace Micajah.Common.Bll.Providers
             string[] keyNames = null;
             if (masterPageTheme == MasterPageTheme.Modern)
             {
-                keyNames = new string[] { "GlobalNavigationConfigurationLink.png", "PageHelpLink.png", "NotificationCross.png", "DropArrow.png", "DropArrowDisabled.png" };
+                keyNames = new string[] { "NotificationCross.png", "DropArrow.png", "DropArrowDisabled.png" };
             }
             else if (masterPageTheme == MasterPageTheme.Gradient)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
 using System.Web;
@@ -368,17 +369,78 @@ namespace Micajah.Common.WebControls.SetupControls
             }
         }
 
-        public static void FillTimeZoneList(ListControl timeZoneList)
+        public static void TimeZoneListDataBind(ListControl timeZoneList, string selectedValue)
         {
             if (timeZoneList == null) return;
 
-            timeZoneList.Items.Add(string.Empty);
-            System.Collections.ObjectModel.ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
+            ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
+
             foreach (TimeZoneInfo timeZoneInfo in timeZones)
             {
-                timeZoneList.Items.Add(new ListItem(timeZoneInfo.DisplayName, timeZoneInfo.BaseUtcOffset.TotalHours.ToString(CultureInfo.InvariantCulture)));
+                if (timeZoneInfo.BaseUtcOffset.TotalHours < 0)
+                    timeZoneList.Items.Insert(0, new ListItem(timeZoneInfo.DisplayName, timeZoneInfo.Id));
             }
-            // TODO: Sort the list accoding to value.
+
+            foreach (TimeZoneInfo timeZoneInfo in timeZones)
+            {
+                if (timeZoneInfo.BaseUtcOffset.TotalHours >= 0)
+                    timeZoneList.Items.Add(new ListItem(timeZoneInfo.DisplayName, timeZoneInfo.Id));
+            }
+
+            timeZoneList.Items.Insert(0, string.Empty);
+
+            ListItem item = timeZoneList.Items.FindByValue(selectedValue);
+            if (item != null)
+                item.Selected = true;
+        }
+
+        public static void TimeFormatsListDataBind(ListControl list, string selectedValue)
+        {
+            if (list == null) return;
+
+            list.Items.Add(new ListItem(Resources.InstanceProfileControl_TimeFormat_12Hr, "0"));
+            list.Items.Add(new ListItem(Resources.InstanceProfileControl_TimeFormat_24Hr, "1"));
+
+            ListItem item = list.Items.FindByValue(selectedValue);
+            if (item != null)
+                item.Selected = true;
+        }
+
+        public static void WorkingDaysListDataBind(ListControl list, string selectedValue)
+        {
+            if (list == null) return;
+
+            string[] days = CultureInfo.CurrentUICulture.DateTimeFormat.DayNames;
+            for (int x = 1; x < 8; x++)
+            {
+                int y = x % 7;
+                list.Items.Add(new ListItem(days[y], y.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            if (!string.IsNullOrEmpty(selectedValue))
+            {
+                if (selectedValue.Length == list.Items.Count)
+                {
+                    int i = 0;
+                    foreach (ListItem day in list.Items)
+                    {
+                        day.Selected = selectedValue[i++] == '1';
+                    }
+                }
+            }
+        }
+
+        public static string GetWorkingDays(ListControl list)
+        {
+            if (list == null) return string.Empty;
+
+            string days = string.Empty;
+            foreach (ListItem item in list.Items)
+            {
+                days = string.Concat(days, (item.Selected) ? "1" : "0");
+            }
+
+            return days;
         }
 
         #endregion

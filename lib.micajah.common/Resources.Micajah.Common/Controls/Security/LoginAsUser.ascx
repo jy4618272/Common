@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="mits" Namespace="Micajah.Common.WebControls" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-    <ContentTemplate>
+    <contenttemplate>
         <asp:Table ID="SearchTable" runat="server" Width="550px">
             <asp:TableHeaderRow TableSection="TableHeader">
                 <asp:TableHeaderCell runat="server" ColumnSpan="2">
@@ -69,7 +69,7 @@
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />
                 <mits:TextBoxField DataField="Email" SortExpression="Email" />
-                <mits:TemplateField SortExpression="LastLoginDate" ItemStyle-HorizontalAlign="Right" HeaderStyle-Width="70px">
+                <mits:TemplateField SortExpression="LastLoginDate" ItemStyle-HorizontalAlign="Right" HeaderStyle-Width="80px">
                     <ItemTemplate>
                         <asp:Literal ID="LastLoginDateLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>
@@ -108,5 +108,5 @@
                 <asp:Parameter Name="roleId" Type="Object" />
             </SelectParameters>
         </asp:ObjectDataSource>
-    </ContentTemplate>
+    </contenttemplate>
 </asp:UpdatePanel>

@@ -537,7 +537,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (!Support.IsNullOrDBNull(obj))
             {
                 Literal lit = (Literal)e.Row.FindControl("LastLoginDateLiteral");
-                lit.Text = Support.GetDisplayDate((DateTime)obj, m_UserContext.UtcOffset, m_UserContext.DateFormat, true);
+                lit.Text = Support.ToShortDateString((DateTime)obj, m_UserContext.TimeZone);
             }
         }
 

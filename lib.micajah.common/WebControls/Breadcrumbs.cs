@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
 using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls
@@ -168,8 +169,11 @@ namespace Micajah.Common.WebControls
                     m_Table.Rows.Add(tr);
                     m_Container.Controls.Add(m_Table);
 
-                    if (this.MicajahMasterPage.VisibleHelpLink)
-                        m_Table.Rows[0].Cells[m_Table.Rows[0].Cells.Count - 1].Style[HtmlTextWriterStyle.PaddingRight] = "85px";
+                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                    {
+                        if (this.MicajahMasterPage.VisibleHelpLink)
+                            m_Table.Rows[0].Cells[m_Table.Rows[0].Cells.Count - 1].Style[HtmlTextWriterStyle.PaddingRight] = "85px";
+                    }
                 }
                 else
                     m_Container.Style[HtmlTextWriterStyle.Display] = "none";

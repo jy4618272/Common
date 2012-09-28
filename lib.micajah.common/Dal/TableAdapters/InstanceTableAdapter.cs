@@ -25,8 +25,6 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("Description", "Description");
             TableMapping.ColumnMappings.Add("EnableSignUpUser", "EnableSignUpUser");
             TableMapping.ColumnMappings.Add("ExternalId", "ExternalId");
-            TableMapping.ColumnMappings.Add("UtcOffset", "UtcOffset");
-            TableMapping.ColumnMappings.Add("DateFormat", "DateFormat");
             TableMapping.ColumnMappings.Add("WorkingDays", "WorkingDays");
             TableMapping.ColumnMappings.Add("Active", "Active");
             TableMapping.ColumnMappings.Add("CanceledTime", "CanceledTime");
@@ -34,6 +32,8 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("Beta", "Beta");
             TableMapping.ColumnMappings.Add("Deleted", "Deleted");
             TableMapping.ColumnMappings.Add("CreatedTime", "CreatedTime");
+            TableMapping.ColumnMappings.Add("TimeZoneId", "TimeZoneId");
+            TableMapping.ColumnMappings.Add("TimeFormat", "TimeFormat");
 
             #endregion
 
@@ -48,14 +48,14 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@Description", SqlDbType.NVarChar, 1024, ParameterDirection.Input, 0, 0, "Description", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@EnableSignUpUser", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "EnableSignUpUser", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@ExternalId", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "ExternalId", DataRowVersion.Current, false, null, "", "", ""));
-            InsertCommand.Parameters.Add(new SqlParameter("@UtcOffset", SqlDbType.Decimal, 0, ParameterDirection.Input, 4, 2, "UtcOffset", DataRowVersion.Current, false, null, "", "", ""));
-            InsertCommand.Parameters.Add(new SqlParameter("@DateFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "DateFormat", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@WorkingDays", SqlDbType.Char, 7, ParameterDirection.Input, 0, 0, "WorkingDays", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Active", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Active", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@CanceledTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CanceledTime", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Trial", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Trial", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Beta", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Beta", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@TimeZoneId", SqlDbType.NVarChar, 100, ParameterDirection.Input, 0, 0, "TimeZoneId", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@TimeFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TimeFormat", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 
@@ -70,14 +70,14 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@Description", SqlDbType.NVarChar, 1024, ParameterDirection.Input, 0, 0, "Description", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@EnableSignUpUser", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "EnableSignUpUser", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@ExternalId", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "ExternalId", DataRowVersion.Current, false, null, "", "", ""));
-            UpdateCommand.Parameters.Add(new SqlParameter("@UtcOffset", SqlDbType.Decimal, 0, ParameterDirection.Input, 4, 2, "UtcOffset", DataRowVersion.Current, false, null, "", "", ""));
-            UpdateCommand.Parameters.Add(new SqlParameter("@DateFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "DateFormat", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@WorkingDays", SqlDbType.Char, 7, ParameterDirection.Input, 0, 0, "WorkingDays", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Active", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Active", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@CanceledTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CanceledTime", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Trial", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Trial", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Beta", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Beta", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@TimeZoneId", SqlDbType.NVarChar, 100, ParameterDirection.Input, 0, 0, "TimeZoneId", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@TimeFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TimeFormat", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 
