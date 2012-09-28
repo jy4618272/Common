@@ -66,6 +66,15 @@ namespace Micajah.Common.Configuration
         {
             get { return (string)this["defaultPartialCustomUrl"]; }
         }
+        
+        /// <summary>
+        /// Gets or the root domain for authentication ticket.
+        /// </summary>
+        [ConfigurationProperty("authenticationTicketDomain")]
+        public string AuthenticationTicketDomain
+        {
+            get { return (string)this["authenticationTicketDomain"]; }
+        }
 
         #endregion
     }

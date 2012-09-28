@@ -601,7 +601,16 @@ namespace Micajah.Common.Bll.Providers
                 if (!isPersistent.HasValue)
                     isPersistent = FormsAuthenticationTicketIsPersistent;
 
-                FormsAuthentication.SetAuthCookie(string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId), isPersistent.Value);
+                string userName = string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId);
+
+                FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
+
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null))
+                {
+                    System.Web.HttpCookie authcookie = System.Web.Security.FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
+                    authcookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                    System.Web.HttpContext.Current.Response.AppendCookie(authcookie);
+                }
             }
         }
 
@@ -778,7 +787,20 @@ namespace Micajah.Common.Bll.Providers
             }
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
-                if (removeAuthInfo) FormsAuthentication.SignOut();
+                if (removeAuthInfo)
+                {
+                    FormsAuthentication.SignOut();
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    {
+                        if (context.Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+                        {
+                            HttpCookie myCookie = new HttpCookie(FormsAuthentication.FormsCookieName);
+                            myCookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                            myCookie.Expires = DateTime.Now.AddDays(-1d);
+                            context.Response.Cookies.Add(myCookie);
+                        }
+                    }
+                }
                 if (!string.IsNullOrEmpty(redirectUrl))
                 {
                     if (context != null)

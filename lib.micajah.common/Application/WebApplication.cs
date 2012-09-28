@@ -33,7 +33,7 @@ namespace Micajah.Common.Application
         private static OrganizationDataSetTableAdapters s_OrganizationDataSetTableAdapters;
         private static SortedList s_OrganizationDataSetTableAdaptersList;
         private static LoginProvider s_LoginProvider;
-        private static Guid? s_WebSiteId;
+        private static Guid? s_WebSiteId;        
 
         // The objects which are used to synchronize access to the cached objects.
         private static object s_CommonDataSetSyncRoot = new object();
@@ -741,7 +741,7 @@ namespace Micajah.Common.Application
                     }
                 }
 
-                if (ctx.Session.IsNewSession)
+                if (ctx.Session.IsNewSession || string.Compare(Security.UserContext.VanityUrl, System.Web.HttpContext.Current.Request.Url.Host, true) != 0) 
                     UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
             }
         }

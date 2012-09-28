@@ -93,26 +93,22 @@ namespace Micajah.Common.WebControls.SecurityControls
                     CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
                     if (row != null)
                     {
-                        redirectUrl = new LoginProvider().GetLoginUrl(ctx.UserId, true, organizationId, Guid.Empty, returnUrl, !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl);
-                        if (!string.IsNullOrEmpty(redirectUrl))
-                        {
-                            if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                                redirectUrl = string.Format("http://{0}", redirectUrl);
-                            errorDiv.Page.Response.Redirect(redirectUrl, true);
-                        }
+                        redirectUrl = string.Format("{0}{1}", !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl, returnUrl);
+                        if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
+                            redirectUrl = string.Format("http://{0}", redirectUrl);
+
+                        errorDiv.Page.Response.Redirect(redirectUrl, true);
                     }
                     else
                     {
                         if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
                         {
                             redirectUrl = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", ctx.SelectedOrganization.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                            redirectUrl = new LoginProvider().GetLoginUrl(ctx.UserId, true, organizationId, Guid.Empty, returnUrl, redirectUrl);
-                            if (!string.IsNullOrEmpty(redirectUrl))
-                            {
-                                if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                                    redirectUrl = string.Format("http://{0}", redirectUrl);
-                                errorDiv.Page.Response.Redirect(redirectUrl, true);
-                            }
+                            redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
+                            if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
+                                redirectUrl = string.Format("http://{0}", redirectUrl);
+
+                            errorDiv.Page.Response.Redirect(redirectUrl, true);
                         }
                     }
                 }

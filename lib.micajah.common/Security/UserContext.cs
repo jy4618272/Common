@@ -51,6 +51,7 @@ namespace Micajah.Common.Security
         private const string StartPageUrlKey = "mc.StartPageUrl";
         private const string UserContextKey = "mc.UserContext";
         private const string UserIdKey = "mc.UserId";
+        private const string VanityUrlKey = "mc.VanityUrl";
 
         private static ArrayList s_ReservedKeys;
 
@@ -369,7 +370,7 @@ namespace Micajah.Common.Security
             get { return (string)base[CountryKey]; }
             set { base[CountryKey] = value; }
         }
-
+        
         /// <summary>
         /// Gets the UTC offset, in hours, of the user's time zone.
         /// </summary>
@@ -426,7 +427,14 @@ namespace Micajah.Common.Security
             get
             {
                 Organization org = null;
-                Guid organizationId = (Guid)base[SelectedOrganizationIdKey];
+                Guid organizationId = Guid.Empty;
+                
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    FillSelectedOrganizationIdFromSession(ref organizationId);
+                
+                if (organizationId == Guid.Empty)
+                    organizationId = (Guid)base[SelectedOrganizationIdKey];
+
                 if (organizationId != Guid.Empty)
                     org = OrganizationProvider.GetOrganization(organizationId);
                 return org;
@@ -442,23 +450,15 @@ namespace Micajah.Common.Security
             {
                 Guid organizationId = Guid.Empty;
                 UserContext user = Current;
-                if (user != null)
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    FillSelectedOrganizationIdFromSession(ref organizationId);
+
+                if (organizationId == Guid.Empty)
                 {
-                    organizationId = (Guid)user[SelectedOrganizationIdKey];
-                }
-                else
-                {
-                    HttpContext ctx = HttpContext.Current;
-                    if (ctx != null)
-                    {
-                        HttpSessionState session = ctx.Session;
-                        if (session != null)
-                        {
-                            object obj = session[SelectedOrganizationIdKey];
-                            if (obj != null)
-                                organizationId = (Guid)obj;
-                        }
-                    }
+                    if (user != null)
+                        organizationId = (Guid)user[SelectedOrganizationIdKey];
+                    else
+                        FillSelectedOrganizationIdFromSession(ref organizationId);
                 }
                 return organizationId;
             }
@@ -478,6 +478,26 @@ namespace Micajah.Common.Security
                 }
             }
         }
+        
+        /// <summary>
+        /// Fills SelectedOrganizationId from session
+        /// </summary>        
+        private static void FillSelectedOrganizationIdFromSession(ref Guid organizationId)
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (ctx != null)
+            {
+                HttpSessionState session = ctx.Session;
+                if (session != null)
+                {
+                    object obj = session[SelectedOrganizationIdKey];
+                    if (obj != null)
+                        organizationId = (Guid)obj;
+                    else
+                        UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the selected instance.
@@ -487,13 +507,83 @@ namespace Micajah.Common.Security
             get
             {
                 Instance inst = null;
-                Guid organizationId = (Guid)base[SelectedOrganizationIdKey];
-                Guid instanceId = (Guid)base[SelectedInstanceIdKey];
+                Guid organizationId = Guid.Empty;
+                Guid instanceId = Guid.Empty;
+
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                {
+                    FillSelectedOrganizationIdFromSession(ref organizationId);
+                    FillSelectedInstanceIdFromSession(ref instanceId);
+                }
+
+                if ((organizationId == Guid.Empty) || (instanceId == Guid.Empty))
+                {
+                    organizationId = (Guid)base[SelectedOrganizationIdKey];
+                    instanceId = (Guid)base[SelectedInstanceIdKey];
+                }
+
                 if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
                     inst = InstanceProvider.GetInstance(instanceId, organizationId);
                 return inst;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the user's vanity url. The default value is empty string.
+        /// </summary>
+        public static string VanityUrl
+        {
+            get
+            {
+                string vanityUrl = string.Empty;
+                UserContext user = Current;
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    FillVanityUrlFromSession(ref vanityUrl);
+
+                if (string.IsNullOrEmpty(vanityUrl))
+                {
+                    if (user != null)
+                        vanityUrl = (string)user[VanityUrlKey];
+                    else
+                        FillVanityUrlFromSession(ref vanityUrl);
+                }
+                return vanityUrl;
+            }
+            internal set
+            {
+                HttpContext ctx = HttpContext.Current;
+                if (ctx != null)
+                {
+                    HttpSessionState session = ctx.Session;
+                    if (session != null)
+                    {
+                        if (string.IsNullOrEmpty(value))
+                            session.Remove(VanityUrlKey);
+                        else
+                            session[VanityUrlKey] = value;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fills VanityUrl from session
+        /// </summary>        
+        private static void FillVanityUrlFromSession(ref string vanityUrl)
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (ctx != null)
+            {
+                HttpSessionState session = ctx.Session;
+                if (session != null)
+                {
+                    object obj = session[VanityUrlKey];
+                    if (obj != null)
+                        vanityUrl = (string)obj;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets the unique identifier of the selected instance.
@@ -504,23 +594,15 @@ namespace Micajah.Common.Security
             {
                 Guid instanceId = Guid.Empty;
                 UserContext user = Current;
-                if (user != null)
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    FillSelectedInstanceIdFromSession(ref instanceId);
+
+                if (instanceId == Guid.Empty)
                 {
-                    instanceId = (Guid)user[SelectedInstanceIdKey];
-                }
-                else
-                {
-                    HttpContext ctx = HttpContext.Current;
-                    if (ctx != null)
-                    {
-                        HttpSessionState session = ctx.Session;
-                        if (session != null)
-                        {
-                            object obj = session[SelectedInstanceIdKey];
-                            if (obj != null)
-                                instanceId = (Guid)obj;
-                        }
-                    }
+                    if (user != null)
+                        instanceId = (Guid)user[SelectedInstanceIdKey];
+                    else
+                        FillSelectedInstanceIdFromSession(ref instanceId);
                 }
                 return instanceId;
             }
@@ -537,6 +619,24 @@ namespace Micajah.Common.Security
                         else
                             session[SelectedInstanceIdKey] = value;
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fills SelectedInstanceId from session
+        /// </summary>        
+        private static void FillSelectedInstanceIdFromSession(ref Guid instanceId)
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (ctx != null)
+            {
+                HttpSessionState session = ctx.Session;
+                if (session != null)
+                {
+                    object obj = session[SelectedInstanceIdKey];
+                    if (obj != null)
+                        instanceId = (Guid)obj;
                 }
             }
         }
@@ -706,7 +806,7 @@ namespace Micajah.Common.Security
         }
 
         private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool? isPersistent)
-        {
+        {            
             if ((Guid)base[SelectedOrganizationIdKey] != newOrganization.OrganizationId)
                 CheckWebSite(newOrganization.OrganizationId, null);
 
@@ -817,72 +917,7 @@ namespace Micajah.Common.Security
                     UserContext.SelectedInstanceId = (row.IsInstanceIdNull() ? Guid.Empty : row.InstanceId);
                 }
                 else
-                {
-                    string url = HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture);
-                    string[] segments = url.Split('.');
-                    string defaultUrl = FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl.ToLower();
-                    bool found = false;
-
-                    foreach (string rootAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses)
-                    {
-                        if (url.StartsWith(rootAddresse.ToLower()))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        if (segments.Length > 1)
-                        {
-                            Organization org = null;
-                            Instance instance = null;
-                            string instPseudo = string.Empty;
-                            string segment = segments[0];
-                            found = false;
-
-                            foreach (string reservedAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
-                            {
-                                if (segment == reservedAddresse.ToLower())
-                                {
-                                    found = true;
-                                    break;
-                                }
-                            }
-
-                            if (!found)
-                            {
-                                if (segment.Contains("-"))
-                                {
-                                    org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
-                                    instPseudo = segment.Split('-')[1];
-                                }
-                                else
-                                    org = OrganizationProvider.GetOrganizationByPseudoId(segment);
-
-                                if (org != null)
-                                {
-                                    UserContext.SelectedOrganizationId = org.OrganizationId;
-                                    if (!string.IsNullOrEmpty(instPseudo))
-                                    {
-                                        instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
-                                        if (instance != null)
-                                            UserContext.SelectedInstanceId = instance.InstanceId;
-                                    }
-                                }
-                                else
-                                {
-                                    if (!string.IsNullOrEmpty(defaultUrl))
-                                    {
-                                        if (!url.StartsWith(defaultUrl))
-                                            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Url.ToString().ToLower(CultureInfo.CurrentCulture).Replace(segments[0], defaultUrl));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                    CustomUrlProvider.InitializeOrganizationOrInstanceFromCustomUrl();
             }
         }
 
