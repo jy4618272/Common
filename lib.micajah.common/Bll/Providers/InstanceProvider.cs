@@ -361,35 +361,6 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal static void UpdateInstancesTimeZoneId()
-        {
-            System.Collections.ObjectModel.ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-
-            foreach (CommonDataSet.OrganizationRow organizationRow in table)
-            {
-                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationRow.OrganizationId);
-                if (ds != null)
-                {
-                    foreach (OrganizationDataSet.InstanceRow instanceRow in ds.Instance)
-                    {
-                        double hoursOffset = 0;
-                        if (double.TryParse(instanceRow.TimeZoneId.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), out hoursOffset))
-                        {
-                            instanceRow.TimeZoneId = string.Empty;
-                            instanceRow.TimeZoneId = Support.GetTimeZoneId(hoursOffset);
-                        }
-                        else
-                            instanceRow.TimeZoneId = string.Empty;
-                    }
-
-                    OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationRow.OrganizationId);
-                    if (adapters != null)
-                        adapters.InstanceTableAdapter.Update(ds.Instance);
-                }
-            }
-        }
-
         #endregion
 
         #region Public Methods
