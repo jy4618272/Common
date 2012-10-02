@@ -60,7 +60,7 @@
             <mits:TextBoxField DataField="Name" HeaderText="Name" HeaderGroup="General Info"
                 SortExpression="Name">
             </mits:TextBoxField>
-            <mits:TextBoxField DataField="Rank" HeaderText="Rank" HeaderGroup="General Info">
+            <mits:TextBoxField DataField="Rank" HeaderText="Rank" HeaderGroup="General Info" ItemStyle-CssClass="Number">
             </mits:TextBoxField>
             <mits:TextBoxField DataField="StartActionId" HeaderText="StartActionId">
             </mits:TextBoxField>
