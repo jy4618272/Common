@@ -52,6 +52,8 @@ namespace Micajah.Common.Security
         private const string UserContextKey = "mc.UserContext";
         private const string UserIdKey = "mc.UserId";
 
+        private const string DefaultTimeZoneId = "Eastern Standard Time";
+
         private static ArrayList s_ReservedKeys;
 
         #endregion
@@ -377,18 +379,23 @@ namespace Micajah.Common.Security
         {
             get
             {
-                string value = "Eastern Standard Time";
+                string value = DefaultTimeZoneId;
                 if (base[TimeZoneIdKey] == null)
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
                     {
                         if (!string.IsNullOrEmpty(inst.TimeZoneId))
-                            base[TimeZoneIdKey] = value = inst.TimeZoneId;
+                        {
+                            TimeZoneInfo timeZone = GetTimeZone(inst.TimeZoneId);
+                            if (timeZone != null)
+                                base[TimeZoneIdKey] = value = timeZone.Id;
+                        }
                     }
                 }
                 else
                     value = (string)base[TimeZoneIdKey];
+
                 return value;
             }
         }
@@ -418,7 +425,7 @@ namespace Micajah.Common.Security
         /// </summary>
         public TimeZoneInfo TimeZone
         {
-            get { return TimeZoneInfo.FindSystemTimeZoneById(this.TimeZoneId); }
+            get { return GetTimeZone(this.TimeZoneId); }
         }
 
         /// <summary>
@@ -641,6 +648,22 @@ namespace Micajah.Common.Security
         #endregion
 
         #region Private Methods
+
+        private static TimeZoneInfo GetTimeZone(string id)
+        {
+            TimeZoneInfo timeZone = null;
+
+            try { timeZone = TimeZoneInfo.FindSystemTimeZoneById(id); }
+            catch (InvalidTimeZoneException) { }
+
+            if (timeZone == null)
+            {
+                try { timeZone = TimeZoneInfo.FindSystemTimeZoneById(DefaultTimeZoneId); }
+                catch (InvalidTimeZoneException) { }
+            }
+
+            return timeZone;
+        }
 
         private void SelectedInstanceChange(Instance newInstance, bool? isPersistent)
         {
