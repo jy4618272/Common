@@ -701,6 +701,30 @@ namespace Micajah.Common.WebControls
                 }
 
                 ProcessRowCells(row, cssClass, borderColor);
+
+                if (theme == MasterPageTheme.Modern)
+                {
+                    foreach (TableCell cell in row.Cells)
+                    {
+                        DataControlFieldCell fieldCell = cell as DataControlFieldCell;
+                        if (fieldCell != null)
+                        {
+                            DataControlField field = fieldCell.ContainingField;
+                            if (field != null)
+                            {
+                                if (field.Visible)
+                                {
+                                    if (field is BoundField)
+                                    {
+                                        cell.CssClass += " Bold";
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             if (grid.HeaderRow != null)
@@ -760,6 +784,19 @@ namespace Micajah.Common.WebControls
                 }
 
                 ProcessRowCells(row, cssClass, borderColor);
+
+                if (theme == MasterPageTheme.Modern)
+                {
+                    foreach (TableCell cell in row.Cells)
+                    {
+                        if (cell.Visible)
+                        {
+                            cell.CssClass += " Bold";
+
+                            break;
+                        }
+                    }
+                }
             }
 
             RegisterStyleSheet(table, theme);
@@ -813,6 +850,19 @@ namespace Micajah.Common.WebControls
                 }
 
                 ProcessRowCells(row, cssClass, borderColor);
+
+                if (theme == MasterPageTheme.Modern)
+                {
+                    foreach (HtmlTableCell cell in row.Cells)
+                    {
+                        if (cell.Visible)
+                        {
+                            cell.Attributes["class"] += " Bold";
+
+                            break;
+                        }
+                    }
+                }
             }
 
             RegisterStyleSheet(table, theme);
