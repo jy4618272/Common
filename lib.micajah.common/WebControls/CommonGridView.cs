@@ -714,7 +714,7 @@ namespace Micajah.Common.WebControls
                             {
                                 if (field.Visible)
                                 {
-                                    if (field is BoundField)
+                                    if (field is BoundField || field is System.Web.UI.WebControls.TemplateField)
                                     {
                                         cell.CssClass += " Bold";
 
