@@ -118,11 +118,8 @@ namespace Micajah.Common.WebControls
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                 return null;
 
-            if (!this.MasterPage.IsSetupPage)
-            {
-                if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl))
-                    return null;
-            }
+            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl))
+                return null;
 
             HtmlGenericControl div = null;
             HtmlGenericControl ul = null;

@@ -36,6 +36,8 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("Country", "Country");
             TableMapping.ColumnMappings.Add("LastLoginDate", "LastLoginDate");
             TableMapping.ColumnMappings.Add("Deleted", "Deleted");
+            TableMapping.ColumnMappings.Add("TimeZoneId", "TimeZoneId");
+            TableMapping.ColumnMappings.Add("TimeFormat", "TimeFormat");
 
             #endregion
 
@@ -61,6 +63,8 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@Country", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Country", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@LastLoginDate", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "LastLoginDate", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@TimeZoneId", SqlDbType.NVarChar, 100, ParameterDirection.Input, 0, 0, "TimeZoneId", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@TimeFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TimeFormat", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 
@@ -86,6 +90,8 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@Country", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Country", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@LastLoginDate", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "LastLoginDate", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@TimeZoneId", SqlDbType.NVarChar, 100, ParameterDirection.Input, 0, 0, "TimeZoneId", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@TimeFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TimeFormat", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 

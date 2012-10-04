@@ -2464,4 +2464,16 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="InstanceProfileControl_TimeFormat_24Hr" xml:space="preserve">
     <value>24HR</value>
   </data>
+  <data name="UsersControl_EditForm_TimeFormatField_HeaderText" xml:space="preserve">
+    <value>Time Format</value>
+  </data>
+  <data name="UsersControl_EditForm_TimeZoneField_HeaderText" xml:space="preserve">
+    <value>Time Zone</value>
+  </data>
+  <data name="ProfileControl_EditForm_TimeFormatField_HeaderText" xml:space="preserve">
+    <value>Time Format</value>
+  </data>
+  <data name="ProfileControl_EditForm_TimeZoneField_HeaderText" xml:space="preserve">
+    <value>Time Zone</value>
+  </data>
 </root>

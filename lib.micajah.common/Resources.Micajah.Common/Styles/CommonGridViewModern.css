@@ -28,9 +28,10 @@ tr.Cgv_R:hover, tr.Cgv_Er:hover, tr.Cgv_Sr
 
 .Cgv_H th
 {
-    padding: 10px;
-    background-color: #004174;
-    border-bottom: 1px solid #004174;
+    padding: 5px 8px;
+    border-top: 1px solid #60a3d7;
+    border-bottom: 1px solid #14619d;
+    background-color: #2e7dba;
     text-align: left;
 }
 
@@ -43,15 +44,26 @@ tr.Cgv_R:hover, tr.Cgv_Er:hover, tr.Cgv_Sr
 
 .Cgv_H th, .Cgv_H a, .Cgv_H a:hover
 {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
     color: White;
+    text-decoration: none;
 }
 
-.Cgv_T td.Cgv_C a
+.Cgv_T td.Cgv_C a, .Cgv_T td.Cgv_C.Bold
 {
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: bold;
     color: #222;
+    text-decoration: none;
+}
+
+.Cgv_T td.Cgv_C.Number, .Cgv_T td.Cgv_C.Number a
+{
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
 }
 
 .Cgv_T input[type=checkbox], .Cgv_T input[type=radio], .Cgv_T input[type=image]
@@ -283,31 +295,42 @@ div.Cgv_Hm a
 
 .Cgv_Filter
 {
-    background-color: #e1e1e1;
-    min-height: 20px;
+    border-top: 1px solid #f7f1c5;
+    background-color: #fffad5;
+    min-height: 24px;
     padding: 10px;
     line-height: 1.231;
 }
 
 .Cgv_Filter a
 {
-    padding: 3px 8px;
+    padding: 5px 10px;
     margin: 0 5px;
     text-decoration: none !important;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px 8px 8px 8px;
-    text-transform: uppercase;
+    border-radius: 3px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
-    font-size: 11px;
-    background-color: #4f5970;
-    color: #fff !important;
+    border: 1px solid #b08357;
+    background-color: #f9d08b;
+    color: #633c16;
+    text-shadow: 1px 1px 0 #fce6b6;
+    box-shadow: inset 0px 1px 1px 0px #fce6b6;
 }
 
-.Cgv_Filter a:hover, .Cgv_Filter a.Selected, .Cgv_Filter ul li.DropMenu:hover a
+.Cgv_Filter a:hover, .Cgv_Filter ul li.DropMenu:hover a
 {
-    background-color: #9cbbe6;
+    color: #633c16;
+    background-color: #ffdea7;
+}
+
+.Cgv_Filter a:active, .Cgv_Filter a.Selected
+{
+    color: #ffffff;
+    background-color: #2e7dba;
+    border-color: #045f86;
+    text-shadow: -1px -1px 0 #045f86;
+    box-shadow: inset 0px 1px 0px 0px #63a8dd;
 }
 
 .Cgv_Filter ul
@@ -328,21 +351,28 @@ div.Cgv_Hm a
     position: absolute;
     width: auto;
     min-width: 100px;
-    background-color: #efefef;
-    color: #777 !important;
-    padding: 5px 10px;
-    margin: 2px 0 0 10px;
+    background-color: #f9d08b;
+    margin: 14px 0 0 5px;
     border-collapse: separate;
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -webkit-border-radius: 0px 5px 5px 5px;
-    border-radius: 0px 5px 5px 5px;
-    -webkit-box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 4px 0px #666666;
+    border-radius: 4px 4px 4px 4px;
+    border-top: 1px solid #ffdea7;
+    padding: 4px;
     display: none;
+}
+
+.Cgv_Filter ul li.DropMenu ul:after
+{
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #f9d18b transparent;
 }
 
 .Cgv_Filter ul li.DropMenu:hover ul
@@ -353,39 +383,42 @@ div.Cgv_Hm a
 .Cgv_Filter ul li.DropMenu ul li
 {
     display: block;
+    border-bottom: 1px solid #ffdea7;
+}
+
+.Cgv_Filter ul li.DropMenu ul li:last-child
+{
+    border: none;
 }
 
 .Cgv_Filter ul li.DropMenu a
 {
-    padding-right: 20px;
-    background-image: url($DropArrow.png$);
+    padding-right: 23px;
+    background-image: url($DropMenu.png$);
     background-repeat: no-repeat;
     background-position: right center;
+    box-shadow: none;
 }
 
 .Cgv_Filter ul li.DropMenu ul li a
 {
-    padding: 3px 8px;
+    padding: 8px 10px;
     margin: 0;
-    text-decoration: none !important;
-    font-weight: normal;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
+    border: 0 none !important;
     text-transform: none;
-    font-weight: normal;
     text-align: left;
-    font-size: 13px;
+    font-size: 12px;
     color: Black !important;
-    background-color: transparent !important;
+    background-color: #f9d08b !important;
     background-image: none;
+	text-shadow: 1px 1px 0 #fce6b6;
     display: block;
 }
 
 .Cgv_Filter ul li.DropMenu ul li a:hover, .Cgv_Filter ul li.DropMenu ul li a.Selected
 {
-    background-color: #e1e1e1 !important;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px 4px 4px 4px;
+    background-color: #ffdea7 !important;
 }

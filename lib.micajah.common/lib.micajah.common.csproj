@@ -1933,11 +1933,12 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\InformationSmall.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\SuccessSmall.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\WarningSmall.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropArrow.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v99.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v99.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v100.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropMenu.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropMenu.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v101.sql" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

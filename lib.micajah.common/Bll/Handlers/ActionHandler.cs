@@ -79,7 +79,7 @@ namespace Micajah.Common.Bll.Handlers
                 else if (action.ActionId == ActionProvider.CustomUrlsPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled);
                 else if (action.ActionId == ActionProvider.AccountSettingsPageActionId)
-                    accessDenied = !UserContext.Current.SelectedOrganization.Beta;
+                    accessDenied = (!UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.StartPageActionId)
                     Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(UserContext.Current, out accessDenied);
                 else if ((action.ActionId == ActionProvider.LdapIntegrationPageActionId)
@@ -89,7 +89,7 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
                     accessDenied = !(FrameworkConfiguration.Current.WebApplication.EnableLdap && UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
-                    accessDenied = (UserContext.Current.SelectedOrganization == null);
+                    accessDenied = ((UserContext.Current != null) && (UserContext.Current.SelectedOrganization == null));
             }
 
             return accessDenied;

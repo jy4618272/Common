@@ -232,9 +232,6 @@ namespace Micajah.Common.WebControls.SetupControls
 
                     if (v == 77 || v == 78)
                         OrganizationProvider.UpdateOrganizationsPseudoId();
-
-                    if (v == 100)
-                        InstanceProvider.UpdateInstancesTimeZoneId();
                 }
             }
             finally

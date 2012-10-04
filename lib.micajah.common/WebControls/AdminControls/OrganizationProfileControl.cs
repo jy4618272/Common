@@ -62,7 +62,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         #endregion
 
-        #region Private Methods        
+        #region Private Methods
 
         private void Redirect()
         {

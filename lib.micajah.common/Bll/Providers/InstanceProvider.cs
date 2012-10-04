@@ -106,7 +106,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="configure">true to configure the instance.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         private static Guid InsertInstance(string name, string description, bool enableSignupUser
-            , string externalId, string timeZoneId, int timeFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
+            , string externalId, string timeZoneId, int? timeFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
             , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg, Guid? templateInstanceId)
         {
             if (refreshOrganizationData) WebApplication.RefreshAllData();
@@ -131,8 +131,24 @@ namespace Micajah.Common.Bll.Providers
             row.OrganizationId = organizationId;
             row.EnableSignUpUser = (templateInstance == null) ? enableSignupUser : templateInstance.EnableSignupUser;
             row.ExternalId = ((externalId == null) ? string.Empty : externalId);
-            row.TimeZoneId = ((timeZoneId == null) ? string.Empty : timeZoneId);
-            row.TimeFormat = (templateInstance == null) ? timeFormat : templateInstance.TimeFormat;
+            if (string.IsNullOrEmpty(timeZoneId))
+                row.SetTimeZoneIdNull();
+            else
+                row.TimeZoneId = timeZoneId;
+            if (templateInstance == null)
+            {
+                if (timeFormat.HasValue)
+                    row.TimeFormat = timeFormat.Value;
+                else
+                    row.SetTimeFormatNull();
+            }
+            else
+            {
+                if (templateInstance.TimeFormat.HasValue)
+                    row.TimeFormat = templateInstance.TimeFormat.Value;
+                else
+                    row.SetTimeFormatNull();
+            }
             row.WorkingDays = (templateInstance == null) ? string.IsNullOrEmpty(workingDays) ? "1111100" : workingDays : templateInstance.WorkingDays;
             row.Active = active;
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
@@ -168,6 +184,7 @@ namespace Micajah.Common.Bll.Providers
                 userId = UserProvider.AddUserToOrganization(adminEmail, null, null, null
                     , null, null, null, null, null, null
                     , null, null, null, null, null
+                    , null, null
                     , groupId.ToString(), true
                     , organizationId, false
                     , false, false
@@ -358,35 +375,6 @@ namespace Micajah.Common.Bll.Providers
                 OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 if (adapters != null)
                     adapters.InstanceTableAdapter.Update(ds.Instance);
-            }
-        }
-
-        internal static void UpdateInstancesTimeZoneId()
-        {
-            System.Collections.ObjectModel.ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-
-            foreach (CommonDataSet.OrganizationRow organizationRow in table)
-            {
-                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationRow.OrganizationId);
-                if (ds != null)
-                {
-                    foreach (OrganizationDataSet.InstanceRow instanceRow in ds.Instance)
-                    {
-                        double hoursOffset = 0;
-                        if (double.TryParse(instanceRow.TimeZoneId.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), out hoursOffset))
-                        {
-                            instanceRow.TimeZoneId = string.Empty;
-                            instanceRow.TimeZoneId = Support.GetTimeZoneId(hoursOffset);
-                        }
-                        else
-                            instanceRow.TimeZoneId = string.Empty;
-                    }
-
-                    OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationRow.OrganizationId);
-                    if (adapters != null)
-                        adapters.InstanceTableAdapter.Update(ds.Instance);
-                }
             }
         }
 
@@ -666,7 +654,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="adminEmail">The e-mail address of the instance administrator.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int timeFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
+        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int? timeFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
         {
             return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null);
         }
@@ -689,7 +677,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
-        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int timeFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
+        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int? timeFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
         {
             return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null);
         }
@@ -811,8 +799,14 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             if (enableSignupUser.HasValue) row.EnableSignUpUser = enableSignupUser.Value;
             if (externalId != null) row.ExternalId = Support.TrimString(externalId, table.ExternalIdColumn.MaxLength);
-            if (timeZoneId != null) row.TimeZoneId = timeZoneId;
-            if (timeFormat.HasValue) row.TimeFormat = timeFormat.Value;
+            if (string.IsNullOrEmpty(timeZoneId))
+                row.SetTimeZoneIdNull();
+            else
+                row.TimeZoneId = timeZoneId;
+            if (timeFormat.HasValue)
+                row.TimeFormat = timeFormat.Value;
+            else
+                row.SetTimeFormatNull();
             if (workingDays != null) row.WorkingDays = workingDays;
             if (active.HasValue) row.Active = active.Value;
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;

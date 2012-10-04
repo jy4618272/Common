@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using System.Web.UI;
 using System.Web.UI.WebControls;
+using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -42,6 +42,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return m_TimeFormatList;
             }
         }
+
         private CheckBoxList WorkingDays
         {
             get
@@ -84,8 +85,14 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["timeZoneId"] = TimeZoneList.SelectedValue;
-            e.InputParameters["timeFormat"] = TimeFormatList.SelectedValue;
+            e.InputParameters["timeZoneId"] = (string.IsNullOrEmpty(TimeZoneList.SelectedValue) ? null : TimeZoneList.SelectedValue);
+
+            int value = 0;
+            if (int.TryParse(TimeFormatList.SelectedValue, out value))
+                e.InputParameters["timeFormat"] = value;
+            else
+                e.InputParameters["timeFormat"] = null;
+
             e.InputParameters["workingDays"] = BaseControl.GetWorkingDays(EditForm.FindControl("WorkingDaysList") as CheckBoxList);
         }
 
@@ -93,18 +100,20 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             string workingDays = string.Empty;
             string timeZoneId = null;
-            int timeFormat = 0;
+            string timeFormat = null;
 
             if (EditForm.DataItem != null)
             {
-                workingDays = DataBinder.Eval(EditForm.DataItem, "WorkingDays").ToString();
-                timeZoneId = DataBinder.Eval(EditForm.DataItem, "TimeZoneId").ToString();
-                timeFormat = (int)DataBinder.Eval(EditForm.DataItem, "TimeFormat");
+                Instance inst = (Instance)EditForm.DataItem;
+                workingDays = inst.WorkingDays;
+                timeZoneId = inst.TimeZoneId;
+                if (inst.TimeFormat.HasValue)
+                    timeFormat = inst.TimeFormat.Value.ToString(CultureInfo.InvariantCulture);
             }
 
             BaseControl.WorkingDaysListDataBind(WorkingDays, workingDays);
-            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId);
-            BaseControl.TimeFormatsListDataBind(TimeFormatList, timeFormat.ToString(CultureInfo.InvariantCulture));
+            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
+            BaseControl.TimeFormatsListDataBind(TimeFormatList, timeFormat, false);
         }
 
         #endregion

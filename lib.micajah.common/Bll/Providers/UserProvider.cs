@@ -113,6 +113,7 @@ namespace Micajah.Common.Bll.Providers
         private static void InsertUserIntoOrganization(Guid loginId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId, Guid organizationId, bool organizationAdministrator, bool sendEmailNotification)
         {
             WebApplication.LoginProvider.ChangeLoginName(loginId, email, sendEmailNotification);
@@ -133,7 +134,7 @@ namespace Micajah.Common.Bll.Providers
                    , ((title == null) ? string.Empty : title), ((department == null) ? string.Empty : department)
                    , ((street == null) ? string.Empty : street), ((street2 == null) ? string.Empty : street2), ((city == null) ? string.Empty : city)
                    , ((state == null) ? string.Empty : state), ((postalCode == null) ? string.Empty : postalCode), ((country == null) ? string.Empty : country)
-                   , null, false, orgAdmin);
+                   , null, false, ((timeZoneId == null) ? string.Empty : timeZoneId), timeFormat);
             }
             else
             {
@@ -152,6 +153,8 @@ namespace Micajah.Common.Bll.Providers
                 if (!string.IsNullOrEmpty(state)) row.State = state;
                 if (!string.IsNullOrEmpty(postalCode)) row.PostalCode = postalCode;
                 if (!string.IsNullOrEmpty(country)) row.Country = country;
+                if (!string.IsNullOrEmpty(timeZoneId)) row.TimeZoneId = timeZoneId;
+                if (timeFormat.HasValue) row.TimeFormat = timeFormat.Value;
                 adapters.UserTableAdapter.Update(row);
             }
 
@@ -224,6 +227,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="addGroup">Specifies the groups identifiers should be added only to the user's groups.</param>
         /// <param name="organizationId">Specifies the identifier of the organization.</param>
@@ -231,6 +236,7 @@ namespace Micajah.Common.Bll.Providers
         private static void UpdateUser(Guid userId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId, bool addGroup, Guid organizationId, bool sendEmailNotification)
         {
             OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
@@ -240,7 +246,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 WebApplication.LoginProvider.ChangeLoginName(userId, email, sendEmailNotification);
 
-                adapters.UserTableAdapter.Update(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, false);
+                adapters.UserTableAdapter.Update(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, false, timeZoneId, timeFormat);
 
                 UpdateUser(userId, email, groupId, addGroup, organizationId, row, adapters, sendEmailNotification);
             }
@@ -293,6 +299,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="addGroup">Specifies the groups identifiers should be added only to the user's groups.</param>
         /// <param name="organizationId">The identifier of the organization.</param>
@@ -306,6 +314,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Guid AddUserToOrganization(string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId, bool addGroup, Guid organizationId, bool organizationAdministrator
             , bool sendEmailNotification, bool refreshAllData
             , int minRequiredPasswordLength, int minRequiredNonAlphanumericCharacters
@@ -322,6 +331,7 @@ namespace Micajah.Common.Bll.Providers
                     UpdateUser(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department
                         , street, street2, city, state, postalCode, country
+                        , timeZoneId, timeFormat
                         , groupId, addGroup, organizationId, sendEmailNotification);
                 }
                 else
@@ -329,6 +339,7 @@ namespace Micajah.Common.Bll.Providers
                     InsertUserIntoOrganization(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department
                         , street, street2, city, state, postalCode, country
+                        , timeZoneId, timeFormat
                         , groupId, organizationId, organizationAdministrator, false);
 
                     WebApplication.RefreshOrganizationDataSetByOrganizationId(organizationId);
@@ -342,6 +353,7 @@ namespace Micajah.Common.Bll.Providers
                 loginId = InsertUser(email, firstName, lastName, middleName
                       , phone, mobilePhone, fax, title, department
                       , street, street2, city, state, postalCode, country
+                      , timeZoneId, timeFormat
                       , groupId, organizationId, organizationAdministrator, sendEmailNotification
                       , minRequiredPasswordLength, minRequiredNonAlphanumericCharacters, out password);
             }
@@ -1181,6 +1193,7 @@ namespace Micajah.Common.Bll.Providers
                 InsertUserIntoOrganization(loginId, email, firstName, lastName, middleName
                     , phone, mobilePhone, fax, title, department
                     , street, street2, city, state, postalCode, country
+                    , null, null
                     , groupId, organizationId, false, false);
 
                 if (sendEmailNotification)
@@ -1211,8 +1224,9 @@ namespace Micajah.Common.Bll.Providers
             , int minRequiredPasswordLength, int minRequiredNonAlphanumericCharacters, out string password)
         {
             return InsertUser(email, firstName, lastName, middleName
-                , string.Empty, string.Empty, string.Empty, string.Empty, string.Empty
-                , string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty
+                , null, null, null, null, null
+                , null, null, null, null, null, null
+                , null, null
                 , groupId, organizationId, organizationAdministrator
                 , sendEmailNotification
                 , minRequiredPasswordLength, minRequiredNonAlphanumericCharacters, out password);
@@ -1237,6 +1251,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="organizationAdministrator">true, if the user is organization administrator; otherwise, false.</param>
@@ -1248,6 +1264,7 @@ namespace Micajah.Common.Bll.Providers
         public static Guid InsertUser(string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId, Guid organizationId, bool organizationAdministrator
             , bool sendEmailNotification
             , int minRequiredPasswordLength, int minRequiredNonAlphanumericCharacters, out string password)
@@ -1266,6 +1283,7 @@ namespace Micajah.Common.Bll.Providers
                 InsertUserIntoOrganization(loginId, email, firstName, lastName, middleName
                     , phone, mobilePhone, fax, title, department
                     , street, street2, city, state, postalCode, country
+                    , timeZoneId, timeFormat
                     , groupId, organizationId, organizationAdministrator, false);
 
                 if (sendEmailNotification)
@@ -1348,18 +1366,22 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <returns>The unique identifier of the newly created user or of the updated user if it already exists.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid AddUserToOrganization(string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId)
         {
             string password = null;
             return AddUserToOrganization(email, firstName, lastName, middleName
                  , phone, mobilePhone, fax, title, department
                  , street, street2, city, state, postalCode, country
+                 , timeZoneId, timeFormat
                  , groupId, false
                  , UserContext.Current.SelectedOrganization.OrganizationId, false
                  , true, true
@@ -1385,6 +1407,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="secondaryEmails">Specifies the user's secondary Emails.</param>
         /// <returns>The unique identifier of the newly created user or of the updated user if it already exists.</returns>
@@ -1392,12 +1416,14 @@ namespace Micajah.Common.Bll.Providers
         public static Guid AddUserToOrganization(string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId, string secondaryEmails)
         {
             string password = null;
             Guid userId = AddUserToOrganization(email, firstName, lastName, middleName
                  , phone, mobilePhone, fax, title, department
                  , street, street2, city, state, postalCode, country
+                 , timeZoneId, timeFormat
                  , groupId, false, UserContext.Current.SelectedOrganization.OrganizationId
                  , false, true, true, 0, 0, out password);
 
@@ -1563,12 +1589,14 @@ namespace Micajah.Common.Bll.Providers
                     UpdateUser(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department
                         , street, street2, city, state, postalCode, country
+                        , null, null
                         , groupId, false, organizationId, sendEmailNotification);
                 }
                 else
                 {
                     InsertUserIntoOrganization(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
+                        , null, null
                         , groupId, organizationId, false, false);
 
                     WebApplication.RefreshOrganizationDataSetByOrganizationId(organizationId);
@@ -1646,6 +1674,7 @@ namespace Micajah.Common.Bll.Providers
             return AddUserToOrganization(email, firstName, lastName, middleName
                     , null, null, null, null, null, null
                     , null, null, null, null, null
+                    , null, null
                     , groupId, false
                     , organizationId, false
                     , sendEmailNotification, true
@@ -1673,6 +1702,7 @@ namespace Micajah.Common.Bll.Providers
             return AddUserToOrganization(email, firstName, lastName, middleName
                    , null, null, null, null, null, null
                    , null, null, null, null, null
+                   , null, null
                    , groupId, false
                    , organizationId, organizationAdministrator
                    , sendEmailNotification, true
@@ -1697,14 +1727,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateCurrentUser(string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
-            , string street, string street2, string city, string state, string postalCode, string country)
+            , string street, string street2, string city, string state, string postalCode, string country, string timeZoneId, int? timeFormat)
         {
             UpdateCurrentUser(Guid.Empty, email, firstName, lastName, middleName, phone, mobilePhone, fax
-                , title, department, street, street2, city, state, postalCode, country);
+                , title, department, street, street2, city, state, postalCode, country, timeZoneId, timeFormat);
         }
 
         /// <summary>
@@ -1726,11 +1758,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateCurrentUser(Guid userId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
-            , string street, string street2, string city, string state, string postalCode, string country)
+            , string street, string street2, string city, string state, string postalCode, string country, string timeZoneId, int? timeFormat)
         {
             UserContext user = UserContext.Current;
             if (user == null) return;
@@ -1767,6 +1801,14 @@ namespace Micajah.Common.Bll.Providers
                         if (state != null) row.State = state;
                         if (postalCode != null) row.PostalCode = postalCode;
                         if (country != null) row.Country = country;
+                        if (string.IsNullOrEmpty(timeZoneId))
+                            row.SetTimeZoneIdNull();
+                        else
+                            row.TimeZoneId = timeZoneId;
+                        if (timeFormat.HasValue)
+                            row.TimeFormat = timeFormat.Value;
+                        else
+                            row.SetTimeFormatNull();
 
                         OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
                         adapters.UserTableAdapter.Update(row);
@@ -1821,6 +1863,7 @@ namespace Micajah.Common.Bll.Providers
         {
             UpdateUser(userId, email, firstName, lastName, middleName
                 , phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
+                , null, null
                 , (string)null, UserContext.SelectedOrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
         }
 
@@ -1843,14 +1886,19 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="secondaryEmails">Specifies the user's secondary Emails.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateUser(Guid userId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
-            , string street, string street2, string city, string state, string postalCode, string country, string secondaryEmails)
+            , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
+            , string secondaryEmails)
         {
             UpdateUser(userId, email, firstName, lastName, middleName
                 , phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
+                , timeZoneId, timeFormat
                 , (string)null, UserContext.SelectedOrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
 
             UpdateUserSecondaryEmails(userId, secondaryEmails);
@@ -1903,6 +1951,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateUser(Guid userId, string email, string firstName, string lastName, string middleName, string groupId)
         {
             UpdateUser(userId, email, firstName, lastName, middleName, null, null, null, null, null, null, null, null, null, null, null
+                , null, null
                 , groupId, UserContext.SelectedOrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
         }
 
@@ -1925,17 +1974,21 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="organizationId">Specifies the identifier of the organization.</param>
         /// <param name="sendEmailNotification">true to send notification email; otherwise, false.</param>
         public static void UpdateUser(Guid userId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , string groupId, Guid organizationId, bool sendEmailNotification)
         {
             UpdateUser(userId, email, firstName, lastName, middleName
                 , phone, mobilePhone, fax, title, department
                 , street, street2, city, state, postalCode, country
+                , timeZoneId, timeFormat
                 , groupId, false, organizationId, sendEmailNotification);
         }
 
@@ -1965,7 +2018,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country
             , IList groupId, Guid organizationId)
         {
-            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
+            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, null
                 , Support.ConvertListToString(groupId), organizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
         }
 
@@ -1996,7 +2049,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country
             , IList groupId, Guid organizationId, bool sendEmailNotification)
         {
-            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
+            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, null
                 , Support.ConvertListToString(groupId), organizationId, sendEmailNotification);
         }
 

@@ -401,7 +401,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static string ProcessCommonGridViewModernStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "Search.png", "DropArrow.png" }, "Images.Micajah.Common.WebControls.CommonGridView.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "Search.png", "DropMenu.png" }, "Images.Micajah.Common.WebControls.CommonGridView.{0}");
         }
 
         #endregion

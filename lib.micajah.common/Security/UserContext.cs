@@ -372,7 +372,7 @@ namespace Micajah.Common.Security
         }
         
         /// <summary>
-        /// Gets the time zone identifier.
+        /// Gets or sets the time zone identifier.
         /// </summary>
         public string TimeZoneId
         {
@@ -385,17 +385,18 @@ namespace Micajah.Common.Security
                     if (inst != null)
                     {
                         if (!string.IsNullOrEmpty(inst.TimeZoneId))
-                            base[TimeZoneIdKey] = value = inst.TimeZoneId;
+                            value = inst.TimeZoneId;
                     }
                 }
                 else
                     value = (string)base[TimeZoneIdKey];
                 return value;
             }
+            set { base[TimeZoneIdKey] = value; }
         }
 
         /// <summary>
-        /// Gets the time format.
+        /// Gets or sets the time format.
         /// </summary>
         public int TimeFormat
         {
@@ -406,12 +407,16 @@ namespace Micajah.Common.Security
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                        base[TimeFormatKey] = value = inst.TimeFormat;
+                    {
+                        if (inst.TimeFormat.HasValue)
+                            value = inst.TimeFormat.Value;
+                    }
                 }
                 else
                     value = (int)base[TimeFormatKey];
                 return value;
             }
+            set { base[TimeFormatKey] = value; }
         }
 
         /// <summary>
@@ -827,8 +832,6 @@ namespace Micajah.Common.Security
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = WebApplication.CreateApplicationAbsoluteUrl(startUrl);
             SelectedInstanceId = newInstance.InstanceId;
-            base[TimeZoneIdKey] = null;
-            base[TimeFormatKey] = null;
             base[SelectedInstanceIdKey] = newInstance.InstanceId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
@@ -998,6 +1001,14 @@ namespace Micajah.Common.Security
                 user.State = userRow.State;
                 user.PostalCode = userRow.PostalCode;
                 user.Country = userRow.Country;
+                if (userRow.IsTimeZoneIdNull())
+                    ((SortedList)user)[TimeZoneIdKey] = null;
+                else
+                    user.TimeZoneId = userRow.TimeZoneId;
+                if (userRow.IsTimeFormatNull())
+                    ((SortedList)user)[TimeFormatKey] = null;
+                else
+                    user.TimeFormat = userRow.TimeFormat;
             }
         }
 
