@@ -382,6 +382,15 @@ namespace Micajah.Common.Bll.Providers
                             string[] pseudos = segment.Split('-');
                             org = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
                             instPseudo = pseudos[1];
+                            if (org == null)
+                            {
+                                string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                CommonDataSet.CustomUrlRow customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                                if (customUrlRow != null)
+                                    org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+
+                                if (customUrlRow != null) customUrlRow = null;
+                            }
                         }
                         else
                             org = OrganizationProvider.GetOrganizationByPseudoId(segment);
@@ -395,6 +404,12 @@ namespace Micajah.Common.Bll.Providers
                                 instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
                                 if (instance != null)
                                     Security.UserContext.SelectedInstanceId = instance.InstanceId;                                    
+                            }
+
+                            if (org.Instances.Count == 1)
+                            {
+                                instance = org.Instances[0];
+                                Security.UserContext.SelectedInstanceId = instance.InstanceId;   
                             }
 
                             Security.UserContext uc = Security.UserContext.Current;

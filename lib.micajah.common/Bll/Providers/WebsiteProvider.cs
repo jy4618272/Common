@@ -85,7 +85,7 @@ namespace Micajah.Common.Bll.Providers
         internal static CommonDataSet.WebsiteRow GetWebsiteRowByUrl(params string[] urls)
         {
             CommonDataSet.WebsiteRow site = null;
-            Organization org = null;
+            Organization org = null;            
             CommonDataSet.CustomUrlRow customUrlRow = null;
             try
             {
@@ -106,7 +106,6 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     {
-
                         foreach (string url in urls)
                         {
                             string[] segments = url.Split('.');
@@ -114,7 +113,17 @@ namespace Micajah.Common.Bll.Providers
                             {
                                 string segment = segments[0].ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
                                 if (segment.Contains("-"))
+                                {
                                     org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
+
+                                    if (org == null)
+                                    {
+                                        string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                                        if (customUrlRow != null)
+                                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                                    }
+                                }
                                 else
                                 {
                                     org = OrganizationProvider.GetOrganizationByPseudoId(segment);

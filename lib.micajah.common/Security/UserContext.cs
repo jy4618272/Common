@@ -520,7 +520,7 @@ namespace Micajah.Common.Security
                 Instance inst = null;
                 Guid organizationId = Guid.Empty;
                 Guid instanceId = Guid.Empty;
-
+                bool isCorrectInstance = false;
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     FillSelectedOrganizationIdFromSession(ref organizationId);
@@ -531,6 +531,20 @@ namespace Micajah.Common.Security
                 {
                     organizationId = (Guid)base[SelectedOrganizationIdKey];
                     instanceId = (Guid)base[SelectedInstanceIdKey];
+                    
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    {
+                        if (SelectedOrganization != null && SelectedOrganization.Instances != null)
+                        {
+                            foreach (Instance instance in SelectedOrganization.Instances)
+                            {
+                                if (instanceId == instance.InstanceId)
+                                    isCorrectInstance = true;
+                            }
+                        }
+                        if (!isCorrectInstance)
+                            instanceId = Guid.Empty;
+                    }
                 }
 
                 if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
@@ -797,14 +811,22 @@ namespace Micajah.Common.Security
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, newInstance.Name));
 
             if (SelectedInstanceChanging != null)
+            {
+                if (string.IsNullOrEmpty(this.Email))
+                {
+                    OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(this.UserId, newInstance.OrganizationId);
+                    if (userRow != null)
+                        RefreshDetails(this, userRow);
+                }
                 SelectedInstanceChanging(this, new UserContextSelectedInstanceChangingEventArgs() { Instance = newInstance });
+            }
 
             base[ActionIdListKey] = actionIdList;
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = WebApplication.CreateApplicationAbsoluteUrl(startUrl);
-            SelectedInstanceId = Guid.Empty;
+            SelectedInstanceId = newInstance.InstanceId;
             base[TimeZoneIdKey] = null;
             base[TimeFormatKey] = null;
             base[SelectedInstanceIdKey] = newInstance.InstanceId;
@@ -870,7 +892,7 @@ namespace Micajah.Common.Security
             if (SelectedOrganizationChanging != null)
                 SelectedOrganizationChanging(this, new UserContextSelectedOrganizationChangingEventArgs() { Organization = newOrganization });
 
-            SelectedOrganizationId = Guid.Empty;
+            SelectedOrganizationId = newOrganization.OrganizationId;
             base[TimeZoneIdKey] = null;
             base[TimeFormatKey] = null;
             base[SelectedOrganizationIdKey] = newOrganization.OrganizationId;

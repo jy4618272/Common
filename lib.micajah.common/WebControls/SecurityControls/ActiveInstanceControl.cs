@@ -57,10 +57,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
         {
             UserContext ctx = UserContext.Current;
+            Instance inst = null;
             try
             {
-                ctx.SelectInstance(instanceId);
-
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     string url = string.Empty;
@@ -71,59 +70,39 @@ namespace Micajah.Common.WebControls.SecurityControls
                         if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
                             url = string.Format("http://{0}", url);
 
-                        //ValidateRedirectUrl(ref url, true);
-                        //if (string.IsNullOrEmpty(url))
-                        //    url = "~/";
-
                         errorDiv.Page.Response.Redirect(url, true);
-
-
-                        
-                        //url = new LoginProvider().GetLoginUrl(ctx.UserId, true, ctx.SelectedOrganization.OrganizationId, instanceId, redirectUrl, !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl);
-                        //if (!string.IsNullOrEmpty(url))
-                        //{
-                        //    if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                        //        url = string.Format("http://{0}", url);
-                        //    errorDiv.Page.Response.Redirect(url);
-                        //}
                     }
                     else
                     {
                         if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
                         {
-                            row = CustomUrlProvider.GetCustomUrlByOrganizationId(ctx.SelectedOrganization.OrganizationId);
-                            if (row != null)
-                                url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl.Split('.')[0], ctx.SelectedInstance.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                            else
-                                url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", ctx.SelectedOrganization.PseudoId, ctx.SelectedInstance.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
+                            inst = InstanceProvider.GetInstance(instanceId);
+                            if (inst != null)
+                            {
+                                row = CustomUrlProvider.GetCustomUrlByOrganizationId(ctx.SelectedOrganization.OrganizationId);
+                                if (row != null)
+                                    if (ctx.SelectedOrganization.Instances.Count > 1)
+                                        url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl.Split('.')[0], inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
+                                    else
+                                        url = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", row.PartialCustomUrl.Split('.')[0], FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
+                                else
+                                    if (ctx.SelectedOrganization.Instances.Count > 1)
+                                        url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", ctx.SelectedOrganization.PseudoId, inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
+                                    else
+                                        url = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", ctx.SelectedOrganization.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
 
-                            url = string.Format("{0}{1}", url, redirectUrl);
+                                url = string.Format("{0}{1}", url, redirectUrl);
 
-                            if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                                url = string.Format("http://{0}", url);
+                                if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
+                                    url = string.Format("http://{0}", url);
 
-                            //ActiveInstanceControl.ValidateRedirectUrl(ref url, true);
-                            //if (string.IsNullOrEmpty(url))
-                            //    url = "~/";
-
-                            errorDiv.Page.Response.Redirect(url, true);
-
-                            //row = CustomUrlProvider.GetCustomUrlByOrganizationId(ctx.SelectedOrganization.OrganizationId);
-                            //if (row != null)
-                            //    url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl.Split('.')[0], ctx.SelectedInstance.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                            //else
-                            //    url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", ctx.SelectedOrganization.PseudoId, ctx.SelectedInstance.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-
-                            //url = new LoginProvider().GetLoginUrl(ctx.UserId, true, ctx.SelectedOrganization.OrganizationId, instanceId, redirectUrl, url);
-                            //if (!string.IsNullOrEmpty(url))
-                            //{
-                            //    if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                            //        url = string.Format("http://{0}", url);
-                            //    errorDiv.Page.Response.Redirect(url);
-                            //}
+                                errorDiv.Page.Response.Redirect(url, true);
+                            }
                         }
                     }
                 }
+
+                ctx.SelectInstance(instanceId);
 
                 ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
                 if (!string.IsNullOrEmpty(redirectUrl))
@@ -132,6 +111,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 ShowError(ex.Message, errorDiv);
+            }
+            finally
+            {
+                if (inst != null) inst = null;
             }
         }
 
