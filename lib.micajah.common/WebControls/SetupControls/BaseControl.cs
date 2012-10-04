@@ -369,7 +369,7 @@ namespace Micajah.Common.WebControls.SetupControls
             }
         }
 
-        public static void TimeZoneListDataBind(ListControl timeZoneList, string selectedValue)
+        public static void TimeZoneListDataBind(ListControl timeZoneList, string selectedValue, bool required)
         {
             if (timeZoneList == null) return;
 
@@ -387,17 +387,20 @@ namespace Micajah.Common.WebControls.SetupControls
                     timeZoneList.Items.Add(new ListItem(timeZoneInfo.DisplayName, timeZoneInfo.Id));
             }
 
-            timeZoneList.Items.Insert(0, string.Empty);
+            if (!required)
+                timeZoneList.Items.Insert(0, string.Empty);
 
             ListItem item = timeZoneList.Items.FindByValue(selectedValue);
             if (item != null)
                 item.Selected = true;
         }
 
-        public static void TimeFormatsListDataBind(ListControl list, string selectedValue)
+        public static void TimeFormatsListDataBind(ListControl list, string selectedValue, bool required)
         {
             if (list == null) return;
 
+            if (!required)
+                list.Items.Add(new ListItem(string.Empty, string.Empty));
             list.Items.Add(new ListItem(Resources.InstanceProfileControl_TimeFormat_12Hr, "0"));
             list.Items.Add(new ListItem(Resources.InstanceProfileControl_TimeFormat_24Hr, "1"));
 

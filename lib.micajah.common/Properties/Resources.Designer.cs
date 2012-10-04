@@ -4790,6 +4790,24 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time Format.
+        /// </summary>
+        internal static string ProfileControl_EditForm_TimeFormatField_HeaderText {
+            get {
+                return ResourceManager.GetString("ProfileControl_EditForm_TimeFormatField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Zone.
+        /// </summary>
+        internal static string ProfileControl_EditForm_TimeZoneField_HeaderText {
+            get {
+                return ResourceManager.GetString("ProfileControl_EditForm_TimeZoneField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         internal static string ProfileControl_EditForm_TitleField_HeaderText {
@@ -6822,6 +6840,24 @@ namespace Micajah.Common.Properties {
         internal static string UsersControl_EditForm_StreetField_HeaderText {
             get {
                 return ResourceManager.GetString("UsersControl_EditForm_StreetField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Format.
+        /// </summary>
+        internal static string UsersControl_EditForm_TimeFormatField_HeaderText {
+            get {
+                return ResourceManager.GetString("UsersControl_EditForm_TimeFormatField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Zone.
+        /// </summary>
+        internal static string UsersControl_EditForm_TimeZoneField_HeaderText {
+            get {
+                return ResourceManager.GetString("UsersControl_EditForm_TimeZoneField_HeaderText", resourceCulture);
             }
         }
         

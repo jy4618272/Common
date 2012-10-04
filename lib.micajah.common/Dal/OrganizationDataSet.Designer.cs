@@ -1366,10 +1366,6 @@ namespace Micajah.Common.Dal {
                 this.columnDeleted.AllowDBNull = false;
                 this.columnDeleted.DefaultValue = ((bool)(false));
                 this.columnCreatedTime.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
-                this.columnTimeZoneId.AllowDBNull = false;
-                this.columnTimeZoneId.DefaultValue = ((string)(""));
-                this.columnTimeFormat.AllowDBNull = false;
-                this.columnTimeFormat.DefaultValue = ((int)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2824,6 +2820,10 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnDeleted;
             
+            private global::System.Data.DataColumn columnTimeZoneId;
+            
+            private global::System.Data.DataColumn columnTimeFormat;
+            
             private global::System.Data.DataColumn columnOrganizationId;
             
             private global::System.Data.DataColumn columnOrganizationAdministrator;
@@ -3026,6 +3026,22 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TimeZoneIdColumn {
+                get {
+                    return this.columnTimeZoneId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TimeFormatColumn {
+                get {
+                    return this.columnTimeFormat;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn OrganizationIdColumn {
                 get {
                     return this.columnOrganizationId;
@@ -3136,6 +3152,8 @@ namespace Micajah.Common.Dal {
                         string Country, 
                         System.DateTime LastLoginDate, 
                         bool Deleted, 
+                        string TimeZoneId, 
+                        int TimeFormat, 
                         string OrganizationId, 
                         bool OrganizationAdministrator, 
                         bool Active, 
@@ -3163,6 +3181,8 @@ namespace Micajah.Common.Dal {
                         Country,
                         LastLoginDate,
                         Deleted,
+                        TimeZoneId,
+                        TimeFormat,
                         OrganizationId,
                         OrganizationAdministrator,
                         Active,
@@ -3196,6 +3216,8 @@ namespace Micajah.Common.Dal {
                         string Country, 
                         System.DateTime LastLoginDate, 
                         bool Deleted, 
+                        string TimeZoneId, 
+                        int TimeFormat, 
                         string OrganizationId, 
                         bool OrganizationAdministrator, 
                         bool Active, 
@@ -3221,6 +3243,8 @@ namespace Micajah.Common.Dal {
                         Country,
                         LastLoginDate,
                         Deleted,
+                        TimeZoneId,
+                        TimeFormat,
                         OrganizationId,
                         OrganizationAdministrator,
                         Active,
@@ -3275,6 +3299,8 @@ namespace Micajah.Common.Dal {
                 this.columnCountry = base.Columns["Country"];
                 this.columnLastLoginDate = base.Columns["LastLoginDate"];
                 this.columnDeleted = base.Columns["Deleted"];
+                this.columnTimeZoneId = base.Columns["TimeZoneId"];
+                this.columnTimeFormat = base.Columns["TimeFormat"];
                 this.columnOrganizationId = base.Columns["OrganizationId"];
                 this.columnOrganizationAdministrator = base.Columns["OrganizationAdministrator"];
                 this.columnActive = base.Columns["Active"];
@@ -3323,6 +3349,10 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnLastLoginDate);
                 this.columnDeleted = new global::System.Data.DataColumn("Deleted", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDeleted);
+                this.columnTimeZoneId = new global::System.Data.DataColumn("TimeZoneId", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTimeZoneId);
+                this.columnTimeFormat = new global::System.Data.DataColumn("TimeFormat", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTimeFormat);
                 this.columnOrganizationId = new global::System.Data.DataColumn("OrganizationId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnOrganizationId);
                 this.columnOrganizationAdministrator = new global::System.Data.DataColumn("OrganizationAdministrator", typeof(bool), null, global::System.Data.MappingType.Element);
@@ -8187,7 +8217,12 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string TimeZoneId {
                 get {
-                    return ((string)(this[this.tableInstance.TimeZoneIdColumn]));
+                    try {
+                        return ((string)(this[this.tableInstance.TimeZoneIdColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TimeZoneId\' in table \'Instance\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableInstance.TimeZoneIdColumn] = value;
@@ -8198,7 +8233,12 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public int TimeFormat {
                 get {
-                    return ((int)(this[this.tableInstance.TimeFormatColumn]));
+                    try {
+                        return ((int)(this[this.tableInstance.TimeFormatColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TimeFormat\' in table \'Instance\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableInstance.TimeFormatColumn] = value;
@@ -8227,6 +8267,30 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCreatedTimeNull() {
                 this[this.tableInstance.CreatedTimeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTimeZoneIdNull() {
+                return this.IsNull(this.tableInstance.TimeZoneIdColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTimeZoneIdNull() {
+                this[this.tableInstance.TimeZoneIdColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTimeFormatNull() {
+                return this.IsNull(this.tableInstance.TimeFormatColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTimeFormatNull() {
+                this[this.tableInstance.TimeFormatColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8934,6 +8998,38 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TimeZoneId {
+                get {
+                    try {
+                        return ((string)(this[this.tableUser.TimeZoneIdColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TimeZoneId\' in table \'User\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableUser.TimeZoneIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int TimeFormat {
+                get {
+                    try {
+                        return ((int)(this[this.tableUser.TimeFormatColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TimeFormat\' in table \'User\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableUser.TimeFormatColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string OrganizationId {
                 get {
                     try {
@@ -9054,6 +9150,30 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetLastLoginDateNull() {
                 this[this.tableUser.LastLoginDateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTimeZoneIdNull() {
+                return this.IsNull(this.tableUser.TimeZoneIdColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTimeZoneIdNull() {
+                this[this.tableUser.TimeZoneIdColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTimeFormatNull() {
+                return this.IsNull(this.tableUser.TimeFormatColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTimeFormatNull() {
+                this[this.tableUser.TimeFormatColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

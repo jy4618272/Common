@@ -1,7 +1,7 @@
 <%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.ProfileControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <mits:MagicForm ID="EditForm" runat="server" DataSourceID="EntityDataSource" DataKeyNames="UserId"
-    Width="550px">
+    Width="550px" OnDataBound="EditForm_DataBound">
     <fields>
         <mits:TextBoxField DataField="Email" MaxLength="255" Columns="65" ControlStyle-Width="350px" HeaderStyle-Width="120px" Required="True"
             ValidationType="RegularExpression" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
@@ -21,6 +21,16 @@
         <mits:ComboBoxField DataField="Country" DataSourceId="CountriesDataSource" 
             DataTextField="Name" DataValueField="Name" ControlStyle-Width="250px" AllowCustomText="true" MarkFirstMatch="true"
             OnControlInit="CountryList_ControlInit" />
+        <mits:TemplateField PaddingLeft="false">
+            <ItemTemplate>
+                <asp:DropDownList ID="TimeZoneList" runat="server" Width="372px" />
+            </ItemTemplate>
+        </mits:TemplateField>
+        <mits:TemplateField PaddingLeft="false">
+            <ItemTemplate>
+                <asp:DropDownList ID="TimeFormatList" runat="server" Width="100px"  />
+            </ItemTemplate>
+        </mits:TemplateField>
         <asp:TemplateField>
             <itemtemplate>
                 <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
@@ -30,7 +40,7 @@
 </mits:MagicForm>
 <asp:Label ID="UserIdLabel" runat="server" Visible="false" />
 <asp:ObjectDataSource ID="EntityDataSource" runat="server" SelectMethod="GetUserRow"
-    TypeName="Micajah.Common.Bll.Providers.UserProvider" UpdateMethod="UpdateCurrentUser">
+    TypeName="Micajah.Common.Bll.Providers.UserProvider" UpdateMethod="UpdateCurrentUser" OnUpdating="EntityDataSource_Updating">
     <SelectParameters>
         <asp:ControlParameter Name="userId" Type="Object" ControlID="UserIdLabel" PropertyName="Text" />
     </SelectParameters>
@@ -51,6 +61,8 @@
         <asp:Parameter Name="state" Type="String" ConvertEmptyStringToNull="false" />
         <asp:Parameter Name="postalCode" Type="String" ConvertEmptyStringToNull="false" />
         <asp:Parameter Name="country" Type="String" ConvertEmptyStringToNull="false" />
+        <asp:Parameter Name="timeZoneId" Type="String" />
+        <asp:Parameter Name="timeFormat" Type="Int32" />
     </UpdateParameters>
 </asp:ObjectDataSource>
 <asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountriesView"

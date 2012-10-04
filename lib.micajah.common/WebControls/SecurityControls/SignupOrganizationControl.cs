@@ -363,7 +363,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 Step2Panel.Visible = false;
                 Step3Panel.Visible = false;
 
-                BaseControl.TimeZoneListDataBind(TimeZoneList, null);
+                BaseControl.TimeZoneListDataBind(TimeZoneList, null, false);
                 this.FillCurrencyList();
 
                 OrganizationName1.Focus();

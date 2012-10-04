@@ -173,6 +173,7 @@ namespace Micajah.Common.Bll.Providers
                 UserProvider.AddUserToOrganization(adminEmail, firstName, lastName, middleName
                       , phone, mobilePhone, null, title, null
                       , street, street2, city, state, postalCode, country
+                      , null, null
                       , string.Empty, false
                       , organizationId, true
                       , false, false

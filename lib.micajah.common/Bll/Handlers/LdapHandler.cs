@@ -232,7 +232,7 @@ namespace Micajah.Common.Bll.Handlers
                     ldapProcess.MessageActivatedLogins = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationLdapSettingsControl_TestActivatedLogins_Text, 0);
                     ldapProcess.MessageCreatedLogins = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationLdapSettingsControl_TestCreatedLogins_Text, 0);
                 }
-                
+
                 ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationStarted) });
                 DateTime startDate = DateTime.UtcNow;
 
@@ -522,7 +522,7 @@ namespace Micajah.Common.Bll.Handlers
                                     {
                                         if (altEmail.Contains("@"))
                                         {
-                                            email = (altEmail.ToUpper(CultureInfo.InvariantCulture).Contains("SMTP")) ? altEmail.Remove(0, 5).ToString() : altEmail;                                            
+                                            email = (altEmail.ToUpper(CultureInfo.InvariantCulture).Contains("SMTP")) ? altEmail.Remove(0, 5).ToString() : altEmail;
                                             if (string.Compare(ldapUser.EmailAddress, email, StringComparison.InvariantCultureIgnoreCase) != 0)
                                             {
                                                 altEmails.Add(email);
@@ -694,7 +694,7 @@ namespace Micajah.Common.Bll.Handlers
                                         provider = new LoginProvider();
 
                                         if (!provider.LoginNameExists(ldapUser.EmailAddress))
-                                            UserProvider.UpdateUser(userRow.UserId, ldapUser.EmailAddress, null, null, null, null, null, null, null, null, null, null, null, null, null, null, groupId, organizationId, false);
+                                            UserProvider.UpdateUser(userRow.UserId, ldapUser.EmailAddress, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, groupId, organizationId, false);
 
                                         if (provider != null) provider = null;
                                     }

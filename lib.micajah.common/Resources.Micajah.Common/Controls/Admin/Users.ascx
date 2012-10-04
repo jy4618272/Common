@@ -11,7 +11,7 @@
     //]]>
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-    <ContentTemplate>
+    <contenttemplate>
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="UserId" DataSourceID="EntityListDataSource"
             Width="700px" OnRowDataBound="List_RowDataBound" OnRowDeleting="List_RowDeleting">
             <captioncontrols>
@@ -60,6 +60,16 @@
                 <mits:ComboBoxField DataField="Country" DataSourceId="CountriesDataSource" 
                     DataTextField="Name" DataValueField="Name" ControlStyle-Width="250px" AllowCustomText="true" MarkFirstMatch="true"
                     OnControlInit="CountryList_ControlInit" Visible="false" />
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <asp:DropDownList ID="TimeZoneList" runat="server" Width="372px" />
+                    </ItemTemplate>
+                </mits:TemplateField>
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <asp:DropDownList ID="TimeFormatList" runat="server" Width="100px"  />
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TextBoxField DataField="SecondaryEmails" MaxLength="255" Columns="65" Rows="3" TextMode="MultiLine" ControlStyle-Width="350px" Visible="false" />
                 <mits:CheckBoxListField DataField="GroupId" DataSourceId="GroupDataSource"
                     DataTextField="Name" DataValueField="GroupId" Required="True" Visible="false" />
@@ -115,7 +125,7 @@
         </asp:ObjectDataSource>
         <asp:ObjectDataSource ID="EntityDataSource" runat="server" SelectMethod="GetUserRowWithSecondaryEmails"
             TypeName="Micajah.Common.Bll.Providers.UserProvider" UpdateMethod="UpdateUser"
-            InsertMethod="AddUserToOrganization">
+            InsertMethod="AddUserToOrganization" OnInserting="EntityDataSource_Inserting" OnUpdating="EntityDataSource_Inserting">
             <SelectParameters>
                 <asp:ControlParameter Name="userId" Type="Object" ControlID="List" PropertyName="SelectedValue" />
             </SelectParameters>
@@ -136,6 +146,8 @@
                 <asp:Parameter Name="state" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="postalCode" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="country" Type="String" ConvertEmptyStringToNull="false" />
+                <asp:Parameter Name="timeZoneId" Type="String" />
+                <asp:Parameter Name="timeFormat" Type="Int32" />
                 <asp:Parameter Name="secondaryEmails" Type="String" ConvertEmptyStringToNull="false" />
             </UpdateParameters>
             <InsertParameters>
@@ -154,6 +166,8 @@
                 <asp:Parameter Name="state" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="postalCode" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="country" Type="String" ConvertEmptyStringToNull="false" />
+                <asp:Parameter Name="timeZoneId" Type="String" />
+                <asp:Parameter Name="timeFormat" Type="Int32" />
                 <asp:Parameter Name="groupId" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="secondaryEmails" Type="String" ConvertEmptyStringToNull="false" />
             </InsertParameters>
@@ -210,5 +224,5 @@
                 <asp:Parameter Name="organizationId" Type="Object" />
             </UpdateParameters>
         </asp:ObjectDataSource>
-    </ContentTemplate>
+    </contenttemplate>
 </asp:UpdatePanel>

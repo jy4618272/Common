@@ -727,7 +727,7 @@ BEGIN
 
 	SELECT TOP 1 u.UserId, u.Email, u.FirstName, u.LastName, u.MiddleName
 		, u.Phone, u.MobilePhone, u.Fax, u.Title, u.Department, u.Street, u.Street2, u.City, u.[State], u.PostalCode, u.Country
-		, u.LastLoginDate, u.Deleted, uo.OrganizationAdministrator, uo.Active
+		, u.LastLoginDate, u.Deleted, u.TimeZoneId, u.TimeFormat, uo.OrganizationAdministrator, uo.Active
 	FROM dbo.Mc_User AS u
 	INNER JOIN dbo.Mc_OrganizationsUsers AS uo
 		ON (u.UserId <> uo.UserId) AND (u.Deleted = 0) AND (uo.OrganizationId = @OrganizationId) AND (uo.OrganizationAdministrator = 1);
@@ -1455,14 +1455,15 @@ AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	SELECT u.UserId, u.Email, u.FirstName, u.LastName, u.MiddleName
+	SELECT TOP 1 u.UserId, u.Email, u.FirstName, u.LastName, u.MiddleName
 		, u.Phone, u.MobilePhone, u.Fax, u.Title, u.Department, u.Street, u.Street2, u.City, u.[State], u.PostalCode, u.Country
-		, u.LastLoginDate, u.Deleted, uo.OrganizationId, uo.OrganizationAdministrator, uo.Active
+		, u.LastLoginDate, u.Deleted, u.TimeZoneId, u.TimeFormat, uo.OrganizationId, uo.OrganizationAdministrator, uo.Active
 	FROM dbo.Mc_User AS u
 	LEFT JOIN dbo.Mc_OrganizationsUsers AS uo
 		ON (u.UserId = uo.UserId)
 	WHERE (u.UserId = @UserId) AND (@OrganizationId IS NULL OR uo.OrganizationId = @OrganizationId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1482,12 +1483,13 @@ BEGIN
 	
 	SELECT u.UserId, u.Email, u.FirstName, u.LastName, u.MiddleName
 		, u.Phone, u.MobilePhone, u.Fax, u.Title, u.Department, u.Street, u.Street2, u.City, u.[State], u.PostalCode, u.Country
-		, u.LastLoginDate, u.Deleted, uo.OrganizationId, uo.OrganizationAdministrator, uo.Active
+		, u.LastLoginDate, u.Deleted, u.TimeZoneId, u.TimeFormat, uo.OrganizationId, uo.OrganizationAdministrator, uo.Active
 	FROM dbo.Mc_User AS u
 	LEFT JOIN dbo.Mc_OrganizationsUsers AS uo
 		ON (u.UserId = uo.UserId)
 	WHERE (u.Email = @Email) AND (@OrganizationId IS NULL OR uo.OrganizationId = @OrganizationId);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -1506,7 +1508,7 @@ BEGIN
 
 	SELECT u.UserId, u.Email, u.FirstName, u.LastName, u.MiddleName
 		, u.Phone, u.MobilePhone, u.Fax, u.Title, u.Department, u.Street, u.Street2, u.City, u.[State], u.PostalCode, u.Country
-		, u.LastLoginDate, u.Deleted, uo.OrganizationId, uo.OrganizationAdministrator, uo.Active
+		, u.LastLoginDate, u.Deleted, u.TimeZoneId, u.TimeFormat, uo.OrganizationId, uo.OrganizationAdministrator, uo.Active
 	FROM dbo.Mc_User AS u
 	INNER JOIN dbo.Mc_OrganizationsUsers AS uo
 		ON (u.UserId = uo.UserId) AND (u.Deleted = 0) AND (uo.OrganizationId = @OrganizationId);
@@ -1536,7 +1538,7 @@ BEGIN
 	SELECT DISTINCT 
 		u.UserId, u.Email, u.FirstName, u.LastName, u.MiddleName
 		, u.Phone, u.MobilePhone, u.Fax, u.Title, u.Department, u.Street, u.Street2, u.City, u.[State], u.PostalCode, u.Country
-		, u.LastLoginDate, u.Deleted, uo.OrganizationId, uo.OrganizationAdministrator
+		, u.LastLoginDate, u.Deleted, u.TimeZoneId, u.TimeFormat, uo.OrganizationId, uo.OrganizationAdministrator
 		, CASE WHEN ((@InstanceId IS NOT NULL) AND (uo.Active = 1) AND (ISNULL(ui.Active, 1) = 1))
 			OR ((@InstanceId IS NULL) AND (uo.Active = 1)) THEN 1 ELSE 0 END AS Active
 	FROM dbo.Mc_User AS u
@@ -1581,6 +1583,7 @@ BEGIN
 			WHERE (',' + @NotInRoles + ',' LIKE '%,' + CAST(gir2.RoleId as varchar(50)) + ',%'))
 		);
 END
+
 GO
 
 SET ANSI_NULLS ON
@@ -2244,17 +2247,19 @@ CREATE PROCEDURE [dbo].[Mc_InsertUser]
 	@PostalCode nvarchar(20),
 	@Country nvarchar(255),
 	@LastLoginDate datetime,
-	@Deleted bit
+	@Deleted bit,
+	@TimeZoneId nvarchar(100),
+	@TimeFormat int
 )
 AS
 BEGIN
 	SET NOCOUNT OFF;
 
 	IF NOT EXISTS(SELECT 0 FROM dbo.Mc_User WHERE UserId = @UserId)
-		INSERT INTO dbo.Mc_User (UserId, Email, FirstName, LastName, MiddleName, Phone, MobilePhone, Fax, Title, Department, Street, Street2, City, [State], PostalCode, Country, LastLoginDate, Deleted) 
-		VALUES (@UserId, @Email, @FirstName, @LastName, @MiddleName, @Phone, @MobilePhone, @Fax, @Title, @Department, @Street, @Street2, @City, @State, @PostalCode, @Country, @LastLoginDate, @Deleted);
+		INSERT INTO dbo.Mc_User (UserId, Email, FirstName, LastName, MiddleName, Phone, MobilePhone, Fax, Title, Department, Street, Street2, City, [State], PostalCode, Country, LastLoginDate, Deleted, TimeZoneId, TimeFormat) 
+		VALUES (@UserId, @Email, @FirstName, @LastName, @MiddleName, @Phone, @MobilePhone, @Fax, @Title, @Department, @Street, @Street2, @City, @State, @PostalCode, @Country, @LastLoginDate, @Deleted, @TimeZoneId, @TimeFormat);
 	
-	SELECT UserId, Email, FirstName, LastName, MiddleName, Phone, MobilePhone, Fax, Title, Department, Street, Street2, City, [State], PostalCode, Country, LastLoginDate, Deleted 
+	SELECT UserId, Email, FirstName, LastName, MiddleName, Phone, MobilePhone, Fax, Title, Department, Street, Street2, City, [State], PostalCode, Country, LastLoginDate, Deleted, TimeZoneId, TimeFormat
 	FROM dbo.Mc_User 
 	WHERE (UserId = @UserId);
 END
@@ -3010,7 +3015,9 @@ CREATE PROCEDURE [dbo].[Mc_UpdateUser]
 	@PostalCode nvarchar(20),
 	@Country nvarchar(255),
 	@LastLoginDate datetime,
-	@Deleted bit
+	@Deleted bit,
+	@TimeZoneId nvarchar(100),
+	@TimeFormat int
 )
 AS
 BEGIN
@@ -3021,10 +3028,11 @@ BEGIN
 		, Phone = ISNULL(@Phone, Phone), MobilePhone = ISNULL(@MobilePhone, MobilePhone), Fax = ISNULL(@Fax, Fax), Title = ISNULL(@Title, Title), Department = ISNULL(@Department, Department)
 		, Street = ISNULL(@Street, Street), Street2 = ISNULL(@Street2, Street2), City = ISNULL(@City, City), [State] = ISNULL(@State, [State])
 		, PostalCode = ISNULL(@PostalCode, PostalCode), Country = ISNULL(@Country, Country)
-		, LastLoginDate = ISNULL(@LastLoginDate, LastLoginDate), Deleted = ISNULL(@Deleted, Deleted) 
+		, LastLoginDate = ISNULL(@LastLoginDate, LastLoginDate), Deleted = ISNULL(@Deleted, Deleted)
+		, TimeZoneId = @TimeZoneId, TimeFormat = @TimeFormat
 	WHERE (UserId = @UserId);
 	
-	SELECT UserId, Email, FirstName, LastName, MiddleName, Phone, MobilePhone, Fax, Title, Department, Street, Street2, City, [State], PostalCode, Country, LastLoginDate, Deleted 
+	SELECT UserId, Email, FirstName, LastName, MiddleName, Phone, MobilePhone, Fax, Title, Department, Street, Street2, City, [State], PostalCode, Country, LastLoginDate, Deleted, TimeZoneId, TimeFormat
 	FROM dbo.Mc_User 
 	WHERE (UserId = @UserId);
 END

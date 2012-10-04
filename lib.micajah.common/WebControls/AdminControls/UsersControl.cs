@@ -34,6 +34,8 @@ namespace Micajah.Common.WebControls.AdminControls
         protected ObjectDataSource GroupDataSource;
 
         private ComboBox m_CountryList;
+        private DropDownList m_TimeZoneList;
+        private DropDownList m_TimeFormatList;
         private UserContext m_UserContext;
 
         #endregion
@@ -46,6 +48,24 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 if (m_CountryList == null) m_CountryList = EditForm.Rows[14].Cells[1].Controls[0] as ComboBox;
                 return m_CountryList;
+            }
+        }
+
+        private DropDownList TimeZoneList
+        {
+            get
+            {
+                if (m_TimeZoneList == null) m_TimeZoneList = EditForm.FindControl("TimeZoneList") as DropDownList;
+                return m_TimeZoneList;
+            }
+        }
+
+        private DropDownList TimeFormatList
+        {
+            get
+            {
+                if (m_TimeFormatList == null) m_TimeFormatList = EditForm.FindControl("TimeFormatList") as DropDownList;
+                return m_TimeFormatList;
             }
         }
 
@@ -93,6 +113,8 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[14].Visible = true;
             EditForm.Fields[15].Visible = visible;
             EditForm.Fields[16].Visible = visible;
+            EditForm.Fields[17].Visible = visible;
+            EditForm.Fields[18].Visible = visible;
         }
 
         private void AddBreadCrumbs(Micajah.Common.Bll.Action action, object sender)
@@ -169,6 +191,19 @@ namespace Micajah.Common.WebControls.AdminControls
             this.BackToDetailMenu();
         }
 
+        protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
+        {
+            if (e == null) return;
+
+            e.InputParameters["timeZoneId"] = (string.IsNullOrEmpty(TimeZoneList.SelectedValue) ? null : TimeZoneList.SelectedValue);
+
+            int value = 0;
+            if (int.TryParse(TimeFormatList.SelectedValue, out value))
+                e.InputParameters["timeFormat"] = value;
+            else
+                e.InputParameters["timeFormat"] = null;
+        }
+
         protected void EditForm_ItemInserting(object sender, DetailsViewInsertEventArgs e)
         {
             if (e == null) return;
@@ -235,10 +270,25 @@ namespace Micajah.Common.WebControls.AdminControls
             if (EditForm.CurrentMode == DetailsViewMode.Insert)
             {
                 if (!UserChecked)
-                {
                     EditForm.Rows[14].Visible = false;
-                }
             }
+
+            string timeZoneId = null;
+            string timeFormat = null;
+
+            if (EditForm.DataItem != null)
+            {
+                OrganizationDataSet.UserRow row = (OrganizationDataSet.UserRow)EditForm.DataItem;
+
+                if (!row.IsTimeZoneIdNull())
+                    timeZoneId = row.TimeZoneId;
+
+                if (!row.IsTimeFormatNull())
+                    timeFormat = row.TimeFormat.ToString(CultureInfo.InvariantCulture);
+            }
+
+            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
+            BaseControl.TimeFormatsListDataBind(TimeFormatList, timeFormat, false);
         }
 
         protected void EditForm_ItemUpdated_Generic(object sender, DetailsViewUpdatedEventArgs e)
@@ -290,7 +340,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 UserDetailMenu.Visible = false;
                 EditForm.Visible = true;
                 EditForm_ShowDetails(true);
-                EditForm.Fields[16].Visible = false;
+                EditForm.Fields[18].Visible = false;
                 EditForm.ChangeMode(DetailsViewMode.Edit);
                 EditForm.DataBind();
                 this.AddBreadCrumbs(action, EditForm);
@@ -460,6 +510,9 @@ namespace Micajah.Common.WebControls.AdminControls
             base.LoadResources();
 
             List.Columns[2].HeaderText = Resources.UsersControl_List_LastLoginDateColumn_HeaderText;
+
+            EditForm.Fields[15].HeaderText = Resources.UsersControl_EditForm_TimeZoneField_HeaderText;
+            EditForm.Fields[16].HeaderText = Resources.UsersControl_EditForm_TimeFormatField_HeaderText;
 
             PasswordForm.ObjectName = Resources.UsersControl_PwdForm_ObjectName;
             LoadResources(EditUserGroupsForm, this.GetType().BaseType.Name);
