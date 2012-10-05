@@ -134,7 +134,7 @@ namespace Micajah.Common.Bll.Providers
                    , ((title == null) ? string.Empty : title), ((department == null) ? string.Empty : department)
                    , ((street == null) ? string.Empty : street), ((street2 == null) ? string.Empty : street2), ((city == null) ? string.Empty : city)
                    , ((state == null) ? string.Empty : state), ((postalCode == null) ? string.Empty : postalCode), ((country == null) ? string.Empty : country)
-                   , null, false, ((timeZoneId == null) ? string.Empty : timeZoneId), timeFormat);
+                   , null, false, (string.IsNullOrEmpty(timeZoneId) ? null : timeZoneId), timeFormat);
             }
             else
             {
