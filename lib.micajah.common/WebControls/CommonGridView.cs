@@ -596,7 +596,7 @@ namespace Micajah.Common.WebControls
         [Category("Behavior")]
         [Description("The selected value of status list.")]
         [DefaultValue(CommonGridViewStatus.Active)]
-        public CommonGridViewStatus StatusListSelectedValue
+        public CommonGridViewStatus SelectedStatus
         {
             get
             {
@@ -662,6 +662,11 @@ namespace Micajah.Common.WebControls
         /// Occurs when a row's Edit button is clicked, but before the control enters edit mode.
         /// </summary>
         public new event GridViewEditEventHandler RowEditing;
+
+        /// <summary>
+        /// Occurs when the selection from the status list control changes between posts to the server.
+        /// </summary>
+        public event EventHandler SelectedStatusChanged;
 
         #endregion
 
@@ -1356,6 +1361,8 @@ namespace Micajah.Common.WebControls
             m_StatusList.ID = "StatusList";
             m_StatusList.CausesValidation = false;
             m_StatusList.AutoPostBack = true;
+            m_StatusList.SelectedIndexChanged += new EventHandler(StatusList_SelectedIndexChanged);
+
             if (((this.StatusListValues & CommonGridViewStatus.Active) == CommonGridViewStatus.Active) || (this.StatusListValues == CommonGridViewStatus.All))
                 m_StatusList.Items.Add(new ListItem(Resources.CommonGridView_StatusList_ActiveItemText, CommonGridViewStatus.Active.ToString()));
             if (((this.StatusListValues & CommonGridViewStatus.Archived) == CommonGridViewStatus.Archived) || (this.StatusListValues == CommonGridViewStatus.All))
@@ -1926,6 +1933,12 @@ namespace Micajah.Common.WebControls
         private void SearchButton_Click(object sender, EventArgs e)
         {
             this.OnAction(CommandActions.Search, -1);
+        }
+
+        private void StatusList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.SelectedStatusChanged != null)
+                this.SelectedStatusChanged(this, EventArgs.Empty);
         }
 
         private void PreviousButton_Click(object sender, EventArgs e)
