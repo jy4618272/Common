@@ -678,6 +678,11 @@ namespace Micajah.Common.Bll.Providers
             return string.Concat(ResourceProvider.ActiveOrganizationPageVirtualPath, "?returnurl=", HttpUtility.UrlEncodeUnicode(returnUrl), (anotherOrganizationIsRequired ? "&ao=1" : string.Empty));
         }
 
+        public static string GetActiveInstancePageUrl()
+        {
+            return GetActiveInstancePageUrl(null, false);
+        }
+
         public static string GetResourceUrl(Guid resourceId)
         {
             return GetResourceUrl(resourceId, false);

@@ -83,39 +83,41 @@ namespace Micajah.Common.WebControls.SecurityControls
         internal static void SelectOrganization(Guid organizationId, string returnUrl, HtmlGenericControl errorDiv)
         {
             UserContext ctx = UserContext.Current;
+            Organization org = null;
             try
             {
-                ctx.SelectOrganization(organizationId);
                 string redirectUrl = returnUrl;
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
-                    CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
-                    if (row != null)
+                    org = OrganizationProvider.GetOrganization(organizationId);
+                    if (org != null)
                     {
-                        redirectUrl = new LoginProvider().GetLoginUrl(ctx.UserId, true, organizationId, Guid.Empty, returnUrl, !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl);
-                        if (!string.IsNullOrEmpty(redirectUrl))
+                        CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
+                        if (row != null)
                         {
+                            redirectUrl = string.Format("{0}{1}", !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl, returnUrl);
                             if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
                                 redirectUrl = string.Format("http://{0}", redirectUrl);
+
                             errorDiv.Page.Response.Redirect(redirectUrl, true);
                         }
-                    }
-                    else
-                    {
-                        if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
+                        else
                         {
-                            redirectUrl = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", ctx.SelectedOrganization.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                            redirectUrl = new LoginProvider().GetLoginUrl(ctx.UserId, true, organizationId, Guid.Empty, returnUrl, redirectUrl);
-                            if (!string.IsNullOrEmpty(redirectUrl))
+                            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
                             {
+                                redirectUrl = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", org.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
+                                redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
                                 if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
                                     redirectUrl = string.Format("http://{0}", redirectUrl);
+
                                 errorDiv.Page.Response.Redirect(redirectUrl, true);
                             }
                         }
                     }
                 }
+
+                ctx.SelectOrganization(organizationId);
 
                 ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
                 if (!string.IsNullOrEmpty(redirectUrl))
@@ -124,6 +126,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 ActiveInstanceControl.ShowError(ex.Message, errorDiv);
+            }
+            finally
+            {
+                if (org != null) org = null;
             }
         }
 

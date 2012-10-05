@@ -85,42 +85,70 @@ namespace Micajah.Common.Bll.Providers
         internal static CommonDataSet.WebsiteRow GetWebsiteRowByUrl(params string[] urls)
         {
             CommonDataSet.WebsiteRow site = null;
-            foreach (CommonDataSet.WebsiteRow row in WebApplication.CommonDataSet.Website)
+            Organization org = null;            
+            CommonDataSet.CustomUrlRow customUrlRow = null;
+            try
             {
-                foreach (string url in urls)
+                foreach (CommonDataSet.WebsiteRow row in WebApplication.CommonDataSet.Website)
                 {
-                    if (row.Url.Contains(url))
-                    {
-                        site = row;
-                        break;
-                    }
-                }
-                if (site != null) break;
-            }
-
-            if (site == null)
-            {
-                if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                {
-                    Organization org = null;
                     foreach (string url in urls)
                     {
-                        string[] segments = url.Split('.');
-                        if (segments.Length > 1)
+                        if (row.Url.Contains(url))
                         {
-                            string segment = segments[0].ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
-                            if (segment.Contains("-"))
-                                org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
-                            else
-                                org = OrganizationProvider.GetOrganizationByPseudoId(segment);
+                            site = row;
+                            break;
+                        }
+                    }
+                    if (site != null) break;
+                }
 
-                            if (org != null)
-                                site = WebsiteProvider.GetWebsiteRowByOrganizationId(org.OrganizationId);
+                if (site == null)
+                {
+                    if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    {
+                        foreach (string url in urls)
+                        {
+                            string[] segments = url.Split('.');
+                            if (segments.Length > 1)
+                            {
+                                string segment = segments[0].ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
+                                if (segment.Contains("-"))
+                                {
+                                    org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
 
-                            if (site != null) break;
+                                    if (org == null)
+                                    {
+                                        string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                                        if (customUrlRow != null)
+                                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                                    }
+                                }
+                                else
+                                {
+                                    org = OrganizationProvider.GetOrganizationByPseudoId(segment);
+
+                                    if (org == null)
+                                    {
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                        if (customUrlRow != null)
+                                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                                    }
+                                }
+
+                                if (org != null)
+                                    site = WebsiteProvider.GetWebsiteRowByOrganizationId(org.OrganizationId);
+
+                                if (site != null) break;
+                            }
                         }
                     }
                 }
+            }
+            finally
+            {
+                if (customUrlRow != null) customUrlRow = null;
+                if (org != null) org = null;
             }
 
             return site;

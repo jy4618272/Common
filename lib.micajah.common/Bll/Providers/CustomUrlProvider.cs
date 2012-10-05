@@ -335,6 +335,105 @@ namespace Micajah.Common.Bll.Providers
                 return false;
         }
 
+
+        /// <summary>
+        /// Initializes the Organization or Instance from custom URL.
+        /// </summary>
+        public static void InitializeOrganizationOrInstanceFromCustomUrl()
+        {
+            string url = System.Web.HttpContext.Current.Request.Url.Host;
+            Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
+            string[] segments = url.Split('.');
+            string defaultUrl = FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl;
+            bool found = false;
+
+            foreach (string rootAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses)
+            {
+                if (url.IndexOf(rootAddresse, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                if (segments.Length > 1)
+                {
+                    Organization org = null;
+                    Instance instance = null;
+                    string instPseudo = string.Empty;
+                    string segment = segments[0];
+                    found = false;
+
+                    foreach (string reservedAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
+                    {
+                        if (string.Compare(segment, reservedAddresse, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                        {
+                            string[] pseudos = segment.Split('-');
+                            org = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
+                            instPseudo = pseudos[1];
+                            if (org == null)
+                            {
+                                string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                CommonDataSet.CustomUrlRow customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                                if (customUrlRow != null)
+                                    org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+
+                                if (customUrlRow != null) customUrlRow = null;
+                            }
+                        }
+                        else
+                            org = OrganizationProvider.GetOrganizationByPseudoId(segment);
+
+                        if (org != null)
+                        {
+                            Security.UserContext.SelectedOrganizationId = org.OrganizationId;
+
+                            if (!string.IsNullOrEmpty(instPseudo))
+                            {
+                                instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
+                                if (instance != null)
+                                    Security.UserContext.SelectedInstanceId = instance.InstanceId;                                    
+                            }
+
+                            if (org.Instances.Count == 1)
+                            {
+                                instance = org.Instances[0];
+                                Security.UserContext.SelectedInstanceId = instance.InstanceId;   
+                            }
+
+                            Security.UserContext uc = Security.UserContext.Current;
+                            
+                            if (uc != null)
+                            {
+                                uc.SelectOrganization(org.OrganizationId);
+                                if (instance != null)
+                                    uc.SelectInstance(instance.InstanceId);
+                            }
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(defaultUrl))
+                            {
+                                if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
+                                    System.Web.HttpContext.Current.Response.Redirect(System.Web.HttpContext.Current.Request.Url.ToString().ToLower(CultureInfo.CurrentCulture).Replace(segment.ToLower(), defaultUrl.ToLower()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
     }
 }
