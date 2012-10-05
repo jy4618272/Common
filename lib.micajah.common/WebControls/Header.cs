@@ -392,7 +392,11 @@ namespace Micajah.Common.WebControls
             {
                 foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks)
                 {
-                    if ((!item.Visible) || item.AccessDenied()) continue;
+                    bool isConfigActionInModerTheme = ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) && (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId));
+                    bool accessDenied = ((!item.Visible) || item.AccessDenied());
+
+                    if ((!isConfigActionInModerTheme) && accessDenied)
+                        continue;
 
                     string customAbsoluteNavigateUrl = null;
                     string customDescription = null;
@@ -401,9 +405,12 @@ namespace Micajah.Common.WebControls
                     {
                         if (item.AuthenticationRequired)
                         {
-                            if (!ShowNonPublicAction(item, isFrameworkAdministrator, canLogOnAsUser, (user.SelectedOrganization != null), builtInOnly, actionIdList,
-                                ref customAbsoluteNavigateUrl, ref customDescription))
-                                continue;
+                            accessDenied = (!ShowNonPublicAction(item, isFrameworkAdministrator, canLogOnAsUser, (user.SelectedOrganization != null), builtInOnly, actionIdList, ref customAbsoluteNavigateUrl, ref customDescription));
+                            if (!isConfigActionInModerTheme)
+                            {
+                                if (accessDenied)
+                                    continue;
+                            }
                         }
                         else if (item.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
                         {
@@ -420,9 +427,12 @@ namespace Micajah.Common.WebControls
                     else if (item.AuthenticationRequired)
                         continue;
 
-                    link = new Link(item.CustomName
-                        , ((customAbsoluteNavigateUrl == null) ? item.CustomAbsoluteNavigateUrl : customAbsoluteNavigateUrl)
-                        , ((customDescription == null) ? item.Description : customDescription));
+                    if (!(isConfigActionInModerTheme && accessDenied))
+                    {
+                        link = new Link(item.CustomName
+                            , ((customAbsoluteNavigateUrl == null) ? item.CustomAbsoluteNavigateUrl : customAbsoluteNavigateUrl)
+                            , ((customDescription == null) ? item.Description : customDescription));
+                    }
 
                     if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
                     {
@@ -456,13 +466,16 @@ namespace Micajah.Common.WebControls
                             ul2.Attributes["class"] = "Sm";
                         }
 
-                        li = new HtmlGenericControl("li");
-                        li.Controls.Add(link);
+                        if (link != null)
+                        {
+                            li = new HtmlGenericControl("li");
+                            li.Controls.Add(link);
 
-                        if (ul2 != null)
-                            ul2.Controls.Add(li);
-                        else
-                            ul.Controls.Add(li);
+                            if (ul2 != null)
+                                ul2.Controls.Add(li);
+                            else
+                                ul.Controls.Add(li);
+                        }
                     }
                     else
                         links.Add(link);
