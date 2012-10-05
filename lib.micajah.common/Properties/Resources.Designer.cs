@@ -664,6 +664,33 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        internal static string CommonGridView_StatusList_ActiveItemText {
+            get {
+                return ResourceManager.GetString("CommonGridView_StatusList_ActiveItemText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived.
+        /// </summary>
+        internal static string CommonGridView_StatusList_ArchivedItemText {
+            get {
+                return ResourceManager.GetString("CommonGridView_StatusList_ArchivedItemText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        internal static string CommonGridView_StatusList_DeletedItemText {
+            get {
+                return ResourceManager.GetString("CommonGridView_StatusList_DeletedItemText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Country &quot;{0}&quot; already exists.
         /// </summary>
         internal static string CountryProvider_ErrorMessage_CountryNameAlreadyExists {
