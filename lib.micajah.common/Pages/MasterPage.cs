@@ -1445,7 +1445,7 @@ namespace Micajah.Common.Pages
             {
                 PageTitle = m_ActiveAction.CustomName;
 
-                if (!((m_ContentPlaceHolder == null) || m_IsOrgAdmin || m_IsInstanceAdmin))
+                if (m_ContentPlaceHolder != null)
                     SetAccessToControls(m_ActiveAction, m_ContentPlaceHolder);
             }
 
