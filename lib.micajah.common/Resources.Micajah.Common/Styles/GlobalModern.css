@@ -477,6 +477,86 @@ button::-moz-focus-inner, input::-moz-focus-inner
     padding: 0;
 }
 
+/* Button drop menu */
+li.Button.DropMenu
+{
+    float: left;
+}
+
+li.Button.DropMenu.AddNew
+{
+    background-image: url($AddNew.png$);
+    background-repeat: no-repeat;
+    background-position: center center;
+    text-align: center;
+    width: 96px;
+}
+
+li.Button.DropMenu ul
+{
+    min-width: 115px;
+    position: absolute;
+    margin: 10px 0 0 -24px;
+    border-radius: 0px 0px 4px 4px;
+    padding: 4px 15px;
+    z-index: 999999999;
+    display: none;
+}
+
+li.Button.DropMenu:hover ul
+{
+    display: block;
+}
+
+li.Button.DropMenu ul li 
+{
+    float: none;
+    display: block;
+    margin: 0 -9px;
+    min-width: 100px;
+    font-size: 14px;
+    border-right: none;
+    border-left: none;
+    height: auto;
+}
+
+li.Button.DropMenu ul li:last-child
+{
+    border: none;
+}
+
+li.Button.DropMenu ul li a
+{
+    font-weight: normal;
+    text-decoration: none;
+    padding: 8px;
+    font-size: 14px;
+    display: block;
+}
+
+/* Green */
+li.Green.DropMenu ul
+{
+    background-color: #058dc7;
+}
+
+li.Green.DropMenu ul li 
+{
+    color: White;
+    background-color: #058dc7;
+    border-bottom: 1px solid #09a0e1;
+}
+
+li.Green.DropMenu ul li:hover 
+{
+    background-color: #09A0E1;
+}
+
+li.Green.DropMenu ul li a
+{
+    color: White;
+}
+
 /* Links */
 a.Link
 {

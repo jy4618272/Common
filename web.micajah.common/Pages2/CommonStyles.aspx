@@ -115,6 +115,24 @@
     <br />
     <br />
     <h1>
+        Button with drop menu
+    </h1>
+    <ul>
+        <li class="Button Green DropMenu AddNew">Add New
+            <ul>
+                <li><a href="#">Ticket</a></li>
+                <li><a href="#">Account</a></li>
+                <li><a href="#">User</a></li>
+                <li><a href="#">Invoice</a></li>
+                <li><a href="#">Bill</a></li>
+                <li><a href="#">Asset</a></li>
+                <li><a href="#">Project</a></li>
+            </ul>
+        </li>
+    </ul>
+    <br />
+    <br />
+    <h1>
         Links
     </h1>
     <asp:LinkButton ID="LinkButton18" runat="server" Text="Link" CssClass="Link" />
