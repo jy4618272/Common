@@ -1939,6 +1939,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v101.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\AddNew.png" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
