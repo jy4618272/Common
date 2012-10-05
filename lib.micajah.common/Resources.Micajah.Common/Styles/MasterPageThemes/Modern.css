@@ -139,6 +139,11 @@
     width: 24px;
 }
 
+.Mp_Hdr ul.Mm li.Dm
+{
+    min-width: 150px;
+}
+
 .Mp_Hdr ul.Mm li.Dm img
 {
     vertical-align: middle;
