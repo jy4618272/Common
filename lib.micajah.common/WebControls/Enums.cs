@@ -207,6 +207,7 @@ namespace Micajah.Common.WebControls
     /// <summary>
     /// Represents the different parts of StandardDateRange enumeration.
     /// </summary>
+    [Serializable]
     [Flags]
     public enum StandardDateRangeParts
     {
@@ -692,5 +693,33 @@ namespace Micajah.Common.WebControls
         /// The control is rendered as on-off switch.
         /// </summary>
         OnOffSwitch
+    }
+
+    /// <summary>
+    /// Defines the different values for the statuses list in the Micajah.Commmon.WebControls.CommonGridView control.
+    /// </summary>
+    [Serializable]
+    [Flags]
+    public enum CommonGridViewStatus
+    {
+        /// <summary>
+        /// All.
+        /// </summary>
+        All = 0,
+
+        /// <summary>
+        /// Active.
+        /// </summary>
+        Active = 1,
+
+        /// <summary>
+        /// Archived.
+        /// </summary>
+        Archived = 2,
+
+        /// <summary>
+        /// Deleted.
+        /// </summary>
+        Deleted = 4
     }
 }

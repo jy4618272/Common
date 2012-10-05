@@ -2476,4 +2476,13 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="ProfileControl_EditForm_TimeZoneField_HeaderText" xml:space="preserve">
     <value>Time Zone</value>
   </data>
+  <data name="CommonGridView_StatusList_ActiveItemText" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="CommonGridView_StatusList_ArchivedItemText" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="CommonGridView_StatusList_DeletedItemText" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
 </root>

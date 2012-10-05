@@ -16,13 +16,13 @@
         AutoGenerateColumns="false" EnableSelect="True" DataKeyNames="RoleId" DataSourceID="ObjectDataSource1"
         ShowAddLink="True" AddLinkCaption="Add New Role" Width="100%" ShowHeader="true"
         ChildControl="Panel1" Caption="Caption is not rendered if the search is enabled"
-        EnableSearch="true" SearchEmptyText="Search Role" OnAction="CommonGridView1_Action">
+        EnableSearch="true" SearchEmptyText="Search Role" OnAction="CommonGridView1_Action" ShowStatusList="true">
         <CaptionControls>
             <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="http://www.google.com"
                 Target="_blank" Text="Google search"></asp:HyperLink>
-            <asp:LinkButton ID="ShowInactiveButton" runat="server" Text="Show Inactive" OnClick="ShowInactiveButton_Click"></asp:LinkButton>
+<%--            <asp:LinkButton ID="ShowInactiveButton" runat="server" Text="Show Inactive" OnClick="ShowInactiveButton_Click"></asp:LinkButton>
             <asp:LinkButton ID="ShowActiveButton" runat="server" CausesValidation="false" Text="Show Active"
-                OnClick="ShowActiveButton_Click"></asp:LinkButton>
+                OnClick="ShowActiveButton_Click"></asp:LinkButton>--%>
         </CaptionControls>
         <Filter>
             <div style="float: left;">

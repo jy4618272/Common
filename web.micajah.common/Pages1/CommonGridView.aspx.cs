@@ -79,13 +79,13 @@ public partial class CommonGridViewTestPage : Page
         CommonGridView.ApplyStyle(GridView1, selectedScheme);
     }
 
-    protected void ShowInactiveButton_Click(object sender, EventArgs e)
-    {
-    }
+    //protected void ShowInactiveButton_Click(object sender, EventArgs e)
+    //{
+    //}
 
-    protected void ShowActiveButton_Click(object sender, EventArgs e)
-    {
-    }
+    //protected void ShowActiveButton_Click(object sender, EventArgs e)
+    //{
+    //}
 
     protected void SelectButton_Click(object sender, EventArgs e)
     {

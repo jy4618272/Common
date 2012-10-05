@@ -52,6 +52,7 @@ namespace Micajah.Common.WebControls
         private Button m_SearchButton;
         private ITemplate m_Filter;
         private PlaceHolder m_FilterContainer;
+        private DropDownList m_StatusList;
         private GridViewRow m_HeaderRow;
         private GridViewRow m_TopPagerRow;
         private GridViewRow m_BottomPagerRow;
@@ -321,22 +322,6 @@ namespace Micajah.Common.WebControls
         }
 
         ///<summary>
-        /// Gets or sets a value indicating whether the add hyperlink is visible and rendered.
-        ///</summary>
-        [DefaultValue(false)]
-        [Category("Appearance")]
-        [Description("Whether the add hyperlink is visible and rendered.")]
-        public bool ShowAddLink
-        {
-            get
-            {
-                object obj = ViewState["ShowAddLink"];
-                return ((obj == null) ? false : (bool)obj);
-            }
-            set { ViewState["ShowAddLink"] = value; }
-        }
-
-        ///<summary>
         /// Gets or sets a value indicating whether the search is visible and rendered.
         ///</summary>
         [DefaultValue(false)]
@@ -571,6 +556,78 @@ namespace Micajah.Common.WebControls
                 this.EnsureSearch();
                 m_SearchTextBox.Text = value;
             }
+        }
+
+        ///<summary>
+        /// Gets or sets a value indicating whether the add hyperlink is visible and rendered.
+        ///</summary>
+        [DefaultValue(false)]
+        [Category("Appearance")]
+        [Description("Whether the add hyperlink is visible and rendered.")]
+        public bool ShowAddLink
+        {
+            get
+            {
+                object obj = ViewState["ShowAddLink"];
+                return ((obj == null) ? false : (bool)obj);
+            }
+            set { ViewState["ShowAddLink"] = value; }
+        }
+
+        ///<summary>
+        /// Gets or sets a value indicating whether the status list is visible and rendered.
+        ///</summary>
+        [DefaultValue(false)]
+        [Category("Appearance")]
+        [Description("Whether the status list is visible and rendered.")]
+        public bool ShowStatusList
+        {
+            get
+            {
+                object obj = ViewState["StatusList"];
+                return ((obj == null) ? false : (bool)obj);
+            }
+            set { ViewState["StatusList"] = value; }
+        }
+
+        /// <summary>
+        /// Gets ot sets the selected value of status list.
+        /// </summary>
+        [Category("Behavior")]
+        [Description("The selected value of status list.")]
+        [DefaultValue(CommonGridViewStatus.Active)]
+        public CommonGridViewStatus StatusListSelectedValue
+        {
+            get
+            {
+                this.EnsureStatusList();
+                object obj = Support.ConvertStringToType(m_StatusList.SelectedValue, typeof(CommonGridViewStatus));
+                return ((obj == null) ? CommonGridViewStatus.Active : (CommonGridViewStatus)obj);
+            }
+            set
+            {
+                this.EnsureStatusList();
+                ListItem item = m_StatusList.Items.FindByValue(value.ToString());
+                if (item != null)
+                    item.Selected = true;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the values of the status list.
+        /// </summary>
+        [Category("Behavior")]
+        [Description("The values of the status list.")]
+        [Editor(typeof(Telerik.Web.Design.Common.FlagEnumUIEditor), typeof(UITypeEditor))]
+        [DefaultValue(CommonGridViewStatus.All)]
+        public CommonGridViewStatus StatusListValues
+        {
+            get
+            {
+                object obj = ViewState["StatusListValues"];
+                return ((obj == null) ? CommonGridViewStatus.All : (CommonGridViewStatus)obj);
+            }
+            set { ViewState["StatusListValues"] = value; }
         }
 
         [Browsable(false)]
@@ -1211,11 +1268,30 @@ namespace Micajah.Common.WebControls
             if (position == PagerPosition.Top)
                 table = oTableTop;
             else if (position == PagerPosition.Bottom)
-                table = oTableBottom;
+            {
+                if (this.ShowStatusList)
+                    this.EnsureStatusList();
+
+                TableCell statusListCell = null;
+                if (this.ShowBottomPagerRow && (oTableBottom != null))
+                {
+                    table = oTableBottom;
+                    statusListCell = table.Rows[0].Cells[table.Rows[0].Cells.Count - 1];
+                }
+                else
+                    statusListCell = cell;
+
+                if ((statusListCell != null) && (m_StatusList != null))
+                {
+                    statusListCell.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                    statusListCell.Controls.Add(m_StatusList);
+                }
+            }
 
             if (table != null)
             {
-                if (!this.PagerStyle.ForeColor.IsEmpty) table.ForeColor = this.PagerStyle.ForeColor;
+                if (!this.PagerStyle.ForeColor.IsEmpty)
+                    table.ForeColor = this.PagerStyle.ForeColor;
                 table.Font.CopyFrom(this.PagerStyle.Font);
                 cell.Controls.Add(table);
             }
@@ -1270,6 +1346,22 @@ namespace Micajah.Common.WebControls
                 }
                 m_Filter.InstantiateIn(m_FilterContainer);
             }
+        }
+
+        private void EnsureStatusList()
+        {
+            if (m_StatusList != null) return;
+
+            m_StatusList = new DropDownList();
+            m_StatusList.ID = "StatusList";
+            m_StatusList.CausesValidation = false;
+            m_StatusList.AutoPostBack = true;
+            if (((this.StatusListValues & CommonGridViewStatus.Active) == CommonGridViewStatus.Active) || (this.StatusListValues == CommonGridViewStatus.All))
+                m_StatusList.Items.Add(new ListItem(Resources.CommonGridView_StatusList_ActiveItemText, CommonGridViewStatus.Active.ToString()));
+            if (((this.StatusListValues & CommonGridViewStatus.Archived) == CommonGridViewStatus.Archived) || (this.StatusListValues == CommonGridViewStatus.All))
+                m_StatusList.Items.Add(new ListItem(Resources.CommonGridView_StatusList_ArchivedItemText, CommonGridViewStatus.Archived.ToString()));
+            if (((this.StatusListValues & CommonGridViewStatus.Deleted) == CommonGridViewStatus.Deleted) || (this.StatusListValues == CommonGridViewStatus.All))
+                m_StatusList.Items.Add(new ListItem(Resources.CommonGridView_StatusList_DeletedItemText, CommonGridViewStatus.Deleted.ToString()));
         }
 
         private static string GetHeaderGroupName(TableCell cell)
@@ -1972,7 +2064,7 @@ namespace Micajah.Common.WebControls
                         if (dataBinding) this.CaptionRow.DataBind();
                     }
 
-                    if (this.ShowBottomPagerRow)
+                    if (this.ShowBottomPagerRow || this.ShowStatusList)
                     {
                         this.BottomPagerRow = CreatePagerRow(PagerPosition.Bottom);
                         if (this.BottomPagerRow != null)
@@ -2131,7 +2223,7 @@ namespace Micajah.Common.WebControls
             if (this.FooterRow != null)
                 this.FooterRow.RenderControl(writer);
 
-            if (isNotEmpty && this.ShowBottomPagerRow && (this.BottomPagerRow != null))
+            if (((isNotEmpty && this.ShowBottomPagerRow) || this.ShowStatusList) && (this.BottomPagerRow != null))
                 this.BottomPagerRow.RenderControl(writer);
 
             this.RenderEndTag(writer);
