@@ -947,7 +947,12 @@ namespace Micajah.Common.Security
                 if (userRow.IsTimeZoneIdNull())
                     ((SortedList)user)[TimeZoneIdKey] = null;
                 else
-                    user.TimeZoneId = userRow.TimeZoneId;
+                {
+                    if (string.IsNullOrEmpty(userRow.TimeZoneId))
+                        ((SortedList)user)[TimeZoneIdKey] = null;
+                    else
+                        user.TimeZoneId = userRow.TimeZoneId;
+                }
                 if (userRow.IsTimeFormatNull())
                     ((SortedList)user)[TimeFormatKey] = null;
                 else
