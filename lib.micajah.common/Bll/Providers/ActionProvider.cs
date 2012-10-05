@@ -378,6 +378,7 @@ namespace Micajah.Common.Bll.Providers
             row.ParentActionId = (parentActionId.HasValue
                 ? parentActionId.Value
                 : ((action.ActionType == ActionType.Page) ? PagesAndControlsActionId : GlobalNavigationLinksActionId));
+            row.Handle = action.Handle;
 
             switch ((ActionType)row.ActionTypeId)
             {
@@ -409,7 +410,6 @@ namespace Micajah.Common.Bll.Providers
             row.AuthenticationRequired = action.AuthenticationRequired;
             row.InstanceRequired = action.InstanceRequired;
             row.Visible = action.Visible;
-            row.Handle = action.Handle;
         }
 
         private static void LoadPageAttributes(CommonDataSet.ActionRow row, ActionElement action)
