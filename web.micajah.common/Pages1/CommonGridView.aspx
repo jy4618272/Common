@@ -16,11 +16,12 @@
         AutoGenerateColumns="false" EnableSelect="True" DataKeyNames="RoleId" DataSourceID="ObjectDataSource1"
         ShowAddLink="True" AddLinkCaption="Add New Role" Width="100%" ShowHeader="true"
         ChildControl="Panel1" Caption="Caption is not rendered if the search is enabled"
-        EnableSearch="true" SearchEmptyText="Search Role" OnAction="CommonGridView1_Action" ShowStatusList="true">
+        EnableSearch="true" SearchEmptyText="Search Role" OnAction="CommonGridView1_Action"
+        ShowStatusList="true" OnSelectedStatusChanged="CommonGridView1_SelectedStatusChanged">
         <CaptionControls>
             <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="http://www.google.com"
                 Target="_blank" Text="Google search"></asp:HyperLink>
-<%--            <asp:LinkButton ID="ShowInactiveButton" runat="server" Text="Show Inactive" OnClick="ShowInactiveButton_Click"></asp:LinkButton>
+            <%--            <asp:LinkButton ID="ShowInactiveButton" runat="server" Text="Show Inactive" OnClick="ShowInactiveButton_Click"></asp:LinkButton>
             <asp:LinkButton ID="ShowActiveButton" runat="server" CausesValidation="false" Text="Show Active"
                 OnClick="ShowActiveButton_Click"></asp:LinkButton>--%>
         </CaptionControls>
@@ -60,7 +61,8 @@
             <mits:TextBoxField DataField="Name" HeaderText="Name" HeaderGroup="General Info"
                 SortExpression="Name">
             </mits:TextBoxField>
-            <mits:TextBoxField DataField="Rank" HeaderText="Rank" HeaderGroup="General Info" ItemStyle-CssClass="Number">
+            <mits:TextBoxField DataField="Rank" HeaderText="Rank" HeaderGroup="General Info"
+                ItemStyle-CssClass="Number">
             </mits:TextBoxField>
             <mits:TextBoxField DataField="StartActionId" HeaderText="StartActionId">
             </mits:TextBoxField>
@@ -311,10 +313,11 @@
         </asp:TableRow>
     </asp:Table>
     <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="GetRoles"
-        TypeName="Micajah.Common.Bll.Providers.RoleProvider" FilterExpression="Name LIKE '%{0}%'"
+        TypeName="Micajah.Common.Bll.Providers.RoleProvider" FilterExpression="Name LIKE '%{0}%' AND BuiltIn = {1}"
         OnFiltering="ObjectDataSource1_Filtering">
         <FilterParameters>
             <asp:Parameter Name="Name" />
+            <asp:Parameter Name="BuiltIn" DefaultValue="1" />
         </FilterParameters>
     </asp:ObjectDataSource>
     <asp:ObjectDataSource ID="ObjectDataSource2" runat="server" SelectMethod="GetRoleRow"

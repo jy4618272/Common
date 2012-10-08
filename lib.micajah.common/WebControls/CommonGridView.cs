@@ -607,6 +607,7 @@ namespace Micajah.Common.WebControls
             set
             {
                 this.EnsureStatusList();
+                m_StatusList.ClearSelection();
                 ListItem item = m_StatusList.Items.FindByValue(value.ToString());
                 if (item != null)
                     item.Selected = true;
@@ -685,6 +686,19 @@ namespace Micajah.Common.WebControls
         #endregion
 
         #region Private Methods
+
+        private static void ApplyHeaderStyle(TableCell cell)
+        {
+            if (cell == null) return;
+
+            DataControlFieldCell fieldCell = cell as DataControlFieldCell;
+            if (fieldCell != null)
+            {
+                DataControlField field = fieldCell.ContainingField;
+                if (field != null)
+                    cell.MergeStyle(field.HeaderStyle);
+            }
+        }
 
         private static void ApplyStyle(GridView grid, SchemeColorSet schemeColorSet, MasterPageTheme theme, bool enableSelect, int selectedRowIndex)
         {
@@ -1722,6 +1736,7 @@ namespace Micajah.Common.WebControls
                         else
                         {
                             TableCell cell = headerRow.Cells[cellIndex - 1];
+                            ApplyHeaderStyle(cell);
                             if (this.Theme != MasterPageTheme.Modern)
                                 cell.BorderColor = this.SchemeColorSet.Dark;
                             RenderHeaderCell(writer, ref cell, 2);
@@ -1760,6 +1775,8 @@ namespace Micajah.Common.WebControls
             for (cellIndex = 0; cellIndex < cellsCount; cellIndex++)
             {
                 TableCell cell = headerRow.Cells[cellIndex];
+                if (m_HeaderRow != null)
+                    ApplyHeaderStyle(cell);
                 if (this.Theme != MasterPageTheme.Modern)
                     cell.BorderColor = this.SchemeColorSet.Dark;
                 RenderHeaderCell(writer, ref cell, 0);
@@ -2046,7 +2063,11 @@ namespace Micajah.Common.WebControls
                     m_MaxColSpan = null;
 
                     if (rowsCount == 0)
+                    {
                         this.HeaderRow = this.CreateHeaderRow(dataBinding, table.Rows);
+                        if (!this.ShowHeader)
+                            this.HeaderRow.Visible = false;
+                    }
 
                     if (this.ShowTopPagerRow || this.ShowBottomPagerRow)
                         this.InitCustomPager();

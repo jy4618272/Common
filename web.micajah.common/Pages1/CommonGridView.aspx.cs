@@ -67,6 +67,7 @@ public partial class CommonGridViewTestPage : Page
     protected void ObjectDataSource1_Filtering(object sender, ObjectDataSourceFilteringEventArgs e)
     {
         e.ParameterValues[0] = CommonGridView1.SearchText;
+        e.ParameterValues[1] = ((CommonGridView1.SelectedStatus == CommonGridViewStatus.Active) ? 1 : 0);
     }
 
     protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
@@ -89,6 +90,10 @@ public partial class CommonGridViewTestPage : Page
 
     protected void SelectButton_Click(object sender, EventArgs e)
     {
+    }
 
+    protected void CommonGridView1_SelectedStatusChanged(object sender, EventArgs e)
+    {
+        CommonGridView1.DataBind();
     }
 }
