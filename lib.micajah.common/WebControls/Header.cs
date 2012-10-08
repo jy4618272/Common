@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
@@ -6,12 +7,12 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Micajah.Common.Application;
+using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
-using Micajah.Common.Bll;
 
 namespace Micajah.Common.WebControls
 {
@@ -62,7 +63,7 @@ namespace Micajah.Common.WebControls
                 rightContainer.Attributes["class"] = "G";
 
                 if (MasterPage.VisibleHeaderLinks)
-                    links = CreateGlobalNavigation(false, MasterPage.IsSetupPage);
+                    links = CreateGlobalNavigation(false, MasterPage.IsSetupPage, this.Page.Request.IsSecureConnection);
 
                 if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
                 {
@@ -357,8 +358,9 @@ namespace Micajah.Common.WebControls
         /// </summary>
         /// <param name="builtInOnly">The flag specifying that the list contains the built-in global navigation links only.</param>
         /// <param name="activeActionIsSetupPage">The flag specifying that the active action is setup page.</param>
+        /// <param name="isSecureConnection">The flag indicating whether the HTTP connection uses secure sockets.</param>
         /// <returns>The control that represents the global navigation links.</returns>
-        private static Control CreateGlobalNavigation(bool builtInOnly, bool activeActionIsSetupPage)
+        private static Control CreateGlobalNavigation(bool builtInOnly, bool activeActionIsSetupPage, bool isSecureConnection)
         {
             UserContext user = UserContext.Current;
             IList actionIdList = null;
@@ -447,7 +449,8 @@ namespace Micajah.Common.WebControls
 
                             Image avatarImg = new Image();
                             avatarImg.CssClass = "Avtr";
-                            avatarImg.ImageUrl = "http://www.gravatar.com/avatar/" + Support.CalculateMD5Hash(user.Email.ToLowerInvariant()) + "?s=24";
+                            avatarImg.ImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}www.gravatar.com/avatar/{2}?s=24"
+                                , (isSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp), Uri.SchemeDelimiter, Support.CalculateMD5Hash(user.Email.ToLowerInvariant()));
                             usernameLink.Controls.Add(avatarImg);
 
                             string name = user.FirstName + Html32TextWriter.SpaceChar + user.LastName;
