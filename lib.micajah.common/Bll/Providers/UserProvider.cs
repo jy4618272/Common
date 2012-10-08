@@ -2011,14 +2011,17 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="organizationId">Specifies the identifier of the organization.</param>
         public static void UpdateUser(Guid userId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , IList groupId, Guid organizationId)
         {
-            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, null
+            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, timeZoneId, timeFormat
                 , Support.ConvertListToString(groupId), organizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
         }
 
@@ -2041,15 +2044,18 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="state">Specifies the user's state/province.</param>
         /// <param name="postalCode">Specifies the user's postal code.</param>
         /// <param name="country">Specifies the user's country.</param>
+        /// <param name="timeZoneId">Time zone identifier.</param>
+        /// <param name="timeFormat">Time format.</param>
         /// <param name="groupId">Specifies the groups identifiers that the user belong to.</param>
         /// <param name="organizationId">Specifies the identifier of the organization.</param>
         /// <param name="sendEmailNotification">true to send notification email; otherwise, false.</param>
         public static void UpdateUser(Guid userId, string email, string firstName, string lastName, string middleName
             , string phone, string mobilePhone, string fax, string title, string department
             , string street, string street2, string city, string state, string postalCode, string country
+            , string timeZoneId, int? timeFormat
             , IList groupId, Guid organizationId, bool sendEmailNotification)
         {
-            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, null
+            UpdateUser(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, timeZoneId, timeFormat
                 , Support.ConvertListToString(groupId), organizationId, sendEmailNotification);
         }
 
