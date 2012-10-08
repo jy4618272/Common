@@ -676,10 +676,25 @@ namespace Micajah.Common.Bll
             }
         }
 
-        private Action GetParentAction(Action item)
+        private Action GetMainMenuItem(Action item)
         {
-            if (item != null && (!item.IsMainMenuRoot))
-                return GetParentAction(item.ParentAction);
+            if ((item != null) && (!item.IsMainMenuRoot))
+                return GetMainMenuItem(item.ParentAction);
+            return item;
+        }
+
+        private Action GetSubmenuItem(Action item)
+        {
+            if (item != null)
+            {
+                if (item.ParentAction != null)
+                {
+                    if (item.ParentAction.IsMainMenuRoot)
+                        return item;
+                    else
+                        return GetSubmenuItem(item.ParentAction);
+                }
+            }
             return item;
         }
 
@@ -822,7 +837,25 @@ namespace Micajah.Common.Bll
                     {
                         return action.ActionId == actionId;
                     });
-                return ((item == null) ? null : GetParentAction(item));
+                return ((item == null) ? null : GetMainMenuItem(item));
+            }
+        }
+
+        /// <summary>
+        /// Finds the parent second level action which the specified action belong to.
+        /// </summary>
+        /// <param name="actionId">The identifier of the action.</param>
+        /// <returns>The Action object that represents parent second level action or the current action if it is a second level action.</returns>
+        internal Action FindSubmenuActionByActionId(Guid actionId)
+        {
+            lock (((ICollection)this).SyncRoot)
+            {
+                Action item = this.Find(
+                    delegate(Action action)
+                    {
+                        return action.ActionId == actionId;
+                    });
+                return ((item == null) ? null : GetSubmenuItem(item));
             }
         }
 

@@ -30,6 +30,7 @@ namespace Micajah.Common.WebControls
         private ActionCollection m_Items;
         private bool m_ItemsIsLoaded;
         private HtmlGenericControl m_Container;
+        private System.Guid? m_SelectedItemId;
 
         #endregion
 
@@ -70,6 +71,28 @@ namespace Micajah.Common.WebControls
             {
                 if (m_MasterPage == null) m_MasterPage = (this.Page.Master as Micajah.Common.Pages.MasterPage);
                 return m_MasterPage;
+            }
+        }
+
+        private System.Guid SelectedItemId
+        {
+            get
+            {
+                if (!m_SelectedItemId.HasValue)
+                {
+                    System.Guid itemId = System.Guid.Empty;
+                    if (this.MasterPage != null)
+                    {
+                        if (m_MasterPage.ActiveAction != null)
+                        {
+                            Micajah.Common.Bll.Action item = ActionProvider.PagesAndControls.FindSubmenuActionByActionId(m_MasterPage.ActiveAction.ActionId);
+                            if (item != null)
+                                itemId = item.ActionId;
+                        }
+                    }
+                    m_SelectedItemId = itemId;
+                }
+                return m_SelectedItemId.Value;
             }
         }
 
@@ -212,6 +235,8 @@ namespace Micajah.Common.WebControls
 
             try
             {
+
+
                 if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
                 {
                     m_Container.Attributes["class"] = "Mp_Smt";
@@ -224,6 +249,8 @@ namespace Micajah.Common.WebControls
                     {
                         using (HtmlGenericControl li = new HtmlGenericControl("li"))
                         {
+                            if (item.ActionId == this.SelectedItemId)
+                                li.Attributes["class"] = "S";
                             li.Controls.Add(CreateLink(item));
                             ul.Controls.Add(li);
                         }
