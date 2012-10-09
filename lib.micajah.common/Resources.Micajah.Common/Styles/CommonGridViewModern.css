@@ -60,10 +60,9 @@ tr.Cgv_R:hover, tr.Cgv_Er:hover, tr.Cgv_Sr
 
 .Cgv_T td.Cgv_C.Number, .Cgv_T td.Cgv_C.Number a
 {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
     text-decoration: none;
-    text-align: center;
 }
 
 .Cgv_T input[type=checkbox], .Cgv_T input[type=radio], .Cgv_T input[type=image]
