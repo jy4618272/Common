@@ -689,7 +689,7 @@ a.Pill.LightGray:hover
 /* Combobox */
 .ComboBox_Modern input[type=text].rcbInput
 {
-    padding-right: 17px !important;
+    padding-right: 32px !important;
     width: 100%;
     font: normal 14px/100% Verdana, Tahoma, sans-serif;
 }
@@ -713,12 +713,14 @@ a.Pill.LightGray:hover
     background-image: url($DropArrow.png$) !important;
     background-position: right 10px !important;
     background-repeat: no-repeat !important;
+    padding-right: 17px !important;
 }
 
 .ComboBox_Modern .rcbArrowCellRight a
 {
     width: 17px !important;
     height: 19px !important;
+    margin-left: 10px;
 }
 
 .ComboBox_Modern .rcbDisabled .rcbArrowCellRight
