@@ -83,8 +83,16 @@ td.Cgv_Crbo
 
 .Cgv_F
 {
-    font-size: 11px;
-    padding-left: 6px;
+    background-color: #004174;   
+}
+
+.Cgv_F td, .Cgv_F td a, .Cgv_F td a:hover
+{
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: White;
+    text-decoration: none;
 }
 
 .Cgv_P table

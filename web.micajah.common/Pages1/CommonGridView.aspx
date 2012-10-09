@@ -17,7 +17,7 @@
         ShowAddLink="True" AddLinkCaption="Add New Role" Width="100%" ShowHeader="true"
         ChildControl="Panel1" Caption="Caption is not rendered if the search is enabled"
         EnableSearch="true" SearchEmptyText="Search Role" OnAction="CommonGridView1_Action"
-        ShowStatusList="true" OnSelectedStatusChanged="CommonGridView1_SelectedStatusChanged">
+        ShowStatusList="true" ShowFooter="true" OnSelectedStatusChanged="CommonGridView1_SelectedStatusChanged">
         <CaptionControls>
             <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="http://www.google.com"
                 Target="_blank" Text="Google search"></asp:HyperLink>
@@ -56,13 +56,14 @@
             </div>
         </Filter>
         <Columns>
+            <asp:HyperLinkField DataTextField="Name" DataNavigateUrlFields="RoleId" DataNavigateUrlFormatString="~/test.aspx?roleid={0}" />
             <mits:TextBoxField DataField="RoleId" HeaderText="RoleId">
             </mits:TextBoxField>
             <mits:TextBoxField DataField="Name" HeaderText="Name" HeaderGroup="General Info"
                 SortExpression="Name">
             </mits:TextBoxField>
             <mits:TextBoxField DataField="Rank" HeaderText="Rank" HeaderGroup="General Info"
-                ItemStyle-CssClass="Number">
+                ItemStyle-CssClass="Number" FooterText="125.56">
             </mits:TextBoxField>
             <mits:TextBoxField DataField="StartActionId" HeaderText="StartActionId">
             </mits:TextBoxField>

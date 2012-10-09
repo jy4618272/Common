@@ -790,7 +790,7 @@ namespace Micajah.Common.WebControls
                             {
                                 if (field.Visible)
                                 {
-                                    if (field is BoundField || field is System.Web.UI.WebControls.TemplateField)
+                                    if (field is BoundField || field is System.Web.UI.WebControls.TemplateField || field is System.Web.UI.WebControls.HyperLinkField)
                                     {
                                         cell.CssClass += " Bold";
 
@@ -817,6 +817,9 @@ namespace Micajah.Common.WebControls
                 grid.BottomPagerRow.BorderColor = borderColor;
                 ProcessRowCells(grid.BottomPagerRow, grid.PagerStyle.CssClass, borderColor);
             }
+
+            if (grid.FooterRow != null)
+                grid.FooterRow.ApplyStyle(grid.FooterStyle);
 
             RegisterStyleSheet(grid, theme);
         }
