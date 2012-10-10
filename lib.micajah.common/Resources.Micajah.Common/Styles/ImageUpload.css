@@ -30,16 +30,16 @@
 
 .iuContainer .iuError
 {
-	font-weight: bold;
-	font-size: 12px;
-	color: Red;
-	padding: 0 0 10px 0;
-	margin: 0 0 10px 0;
+    font-weight: bold;
+    font-size: 12px;
+    color: Red;
+    padding: 0 0 10px 0;
+    margin: 0 0 10px 0;
 }
 
 .iuContainer .iuImageView
 {
-    border: solid 1px #cccccc !important;
+    border: 1px solid #cccccc !important;
     padding: 1px;
     text-align: center;
 }
@@ -50,7 +50,7 @@
     color: #cccccc;
 }
 
-.iuContainer .iuUploadButton
+.iuContainer .iuUploadButton, .iuContainer .iuUploadButton:hover
 {
     font-weight: bold;
     font-size: 11px;
