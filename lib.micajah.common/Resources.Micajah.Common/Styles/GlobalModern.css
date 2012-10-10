@@ -687,11 +687,17 @@ a.Pill.LightGray:hover
 }
 
 /* Combobox */
+.ComboBox_Modern
+{
+    padding-right: 10px;
+}
+
 .ComboBox_Modern input[type=text].rcbInput
 {
     padding-right: 32px !important;
     width: 100%;
     font: normal 14px/100% Verdana, Tahoma, sans-serif;
+    background-color: White !important;
 }
 
 .ComboBox_Modern .rcbInputCell
