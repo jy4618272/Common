@@ -296,6 +296,7 @@ div.Mp_B span.L
     padding: 8px 0;
     float: left;
     width: 100%;
+    *padding: 2px 0;
 }
 
 /*------------ Main menu item ------------ */
@@ -318,6 +319,7 @@ div.Mp_B span.L
     -moz-border-radius: 4px;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid transparent;
+    *display: inline-block;
 }
 
 /*------------ Selected and hovered main menu item ------------ */
@@ -404,6 +406,7 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
     padding: 8px 0;
     float: left;
     width: 100%;
+    *padding: 2px 0;
 }
 
 .Mp_Smt ul li
@@ -425,6 +428,7 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
     border-radius: 4px 4px 4px 4px;
     font-size: 14px;
     border: 1px solid transparent;
+    *display: inline-block;
 }
 
 .Mp_Smt ul li a:hover

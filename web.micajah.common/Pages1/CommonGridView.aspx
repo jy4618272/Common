@@ -34,7 +34,6 @@
             <div style="float: right;">
                 <ul>
                     <li class="DropMenu">
-                        <asp:HyperLink ID="ColSettingLink" runat="server" NavigateUrl="#">Columns &amp; Orders</asp:HyperLink>
                         <asp:Repeater ID="cmbColSetting" runat="server" DataSourceID="ObjectDataSource5">
                             <HeaderTemplate>
                                 <ul>
@@ -49,6 +48,7 @@
                             <FooterTemplate>
                                 </ul></FooterTemplate>
                         </asp:Repeater>
+                        <asp:HyperLink ID="ColSettingLink" runat="server" NavigateUrl="#">Columns &amp; Orders</asp:HyperLink>
                     </li>
                 </ul>
                 <asp:HyperLink ID="ExportLink" runat="server" NavigateUrl="#">Export to Excel</asp:HyperLink>

@@ -372,6 +372,7 @@ input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, but
     border: 1px solid #acacac;
     *vertical-align: middle;
     *overflow: visible;
+    *display: inline-block;
 }
 
 input[type=button], input[type=reset], input[type=submit], button, .Button

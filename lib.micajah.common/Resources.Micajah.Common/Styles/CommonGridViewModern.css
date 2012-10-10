@@ -21,6 +21,12 @@ tr.Cgv_R, tr.Cgv_Er
     background-color: #fff;
 }
 
+tr.Cgv_R td
+{
+    *border-top: 1px solid #ddd;
+    *border-bottom: 1px solid #ddd;
+}
+
 tr.Cgv_R:hover, tr.Cgv_Er:hover, tr.Cgv_Sr
 {
     background-color: #f2fff3 !important;
@@ -130,6 +136,7 @@ tr.Cgv_P td table td
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
+    *display: inline-block;
 }
 
 .Cgv_P a
@@ -306,6 +313,7 @@ div.Cgv_Hm a
     min-height: 16px;
     padding: 10px;
     line-height: 1.231;
+    *padding: 5px 10px 5px 10px;
 }
 
 .Cgv_Filter a
@@ -322,6 +330,7 @@ div.Cgv_Hm a
     color: #633c16;
     text-shadow: 1px 1px 0 #fce6b6;
     box-shadow: inset 0px 1px 1px 0px #fce6b6;
+    *display: inline-block;
 }
 
 .Cgv_Filter a:hover, .Cgv_Filter ul li.DropMenu:hover a
@@ -342,14 +351,25 @@ div.Cgv_Hm a
 .Cgv_Filter ul
 {
     display: inline;
+    *float: left;
 }
 
-.Cgv_Filter li
+.Cgv_Filter ul li
 {
     display: inline-block;
     list-style: none;
     margin: 0;
     padding: 0;
+    *display: block;
+}
+
+.Cgv_Filter ul li.DropMenu a
+{
+    padding-right: 23px;
+    background-image: url($DropMenu.png$);
+    background-repeat: no-repeat;
+    background-position: right center;
+    box-shadow: none;
 }
 
 .Cgv_Filter ul li.DropMenu ul
@@ -358,13 +378,19 @@ div.Cgv_Hm a
     width: auto;
     min-width: 100px;
     background-color: #f9d08b;
-    margin: 14px 0 0 5px;
+    margin: 30px 0 0 5px;
     border-collapse: separate;
     box-shadow: 0px 0px 4px 0px #666666;
     border-radius: 4px 4px 4px 4px;
     border-top: 1px solid #ffdea7;
     padding: 4px;
     display: none;
+    *margin-top: 28px;
+}
+
+.Cgv_Filter ul li.DropMenu:hover ul
+{
+    display: block;
 }
 
 .Cgv_Filter ul li.DropMenu ul:after
@@ -381,11 +407,6 @@ div.Cgv_Hm a
     border-color: transparent transparent #f9d18b transparent;
 }
 
-.Cgv_Filter ul li.DropMenu:hover ul
-{
-    display: block;
-}
-
 .Cgv_Filter ul li.DropMenu ul li
 {
     display: block;
@@ -395,15 +416,6 @@ div.Cgv_Hm a
 .Cgv_Filter ul li.DropMenu ul li:last-child
 {
     border: none;
-}
-
-.Cgv_Filter ul li.DropMenu a
-{
-    padding-right: 23px;
-    background-image: url($DropMenu.png$);
-    background-repeat: no-repeat;
-    background-position: right center;
-    box-shadow: none;
 }
 
 .Cgv_Filter ul li.DropMenu ul li a
