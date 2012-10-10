@@ -775,6 +775,15 @@ a.Pill.LightGray:hover
     margin-top: -10px !important;
 }
 
+/* TreeView */
+.RadTreeView input[type=text]
+{
+    border: 0 none !important;
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+}
+
 /* FireFox fixes */
 @-moz-document url-prefix()
 {
