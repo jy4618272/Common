@@ -98,7 +98,7 @@
     margin: 0;
     float: left;
     position: relative;
-    z-index: 99999;
+    z-index: 2999;
     border-left: 1px solid #245d89;
 }
 
