@@ -1940,6 +1940,8 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\AddNew.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\ComboBoxModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.ComboBox\Modern.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Cross.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Gear.png" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

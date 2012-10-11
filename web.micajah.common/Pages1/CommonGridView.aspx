@@ -191,7 +191,7 @@
                 Row 1 Cell 3
             </td>
             <td>
-                Row 1 Cell 4
+                <a href="#" class="Edit">Edit</a><a href="#" class="Delete">Delete</a>
             </td>
         </tr>
         <tr>

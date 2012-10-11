@@ -215,17 +215,41 @@ tr.Cgv_P td table td
     margin-right: 0 !important;
 }
 
-.Cgv_B, .Cgv_Db
+.Cgv_B
 {
     padding: 10px;
-    text-align: center;
-    white-space: nowrap;
+    text-align: left;
+    white-space: nowrap !important;
     width: 1px;
 }
 
-.Cgv_Db a:hover
+.Cgv_B a, .Cgv_B a:hover, .Cgv_B a:focus, .Cgv_T a.Edit, .Cgv_T a.Edit:hover, .Cgv_T a.Edit:focus, .Cgv_T a.Delete, .Cgv_T a.Delete:hover, .Cgv_T a.Delete:focus
 {
-    color: Red;
+    margin-right: 15px;
+    display: inline-block;
+    color: #222 !important;
+}
+
+.Cgv_T a.Edit, .Cgv_T a.Edit:hover, .Cgv_T a.Edit:focus
+{
+    background: transparent url($Gear.png$) no-repeat left center !important;
+    padding: 0 0 0 21px !important;
+}
+
+.Cgv_T a.Delete, .Cgv_T a.Delete:hover, .Cgv_T a.Delete:focus
+{
+    background: transparent url($Cross.png$) no-repeat left center !important;
+    padding: 0 0 0 21px !important;
+}
+
+tr.Cgv_R .Cgv_B a
+{
+    visibility: hidden;
+}
+
+tr.Cgv_R:hover .Cgv_B a
+{
+    visibility: visible;
 }
 
 div.Cgv_Hm

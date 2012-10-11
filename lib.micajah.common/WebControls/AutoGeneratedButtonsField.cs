@@ -4,7 +4,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll;
-using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 
@@ -223,18 +222,13 @@ namespace Micajah.Common.WebControls
             cell.Attributes.Remove("SpannedCell");
             if (this.m_Grid.EditIndex != rowIndex)
             {
-                if (this.m_ShowEditButton)
-                {
-                    this.InsertButton(cell, CommandActions.Edit, rowIndex, Color.Empty);
-                }
+                if (m_ShowEditButton)
+                    this.InsertButton(cell, CommandActions.Edit, rowIndex, "Edit");
 
-                if (this.m_ShowDeleteButton)
-                {
-                    cell.CssClass = "Cgv_Db";
-                    this.InsertButton(cell, CommandActions.Delete, rowIndex, Color.Empty);
-                }
+                if (m_ShowDeleteButton)
+                    this.InsertButton(cell, CommandActions.Delete, rowIndex, "Delete");
 
-                if (this.m_ShowSelectButton)
+                if (m_ShowSelectButton)
                 {
                     InsertSeparator(cell);
                     this.InsertButton(cell, CommandActions.Select, rowIndex, Color.Empty);
@@ -242,7 +236,7 @@ namespace Micajah.Common.WebControls
             }
             else
             {
-                if (this.m_ShowEditButton)
+                if (m_ShowEditButton)
                 {
                     this.InsertButton(cell, CommandActions.Update, rowIndex, Color.Empty);
                     InsertSeparator(cell);

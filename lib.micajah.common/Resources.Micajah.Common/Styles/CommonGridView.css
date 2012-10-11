@@ -121,7 +121,7 @@ a.Cgv_AddNew, a.Cgv_AddNew:hover
     margin-right: 0 !important;
 }
 
-.Cgv_B, .Cgv_Db
+.Cgv_B
 {
     padding: 3px 6px 3px 6px;
     text-align: center;
@@ -131,7 +131,7 @@ a.Cgv_AddNew, a.Cgv_AddNew:hover
     border-style: solid;
 }
 
-.Cgv_Db a:hover
+.Cgv_T a.Delete:hover
 {
     color: Red;
 }
