@@ -413,7 +413,7 @@ namespace Micajah.Common.Bll.Providers
                             }
 
                             Security.UserContext uc = Security.UserContext.Current;
-                            
+
                             if (uc != null)
                             {
                                 uc.SelectOrganization(org.OrganizationId);
@@ -426,7 +426,13 @@ namespace Micajah.Common.Bll.Providers
                             if (!string.IsNullOrEmpty(defaultUrl))
                             {
                                 if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
-                                    System.Web.HttpContext.Current.Response.Redirect(System.Web.HttpContext.Current.Request.Url.ToString().ToLower(CultureInfo.CurrentCulture).Replace(segment.ToLower(), defaultUrl.ToLower()));
+                                {
+                                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
+                                    {
+                                        System.Web.HttpRequest request = System.Web.HttpContext.Current.Request;
+                                        System.Web.HttpContext.Current.Response.Redirect(request.Url.ToString().Replace(request.Url.Host, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0])));
+                                    }
+                                }
                             }
                         }
                     }

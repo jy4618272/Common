@@ -741,7 +741,7 @@ namespace Micajah.Common.Application
                     }
                 }
 
-                if (ctx.Session.IsNewSession || string.Compare(Security.UserContext.VanityUrl, System.Web.HttpContext.Current.Request.Url.Host, true) != 0) 
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (ctx.Session.IsNewSession || string.Compare(Security.UserContext.VanityUrl, System.Web.HttpContext.Current.Request.Url.Host, true) != 0))
                     UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
             }
         }

@@ -603,14 +603,14 @@ namespace Micajah.Common.Bll.Providers
 
                 string userName = string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId);
 
-                FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
-
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null))
                 {
                     System.Web.HttpCookie authcookie = System.Web.Security.FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
                     authcookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
                     System.Web.HttpContext.Current.Response.AppendCookie(authcookie);
                 }
+                else
+                    FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
             }
         }
 
@@ -783,7 +783,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 context.Session.Clear();
 
-                UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
+                //UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
             }
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
@@ -798,8 +798,25 @@ namespace Micajah.Common.Bll.Providers
                             myCookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
                             myCookie.Expires = DateTime.Now.AddDays(-1d);
                             context.Response.Cookies.Add(myCookie);
+
+                            List<HttpCookie> list = new List<HttpCookie>();
+                            for (int i = 0; i < context.Request.Cookies.Count; i++)
+                            {
+                                if (string.Compare(context.Request.Cookies[i].Name, FormsAuthentication.FormsCookieName) == 0)
+                                {
+                                    HttpCookie cookie = context.Request.Cookies[i];
+                                    cookie.Expires = DateTime.Now.AddDays(-1d);
+                                    list.Add(cookie);
+                                }
+                            }
+
+                            foreach (HttpCookie cookie in list)
+                            {
+                                context.Response.Cookies.Add(cookie);
+                            }
                         }
                     }
+
                 }
                 if (!string.IsNullOrEmpty(redirectUrl))
                 {

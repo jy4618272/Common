@@ -566,17 +566,7 @@ namespace Micajah.Common.Security
             get
             {
                 string vanityUrl = string.Empty;
-                UserContext user = Current;
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    FillVanityUrlFromSession(ref vanityUrl);
-
-                if (string.IsNullOrEmpty(vanityUrl))
-                {
-                    if (user != null)
-                        vanityUrl = (string)user[VanityUrlKey];
-                    else
-                        FillVanityUrlFromSession(ref vanityUrl);
-                }
+                FillVanityUrlFromSession(ref vanityUrl);
                 return vanityUrl;
             }
             internal set
