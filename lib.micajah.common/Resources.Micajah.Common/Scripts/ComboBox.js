@@ -37,7 +37,7 @@ function ComboBox_Validate(source, arguments) {
             else
                 isValid = (value.replace(/^\s+$/gm, "").length > 0)
         }
-        ComboBox_ValidatorUpdateDisplay(comboBox.get_dropDownElement(), source.id, isValid);
+        ComboBox_ValidatorUpdateDisplay(comboBox.get_element(), source.id, isValid);
     }
     arguments.IsValid = isValid;
 }

@@ -81,6 +81,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string ResourceHandlerVirtualPath = "~/mc.axd";
 
         internal const string StyleSheetLoader = "Scripts.StyleSheetLoader.js";
+        internal const string ComboBoxModernStyleSheet = "Styles.ComboBoxModern.css";
         internal const string CustomStyleSheet = "Styles.Custom.css";
         internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-1.3.4.css";
         internal const string CommonGridViewModernStyleSheet = "Styles.CommonGridViewModern.css";
@@ -216,6 +217,8 @@ namespace Micajah.Common.Bll.Providers
                 else
                     content = new byte[] { };
             }
+            else if (resourceName.EndsWith(ComboBoxModernStyleSheet, StringComparison.OrdinalIgnoreCase))
+                content = UnicodeEncoding.UTF8.GetBytes(ProcessComboBoxModernStyleSheet(GetManifestResourceString(resourceName)));
             else if (IsMasterPageThemeColorStyleSheet(resourceName, out masterPageTheme, out masterPageThemeColor))
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(GetManifestResourceString(resourceName), masterPageTheme, masterPageThemeColor));
             else if (IsDetailMenuThemeStyleSheet(resourceName, out detailMenuTheme))
@@ -356,7 +359,7 @@ namespace Micajah.Common.Bll.Providers
             string[] keyNames = null;
             if (masterPageTheme == MasterPageTheme.Modern)
             {
-                keyNames = new string[] { "NotificationCross.png", "DropArrow.png", "DropArrowDisabled.png", "AddNew.png" };
+                keyNames = new string[] { "NotificationCross.png", "AddNew.png" };
             }
             else if (masterPageTheme == MasterPageTheme.Gradient)
             {
@@ -402,6 +405,11 @@ namespace Micajah.Common.Bll.Providers
         private static string ProcessCommonGridViewModernStyleSheet(string styleSheetContent)
         {
             return ProcessStyleSheet(styleSheetContent, new string[] { "Search.png", "DropMenu.png" }, "Images.Micajah.Common.WebControls.CommonGridView.{0}");
+        }
+
+        private static string ProcessComboBoxModernStyleSheet(string styleSheetContent)
+        {
+            return ProcessStyleSheet(styleSheetContent, new string[] { "Modern.png" }, "Images.Micajah.Common.WebControls.ComboBox.{0}");
         }
 
         #endregion

@@ -1908,8 +1908,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\GlobalModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\SignupOrganization.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicFormModern.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropArrow.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropArrowDisabled.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\CommonGridViewModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\LogOn.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\LogOnModern.css" />
@@ -1940,6 +1938,8 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v101.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\AddNew.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\ComboBoxModern.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.ComboBox\Modern.png" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

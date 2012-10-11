@@ -121,6 +121,14 @@ namespace Micajah.Common.WebControls
                 return base.GetScriptReferences();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (this.Theme == MasterPageTheme.Modern)
+                ApplyStyle(this);
+        }
+
         /// <summary>
         /// Raises the PreRender event.
         /// </summary>
@@ -162,17 +170,8 @@ namespace Micajah.Common.WebControls
 
             if (this.Theme == MasterPageTheme.Modern)
             {
-                base.CssClass = "ComboBox_Modern";
-                base.DropDownCssClass = "ComboBox_DropDown_Modern";
-
                 if (m_Validator != null)
                     base.OnClientSelectedIndexChanged = "ComboBox_SelectedIndexChanged";
-
-                if (!this.Width.IsEmpty)
-                {
-                    if (this.Width.Type == UnitType.Pixel)
-                        this.Width = new Unit(this.Width.Value + 10, UnitType.Pixel);
-                }
             }
             else
                 BaseValidatedControl.RenderValidatedControlBeginTag(this.Required && this.ShowRequired, writer, this.Width);
@@ -194,6 +193,22 @@ namespace Micajah.Common.WebControls
             }
             else
                 BaseValidatedControl.RenderValidatedControlEndTag(m_Validator, this.Required, this.DesignMode, this.ErrorMessage, writer);
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Applies the modern styles for the combobox.
+        /// </summary>
+        /// <param name="comboBox">The Telerik.Web.UI.RadComboBox object to apply the styles to.</param>
+        public static void ApplyStyle(RadComboBox comboBox)
+        {
+            comboBox.EnableEmbeddedSkins = false;
+            comboBox.Skin = "Modern";
+
+            ResourceProvider.RegisterStyleSheetResource(comboBox, ResourceProvider.ComboBoxModernStyleSheet, "ComboBoxModernStyleSheet", true);
         }
 
         #endregion

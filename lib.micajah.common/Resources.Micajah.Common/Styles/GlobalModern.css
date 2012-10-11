@@ -316,7 +316,7 @@ input[type=text].Large, input[type=password].Large, select.Large, textarea.Large
     padding: 12px 10px !important;
 }
 
-input[type=text].Invalid, input[type=password].Invalid, select.Invalid, textarea.Invalid
+input[type=text].Invalid, input[type=password].Invalid, select.Invalid, textarea.Invalid, .Invalid
 {
     background-color: #ffcece !important;
     border-color: #df8f8f !important;
@@ -685,95 +685,6 @@ a.Pill.LightGray:hover
 .DatePicker_Modern input[type=text].rdfd_
 {
     padding: 0 !important;
-}
-
-/* Combobox */
-.ComboBox_Modern
-{
-    padding-right: 10px;
-}
-
-.ComboBox_Modern input[type=text].rcbInput
-{
-    padding-right: 32px !important;
-    width: 100%;
-    font: normal 14px/100% Verdana, Tahoma, sans-serif;
-    background-color: White !important;
-}
-
-.ComboBox_Modern .rcbInputCell
-{
-    margin: 0 10px 0 0 !important;
-    padding: 0 !important;
-    background-position: right 10px !important;
-    background-repeat: no-repeat !important;
-    background: none !important;
-}
-
-.ComboBox_Modern .rcbArrowCell
-{
-    width: 17px !important;
-}
-
-.ComboBox_Modern .rcbArrowCellRight
-{
-    background-image: url($DropArrow.png$) !important;
-    background-position: right 10px !important;
-    background-repeat: no-repeat !important;
-    padding-right: 17px !important;
-}
-
-.ComboBox_Modern .rcbArrowCellRight a
-{
-    width: 17px !important;
-    height: 19px !important;
-    margin-left: 10px;
-}
-
-.ComboBox_Modern .rcbDisabled .rcbArrowCellRight
-{
-    background-image: url($DropArrowDisabled.png$) !important;
-    background-position: right 10px !important;
-    background-repeat: no-repeat !important;
-}
-
-.ComboBox_DropDown_Modern
-{
-    padding-left: 10px !important;
-    padding-right: 3px !important;
-    border: none !important;
-    background-color: transparent !important;
-}
-
-.ComboBox_DropDown_Modern div
-{
-    border: 1px solid #646464 !important;
-    background-color: White !important;
-}
-
-.ComboBox_DropDown_Modern .rcbItem
-{
-    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
-    margin: 0 !important;
-}
-
-.ComboBox_DropDown_Modern.Invalid .rcbItem
-{
-    background-color: #ffcece !important;
-    color: #665252;
-}
-
-.ComboBox_DropDown_Modern .rcbHovered
-{
-    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
-    background-color: Highlight !important;
-    color: White !important;
-    margin: 0 !important;
-}
-
-.rcbSlide
-{
-    margin-top: -10px !important;
 }
 
 /* TreeView */

@@ -1,0 +1,122 @@
+﻿/* RadComboBox Modern skin */
+
+/*global*/
+.RadComboBox_Modern, .RadComboBox_Modern .rcbInput, .RadComboBoxDropDown_Modern
+{
+    font: normal 14px/100% Verdana, Tahoma, sans-serif;
+    color: #222;
+}
+
+/* combobox */
+.RadComboBox_Modern .rcbArrowCellRight
+{
+    background-image: url($Modern.png$);
+    background-position: 0 1px;
+}
+
+.RadComboBox_Modern .rcbInputCellLeft
+{
+    padding-right: 5px !important;
+}
+
+.RadComboBox_Modern
+{
+    padding: 8px 10px 8px 10px !important;
+    border: solid 1px #CCC !important;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    outline: 0 !important;
+    background-color: White;
+}
+
+.RadComboBox_Modern:hover
+{
+    border-color: #80BFFF !important;
+}
+
+.RadComboBox_Modern .rcbInput
+{
+    padding: 2px 0 2px 0 !important;
+    margin: 0 !important;
+    border: 0 none !important;
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+}
+
+.RadComboBox_Modern td.rcbArrowCell, .RadComboBox_Modern td.rcbArrowCell a
+{
+    width: 17px !important;
+}
+
+.RadComboBox_Modern td.rcbArrowCell a
+{
+    height: 19px !important;
+}
+
+/* dropdown */
+.RadComboBoxDropDown_Modern
+{
+    background: White;
+    border-color: #646464;
+}
+
+.RadComboBoxDropDown_Modern .rcbHeader, .RadComboBoxDropDown_Modern .rcbFooter
+{
+    background-color: #f1f2f4;
+}
+
+.RadComboBoxDropDown_Modern .rcbHeader
+{
+    border-bottom-color: #d5d5d5;
+}
+
+.RadComboBoxDropDown_Modern .rcbFooter
+{
+    border-top-color: #d5d5d5;
+}
+
+.RadComboBoxDropDown_Modern .rcbItem
+{
+    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
+    margin: 0 !important;
+}
+
+.RadComboBoxDropDown_Modern .rcbHovered
+{
+    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
+    background-color: Highlight;
+    color: White;
+    margin: 0 !important;
+}
+
+.RadComboBoxDropDown_Modern .rcbSeparator
+{
+    font: normal 14px/100% Verdana, Tahoma, sans-serif !important;
+    background: #8a8a8a;
+    color: White;
+}
+
+.RadComboBox_Modern .rcbDisabled .rcbInputCell .rcbInput, .RadComboBoxDropDown_Modern .rcbDisabled
+{
+    color: #999;
+}
+
+.RadComboBox_Modern .rcbDisabled td.rcbInputCellRight, .RadComboBox_Modern .rcbDisabled td.rcbArrowCellRight, .RadComboBox_Modern .rcbDisabled .rcbReadOnly td.rcbArrowCellRight
+{
+    background-position: -17px 1px;
+}
+
+.RadComboBoxDropDown_Modern .rcbLoading
+{
+    background: #f0f0f0;
+}
+
+.RadComboBoxDropDown_Modern .rcbMoreResults
+{
+    border-top-color: #c6c7d2;
+    background-position: 0 -132px;
+    background-color: #e6e6e6;
+    color: #8a8a8a;
+}
