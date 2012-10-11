@@ -35,6 +35,11 @@
     border-color: #80BFFF !important;
 }
 
+.RadComboBox_Modern:focus, .RadComboBox_Modern.focus
+{
+    border-color: #0053A6 !important;
+}
+
 .RadComboBox_Modern .rcbInput
 {
     padding: 2px 0 2px 0 !important;

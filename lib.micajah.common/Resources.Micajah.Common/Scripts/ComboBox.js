@@ -50,4 +50,12 @@ function ComboBox_SelectedIndexChanged(sender, eventArgs) {
     }
 }
 
+function ComboBox_Blur(sender, eventArgs) {
+    sender.get_element().className = sender.get_element().className.replace(" focus", "");
+}
+
+function ComboBox_Focus(sender, eventArgs) {
+    sender.get_element().className += " focus";
+}
+
 if (typeof (Sys) !== "undefined") Sys.Application.notifyScriptLoaded();

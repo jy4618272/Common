@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll.Providers;
@@ -98,6 +100,64 @@ namespace Micajah.Common.WebControls
                 return ((obj == null) ? FrameworkConfiguration.Current.WebApplication.MasterPage.Theme : (MasterPageTheme)obj);
             }
             set { ViewState["Theme"] = value; }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static void ComboBox_PreRender(object sender, EventArgs e)
+        {
+            RadComboBox comboBox = (RadComboBox)sender;
+
+            comboBox.EnableEmbeddedSkins = false;
+            comboBox.Skin = "Modern";
+
+            StringBuilder sb = new StringBuilder();
+
+            if ((!string.IsNullOrEmpty(comboBox.OnClientBlur)) && (string.Compare(comboBox.OnClientBlur, "ComboBox_Blur", StringComparison.Ordinal) != 0))
+            {
+                if (!comboBox.Page.IsPostBack)
+                    comboBox.Attributes["OnClientBlurOriginal"] = comboBox.OnClientBlur;
+
+                string handler = string.Format(CultureInfo.InvariantCulture, "{0}_ClientBlur", comboBox.ClientID);
+                comboBox.OnClientBlur = handler;
+
+                sb.AppendFormat(CultureInfo.InvariantCulture
+                    , "function {0}(sender, eventArgs) {{ ComboBox_Blur(sender, eventArgs); {1}(sender, eventArgs); }}\r\n"
+                    , handler, comboBox.Attributes["OnClientBlurOriginal"]);
+            }
+            else
+                comboBox.OnClientBlur = "ComboBox_Blur";
+
+            if ((!string.IsNullOrEmpty(comboBox.OnClientFocus)) && (string.Compare(comboBox.OnClientFocus, "ComboBox_Focus", StringComparison.Ordinal) != 0))
+            {
+                if (!comboBox.Page.IsPostBack)
+                    comboBox.Attributes["OnClientFocusOriginal"] = comboBox.OnClientFocus;
+
+                string handler = string.Format(CultureInfo.InvariantCulture, "{0}_ClientFocus", comboBox.ClientID);
+                comboBox.OnClientFocus = handler;
+
+                sb.AppendFormat(CultureInfo.InvariantCulture
+                    , "function {0}(sender, eventArgs) {{ ComboBox_Focus(sender, eventArgs); {1}(sender, eventArgs); }}\r\n"
+                    , handler, comboBox.Attributes["OnClientFocusOriginal"]);
+            }
+            else
+                comboBox.OnClientFocus = "ComboBox_Focus";
+
+            ResourceProvider.RegisterStyleSheetResource(comboBox, ResourceProvider.ComboBoxModernStyleSheet, "ComboBoxModernStyleSheet", true);
+
+            if (sb.Length > 0)
+                ScriptManager.RegisterClientScriptBlock(comboBox, comboBox.GetType(), comboBox.ClientID + "_Handlers", sb.ToString(), true);
+
+            ComboBox cb = sender as ComboBox;
+            if (cb != null)
+            {
+                if (cb.Required)
+                    return;
+            }
+
+            ScriptManager.RegisterClientScriptInclude(comboBox.Page, comboBox.Page.GetType(), "ComboBoxClientScripts", ResourceProvider.GetResourceUrl("Scripts.ComboBox.js", true));
         }
 
         #endregion
@@ -205,10 +265,7 @@ namespace Micajah.Common.WebControls
         /// <param name="comboBox">The Telerik.Web.UI.RadComboBox object to apply the styles to.</param>
         public static void ApplyStyle(RadComboBox comboBox)
         {
-            comboBox.EnableEmbeddedSkins = false;
-            comboBox.Skin = "Modern";
-
-            ResourceProvider.RegisterStyleSheetResource(comboBox, ResourceProvider.ComboBoxModernStyleSheet, "ComboBoxModernStyleSheet", true);
+            comboBox.PreRender += new EventHandler(ComboBox_PreRender);
         }
 
         #endregion

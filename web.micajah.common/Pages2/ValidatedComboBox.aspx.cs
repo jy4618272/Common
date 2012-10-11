@@ -5,6 +5,7 @@ public partial class ValidatedComboBoxTestPage : Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Micajah.Common.WebControls.ComboBox.ApplyStyle(RadComboBox1);
     }
 
     protected void Button1_Click(object sender, EventArgs e)
