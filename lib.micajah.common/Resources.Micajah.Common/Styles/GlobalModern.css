@@ -279,6 +279,7 @@ legend
 /* Inputs */
 input[type=text], input[type=password], select, textarea
 {
+    background-color: White;
     padding: 10px !important;
     border: solid 1px #CCC !important;
     border-radius: 5px;

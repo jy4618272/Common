@@ -157,7 +157,7 @@ tr.Cgv_P td table td
     color: #000;
 }
 
-.Cgv_P select
+.Cgv_P select, .Cgv_Filter select
 {
     padding: 4px !important;
     font: normal 13px/100% Sans-serif !important;
