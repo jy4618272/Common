@@ -407,21 +407,24 @@ namespace Micajah.Common.Bll.Providers
                                     Security.UserContext.SelectedInstanceId = instance.InstanceId;                                    
                             }
 
-                            if (instance == null)
-                            {
-                                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, Security.UserContext.SelectedOrganizationId);
-                                if (coll.Count == 1)
-                                {
-                                    instance = coll[0];
-                                    Security.UserContext.SelectedInstanceId = instance.InstanceId;
-                                }
-                            }
-
                             if (uc != null)
                             {
-                                uc.SelectOrganization(org.OrganizationId);
-                                if (instance != null)
-                                    uc.SelectInstance(instance.InstanceId);
+                                if (instance == null)
+                                {
+                                    InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, Security.UserContext.SelectedOrganizationId);
+                                    if (coll.Count == 1)
+                                    {
+                                        instance = coll[0];
+                                        Security.UserContext.SelectedInstanceId = instance.InstanceId;
+                                    }
+                                }
+
+                                if (uc != null)
+                                {
+                                    uc.SelectOrganization(org.OrganizationId);
+                                    if (instance != null)
+                                        uc.SelectInstance(instance.InstanceId);
+                                }
                             }
                         }
                         else
