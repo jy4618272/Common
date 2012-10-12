@@ -418,14 +418,13 @@ namespace Micajah.Common.Bll.Providers
                                         Security.UserContext.SelectedInstanceId = instance.InstanceId;
                                     }
                                 }
-
-                                if (uc != null)
-                                {
-                                    uc.SelectOrganization(org.OrganizationId);
-                                    if (instance != null)
-                                        uc.SelectInstance(instance.InstanceId);
-                                }
+                                
+                                uc.SelectOrganization(org.OrganizationId);
+                                if (instance != null)
+                                    uc.SelectInstance(instance.InstanceId);
                             }
+                            else 
+                                Security.UserContext.VanityUrl = string.Empty;
                         }
                         else
                         {
