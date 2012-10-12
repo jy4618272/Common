@@ -373,7 +373,12 @@ input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, but
     border: 1px solid #acacac;
     *vertical-align: middle;
     *overflow: visible;
-    *display: inline-block;
+}
+
+.Button, .Button:hover, .Button:focus
+{
+    display: inline-block;
+    *padding: 10.84px 29.46px;
 }
 
 input[type=button], input[type=reset], input[type=submit], button, .Button
@@ -401,16 +406,31 @@ input[type=button].Small, input[type=reset].Small, input[type=submit].Small, but
     padding: 7.56px 25.2px !important;
 }
 
+.Button.Small, .Button.Small:hover, .Button.Small:focus
+{
+    *padding: 8.99px 25.2px !important;
+}
+
 input[type=button].Large, input[type=reset].Large, input[type=submit].Large, button.Large, .Button.Large
 {
     font-size: 18.2px !important;
     padding: 10.92px 36.4px !important;
 }
 
+.Button.Large, .Button.Large:hover, .Button.Large:focus
+{
+    *padding: 13.92px 36.4px !important;
+}
+
 input[type=button].X-Large, input[type=reset].X-Large, input[type=submit].X-Large, button.X-Large, .Button.X-Large
 {
     font-size: 21px !important;
     padding: 12.6px 42px !important;
+}
+
+.Button.X-Large, .Button.X-Large:hover, .Button.X-Large:focus
+{
+    *padding: 16.6px 42px !important;
 }
 
 /* Green Buttons */

@@ -16,15 +16,13 @@
 
 tr.Cgv_R, tr.Cgv_Er
 {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
     background-color: #fff;
 }
 
-tr.Cgv_R td
+tr.Cgv_R td, tr.Cgv_Er td
 {
-    *border-top: 1px solid #ddd;
-    *border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
 tr.Cgv_R:hover, tr.Cgv_Er:hover, tr.Cgv_Sr
@@ -161,6 +159,7 @@ tr.Cgv_P td table td
 {
     padding: 4px !important;
     font: normal 13px/100% Sans-serif !important;
+    *vertical-align: inherit;
 }
 
 .Cgv_P input[type=text]
@@ -335,9 +334,8 @@ div.Cgv_Hm a
     border-top: 1px solid #f7f1c5;
     background-color: #fffad5;
     min-height: 16px;
-    padding: 10px;
     line-height: 1.231;
-    *padding: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
 }
 
 .Cgv_Filter a
@@ -354,7 +352,7 @@ div.Cgv_Hm a
     color: #633c16;
     text-shadow: 1px 1px 0 #fce6b6;
     box-shadow: inset 0px 1px 1px 0px #fce6b6;
-    *display: inline-block;
+    display: inline-block;
 }
 
 .Cgv_Filter a:hover, .Cgv_Filter ul li.DropMenu:hover a

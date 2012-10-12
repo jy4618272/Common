@@ -26,34 +26,40 @@
                 OnClick="ShowActiveButton_Click"></asp:LinkButton>--%>
         </CaptionControls>
         <Filter>
-            <div style="float: left;">
-                <a href="#" class="Selected">My Checked-Out</a><asp:HyperLink ID="MyOwnedLink" runat="server"
-                    NavigateUrl="#">My Owned</asp:HyperLink><a href="#">My Location</a><a href="#">Missing</a><asp:LinkButton
-                        ID="BulkButton" runat="server" CausesValidation="false">Bulk</asp:LinkButton>
-            </div>
-            <div style="float: right;">
-                <ul>
-                    <li class="DropMenu">
-                        <asp:Repeater ID="cmbColSetting" runat="server" DataSourceID="ObjectDataSource5">
-                            <HeaderTemplate>
-                                <ul>
-                            </HeaderTemplate>
-                            <ItemTemplate>
-                                <li>
-                                    <asp:LinkButton ID="SelectButton" runat="server" CausesValidation="false" CommandName="Select"
-                                        Text='<%# DataBinder.Eval(Container, "DataItem.Name") %>' CommandArgument='<%# DataBinder.Eval(Container, "DataItem.RoleId") %>'
-                                        OnClick="SelectButton_Click"></asp:LinkButton>
-                                </li>
-                            </ItemTemplate>
-                            <FooterTemplate>
-                                </ul></FooterTemplate>
-                        </asp:Repeater>
-                        <asp:HyperLink ID="ColSettingLink" runat="server" NavigateUrl="#">Columns &amp; Orders</asp:HyperLink>
-                    </li>
-                </ul>
-                <asp:HyperLink ID="ExportLink" runat="server" NavigateUrl="#">Export to Excel</asp:HyperLink>
-                <asp:HyperLink ID="PrintLink" runat="server" NavigateUrl="#">Print</asp:HyperLink>
-            </div>
+            <table cellpadding="0" cellspacing="0" width="100%">
+                <td>
+                    <a href="#" class="Selected">My Checked-Out</a><asp:HyperLink ID="MyOwnedLink" runat="server"
+                        NavigateUrl="#">My Owned</asp:HyperLink><a href="#">My Location</a><a href="#">Missing</a><asp:LinkButton
+                            ID="BulkButton" runat="server" CausesValidation="false">Bulk</asp:LinkButton>
+                    <asp:DropDownList ID="ddl1" runat="server">
+                        <asp:ListItem>Option 1</asp:ListItem>
+                        <asp:ListItem>Option 2</asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+                <td style="text-align: right;">
+                    <ul>
+                        <li class="DropMenu">
+                            <asp:Repeater ID="cmbColSetting" runat="server" DataSourceID="ObjectDataSource5">
+                                <HeaderTemplate>
+                                    <ul>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <li>
+                                        <asp:LinkButton ID="SelectButton" runat="server" CausesValidation="false" CommandName="Select"
+                                            Text='<%# DataBinder.Eval(Container, "DataItem.Name") %>' CommandArgument='<%# DataBinder.Eval(Container, "DataItem.RoleId") %>'
+                                            OnClick="SelectButton_Click"></asp:LinkButton>
+                                    </li>
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    </ul></FooterTemplate>
+                            </asp:Repeater>
+                            <asp:HyperLink ID="ColSettingLink" runat="server" NavigateUrl="#">Columns &amp; Orders</asp:HyperLink>
+                        </li>
+                    </ul>
+                    <asp:HyperLink ID="ExportLink" runat="server" NavigateUrl="#">Export to Excel</asp:HyperLink>
+                    <asp:HyperLink ID="PrintLink" runat="server" NavigateUrl="#">Print</asp:HyperLink>
+                </td>
+            </table>
         </Filter>
         <Columns>
             <asp:HyperLinkField DataTextField="Name" DataNavigateUrlFields="RoleId" DataNavigateUrlFormatString="~/test.aspx?roleid={0}" />
