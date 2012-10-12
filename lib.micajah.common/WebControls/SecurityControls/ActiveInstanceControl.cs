@@ -77,19 +77,22 @@ namespace Micajah.Common.WebControls.SecurityControls
                         if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
                         {
                             inst = InstanceProvider.GetInstance(instanceId);
+                            InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(ctx.UserId, ctx.SelectedOrganization.OrganizationId);
                             if (inst != null)
                             {
                                 row = CustomUrlProvider.GetCustomUrlByOrganizationId(ctx.SelectedOrganization.OrganizationId);
                                 if (row != null)
-                                    if (ctx.SelectedOrganization.Instances.Count > 1)
+                                    if (coll.Count > 1)
                                         url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl.Split('.')[0], inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
                                     else
                                         url = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", row.PartialCustomUrl.Split('.')[0], FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
                                 else
-                                    if (ctx.SelectedOrganization.Instances.Count > 1)
+                                {
+                                    if (coll.Count > 1)
                                         url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", ctx.SelectedOrganization.PseudoId, inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
                                     else
                                         url = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", ctx.SelectedOrganization.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
+                                }
 
                                 url = string.Format("{0}{1}", url, redirectUrl);
 

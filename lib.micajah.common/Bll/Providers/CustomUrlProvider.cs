@@ -398,7 +398,8 @@ namespace Micajah.Common.Bll.Providers
                         if (org != null)
                         {
                             Security.UserContext.SelectedOrganizationId = org.OrganizationId;
-
+                            Security.UserContext uc = Security.UserContext.Current;          
+                            
                             if (!string.IsNullOrEmpty(instPseudo))
                             {
                                 instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
@@ -406,13 +407,15 @@ namespace Micajah.Common.Bll.Providers
                                     Security.UserContext.SelectedInstanceId = instance.InstanceId;                                    
                             }
 
-                            if (org.Instances.Count == 1)
+                            if (instance == null)
                             {
-                                instance = org.Instances[0];
-                                Security.UserContext.SelectedInstanceId = instance.InstanceId;   
+                                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, Security.UserContext.SelectedOrganizationId);
+                                if (coll.Count == 1)
+                                {
+                                    instance = coll[0];
+                                    Security.UserContext.SelectedInstanceId = instance.InstanceId;
+                                }
                             }
-
-                            Security.UserContext uc = Security.UserContext.Current;
 
                             if (uc != null)
                             {

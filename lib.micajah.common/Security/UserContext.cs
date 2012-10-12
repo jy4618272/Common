@@ -941,6 +941,25 @@ namespace Micajah.Common.Security
                 {
                     UserContext.SelectedOrganizationId = row.OrganizationId;
                     UserContext.SelectedInstanceId = (row.IsInstanceIdNull() ? Guid.Empty : row.InstanceId);
+
+                    UserContext user = UserContext.Current;
+                    if (user != null)
+                    {
+                        if (UserContext.SelectedOrganizationId != Guid.Empty && UserContext.SelectedInstanceId == Guid.Empty)
+                        {
+                            InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, UserContext.SelectedOrganizationId);
+                            if (coll != null && coll.Count == 1)
+                                UserContext.SelectedInstanceId = coll[0].InstanceId;
+                        }
+
+                        if (UserContext.SelectedOrganizationId != Guid.Empty)
+                            user.SelectOrganization(UserContext.SelectedOrganizationId);
+
+                        if (UserContext.SelectedInstanceId != Guid.Empty)
+                            user.SelectInstance(UserContext.SelectedInstanceId);
+
+                        Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
+                    }
                 }
                 else
                     CustomUrlProvider.InitializeOrganizationOrInstanceFromCustomUrl();
