@@ -108,56 +108,63 @@ namespace Micajah.Common.WebControls
 
         private static void ComboBox_PreRender(object sender, EventArgs e)
         {
-            RadComboBox comboBox = (RadComboBox)sender;
+            RadComboBox radComboBox = (RadComboBox)sender;
+            ComboBox comboBox = sender as ComboBox;
 
-            comboBox.EnableEmbeddedSkins = false;
-            comboBox.Skin = "Modern";
+            MasterPageTheme theme = FrameworkConfiguration.Current.WebApplication.MasterPage.Theme;
+            if (comboBox != null)
+                theme = comboBox.Theme;
+
+            if (theme != MasterPageTheme.Modern)
+                return;
+
+            radComboBox.EnableEmbeddedSkins = false;
+            radComboBox.Skin = "Modern";
 
             StringBuilder sb = new StringBuilder();
 
-            if ((!string.IsNullOrEmpty(comboBox.OnClientBlur)) && (string.Compare(comboBox.OnClientBlur, "ComboBox_Blur", StringComparison.Ordinal) != 0))
+            if ((!string.IsNullOrEmpty(radComboBox.OnClientBlur)) && (string.Compare(radComboBox.OnClientBlur, "ComboBox_Blur", StringComparison.Ordinal) != 0))
             {
-                if (!comboBox.Page.IsPostBack)
-                    comboBox.Attributes["OnClientBlurOriginal"] = comboBox.OnClientBlur;
+                if (!radComboBox.Page.IsPostBack)
+                    radComboBox.Attributes["OnClientBlurOriginal"] = radComboBox.OnClientBlur;
 
-                string handler = string.Format(CultureInfo.InvariantCulture, "{0}_ClientBlur", comboBox.ClientID);
-                comboBox.OnClientBlur = handler;
+                string handler = string.Format(CultureInfo.InvariantCulture, "{0}_ClientBlur", radComboBox.ClientID);
+                radComboBox.OnClientBlur = handler;
 
                 sb.AppendFormat(CultureInfo.InvariantCulture
                     , "function {0}(sender, eventArgs) {{ ComboBox_Blur(sender, eventArgs); {1}(sender, eventArgs); }}\r\n"
-                    , handler, comboBox.Attributes["OnClientBlurOriginal"]);
+                    , handler, radComboBox.Attributes["OnClientBlurOriginal"]);
             }
             else
-                comboBox.OnClientBlur = "ComboBox_Blur";
+                radComboBox.OnClientBlur = "ComboBox_Blur";
 
-            if ((!string.IsNullOrEmpty(comboBox.OnClientFocus)) && (string.Compare(comboBox.OnClientFocus, "ComboBox_Focus", StringComparison.Ordinal) != 0))
+            if ((!string.IsNullOrEmpty(radComboBox.OnClientFocus)) && (string.Compare(radComboBox.OnClientFocus, "ComboBox_Focus", StringComparison.Ordinal) != 0))
             {
-                if (!comboBox.Page.IsPostBack)
-                    comboBox.Attributes["OnClientFocusOriginal"] = comboBox.OnClientFocus;
+                if (!radComboBox.Page.IsPostBack)
+                    radComboBox.Attributes["OnClientFocusOriginal"] = radComboBox.OnClientFocus;
 
-                string handler = string.Format(CultureInfo.InvariantCulture, "{0}_ClientFocus", comboBox.ClientID);
-                comboBox.OnClientFocus = handler;
+                string handler = string.Format(CultureInfo.InvariantCulture, "{0}_ClientFocus", radComboBox.ClientID);
+                radComboBox.OnClientFocus = handler;
 
                 sb.AppendFormat(CultureInfo.InvariantCulture
                     , "function {0}(sender, eventArgs) {{ ComboBox_Focus(sender, eventArgs); {1}(sender, eventArgs); }}\r\n"
-                    , handler, comboBox.Attributes["OnClientFocusOriginal"]);
+                    , handler, radComboBox.Attributes["OnClientFocusOriginal"]);
             }
             else
-                comboBox.OnClientFocus = "ComboBox_Focus";
+                radComboBox.OnClientFocus = "ComboBox_Focus";
 
-            ResourceProvider.RegisterStyleSheetResource(comboBox, ResourceProvider.ComboBoxModernStyleSheet, "ComboBoxModernStyleSheet", true);
+            ResourceProvider.RegisterStyleSheetResource(radComboBox, ResourceProvider.ComboBoxModernStyleSheet, "ComboBoxModernStyleSheet", true);
 
             if (sb.Length > 0)
-                ScriptManager.RegisterClientScriptBlock(comboBox, comboBox.GetType(), comboBox.ClientID + "_Handlers", sb.ToString(), true);
+                ScriptManager.RegisterClientScriptBlock(radComboBox, radComboBox.GetType(), radComboBox.ClientID + "_Handlers", sb.ToString(), true);
 
-            ComboBox cb = sender as ComboBox;
-            if (cb != null)
+            if (comboBox != null)
             {
-                if (cb.Required)
+                if (comboBox.Required)
                     return;
             }
 
-            ScriptManager.RegisterClientScriptInclude(comboBox.Page, comboBox.Page.GetType(), "ComboBoxClientScripts", ResourceProvider.GetResourceUrl("Scripts.ComboBox.js", true));
+            ScriptManager.RegisterClientScriptInclude(radComboBox.Page, radComboBox.Page.GetType(), "ComboBoxClientScripts", ResourceProvider.GetResourceUrl("Scripts.ComboBox.js", true));
         }
 
         #endregion
