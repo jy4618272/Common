@@ -92,6 +92,11 @@
     padding: 0 15px;
 }
 
+.Mp_Hdr ul.Mm a
+{
+    cursor: pointer;
+}
+
 .Mp_Hdr ul.Mm li
 {
     height: 50px;

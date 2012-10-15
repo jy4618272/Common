@@ -74,7 +74,6 @@ namespace Micajah.Common.WebControls
                         link = new HyperLink();
                         link.ToolTip = Resources.MasterPage_HelpLink_Text2;
                         link.ImageUrl = ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorResource(MasterPageTheme.Modern, MasterPageThemeColor.NotSet, "Help.png"), true);
-                        link.NavigateUrl = "#";
                         link.Attributes["onclick"] = this.MasterPage.HelpLinkOnClick;
 
                         li = new HtmlGenericControl("li");
@@ -444,7 +443,6 @@ namespace Micajah.Common.WebControls
                             li.Attributes["class"] = "Dm";
 
                             HyperLink usernameLink = new HyperLink();
-                            usernameLink.NavigateUrl = "#";
                             li.Controls.Add(usernameLink);
 
                             Image avatarImg = new Image();
