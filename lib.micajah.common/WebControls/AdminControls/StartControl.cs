@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -14,6 +16,7 @@ namespace Micajah.Common.WebControls.AdminControls
     {
         #region Members
 
+        protected HtmlGenericControl VideoDiv;
         protected DetailMenu StartMenu;
         protected LinkButton HideLink;
 
@@ -36,6 +39,24 @@ namespace Micajah.Common.WebControls.AdminControls
         #endregion
 
         #region Private Methods
+
+        private static string GetObjectTag(int width, int height, string url)
+        {
+            string widthAttribute = string.Empty;
+            if (width > 0) widthAttribute = " width=\"" + width + "\"";
+            string heightAttribute = string.Empty;
+            if (height > 0) heightAttribute = " height=\"" + height + "\"";
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat(CultureInfo.InvariantCulture, @"<object classid=""clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"" codebase=""https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0""{0}{1}>
+    <param name=""movie"" value=""{2}"">
+    <param name=""quality"" value=""high"">
+    <param name=""WMode"" value=""opaque"">
+    <embed src=""{2}"" quality=""high"" wmode=""opaque""{0}{1} type=""application/x-shockwave-flash"" pluginspage=""https://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"">
+</object>
+"
+                , widthAttribute, heightAttribute, url);
+            return sb.ToString();
+        }
 
         private void LoadResources()
         {
@@ -141,6 +162,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             Micajah.Common.Pages.MasterPage.AddGlobalStyleSheet(this.Page);
 
+            this.MasterPage.VisibleSubmenu = false;
             this.MasterPage.VisibleLeftArea = false;
             this.MasterPage.EnableJQuery = true;
             this.MasterPage.EnableFancyBox = true;
@@ -148,7 +170,14 @@ namespace Micajah.Common.WebControls.AdminControls
             this.LoadResources();
 
             if (!this.IsPostBack)
+            {
+                if (!string.IsNullOrEmpty(this.MasterPage.ActiveAction.VideoUrl))
+                    VideoDiv.InnerHtml = GetObjectTag(386, 220, this.MasterPage.ActiveAction.VideoUrl);
+                else
+                    VideoDiv.Visible = false;
+
                 this.RegisterFancyBoxInitScript();
+            }
         }
 
         protected void StartMenu_ItemDataBound(object sender, CommandEventArgs e)

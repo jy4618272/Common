@@ -343,6 +343,9 @@ namespace Micajah.Common.Configuration
             if (action.DetailMenu.IconSize.HasValue)
                 this.DetailMenu.IconSize = action.DetailMenu.IconSize;
 
+            if (!string.IsNullOrEmpty(action.VideoUrl))
+                this.VideoUrl = action.VideoUrl;
+
             foreach (ActionElement actionToAdd in action.Actions)
             {
                 this.Actions.Add(actionToAdd);
