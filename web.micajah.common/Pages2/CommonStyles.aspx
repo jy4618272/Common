@@ -118,7 +118,7 @@
         Button with drop menu
     </h1>
     <ul>
-        <li class="Button Green DropMenu AddNew">Add New
+        <li class="Button Green DropMenu AddNew">
             <ul>
                 <li><a href="#">Ticket</a></li>
                 <li><a href="#">Account</a></li>
@@ -128,7 +128,7 @@
                 <li><a href="#">Asset</a></li>
                 <li><a href="#">Project</a></li>
             </ul>
-        </li>
+            Add New</li>
     </ul>
     <br />
     <br />
