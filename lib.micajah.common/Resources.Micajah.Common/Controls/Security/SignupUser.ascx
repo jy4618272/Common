@@ -52,7 +52,7 @@
             <td style="text-align: right;">
                 <asp:Label ID="LoginLabel1" runat="server" />
             </td>
-            <td class="Pl">
+            <td class="Pl" style="*width: 490px;">
                 <b>
                     <asp:Literal ID="LoginTextLabel" runat="server" /></b>
             </td>

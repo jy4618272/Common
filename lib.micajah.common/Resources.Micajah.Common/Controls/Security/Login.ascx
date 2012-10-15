@@ -22,7 +22,7 @@
             <td style="padding-top: 12px; text-align: right; width: 110px;">
                 <asp:Label ID="LoginLabel" runat="server" CssClass="Large" />
             </td>
-            <td>
+            <td style="*width: 335px;">
                 <mits:TextBox id="LoginTextBox" runat="server" columns="32" CssClass="Large" tabindex="1" />
             </td>
         </tr>
