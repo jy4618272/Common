@@ -438,9 +438,13 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                return (this.Handle
-                    ? WebApplication.CreateApplicationAbsoluteUrl(this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this))
-                    : this.AbsoluteNavigateUrl);
+                if (this.Handle)
+                {
+                    string navigateUrl = this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this);
+                    bool isDetailMenu = ((this.ActionType == ActionType.Page) && (string.Compare(navigateUrl, string.Empty, StringComparison.OrdinalIgnoreCase) == 0));
+                    return this.IsDetailMenuPage ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : WebApplication.CreateApplicationAbsoluteUrl(navigateUrl);
+                }
+                return this.AbsoluteNavigateUrl;
             }
         }
 
