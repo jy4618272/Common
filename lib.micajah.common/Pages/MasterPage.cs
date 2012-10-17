@@ -74,6 +74,7 @@ namespace Micajah.Common.Pages
         private bool m_IsInstanceAdmin;
         private Guid? m_ActiveActionId;
         private Micajah.Common.Bll.Action m_ActiveAction;
+        private Micajah.Common.Bll.Action m_SubmenuParentAction;
 
         private bool? m_IsDetailMenuPage;
         private bool? m_IsSetupPage;
@@ -473,6 +474,19 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
+        /// Gets or sets the identifier of the action the child actions of which are displayed in the submenu.
+        /// </summary>
+        public Guid SubmenuParentActionId
+        {
+            get
+            {
+                object obj = ViewState["SubmenuParentActionId"];
+                return ((obj == null) ? Guid.Empty : (Guid)obj);
+            }
+            set { ViewState["SubmenuParentActionId"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets a value that indicates whether the header is visible and rendered.
         /// </summary>
         public bool VisibleHeader
@@ -836,11 +850,13 @@ namespace Micajah.Common.Pages
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)
             {
                 m_TopSubmenu = new Submenu(SubmenuPosition.Top);
+                m_TopSubmenu.ParentActionId = this.SubmenuParentActionId;
                 Controls.Add(m_TopSubmenu);
             }
             else if ((this.SubmenuPosition == SubmenuPosition.Left) && VisibleLeftArea && VisibleSubmenu)
             {
                 m_LeftSubmenu = new Submenu();
+                m_LeftSubmenu.ParentActionId = this.SubmenuParentActionId;
                 Controls.Add(m_LeftSubmenu);
             }
         }
