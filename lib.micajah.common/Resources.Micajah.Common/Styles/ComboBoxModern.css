@@ -21,7 +21,7 @@
 
 .RadComboBox_Modern
 {
-    padding: 8px 10px 8px 10px !important;
+    padding: 4px 10px !important;
     border: solid 1px #CCC !important;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -42,7 +42,7 @@
 
 .RadComboBox_Modern .rcbInput
 {
-    padding: 2px 0 2px 0 !important;
+    padding: 2px 0 !important;
     margin: 0 !important;
     border: 0 none !important;
     border-radius: 0 !important;

@@ -111,6 +111,8 @@ namespace Micajah.Common.WebControls
                 EnsureChildControls();
                 m_RadMaskedTextBox.CssClass = value;
                 m_TextBox.CssClass = value;
+                if (string.Compare(value, "Large", StringComparison.Ordinal) == 0)
+                    RequiredFieldValidator.CssClass += " Large";
             }
         }
 
