@@ -74,7 +74,6 @@ namespace Micajah.Common.Pages
         private bool m_IsInstanceAdmin;
         private Guid? m_ActiveActionId;
         private Micajah.Common.Bll.Action m_ActiveAction;
-        private Micajah.Common.Bll.Action m_SubmenuParentAction;
 
         private bool? m_IsDetailMenuPage;
         private bool? m_IsSetupPage;

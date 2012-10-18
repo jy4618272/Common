@@ -11,7 +11,7 @@
 .RadComboBox_Modern .rcbArrowCellRight
 {
     background-image: url($Modern.png$);
-    background-position: 0 1px;
+    background-position: 0 6px;
 }
 
 .RadComboBox_Modern .rcbInputCellLeft
@@ -21,7 +21,7 @@
 
 .RadComboBox_Modern
 {
-    padding: 4px 10px !important;
+    padding: 0 10px !important;
     border: solid 1px #CCC !important;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -42,7 +42,7 @@
 
 .RadComboBox_Modern .rcbInput
 {
-    padding: 2px 0 !important;
+    padding: 6px 0 !important;
     margin: 0 !important;
     border: 0 none !important;
     border-radius: 0 !important;
@@ -57,7 +57,17 @@
 
 .RadComboBox_Modern td.rcbArrowCell a
 {
-    height: 19px !important;
+    height: 17px !important;
+    border: 0 none !important;
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent !important;
+    display: block !important;
 }
 
 /* dropdown */
@@ -110,7 +120,7 @@
 
 .RadComboBox_Modern .rcbDisabled td.rcbInputCellRight, .RadComboBox_Modern .rcbDisabled td.rcbArrowCellRight, .RadComboBox_Modern .rcbDisabled .rcbReadOnly td.rcbArrowCellRight
 {
-    background-position: -17px 1px;
+    background-position: -17px 2px;
 }
 
 .RadComboBoxDropDown_Modern .rcbLoading
