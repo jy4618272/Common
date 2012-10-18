@@ -165,7 +165,7 @@ IF @@ERROR <> 0
 
 IF @@TRANCOUNT = 1
    INSERT INTO [dbo].[tmp_Mc_Instance] ([InstanceId], [PseudoId], [OrganizationId], [Name], [Description], [EnableSignUpUser], [ExternalId], [WorkingDays], [Active], [CanceledTime], [Trial], [Beta], [Deleted], [CreatedTime], [TimeZoneId], [TimeFormat])
-   SELECT [InstanceId], [PseudoId], [OrganizationId], [Name], [Description], [EnableSignUpUser], [ExternalId], [WorkingDays], [Active], [CanceledTime], [Trial], [Beta], [Deleted], [CreatedTime], CAST([UTCOffset] AS nvarchar(100)), CASE WHEN [DateFormat] IN (0, 2) THEN 0 ELSE 1 END
+   SELECT [InstanceId], [PseudoId], [OrganizationId], [Name], [Description], [EnableSignUpUser], [ExternalId], [WorkingDays], [Active], [CanceledTime], [Trial], [Beta], [Deleted], [CreatedTime], CAST(([UTCOffset] - 5) AS nvarchar(100)), CASE WHEN [DateFormat] IN (0, 2) THEN 0 ELSE 1 END
    FROM [dbo].[Mc_Instance]
 
 IF @@ERROR <> 0
