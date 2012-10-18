@@ -50,7 +50,7 @@ namespace Micajah.Common.WebControls
                 string associatedUpdatePanelClientId = string.Empty;
                 if (!string.IsNullOrEmpty(m_ScriptControl.AssociatedUpdatePanelID))
                 {
-                    UpdatePanel panel = Support.FindTargetControl(m_ScriptControl.AssociatedUpdatePanelID, m_ScriptControl, true) as UpdatePanel;
+                    Control panel = Support.FindTargetControl(m_ScriptControl.AssociatedUpdatePanelID, m_ScriptControl, true);
                     if (panel == null)
                         throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, Resources.UpdateProgress_NoUpdatePanel, m_ScriptControl.AssociatedUpdatePanelID));
                     associatedUpdatePanelClientId = panel.ClientID;
@@ -381,7 +381,7 @@ namespace Micajah.Common.WebControls
                 return ((obj == null) ? string.Empty : (string)obj);
             }
             set { this.ViewState["PostBackActionControl"] = value; }
-        }        
+        }
 
         #endregion
 
@@ -415,7 +415,7 @@ namespace Micajah.Common.WebControls
         private void CreateSuccessTemplateContainer()
         {
             m_SuccessTemplateContainer = new HtmlGenericControl("div");
-            m_SuccessTemplateContainer.Attributes["id"] = this.ClientID + this.ClientIDSeparator + "SuccessTemplate";            
+            m_SuccessTemplateContainer.Attributes["id"] = this.ClientID + this.ClientIDSeparator + "SuccessTemplate";
             m_SuccessTemplateContainer.Style[HtmlTextWriterStyle.Display] = "none";
             this.SuccessTemplate.InstantiateIn(m_SuccessTemplateContainer);
             this.Controls.Add(m_SuccessTemplateContainer);
