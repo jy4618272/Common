@@ -255,11 +255,17 @@ legend
     font-weight: normal;
     line-height: normal;
     background-image: url($NotificationCross.png$);
-    background-position: left 12px;
+    background-position: left 8px;
     background-repeat: no-repeat;
-    padding: 12px 0 2px 22px !important;
+    padding: 8px 0 2px 22px !important;
     margin: 0 0 0 5px;
     position: absolute;
+}
+
+.Error.Large
+{
+    background-position: left 15px !important;
+    padding-top: 15px !important;
 }
 
 .Error, .Error a, .Error a:hover
@@ -285,23 +291,22 @@ input[type=text], input[type=password], select, textarea
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     outline: 0 !important;
-    font: normal 14px/100% Verdana, Tahoma, sans-serif;
+    font: normal 14px/14px Verdana, Tahoma, sans-serif;
     color: #222;
     margin: 0;
     vertical-align: baseline;
-    line-height: normal;
     *vertical-align: middle;
     *overflow: visible;
 }
 
 input[type=text], input[type=password], textarea
 {
-    padding: 10px !important;
+    padding: 6px 10px !important;
 }
 
 select
 {
-    padding: 9px 10px !important;
+    padding: 5px 10px !important;
 }
 
 textarea
@@ -733,13 +738,4 @@ a.Pill.LightGray:hover
     border-radius: 0 !important;
     -moz-border-radius: 0 !important;
     -webkit-border-radius: 0 !important;
-}
-
-/* FireFox fixes */
-@-moz-document url-prefix()
-{
-    .Error
-    {
-        position: static;
-    }
 }

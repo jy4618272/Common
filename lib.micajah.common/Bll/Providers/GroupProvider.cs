@@ -376,6 +376,7 @@ namespace Micajah.Common.Bll.Providers
         {
             if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
                 return UserContext.Current.SelectedOrganization.DataSet.Group.Copy();
+            else
             {
                 OrganizationDataSet.GroupDataTable table = UserContext.Current.SelectedOrganization.DataSet.Group;
                 OrganizationDataSet.GroupDataTable newTable = table.Copy() as OrganizationDataSet.GroupDataTable;
@@ -683,7 +684,7 @@ namespace Micajah.Common.Bll.Providers
                             bool isInstanceActive = true;
 
                             foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in row.GetGroupsInstancesRolesRows())
-                            {                                
+                            {
                                 Guid instanceId = gdrRow.InstanceId;
                                 Guid roleId = gdrRow.RoleId;
 

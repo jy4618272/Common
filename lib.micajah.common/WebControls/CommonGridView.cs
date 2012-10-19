@@ -670,6 +670,11 @@ namespace Micajah.Common.WebControls
         public new event GridViewEditEventHandler RowEditing;
 
         /// <summary>
+        /// Occurs when a row's Delete button is clicked, but before the control deletes the row.
+        /// </summary>
+        public new event GridViewDeleteEventHandler RowDeleting;
+
+        /// <summary>
         /// Occurs when the selection from the status list control changes between posts to the server.
         /// </summary>
         public event EventHandler SelectedStatusChanged;
@@ -1928,26 +1933,32 @@ namespace Micajah.Common.WebControls
         private void RenderFilterRow(HtmlTextWriter writer)
         {
             if (writer == null) return;
+            if (this.FilterRow == null) return;
 
-            if (this.FilterRow != null)
+            StringBuilder sb = new StringBuilder();
+            using (StringWriter sw = new StringWriter(sb, CultureInfo.InvariantCulture))
             {
-                if (m_FilterContainer != null)
+                using (HtmlTextWriter wr = new HtmlTextWriter(sw))
                 {
-                    StringBuilder sb = new StringBuilder();
-                    using (StringWriter sw = new StringWriter(sb, CultureInfo.InvariantCulture))
-                    {
-                        using (HtmlTextWriter wr = new HtmlTextWriter(sw))
-                        {
-                            m_FilterContainer.RenderControl(wr);
-                        }
-                    }
-
-                    if (Support.StringIsNullOrEmpty(sb.ToString().Replace("&nbsp;", string.Empty)))
-                        return;
+                    this.FilterRow.RenderControl(wr);
                 }
-
-                this.FilterRow.RenderControl(writer);
             }
+
+            string filterString = sb.ToString();
+            int startIndex = filterString.IndexOf("<td", StringComparison.OrdinalIgnoreCase);
+            if (startIndex > -1)
+            {
+                startIndex = filterString.IndexOf(">", startIndex, StringComparison.OrdinalIgnoreCase);
+                int endIndex = filterString.LastIndexOf("</td>", StringComparison.OrdinalIgnoreCase);
+                if (endIndex < 0)
+                    endIndex = filterString.Length - 1;
+                filterString = filterString.Substring(startIndex + 1, endIndex - startIndex - 1);
+
+                if (Support.StringIsNullOrEmpty(filterString.Replace("&nbsp;", string.Empty)))
+                    return;
+            }
+
+            writer.Write(sb.ToString());
         }
 
         private void AddLink_Click(object sender, EventArgs e)
@@ -2229,6 +2240,12 @@ namespace Micajah.Common.WebControls
         protected override void OnRowEditing(GridViewEditEventArgs e)
         {
             if (RowEditing != null) RowEditing(this, e);
+        }
+
+        protected override void OnRowDeleting(GridViewDeleteEventArgs e)
+        {
+            if (this.RowDeleting != null)
+                base.OnRowDeleting(e);
         }
 
         protected override void RenderContents(HtmlTextWriter writer)

@@ -28,7 +28,7 @@
                 <asp:Label ID="LoginLabel" runat="server" CssClass="Large" />
             </td>
             <td>
-                <mits:TextBox id="LoginTextBox" runat="server" Columns="32" CssClass="Large" Required="True"
+                <mits:TextBox id="LoginTextBox" runat="server" Columns="33" CssClass="Large" Required="True"
                     ShowRequired="false" TabIndex="1" />
             </td>
         </tr>

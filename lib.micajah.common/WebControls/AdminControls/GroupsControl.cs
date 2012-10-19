@@ -57,7 +57,11 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     int lastIndex = e.Row.Cells.Count - 1;
 
-                    BaseControl.HideControls(e.Row.Cells[0].Controls);
+                    if (this.List.Theme != MasterPageTheme.Modern)
+                    {
+                        BaseControl.HideControls(e.Row.Cells[0].Controls);
+                    }
+
                     BaseControl.HideControls(e.Row.Cells[lastIndex - 1].Controls);
                     BaseControl.HideControls(e.Row.Cells[lastIndex].Controls);
                 }

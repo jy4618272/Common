@@ -438,9 +438,13 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                return (this.Handle
-                    ? WebApplication.CreateApplicationAbsoluteUrl(this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this))
-                    : this.AbsoluteNavigateUrl);
+                if (this.Handle)
+                {
+                    string navigateUrl = this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this);
+                    bool isDetailMenu = ((this.ActionType == ActionType.Page) && (string.Compare(navigateUrl, string.Empty, StringComparison.OrdinalIgnoreCase) == 0));
+                    return this.IsDetailMenuPage ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : WebApplication.CreateApplicationAbsoluteUrl(navigateUrl);
+                }
+                return this.AbsoluteNavigateUrl;
             }
         }
 
@@ -683,16 +687,18 @@ namespace Micajah.Common.Bll
             return item;
         }
 
-        private Action GetSubmenuItem(Action item)
+        private Action GetSubmenuItem(Action item, Guid parentActionId)
         {
             if (item != null)
             {
                 if (item.ParentAction != null)
                 {
-                    if (item.ParentAction.IsMainMenuRoot)
+                    if (item.ParentAction.ActionId == parentActionId)
+                        return item;
+                    else if (item.ParentAction.IsMainMenuRoot)
                         return item;
                     else
-                        return GetSubmenuItem(item.ParentAction);
+                        return GetSubmenuItem(item.ParentAction, parentActionId);
                 }
             }
             return item;
@@ -846,7 +852,7 @@ namespace Micajah.Common.Bll
         /// </summary>
         /// <param name="actionId">The identifier of the action.</param>
         /// <returns>The Action object that represents parent second level action or the current action if it is a second level action.</returns>
-        internal Action FindSubmenuActionByActionId(Guid actionId)
+        internal Action FindSubmenuActionByActionId(Guid actionId, Guid parentActionId)
         {
             lock (((ICollection)this).SyncRoot)
             {
@@ -855,7 +861,7 @@ namespace Micajah.Common.Bll
                     {
                         return action.ActionId == actionId;
                     });
-                return ((item == null) ? null : GetSubmenuItem(item));
+                return ((item == null) ? null : GetSubmenuItem(item, parentActionId));
             }
         }
 

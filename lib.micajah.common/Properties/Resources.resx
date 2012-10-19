@@ -910,7 +910,7 @@
     <value>No UpdatePanel found for AssociatedUpdatePanelID '{0}'.</value>
   </data>
   <data name="UpdateProgress_ProgressText" xml:space="preserve">
-    <value>Please wait, saving your request ....</value>
+    <value>Saving your request ....</value>
   </data>
   <data name="UpdateProgress_FailureText" xml:space="preserve">
     <value>Save Error! Try again.</value>

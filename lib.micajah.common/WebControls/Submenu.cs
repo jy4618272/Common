@@ -21,6 +21,7 @@ namespace Micajah.Common.WebControls
     {
         #region Members
 
+        private Action m_ParentAction;
         private Micajah.Common.Pages.MasterPage m_MasterPage;
         private SubmenuPosition m_Position;
         private IList m_ActionIdList;
@@ -85,7 +86,7 @@ namespace Micajah.Common.WebControls
                     {
                         if (m_MasterPage.ActiveAction != null)
                         {
-                            Micajah.Common.Bll.Action item = ActionProvider.PagesAndControls.FindSubmenuActionByActionId(m_MasterPage.ActiveAction.ActionId);
+                            Micajah.Common.Bll.Action item = ActionProvider.PagesAndControls.FindSubmenuActionByActionId(m_MasterPage.ActiveAction.ActionId, this.ParentActionId);
                             if (item != null)
                                 itemId = item.ActionId;
                         }
@@ -98,30 +99,74 @@ namespace Micajah.Common.WebControls
 
         #endregion
 
-        #region Internal Properties
+        #region Public Properties
 
         /// <summary>
         /// Gets the items of the menu.
         /// </summary>
-        internal ActionCollection Items
+        public ActionCollection Items
         {
             get
             {
                 if (!m_ItemsIsLoaded)
                 {
-                    Micajah.Common.Bll.Action mainItem = null;
-                    if (this.MasterPage != null)
+                    if (this.ParentAction != null)
                     {
-                        if (m_MasterPage.ActiveAction != null)
-                            mainItem = ActionProvider.PagesAndControls.FindMainMenuActionByActionId(m_MasterPage.ActiveAction.ActionId);
-                    }
-                    if (mainItem != null)
-                    {
-                        m_Items = mainItem.GetAvailableChildActions(m_IsAuthenticated, m_IsFrameworkAdmin, m_ActionIdList);
+                        m_Items = m_ParentAction.GetAvailableChildActions(m_IsAuthenticated, m_IsFrameworkAdmin, m_ActionIdList);
                         m_ItemsIsLoaded = true;
                     }
                 }
                 return m_Items;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the identifier of the action the child actions of which are displayed in the control.
+        /// </summary>
+        public System.Guid ParentActionId
+        {
+            get
+            {
+                object obj = ViewState["ParentActionId"];
+                return ((obj == null) ? System.Guid.Empty : (System.Guid)obj);
+            }
+            set
+            {
+                ViewState["ParentActionId"] = value;
+                if (m_ParentAction != null)
+                {
+                    if (m_ParentAction.ActionId != value)
+                        m_ParentAction = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the action the child actions of which are displayed in the control.
+        /// </summary>
+        public Action ParentAction
+        {
+            get
+            {
+                if (m_ParentAction == null)
+                {
+                    if (this.ParentActionId != System.Guid.Empty)
+                        m_ParentAction = ActionProvider.PagesAndControls.FindByActionId(this.ParentActionId);
+                    else if (this.MasterPage != null)
+                    {
+                        if (m_MasterPage.ActiveAction != null)
+                        {
+                            m_ParentAction = ActionProvider.PagesAndControls.FindMainMenuActionByActionId(m_MasterPage.ActiveAction.ActionId);
+                            this.ParentActionId = ((m_ParentAction == null) ? System.Guid.Empty : m_ParentAction.ActionId);
+                        }
+                    }
+                }
+                return m_ParentAction;
+            }
+            set
+            {
+                m_ParentAction = value;
+                this.ParentActionId = ((value == null) ? System.Guid.Empty : value.ActionId);
             }
         }
 

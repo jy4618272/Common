@@ -462,3 +462,30 @@ div.Cgv_Hm a
 {
     background-color: #ffdea7 !important;
 }
+
+.Cgv_Filter .RadComboBox_Modern
+{
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+}
+
+.Cgv_Filter .RadComboBox_Modern .rcbInput
+{
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.Cgv_Filter .RadComboBox_Modern input[type=text], .Cgv_Filter .RadComboBoxDropDown_Modern .rcbItem, .Cgv_Filter .RadComboBoxDropDown_Modern .rcbHovered, .Cgv_Filter .RadComboBoxDropDown_Modern .rcbSeparator
+{
+    font: normal 13px/100% Sans-serif !important;
+}
+
+.Cgv_Filter .RadComboBox_Modern .rcbArrowCellRight
+{
+    background-position: 0 4px !important;
+}
+
+.Cgv_Filter .RadComboBox_Modern .rcbDisabled td.rcbInputCellRight, .Cgv_Filter .RadComboBox_Modern .rcbDisabled td.rcbArrowCellRight, .Cgv_Filter .RadComboBox_Modern .rcbDisabled .rcbReadOnly td.rcbArrowCellRight
+{
+    background-position: -17px 4px !important;
+}
