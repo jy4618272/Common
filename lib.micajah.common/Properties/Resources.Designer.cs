@@ -6466,7 +6466,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please wait, saving your request .....
+        ///   Looks up a localized string similar to Saving your request .....
         /// </summary>
         internal static string UpdateProgress_ProgressText {
             get {
