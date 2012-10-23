@@ -71,7 +71,7 @@ namespace Micajah.Common.Configuration
         /// Gets the settings for custom URLs engine.
         /// </summary>
         [ConfigurationProperty("customUrl")]
-        internal CustomUrlElement CustomUrl
+        public CustomUrlElement CustomUrl
         {
             get { return (CustomUrlElement)this["customUrl"]; }
         }

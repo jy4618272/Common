@@ -93,7 +93,21 @@ namespace Micajah.Common.WebControls.SecurityControls
                     org = OrganizationProvider.GetOrganization(organizationId);
                     if (org != null)
                     {
-                        CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
+                        CommonDataSet.CustomUrlRow row = null;
+
+                        if (UserContext.Current.SelectedInstance != null)
+                            row = CustomUrlProvider.GetCustomUrl(organizationId, UserContext.Current.SelectedInstance.InstanceId);
+                        
+                        if (row == null)                        
+                            row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
+
+                        if (row == null)
+                        {
+                            System.Data.DataView table = CustomUrlProvider.GetCustomUrls(organizationId);
+                            if (table != null && table.Table.Rows.Count > 0)
+                                row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
+                        }
+                            
                         if (row != null)
                         {
                             redirectUrl = string.Format("{0}{1}", !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl, returnUrl);

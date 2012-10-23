@@ -2485,4 +2485,25 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="CommonGridView_StatusList_DeletedItemText" xml:space="preserve">
     <value>Deleted</value>
   </data>
+  <data name="CustomUrlsControl_ChangeToAdvancedView_Text" xml:space="preserve">
+    <value>Advanced Vanity URL view</value>
+  </data>
+  <data name="CustomUrlsControl_ChangeToSimpleView_Text" xml:space="preserve">
+    <value>Simple Vanity URL view</value>
+  </data>
+  <data name="CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage" xml:space="preserve">
+    <value>You must enter a partial custom URL</value>
+  </data>
+  <data name="CustomUrlsControl_EditFormSimpleView_ObjectName" xml:space="preserve">
+    <value>Vanity URL</value>
+  </data>
+  <data name="CustomUrlsControl_SimpleViewMessageLabel_Text" xml:space="preserve">
+    <value>Vanity URL saved.</value>
+  </data>
+  <data name="CustomUrlsControl_SimpleViewSaveButton_Text" xml:space="preserve">
+    <value>Update Vanity URL</value>
+  </data>
+  <data name="CustomUrlsControl_SimpleViewTitleLabel_Text" xml:space="preserve">
+    <value>Vanity URL</value>
+  </data>
 </root>

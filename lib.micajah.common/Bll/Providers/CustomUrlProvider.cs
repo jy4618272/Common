@@ -133,27 +133,38 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-
         /// <summary>
         /// Returns the custom URLs by specified organization id.
         /// </summary>
         /// <param name="host">The host of the URL to find the custom URLs.</param>
         /// <returns>The Micajah.Common.Dal.CommonDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
+        [DataObjectMethod(DataObjectMethodType.Select)]
         public static CommonDataSet.CustomUrlRow GetCustomUrlByOrganizationId(Guid organizationId)
         {
             CommonDataSet.CustomUrlDataTable table = null;
+            CommonDataSet.CustomUrlRow row = null;
             try
             {
                 table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
-                return ((table.Count > 0) ? table[0] : null);
+                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);                
+                row = ((table.Count > 0) ? table[0] : null);
+                if (row != null)
+                {
+                    try 
+                    {
+                        if (row.InstanceId == Guid.Empty)
+                            row.InstanceId = Guid.Empty;
+                    }
+                    catch {row.InstanceId = Guid.Empty;}
+                }
+                return row;
             }
             finally
             {
                 if (table != null) table.Dispose();
+                if (row != null) row = null;
             }
         }
-
 
         /// <summary>
         /// Returns the custom URLs by by specified organization id and instance id.
@@ -345,104 +356,104 @@ namespace Micajah.Common.Bll.Providers
             Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
             string[] segments = url.Split('.');
             string defaultUrl = FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl;
-            bool found = false;
+            //bool found = false;
 
-            foreach (string rootAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses)
+            //foreach (string rootAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses)
+            //{
+            //    if (url.IndexOf(rootAddresse, StringComparison.OrdinalIgnoreCase) == 0)
+            //    {
+            //        found = true;
+            //        break;
+            //    }
+            //}
+
+            //if (!found)
+            //{
+            if (segments.Length > 1)
             {
-                if (url.IndexOf(rootAddresse, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    found = true;
-                    break;
-                }
-            }
+                Organization org = null;
+                Instance instance = null;
+                string instPseudo = string.Empty;
+                string segment = segments[0];
+                //found = false;
 
-            if (!found)
-            {
-                if (segments.Length > 1)
-                {
-                    Organization org = null;
-                    Instance instance = null;
-                    string instPseudo = string.Empty;
-                    string segment = segments[0];
-                    found = false;
+                //foreach (string reservedAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
+                //{
+                //    if (string.Compare(segment, reservedAddresse, StringComparison.OrdinalIgnoreCase) == 0)
+                //    {
+                //        found = true;
+                //        break;
+                //    }
+                //}
 
-                    foreach (string reservedAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
+                //if (!found)
+                //{
+                if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                {
+                    string[] pseudos = segment.Split('-');
+                    org = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
+                    instPseudo = pseudos[1];
+                    if (org == null)
                     {
-                        if (string.Compare(segment, reservedAddresse, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            found = true;
-                            break;
-                        }
+                        string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
+                        CommonDataSet.CustomUrlRow customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                        if (customUrlRow != null)
+                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+
+                        if (customUrlRow != null) customUrlRow = null;
+                    }
+                }
+                else
+                    org = OrganizationProvider.GetOrganizationByPseudoId(segment);
+
+                if (org != null)
+                {
+                    Security.UserContext.SelectedOrganizationId = org.OrganizationId;
+                    Security.UserContext uc = Security.UserContext.Current;
+
+                    if (!string.IsNullOrEmpty(instPseudo))
+                    {
+                        instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
+                        if (instance != null)
+                            Security.UserContext.SelectedInstanceId = instance.InstanceId;
                     }
 
-                    if (!found)
+                    if (uc != null)
                     {
-                        if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                        if (instance == null)
                         {
-                            string[] pseudos = segment.Split('-');
-                            org = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
-                            instPseudo = pseudos[1];
-                            if (org == null)
+                            InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, Security.UserContext.SelectedOrganizationId);
+                            if (coll.Count == 1)
                             {
-                                string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
-                                CommonDataSet.CustomUrlRow customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
-                                if (customUrlRow != null)
-                                    org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
-
-                                if (customUrlRow != null) customUrlRow = null;
+                                instance = coll[0];
+                                Security.UserContext.SelectedInstanceId = instance.InstanceId;
                             }
                         }
-                        else
-                            org = OrganizationProvider.GetOrganizationByPseudoId(segment);
 
-                        if (org != null)
+                        uc.SelectOrganization(org.OrganizationId);
+                        if (instance != null)
+                            uc.SelectInstance(instance.InstanceId);
+                    }
+                    else
+                        Security.UserContext.VanityUrl = string.Empty;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(defaultUrl))
+                    {
+                        if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
                         {
-                            Security.UserContext.SelectedOrganizationId = org.OrganizationId;
-                            Security.UserContext uc = Security.UserContext.Current;          
-                            
-                            if (!string.IsNullOrEmpty(instPseudo))
+                            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
                             {
-                                instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
-                                if (instance != null)
-                                    Security.UserContext.SelectedInstanceId = instance.InstanceId;                                    
-                            }
-
-                            if (uc != null)
-                            {
-                                if (instance == null)
-                                {
-                                    InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, Security.UserContext.SelectedOrganizationId);
-                                    if (coll.Count == 1)
-                                    {
-                                        instance = coll[0];
-                                        Security.UserContext.SelectedInstanceId = instance.InstanceId;
-                                    }
-                                }
-                                
-                                uc.SelectOrganization(org.OrganizationId);
-                                if (instance != null)
-                                    uc.SelectInstance(instance.InstanceId);
-                            }
-                            else 
-                                Security.UserContext.VanityUrl = string.Empty;
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(defaultUrl))
-                            {
-                                if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
-                                {
-                                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
-                                    {
-                                        System.Web.HttpRequest request = System.Web.HttpContext.Current.Request;
-                                        System.Web.HttpContext.Current.Response.Redirect(request.Url.ToString().Replace(request.Url.Host, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0])));
-                                    }
-                                }
+                                System.Web.HttpRequest request = System.Web.HttpContext.Current.Request;
+                                System.Web.HttpContext.Current.Response.Redirect(request.Url.ToString().Replace(request.Url.Host, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0])));
                             }
                         }
                     }
                 }
             }
+            //    }
+            //}
         }
 
         #endregion

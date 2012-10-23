@@ -81,6 +81,14 @@ namespace Micajah.Common.WebControls.SecurityControls
                             if (inst != null)
                             {
                                 row = CustomUrlProvider.GetCustomUrlByOrganizationId(ctx.SelectedOrganization.OrganizationId);
+
+                                if (row == null)
+                                {
+                                    System.Data.DataView table = CustomUrlProvider.GetCustomUrls(ctx.SelectedOrganization.OrganizationId);
+                                    if (table != null && table.Table.Rows.Count > 0)
+                                        row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow; 
+                                }
+
                                 if (row != null)
                                     if (coll.Count > 1)
                                         url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl.Split('.')[0], inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);

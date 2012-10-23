@@ -727,6 +727,33 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advanced Vanity URL view.
+        /// </summary>
+        internal static string CustomUrlsControl_ChangeToAdvancedView_Text {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_ChangeToAdvancedView_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple Vanity URL view.
+        /// </summary>
+        internal static string CustomUrlsControl_ChangeToSimpleView_Text {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_ChangeToSimpleView_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter a partial custom URL.
+        /// </summary>
+        internal static string CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must enter a full or/and partial custom URL.
         /// </summary>
         internal static string CustomUrlsControl_CustomUrlsValidator_ErrorMessage {
@@ -799,6 +826,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vanity URL.
+        /// </summary>
+        internal static string CustomUrlsControl_EditFormSimpleView_ObjectName {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_EditFormSimpleView_ObjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom URLs.
         /// </summary>
         internal static string CustomUrlsControl_List_Caption {
@@ -831,6 +867,33 @@ namespace Micajah.Common.Properties {
         internal static string CustomUrlsControl_List_PartialCustomUrlColumn_HeaderText {
             get {
                 return ResourceManager.GetString("CustomUrlsControl_List_PartialCustomUrlColumn_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vanity URL saved..
+        /// </summary>
+        internal static string CustomUrlsControl_SimpleViewMessageLabel_Text {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_SimpleViewMessageLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Vanity URL.
+        /// </summary>
+        internal static string CustomUrlsControl_SimpleViewSaveButton_Text {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_SimpleViewSaveButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vanity URL.
+        /// </summary>
+        internal static string CustomUrlsControl_SimpleViewTitleLabel_Text {
+            get {
+                return ResourceManager.GetString("CustomUrlsControl_SimpleViewTitleLabel_Text", resourceCulture);
             }
         }
         
@@ -3778,11 +3841,12 @@ namespace Micajah.Common.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;micajah.common&gt;
-        ///  &lt;roles&gt;
-        ///    &lt;role id=&quot;00000000-0000-0000-0000-000000000001&quot; name=&quot;Organization Administrator&quot; description=&quot;Built-in Role for administering the Organization&quot; shortName=&quot;OrgAdmin&quot; rank=&quot;1&quot; startPageId=&quot;00000000-0000-0000-0000-000000000009&quot; /&gt;
-        ///    &lt;role id=&quot;00000000-0000-0000-0000-000000000002&quot; name=&quot;Instance Administrator&quot; description=&quot;Built-in Role for administering the Instance&quot; shortName=&quot;InstAdmin&quot; rank=&quot;2&quot; startPageId=&quot;00000000-0000-0000-0000-000000000015&quot; /&gt;
-        ///  &lt;/roles&gt;
-        ///  &lt;actions [rest of string was truncated]&quot;;.
+        ///	&lt;roles&gt;
+        ///		&lt;role id=&quot;00000000-0000-0000-0000-000000000001&quot; name=&quot;Organization Administrator&quot; description=&quot;Built-in Role for administering the Organization&quot; shortName=&quot;OrgAdmin&quot; rank=&quot;1&quot; startPageId=&quot;00000000-0000-0000-0000-000000000009&quot; /&gt;
+        ///		&lt;role id=&quot;00000000-0000-0000-0000-000000000002&quot; name=&quot;Instance Administrator&quot; description=&quot;Built-in Role for administering the Instance&quot; shortName=&quot;InstAdmin&quot; rank=&quot;2&quot; startPageId=&quot;00000000-0000-0000-0000-000000000015&quot; /&gt;
+        ///	&lt;/roles&gt;
+        ///	&lt;actions&gt;
+        ///		&lt;a [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MicajahCommonConfig {
             get {
