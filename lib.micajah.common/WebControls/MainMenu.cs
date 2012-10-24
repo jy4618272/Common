@@ -31,7 +31,19 @@ namespace Micajah.Common.WebControls
         {
             get
             {
-                if (m_MasterPage == null) m_MasterPage = (this.Page.Master as Micajah.Common.Pages.MasterPage);
+                if (m_MasterPage == null)
+                {
+                    System.Web.UI.MasterPage master = this.Page.Master;
+                    while (master != null)
+                    {
+                        if (master is Micajah.Common.Pages.MasterPage)
+                        {
+                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
+                            return m_MasterPage;
+                        }
+                        master = master.Master;
+                    }
+                }
                 return m_MasterPage;
             }
         }
