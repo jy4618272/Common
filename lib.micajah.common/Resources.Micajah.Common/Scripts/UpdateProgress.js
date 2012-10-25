@@ -7,12 +7,13 @@ Micajah.Common.UpdateProgress = function (a) {
     this._hideAfter = 2000;
     this._fadeOutSuccessTemplateDelegate = Function.createDelegate(this, this._fadeOutSuccessTemplate);
     this._failureTemplate = $get(this.get_element().id + '_FailureTemplate');
-    this._failureTemplateOriginalHtml = ((this._failureTemplate == null) ? null : this._failureTemplate.innerHTML);
+    this._postBackHasError = false;
     this._intervalTimerCookie = null;
+    this._postBackControlId = "";
     this._progressTemplate = $get(this.get_element().id + '_ProgressTemplate');
     this._successTemplate = $get(this.get_element().id + '_SuccessTemplate');
     this._templates = [this._failureTemplate, this._progressTemplate, this._successTemplate];
-    this._timeout = 90000;
+    this._timeout = -1;
     this._postBackAction = $get(this.get_element().id + '_PostBackAction');
     this._postBackElement = null;
     try {
@@ -24,10 +25,32 @@ Micajah.Common.UpdateProgress = function (a) {
 
 Micajah.Common.UpdateProgress.prototype =
 {
+    get_postBackHasError: function () { return this._postBackHasError; },
+    set_postBackHasError: function (a) { this._postBackHasError = a; },
     get_hideAfter: function () { return this._hideAfter; },
     set_hideAfter: function (a) { this._hideAfter = a; },
+    get_postBackControlId: function () { return this._postBackControlId; },
+    set_postBackControlId: function (a) { this._postBackControlId = a; },
     get_timeout: function () { return this._timeout; },
     set_timeout: function (a) { this._timeout = a; },
+
+    get_showProgress: function () {
+        var showProgress = (!this._associatedUpdatePanelId);
+        if (this._postBackElement) {
+            if (this._postBackControlId.length > 0) {
+                showProgress = (this._postBackElement.id === this._postBackControlId);
+            }
+            else {
+                var curElem = $get(this._postBackElement.id);
+                while (!showProgress && curElem) {
+                    if (curElem.id && (this._associatedUpdatePanelId === curElem.id))
+                        showProgress = true;
+                    curElem = curElem.parentNode;
+                }
+            }
+        }
+        return showProgress;
+    },
 
     _clearIntervalTimerCookie: function () {
         if (this._intervalTimerCookie) {
@@ -86,7 +109,6 @@ Micajah.Common.UpdateProgress.prototype =
             child = this._templates[x];
             if ((child) && (a))
                 child.style.display = ((child.id == a.id) ? 'block' : 'none');
-
             if ((child) && (!a))
                 child.style.display = 'none';
         }
@@ -101,40 +123,27 @@ Micajah.Common.UpdateProgress.prototype =
 
     _handleBeginRequest: function (sender, args) {
         this._postBackElement = args.get_postBackElement();
-        if (this._timeout > -1) args.get_request().set_timeout(this._timeout);
-        Micajah.Common.UpdateProgress.callBaseMethod(this, '_handleBeginRequest', [sender, args]);
+        if (this.get_showProgress()) {
+            if (this._timeout > -1)
+                args.get_request().set_timeout(this._timeout);
+            Micajah.Common.UpdateProgress.callBaseMethod(this, '_handleBeginRequest', [sender, args]);
+        }
     },
 
     _handleEndRequest: function (sender, args) {
         this._clearTimerCookie();
         this._cancelHideElement = false;
-        var error = args.get_error();
-        if (args.get_error() == null) {
-            this._showTemplate(this._successTemplate);
-            if (this._hideAfter > -1) this._timerCookie = window.setTimeout(this._fadeOutSuccessTemplateDelegate, this._hideAfter);
-        }
-        else {
-            args.set_errorHandled(true);
-            var action = "";
-
-            if (this._postBackAction != null) {
-                if (this._postBackAction.innerHTML.length > 0)
-                    action = this._postBackAction.innerHTML;
-            }
-
-            if (action.length > 0) {
-                if (this._postBackElement.id == action) {
-                    if (this._failureTemplate != null) {
-                        this._failureTemplate.innerHTML = "<span style=\"color:#000066;background-color:#FFEFAC;font-family:Arial;font-size:18px;font-weight:bold;padding:3px 8px 3px 8px;\">" + error.message + "</span>";
-                        this._showTemplate(this._failureTemplate);
-                    }
-                }
+        if (this.get_showProgress()) {
+            var error = args.get_error();
+            if ((error != null) || this._postBackHasError) {
+                args.set_errorHandled(true);
+                if (this._failureTemplate != null)
+                    this._showTemplate(this._failureTemplate);
             }
             else {
-                if (this._failureTemplate != null) {
-                    this._failureTemplate.innerHTML = (((this._failureTemplateOriginalHtml != null) && (this._failureTemplateOriginalHtml.length > 0)) ? this._failureTemplateOriginalHtml : error.message);
-                    this._showTemplate(this._failureTemplate);
-                }
+                this._showTemplate(this._successTemplate);
+                if (this._hideAfter > -1)
+                    this._timerCookie = window.setTimeout(this._fadeOutSuccessTemplateDelegate, this._hideAfter);
             }
         }
     }

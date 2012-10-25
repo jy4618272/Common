@@ -42,10 +42,9 @@ namespace Micajah.Common.WebControls.AdminControls
 
             FormUpdateProgress.ProgressText = Resources.LdapGroupMappingsControl_UpdateProgress_Text;
             FormUpdateProgress.Timeout = int.MaxValue;
-            FormUpdateProgress.HideAfter = int.MaxValue;
+            FormUpdateProgress.HideAfter = -1;
             FormUpdateProgress.ShowSuccessText = false;
-            FormUpdateProgress.ShowFailureText = true;
-            FormUpdateProgress.PostBackActionControl = this.SaveButton.ClientID;
+            FormUpdateProgress.PostBackControlId = this.SaveButton.ClientID;
         }
 
         #endregion
