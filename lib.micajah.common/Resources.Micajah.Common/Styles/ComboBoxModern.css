@@ -8,6 +8,11 @@
 }
 
 /* combobox */
+.RadComboBox_Modern table
+{
+    width: 100% !important;
+}
+
 .RadComboBox_Modern .rcbArrowCellRight
 {
     background-image: url($Modern.png$);

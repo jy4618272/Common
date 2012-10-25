@@ -18,6 +18,11 @@
         Telerik RadComboBox that looks like ComboBox</h1>
     <telerik:RadComboBox ID="RadComboBox1" runat="server" DataSourceID="ObjectDataSource1"
         DataTextField="Name" DataValueField="RoleId">
+        <ItemTemplate>
+            <asp:CheckBox runat="server" ID="chkToDoListTemplate" Checked="false" />
+            <asp:Label runat="server" ID="lblToDoListTemplateName" AssociatedControlID="chkToDoListTemplate"
+                Text='<%# Eval("Name") %>'></asp:Label>
+        </ItemTemplate>
     </telerik:RadComboBox>
     <p>
         &nbsp;
