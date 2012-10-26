@@ -14,8 +14,6 @@ Micajah.Common.UpdateProgress = function (a) {
     this._successTemplate = $get(this.get_element().id + '_SuccessTemplate');
     this._templates = [this._failureTemplate, this._progressTemplate, this._successTemplate];
     this._timeout = -1;
-    this._postBackAction = $get(this.get_element().id + '_PostBackAction');
-    this._postBackElement = null;
     try {
         if ((window.navigator.appVersion.indexOf('MSIE') > -1) && (this._successTemplate.style.width == ''))
             this._successTemplate.style.width = '100%';
@@ -36,12 +34,13 @@ Micajah.Common.UpdateProgress.prototype =
 
     get_showProgress: function () {
         var showProgress = (!this._associatedUpdatePanelId);
-        if (this._postBackElement) {
+        var postBackElement = $get(Micajah.Common.UpdateProgress._postBackElements[this.get_id()]);
+        if (postBackElement) {
             if (this._postBackControlId.length > 0) {
-                showProgress = (this._postBackElement.id === this._postBackControlId);
+                showProgress = (postBackElement.id === this._postBackControlId);
             }
             else {
-                var curElem = $get(this._postBackElement.id);
+                var curElem = postBackElement;
                 while (!showProgress && curElem) {
                     if (curElem.id && (this._associatedUpdatePanelId === curElem.id))
                         showProgress = true;
@@ -122,7 +121,8 @@ Micajah.Common.UpdateProgress.prototype =
     },
 
     _handleBeginRequest: function (sender, args) {
-        this._postBackElement = args.get_postBackElement();
+        var postBackElement = args.get_postBackElement();
+        Micajah.Common.UpdateProgress._postBackElements[this.get_id()] = (postBackElement ? postBackElement.id : "");
         if (this.get_showProgress()) {
             if (this._timeout > -1)
                 args.get_request().set_timeout(this._timeout);
@@ -148,5 +148,7 @@ Micajah.Common.UpdateProgress.prototype =
         }
     }
 }
+
+Micajah.Common.UpdateProgress._postBackElements = {};
 
 Micajah.Common.UpdateProgress.registerClass('Micajah.Common.UpdateProgress', Sys.UI._UpdateProgress);

@@ -69,8 +69,8 @@ namespace Micajah.Common.WebControls
             protected override string GetScript()
             {
                 return string.Format(CultureInfo.InvariantCulture
-                    , "$create(Micajah.Common.UpdateProgress, {{'associatedUpdatePanelId':'{0}','displayAfter':{1},'dynamicLayout':{2},'hideAfter':{3},'timeout':{4},'postBackControlId':'{5}'}}, null, null, $get('{6}'));"
-                    , GetAssociatedUpdatePanelClientId(), m_ScriptControl.DisplayAfter, (m_ScriptControl.DynamicLayout ? "true" : "false"), m_ScriptControl.HideAfter, m_ScriptControl.Timeout, m_ScriptControl.PostBackControlId, m_ScriptControl.ClientID);
+                    , "$create(Micajah.Common.UpdateProgress, {{'associatedUpdatePanelId':'{0}','displayAfter':{1},'dynamicLayout':{2},'hideAfter':{3},'timeout':{4},'postBackControlId':'{5}','postBackHasError':{6}}}, null, null, $get('{7}'));"
+                    , GetAssociatedUpdatePanelClientId(), m_ScriptControl.DisplayAfter, (m_ScriptControl.DynamicLayout ? "true" : "false"), m_ScriptControl.HideAfter, m_ScriptControl.Timeout, m_ScriptControl.PostBackControlId, (m_ScriptControl.PostBackHasError ? "true" : "false"), m_ScriptControl.ClientID);
             }
 
             #endregion
@@ -479,7 +479,7 @@ namespace Micajah.Common.WebControls
                 current.RegisterScriptControl<UpdateProgress>(this);
 
                 if (current.IsInAsyncPostBack)
-                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), this.ClientID + "_SetFailed", "$find('" + this.ClientID + "').set_postBackHasError(" + (this.PostBackHasError ? "true" : "false") + ");", true);
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), this.ClientID + "_SetFailed", "Sys.Application.add_init(function() {{var ctl = $find('" + this.ClientID + "'); if (ctl) {{ ctl.set_postBackHasError(" + (this.PostBackHasError ? "true" : "false") + "); }} }});", true);
             }
         }
 
