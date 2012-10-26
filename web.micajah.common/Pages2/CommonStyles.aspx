@@ -86,32 +86,32 @@
     <asp:Button ID="Button25" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="X-Large Blue" />
     <asp:LinkButton ID="LinkButton11" runat="server" Text="Link" CssClass="Button X-Large Blue" />
     <h1>
-        Red Negative Buttons
+        Red Buttons
     </h1>
     <p>
         Small</p>
     <asp:Button ID="Button26" runat="server" Text="Button" CssClass="Small Red Negative" />
-    <input type="reset" value="Reset" class="Small Red Negative" />
-    <asp:Button ID="Button27" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Small Red Negative" />
-    <asp:LinkButton ID="LinkButton12" runat="server" Text="Link" CssClass="Button Small Red Negative" />
+    <input type="reset" value="Reset" class="Small Red" />
+    <asp:Button ID="Button27" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Small Red" />
+    <asp:LinkButton ID="LinkButton12" runat="server" Text="Link" CssClass="Button Small Red" />
     <p>
         Standard</p>
-    <asp:Button ID="Button28" runat="server" Text="Button" CssClass="Red Negative" />
-    <input type="reset" value="Reset" class="Red Negative" />
-    <asp:Button ID="Button29" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Red Negative" />
-    <asp:LinkButton ID="LinkButton13" runat="server" Text="Link" CssClass="Button Red Negative" />
+    <asp:Button ID="Button28" runat="server" Text="Button" CssClass="Red" />
+    <input type="reset" value="Reset" class="Red" />
+    <asp:Button ID="Button29" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Red" />
+    <asp:LinkButton ID="LinkButton13" runat="server" Text="Link" CssClass="Button Red" />
     <p>
         Large</p>
-    <asp:Button ID="Button30" runat="server" Text="Button" CssClass="Large Red Negative" />
-    <input type="reset" value="Reset" class="Large Red Negative" />
-    <asp:Button ID="Button31" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Large Red Negative" />
-    <asp:LinkButton ID="LinkButton14" runat="server" Text="Link" CssClass="Button Large Red Negative" />
+    <asp:Button ID="Button30" runat="server" Text="Button" CssClass="Large Red" />
+    <input type="reset" value="Reset" class="Large Red" />
+    <asp:Button ID="Button31" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Large Red" />
+    <asp:LinkButton ID="LinkButton14" runat="server" Text="Link" CssClass="Button Large Red" />
     <p>
         X-Large</p>
-    <asp:Button ID="Button32" runat="server" Text="Button" CssClass="X-Large Red Negative" />
-    <input type="reset" value="Reset" class="X-Large Red Negative" />
-    <asp:Button ID="Button33" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="X-Large Red Negative" />
-    <asp:LinkButton ID="LinkButton15" runat="server" Text="Link" CssClass="Button X-Large Red Negative" />
+    <asp:Button ID="Button32" runat="server" Text="Button" CssClass="X-Large Red" />
+    <input type="reset" value="Reset" class="X-Large Red" />
+    <asp:Button ID="Button33" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="X-Large Red" />
+    <asp:LinkButton ID="LinkButton15" runat="server" Text="Link" CssClass="Button X-Large Red" />
     <br />
     <br />
     <h1>
