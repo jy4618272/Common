@@ -199,7 +199,7 @@ namespace Micajah.Common.Security
                                 user = CreateFromAuthCookie();
                                 session[UserContextKey] = user;
                             }
-                            catch (AuthenticationException)
+                            catch (AuthenticationException ex)
                             {
                                 (new LoginProvider()).SignOut();
                             }
@@ -370,7 +370,7 @@ namespace Micajah.Common.Security
             get { return (string)base[CountryKey]; }
             set { base[CountryKey] = value; }
         }
-        
+
         /// <summary>
         /// Gets or sets the time zone identifier.
         /// </summary>
@@ -444,10 +444,10 @@ namespace Micajah.Common.Security
             {
                 Organization org = null;
                 Guid organizationId = Guid.Empty;
-                
+
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     FillSelectedOrganizationIdFromSession(ref organizationId);
-                
+
                 if (organizationId == Guid.Empty)
                     organizationId = (Guid)base[SelectedOrganizationIdKey];
 
@@ -494,7 +494,7 @@ namespace Micajah.Common.Security
                 }
             }
         }
-        
+
         /// <summary>
         /// Fills SelectedOrganizationId from session
         /// </summary>        
@@ -511,6 +511,13 @@ namespace Micajah.Common.Security
                         organizationId = (Guid)obj;
                     else
                         UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
+
+                    if (obj == null)
+                    {
+                        obj = session[SelectedOrganizationIdKey];
+                        if (obj != null)
+                            organizationId = (Guid)obj;
+                    }
                 }
             }
         }
@@ -536,7 +543,7 @@ namespace Micajah.Common.Security
                 {
                     organizationId = (Guid)base[SelectedOrganizationIdKey];
                     instanceId = (Guid)base[SelectedInstanceIdKey];
-                    
+
                     if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     {
                         if (SelectedOrganization != null && SelectedOrganization.Instances != null)
@@ -832,7 +839,7 @@ namespace Micajah.Common.Security
         }
 
         private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool? isPersistent)
-        {            
+        {
             if ((Guid)base[SelectedOrganizationIdKey] != newOrganization.OrganizationId)
                 CheckWebSite(newOrganization.OrganizationId, null);
 
@@ -936,7 +943,9 @@ namespace Micajah.Common.Security
         {
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null))
             {
-                CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture));
+                string customUrl = HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture);
+                customUrl = customUrl.Replace(string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst), string.Empty);
+                CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(customUrl.ToLower());
                 if (row != null)
                 {
                     UserContext.SelectedOrganizationId = row.OrganizationId;
@@ -1095,7 +1104,12 @@ namespace Micajah.Common.Security
             this.UserId = userId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
-                LoginProvider.SetAuthCookie(userId, Guid.Empty, Guid.Empty, isPersistent);
+            {
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    LoginProvider.SetAuthCookie(userId, organizationId, instanceId, isPersistent);
+                else
+                    LoginProvider.SetAuthCookie(userId, Guid.Empty, Guid.Empty, isPersistent);
+            }
 
             if (organizationId != Guid.Empty)
             {

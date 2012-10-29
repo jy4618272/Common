@@ -506,7 +506,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static Instance GetInstance(Guid instanceId)
         {
-            return GetInstance(instanceId, UserContext.Current.SelectedOrganization.OrganizationId);
+            if (UserContext.Current != null && UserContext.Current.SelectedOrganization != null)
+                return GetInstance(instanceId, UserContext.Current.SelectedOrganization.OrganizationId);
+            else
+                return null;
         }
 
         /// <summary>

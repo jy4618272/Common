@@ -47,6 +47,18 @@ namespace Micajah.Common.Configuration
             get { return (StringCollection)this["partialCustomUrlRootAddresses"]; }
         }
 
+        public string PartialCustomUrlRootAddressesFirst
+        {
+            get
+            {
+                string address = string.Empty;
+                if (this.PartialCustomUrlRootAddresses != null && this.PartialCustomUrlRootAddresses.Count > 0)
+                    address = this.PartialCustomUrlRootAddresses[0];
+
+                return address;
+            }
+        }
+
         /// <summary>
         /// Gets the reserved addresses for partial custom URLs used by internal applications.
         /// </summary>
