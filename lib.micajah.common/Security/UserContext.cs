@@ -966,9 +966,9 @@ namespace Micajah.Common.Security
 
                         if (UserContext.SelectedInstanceId != Guid.Empty)
                             user.SelectInstance(UserContext.SelectedInstanceId);
+                        
+                        Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
                     }
-
-                    Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
                 }
                 else
                     CustomUrlProvider.InitializeOrganizationOrInstanceFromCustomUrl();

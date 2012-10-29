@@ -748,7 +748,7 @@ namespace Micajah.Common.Application
                     { 
                         string url = CustomUrlProvider.GetVanityUrl(Security.UserContext.SelectedOrganizationId, Security.UserContext.SelectedInstanceId);
                         url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
-                        if (!string.IsNullOrEmpty(url) && string.Compare(Security.UserContext.VanityUrl, url, true) != 0)
+                        if (!string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(Security.UserContext.VanityUrl) && string.Compare(Security.UserContext.VanityUrl, url, true) != 0)
                             Response.Redirect(Request.Url.ToString().Replace(Request.Url.Host, url));
                     }
                 }
