@@ -24,7 +24,6 @@ namespace Micajah.Common.Security
     {
         #region Members
 
-        private const string ActionIdListKey = "mc.ActionIdList";
         private const string BreadcrumbsKey = "mc.Breadcrumbs";
         private const string EmailKey = "mc.Email";
         private const string FirstNameKey = "mc.FirstName";
@@ -64,7 +63,6 @@ namespace Micajah.Common.Security
         /// </summary>
         public UserContext()
         {
-            base[ActionIdListKey] = new ArrayList();
             base[EmailKey] = string.Empty;
             base[FirstNameKey] = string.Empty;
             base[GroupIdListKey] = new ArrayList();
@@ -84,11 +82,18 @@ namespace Micajah.Common.Security
         #region Internal Properties
 
         /// <summary>
-        /// Gets a collection of the actions identifiers that the user's groups roles are associated with.
+        /// Gets a collection of the actions identifiers that the user has access to.
         /// </summary>
         internal ArrayList ActionIdList
         {
-            get { return (ArrayList)base[ActionIdListKey]; }
+            get
+            {
+                Instance inst = this.SelectedInstance;
+                if (inst == null)
+                    return ActionProvider.GetRoleActionIdList(this.RoleIdList, this.IsOrganizationAdministrator);
+                else
+                    return ActionProvider.GetGroupActionIdList(this.GroupIdList, inst.InstanceId, inst.OrganizationId, this.IsOrganizationAdministrator, this.IsInstanceAdministrator());
+            }
         }
 
         /// <summary>
@@ -141,7 +146,6 @@ namespace Micajah.Common.Security
                 if (s_ReservedKeys == null)
                 {
                     s_ReservedKeys = new ArrayList();
-                    s_ReservedKeys.Add(ActionIdListKey);
                     s_ReservedKeys.Add(BreadcrumbsKey);
                     s_ReservedKeys.Add(EmailKey);
                     s_ReservedKeys.Add(FirstNameKey);
@@ -370,7 +374,7 @@ namespace Micajah.Common.Security
             get { return (string)base[CountryKey]; }
             set { base[CountryKey] = value; }
         }
-        
+
         /// <summary>
         /// Gets or sets the time zone identifier.
         /// </summary>
@@ -444,10 +448,10 @@ namespace Micajah.Common.Security
             {
                 Organization org = null;
                 Guid organizationId = Guid.Empty;
-                
+
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     FillSelectedOrganizationIdFromSession(ref organizationId);
-                
+
                 if (organizationId == Guid.Empty)
                     organizationId = (Guid)base[SelectedOrganizationIdKey];
 
@@ -494,7 +498,7 @@ namespace Micajah.Common.Security
                 }
             }
         }
-        
+
         /// <summary>
         /// Fills SelectedOrganizationId from session
         /// </summary>        
@@ -536,7 +540,7 @@ namespace Micajah.Common.Security
                 {
                     organizationId = (Guid)base[SelectedOrganizationIdKey];
                     instanceId = (Guid)base[SelectedInstanceIdKey];
-                    
+
                     if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     {
                         if (SelectedOrganization != null && SelectedOrganization.Instances != null)
@@ -753,15 +757,12 @@ namespace Micajah.Common.Security
 
         private void SelectedInstanceChange(Instance newInstance, bool? isPersistent)
         {
-            ArrayList actionIdList = new ArrayList();
             ArrayList groupIdList = new ArrayList();
             ArrayList roleIdList = new ArrayList();
             Guid roleId = Guid.Empty;
             string startUrl = null;
 
             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(newInstance.OrganizationId);
-            SortedList list = null;
-            SortedList list2 = new SortedList();
             OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
 
             // Gets the actions that the user have access to.
@@ -779,28 +780,10 @@ namespace Micajah.Common.Security
                         if (RoleProvider.GetRoleRow(roleId) != null)
                             roleIdList.Add(roleId);
                     }
-
-                    if (roleId != RoleProvider.InstanceAdministratorRoleId)
-                    {
-                        list = GroupProvider.GetActionIdListWithEnabledFlag(ds.GroupsInstancesActions, groupId, newInstance.InstanceId, roleId);
-                        foreach (Guid actionId in list.Keys)
-                        {
-                            bool enabled = (bool)list[actionId];
-                            if (list2.Contains(actionId))
-                                list2[actionId] = enabled;
-                            else
-                                list2.Add(actionId, enabled);
-                        }
-                    }
                 }
             }
 
-            foreach (Guid actionId in list2.Keys)
-            {
-                if ((bool)list2[actionId]) actionIdList.Add(actionId);
-            }
-
-            roleId = RoleProvider.AssumeRole(this.IsOrganizationAdministrator, ref roleIdList, ref startUrl, ref actionIdList);
+            roleId = RoleProvider.AssumeRole(this.IsOrganizationAdministrator, ref roleIdList, ref startUrl);
 
             if (roleIdList.Count == 0)
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, newInstance.Name));
@@ -816,7 +799,6 @@ namespace Micajah.Common.Security
                 SelectedInstanceChanging(this, new UserContextSelectedInstanceChangingEventArgs() { Instance = newInstance });
             }
 
-            base[ActionIdListKey] = actionIdList;
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
@@ -832,7 +814,7 @@ namespace Micajah.Common.Security
         }
 
         private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool? isPersistent)
-        {            
+        {
             if ((Guid)base[SelectedOrganizationIdKey] != newOrganization.OrganizationId)
                 CheckWebSite(newOrganization.OrganizationId, null);
 
@@ -847,7 +829,6 @@ namespace Micajah.Common.Security
 
             base[SelectedInstanceIdKey] = Guid.Empty;
 
-            ArrayList actionIdList = new ArrayList();
             ArrayList groupIdList = new ArrayList();
             ArrayList roleIdList = new ArrayList();
             Guid roleId = Guid.Empty;
@@ -877,7 +858,7 @@ namespace Micajah.Common.Security
                 }
             }
 
-            roleId = RoleProvider.AssumeRole(isOrgAdmin, ref roleIdList, ref startUrl, ref actionIdList);
+            roleId = RoleProvider.AssumeRole(isOrgAdmin, ref roleIdList, ref startUrl);
 
             if (roleIdList.Count == 0)
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstancesRoles, newOrganization.Name));
@@ -889,7 +870,6 @@ namespace Micajah.Common.Security
             base[TimeZoneIdKey] = null;
             base[TimeFormatKey] = null;
             base[SelectedOrganizationIdKey] = newOrganization.OrganizationId;
-            base[ActionIdListKey] = actionIdList;
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;

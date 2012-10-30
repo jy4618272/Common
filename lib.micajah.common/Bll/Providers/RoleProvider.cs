@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Micajah.Common.Application;
@@ -92,12 +91,11 @@ namespace Micajah.Common.Bll.Providers
 
             //if (!isInstanceAdmin)
             //    isInstanceAdmin = isOrgAdmin;
-                        
+
             return (isAdminOnly ? GetHighestNonBuiltInRoleId() : GetHighestNonBuiltInRoleId(roleIdList));
         }
 
-        // The administrators only assume the highest non built-in role; the other users assume the lowest non built-in role from the list.
-        internal static Guid AssumeRole(bool isOrgAdmin, ref ArrayList roleIdList, ref string startUrl, ref ArrayList actionIdList)
+        internal static Guid AssumeRole(bool isOrgAdmin, ref ArrayList roleIdList, ref string startUrl)
         {
             bool instanceRequired = false;
             bool isInstanceAdmin = false;
@@ -107,23 +105,18 @@ namespace Micajah.Common.Bll.Providers
             roleIdList.Clear();
             if (roleId != Guid.Empty)
             {
-                actionIdList.AddRange(ActionProvider.GetActionIdListByRoleId(roleId));
                 roleIdList.Add(roleId);
                 startUrl = GetStartActionNavigateUrl(roleId, out instanceRequired);
             }
 
             if (isInstanceAdmin)
             {
-                actionIdList.AddRange(ActionProvider.GetActionIdListByRoleId(InstanceAdministratorRoleId));
-
                 if (!roleIdList.Contains(InstanceAdministratorRoleId))
                     roleIdList.Add(InstanceAdministratorRoleId);
             }
 
             if (isOrgAdmin)
             {
-                actionIdList.AddRange(ActionProvider.GetActionIdListByRoleId(OrganizationAdministratorRoleId));
-
                 if (!roleIdList.Contains(OrganizationAdministratorRoleId))
                     roleIdList.Add(OrganizationAdministratorRoleId);
 
@@ -132,13 +125,6 @@ namespace Micajah.Common.Bll.Providers
             }
             else if (startUrl == null)
                 startUrl = GetStartActionNavigateUrl(InstanceAdministratorRoleId, out instanceRequired);
-
-
-            // Removes duplicate values.
-            HashSet<Guid> set = new HashSet<Guid>((Guid[])actionIdList.ToArray(typeof(Guid)));
-            Guid[] result = new Guid[set.Count];
-            set.CopyTo(result);
-            actionIdList = new ArrayList(result);
 
             return roleId;
         }
