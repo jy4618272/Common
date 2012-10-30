@@ -393,7 +393,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 HeaderRightLogoLink.Visible = true;
             }
 
-            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
+            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
                 LogoImage.Visible = false;
             else
             {
