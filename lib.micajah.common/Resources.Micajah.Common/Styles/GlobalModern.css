@@ -405,8 +405,7 @@ input[type=button], input[type=reset], input[type=submit], button, .Button
 {
     color: #333;
     border: 1px solid #d4d4d4;
-    background-color: #ececec;
-    background-image: linear-gradient(#f4f4f4, #ececec);
+    background-color: #d3d3d3;
 }
 
 input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus,
@@ -418,7 +417,6 @@ input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, but
     border-top-color: #3072b3;
     border-bottom-color: #2a65a0;
 	background-color: #3072b3;
-	background-image: linear-gradient(#599bdc, #3072b3);
 }
 
 input[type=button].Small, input[type=reset].Small, input[type=submit].Small, button.Small, .Button.Small
@@ -460,7 +458,6 @@ input[type=button].Green, input[type=reset].Green, input[type=submit].Green, but
     color: White;
     border: 1px solid #79A541;
     background-color: #92C74F;
-    background-image: none;
 }
 
 input[type=button].Green:hover, input[type=reset].Green:hover, input[type=submit].Green:hover, button.Green:hover, .Button.Green:hover
@@ -475,7 +472,6 @@ input[type=button].Green:active, input[type=reset].Green:active, input[type=subm
     color: White;
     border: 1px solid #28597a;
     background-color: #28597a;
-    background-image: none;
 }
 
 /* Blue Buttons */
@@ -484,7 +480,6 @@ input[type=button].Blue, input[type=reset].Blue, input[type=submit].Blue, button
     color: White;
     border: 1px solid #058dc7;
     background-color: #058dc7;
-    background-image: none;
 }
 
 input[type=button].Blue:hover, input[type=reset].Blue:hover, input[type=submit].Blue:hover, button.Blue:hover, .Button.Blue:hover
@@ -500,7 +495,6 @@ input[type=button].Red, input[type=reset].Red, input[type=submit].Red, button.Re
     color: White;
     border: 1px solid #ab2222;
     background-color: #d74040;
-    background-image: none;
 }
 
 input[type=button].Red:focus, input[type=reset].Red:focus, input[type=submit].Red:focus, button.Red:focus, .Button.Red:focus,

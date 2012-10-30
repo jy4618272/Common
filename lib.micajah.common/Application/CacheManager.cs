@@ -85,9 +85,18 @@ namespace Micajah.Common.Application
         /// Retrieves an enumerator used to iterate through the key settings and their values contained in the cache.
         /// </summary>
         /// <returns>An enumerator to iterate through the cache.</returns>
-        public virtual IEnumerator GetEnumerator()
+        public virtual IDictionaryEnumerator GetEnumerator()
         {
             return HttpRuntime.Cache.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Retrieves an enumerator used to iterate through the key settings and their values contained in the cache.
+        /// </summary>
+        /// <returns>An enumerator to iterate through the cache.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
 
         /// <summary>

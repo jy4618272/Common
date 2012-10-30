@@ -208,14 +208,20 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (!actionIdList.Contains(actionId))
                     {
-                        newActionRow = table.NewGroupsInstancesActionsRow();
+                        newActionRow = table.FindByGroupIdInstanceIdActionId(groupId, instanceId, actionId);
+                        if (newActionRow == null)
+                        {
+                            newActionRow = table.NewGroupsInstancesActionsRow();
 
-                        newActionRow.GroupId = groupId;
-                        newActionRow.InstanceId = instanceId;
-                        newActionRow.ActionId = actionId;
-                        newActionRow.Enabled = false;
+                            newActionRow.GroupId = groupId;
+                            newActionRow.InstanceId = instanceId;
+                            newActionRow.ActionId = actionId;
+                            newActionRow.Enabled = false;
 
-                        table.AddGroupsInstancesActionsRow(newActionRow);
+                            table.AddGroupsInstancesActionsRow(newActionRow);
+                        }
+                        else if (newActionRow.Enabled)
+                            newActionRow.Enabled = false;
                     }
                     else actionIdList.Remove(actionId);
                 }
@@ -224,14 +230,20 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (!list.Contains(actionId))
                     {
-                        newActionRow = table.NewGroupsInstancesActionsRow();
+                        newActionRow = table.FindByGroupIdInstanceIdActionId(groupId, instanceId, actionId);
+                        if (newActionRow == null)
+                        {
+                            newActionRow = table.NewGroupsInstancesActionsRow();
 
-                        newActionRow.GroupId = groupId;
-                        newActionRow.InstanceId = instanceId;
-                        newActionRow.ActionId = actionId;
-                        newActionRow.Enabled = true;
+                            newActionRow.GroupId = groupId;
+                            newActionRow.InstanceId = instanceId;
+                            newActionRow.ActionId = actionId;
+                            newActionRow.Enabled = true;
 
-                        table.AddGroupsInstancesActionsRow(newActionRow);
+                            table.AddGroupsInstancesActionsRow(newActionRow);
+                        }
+                        else if (!newActionRow.Enabled)
+                            newActionRow.Enabled = true;
                     }
                 }
 
