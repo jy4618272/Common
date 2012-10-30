@@ -15,7 +15,7 @@
     <table id="FormTable" class="FormTable" runat="server" align="center" cellspacing="10">
         <tr id="TitleContainer" runat="server" class="Caption">
             <td colspan="2" style="text-align: center;">
-                <asp:Label ID="TitleLabel" runat="server"></asp:Label>
+                <asp:Image ID="LogoImage" runat="server" /><asp:Label ID="TitleLabel" runat="server"></asp:Label>
             </td>
         </tr>
         <tr>

@@ -48,6 +48,12 @@ a.Large, a:hover.Large
     padding-right: 7px;
 }
 
+.Logo
+{
+    width: 100%;
+    text-align: center;
+}
+
 .RadCaptcha_Default p
 {
     display: inline;
