@@ -742,7 +742,16 @@ namespace Micajah.Common.Application
                 }
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (ctx.Session.IsNewSession || string.Compare(Security.UserContext.VanityUrl, System.Web.HttpContext.Current.Request.Url.Host, true) != 0))
+                {
                     UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
+                    if (Security.UserContext.SelectedOrganizationId != Guid.Empty)
+                    { 
+                        string url = CustomUrlProvider.GetVanityUrl(Security.UserContext.SelectedOrganizationId, Security.UserContext.SelectedInstanceId);
+                        url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
+                        if (!string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(Security.UserContext.VanityUrl) && string.Compare(Security.UserContext.VanityUrl, url, true) != 0)
+                            Response.Redirect(Request.Url.ToString().Replace(Request.Url.Host, url));
+                    }
+                }
             }
         }
 

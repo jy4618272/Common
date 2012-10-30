@@ -57,60 +57,13 @@ namespace Micajah.Common.WebControls.SecurityControls
         internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
         {
             UserContext ctx = UserContext.Current;
-            Instance inst = null;
             try
             {
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
-                    string url = string.Empty;
-                    CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(ctx.SelectedOrganization.OrganizationId, instanceId);
-                    if (row != null)
-                    {
-                        url = string.Format("{0}{1}", !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl, redirectUrl);
-                        if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                            url = string.Format("http://{0}", url);
-
-                        errorDiv.Page.Response.Redirect(url, true);
-                    }
-                    else
-                    {
-                        if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
-                        {
-                            inst = InstanceProvider.GetInstance(instanceId);
-                            InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(ctx.UserId, ctx.SelectedOrganization.OrganizationId);
-                            if (inst != null)
-                            {
-                                row = CustomUrlProvider.GetCustomUrlByOrganizationId(ctx.SelectedOrganization.OrganizationId);
-
-                                if (row == null)
-                                {
-                                    System.Data.DataView table = CustomUrlProvider.GetCustomUrls(ctx.SelectedOrganization.OrganizationId);
-                                    if (table != null && table.Table.Rows.Count > 0)
-                                        row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow; 
-                                }
-
-                                if (row != null)
-                                    if (coll.Count > 1)
-                                        url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl.Split('.')[0], inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                                    else
-                                        url = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", row.PartialCustomUrl.Split('.')[0], FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                                else
-                                {
-                                    if (coll.Count > 1)
-                                        url = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", ctx.SelectedOrganization.PseudoId, inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                                    else
-                                        url = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", ctx.SelectedOrganization.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                                }
-
-                                url = string.Format("{0}{1}", url, redirectUrl);
-
-                                if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                                    url = string.Format("http://{0}", url);
-
-                                errorDiv.Page.Response.Redirect(url, true);
-                            }
-                        }
-                    }
+                    string url = CustomUrlProvider.GetVanityUrl(ctx != null ? ctx.SelectedOrganization.OrganizationId : UserContext.SelectedOrganizationId, instanceId);
+                    url = string.Format("{0}{1}", url, redirectUrl);
+                    errorDiv.Page.Response.Redirect(url, true);
                 }
 
                 ctx.SelectInstance(instanceId);
@@ -122,10 +75,6 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 ShowError(ex.Message, errorDiv);
-            }
-            finally
-            {
-                if (inst != null) inst = null;
             }
         }
 

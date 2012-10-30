@@ -203,7 +203,7 @@ namespace Micajah.Common.Security
                                 user = CreateFromAuthCookie();
                                 session[UserContextKey] = user;
                             }
-                            catch (AuthenticationException)
+                            catch (AuthenticationException ex)
                             {
                                 (new LoginProvider()).SignOut();
                             }
@@ -515,6 +515,13 @@ namespace Micajah.Common.Security
                         organizationId = (Guid)obj;
                     else
                         UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
+
+                    if (obj == null)
+                    {
+                        obj = session[SelectedOrganizationIdKey];
+                        if (obj != null)
+                            organizationId = (Guid)obj;
+                    }
                 }
             }
         }
@@ -916,7 +923,9 @@ namespace Micajah.Common.Security
         {
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null))
             {
-                CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture));
+                string customUrl = HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture);
+                customUrl = customUrl.Replace(string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst), string.Empty);
+                CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(customUrl.ToLower());
                 if (row != null)
                 {
                     UserContext.SelectedOrganizationId = row.OrganizationId;
@@ -937,7 +946,7 @@ namespace Micajah.Common.Security
 
                         if (UserContext.SelectedInstanceId != Guid.Empty)
                             user.SelectInstance(UserContext.SelectedInstanceId);
-
+                        
                         Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
                     }
                 }
@@ -1075,7 +1084,12 @@ namespace Micajah.Common.Security
             this.UserId = userId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
-                LoginProvider.SetAuthCookie(userId, Guid.Empty, Guid.Empty, isPersistent);
+            {
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    LoginProvider.SetAuthCookie(userId, organizationId, instanceId, isPersistent);
+                else
+                    LoginProvider.SetAuthCookie(userId, Guid.Empty, Guid.Empty, isPersistent);
+            }
 
             if (organizationId != Guid.Empty)
             {

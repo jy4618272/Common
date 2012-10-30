@@ -83,52 +83,15 @@ namespace Micajah.Common.WebControls.SecurityControls
         internal static void SelectOrganization(Guid organizationId, string returnUrl, HtmlGenericControl errorDiv)
         {
             UserContext ctx = UserContext.Current;
-            Organization org = null;
             try
             {
                 string redirectUrl = returnUrl;
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
-                    org = OrganizationProvider.GetOrganization(organizationId);
-                    if (org != null)
-                    {
-                        CommonDataSet.CustomUrlRow row = null;
-
-                        if (UserContext.Current.SelectedInstance != null)
-                            row = CustomUrlProvider.GetCustomUrl(organizationId, UserContext.Current.SelectedInstance.InstanceId);
-                        
-                        if (row == null)                        
-                            row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
-
-                        if (row == null)
-                        {
-                            System.Data.DataView table = CustomUrlProvider.GetCustomUrls(organizationId);
-                            if (table != null && table.Table.Rows.Count > 0)
-                                row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                        }
-                            
-                        if (row != null)
-                        {
-                            redirectUrl = string.Format("{0}{1}", !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : row.PartialCustomUrl, returnUrl);
-                            if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                                redirectUrl = string.Format("http://{0}", redirectUrl);
-
-                            errorDiv.Page.Response.Redirect(redirectUrl, true);
-                        }
-                        else
-                        {
-                            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses != null && FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
-                            {
-                                redirectUrl = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", org.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0]);
-                                redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
-                                if (!(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || redirectUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                                    redirectUrl = string.Format("http://{0}", redirectUrl);
-
-                                errorDiv.Page.Response.Redirect(redirectUrl, true);
-                            }
-                        }
-                    }
+                    redirectUrl = CustomUrlProvider.GetVanityUrl(organizationId, Guid.Empty);
+                    redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
+                    errorDiv.Page.Response.Redirect(redirectUrl, true);
                 }
 
                 ctx.SelectOrganization(organizationId);
@@ -140,11 +103,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 ActiveInstanceControl.ShowError(ex.Message, errorDiv);
-            }
-            finally
-            {
-                if (org != null) org = null;
-            }
+            }            
         }
 
         #endregion

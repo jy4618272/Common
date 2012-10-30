@@ -202,8 +202,7 @@ function InstanceRequiredValidation(source, arguments) {{
             EmailLabel1.Text = Resources.SignupOrganizationControl_EmailLabel1_Text;
             OrganizationUrlLabel.Text = Resources.SignupOrganizationControl_OrganizationUrlLabel_Text;
             Schema.Text = Uri.UriSchemeHttps + Uri.SchemeDelimiter;
-            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
-                PartialCustomUrlRootAddress.Text = "." + FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0];
+            PartialCustomUrlRootAddress.Text = "." + FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst;
             OrganizationUrl.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
@@ -531,7 +530,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     if (!string.IsNullOrEmpty(OrganizationUrl.Text))
                     {
                         CustomUrlProvider.ValidatePartialCustomUrl(OrganizationUrl.Text);
-                        args.IsValid = CustomUrlProvider.CheckCustomUrl(OrganizationUrl.Text + PartialCustomUrlRootAddress.Text);
+                        args.IsValid = CustomUrlProvider.CheckCustomUrl(OrganizationUrl.Text);
                     }
                 }
                 catch (Exception ex) { errorMessage = ex.Message; }
@@ -559,7 +558,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 if (!string.IsNullOrEmpty(OrganizationUrl.Text))
                 {
                     CustomUrlProvider.ValidatePartialCustomUrl(OrganizationUrl.Text);
-                    OrganizationUrlTick.Visible = OrganizationUrl.IsValid = args.IsValid = CustomUrlProvider.CheckCustomUrl(OrganizationUrl.Text + PartialCustomUrlRootAddress.Text);
+                    OrganizationUrlTick.Visible = OrganizationUrl.IsValid = args.IsValid = CustomUrlProvider.CheckCustomUrl(OrganizationUrl.Text);
                 }
                 else
                     args.IsValid = true;

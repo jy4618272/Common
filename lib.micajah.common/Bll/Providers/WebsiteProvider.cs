@@ -118,8 +118,7 @@ namespace Micajah.Common.Bll.Providers
 
                                     if (org == null)
                                     {
-                                        string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
-                                        customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(segment.Split('-')[0]);
                                         if (customUrlRow != null)
                                             org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
                                     }
@@ -130,7 +129,7 @@ namespace Micajah.Common.Bll.Providers
 
                                     if (org == null)
                                     {
-                                        customUrlRow = CustomUrlProvider.GetCustomUrl(url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(segment);
                                         if (customUrlRow != null)
                                             org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
                                     }
