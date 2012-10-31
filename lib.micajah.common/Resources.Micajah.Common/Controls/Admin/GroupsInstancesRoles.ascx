@@ -17,13 +17,13 @@
                 <mits:TextBoxField DataField="RoleName" />
                 <mits:TemplateField ItemStyle-Wrap="False" ItemStyle-Width="40px">
                     <itemtemplate>
-                        <asp:LinkButton ID="ActionsLink" runat="server" CommandName="Select" Text="<%# ActionsLinkText %>"
+                        <asp:LinkButton ID="ActionsLink" runat="server" CssClass="Command" CommandName="Select" Text="<%# ActionsLinkText %>"
                             Visible='<%# LinkVisible(Eval("RoleId")) %>' />
                     </itemtemplate>
                 </mits:TemplateField>
                 <mits:TemplateField ItemStyle-Wrap="False" ItemStyle-Width="40px">
                     <itemtemplate>
-                        <asp:HyperLink ID="SettingsLink" runat="server" Text="<%# SettingsLinkText %>"
+                        <asp:HyperLink ID="SettingsLink" runat="server" CssClass="Command" Text="<%# SettingsLinkText %>"
                             NavigateUrl='<%# GetSettingsLink(Eval("GroupId"), Eval("InstanceId")) %>'
                             Visible='<%# LinkVisible(Eval("RoleId")) %>' />
                     </itemtemplate>

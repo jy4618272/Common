@@ -56,8 +56,6 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Visible = false;
         }
 
-
-
         protected void List_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e == null) return;

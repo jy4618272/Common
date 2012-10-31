@@ -19,12 +19,12 @@
             <mits:TextBoxField DataField="Name" HeaderText="Name" SortExpression="Name" HeaderStyle-Wrap="false"
                 ItemStyle-Wrap="false">
             </mits:TextBoxField>
-            <mits:TemplateField SortExpression="StartDate" ItemStyle-HorizontalAlign="Right" HeaderStyle-Wrap="false" ItemStyle-Wrap="false" HeaderText="Start Date">
+            <mits:TemplateField SortExpression="StartDate" HeaderStyle-Wrap="false" ItemStyle-Wrap="false" HeaderText="Start Date">
                 <ItemTemplate>
                     <asp:Literal ID="StartDateLiteral" runat="server"></asp:Literal>
                 </ItemTemplate>
             </mits:TemplateField>
-            <mits:TemplateField SortExpression="EndDate" ItemStyle-HorizontalAlign="Right" HeaderStyle-Wrap="false" ItemStyle-Wrap="false" HeaderText="End Date">
+            <mits:TemplateField SortExpression="EndDate" HeaderStyle-Wrap="false" ItemStyle-Wrap="false" HeaderText="End Date">
                 <ItemTemplate>
                     <asp:Literal ID="EndDateLiteral" runat="server"></asp:Literal>
                 </ItemTemplate>

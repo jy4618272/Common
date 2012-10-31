@@ -14,7 +14,7 @@
                         <asp:Label ID="Name" runat="server" Text='<%# Bind("Name") %>' style="font-size:medium;" ToolTip='<%# Bind("Description") %>'></asp:Label>
                     </itemtemplate>
                 </mits:TemplateField>
-                <mits:HyperLinkField DataNavigateUrlFields="GroupId" ItemStyle-Width="80px" ItemStyle-Wrap="False" />
+                <mits:HyperLinkField DataNavigateUrlFields="GroupId" ItemStyle-Width="80px" ItemStyle-Wrap="False" ControlStyle-CssClass="Command" />
             </columns>
         </mits:CommonGridView>
         <mits:MagicForm ID="EditForm" runat="server" DataSourceID="EntityDataSource" DataKeyNames="GroupId"

@@ -241,12 +241,12 @@ tr.Cgv_P td table td
     padding: 0 0 0 21px !important;
 }
 
-tr.Cgv_R .Cgv_B a
+tr.Cgv_R .Cgv_B a, tr.Cgv_R .Command
 {
     visibility: hidden;
 }
 
-tr.Cgv_R:hover .Cgv_B a
+tr.Cgv_R:hover .Cgv_B a, tr.Cgv_R:hover .Command
 {
     visibility: visible;
 }

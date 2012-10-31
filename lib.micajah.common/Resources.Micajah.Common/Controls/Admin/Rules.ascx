@@ -39,7 +39,7 @@
                         <%# Eval("LastUsedUser") != DBNull.Value ? Micajah.Common.Bll.Providers.RuleEngineProvider.GetDisplayUserName((Guid)Eval("LastUsedUser"), (Guid)Eval("OrganizationId")) : string.Empty %>
                     </ItemTemplate>
                 </mits:TemplateField>
-                <mits:TemplateField SortExpression="LastUsedDate" ItemStyle-HorizontalAlign="Right">
+                <mits:TemplateField SortExpression="LastUsedDate">
                     <ItemTemplate>
                         <asp:Literal ID="LastUsedDateLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>
@@ -49,7 +49,7 @@
                         <%# Micajah.Common.Bll.Providers.RuleEngineProvider.GetDisplayUserName((Guid)Eval("CreatedBy"), (Guid)Eval("OrganizationId"))%>
                     </ItemTemplate>
                 </mits:TemplateField>
-                <mits:TemplateField SortExpression="CreatedDate" ItemStyle-HorizontalAlign="Right">
+                <mits:TemplateField SortExpression="CreatedDate">
                     <ItemTemplate>
                         <asp:Literal ID="CreatedDateLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>

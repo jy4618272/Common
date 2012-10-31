@@ -11,16 +11,16 @@
     //]]>
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-    <contenttemplate>
+    <ContentTemplate>
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="UserId" DataSourceID="EntityListDataSource"
             Width="700px" OnRowDataBound="List_RowDataBound" OnRowDeleting="List_RowDeleting">
             <captioncontrols>
-                <asp:HyperLink ID="InviteUsersLink" runat="server" CssClass="Cgv_AddNew" OnInit="InviteUsersLink_Init"></asp:HyperLink>
+                <asp:HyperLink ID="InviteUsersLink" runat="server" OnInit="InviteUsersLink_Init"></asp:HyperLink>
             </captioncontrols>
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />
                 <mits:TextBoxField DataField="Email" SortExpression="Email" />
-                <mits:TemplateField SortExpression="LastLoginDate" HeaderStyle-Width="80px" ItemStyle-HorizontalAlign="Right">
+                <mits:TemplateField SortExpression="LastLoginDate" HeaderStyle-Width="80px">
                     <ItemTemplate>
                         <asp:Literal ID="LastLoginDateLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>
@@ -33,7 +33,7 @@
                 AllowSorting="true">
                 <columns>
                     <mits:TextBoxField DataField="LoginName" SortExpression="LoginName" />
-                    <mits:ButtonField CommandName="Delete" HeaderStyle-Width="80px" ItemStyle-Wrap="false"></mits:ButtonField>
+                    <mits:ButtonField CommandName="Delete" HeaderStyle-Width="80px" ItemStyle-Wrap="false" ControlStyle-CssClass="Command"></mits:ButtonField>
                 </columns>
             </mits:CommonGridView>
         </div>
@@ -125,7 +125,8 @@
         </asp:ObjectDataSource>
         <asp:ObjectDataSource ID="EntityDataSource" runat="server" SelectMethod="GetUserRowWithSecondaryEmails"
             TypeName="Micajah.Common.Bll.Providers.UserProvider" UpdateMethod="UpdateUser"
-            InsertMethod="AddUserToOrganization" OnInserting="EntityDataSource_Inserting" OnUpdating="EntityDataSource_Inserting">
+            InsertMethod="AddUserToOrganization" OnInserting="EntityDataSource_Inserting"
+            OnUpdating="EntityDataSource_Inserting">
             <SelectParameters>
                 <asp:ControlParameter Name="userId" Type="Object" ControlID="List" PropertyName="SelectedValue" />
             </SelectParameters>
@@ -224,5 +225,5 @@
                 <asp:Parameter Name="organizationId" Type="Object" />
             </UpdateParameters>
         </asp:ObjectDataSource>
-    </contenttemplate>
+    </ContentTemplate>
 </asp:UpdatePanel>

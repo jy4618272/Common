@@ -9,10 +9,8 @@
         <mits:TextBoxField DataField="Name" SortExpression="Name" />
         <mits:TextBoxField DataField="Type" SortExpression="Type" />
         <mits:ImageField DataImageUrlField="Logo" SortExpression="Logo" />
-        <asp:CommandField ShowEditButton="True" />
+        <asp:CommandField ShowEditButton="True" ControlStyle-CssClass="Command" HeaderStyle-Width="90px" />
     </columns>
-    <rowstyle horizontalalign="Center" />
-    <selectedrowstyle horizontalalign="Center" />
 </mits:CommonGridView>
 <mits:magicform id="EditForm" runat="server" datakeynames="ObjectId" width="550px"
     OnDataBinding="EditForm_DataBinding" OnModeChanging="EditForm_ModeChanging" OnItemUpdating="EditForm_ItemUpdating">

@@ -40,7 +40,7 @@
                 <mits:CheckBoxField DataField="Active" SortExpression="Active" HeaderStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                 <mits:TemplateField HeaderStyle-Width="50px" ItemStyle-HorizontalAlign="Center">
                     <ItemTemplate>
-                         <asp:LinkButton ID="UpdateActiveButton" runat="server" CausesValidation="false"></asp:LinkButton>
+                         <asp:LinkButton ID="UpdateActiveButton" runat="server" CssClass="Command" CausesValidation="false"></asp:LinkButton>
                     </ItemTemplate>
                 </mits:TemplateField>
             </columns>

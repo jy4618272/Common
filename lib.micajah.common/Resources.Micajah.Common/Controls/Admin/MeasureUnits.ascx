@@ -8,7 +8,7 @@
             <captioncontrols>
                 <asp:LinkButton ID="AddFromBuiltInLink" runat="server" OnClick="AddFromBuiltInLink_Click" 
                     OnInit="AddFromBuiltInLink_Init"></asp:LinkButton>
-                <asp:LinkButton ID="AddNewLink" runat="server" CssClass="Cgv_AddNew" OnClick="AddNewLink_Click"
+                <asp:LinkButton ID="AddNewLink" runat="server" CssClass="Cgv_AddNew Button Green Large" OnClick="AddNewLink_Click"
                     OnInit="AddNewLink_Init"></asp:LinkButton>
             </captioncontrols>
             <columns>
