@@ -299,54 +299,45 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Checks if custom url is exists in system
         /// </summary>
-        /// <param name="customUrl">Custom url</param>
+        /// <param name="partialCustomUrl">Partial Custom Url with out domain</param>
         /// <returns></returns>
-        public static bool CheckCustomUrl(string customUrl)
+        public static bool CheckCustomUrl(string partialCustomUrl)
         {
-            if (!string.IsNullOrEmpty(customUrl))
+            if (!string.IsNullOrEmpty(partialCustomUrl))
             {
                 CommonDataSet.CustomUrlDataTable table = null;
                 Organization org = null;
-                string[] segments = null;
                 string segment = null;
                 try
                 {
                     table = new CommonDataSet.CustomUrlDataTable();
-                    WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, customUrl, customUrl);
+                    WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
 
                     if (table.Rows.Count > 0)
                         return false;
                     else
                     {
-                        segments = customUrl.Split('.');
-                        if (segments.Length > 1)
-                        {
-                            segment = segments[0].ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
-                            if (segment.Contains("-"))
-                                org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
-                            else
-                                org = OrganizationProvider.GetOrganizationByPseudoId(segment);
-
-                            if (org == null)
-                            {
-                                CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(segment);
-                                if (row != null)
-                                    org = OrganizationProvider.GetOrganization(row.OrganizationId);
-                            }
-
-                            return (org == null);
-                        }
+                        segment = partialCustomUrl.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
+                        if (segment.Contains("-"))
+                            org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
                         else
-                            return false;
-                    }
+                            org = OrganizationProvider.GetOrganizationByPseudoId(segment);
 
+                        if (org == null)
+                        {
+                            CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(segment);
+                            if (row != null)
+                                org = OrganizationProvider.GetOrganization(row.OrganizationId);
+                        }
+
+                        return (org == null);
+                    }
                 }
                 finally
                 {
                     if (table != null) table.Dispose();
                     if (org != null) org = null;
                     segment = null;
-                    segments = null;
                 }
             }
             else
@@ -365,7 +356,7 @@ namespace Micajah.Common.Bll.Providers
             
             if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
             {
-                InitializeFromCustomUrl(url, ref org, ref instance);
+                InitializeFromCustomUrl(ref org, ref instance);
                 Security.UserContext.VanityUrl = (org != null) ? url : string.Empty;
             }
 
@@ -402,18 +393,18 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Initializes the Organization or Instance from custom URL.
-        /// </summary>
-        /// <param name="customUrl">Custom url</param>
+        /// Initializes the Organization or Instance from System.Web.HttpContext.Current.Request.
+        /// </summary>        
         /// <param name="organization">Organization</param>
         /// <param name="instance">Instance</param>
-        public static void InitializeFromCustomUrl(string customUrl, ref Organization organization, ref Instance instance)
+        public static void InitializeFromCustomUrl(ref Organization organization, ref Instance instance)
         {
             string[] segments = null;
             string instPseudo = null;
             string segment = null;
             string[] pseudos = null;
             CommonDataSet.CustomUrlRow customUrlRow = null;
+            string customUrl = System.Web.HttpContext.Current.Request.Url.Host.ToLower();
 
             organization = null;
             instance = null;
@@ -470,6 +461,7 @@ namespace Micajah.Common.Bll.Providers
                 if (segment != null) segment = null;
                 if (pseudos != null) pseudos = null;
                 if (customUrlRow != null) customUrlRow = null;
+                if (customUrl != null) customUrl = null;
             }
         }
 

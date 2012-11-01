@@ -913,33 +913,36 @@ namespace Micajah.Common.Security
             {
                 string customUrl = HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture);
                 customUrl = customUrl.Replace(string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst), string.Empty);
-                CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(customUrl.ToLower());
-                if (row != null)
+                if (string.Compare(customUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl) != 0)
                 {
-                    UserContext.SelectedOrganizationId = row.OrganizationId;
-                    UserContext.SelectedInstanceId = (row.IsInstanceIdNull() ? Guid.Empty : row.InstanceId);
-
-                    UserContext user = UserContext.Current;
-                    if (user != null)
+                    CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(customUrl.ToLower());
+                    if (row != null)
                     {
-                        if (UserContext.SelectedOrganizationId != Guid.Empty && UserContext.SelectedInstanceId == Guid.Empty)
+                        UserContext.SelectedOrganizationId = row.OrganizationId;
+                        UserContext.SelectedInstanceId = (row.IsInstanceIdNull() ? Guid.Empty : row.InstanceId);
+
+                        UserContext user = UserContext.Current;
+                        if (user != null)
                         {
-                            InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, UserContext.SelectedOrganizationId);
-                            if (coll != null && coll.Count == 1)
-                                UserContext.SelectedInstanceId = coll[0].InstanceId;
+                            if (UserContext.SelectedOrganizationId != Guid.Empty && UserContext.SelectedInstanceId == Guid.Empty)
+                            {
+                                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, UserContext.SelectedOrganizationId);
+                                if (coll != null && coll.Count == 1)
+                                    UserContext.SelectedInstanceId = coll[0].InstanceId;
+                            }
+
+                            if (UserContext.SelectedOrganizationId != Guid.Empty)
+                                user.SelectOrganization(UserContext.SelectedOrganizationId);
+
+                            if (UserContext.SelectedInstanceId != Guid.Empty)
+                                user.SelectInstance(UserContext.SelectedInstanceId);
+
+                            Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
                         }
-
-                        if (UserContext.SelectedOrganizationId != Guid.Empty)
-                            user.SelectOrganization(UserContext.SelectedOrganizationId);
-
-                        if (UserContext.SelectedInstanceId != Guid.Empty)
-                            user.SelectInstance(UserContext.SelectedInstanceId);
-
-                        Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
                     }
+                    else
+                        CustomUrlProvider.InitializeOrganizationOrInstanceFromCustomUrl();
                 }
-                else
-                    CustomUrlProvider.InitializeOrganizationOrInstanceFromCustomUrl();
             }
         }
 

@@ -44,6 +44,8 @@ namespace Micajah.Common.WebControls.AdminControls
         protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorDiv;
         protected CustomValidator SimpleViewCustomValidator;
 
+        public bool ShowSwitchViewButton { get; set; }
+
         #endregion
 
         #region Private Properties
@@ -346,7 +348,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
 
             VanityUrlDomainLabel.Text = string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
-
             CustomUrlsMultiView.ActiveViewIndex = 0;
 
             if (!Page.IsPostBack)
@@ -369,6 +370,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (row != null)
                     VanityUrlTextbox.Text = row.PartialCustomUrl.ToLower(CultureInfo.CurrentCulture);
             }
+
+            ChangeViewButton.Visible = this.ShowSwitchViewButton;
         }
 
         protected override void EditFormReset()

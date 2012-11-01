@@ -823,7 +823,21 @@ namespace Micajah.Common.Bll.Providers
                     if (context != null)
                     {
                         context.Response.Clear();
-                        context.Response.Redirect(redirectUrl);
+                        if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                        {
+                            Uri uri = null;
+                            if (Uri.TryCreate(redirectUrl, UriKind.Absolute, out uri))
+                            {
+                                Regex regEx = new Regex(uri.Host, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                                redirectUrl = regEx.Replace(redirectUrl, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst));
+                            }
+                            else
+                                redirectUrl = string.Format("{3}://{0}.{1}{2}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst, redirectUrl, context.Request.Url.Scheme);
+
+                            context.Response.Redirect(redirectUrl);
+                        }
+                        else
+                            context.Response.Redirect(redirectUrl);
                     }
                 }
             }
