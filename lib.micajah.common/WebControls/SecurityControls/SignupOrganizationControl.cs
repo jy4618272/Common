@@ -629,7 +629,7 @@ function InstanceRequiredValidation(source, arguments) {{
             SettingProvider.InitializeStartMenuCheckedItemsSetting(orgId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instId) : null));
 
             if (!string.IsNullOrEmpty(OrganizationUrl.Text))
-                CustomUrlProvider.InsertCustomUrl(orgId, instId, null, OrganizationUrl.Text + PartialCustomUrlRootAddress.Text);
+                CustomUrlProvider.InsertCustomUrl(orgId, instId, null, OrganizationUrl.Text);
 
             Response.Redirect(Micajah.Common.Application.WebApplication.LoginProvider.GetLoginUrl(Email2.Text
                 , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true

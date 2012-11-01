@@ -832,7 +832,7 @@ namespace Micajah.Common.Bll.Providers
                                 redirectUrl = regEx.Replace(redirectUrl, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst));
                             }
                             else
-                                redirectUrl = string.Format("{3}://{0}.{1}{2}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst, redirectUrl, context.Request.Url.Scheme);
+                                redirectUrl = string.Format("{3}{4}{0}.{1}{2}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst, redirectUrl, context.Request.Url.Scheme, Uri.SchemeDelimiter);
 
                             context.Response.Redirect(redirectUrl);
                         }

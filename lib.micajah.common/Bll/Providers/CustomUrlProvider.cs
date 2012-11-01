@@ -226,7 +226,10 @@ namespace Micajah.Common.Bll.Providers
                 WebApplication.CommonDataSet.CustomUrl.AddCustomUrlRow(row);
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(row);
 
-                WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, row.PartialCustomUrl);
+                if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, row.PartialCustomUrl);
+                else
+                    WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, string.Format("{0}.{1}", row.PartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst));
 
                 return row.CustomUrlId;
             }
