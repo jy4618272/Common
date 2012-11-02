@@ -44,6 +44,7 @@ namespace Micajah.Common.Security
         private const string CountryKey = "mc.Country";
         private const string TimeZoneIdKey = "mc.TimeZoneId";
         private const string TimeFormatKey = "mc.TimeFormat";
+        private const string DateFormatKey = "mc.DateFormat";
         private const string RoleIdListKey = "mc.RoleIdList";
         private const string SelectedInstanceIdKey = "mc.SelectedInstanceId";
         private const string SelectedOrganizationIdKey = "mc.SelectedOrganizationId";
@@ -164,6 +165,7 @@ namespace Micajah.Common.Security
                     s_ReservedKeys.Add(CountryKey);
                     s_ReservedKeys.Add(TimeZoneIdKey);
                     s_ReservedKeys.Add(TimeFormatKey);
+                    s_ReservedKeys.Add(DateFormatKey);
                     s_ReservedKeys.Add(RoleIdListKey);
                     s_ReservedKeys.Add(RoleIdKey);
                     s_ReservedKeys.Add(SelectedInstanceIdKey);
@@ -421,6 +423,30 @@ namespace Micajah.Common.Security
                 return value;
             }
             set { base[TimeFormatKey] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the date format.
+        /// </summary>
+        public int DateFormat
+        {
+            get
+            {
+                int value = 0;
+                if (base[DateFormatKey] == null)
+                {
+                    Instance inst = this.SelectedInstance;
+                    if (inst != null)
+                    {
+                        if (inst.DateFormat.HasValue)
+                            value = inst.DateFormat.Value;
+                    }
+                }
+                else
+                    value = (int)base[DateFormatKey];
+                return value;
+            }
+            set { base[DateFormatKey] = value; }
         }
 
         /// <summary>
@@ -864,6 +890,7 @@ namespace Micajah.Common.Security
             SelectedOrganizationId = newOrganization.OrganizationId;
             base[TimeZoneIdKey] = null;
             base[TimeFormatKey] = null;
+            base[DateFormatKey] = null;
             base[SelectedOrganizationIdKey] = newOrganization.OrganizationId;
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
@@ -1003,6 +1030,10 @@ namespace Micajah.Common.Security
                     ((SortedList)user)[TimeFormatKey] = null;
                 else
                     user.TimeFormat = userRow.TimeFormat;
+                if (userRow.IsDateFormatNull())
+                    ((SortedList)user)[DateFormatKey] = null;
+                else
+                    user.DateFormat = userRow.DateFormat;
             }
         }
 

@@ -1,11 +1,14 @@
 using System;
-using System.Web.UI;
 using System.Globalization;
+using System.Web.UI;
+using Micajah.Common.Bll;
+using Micajah.Common.Security;
 
 public partial class DatePickerTestPage : Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Label1.Text = ValidatedDatePicker1.SelectedDate.ToString(CultureInfo.CurrentCulture);
+        ValidatedDatePicker1.DateFormat = Support.GetLongDateTimeFormat(UserContext.Current.TimeFormat, UserContext.Current.DateFormat);
+        Label1.Text = Support.ToLongDateTimeString(ValidatedDatePicker1.SelectedDate, UserContext.Current.TimeFormat);
     }
 }

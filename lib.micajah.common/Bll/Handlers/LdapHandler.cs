@@ -694,7 +694,7 @@ namespace Micajah.Common.Bll.Handlers
                                         provider = new LoginProvider();
 
                                         if (!provider.LoginNameExists(ldapUser.EmailAddress))
-                                            UserProvider.UpdateUser(userRow.UserId, ldapUser.EmailAddress, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, groupId, organizationId, false);
+                                            UserProvider.UpdateUser(userRow.UserId, ldapUser.EmailAddress, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, groupId, organizationId, false);
 
                                         if (provider != null) provider = null;
                                     }

@@ -72,7 +72,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 RecurrenceScheduleControl.OrganizationId = m_UserContext.SelectedOrganization.OrganizationId;
                 if (m_UserContext.SelectedInstance != null)
                     RecurrenceScheduleControl.InstanceId = m_UserContext.SelectedInstance.InstanceId;
-                RecurrenceScheduleControl.DateFormat = Support.GetLongDateTimeFormat(m_UserContext.TimeFormat);
+                RecurrenceScheduleControl.DateFormat = Support.GetLongDateTimeFormat(m_UserContext.TimeFormat, m_UserContext.DateFormat);
             }
 
             this.MasterPage.VisibleBreadcrumbs = true;

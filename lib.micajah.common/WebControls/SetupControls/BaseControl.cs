@@ -395,7 +395,7 @@ namespace Micajah.Common.WebControls.SetupControls
                 item.Selected = true;
         }
 
-        public static void TimeFormatsListDataBind(ListControl list, string selectedValue, bool required)
+        public static void TimeFormatListDataBind(ListControl list, string selectedValue, bool required)
         {
             if (list == null) return;
 
@@ -403,6 +403,20 @@ namespace Micajah.Common.WebControls.SetupControls
                 list.Items.Add(new ListItem(string.Empty, string.Empty));
             list.Items.Add(new ListItem(Resources.InstanceProfileControl_TimeFormat_12Hr, "0"));
             list.Items.Add(new ListItem(Resources.InstanceProfileControl_TimeFormat_24Hr, "1"));
+
+            ListItem item = list.Items.FindByValue(selectedValue);
+            if (item != null)
+                item.Selected = true;
+        }
+
+        public static void DateFormatListDataBind(ListControl list, string selectedValue, bool required)
+        {
+            if (list == null) return;
+
+            if (!required)
+                list.Items.Add(new ListItem(string.Empty, string.Empty));
+            list.Items.Add(new ListItem(Resources.InstanceProfileControl_DateFormat_0, "0"));
+            list.Items.Add(new ListItem(Resources.InstanceProfileControl_DateFormat_1, "1"));
 
             ListItem item = list.Items.FindByValue(selectedValue);
             if (item != null)

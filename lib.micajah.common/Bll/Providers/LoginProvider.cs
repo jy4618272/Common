@@ -1642,7 +1642,7 @@ namespace Micajah.Common.Bll.Providers
                     if (userRow != null)
                     {
                         UserProvider.UpdateUser(loginId, userRow.Email, firstName, lastName, userRow.MiddleName, userRow.Phone, userRow.MobilePhone, userRow.Fax, userRow.Title, userRow.Department, userRow.Street, userRow.Street2, userRow.City, userRow.State, userRow.PostalCode, userRow.Country
-                            , (userRow.IsTimeZoneIdNull() ? null : userRow.TimeZoneId), (userRow.IsTimeFormatNull() ? null : new int?(userRow.TimeFormat))
+                            , (userRow.IsTimeZoneIdNull() ? null : userRow.TimeZoneId), (userRow.IsTimeFormatNull() ? null : new int?(userRow.TimeFormat)), (userRow.IsDateFormatNull() ? null : new int?(userRow.DateFormat))
                             , userRow.GroupId, organizationId, false);
                         UserProvider.RaiseUserUpdated(loginId, organizationId, new List<Guid>());
                     }

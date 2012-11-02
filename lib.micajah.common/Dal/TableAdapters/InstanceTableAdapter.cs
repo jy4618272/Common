@@ -34,6 +34,7 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("CreatedTime", "CreatedTime");
             TableMapping.ColumnMappings.Add("TimeZoneId", "TimeZoneId");
             TableMapping.ColumnMappings.Add("TimeFormat", "TimeFormat");
+            TableMapping.ColumnMappings.Add("DateFormat", "DateFormat");
 
             #endregion
 
@@ -56,6 +57,7 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@TimeZoneId", SqlDbType.NVarChar, 100, ParameterDirection.Input, 0, 0, "TimeZoneId", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@TimeFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TimeFormat", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@DateFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "DateFormat", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 
@@ -78,6 +80,7 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@TimeZoneId", SqlDbType.NVarChar, 100, ParameterDirection.Input, 0, 0, "TimeZoneId", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@TimeFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TimeFormat", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@DateFormat", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "DateFormat", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 

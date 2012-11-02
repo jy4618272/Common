@@ -19,6 +19,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private DropDownList m_TimeZoneList;
         private DropDownList m_TimeFormatList;
+        private DropDownList m_DateFormatList;
         private CheckBoxList m_WorkingDays;
 
         #endregion
@@ -40,6 +41,15 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 if (m_TimeFormatList == null) m_TimeFormatList = EditForm.FindControl("TimeFormatList") as DropDownList;
                 return m_TimeFormatList;
+            }
+        }
+
+        private DropDownList DateFormatList
+        {
+            get
+            {
+                if (m_DateFormatList == null) m_DateFormatList = EditForm.FindControl("DateFormatList") as DropDownList;
+                return m_DateFormatList;
             }
         }
 
@@ -93,6 +103,11 @@ namespace Micajah.Common.WebControls.AdminControls
             else
                 e.InputParameters["timeFormat"] = null;
 
+            if (int.TryParse(DateFormatList.SelectedValue, out value))
+                e.InputParameters["dateFormat"] = value;
+            else
+                e.InputParameters["dateFormat"] = null;
+
             e.InputParameters["workingDays"] = BaseControl.GetWorkingDays(EditForm.FindControl("WorkingDaysList") as CheckBoxList);
         }
 
@@ -101,19 +116,26 @@ namespace Micajah.Common.WebControls.AdminControls
             string workingDays = string.Empty;
             string timeZoneId = null;
             string timeFormat = null;
+            string dateFormat = null;
 
             if (EditForm.DataItem != null)
             {
                 Instance inst = (Instance)EditForm.DataItem;
+
                 workingDays = inst.WorkingDays;
                 timeZoneId = inst.TimeZoneId;
+
                 if (inst.TimeFormat.HasValue)
                     timeFormat = inst.TimeFormat.Value.ToString(CultureInfo.InvariantCulture);
+
+                if (inst.DateFormat.HasValue)
+                    dateFormat = inst.DateFormat.Value.ToString(CultureInfo.InvariantCulture);
             }
 
             BaseControl.WorkingDaysListDataBind(WorkingDays, workingDays);
             BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
-            BaseControl.TimeFormatsListDataBind(TimeFormatList, timeFormat, false);
+            BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, false);
+            BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, false);
         }
 
         #endregion
@@ -127,6 +149,7 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[3].HeaderText = Resources.InstanceProfileControl_EditForm_WorkingDaysField_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.InstanceProfileControl_EditForm_TimeZoneField_HeaderText;
             EditForm.Fields[5].HeaderText = Resources.InstanceProfileControl_EditForm_TimeFormatField_HeaderText;
+            EditForm.Fields[6].HeaderText = Resources.InstanceProfileControl_EditForm_DateFormatField_HeaderText;
         }
 
         protected override void EditForm_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)

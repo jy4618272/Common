@@ -29,16 +29,6 @@ namespace Micajah.Common.Bll
         #region Members
 
         /// <summary>
-        /// The short date format: "d-MMM-yyyy".
-        /// </summary>
-        public const string DateShortFormat = "d-MMM-yyyy";
-
-        /// <summary>
-        /// The short date format string: "{0:d-MMM-yyyy}".
-        /// </summary>
-        public const string DateShortFormatString = "{0:d-MMM-yyyy}";
-
-        /// <summary>
         /// The regular expression to match an e-mail address.
         /// </summary>
         internal const string EmailRegularExpression = @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
@@ -92,6 +82,34 @@ namespace Micajah.Common.Bll
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Converts the UTC date and time using specified time zone and return the result as formatted string using specified date and time formats.
+        /// </summary>
+        /// <param name="utcDateTime">The UTC date and time to convert.</param>
+        /// <param name="timeZone">The time zone to convert date and time to.</param>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <param name="omitUtc">Whether the UTC hours offset at the end of the result string is ommited.</param>
+        /// <returns>String that contains the formatted date and time.</returns>
+        public static string ToLongDateTimeString(DateTime utcDateTime, TimeZoneInfo timeZone, int timeFormat, int? dateFormat, bool omitUtc)
+        {
+            string format = dateFormat.HasValue ? GetLongDateTimeFormatString(timeFormat, dateFormat.Value) : GetLongDateTimeFormatString(timeFormat);
+            if (timeZone != null)
+            {
+                utcDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, timeZone);
+                if (!omitUtc)
+                {
+                    format += " (UTC";
+                    if (timeZone.BaseUtcOffset.TotalHours < 0)
+                        format += timeZone.BaseUtcOffset.ToString().Substring(0, ((timeZone.BaseUtcOffset.TotalHours < 0) ? 6 : 5));
+                    else if (timeZone.BaseUtcOffset.TotalHours > 0)
+                        format += "+" + timeZone.BaseUtcOffset.ToString().Substring(0, ((timeZone.BaseUtcOffset.TotalHours < 0) ? 6 : 5));
+                    format += ")";
+                }
+            }
+            return string.Format(CultureInfo.CurrentCulture, format, utcDateTime);
+        }
 
         /// <summary>
         /// Determines if the character needs to be encoded.
@@ -226,6 +244,17 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
+        /// Returns long date and time format.
+        /// </summary>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <returns>The date and time format.</returns>
+        public static string GetLongDateTimeFormat(int timeFormat, int dateFormat)
+        {
+            return GetShortDateFormat(dateFormat) + ((timeFormat == 0) ? " h:mm tt" : " H:mm");
+        }
+
+        /// <summary>
         /// Returns the long date and time format string: "{0:MMM d, yyyy h:mm tt}" (12 hours).
         /// </summary>
         /// <returns>The date and time format string.</returns>
@@ -235,13 +264,62 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Returns long date and time format: "{0:MMM d, yyyy h:mm tt}" (12 hours) or "{0:MMM d, yyyy H:mm}" (24 hours).
+        /// Returns long date and time format string: "{0:MMM d, yyyy h:mm tt}" (12 hours) or "{0:MMM d, yyyy H:mm}" (24 hours).
         /// </summary>
         /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
         /// <returns>The date and time format string.</returns>
         public static string GetLongDateTimeFormatString(int timeFormat)
         {
             return "{0:" + GetLongDateTimeFormat(timeFormat) + "}";
+        }
+
+        /// <summary>
+        /// Returns long date and time format string: "{0:MMM d, yyyy h:mm tt}" (12 hours) or "{0:MMM d, yyyy H:mm}" (24 hours).
+        /// </summary>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <returns>The date and time format string.</returns>
+        public static string GetLongDateTimeFormatString(int timeFormat, int dateFormat)
+        {
+            return "{0:" + GetLongDateTimeFormat(timeFormat, dateFormat) + "}";
+        }
+
+        /// <summary>
+        /// Returns the short date format: "d-MMM-yyyy".
+        /// </summary>
+        /// <returns>The date format.</returns>
+        public static string GetShortDateFormat()
+        {
+            return "d-MMM-yyyy";
+        }
+
+        /// <summary>
+        /// Returns short date format: "MM/dd/yyyy" or "dd/MM/yyyy".
+        /// </summary>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <returns>The date format.</returns>
+        public static string GetShortDateFormat(int dateFormat)
+        {
+            return ((dateFormat == 0) ? "MM/dd/yyyy" : "dd/MM/yyyy");
+        }
+
+        /// <summary>
+        /// Returns the long date and time format string: "{0:d-MMM-yyyy}".
+        /// </summary>
+        /// <returns>The date format string.</returns>
+        public static string GetShortDateFormatString()
+        {
+            return "{0:" + GetShortDateFormat() + "}";
+        }
+
+        /// <summary>
+        /// Returns short date format string: "{0:MM/dd/yyyy}" or "{0:dd/MM/yyyy}".
+        /// </summary>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "{0:MM/dd/yyyy}" format, 1 to use "{0:dd/MM/yyyy}" format.</param>
+        /// <returns>The date format string.</returns>
+        public static string GetShortDateFormatString(int dateFormat)
+        {
+            return "{0:" + GetShortDateFormat(dateFormat) + "}";
         }
 
         /// <summary>
@@ -345,7 +423,32 @@ namespace Micajah.Common.Bll
         {
             if (timeZone != null)
                 utcDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZone);
-            return string.Format(CultureInfo.CurrentCulture, DateShortFormatString, utcDate);
+            return string.Format(CultureInfo.CurrentCulture, GetShortDateFormatString(), utcDate);
+        }
+
+        /// <summary>
+        /// Converts the date to string in specified format.
+        /// </summary>
+        /// <param name="date">The date to convert.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "{0:MM/dd/yyyy}" format, 1 to use "{0:dd/MM/yyyy}" format.</param>
+        /// <returns>String that contains the formatted date.</returns>
+        public static string ToShortDateString(DateTime date, int dateFormat)
+        {
+            return ToShortDateString(date, null, dateFormat);
+        }
+
+        /// <summary>
+        /// Converts the UTC date using specified time zone and return the result as string in specified format.
+        /// </summary>
+        /// <param name="utcDate">The UTC date to convert.</param>
+        /// <param name="timeZone">The time zone to convert date to.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "{0:MM/dd/yyyy}" format, 1 to use "{0:dd/MM/yyyy}" format.</param>
+        /// <returns>String that contains the formatted date.</returns>
+        public static string ToShortDateString(DateTime utcDate, TimeZoneInfo timeZone, int dateFormat)
+        {
+            if (timeZone != null)
+                utcDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, timeZone);
+            return string.Format(CultureInfo.CurrentCulture, GetShortDateFormatString(dateFormat), utcDate);
         }
 
         /// <summary>
@@ -437,21 +540,46 @@ namespace Micajah.Common.Bll
         /// <returns>String that contains the formatted date and time.</returns>
         public static string ToLongDateTimeString(DateTime utcDateTime, TimeZoneInfo timeZone, int timeFormat, bool omitUtc)
         {
-            string format = GetLongDateTimeFormatString(timeFormat);
-            if (timeZone != null)
-            {
-                utcDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, timeZone);
-                if (!omitUtc)
-                {
-                    format += " (UTC";
-                    if (timeZone.BaseUtcOffset.TotalHours < 0)
-                        format += timeZone.BaseUtcOffset.ToString().Substring(0, ((timeZone.BaseUtcOffset.TotalHours < 0) ? 6 : 5));
-                    else if (timeZone.BaseUtcOffset.TotalHours > 0)
-                        format += "+" + timeZone.BaseUtcOffset.ToString().Substring(0, ((timeZone.BaseUtcOffset.TotalHours < 0) ? 6 : 5));
-                    format += ")";
-                }
-            }
-            return string.Format(CultureInfo.CurrentCulture, format, utcDateTime);
+            return ToLongDateTimeString(utcDateTime, timeZone, timeFormat, null, omitUtc);
+        }
+
+        /// <summary>
+        /// Converts the date and time using specified time zone and return the result as formatted string using specified date and time formats.
+        /// </summary>
+        /// <param name="dateTime">The date and time to convert.</param>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <returns>String that contains the formatted date and time.</returns>
+        public static string ToLongDateTimeString(DateTime dateTime, int timeFormat, int dateFormat)
+        {
+            return ToLongDateTimeString(dateTime, null, timeFormat, dateFormat, false);
+        }
+
+        /// <summary>
+        /// Converts the UTC date and time using specified time zone and return the result as formatted string using specified date and time formats.
+        /// </summary>
+        /// <param name="utcDateTime">The UTC date and time to convert.</param>
+        /// <param name="timeZone">The time zone to convert date and time to.</param>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <returns>String that contains the formatted date and time.</returns>
+        public static string ToLongDateTimeString(DateTime utcDateTime, TimeZoneInfo timeZone, int timeFormat, int dateFormat)
+        {
+            return ToLongDateTimeString(utcDateTime, timeZone, timeFormat, dateFormat, false);
+        }
+
+        /// <summary>
+        /// Converts the UTC date and time using specified time zone and return the result as formatted string using specified date and time formats.
+        /// </summary>
+        /// <param name="utcDateTime">The UTC date and time to convert.</param>
+        /// <param name="timeZone">The time zone to convert date and time to.</param>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <param name="dateFormat">The format to convert date to. Possible values: 0 to use "MM/dd/yyyy" format, 1 to use "dd/MM/yyyy" format.</param>
+        /// <param name="omitUtc">Whether the UTC hours offset at the end of the result string is ommited.</param>
+        /// <returns>String that contains the formatted date and time.</returns>
+        public static string ToLongDateTimeString(DateTime utcDateTime, TimeZoneInfo timeZone, int timeFormat, int dateFormat, bool omitUtc)
+        {
+            return ToLongDateTimeString(utcDateTime, timeZone, timeFormat, dateFormat, omitUtc);
         }
 
         #endregion

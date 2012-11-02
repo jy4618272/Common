@@ -1936,7 +1936,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v100.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropMenu.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v101.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\AddNew.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\ComboBoxModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.ComboBox\Modern.png" />

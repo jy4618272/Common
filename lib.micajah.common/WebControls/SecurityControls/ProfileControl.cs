@@ -19,6 +19,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         private ComboBox m_CountryList;
         private DropDownList m_TimeZoneList;
         private DropDownList m_TimeFormatList;
+        private DropDownList m_DateFormatList;
 
         #endregion
 
@@ -48,6 +49,15 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 if (m_TimeFormatList == null) m_TimeFormatList = EditForm.FindControl("TimeFormatList") as DropDownList;
                 return m_TimeFormatList;
+            }
+        }
+
+        private DropDownList DateFormatList
+        {
+            get
+            {
+                if (m_DateFormatList == null) m_DateFormatList = EditForm.FindControl("DateFormatList") as DropDownList;
+                return m_DateFormatList;
             }
         }
 
@@ -84,12 +94,18 @@ namespace Micajah.Common.WebControls.SecurityControls
                 e.InputParameters["timeFormat"] = value;
             else
                 e.InputParameters["timeFormat"] = null;
+
+            if (int.TryParse(DateFormatList.SelectedValue, out value))
+                e.InputParameters["dateFormat"] = value;
+            else
+                e.InputParameters["dateFormat"] = null;
         }
 
         protected void EditForm_DataBound(object sender, EventArgs e)
         {
             string timeZoneId = null;
             string timeFormat = null;
+            string dateFormat = null;
 
             if (EditForm.DataItem != null)
             {
@@ -100,10 +116,14 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 if (!row.IsTimeFormatNull())
                     timeFormat = row.TimeFormat.ToString(CultureInfo.InvariantCulture);
+
+                if (!row.IsDateFormatNull())
+                    dateFormat = row.DateFormat.ToString(CultureInfo.InvariantCulture);
             }
 
             BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
-            BaseControl.TimeFormatsListDataBind(TimeFormatList, timeFormat, false);
+            BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, false);
+            BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, false);
         }
 
         protected void CountryList_ControlInit(object sender, EventArgs e)
@@ -135,6 +155,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             EditForm.Fields[15].HeaderText = Resources.ProfileControl_EditForm_TimeZoneField_HeaderText;
             EditForm.Fields[16].HeaderText = Resources.ProfileControl_EditForm_TimeFormatField_HeaderText;
+            EditForm.Fields[17].HeaderText = Resources.ProfileControl_EditForm_DateFormatField_HeaderText;
         }
 
         protected override void OnLoad(EventArgs e)

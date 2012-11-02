@@ -194,18 +194,7 @@ namespace Micajah.Common.WebControls
                 if (!Micajah.Common.Bll.RecurringSchedule.RecurrenceRule.TryParse(value, out rrule))
                     return;
 
-                if (rrule.Range.EventDuration.Equals(TimeSpan.FromDays(1.0)))
-                {
-                    CheckBoxAllDay.Checked = true;
-                    //DatePickerStartDate.DateFormat = "M/dd/yyyy";
-                    //DatePickerEndDate.DateFormat = "M/dd/yyyy";
-                }
-                else
-                {
-                    CheckBoxAllDay.Checked = false;
-                    //DatePickerStartDate.DateFormat = "M/dd/yyyy h:mm tt";
-                    //DatePickerEndDate.DateFormat = "M/dd/yyyy h:mm tt";
-                }
+                CheckBoxAllDay.Checked = rrule.Range.EventDuration.Equals(TimeSpan.FromDays(1.0));
 
                 if (rrule.Pattern.Frequency != RecurrenceFrequency.None)
                 {
