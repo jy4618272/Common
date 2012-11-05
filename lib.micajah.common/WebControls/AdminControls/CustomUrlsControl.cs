@@ -41,8 +41,10 @@ namespace Micajah.Common.WebControls.AdminControls
         protected TextBox VanityUrlTextbox;
         protected Label VanityUrlDomainLabel;
         protected Button SimpleViewSaveButton;
-        protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorDiv;        
+        protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorDiv;
         protected CustomValidator SimpleViewCustomValidator;
+
+        public bool ShowSwitchViewButton { get; set; }
 
         #endregion
 
@@ -91,7 +93,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return m_PartialCustomUrlTextBox;
             }
         }
-        
+
 
         private ComboBox InstanceList
         {
@@ -118,8 +120,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (m_RootAddressesList == null) m_RootAddressesList = EditForm.FindControl("RootAddressesList") as ComboBox;
                 return m_RootAddressesList;
             }
-        }       
-        
+        }
+
 
         #endregion
 
@@ -182,17 +184,11 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (EditForm.CurrentMode != DetailsViewMode.ReadOnly)
             {
-                foreach (string adress in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses)
+                string adress = FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst;
+                using (RadComboBoxItem item = new RadComboBoxItem(adress, adress))
                 {
-                    using (RadComboBoxItem item = new RadComboBoxItem(adress, adress))
-                    {
-                        if (partialCustomUrl.EndsWith(adress, StringComparison.OrdinalIgnoreCase))
-                        {
-                            item.Selected = true;
-                            PartialCustomUrlTextBox.Text = partialCustomUrl.ToLower(CultureInfo.CurrentCulture).Split(new string[] { adress }, StringSplitOptions.None)[0].TrimEnd('.');
-                        }
-                        RootAddressesList.Items.Add(item);
-                    }
+                    item.Selected = true;
+                    RootAddressesList.Items.Add(item);
                 }
             }
         }
@@ -235,16 +231,14 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (obj != null) instanceId = (Guid)obj;
                 }
                 e.InputParameters["instanceId"] = instanceId;
-                e.InputParameters["partialCustomUrl"] = PartialCustomUrlTextBox.Text.ToLower(CultureInfo.CurrentCulture) + "." + RootAddressesList.SelectedValue;
+                e.InputParameters["partialCustomUrl"] = PartialCustomUrlTextBox.Text.ToLower(CultureInfo.CurrentCulture);
             }
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-            {
-                e.InputParameters["partialCustomUrl"] = (string.IsNullOrEmpty(PartialCustomUrlTextBox.Text) ? null : (PartialCustomUrlTextBox.Text.ToLower(CultureInfo.CurrentCulture) + "." + RootAddressesList.SelectedValue));
-            }
+                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(PartialCustomUrlTextBox.Text) ? null : PartialCustomUrlTextBox.Text.ToLower(CultureInfo.CurrentCulture);
         }
 
         protected void ChangeViewButton_Click(object sender, EventArgs e)
@@ -257,14 +251,14 @@ namespace Micajah.Common.WebControls.AdminControls
             else
             {
                 CustomUrlsMultiView.SetActiveView(SimpleView);
-                ChangeViewButton.Text = Resources.CustomUrlsControl_ChangeToAdvancedView_Text;                
+                ChangeViewButton.Text = Resources.CustomUrlsControl_ChangeToAdvancedView_Text;
             }
         }
 
         protected void EntityDataSourceSimpleView_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;            
+                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
         }
 
         protected void EntityDataSourceSimpleView_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
@@ -278,14 +272,14 @@ namespace Micajah.Common.WebControls.AdminControls
                 else
                     e.InputParameters["instanceId"] = null;
 
-                e.InputParameters["partialCustomUrl"] = VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture) + "." + VanityUrlDomainLabel.Text;
+                e.InputParameters["partialCustomUrl"] = VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture);
             }
         }
 
         protected void EntityDataSourceSimpleView_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["partialCustomUrl"] = (string.IsNullOrEmpty(VanityUrlTextbox.Text) ? null : (VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture) + "." + VanityUrlDomainLabel.Text));            
+                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(VanityUrlTextbox.Text) ? null : VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture);
         }
 
         protected void SimpleViewSaveButton_Click(object sender, EventArgs e)
@@ -294,40 +288,34 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 try
                 {
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
+                    Guid orgId = UserContext.Current.SelectedOrganization.OrganizationId;
+                    Guid? instId = null;
+                    if (UserContext.Current.SelectedInstance != null)
+                        instId = UserContext.Current.SelectedInstance.InstanceId;
+
+                    CommonDataSet.CustomUrlRow row = null;
+
+                    if (UserContext.Current.SelectedInstance != null)
+                        row = CustomUrlProvider.GetCustomUrl(UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.SelectedInstance.InstanceId);
+
+                    if (row == null)
+                        row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
+
+                    if (row == null)
                     {
-                        string address = FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0];
-
-                        Guid orgId = UserContext.Current.SelectedOrganization.OrganizationId;
-                        Guid? instId = null;
-                        if (UserContext.Current.SelectedInstance != null)
-                            instId = UserContext.Current.SelectedInstance.InstanceId;
-
-                        CommonDataSet.CustomUrlRow row = null;
-
-                        if (UserContext.Current.SelectedInstance != null)
-                            row = CustomUrlProvider.GetCustomUrl(UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.SelectedInstance.InstanceId);
-
-                        if (row == null)
-                            row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
-
-                        if (row == null)
-                        {
-                            System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
-                            if (table != null && table.Table.Rows.Count > 0)
-                                row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                        }
-
-
-                        if (row != null)
-                            CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture) + "." + address);
-                        else
-                            CustomUrlProvider.InsertCustomUrl(orgId, instId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture) + "." + address);
-
-                        SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewMessageLabel_Text;
-
-                        Micajah.Common.Application.WebApplication.RefreshAllData();
+                        System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
+                        if (table != null && table.Table.Rows.Count > 0)
+                            row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
                     }
+
+                    if (row != null)
+                        CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture));
+                    else
+                        CustomUrlProvider.InsertCustomUrl(orgId, instId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture));
+
+                    SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewMessageLabel_Text;
+
+                    Micajah.Common.Application.WebApplication.RefreshAllData();
                 }
                 catch (Exception ex)
                 {
@@ -358,43 +346,34 @@ namespace Micajah.Common.WebControls.AdminControls
             SimpleViewSaveButton.Text = Resources.CustomUrlsControl_SimpleViewSaveButton_Text;
             SimpleViewCustomValidator.ErrorMessage = Resources.CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage;
 
-            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
+
+            VanityUrlDomainLabel.Text = string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+            CustomUrlsMultiView.ActiveViewIndex = 0;
+
+            if (!Page.IsPostBack)
             {
-                string address = FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0];
-                VanityUrlDomainLabel.Text = string.Format(".{0}", address);
+                CommonDataSet.CustomUrlRow row = null;
 
-                CustomUrlsMultiView.ActiveViewIndex = 0;
+                if (UserContext.Current.SelectedInstance != null)
+                    row = CustomUrlProvider.GetCustomUrl(UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.SelectedInstance.InstanceId);
 
-                if (!Page.IsPostBack)
+                if (row == null)
+                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
+
+                if (row == null)
                 {
-                    CommonDataSet.CustomUrlRow row = null;
-
-                    if (UserContext.Current.SelectedInstance != null)
-                        row = CustomUrlProvider.GetCustomUrl(UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.SelectedInstance.InstanceId);
-                    
-                    if (row == null)                    
-                        row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
-
-                    if (row == null)
-                    {
-                        System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
-                        if (table != null && table.Table.Rows.Count > 0)
-                            row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow; 
-                    }
-
-                    if (row != null)
-                    {
-                        string partialCustomUrl = row.PartialCustomUrl;
-
-                        if (partialCustomUrl.EndsWith(address, StringComparison.OrdinalIgnoreCase))
-                        {
-                            VanityUrlTextbox.Text = partialCustomUrl.ToLower(CultureInfo.CurrentCulture).Split(new string[] { address }, StringSplitOptions.None)[0].TrimEnd('.');
-                        }
-                    }
+                    System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
+                    if (table != null && table.Table.Rows.Count > 0)
+                        row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
                 }
+
+                if (row != null)
+                    VanityUrlTextbox.Text = row.PartialCustomUrl.ToLower(CultureInfo.CurrentCulture);
             }
+
+            ChangeViewButton.Visible = this.ShowSwitchViewButton;
         }
-        
+
         protected override void EditFormReset()
         {
             base.EditFormReset();
@@ -432,7 +411,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             string scripts = ClientScripts;
             if (!string.IsNullOrEmpty(scripts)) ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ValidateCustomUrlsScript", scripts, true);
-            base.Render(writer);            
+            base.Render(writer);
         }
 
         #endregion

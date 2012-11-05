@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Data;
 using System.Globalization;
+using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Threading;
-using System.Data;
-using System.Collections.Generic;
-using System.Web;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -403,10 +401,9 @@ namespace Micajah.Common.WebControls.AdminControls
 
             ClearUserLdapInfoUpdateProgress.ProgressText = Resources.UserLdapInfoControl_UpdateProgress_Text;
             ClearUserLdapInfoUpdateProgress.Timeout = int.MaxValue;
-            ClearUserLdapInfoUpdateProgress.HideAfter = int.MaxValue;
+            ClearUserLdapInfoUpdateProgress.HideAfter = -1;
             ClearUserLdapInfoUpdateProgress.ShowSuccessText = false;
-            ClearUserLdapInfoUpdateProgress.ShowFailureText = true;
-            ClearUserLdapInfoUpdateProgress.PostBackActionControl = this.ClearUserLdapInfoButton.ClientID;
+            ClearUserLdapInfoUpdateProgress.PostBackControlId = this.ClearUserLdapInfoButton.ClientID;
 
             //GetUserGroups
             GetUserGroupsViewProcessLiteral.Text = Resources.UserLdapInfoControl_UpdateProgress_Text;

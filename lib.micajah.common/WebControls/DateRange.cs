@@ -192,7 +192,8 @@ namespace Micajah.Common.WebControls
             set
             {
                 EnsureChildControls();
-                m_DateStartPicker.DateInput.DateFormat = m_DateEndPicker.DateInput.DateFormat = value;
+                m_DateStartPicker.DateInput.DateFormat = m_DateEndPicker.DateInput.DateFormat
+                    = m_DateStartPicker.DateInput.DisplayDateFormat = m_DateEndPicker.DateInput.DisplayDateFormat = value;
             }
         }
 

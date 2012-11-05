@@ -2,7 +2,7 @@
     CodeFile="ValidatedDatePicker.aspx.cs" Inherits="DatePickerTestPage" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
-    <mits:DatePicker ID="ValidatedDatePicker1" runat="server" Required="True" />
+    <mits:DatePicker ID="ValidatedDatePicker1" runat="server" Required="True" Type="DateTimePicker" />
     <br />
     <br />
     <asp:Button ID="Button1" runat="server" Text="Submit" />

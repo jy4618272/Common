@@ -2562,6 +2562,24 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MM/dd/yyyy.
+        /// </summary>
+        internal static string InstanceProfileControl_DateFormat_0 {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_DateFormat_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dd/MM/yyyy.
+        /// </summary>
+        internal static string InstanceProfileControl_DateFormat_1 {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_DateFormat_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         internal static string InstanceProfileControl_EditForm_ActiveField_Text {
@@ -2576,6 +2594,15 @@ namespace Micajah.Common.Properties {
         internal static string InstanceProfileControl_EditForm_BetaField_Text {
             get {
                 return ResourceManager.GetString("InstanceProfileControl_EditForm_BetaField_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Format.
+        /// </summary>
+        internal static string InstanceProfileControl_EditForm_DateFormatField_HeaderText {
+            get {
+                return ResourceManager.GetString("InstanceProfileControl_EditForm_DateFormatField_HeaderText", resourceCulture);
             }
         }
         
@@ -3841,12 +3868,11 @@ namespace Micajah.Common.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;micajah.common&gt;
-        ///	&lt;roles&gt;
-        ///		&lt;role id=&quot;00000000-0000-0000-0000-000000000001&quot; name=&quot;Organization Administrator&quot; description=&quot;Built-in Role for administering the Organization&quot; shortName=&quot;OrgAdmin&quot; rank=&quot;1&quot; startPageId=&quot;00000000-0000-0000-0000-000000000009&quot; /&gt;
-        ///		&lt;role id=&quot;00000000-0000-0000-0000-000000000002&quot; name=&quot;Instance Administrator&quot; description=&quot;Built-in Role for administering the Instance&quot; shortName=&quot;InstAdmin&quot; rank=&quot;2&quot; startPageId=&quot;00000000-0000-0000-0000-000000000015&quot; /&gt;
-        ///	&lt;/roles&gt;
-        ///	&lt;actions&gt;
-        ///		&lt;a [rest of string was truncated]&quot;;.
+        ///  &lt;roles&gt;
+        ///    &lt;role id=&quot;00000000-0000-0000-0000-000000000001&quot; name=&quot;Organization Administrator&quot; description=&quot;Built-in Role for administering the Organization&quot; shortName=&quot;OrgAdmin&quot; rank=&quot;1&quot; startPageId=&quot;00000000-0000-0000-0000-000000000009&quot; /&gt;
+        ///    &lt;role id=&quot;00000000-0000-0000-0000-000000000002&quot; name=&quot;Instance Administrator&quot; description=&quot;Built-in Role for administering the Instance&quot; shortName=&quot;InstAdmin&quot; rank=&quot;2&quot; startPageId=&quot;00000000-0000-0000-0000-000000000015&quot; /&gt;
+        ///  &lt;/roles&gt;
+        ///  &lt;actions [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MicajahCommonConfig {
             get {
@@ -4760,6 +4786,15 @@ namespace Micajah.Common.Properties {
         internal static string ProfileControl_EditForm_CountryField_HeaderText {
             get {
                 return ResourceManager.GetString("ProfileControl_EditForm_CountryField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Format.
+        /// </summary>
+        internal static string ProfileControl_EditForm_DateFormatField_HeaderText {
+            get {
+                return ResourceManager.GetString("ProfileControl_EditForm_DateFormatField_HeaderText", resourceCulture);
             }
         }
         
@@ -6787,6 +6822,15 @@ namespace Micajah.Common.Properties {
         internal static string UsersControl_EditForm_CountryField_HeaderText {
             get {
                 return ResourceManager.GetString("UsersControl_EditForm_CountryField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Format.
+        /// </summary>
+        internal static string UsersControl_EditForm_DateFormatField_HeaderText {
+            get {
+                return ResourceManager.GetString("UsersControl_EditForm_DateFormatField_HeaderText", resourceCulture);
             }
         }
         

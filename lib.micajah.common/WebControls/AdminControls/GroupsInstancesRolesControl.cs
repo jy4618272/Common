@@ -265,8 +265,6 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             else
             {
-                if (!e.Node.Visible) return;
-
                 if (m_ActionIdList != null)
                     if (m_ActionIdList.Contains(actionId)) e.Node.Checked = true;
             }

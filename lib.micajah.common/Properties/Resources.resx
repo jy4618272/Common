@@ -2506,4 +2506,19 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="CustomUrlsControl_SimpleViewTitleLabel_Text" xml:space="preserve">
     <value>Vanity URL</value>
   </data>
+  <data name="InstanceProfileControl_DateFormat_0" xml:space="preserve">
+    <value>MM/dd/yyyy</value>
+  </data>
+  <data name="InstanceProfileControl_DateFormat_1" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="InstanceProfileControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
+    <value>Date Format</value>
+  </data>
+  <data name="UsersControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
+    <value>Date Format</value>
+  </data>
+  <data name="ProfileControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
+    <value>Date Format</value>
+  </data>
 </root>

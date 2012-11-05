@@ -536,10 +536,6 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Us
 DROP TABLE [dbo].[Mc_UsersInstances]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Version]') AND type in (N'U'))
-DROP TABLE [dbo].[Mc_Version]
-GO
-
 SET ANSI_NULLS ON
 GO
 
@@ -775,6 +771,7 @@ CREATE TABLE [dbo].[Mc_Instance](
 	[CreatedTime] [datetime] NULL,
 	[TimeZoneId] [nvarchar](100) NULL,
 	[TimeFormat] [int] NULL,
+	[DateFormat] [int] NULL,
  CONSTRAINT [PK_Mc_Instance] PRIMARY KEY CLUSTERED 
 (
 	[InstanceId] ASC
@@ -970,8 +967,9 @@ CREATE TABLE [dbo].[Mc_User](
 	[Country] [nvarchar](255) NOT NULL,
 	[LastLoginDate] [datetime] NULL,
 	[Deleted] [bit] NOT NULL,
-	[TimeFormat] [int] NULL,
 	[TimeZoneId] [nvarchar](100) NULL,
+	[TimeFormat] [int] NULL,
+	[DateFormat] [int] NULL,
  CONSTRAINT [PK_Mc_User] PRIMARY KEY CLUSTERED 
 (
 	[UserId] ASC
@@ -1019,22 +1017,6 @@ CREATE TABLE [dbo].[Mc_UsersInstances](
 (
 	[UserId] ASC,
 	[InstanceId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[Mc_Version](
-	[Version] [int] NOT NULL,
- CONSTRAINT [PK_Mc_Version] PRIMARY KEY CLUSTERED 
-(
-	[Version] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 

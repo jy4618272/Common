@@ -69,7 +69,7 @@
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />
                 <mits:TextBoxField DataField="Email" SortExpression="Email" />
-                <mits:TemplateField SortExpression="LastLoginDate" ItemStyle-HorizontalAlign="Right" HeaderStyle-Width="80px">
+                <mits:TemplateField SortExpression="LastLoginDate" HeaderStyle-Width="80px">
                     <ItemTemplate>
                         <asp:Literal ID="LastLoginDateLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>

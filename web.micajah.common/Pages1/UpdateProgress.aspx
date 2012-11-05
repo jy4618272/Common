@@ -11,21 +11,20 @@
                         <asp:Button ID="SubmitButton" runat="server" Text="Send Response" OnClick="SubmitButton_Click" />
                     </td>
                     <td>
-                        <asp:CheckBox ID="GenerateTimeout" runat="server" Text="Generate time-out" />
+                        <asp:CheckBox ID="GenerateTimeout" runat="server" Text="Generate time-out" AutoPostBack="true" />
                     </td>
                 </tr>
             </table>
         </ContentTemplate>
     </asp:UpdatePanel>
     <div style="padding: 10px 0 30px 0;">
-        <mits:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel1"
-            Timeout="5000">
+        <mits:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel1">
         </mits:UpdateProgress>
     </div>
     <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <b>The last transmitted text is:</b><br />
-            <asp:Label ID="FreeTextLabel" runat="server" Text="None"></asp:Label>
+            <asp:Label ID="FreeTextLabel" runat="server"></asp:Label>
         </ContentTemplate>
     </asp:UpdatePanel>
     <div style="padding-top: 30px;">

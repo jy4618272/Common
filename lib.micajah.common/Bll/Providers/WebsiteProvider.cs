@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
+using Micajah.Common.Configuration;
 using System.Collections.Generic;
 
 namespace Micajah.Common.Bll.Providers
@@ -118,8 +119,7 @@ namespace Micajah.Common.Bll.Providers
 
                                     if (org == null)
                                     {
-                                        string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
-                                        customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(segment.Split('-')[0]);
                                         if (customUrlRow != null)
                                             org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
                                     }
@@ -130,7 +130,7 @@ namespace Micajah.Common.Bll.Providers
 
                                     if (org == null)
                                     {
-                                        customUrlRow = CustomUrlProvider.GetCustomUrl(url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty));
+                                        customUrlRow = CustomUrlProvider.GetCustomUrl(segment);
                                         if (customUrlRow != null)
                                             org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
                                     }
@@ -308,7 +308,35 @@ namespace Micajah.Common.Bll.Providers
         {
             string url = null;
             CommonDataSet.WebsiteRow row = WebApplication.CommonDataSet.Website.FindByWebsiteId(websiteId);
-            if (row != null) url = row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0];
+            if (row != null)
+            {
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                {
+                    string defaultUrl = string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+
+                    if (System.Web.HttpContext.Current != null &&  System.Web.HttpContext.Current.Request != null &&  System.Web.HttpContext.Current.Request.Url != null)
+                        defaultUrl = string.Format("{0}{1}{2}", System.Web.HttpContext.Current.Request.Url.Scheme, Uri.SchemeDelimiter, defaultUrl);                    
+
+                    if (!defaultUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!defaultUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+                            defaultUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + defaultUrl;
+                    }
+
+                    foreach (string websiteUrl in row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        if (string.Compare(websiteUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst) == 0 ||
+                            string.Compare(websiteUrl, defaultUrl) == 0)
+                        {
+                            url = defaultUrl;
+                            break;
+                        }
+                    }
+                }
+                
+                if (string.IsNullOrEmpty(url))
+                    url = row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0];
+            }
             return url;
         }
 

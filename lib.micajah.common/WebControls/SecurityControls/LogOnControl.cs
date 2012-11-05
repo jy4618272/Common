@@ -62,6 +62,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// </summary>
         protected HtmlGenericControl ErrorDiv;
 
+        protected Image LogoImage;
         protected HtmlGenericControl MainContainer;
         protected HtmlTable FormTable;
         protected HtmlTable SignupUserTable;
@@ -72,6 +73,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private Organization m_Organization;
         private Instance m_Instance;
+        private int m_MainContainerHeight;
 
         #endregion
 
@@ -350,11 +352,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(instance);
             if (groupId != Guid.Empty)
             {
-                if (MainContainer != null)
-                {
-                    MainContainer.Style[HtmlTextWriterStyle.Height] = "300px";
-                    MainContainer.Style[HtmlTextWriterStyle.MarginTop] = "-150px";
-                }
+                m_MainContainerHeight = 300;
                 SignupUserTable.Visible = true;
             }
             else
@@ -393,6 +391,14 @@ namespace Micajah.Common.WebControls.SecurityControls
                 else
                     HeaderRightLogoLink.Text = FrameworkConfiguration.Current.WebApplication.Name;
                 HeaderRightLogoLink.Visible = true;
+            }
+
+            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
+                LogoImage.Visible = false;
+            else
+            {
+                LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                m_MainContainerHeight += 100;
             }
         }
 
@@ -585,6 +591,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 if (string.Compare(Request.QueryString["ac"], "1", StringComparison.OrdinalIgnoreCase) == 0)
                     ShowErrorMessage(Resources.LogOnControl_YouAreLoggedFromAnotherComputer);
 
+                m_MainContainerHeight = 220;
+
                 this.CheckSignupUser();
                 this.LoadResources();
                 this.LoadLogos();
@@ -618,10 +626,17 @@ namespace Micajah.Common.WebControls.SecurityControls
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 
-            TitleContainer.Visible = (!string.IsNullOrEmpty(TitleLabel.Text));
+            TitleContainer.Visible = ((!string.IsNullOrEmpty(TitleLabel.Text)) || LogoImage.Visible);
+            TitleLabel.Visible = (!LogoImage.Visible);
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
+
+            if (m_MainContainerHeight > 0 && (MainContainer != null))
+            {
+                MainContainer.Style[HtmlTextWriterStyle.Height] = m_MainContainerHeight.ToString(CultureInfo.InvariantCulture) + "px";
+                MainContainer.Style[HtmlTextWriterStyle.MarginTop] = (-Convert.ToInt32(m_MainContainerHeight / 2)).ToString(CultureInfo.InvariantCulture) + "px";
+            }
         }
 
         #endregion

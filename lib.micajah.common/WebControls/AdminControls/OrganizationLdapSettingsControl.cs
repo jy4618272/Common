@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Text;
-using System.Web.Caching;
+using System.Threading;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
 using Micajah.Common.Bll.Handlers;
-using Micajah.Common.Dal;
+using Micajah.Common.Bll.Providers;
 using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
-using System.Threading;
-using System.Web;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -132,7 +125,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Label Step5Label;
         protected Label Step6Label;
         protected Label Step7Label;
-        
+
 
         #endregion
 
@@ -342,7 +335,7 @@ namespace Micajah.Common.WebControls.AdminControls
             TestADReplicationTimer.Enabled = true;
             TestADReplicationMultiView.SetActiveView(TestADReplicationViewProcess);
             TestADReplicationViewProcessResultLabel.Text = string.Empty;
-                        
+
             rtsTestReplicationProcess.Visible = false;
             rtsTestReplicationResult.Visible = false;
             rmpTestReplicationProcess.Visible = false;
@@ -711,14 +704,14 @@ namespace Micajah.Common.WebControls.AdminControls
                             foreach (LdapProcessLog log in ldapProcess.Logs)
                             {
                                 TestADReplicationViewResultLabel.Text += string.Format(CultureInfo.CurrentCulture, "{0} - {1}<br/>", log.Date, log.Message);
-                            }                            
+                            }
 
                             LdapInfoProvider.LdapProcesses.Remove(ldapProcess);
                             break;
 
                         case Bll.ThreadStateType.Running:
                             TestADReplicationMultiView.SetActiveView(TestADReplicationViewProcess);
-                            
+
                             rtsTestReplicationProcess.Visible = true;
                             rmpTestReplicationProcess.Visible = true;
                             rtsTestReplicationProcess.Tabs[1].Enabled = false;
@@ -727,7 +720,7 @@ namespace Micajah.Common.WebControls.AdminControls
                             foreach (LdapProcessLog log in ldapProcess.Logs)
                             {
                                 TestADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.CurrentCulture, "{0} - {1}<br/>", log.Date, log.Message);
-                            }                            
+                            }
                             //TestADReplicationViewProcessResultLabel.Text = string.Format(CultureInfo.InvariantCulture, "<br/>{0}<br/><br/>", ldapProcess.MessageDeactivatedLogins);
                             //TestADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.InvariantCulture, "{0}<br/><br/>", ldapProcess.MessageActivatedLogins);
                             //TestADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.InvariantCulture, "{0}<br/>", ldapProcess.MessageCreatedLogins);
@@ -817,7 +810,7 @@ namespace Micajah.Common.WebControls.AdminControls
                             foreach (LdapProcessLog log in ldapProcess.Logs)
                             {
                                 RealADReplicationViewResultLabel.Text += string.Format(CultureInfo.CurrentCulture, "{0} - {1}<br/>", log.Date, log.Message);
-                            }    
+                            }
 
                             LdapInfoProvider.LdapProcesses.Remove(ldapProcess);
                             break;
@@ -833,7 +826,7 @@ namespace Micajah.Common.WebControls.AdminControls
                             foreach (LdapProcessLog log in ldapProcess.Logs)
                             {
                                 RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.CurrentCulture, "{0} - {1}<br/>", log.Date, log.Message);
-                            }   
+                            }
                             //RealADReplicationViewProcessResultLabel.Text = string.Format(CultureInfo.InvariantCulture, "<br/>{0}<br/><br/>", ldapProcess.MessageDeactivatedLogins);
                             //RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.InvariantCulture, "{0}<br/><br/>", ldapProcess.MessageActivatedLogins);
                             //RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.InvariantCulture, "{0}<br/>", ldapProcess.MessageCreatedLogins);
@@ -884,25 +877,21 @@ namespace Micajah.Common.WebControls.AdminControls
 
             PingLdapServerUpdateProgress.ProgressText = Resources.OrganizationLdapSettingsControl_UpdateProgress_Text;
             PingLdapServerUpdateProgress.Timeout = int.MaxValue;
-            PingLdapServerUpdateProgress.HideAfter = int.MaxValue;
+            PingLdapServerUpdateProgress.HideAfter = -1;
             PingLdapServerUpdateProgress.ShowSuccessText = false;
-            PingLdapServerUpdateProgress.ShowFailureText = true;
-            PingLdapServerUpdateProgress.PostBackActionControl = this.PingLdapServerButton.ClientID;
+            PingLdapServerUpdateProgress.PostBackControlId = this.PingLdapServerButton.ClientID;
 
             GoToGroupMappringsUpdateProgress.ProgressText = Resources.OrganizationLdapSettingsControl_UpdateProgress_Text;
             GoToGroupMappringsUpdateProgress.Timeout = int.MaxValue;
-            GoToGroupMappringsUpdateProgress.HideAfter = int.MaxValue;
+            GoToGroupMappringsUpdateProgress.HideAfter = -1;
             GoToGroupMappringsUpdateProgress.ShowSuccessText = false;
-            GoToGroupMappringsUpdateProgress.ShowFailureText = true;
-            GoToGroupMappringsUpdateProgress.PostBackActionControl = this.GoToGroupMapprings.ClientID;
-
+            GoToGroupMappringsUpdateProgress.PostBackControlId = this.GoToGroupMapprings.ClientID;
 
             CheckPortUpdateProgress.ProgressText = Resources.OrganizationLdapSettingsControl_UpdateProgress_Text;
             CheckPortUpdateProgress.Timeout = int.MaxValue;
             CheckPortUpdateProgress.HideAfter = int.MaxValue;
             CheckPortUpdateProgress.ShowSuccessText = false;
-            CheckPortUpdateProgress.ShowFailureText = true;
-            CheckPortUpdateProgress.PostBackActionControl = this.PingLdapServerButton.ClientID;
+            CheckPortUpdateProgress.PostBackControlId = this.PingLdapServerButton.ClientID;
 
             Bll.Action action = ActionProvider.FindAction(ActionProvider.LdapGroupMappingsPageActionId);
             if (action != null)
@@ -943,7 +932,7 @@ namespace Micajah.Common.WebControls.AdminControls
             RealADReplicationViewProcessImage.ImageUrl = ResourceProvider.GetImageUrl(typeof(UpdateProgress), "Loader.gif", true);
 
             CheckLdapServerAddressErrorTextHidden.Value = Resources.OrganizationLdapSettingsControl_CheckLdapServerAddress_ErrorText;
-            
+
             DescriptionLabel.Text = Resources.OrganizationLdapSettingsControl_Description_Text;
             LdapSetupLabel.Text = Resources.OrganizationLdapSettingsControl_LdapSetup_Text;
             Step1Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep1_Text;

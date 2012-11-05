@@ -28,7 +28,12 @@
                 </mits:TemplateField>
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
-                        <asp:DropDownList ID="TimeFormatList" runat="server" Width="100px"  />
+                        <asp:DropDownList ID="TimeFormatList" runat="server" Width="140px"  />
+                    </ItemTemplate>
+                </mits:TemplateField>
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <asp:DropDownList ID="DateFormatList" runat="server" Width="140px"  />
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:CheckBoxField DataField="EnableSignUpUser" />
@@ -50,6 +55,7 @@
                 <asp:Parameter Name="enableSignUpUser" Type="Boolean" />
                 <asp:Parameter Name="timeZoneId" Type="String" ConvertEmptyStringToNull="False" />
                 <asp:Parameter Name="timeFormat" Type="Int32" />
+                <asp:Parameter Name="dateFormat" Type="Int32" />
                 <asp:Parameter Name="workingDays" Type="String" />
                 <asp:Parameter Name="beta" Type="Boolean" />
                 <asp:Parameter Name="emailSuffixes" Type="String" ConvertEmptyStringToNull="False" />

@@ -203,6 +203,11 @@ namespace Micajah.Common.Bll
         public int? TimeFormat { get; set; }
 
         /// <summary>
+        /// Gets ot sets the date format.
+        /// </summary>
+        public int? DateFormat { get; set; }
+
+        /// <summary>
         /// Gets or sets the working days of the instance.
         /// </summary>
         public string WorkingDays
@@ -429,6 +434,7 @@ namespace Micajah.Common.Bll
                 m_ExternalId = row.ExternalId;
                 this.TimeZoneId = (row.IsTimeZoneIdNull() ? null : row.TimeZoneId);
                 this.TimeFormat = (row.IsTimeFormatNull() ? null : new int?(row.TimeFormat));
+                this.DateFormat = (row.IsDateFormatNull() ? null : new int?(row.DateFormat));
                 m_WorkingDays = row.WorkingDays;
                 m_Active = row.Active;
                 m_CanceledTime = (row.IsCanceledTimeNull() ? null : new DateTime?(row.CanceledTime));

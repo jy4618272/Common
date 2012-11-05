@@ -146,16 +146,16 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);                
+                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
                 row = ((table.Count > 0) ? table[0] : null);
                 if (row != null)
                 {
-                    try 
+                    try
                     {
                         if (row.InstanceId == Guid.Empty)
                             row.InstanceId = Guid.Empty;
                     }
-                    catch {row.InstanceId = Guid.Empty;}
+                    catch { row.InstanceId = Guid.Empty; }
                 }
                 return row;
             }
@@ -226,7 +226,10 @@ namespace Micajah.Common.Bll.Providers
                 WebApplication.CommonDataSet.CustomUrl.AddCustomUrlRow(row);
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(row);
 
-                WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, row.PartialCustomUrl);
+                if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, row.PartialCustomUrl);
+                else
+                    WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, string.Format("{0}.{1}", row.PartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst));
 
                 return row.CustomUrlId;
             }
@@ -299,53 +302,50 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Checks if custom url is exists in system
         /// </summary>
-        /// <param name="customUrl">Custom url</param>
+        /// <param name="partialCustomUrl">Partial Custom Url with out domain</param>
         /// <returns></returns>
-        public static bool CheckCustomUrl(string customUrl)
+        public static bool CheckCustomUrl(string partialCustomUrl)
         {
-            if (!string.IsNullOrEmpty(customUrl))
+            if (!string.IsNullOrEmpty(partialCustomUrl))
             {
                 CommonDataSet.CustomUrlDataTable table = null;
                 Organization org = null;
-                string[] segments = null;
                 string segment = null;
                 try
                 {
                     table = new CommonDataSet.CustomUrlDataTable();
-                    WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, customUrl, customUrl);
+                    WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
 
                     if (table.Rows.Count > 0)
                         return false;
                     else
                     {
-                        segments = customUrl.Split('.');
-                        if (segments.Length > 1)
-                        {
-                            segment = segments[0].ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
-                            if (segment.Contains("-"))
-                                org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
-                            else
-                                org = OrganizationProvider.GetOrganizationByPseudoId(segment);
-
-                            return (org == null);
-                        }
+                        segment = partialCustomUrl.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
+                        if (segment.Contains("-"))
+                            org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
                         else
-                            return false;
-                    }
+                            org = OrganizationProvider.GetOrganizationByPseudoId(segment);
 
+                        if (org == null)
+                        {
+                            CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(segment);
+                            if (row != null)
+                                org = OrganizationProvider.GetOrganization(row.OrganizationId);
+                        }
+
+                        return (org == null);
+                    }
                 }
                 finally
                 {
                     if (table != null) table.Dispose();
                     if (org != null) org = null;
                     segment = null;
-                    segments = null;
                 }
             }
             else
                 return false;
         }
-
 
         /// <summary>
         /// Initializes the Organization or Instance from custom URL.
@@ -353,107 +353,194 @@ namespace Micajah.Common.Bll.Providers
         public static void InitializeOrganizationOrInstanceFromCustomUrl()
         {
             string url = System.Web.HttpContext.Current.Request.Url.Host;
-            Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
-            string[] segments = url.Split('.');
             string defaultUrl = FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl;
-            //bool found = false;
-
-            //foreach (string rootAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses)
-            //{
-            //    if (url.IndexOf(rootAddresse, StringComparison.OrdinalIgnoreCase) == 0)
-            //    {
-            //        found = true;
-            //        break;
-            //    }
-            //}
-
-            //if (!found)
-            //{
-            if (segments.Length > 1)
+            Organization org = null;
+            Instance instance = null;
+            
+            if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
             {
-                Organization org = null;
-                Instance instance = null;
-                string instPseudo = string.Empty;
-                string segment = segments[0];
-                //found = false;
+                InitializeFromCustomUrl(ref org, ref instance);
+                Security.UserContext.VanityUrl = (org != null) ? url : string.Empty;
+            }
 
-                //foreach (string reservedAddresse in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
-                //{
-                //    if (string.Compare(segment, reservedAddresse, StringComparison.OrdinalIgnoreCase) == 0)
-                //    {
-                //        found = true;
-                //        break;
-                //    }
-                //}
+            if (org != null)
+            {
+                Security.UserContext.SelectedOrganizationId = org.OrganizationId;
+                Security.UserContext uc = Security.UserContext.Current;
 
-                //if (!found)
-                //{
-                if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                if (instance != null)
+                    Security.UserContext.SelectedInstanceId = instance.InstanceId;
+                else if (Security.UserContext.SelectedInstanceId != Guid.Empty)
+                    Security.UserContext.SelectedInstanceId = Guid.Empty;
+
+                if (uc != null)
                 {
-                    string[] pseudos = segment.Split('-');
-                    org = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
-                    instPseudo = pseudos[1];
-                    if (org == null)
-                    {
-                        string vanityUrl = string.Format("{0}{1}", segment.Split('-')[0], url.ToLower().Replace(segment, string.Empty).Replace("http://", string.Empty).Replace("https://", string.Empty));
-                        CommonDataSet.CustomUrlRow customUrlRow = CustomUrlProvider.GetCustomUrl(vanityUrl.ToLower());
-                        if (customUrlRow != null)
-                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
-
-                        if (customUrlRow != null) customUrlRow = null;
-                    }
+                    uc.SelectOrganization(org.OrganizationId);
+                    if (instance != null)
+                        uc.SelectInstance(instance.InstanceId);
                 }
                 else
-                    org = OrganizationProvider.GetOrganizationByPseudoId(segment);
-
-                if (org != null)
+                    Security.UserContext.VanityUrl = string.Empty;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(defaultUrl))
                 {
-                    Security.UserContext.SelectedOrganizationId = org.OrganizationId;
-                    Security.UserContext uc = Security.UserContext.Current;
-
-                    if (!string.IsNullOrEmpty(instPseudo))
+                    if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
                     {
-                        instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, org.OrganizationId);
-                        if (instance != null)
-                            Security.UserContext.SelectedInstanceId = instance.InstanceId;
-                    }
-
-                    if (uc != null)
-                    {
-                        if (instance == null)
-                        {
-                            InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, Security.UserContext.SelectedOrganizationId);
-                            if (coll.Count == 1)
-                            {
-                                instance = coll[0];
-                                Security.UserContext.SelectedInstanceId = instance.InstanceId;
-                            }
-                        }
-
-                        uc.SelectOrganization(org.OrganizationId);
-                        if (instance != null)
-                            uc.SelectInstance(instance.InstanceId);
-                    }
-                    else
-                        Security.UserContext.VanityUrl = string.Empty;
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(defaultUrl))
-                    {
-                        if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
-                        {
-                            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses.Count > 0)
-                            {
-                                System.Web.HttpRequest request = System.Web.HttpContext.Current.Request;
-                                System.Web.HttpContext.Current.Response.Redirect(request.Url.ToString().Replace(request.Url.Host, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddresses[0])));
-                            }
-                        }
+                        System.Web.HttpRequest request = System.Web.HttpContext.Current.Request;
+                        System.Web.HttpContext.Current.Response.Redirect(request.Url.ToString().Replace(request.Url.Host, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst)));
                     }
                 }
             }
-            //    }
-            //}
+        }
+
+        /// <summary>
+        /// Initializes the Organization or Instance from System.Web.HttpContext.Current.Request.
+        /// </summary>        
+        /// <param name="organization">Organization</param>
+        /// <param name="instance">Instance</param>
+        public static void InitializeFromCustomUrl(ref Organization organization, ref Instance instance)
+        {
+            string[] segments = null;
+            string instPseudo = null;
+            string segment = null;
+            string[] pseudos = null;
+            CommonDataSet.CustomUrlRow customUrlRow = null;
+            string customUrl = System.Web.HttpContext.Current.Request.Url.Host.ToLower();
+
+            organization = null;
+            instance = null;
+
+            try
+            {
+                segments = customUrl.Split('.');
+
+                if (segments.Length > 1)
+                {
+                    segment = segments[0];
+                    if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                    {
+                        pseudos = segment.Split('-');
+                        organization = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
+                        instPseudo = pseudos[1];
+                        if (organization == null)
+                        {
+                            customUrlRow = CustomUrlProvider.GetCustomUrl(segment.Split('-')[0].ToLower());
+                            if (customUrlRow != null)
+                                organization = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                        }
+                    }
+                    else
+                        organization = OrganizationProvider.GetOrganizationByPseudoId(segment);
+
+                    if (organization != null)
+                    {
+                        Security.UserContext.SelectedOrganizationId = organization.OrganizationId;
+                        Security.UserContext uc = Security.UserContext.Current;
+
+                        if (!string.IsNullOrEmpty(instPseudo))
+                            instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, organization.OrganizationId);
+
+                        if (uc != null)
+                        {
+                            if (instance == null)
+                            {
+                                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, organization.OrganizationId);
+                                if (coll.Count == 1)
+                                    instance = coll[0];
+                            }
+                        }
+
+                        if (instance != null)
+                            Security.UserContext.SelectedInstanceId = instance.InstanceId;
+                    }
+                }
+            }
+            finally
+            {
+                if (segments != null) segments = null;
+                if (instPseudo != null) instPseudo = null;
+                if (segment != null) segment = null;
+                if (pseudos != null) pseudos = null;
+                if (customUrlRow != null) customUrlRow = null;
+                if (customUrl != null) customUrl = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets Custom url by organizationId and instanceId. If need only by organization use instanceId == Guid.Empty
+        /// </summary>
+        /// <param name="organizationId">Organization Id</param>
+        /// <param name="instanceId">Instance Id</param>
+        /// <returns>Custom Url</returns>
+        public static string GetVanityUrl(Guid organizationId, Guid instanceId)
+        {
+            string customUrl = string.Empty;
+            Organization org = null;
+            Instance inst = null;
+            CommonDataSet.CustomUrlRow row = null;
+            System.Data.DataView table = null;
+            bool oneInstance = true;
+            InstanceCollection coll = null;
+            try
+            {
+                org = OrganizationProvider.GetOrganization(organizationId);
+                if (org != null)
+                {
+                    if (instanceId != Guid.Empty)
+                        row = CustomUrlProvider.GetCustomUrl(organizationId, instanceId);
+
+                    if (row == null)
+                        row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
+
+                    if (row == null)
+                    {
+                        table = CustomUrlProvider.GetCustomUrls(organizationId);
+                        if (table != null && table.Table.Rows.Count > 0)
+                            row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
+                    }
+
+                    Security.UserContext ctx = Security.UserContext.Current;
+                    if (ctx != null)
+                    {
+                        coll = WebApplication.LoginProvider.GetLoginInstances(ctx.UserId, organizationId);
+                        oneInstance = (coll != null && coll.Count == 1);
+                    }
+
+                    if (instanceId != Guid.Empty)
+                        inst = InstanceProvider.GetInstance(instanceId);
+
+                    if (row != null)
+                    {
+                        customUrl = !string.IsNullOrEmpty(row.FullCustomUrl) ? row.FullCustomUrl : string.Format("{0}.{1}", row.PartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+
+                        if (row.InstanceId == Guid.Empty && inst != null && !oneInstance)
+                            customUrl = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", row.PartialCustomUrl, inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+                    }
+                    else
+                    {
+                        customUrl = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", org.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+
+                        if (inst != null && !oneInstance)
+                            customUrl = string.Format(CultureInfo.InvariantCulture, "{0}-{1}.{2}", org.PseudoId, inst.PseudoId, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+                    }
+                }
+
+                if (!(customUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || customUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
+                    customUrl = string.Format("http://{0}", customUrl);
+
+                return customUrl;
+            }
+            finally
+            {
+                if (org != null) org = null;
+                if (inst != null) inst = null;
+                if (!string.IsNullOrEmpty(customUrl)) customUrl = null;
+                if (row != null) row = null;
+                if (table != null) table = null;
+                if (coll != null) coll = null;
+            }
         }
 
         #endregion

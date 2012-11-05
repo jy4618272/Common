@@ -11,29 +11,29 @@
     //]]>
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-    <contenttemplate>
+    <ContentTemplate>
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="UserId" DataSourceID="EntityListDataSource"
             Width="700px" OnRowDataBound="List_RowDataBound" OnRowDeleting="List_RowDeleting">
             <captioncontrols>
-                <asp:HyperLink ID="InviteUsersLink" runat="server" CssClass="Cgv_AddNew" OnInit="InviteUsersLink_Init"></asp:HyperLink>
+                <asp:HyperLink ID="InviteUsersLink" runat="server" OnInit="InviteUsersLink_Init"></asp:HyperLink>
             </captioncontrols>
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />
                 <mits:TextBoxField DataField="Email" SortExpression="Email" />
-                <mits:TemplateField SortExpression="LastLoginDate" HeaderStyle-Width="80px" ItemStyle-HorizontalAlign="Right">
+                <mits:TemplateField SortExpression="LastLoginDate" HeaderStyle-Width="80px">
                     <ItemTemplate>
                         <asp:Literal ID="LastLoginDateLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>
                 </mits:TemplateField>
             </columns>
         </mits:CommonGridView>
-        <div id="InvitedUsersDiv" runat="server" style="padding-top: 20px;">
+        <div id="InvitedUsersDiv" runat="server" style="padding-top: 40px;">
             <mits:CommonGridView ID="InvitedUsersList" runat="server" DataKeyNames="InvitedLoginId"
                 DataSourceID="InvitedUsersListDataSource" Width="700px" AutoGenerateColumns="false"
                 AllowSorting="true">
                 <columns>
                     <mits:TextBoxField DataField="LoginName" SortExpression="LoginName" />
-                    <mits:ButtonField CommandName="Delete" HeaderStyle-Width="80px" ItemStyle-Wrap="false"></mits:ButtonField>
+                    <mits:ButtonField CommandName="Delete" HeaderStyle-Width="80px" ItemStyle-Wrap="false" ControlStyle-CssClass="Command"></mits:ButtonField>
                 </columns>
             </mits:CommonGridView>
         </div>
@@ -47,16 +47,16 @@
                 <mits:TextBoxField DataField="FirstName" MaxLength="255" Columns="65" ControlStyle-Width="350px" Required="True" Visible="false" HeaderStyle-Wrap="false" />
                 <mits:TextBoxField DataField="MiddleName" MaxLength="255" Columns="65" ControlStyle-Width="350px" Visible="false" HeaderStyle-Wrap="false" />
                 <mits:TextBoxField DataField="LastName" MaxLength="255" Columns="65" ControlStyle-Width="350px" Required="True" Visible="false" HeaderStyle-Wrap="false" />
-                <mits:TextBoxField DataField="Phone" MaxLength="20" Columns="20" Visible="false" />
-                <mits:TextBoxField DataField="MobilePhone" MaxLength="20" Columns="20" Visible="false" />
-                <mits:TextBoxField DataField="Fax" MaxLength="20" Columns="20" Visible="false" />
-                <mits:TextBoxField DataField="Title" MaxLength="30" Columns="20" Visible="false" />
+                <mits:TextBoxField DataField="Phone" MaxLength="20" Columns="20" ControlStyle-Width="180px" Visible="false" />
+                <mits:TextBoxField DataField="MobilePhone" MaxLength="20" Columns="20" ControlStyle-Width="180px" Visible="false" />
+                <mits:TextBoxField DataField="Fax" MaxLength="20" Columns="20" ControlStyle-Width="180px" Visible="false" />
+                <mits:TextBoxField DataField="Title" MaxLength="30" Columns="20" ControlStyle-Width="180px" Visible="false" />
                 <mits:TextBoxField DataField="Department" MaxLength="255" Columns="65" ControlStyle-Width="350px" Visible="false" />
                 <mits:TextBoxField DataField="Street" MaxLength="255" Columns="65" ControlStyle-Width="350px" Visible="false" />
                 <mits:TextBoxField DataField="Street2" MaxLength="255" Columns="65" ControlStyle-Width="350px" Visible="false" />
                 <mits:TextBoxField DataField="City" MaxLength="255" Columns="65" ControlStyle-Width="350px" Visible="false" />
                 <mits:TextBoxField DataField="State" MaxLength="255" Columns="65" ControlStyle-Width="350px" Visible="false" />
-                <mits:TextBoxField DataField="PostalCode" MaxLength="20" Columns="20" Visible="false" />
+                <mits:TextBoxField DataField="PostalCode" MaxLength="20" Columns="20" ControlStyle-Width="180px" Visible="false" />
                 <mits:ComboBoxField DataField="Country" DataSourceId="CountriesDataSource" 
                     DataTextField="Name" DataValueField="Name" ControlStyle-Width="250px" AllowCustomText="true" MarkFirstMatch="true"
                     OnControlInit="CountryList_ControlInit" Visible="false" />
@@ -67,7 +67,12 @@
                 </mits:TemplateField>
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
-                        <asp:DropDownList ID="TimeFormatList" runat="server" Width="100px"  />
+                        <asp:DropDownList ID="TimeFormatList" runat="server" Width="140px"  />
+                    </ItemTemplate>
+                </mits:TemplateField>
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <asp:DropDownList ID="DateFormatList" runat="server" Width="140px"  />
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:TextBoxField DataField="SecondaryEmails" MaxLength="255" Columns="65" Rows="3" TextMode="MultiLine" ControlStyle-Width="350px" Visible="false" />
@@ -125,7 +130,8 @@
         </asp:ObjectDataSource>
         <asp:ObjectDataSource ID="EntityDataSource" runat="server" SelectMethod="GetUserRowWithSecondaryEmails"
             TypeName="Micajah.Common.Bll.Providers.UserProvider" UpdateMethod="UpdateUser"
-            InsertMethod="AddUserToOrganization" OnInserting="EntityDataSource_Inserting" OnUpdating="EntityDataSource_Inserting">
+            InsertMethod="AddUserToOrganization" OnInserting="EntityDataSource_Inserting"
+            OnUpdating="EntityDataSource_Inserting">
             <SelectParameters>
                 <asp:ControlParameter Name="userId" Type="Object" ControlID="List" PropertyName="SelectedValue" />
             </SelectParameters>
@@ -148,6 +154,7 @@
                 <asp:Parameter Name="country" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="timeZoneId" Type="String" />
                 <asp:Parameter Name="timeFormat" Type="Int32" />
+                <asp:Parameter Name="dateFormat" Type="Int32" />
                 <asp:Parameter Name="secondaryEmails" Type="String" ConvertEmptyStringToNull="false" />
             </UpdateParameters>
             <InsertParameters>
@@ -168,6 +175,7 @@
                 <asp:Parameter Name="country" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="timeZoneId" Type="String" />
                 <asp:Parameter Name="timeFormat" Type="Int32" />
+                <asp:Parameter Name="dateFormat" Type="Int32" />
                 <asp:Parameter Name="groupId" Type="String" ConvertEmptyStringToNull="false" />
                 <asp:Parameter Name="secondaryEmails" Type="String" ConvertEmptyStringToNull="false" />
             </InsertParameters>
@@ -224,5 +232,5 @@
                 <asp:Parameter Name="organizationId" Type="Object" />
             </UpdateParameters>
         </asp:ObjectDataSource>
-    </contenttemplate>
+    </ContentTemplate>
 </asp:UpdatePanel>

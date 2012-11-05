@@ -76,35 +76,6 @@ namespace Micajah.Common.Bll.Providers
         #region Internal Methods
 
         /// <summary>
-        /// Gets the collection of actions identifier/enabled flag pairs associated with specified group role in specified instance.
-        /// </summary>
-        /// <param name="gdaTable">The data source to get data from.</param>
-        /// <param name="groupId">The group's identifier.</param>
-        /// <param name="instanceId">The instance's identifier.</param>
-        /// <param name="roleId">The group's role identifier in specified instance.</param>
-        /// <returns>The System.Collections.SortedList that represents the collection of actions identifier/enabled flag pairs.</returns>
-        internal static SortedList GetActionIdListWithEnabledFlag(OrganizationDataSet.GroupsInstancesActionsDataTable table, Guid groupId, Guid instanceId, Guid roleId)
-        {
-            SortedList list = new SortedList();
-
-            foreach (Guid actionId in ActionProvider.GetActionIdListByRoleId(roleId))
-            {
-                list.Add(actionId, true);
-            }
-
-            foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'", table.GroupIdColumn.ColumnName, groupId.ToString(), table.InstanceIdColumn.ColumnName, instanceId.ToString())))
-            {
-                Guid actionId = actionRow.ActionId;
-                if (list.Contains(actionId))
-                    list[actionId] = actionRow.Enabled;
-                else
-                    list.Add(actionId, actionRow.Enabled);
-            }
-
-            return list;
-        }
-
-        /// <summary>
         /// Gets the identifiers of actions associated with specified group role in specified instance.
         /// </summary>
         /// <param name="groupId">The group's identifier.</param>
@@ -214,7 +185,8 @@ namespace Micajah.Common.Bll.Providers
             {
                 ArrayList list = ActionProvider.GetActionIdListByRoleId(roleId);
 
-                foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'", table.GroupIdColumn.ColumnName, groupId.ToString(), table.InstanceIdColumn.ColumnName, instanceId.ToString())))
+                foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'"
+                    , table.GroupIdColumn.ColumnName, groupId.ToString(), table.InstanceIdColumn.ColumnName, instanceId.ToString())))
                 {
                     Guid actionId = actionRow.ActionId;
                     if (actionIdList.Contains(actionId))
@@ -236,14 +208,20 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (!actionIdList.Contains(actionId))
                     {
-                        newActionRow = table.NewGroupsInstancesActionsRow();
+                        newActionRow = table.FindByGroupIdInstanceIdActionId(groupId, instanceId, actionId);
+                        if (newActionRow == null)
+                        {
+                            newActionRow = table.NewGroupsInstancesActionsRow();
 
-                        newActionRow.GroupId = groupId;
-                        newActionRow.InstanceId = instanceId;
-                        newActionRow.ActionId = actionId;
-                        newActionRow.Enabled = false;
+                            newActionRow.GroupId = groupId;
+                            newActionRow.InstanceId = instanceId;
+                            newActionRow.ActionId = actionId;
+                            newActionRow.Enabled = false;
 
-                        table.AddGroupsInstancesActionsRow(newActionRow);
+                            table.AddGroupsInstancesActionsRow(newActionRow);
+                        }
+                        else if (newActionRow.Enabled)
+                            newActionRow.Enabled = false;
                     }
                     else actionIdList.Remove(actionId);
                 }
@@ -252,18 +230,26 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (!list.Contains(actionId))
                     {
-                        newActionRow = table.NewGroupsInstancesActionsRow();
+                        newActionRow = table.FindByGroupIdInstanceIdActionId(groupId, instanceId, actionId);
+                        if (newActionRow == null)
+                        {
+                            newActionRow = table.NewGroupsInstancesActionsRow();
 
-                        newActionRow.GroupId = groupId;
-                        newActionRow.InstanceId = instanceId;
-                        newActionRow.ActionId = actionId;
-                        newActionRow.Enabled = true;
+                            newActionRow.GroupId = groupId;
+                            newActionRow.InstanceId = instanceId;
+                            newActionRow.ActionId = actionId;
+                            newActionRow.Enabled = true;
 
-                        table.AddGroupsInstancesActionsRow(newActionRow);
+                            table.AddGroupsInstancesActionsRow(newActionRow);
+                        }
+                        else if (!newActionRow.Enabled)
+                            newActionRow.Enabled = true;
                     }
                 }
 
                 ctx.SelectedOrganization.TableAdapters.GroupsInstancesActionsTableAdapter.Update(table);
+
+                ActionProvider.Refresh(groupId, instanceId);
             }
         }
 

@@ -59,7 +59,6 @@ label.iPhoneCheckLabelOn
 {
     color: white;
     background: url($On.png$) no-repeat;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
     left: 0;
     padding-top: 5px;
 }
@@ -73,7 +72,6 @@ label.iPhoneCheckLabelOff
 {
     color: #8b8b8b;
     background: url($Off.png$) no-repeat right 0;
-    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.6);
     text-align: right;
     right: 0;
 }
@@ -162,7 +160,6 @@ label.iOSCheckLabelOn
 {
     color: white;
     background: url('images/ios-style-checkboxes/on.png?1284697268') no-repeat;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
     left: 0;
     padding-top: 5px;
 }
@@ -176,7 +173,6 @@ label.iOSCheckLabelOff
 {
     color: #8b8b8b;
     background: url('images/ios-style-checkboxes/off.png?1284697268') no-repeat right 0;
-    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.6);
     text-align: right;
     right: 0;
 }

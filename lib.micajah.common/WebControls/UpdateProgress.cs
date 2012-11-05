@@ -69,8 +69,8 @@ namespace Micajah.Common.WebControls
             protected override string GetScript()
             {
                 return string.Format(CultureInfo.InvariantCulture
-                    , "$create(Micajah.Common.UpdateProgress, {{'associatedUpdatePanelId':'{0}','displayAfter':{1},'dynamicLayout':{2},'hideAfter':{3},'timeout':{4}}}, null, null, $get('{5}'));"
-                    , GetAssociatedUpdatePanelClientId(), m_ScriptControl.DisplayAfter, (m_ScriptControl.DynamicLayout ? "true" : "false"), m_ScriptControl.HideAfter, m_ScriptControl.Timeout, m_ScriptControl.ClientID);
+                    , "$create(Micajah.Common.UpdateProgress, {{'associatedUpdatePanelId':'{0}','displayAfter':{1},'dynamicLayout':{2},'hideAfter':{3},'timeout':{4},'postBackControlId':'{5}','postBackHasError':{6}}}, null, null, $get('{7}'));"
+                    , GetAssociatedUpdatePanelClientId(), m_ScriptControl.DisplayAfter, (m_ScriptControl.DynamicLayout ? "true" : "false"), m_ScriptControl.HideAfter, m_ScriptControl.Timeout, m_ScriptControl.PostBackControlId, (m_ScriptControl.PostBackHasError ? "true" : "false"), m_ScriptControl.ClientID);
             }
 
             #endregion
@@ -195,7 +195,6 @@ namespace Micajah.Common.WebControls
         private HtmlGenericControl m_ProgressTemplateContainer;
         private ITemplate m_SuccessTemplate;
         private HtmlGenericControl m_SuccessTemplateContainer;
-        private HtmlGenericControl m_PostBackActionControlContainer;
 
         #endregion
 
@@ -318,13 +317,13 @@ namespace Micajah.Common.WebControls
         /// </summary>
         [Category("Behavior")]
         [Description("The time-out value for the async postbacks in milliseconds.")]
-        [DefaultValue(90000)]
+        [DefaultValue(-1)]
         public int Timeout
         {
             get
             {
                 object obj = this.ViewState["Timeout"];
-                return ((obj == null) ? 90000 : (int)obj);
+                return ((obj == null) ? -1 : (int)obj);
             }
             set
             {
@@ -335,11 +334,11 @@ namespace Micajah.Common.WebControls
             }
         }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets a value indicating whether the failed text should be shown.
         /// </summary>
         [Category("Appearance")]
-        [Description("The value indicating whether the failure text should be shown..")]
+        [Description("The value indicating whether the failure text should be shown.")]
         [DefaultValue(true)]
         public bool ShowFailureText
         {
@@ -351,11 +350,11 @@ namespace Micajah.Common.WebControls
             set { this.ViewState["ShowFailureText"] = value; }
         }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets a value indicating whether the success text should be shown.
         /// </summary>
         [Category("Appearance")]
-        [Description("The value indicating whether the success text should be shown..")]
+        [Description("The value indicating whether the success text should be shown.")]
         [DefaultValue(true)]
         public bool ShowSuccessText
         {
@@ -368,19 +367,30 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the id of post back action control.
+        /// Gets or sets the client ID of control the post back of that caused displaying the progress.
         /// </summary>
         [Category("Appearance")]
-        [Description("The id of post back action control.")]
+        [Description("The client ID of control the post back of that caused displaying the progress.")]
         [DefaultValue("")]
-        public string PostBackActionControl
+        public string PostBackControlId
         {
             get
             {
-                object obj = this.ViewState["PostBackActionControl"];
+                object obj = this.ViewState["PostBackControlId"];
                 return ((obj == null) ? string.Empty : (string)obj);
             }
-            set { this.ViewState["PostBackActionControl"] = value; }
+            set { this.ViewState["PostBackControlId"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the value indicating whether an error occured during postback.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool PostBackHasError
+        {
+            get;
+            set;
         }
 
         #endregion
@@ -421,15 +431,6 @@ namespace Micajah.Common.WebControls
             this.Controls.Add(m_SuccessTemplateContainer);
         }
 
-        private void CreatePostBackContainer()
-        {
-            m_PostBackActionControlContainer = new HtmlGenericControl("div");
-            m_PostBackActionControlContainer.Attributes["id"] = this.ClientID + this.ClientIDSeparator + "PostBackAction";
-            m_PostBackActionControlContainer.Style[HtmlTextWriterStyle.Display] = "none";
-            m_PostBackActionControlContainer.InnerText = this.PostBackActionControl;
-            this.Controls.Add(m_PostBackActionControlContainer);
-        }
-
         #endregion
 
         #region Overriden Methods
@@ -441,7 +442,6 @@ namespace Micajah.Common.WebControls
             this.CreateProgressTemplateContainer();
             if (this.ShowSuccessText)
                 this.CreateSuccessTemplateContainer();
-            this.CreatePostBackContainer();
         }
 
         /// <summary>
@@ -474,7 +474,13 @@ namespace Micajah.Common.WebControls
         protected override void OnPreRender(EventArgs e)
         {
             ScriptManager current = ScriptManager.GetCurrent(this.Page);
-            if (current != null) current.RegisterScriptControl<UpdateProgress>(this);
+            if (current != null)
+            {
+                current.RegisterScriptControl<UpdateProgress>(this);
+
+                if (current.IsInAsyncPostBack)
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), this.ClientID + "_SetFailed", "Sys.Application.add_init(function() {{var ctl = $find('" + this.ClientID + "'); if (ctl) {{ ctl.set_postBackHasError(" + (this.PostBackHasError ? "true" : "false") + "); }} }});", true);
+            }
         }
 
         #endregion

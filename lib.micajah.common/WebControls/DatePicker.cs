@@ -192,6 +192,10 @@ namespace Micajah.Common.WebControls
             {
                 EnsureChildControls();
                 m_RadDateTimePicker.DateInput.DateFormat = value;
+                m_RadDateTimePicker.DateInput.DisplayDateFormat = value;
+                int idx = value.IndexOf("h", StringComparison.OrdinalIgnoreCase);
+                if (idx > -1)
+                    m_RadDateTimePicker.TimeView.TimeFormat = value.Substring(idx);
             }
         }
 
@@ -216,29 +220,25 @@ namespace Micajah.Common.WebControls
                 {
                     case DatePickerType.Date:
                         m_RadDateTimePicker.DatePopupButton.Visible = false;
-                        m_RadDateTimePicker.Calendar.Visible = false;
                         break;
                     case DatePickerType.DatePicker:
                         break;
                     case DatePickerType.DateTime:
-                        m_RadDateTimePicker.DateInput.DateFormat = "g";
+                        m_RadDateTimePicker.DateInput.DateFormat = m_RadDateTimePicker.DateInput.DisplayDateFormat = "g";
                         m_RadDateTimePicker.DatePopupButton.Visible = false;
-                        m_RadDateTimePicker.Calendar.Visible = false;
                         break;
                     case DatePickerType.DateTimePicker:
-                        m_RadDateTimePicker.DateInput.DateFormat = "g";
+                        m_RadDateTimePicker.DateInput.DateFormat = m_RadDateTimePicker.DateInput.DisplayDateFormat = "g";
                         m_RadDateTimePicker.TimePopupButton.Visible = true;
                         break;
                     case DatePickerType.Time:
-                        m_RadDateTimePicker.DateInput.DateFormat = "t";
+                        m_RadDateTimePicker.DateInput.DateFormat = m_RadDateTimePicker.DateInput.DisplayDateFormat = "t";
                         m_RadDateTimePicker.DatePopupButton.Visible = false;
-                        m_RadDateTimePicker.Calendar.Visible = false;
                         break;
                     case DatePickerType.TimePicker:
-                        m_RadDateTimePicker.DateInput.DateFormat = "t";
+                        m_RadDateTimePicker.DateInput.DateFormat = m_RadDateTimePicker.DateInput.DisplayDateFormat = "t";
                         m_RadDateTimePicker.DatePopupButton.Visible = false;
                         m_RadDateTimePicker.TimePopupButton.Visible = true;
-                        m_RadDateTimePicker.Calendar.Visible = false;
                         break;
                 }
                 ViewState["Type"] = value;

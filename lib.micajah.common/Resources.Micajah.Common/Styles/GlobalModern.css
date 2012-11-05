@@ -16,7 +16,7 @@ html, body, form
 
 body
 {
-    font: 13px/1.231 'Helvetica Neue' , Arial, 'Liberation Sans' , FreeSans, Sans-serif;
+    font: 13px/1.231 Arial, Sans-serif;
     color: #555;
 }
 
@@ -403,21 +403,20 @@ input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, but
 
 input[type=button], input[type=reset], input[type=submit], button, .Button
 {
-    color: #444444;
-    background-color: White;
-    border: 1px solid #acacac;
+    color: #333;
+    border: 1px solid #d4d4d4;
+    background-color: #d3d3d3;
 }
 
-input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus
-{
-    color: #444444;
-    border: 1px solid #0053a6;
-}
-
+input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus,
 input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover
 {
-    color: #1874cd;
-    border: 1px solid #1874cd;
+	color: #fff;
+	border-left-color: #3072b3;
+    border-right-color: #3072b3;
+    border-top-color: #3072b3;
+    border-bottom-color: #2a65a0;
+	background-color: #3072b3;
 }
 
 input[type=button].Small, input[type=reset].Small, input[type=submit].Small, button.Small, .Button.Small
@@ -457,8 +456,8 @@ input[type=button].X-Large, input[type=reset].X-Large, input[type=submit].X-Larg
 input[type=button].Green, input[type=reset].Green, input[type=submit].Green, button.Green, .Button.Green
 {
     color: White;
-    background-color: #92C74F;
     border: 1px solid #79A541;
+    background-color: #92C74F;
 }
 
 input[type=button].Green:hover, input[type=reset].Green:hover, input[type=submit].Green:hover, button.Green:hover, .Button.Green:hover
@@ -471,16 +470,16 @@ input[type=button].Green:hover, input[type=reset].Green:hover, input[type=submit
 input[type=button].Green:active, input[type=reset].Green:active, input[type=submit].Green:active, button.Green:active, .Button.Green:active
 {
     color: White;
-    background-color: #28597a;
     border: 1px solid #28597a;
+    background-color: #28597a;
 }
 
 /* Blue Buttons */
 input[type=button].Blue, input[type=reset].Blue, input[type=submit].Blue, button.Blue, .Button.Blue
 {
     color: White;
-    background-color: #058dc7;
     border: 1px solid #058dc7;
+    background-color: #058dc7;
 }
 
 input[type=button].Blue:hover, input[type=reset].Blue:hover, input[type=submit].Blue:hover, button.Blue:hover, .Button.Blue:hover
@@ -490,27 +489,21 @@ input[type=button].Blue:hover, input[type=reset].Blue:hover, input[type=submit].
     border: 1px solid #09a0e1;
 }
 
-/* Red Negative Buttons */
-input[type=button].Red.Negative, input[type=reset].Red.Negative, input[type=submit].Red.Negative, button.Red.Negative, .Button.Red.Negative
-{
-    color: #900;
-    background-color: White;
-    border: 1px solid #acacac;
-}
-
-input[type=button].Red.Negative:focus, input[type=reset].Red.Negative:focus, input[type=submit].Red.Negative:focus, button.Red.Negative:focus, .Button.Red.Negative:focus,
-input[type=button].Red.Negative:hover, input[type=reset].Red.Negative:hover, input[type=submit].Red.Negative:hover, button.Red.Negative:hover, .Button.Red.Negative:hover
+/* Red Buttons */
+input[type=button].Red, input[type=reset].Red, input[type=submit].Red, button.Red, .Button.Red
 {
     color: White;
-    background-color: #d74040;
     border: 1px solid #ab2222;
+    background-color: #d74040;
 }
 
-input[type=button].Red.Negative:active, input[type=reset].Red.Negative:active, input[type=submit].Red.Negative:active, button.Red.Negative:active, .Button.Red.Negative:active
+input[type=button].Red:focus, input[type=reset].Red:focus, input[type=submit].Red:focus, button.Red:focus, .Button.Red:focus,
+input[type=button].Red:hover, input[type=reset].Red:hover, input[type=submit].Red:hover, button.Red:hover, .Button.Red:hover,
+input[type=button].Red:active, input[type=reset].Red:active, input[type=submit].Red:active, button.Red:active, .Button.Red:active
 {
     color: White;
     background-color: #ad2323;
-    border: 1px solid #b33630;
+    border: 1px solid #a0302a;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner

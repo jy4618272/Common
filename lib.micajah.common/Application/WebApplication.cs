@@ -742,7 +742,31 @@ namespace Micajah.Common.Application
                 }
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (ctx.Session.IsNewSession || string.Compare(Security.UserContext.VanityUrl, System.Web.HttpContext.Current.Request.Url.Host, true) != 0))
+                {
+                    string url = null;
                     UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
+                    if (Security.UserContext.SelectedOrganizationId != Guid.Empty && HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null && HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        url = CustomUrlProvider.GetVanityUrl(Security.UserContext.SelectedOrganizationId, Security.UserContext.SelectedInstanceId);
+                        url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
+                        if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
+                            Response.Redirect(Request.Url.ToString().Replace(Request.Url.Host, url));
+                    }
+                    else if (HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null && HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        Guid userId = Guid.Empty;
+                        Guid organizationId = Guid.Empty;
+                        Guid instanceId = Guid.Empty;
+                        LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
+                        if (userId != Guid.Empty)
+                        {
+                            url = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
+                            url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
+                            if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
+                                Response.Redirect(Request.Url.ToString().Replace(Request.Url.Host, url));
+                        }
+                    }
+                }
             }
         }
 

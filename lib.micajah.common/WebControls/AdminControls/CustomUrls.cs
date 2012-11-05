@@ -35,6 +35,8 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
+        public bool ShowSwitchViewButton { get; set; }
+
         #endregion
 
         #region Overriden Methods
@@ -49,6 +51,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             m_InnerControl = this.Page.LoadControl(ResourceProvider.CustomUrlsControlVirtualPath) as CustomUrlsControl;
             m_InnerControl.ID = "CustomUrls";
+            m_InnerControl.ShowSwitchViewButton = this.ShowSwitchViewButton;
             m_Holder.Controls.Add(m_InnerControl);
         }
 
