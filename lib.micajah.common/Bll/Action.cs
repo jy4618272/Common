@@ -442,7 +442,7 @@ namespace Micajah.Common.Bll
                 {
                     string navigateUrl = this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this);
                     bool isDetailMenu = ((this.ActionType == ActionType.Page) && (string.Compare(navigateUrl, string.Empty, StringComparison.OrdinalIgnoreCase) == 0));
-                    return this.IsDetailMenuPage ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : WebApplication.CreateApplicationAbsoluteUrl(navigateUrl);
+                    return isDetailMenu ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : WebApplication.CreateApplicationAbsoluteUrl(navigateUrl);
                 }
                 return this.AbsoluteNavigateUrl;
             }
