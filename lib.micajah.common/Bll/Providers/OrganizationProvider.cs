@@ -482,7 +482,7 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (!includeExpired)
                     {
-                        if (org.Expired)
+                        if (org.Expired && (org.GraceDaysRemaining == 0))
                             continue;
                     }
 
