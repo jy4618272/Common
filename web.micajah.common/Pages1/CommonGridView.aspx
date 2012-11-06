@@ -127,7 +127,7 @@
         &nbsp;
     </p>
     <mits:CommonGridView ID="CommonGridView4" runat="server" AutoGenerateColumns="false"
-        DataKeyNames="RoleId" Width="100%" Caption="Empty grid">
+        DataKeyNames="RoleId" Width="100%" Caption="Empty grid" EmptyDataText="No Items Found...">
         <Columns>
             <mits:TextBoxField DataField="RoleId" HeaderText="RoleId">
             </mits:TextBoxField>

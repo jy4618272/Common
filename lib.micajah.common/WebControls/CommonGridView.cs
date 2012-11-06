@@ -182,7 +182,7 @@ namespace Micajah.Common.WebControls
         [ResourceDefaultValue("CommonGridView_EmptyDataText")]
         public override string EmptyDataText
         {
-            get { return base.EmptyDataText; }
+            get { return (string.IsNullOrEmpty(base.EmptyDataText) ? Resources.CommonGridView_EmptyDataText : base.EmptyDataText); }
             set { base.EmptyDataText = value; }
         }
 
@@ -2149,8 +2149,6 @@ namespace Micajah.Common.WebControls
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
-
-            base.EmptyDataText = Resources.CommonGridView_EmptyDataText;
 
             if (!this.DesignMode)
             {
