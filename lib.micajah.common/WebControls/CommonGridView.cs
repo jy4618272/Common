@@ -232,6 +232,22 @@ namespace Micajah.Common.WebControls
             set { ViewState["AddLinkCaption"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the CSS class of the add hyperlink.
+        /// </summary>
+        [Category("Appearance")]
+        [Description("The CSS class of the add hyperlink.")]
+        [DefaultValue("")]
+        public string AddLinkCssClass
+        {
+            get
+            {
+                object obj = ViewState["AddLinkCssClass"];
+                return ((obj == null) ? string.Empty : (string)obj);
+            }
+            set { ViewState["AddLinkCssClass"] = value; }
+        }
+
         ///<summary>
         /// Gets Custom Pager Class for customizing paging.
         ///</summary>
@@ -1237,7 +1253,14 @@ namespace Micajah.Common.WebControls
                             m_AddLink.ID = "btnAdd";
                             m_AddLink.Text = this.AddLinkCaption;
                             m_AddLink.CausesValidation = false;
-                            m_AddLink.CssClass = ((this.Theme == MasterPageTheme.Modern) ? "Button Green Large" : "Cgv_AddNew");
+                            m_AddLink.CssClass = ((this.Theme == MasterPageTheme.Modern) ? "Button Large" : "Cgv_AddNew");
+                            if (string.IsNullOrEmpty(this.AddLinkCssClass))
+                            {
+                                if (this.Theme == MasterPageTheme.Modern)
+                                    m_AddLink.CssClass += " Green";
+                            }
+                            else
+                                m_AddLink.CssClass += " " + this.AddLinkCssClass;
                             m_AddLink.Click += new EventHandler(AddLink_Click);
                             pnl2.Controls.Add(m_AddLink);
                         }
