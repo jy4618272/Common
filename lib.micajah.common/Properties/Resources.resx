@@ -2127,9 +2127,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="LoginProvider_ErrorMessage_PasswordTooShort" xml:space="preserve">
     <value>Password must be alphanumeric with at least {0} characters.</value>
   </data>
-  <data name="LogosControl_List_CommandColumn_EditText" xml:space="preserve">
-    <value>Upload Logo</value>
-  </data>
   <data name="UsersControl_EditForm_SecondaryEmailsField_HeaderText" xml:space="preserve">
     <value>Secondary Emails</value>
   </data>
