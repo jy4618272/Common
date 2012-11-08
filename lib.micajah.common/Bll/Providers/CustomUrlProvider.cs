@@ -527,9 +527,6 @@ namespace Micajah.Common.Bll.Providers
                     }
                 }
 
-                if (!(customUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || customUrl.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                    customUrl = string.Format("http://{0}", customUrl);
-
                 return customUrl;
             }
             finally

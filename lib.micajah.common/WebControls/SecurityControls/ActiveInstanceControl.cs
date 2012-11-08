@@ -57,16 +57,17 @@ namespace Micajah.Common.WebControls.SecurityControls
         internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
         {
             UserContext ctx = UserContext.Current;
+
+            ctx.SelectInstance(instanceId);
+
             try
             {
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     string url = CustomUrlProvider.GetVanityUrl(ctx != null ? ctx.SelectedOrganization.OrganizationId : UserContext.SelectedOrganizationId, instanceId);
                     url = string.Format("{0}{1}", url, redirectUrl);
-                    errorDiv.Page.Response.Redirect(url, true);
+                    errorDiv.Page.Response.Redirect("https://"+url, true);
                 }
-
-                ctx.SelectInstance(instanceId);
 
                 ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
                 if (!string.IsNullOrEmpty(redirectUrl))
