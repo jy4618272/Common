@@ -3444,15 +3444,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload Logo.
-        /// </summary>
-        internal static string LogosControl_List_CommandColumn_EditText {
-            get {
-                return ResourceManager.GetString("LogosControl_List_CommandColumn_EditText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Instance.
         /// </summary>
         internal static string LogosControl_List_InstanceType_Text {

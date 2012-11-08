@@ -214,6 +214,11 @@ tr.Cgv_P td table td
     margin-right: 0 !important;
 }
 
+.Cgv_CptCtrls .Button:hover
+{
+    color: White;
+}
+
 .Cgv_B
 {
     padding: 10px;

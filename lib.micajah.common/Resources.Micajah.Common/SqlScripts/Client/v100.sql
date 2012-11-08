@@ -210,7 +210,7 @@ IF @@TRANCOUNT = 1
 			WHEN -10 THEN 'Hawaiian Standard Time'
 			WHEN -11 THEN 'UTC-11'
 			WHEN -12 THEN 'Dateline Standard Time'
-			ELSE NULL END
+			ELSE 'Eastern Standard Time' END
 	WHERE ISNUMERIC(TimeZoneId) = 1
 
 IF @@ERROR <> 0
