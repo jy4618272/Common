@@ -180,7 +180,7 @@ namespace Micajah.Common.WebControls
 
                 if (this.Theme == MasterPageTheme.Modern)
                 {
-                    writer.AddStyleAttribute("background", string.Format(CultureInfo.InvariantCulture, "url(\"{0}\") no-repeat right 10px", ResourceProvider.GetResourceUrl("Images.MasterPageThemes.Modern.DropArrow.png", true)));
+                    writer.AddStyleAttribute("background", string.Format(CultureInfo.InvariantCulture, "url(\"{0}\") no-repeat right 7px", ResourceProvider.GetImageUrl(typeof(TreeView), "Modern.png", true)));
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Position, "relative");
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Left, "10px");
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Height, "39px");
