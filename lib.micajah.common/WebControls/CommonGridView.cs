@@ -1711,7 +1711,7 @@ namespace Micajah.Common.WebControls
             writer.AddAttribute(HtmlTextWriterAttribute.Scope, "col");
             if (columnSpan > 1) writer.AddAttribute(HtmlTextWriterAttribute.Colspan, columnSpan.ToString(CultureInfo.InvariantCulture));
             if (!string.IsNullOrEmpty(borderColor)) writer.AddStyleAttribute(HtmlTextWriterStyle.BorderColor, borderColor);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Cgv_H");
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Cgv_H Cgv_Hg");
             writer.RenderBeginTag(HtmlTextWriterTag.Th);
             writer.Write(headerGroupName);
             writer.RenderEndTag();
