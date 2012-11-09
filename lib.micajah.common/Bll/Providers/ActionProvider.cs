@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -671,11 +670,14 @@ namespace Micajah.Common.Bll.Providers
             if (isOrgAdmin)
                 actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
 
-            // Removes duplicate values.
-            HashSet<Guid> set = new HashSet<Guid>((Guid[])actionIdList.ToArray(typeof(Guid)));
-            Guid[] result = new Guid[set.Count];
-            set.CopyTo(result);
-            actionIdList = new ArrayList(result);
+            ArrayList list = new ArrayList(actionIdList);
+            actionIdList.Clear();
+
+            foreach (Guid actionId in list)
+            {
+                if (!actionIdList.Contains(actionId))
+                    actionIdList.Add(actionId);
+            }
         }
 
         internal static ArrayList GetActionIdList(ArrayList roleIdList, bool isOrgAdmin)
