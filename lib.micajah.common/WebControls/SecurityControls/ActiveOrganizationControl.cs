@@ -87,14 +87,14 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 string redirectUrl = returnUrl;
 
-                ctx.SelectOrganization(organizationId);
-
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     redirectUrl = CustomUrlProvider.GetVanityUrl(organizationId, Guid.Empty);
                     redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
                     errorDiv.Page.Response.Redirect("https://"+redirectUrl, true);
                 }
+
+                ctx.SelectOrganization(organizationId);
 
                 ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
                 if (!string.IsNullOrEmpty(redirectUrl))

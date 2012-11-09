@@ -58,8 +58,6 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             UserContext ctx = UserContext.Current;
 
-            ctx.SelectInstance(instanceId);
-
             try
             {
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
@@ -68,6 +66,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                     url = string.Format("{0}{1}", url, redirectUrl);
                     errorDiv.Page.Response.Redirect("https://"+url, true);
                 }
+
+                ctx.SelectInstance(instanceId);
 
                 ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
                 if (!string.IsNullOrEmpty(redirectUrl))
