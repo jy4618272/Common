@@ -664,6 +664,11 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void AddAdminActionIdList(bool isOrgAdmin, bool isInstAdmin, ref ArrayList actionIdList)
         {
+            if (actionIdList == null) return;
+
+            if (isOrgAdmin)
+                actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
+
             if (isInstAdmin)
                 actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.InstanceAdministratorRoleId));
 
