@@ -44,6 +44,7 @@ tr.Cgv_R:hover, tr.Cgv_Er:hover, tr.Cgv_Sr
     font-size: 13px;
     padding: 10px;
     color: #222;
+    font-weight: normal;
 }
 
 .Cgv_H th, .Cgv_H a, .Cgv_H a:hover
