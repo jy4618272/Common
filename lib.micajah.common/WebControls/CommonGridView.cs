@@ -686,11 +686,6 @@ namespace Micajah.Common.WebControls
         public new event GridViewEditEventHandler RowEditing;
 
         /// <summary>
-        /// Occurs when a row's Delete button is clicked, but before the control deletes the row.
-        /// </summary>
-        public new event GridViewDeleteEventHandler RowDeleting;
-
-        /// <summary>
         /// Occurs when the selection from the status list control changes between posts to the server.
         /// </summary>
         public event EventHandler SelectedStatusChanged;
@@ -2261,12 +2256,6 @@ namespace Micajah.Common.WebControls
         protected override void OnRowEditing(GridViewEditEventArgs e)
         {
             if (RowEditing != null) RowEditing(this, e);
-        }
-
-        protected override void OnRowDeleting(GridViewDeleteEventArgs e)
-        {
-            if (this.RowDeleting != null)
-                base.OnRowDeleting(e);
         }
 
         protected override void RenderContents(HtmlTextWriter writer)
