@@ -260,12 +260,22 @@ namespace Micajah.Common.WebControls.SecurityControls
                     {
                         string url = CustomUrlProvider.GetVanityUrl(this.OrganizationId, this.InstanceId);
                         url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
+
                         if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
                         {
+                            Security.UserContext.SelectedOrganizationId = Guid.Empty;
+                            Security.UserContext.SelectedInstanceId = Guid.Empty;
+                            Security.UserContext.Current = null;
+
                             if (redirectUrl != "~/")
                                 Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, redirectUrl));
                             else
                                 Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, ResolveUrl(redirectUrl)));
+                        }
+                        else
+                        {
+                            Security.UserContext.SelectedOrganizationId = this.OrganizationId;
+                            Security.UserContext.SelectedInstanceId = this.InstanceId;
                         }
                     }
                     else

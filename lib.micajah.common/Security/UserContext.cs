@@ -209,7 +209,7 @@ namespace Micajah.Common.Security
                             {
                                 (new LoginProvider()).SignOut();
                             }
-                        }
+                        }                        
                     }
                 }
 

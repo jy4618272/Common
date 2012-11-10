@@ -96,8 +96,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
         {
-            UserContext ctx = UserContext.Current;
-
+            UserContext ctx = UserContext.Current;           
+           
             if (!string.IsNullOrEmpty(redirectUrl))
             {
                 string relativeUrl = WebApplication.CreateApplicationRelativeUrl(redirectUrl);
@@ -109,7 +109,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     object obj = Support.ConvertStringToType(Support.ExtractQueryStringParameterValue(redirectUrl, "pageid"), typeof(Guid));
                     if (obj != null) actionId = (Guid)obj;
 
-                    if (ctx.SelectedOrganization != null)
+                    if (ctx != null && ctx.SelectedOrganization != null)
                     {
                         Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, redirectUrl);
                         if (action != null)
@@ -125,7 +125,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (enableStartMenu)
             {
-                if (ctx.IsOrganizationAdministrator)
+                if (ctx != null && ctx.IsOrganizationAdministrator)
                 {
                     bool redirect = false;
                     Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(ctx, out redirect);
