@@ -256,7 +256,20 @@ namespace Micajah.Common.WebControls.SecurityControls
                     if (string.IsNullOrEmpty(redirectUrl))
                         redirectUrl = "~/";
 
-                    Response.Redirect(redirectUrl);
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    {
+                        string url = CustomUrlProvider.GetVanityUrl(this.OrganizationId, this.InstanceId);
+                        url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
+                        if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
+                        {
+                            if (redirectUrl != "~/")
+                                Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, redirectUrl));
+                            else
+                                Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, ResolveUrl(redirectUrl)));
+                        }
+                    }
+                    else
+                        Response.Redirect(redirectUrl);
 
                 }
                 catch (AuthenticationException ex)

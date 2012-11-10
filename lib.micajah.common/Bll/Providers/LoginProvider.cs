@@ -800,14 +800,13 @@ namespace Micajah.Common.Bll.Providers
                         foreach (string name in cookiesToClear)
                         {
                             HttpCookie cookie = new HttpCookie(name, string.Empty);
-                            cookie.Domain =
-                                FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                            cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
                             cookie.Expires = DateTime.Today.AddYears(-1);
 
                             context.Response.Cookies.Set(cookie);
+                            context.Request.Cookies.Set(cookie);
                         }
                     }
-
                 }
                 if (!string.IsNullOrEmpty(redirectUrl))
                 {

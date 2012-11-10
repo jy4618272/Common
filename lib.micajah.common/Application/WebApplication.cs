@@ -750,7 +750,7 @@ namespace Micajah.Common.Application
                         url = CustomUrlProvider.GetVanityUrl(Security.UserContext.SelectedOrganizationId, Security.UserContext.SelectedInstanceId);
                         url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
                         if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
-                            Response.Redirect(Request.Url.ToString().Replace(Request.Url.Host, url));
+                            Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, Request.Url.PathAndQuery));
                     }
                     else if (HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null && HttpContext.Current.User.Identity.IsAuthenticated)
                     {
@@ -763,7 +763,7 @@ namespace Micajah.Common.Application
                             url = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
                             url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
                             if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
-                                Response.Redirect(Request.Url.ToString().Replace(Request.Url.Host, url));
+                                Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, Request.Url.PathAndQuery));
                         }
                     }
                 }
