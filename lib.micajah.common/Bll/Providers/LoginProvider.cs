@@ -809,7 +809,7 @@ namespace Micajah.Common.Bll.Providers
                     }
 
                 }
-                if (string.IsNullOrEmpty(redirectUrl) || redirectUrl == "/")
+                if (!string.IsNullOrEmpty(redirectUrl))
                 {
                     if (context != null)
                     {
@@ -831,7 +831,7 @@ namespace Micajah.Common.Bll.Providers
                             context.Response.Redirect("~/");
                     }
                 }
-                else if (context!=null) context.Response.Redirect(redirectUrl);
+                //else if (context!=null) context.Response.Redirect(redirectUrl);
             }
         }
 
