@@ -682,18 +682,6 @@ namespace Micajah.Common.Bll.Providers
 
             if (isInstAdmin)
                 actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.InstanceAdministratorRoleId));
-
-            if (isOrgAdmin)
-                actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
-
-            ArrayList list = new ArrayList(actionIdList);
-            actionIdList.Clear();
-
-            foreach (Guid actionId in list)
-            {
-                if (!actionIdList.Contains(actionId))
-                    actionIdList.Add(actionId);
-            }
         }
 
         internal static ArrayList GetActionIdList(ArrayList roleIdList, bool isOrgAdmin)
@@ -706,6 +694,8 @@ namespace Micajah.Common.Bll.Providers
                 actionIdList.AddRange(GetActionIdListByRoleId(roleId));
 
             AddAdminActionIdList(isOrgAdmin, isInstAdmin, ref actionIdList);
+
+            RemoveDuplicates(ref actionIdList);
 
             return actionIdList;
         }
@@ -763,10 +753,7 @@ namespace Micajah.Common.Bll.Providers
                 actionIdList.AddRange(list);
             }
 
-            if (actionIdList.Count == 0) // If an user is instance or organization administrator and has no other role.
-                actionIdList.AddRange(GetActionIdList(roleIdList, isOrgAdmin));
-            else
-                AddAdminActionIdList(isOrgAdmin, isInstAdmin, ref actionIdList);
+            actionIdList.AddRange(GetActionIdList(roleIdList, isOrgAdmin));
 
             return actionIdList;
         }
@@ -1011,6 +998,18 @@ namespace Micajah.Common.Bll.Providers
                         }
                     }
                 }
+            }
+        }
+
+        internal static void RemoveDuplicates(ref ArrayList actionIdList)
+        {
+            ArrayList list = new ArrayList(actionIdList);
+            actionIdList.Clear();
+
+            foreach (Guid actionId in list)
+            {
+                if (!actionIdList.Contains(actionId))
+                    actionIdList.Add(actionId);
             }
         }
 
