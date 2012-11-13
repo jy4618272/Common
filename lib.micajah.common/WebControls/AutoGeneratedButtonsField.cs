@@ -47,6 +47,23 @@ namespace Micajah.Common.WebControls
 
         #endregion
 
+        #region Overriden Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the header section is displayed.
+        /// </summary>
+        public override bool ShowHeader
+        {
+            get
+            {
+                if (m_MagicForm != null) return true;
+                return base.ShowHeader;
+            }
+            set { base.ShowHeader = value; }
+        }
+
+        #endregion
+
         #region Overriden Methods
 
         /// <summary>
