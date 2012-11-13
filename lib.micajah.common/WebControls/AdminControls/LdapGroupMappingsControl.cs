@@ -3,6 +3,7 @@ using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Telerik.Web.UI;
@@ -24,6 +25,8 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Button SaveButton;
         protected ComboBox DomainList;
         protected ComboBox LdapGroupList;
+        protected TableCell ButtonHeaderCell;
+        protected TableCell ButtonCell;
         protected CommonGridView CommonGridView1;
         protected TreeView AppGroupTreeView;
         protected UpdateProgress FormUpdateProgress;
@@ -98,6 +101,17 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (LdapGroupMappingsTable.Visible)
                 MagicForm.ApplyStyle(LdapGroupMappingsTable);
+
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
+            {
+                ButtonHeaderCell.Visible = true;
+                ButtonCell.ColumnSpan = 0;
+            }
+            else
+            {
+                ButtonHeaderCell.Visible = false;
+                ButtonCell.ColumnSpan = 2;
+            }
         }
 
         protected void AppGroupTreeView_NodeDataBound(object sender, Telerik.Web.UI.RadTreeNodeEventArgs e)

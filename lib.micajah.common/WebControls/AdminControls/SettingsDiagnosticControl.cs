@@ -33,6 +33,8 @@ namespace Micajah.Common.WebControls.AdminControls
         protected CheckBoxList GroupList;
         protected DropDownList UserList;
         protected DropDownList InstanceList;
+        protected TableCell ButtonHeaderCell;
+        protected TableCell ButtonCell;
         protected LinkButton SwitchButton;
         protected Button SubmitButton;
         protected PlaceHolder ButtonsSeparator;
@@ -178,6 +180,17 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (InstanceListRow.Visible)
                 InstanceListRow.Visible = FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances;
+
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
+            {
+                ButtonHeaderCell.Visible = true;
+                ButtonCell.ColumnSpan = 0;
+            }
+            else
+            {
+                ButtonHeaderCell.Visible = false;
+                ButtonCell.ColumnSpan = 2;
+            }
         }
 
         protected void SubmitButton_Click(object sender, EventArgs e)

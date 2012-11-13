@@ -51,7 +51,8 @@
                 </asp:TableCell>
             </asp:TableRow>
             <asp:TableFooterRow>
-                <asp:TableCell ColumnSpan="2">
+                <asp:TableCell ID="ButtonHeaderCell" runat="server"></asp:TableCell>
+                <asp:TableCell ID="ButtonCell" runat="server">
                     <asp:Button ID="SaveButton" runat="server" OnClick="SaveButton_Click" />
                 </asp:TableCell>
             </asp:TableFooterRow>
