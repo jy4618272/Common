@@ -140,6 +140,16 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets or sets the height of the big application logo's image.
+        /// </summary>
+        [ConfigurationProperty("bigLogoImageHeight", DefaultValue = 100)]
+        public int BigLogoImageHeight
+        {
+            get { return (int)this["bigLogoImageHeight"]; }
+            set { this["bigLogoImageHeight"] = value; }
+        }
+
+        /// <summary>
         /// Gets the URL of the application.
         /// </summary>
         public string Url

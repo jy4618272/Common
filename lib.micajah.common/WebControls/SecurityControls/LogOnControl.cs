@@ -421,7 +421,8 @@ namespace Micajah.Common.WebControls.SecurityControls
             else
             {
                 LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
-                m_MainContainerHeight += 100;
+                if (FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight > 0)
+                    m_MainContainerHeight += FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight;
             }
         }
 
