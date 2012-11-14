@@ -169,6 +169,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                 action = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId);
                 LogOffLink.NavigateUrl = ((action == null) ? ResourceProvider.LogOffPageVirtualPath : action.AbsoluteNavigateUrl);
 
+                if (Security.UserContext.SelectedInstanceId != Guid.Empty)
+                    SelectInstance(Security.UserContext.SelectedInstanceId, Request.QueryString["returnurl"], ErrorDiv);
+
                 InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganization.OrganizationId);
                 int count = 0;
 

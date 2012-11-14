@@ -200,6 +200,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                     if (action != null) LogOnAsAnotherUserLink.NavigateUrl = action.AbsoluteNavigateUrl;
                 }
 
+                if (Security.UserContext.SelectedOrganizationId != Guid.Empty)
+                    SelectOrganization(Security.UserContext.SelectedOrganizationId, Request.QueryString["returnurl"], ErrorDiv);
+
                 OrganizationCollection coll = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
                 int count = 0;
                 if (coll != null)
