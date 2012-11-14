@@ -11,7 +11,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td class="Tc2" style="white-space: nowrap;">
+                        <td class="Tc2">
                             <asp:PlaceHolder ID="ControlHolder2" runat="server"></asp:PlaceHolder>
                         </td>
                         <td class="Tc2" style="width: 100%;">

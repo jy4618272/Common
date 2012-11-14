@@ -62,6 +62,11 @@
     margin-left: 23px;
 }
 
+.Mc_Settings .Error
+{
+    position: static !important;
+}
+
 /* Overrides DetailMenu styles */
 .Mp_Dm td
 {

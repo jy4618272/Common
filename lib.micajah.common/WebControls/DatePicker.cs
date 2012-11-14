@@ -343,6 +343,16 @@ namespace Micajah.Common.WebControls
 
         #endregion
 
+        #region Internal Methods
+
+        protected internal void SetDateInputValue(string value)
+        {
+            this.EnsureChildControls();
+            m_RadDateTimePicker.DateInput.Attributes["value"] = value;
+        }
+
+        #endregion
+
         #region Overriden Methods
 
         /// <summary>

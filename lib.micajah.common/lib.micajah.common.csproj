@@ -203,6 +203,7 @@
     <Compile Include="Configuration\RulesEngineOutputElement.cs" />
     <Compile Include="Configuration\SecurityElement.cs" />
     <Compile Include="Configuration\SettingElement.cs" />
+    <Compile Include="Configuration\ValidationElement.cs" />
     <Compile Include="Configuration\SettingValueElement.cs" />
     <Compile Include="Configuration\StartThreadElement.cs" />
     <Compile Include="Configuration\SubmenuElement.cs" />

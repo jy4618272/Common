@@ -3892,6 +3892,16 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnExternalId;
             
+            private global::System.Data.DataColumn columnValidationType;
+            
+            private global::System.Data.DataColumn columnValidationExpression;
+            
+            private global::System.Data.DataColumn columnMaximumValue;
+            
+            private global::System.Data.DataColumn columnMinimumValue;
+            
+            private global::System.Data.DataColumn columnMaxLength;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public SettingDataTable() {
@@ -4095,6 +4105,46 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ValidationTypeColumn {
+                get {
+                    return this.columnValidationType;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ValidationExpressionColumn {
+                get {
+                    return this.columnValidationExpression;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn MaximumValueColumn {
+                get {
+                    return this.columnMaximumValue;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn MinimumValueColumn {
+                get {
+                    return this.columnMinimumValue;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn MaxLengthColumn {
+                get {
+                    return this.columnMaxLength;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -4151,7 +4201,12 @@ namespace Micajah.Common.Dal {
                         bool Paid, 
                         int UsageCountLimit, 
                         decimal Price, 
-                        string ExternalId) {
+                        string ExternalId, 
+                        string ValidationType, 
+                        string ValidationExpression, 
+                        string MaximumValue, 
+                        string MinimumValue, 
+                        int MaxLength) {
                 SettingRow rowSettingRow = ((SettingRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         SettingId,
@@ -4174,7 +4229,12 @@ namespace Micajah.Common.Dal {
                         Paid,
                         UsageCountLimit,
                         Price,
-                        ExternalId};
+                        ExternalId,
+                        ValidationType,
+                        ValidationExpression,
+                        MaximumValue,
+                        MinimumValue,
+                        MaxLength};
                 if ((parentSettingRowByFK_Mc_Setting_Mc_Setting != null)) {
                     columnValuesArray[1] = parentSettingRowByFK_Mc_Setting_Mc_Setting[0];
                 }
@@ -4231,6 +4291,11 @@ namespace Micajah.Common.Dal {
                 this.columnUsageCountLimit = base.Columns["UsageCountLimit"];
                 this.columnPrice = base.Columns["Price"];
                 this.columnExternalId = base.Columns["ExternalId"];
+                this.columnValidationType = base.Columns["ValidationType"];
+                this.columnValidationExpression = base.Columns["ValidationExpression"];
+                this.columnMaximumValue = base.Columns["MaximumValue"];
+                this.columnMinimumValue = base.Columns["MinimumValue"];
+                this.columnMaxLength = base.Columns["MaxLength"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4278,6 +4343,16 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnPrice);
                 this.columnExternalId = new global::System.Data.DataColumn("ExternalId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnExternalId);
+                this.columnValidationType = new global::System.Data.DataColumn("ValidationType", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnValidationType);
+                this.columnValidationExpression = new global::System.Data.DataColumn("ValidationExpression", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnValidationExpression);
+                this.columnMaximumValue = new global::System.Data.DataColumn("MaximumValue", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMaximumValue);
+                this.columnMinimumValue = new global::System.Data.DataColumn("MinimumValue", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMinimumValue);
+                this.columnMaxLength = new global::System.Data.DataColumn("MaxLength", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMaxLength);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnSettingId}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
@@ -4313,6 +4388,16 @@ namespace Micajah.Common.Dal {
                 this.columnPaid.DefaultValue = ((bool)(false));
                 this.columnUsageCountLimit.DefaultValue = ((int)(0));
                 this.columnPrice.DefaultValue = ((decimal)(0m));
+                this.columnValidationType.AllowDBNull = false;
+                this.columnValidationType.DefaultValue = ((string)(""));
+                this.columnValidationExpression.AllowDBNull = false;
+                this.columnValidationExpression.DefaultValue = ((string)(""));
+                this.columnMaximumValue.AllowDBNull = false;
+                this.columnMaximumValue.DefaultValue = ((string)(""));
+                this.columnMinimumValue.AllowDBNull = false;
+                this.columnMinimumValue.DefaultValue = ((string)(""));
+                this.columnMaxLength.AllowDBNull = false;
+                this.columnMaxLength.DefaultValue = ((int)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -10483,6 +10568,61 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableSetting.ExternalIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ValidationType {
+                get {
+                    return ((string)(this[this.tableSetting.ValidationTypeColumn]));
+                }
+                set {
+                    this[this.tableSetting.ValidationTypeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ValidationExpression {
+                get {
+                    return ((string)(this[this.tableSetting.ValidationExpressionColumn]));
+                }
+                set {
+                    this[this.tableSetting.ValidationExpressionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string MaximumValue {
+                get {
+                    return ((string)(this[this.tableSetting.MaximumValueColumn]));
+                }
+                set {
+                    this[this.tableSetting.MaximumValueColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string MinimumValue {
+                get {
+                    return ((string)(this[this.tableSetting.MinimumValueColumn]));
+                }
+                set {
+                    this[this.tableSetting.MinimumValueColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int MaxLength {
+                get {
+                    return ((int)(this[this.tableSetting.MaxLengthColumn]));
+                }
+                set {
+                    this[this.tableSetting.MaxLengthColumn] = value;
                 }
             }
             

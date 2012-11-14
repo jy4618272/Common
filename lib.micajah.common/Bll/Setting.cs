@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Micajah.Common.Bll.Providers;
+using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll
 {
@@ -147,16 +148,11 @@ namespace Micajah.Common.Bll
         /// </summary>
         public string Value
         {
-            get 
+            get
             {
-                return ((m_Value == null) ? DefaultValue : m_Value); 
+                return ((m_Value == null) ? DefaultValue : m_Value);
             }
             set { m_Value = value; }
-        }
-
-        public int GetCounterValue(Guid OrganizationId)
-        {
-            return Handlers.SettingHandler.Current.GetUsedItemsCount(this, OrganizationId);
         }
 
         /// <summary>
@@ -261,6 +257,31 @@ namespace Micajah.Common.Bll
             get { return m_Visible; }
             set { m_Visible = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the data type of values.
+        /// </summary>
+        public string ValidationType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the regular expression that determines the pattern used to validate the value.
+        /// </summary>
+        public string ValidationExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum value for the validation range.
+        /// </summary>
+        public string MaximumValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimum value for the validation range.
+        /// </summary>
+        public string MinimumValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum number of characters allowed for the value.
+        /// </summary>
+        public int MaxLength { get; set; }
 
         /// <summary>
         /// Gets or sets the action this settings is associated to.
@@ -471,6 +492,11 @@ namespace Micajah.Common.Bll
                 if (result == 0) result += string.Compare(this.Name, other.Name, StringComparison.CurrentCultureIgnoreCase);
             }
             return result;
+        }
+
+        public int GetCounterValue(Guid organizationId)
+        {
+            return Handlers.SettingHandler.Current.GetUsedItemsCount(this, organizationId);
         }
 
         /// <summary>

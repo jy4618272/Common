@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -335,34 +334,84 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-        private static Control CreateTextBox(Setting setting, bool diagnoseConflictingSettings)
+        private Control CreateTextBox(Setting setting, bool diagnoseConflictingSettings)
         {
-            HtmlGenericControl ctl = null;
+            TextBox textBox = null;
+            DatePicker datePicker = null;
 
             try
             {
-                ctl = new HtmlGenericControl("input");
-                ctl.Attributes["type"] = "text";
-                ctl.Attributes["size"] = "40";
-                if (setting.IsConflicting)
+                object obj = Support.ConvertStringToType(setting.ValidationType, typeof(DatePickerType));
+                if (obj != null)
                 {
-                    ctl.Attributes["value"] = Resources.SettingsControl_SettingValueUndefined;
+                    datePicker = new DatePicker();
+                    datePicker.ID = string.Concat(ControlIdPrefix, setting.SettingId.ToString("N"));
+                    datePicker.Type = (DatePickerType)obj;
+
+                    switch (datePicker.Type)
+                    {
+                        case DatePickerType.Date:
+                        case DatePickerType.DatePicker:
+                            datePicker.DateFormat = Support.GetShortDateFormat(m_UserContext.DateFormat);
+                            break;
+                        case DatePickerType.DateTime:
+                        case DatePickerType.DateTimePicker:
+                            datePicker.DateFormat = Support.GetLongDateTimeFormat(m_UserContext.TimeFormat, m_UserContext.DateFormat);
+                            break;
+                        case DatePickerType.Time:
+                        case DatePickerType.TimePicker:
+                            datePicker.DateFormat = Support.GetTimeFormat(m_UserContext.TimeFormat);
+                            break;
+                    }
+
+                    DateTime value = DateTime.MinValue;
+                    if (DateTime.TryParse(setting.MinimumValue, out value))
+                        datePicker.MinDate = TimeZoneInfo.ConvertTimeFromUtc(value, m_UserContext.TimeZone);
+
+                    if (DateTime.TryParse(setting.MaximumValue, out value))
+                        datePicker.MaxDate = TimeZoneInfo.ConvertTimeFromUtc(value, m_UserContext.TimeZone);
+
+                    if (setting.IsConflicting)
+                    {
+                        datePicker.SetDateInputValue(Resources.SettingsControl_SettingValueUndefined);
+                    }
+                    else
+                    {
+                        if (DateTime.TryParse(setting.Value, out value))
+                            datePicker.SelectedDate = TimeZoneInfo.ConvertTimeFromUtc(value, m_UserContext.TimeZone);
+                    }
+
+                    if (diagnoseConflictingSettings)
+                        datePicker.Enabled = false;
+
+                    return datePicker;
                 }
                 else
                 {
-                    ctl.Attributes["id"] = ctl.Attributes["name"] = string.Concat(ControlIdPrefix, setting.SettingId.ToString("N"));
-                    ctl.Attributes["value"] = setting.Value;
+                    textBox = new TextBox();
+                    textBox.Columns = 40;
+                    textBox.ID = string.Concat(ControlIdPrefix, setting.SettingId.ToString("N"));
+                    textBox.ValidationExpression = setting.ValidationExpression;
+                    textBox.MaximumValue = setting.MaximumValue;
+                    textBox.MinimumValue = setting.MinimumValue;
+                    textBox.MaxLength = setting.MaxLength;
+
+                    obj = Support.ConvertStringToType(setting.ValidationType, typeof(CustomValidationDataType));
+                    if (obj != null)
+                        textBox.ValidationType = (CustomValidationDataType)obj;
+
+                    textBox.Text = (setting.IsConflicting ? Resources.SettingsControl_SettingValueUndefined : setting.Value);
+
+                    if (diagnoseConflictingSettings)
+                        textBox.Enabled = false;
+
+                    return textBox;
                 }
-                if (diagnoseConflictingSettings)
-                {
-                    ctl.Disabled = true;
-                    ctl.Style.Add(HtmlTextWriterStyle.Color, "Gray");
-                }
-                return ctl;
             }
             finally
             {
-                if (ctl != null) ctl.Dispose();
+                if (textBox != null) textBox.Dispose();
+                if (datePicker != null) datePicker.Dispose();
             }
         }
 
@@ -814,10 +863,39 @@ namespace Micajah.Common.WebControls.AdminControls
 
         public string GetSettingValue(Guid settingId, SettingType settingType)
         {
-            string value = Request.Form[string.Concat(ControlIdPrefix, settingId.ToString("N"))];
+            string id = string.Concat(ControlIdPrefix, settingId.ToString("N"));
+            string value = Request.Form[id];
             if (settingType == SettingType.CheckBox)
             {
                 value = ((value == null) ? "false" : "true");
+            }
+            else if (settingType == SettingType.Value)
+            {
+                foreach (string key in Request.Form.AllKeys)
+                {
+                    if (key.EndsWith(id + this.IdSeparator + "txt", StringComparison.Ordinal) || key.EndsWith(id + this.IdSeparator + "rdp", StringComparison.Ordinal))
+                    {
+                        Control ctl = Support.FindTargetControl(key.Substring(0, key.Length - 4), this, true);
+                        if (ctl != null)
+                        {
+                            TextBox textBox = ctl as TextBox;
+                            if (textBox != null)
+                            {
+                                value = textBox.Text;
+                                break;
+                            }
+                            else
+                            {
+                                DatePicker datePicker = ctl as DatePicker;
+                                if (datePicker != null)
+                                {
+                                    value = (datePicker.IsEmpty ? string.Empty : TimeZoneInfo.ConvertTimeToUtc(datePicker.SelectedDate, m_UserContext.TimeZone).ToString("g"));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return value;
         }
