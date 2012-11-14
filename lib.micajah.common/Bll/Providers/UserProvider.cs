@@ -549,7 +549,6 @@ namespace Micajah.Common.Bll.Providers
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, email, null, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
                 {
-                    SmtpServer = FrameworkConfiguration.Current.WebApplication.Email.SmtpServer,
                     Reason = EmailSendingReason.ChangeLogin,
                     Organization = org
                 });
@@ -591,7 +590,6 @@ namespace Micajah.Common.Bll.Providers
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, email, null, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
                 {
-                    SmtpServer = FrameworkConfiguration.Current.WebApplication.Email.SmtpServer,
                     Reason = EmailSendingReason.ChangePassword,
                     Organization = org
                 });
@@ -669,7 +667,6 @@ namespace Micajah.Common.Bll.Providers
                         return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, email, bcc, subject, body.ToString(), false
                             , new EmailSendingEventArgs()
                             {
-                                SmtpServer = FrameworkConfiguration.Current.WebApplication.Email.SmtpServer,
                                 Reason = reason,
                                 Organization = org
                             });
@@ -707,7 +704,6 @@ namespace Micajah.Common.Bll.Providers
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, email, bcc, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
                 {
-                    SmtpServer = FrameworkConfiguration.Current.WebApplication.Email.SmtpServer,
                     Reason = reason,
                     Organization = org
                 });

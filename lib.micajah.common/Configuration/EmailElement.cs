@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Net.Configuration;
 using System.Xml.XPath;
 
 namespace Micajah.Common.Configuration
@@ -26,34 +25,7 @@ namespace Micajah.Common.Configuration
 
         #endregion
 
-        #region Members
-
-        private string m_SmtpServer;
-
-        #endregion
-
         #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the SMTP-server.
-        /// </summary>
-        public string SmtpServer
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(m_SmtpServer))
-                {
-                    SmtpSection sect = (ConfigurationManager.GetSection("system.net/mailSettings/smtp") as SmtpSection);
-                    if (sect != null)
-                    {
-                        if (sect.Network != null)
-                            m_SmtpServer = sect.Network.Host;
-                    }
-                }
-                return m_SmtpServer;
-            }
-            set { m_SmtpServer = value; }
-        }
 
         /// <summary>
         /// Gets or sets the value indicating whether the e-mail will be sent when login, email address, password is changed, or the account is added to an organization.

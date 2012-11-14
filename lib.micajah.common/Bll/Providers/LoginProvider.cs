@@ -786,7 +786,7 @@ namespace Micajah.Common.Bll.Providers
                 if (removeAuthInfo)
                 {
                     FormsAuthentication.SignOut();
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && context!=null)
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && context != null)
                     {
 
                         // Expire all the cookies so browser visits us as a brand new user
@@ -803,7 +803,7 @@ namespace Micajah.Common.Bll.Providers
                             cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
                             cookie.Expires = DateTime.Today.AddYears(-1);
 
-                            context.Response.Cookies.Set(cookie);                            
+                            context.Response.Cookies.Set(cookie);
                         }
                     }
                 }
@@ -1716,7 +1716,7 @@ namespace Micajah.Common.Bll.Providers
                     row.CreatedTime = DateTime.UtcNow;
                     table.AddInvitedLoginRow(row);
 
-                    Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, FrameworkConfiguration.Current.WebApplication.Email.SmtpServer, true, EmailSendingReason.InviteUser);
+                    Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, true, EmailSendingReason.InviteUser);
                 }
             }
 
@@ -1883,7 +1883,7 @@ namespace Micajah.Common.Bll.Providers
             body = body.Replace("{PasswordResetPageUrl}", WebApplication.CreateApplicationUri(ResourceProvider.ResetPasswordPageVirtualPath) + "?r=" + row.ResetPasswordRequestId.ToString("N"));
             body = body.Replace("{ApplicationUrl}", FrameworkConfiguration.Current.WebApplication.Url);
 
-            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, FrameworkConfiguration.Current.WebApplication.Email.SmtpServer, false, EmailSendingReason.ResetPassword);
+            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
         }
 
         /// <summary>

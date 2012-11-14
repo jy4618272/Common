@@ -33,7 +33,7 @@ namespace Micajah.Common.Application
         private static OrganizationDataSetTableAdapters s_OrganizationDataSetTableAdapters;
         private static SortedList s_OrganizationDataSetTableAdaptersList;
         private static LoginProvider s_LoginProvider;
-        private static Guid? s_WebSiteId;        
+        private static Guid? s_WebSiteId;
 
         // The objects which are used to synchronize access to the cached objects.
         private static object s_CommonDataSetSyncRoot = new object();
@@ -871,11 +871,6 @@ namespace Micajah.Common.Application
         /// Gets or sets the e-mail message.
         /// </summary>
         public MailMessage MailMessage { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SMTP server.
-        /// </summary>
-        public string SmtpServer { get; set; }
 
         /// <summary>
         /// Gets or sets whether the email should be sent and the calling thread will not blocked.

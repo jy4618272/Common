@@ -1430,13 +1430,12 @@ namespace Micajah.Common.Bll
         /// <param name="subject">The subject line for the e-mail message.</param>
         /// <param name="body">The message body.</param>
         /// <param name="isBodyHtml">true if the message body is in HTML; else false.</param>
-        /// <param name="smtpServer">The SMTP server.</param>
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="reason">A reason for email sending.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
-        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, string smtpServer, bool async, EmailSendingReason reason)
+        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, bool async, EmailSendingReason reason)
         {
-            EmailSendingEventArgs args = new EmailSendingEventArgs() { SmtpServer = smtpServer, Async = async, Reason = reason };
+            EmailSendingEventArgs args = new EmailSendingEventArgs() { Async = async, Reason = reason };
             return SendEmail(from, to, bcc, subject, body, isBodyHtml, args);
         }
 
@@ -1449,7 +1448,6 @@ namespace Micajah.Common.Bll
         /// <param name="subject">The subject line for the e-mail message.</param>
         /// <param name="body">The message body.</param>
         /// <param name="isBodyHtml">true if the message body is in HTML; else false.</param>
-        /// <param name="smtpServer">The SMTP server.</param>
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="args">An EmailSendingEventArgs that contains the Micajah.Common.Application.WebApplication.EmailSending event data.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
@@ -1475,7 +1473,7 @@ namespace Micajah.Common.Bll
 
                     if (!args.Cancel)
                     {
-                        SmtpClient client = new SmtpClient(args.SmtpServer);
+                        SmtpClient client = new SmtpClient();
                         if (args.Async)
                             client.SendAsync(args.MailMessage, null);
                         else
