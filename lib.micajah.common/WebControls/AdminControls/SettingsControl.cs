@@ -347,6 +347,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     datePicker = new DatePicker();
                     datePicker.ID = string.Concat(ControlIdPrefix, setting.SettingId.ToString("N"));
                     datePicker.Type = (DatePickerType)obj;
+                    datePicker.ShowRequired = false;
 
                     switch (datePicker.Type)
                     {
@@ -389,6 +390,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 else
                 {
                     textBox = new TextBox();
+                    textBox.ShowRequired = false;
                     textBox.Columns = 40;
                     textBox.ID = string.Concat(ControlIdPrefix, setting.SettingId.ToString("N"));
                     textBox.ValidationExpression = setting.ValidationExpression;
