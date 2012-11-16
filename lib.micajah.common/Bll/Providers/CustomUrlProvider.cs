@@ -356,7 +356,7 @@ namespace Micajah.Common.Bll.Providers
             string defaultUrl = FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl;
             Organization org = null;
             Instance instance = null;
-            
+
             if (url.IndexOf(defaultUrl, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 InitializeFromCustomUrl(ref org, ref instance);
@@ -407,6 +407,7 @@ namespace Micajah.Common.Bll.Providers
             string segment = null;
             string[] pseudos = null;
             CommonDataSet.CustomUrlRow customUrlRow = null;
+            InstanceCollection coll = null;
             string customUrl = System.Web.HttpContext.Current.Request.Url.Host.ToLower();
 
             organization = null;
@@ -419,41 +420,62 @@ namespace Micajah.Common.Bll.Providers
                 if (segments.Length > 1)
                 {
                     segment = segments[0];
-                    if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                    if (string.Compare(segment, FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain) != 0)
                     {
-                        pseudos = segment.Split('-');
-                        organization = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
-                        instPseudo = pseudos[1];
+                        if (segment.IndexOf("-", StringComparison.OrdinalIgnoreCase) > 0)
+                        {
+                            pseudos = segment.Split('-');
+                            organization = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
+                            instPseudo = pseudos[1];
+                            if (organization == null)
+                            {
+                                customUrlRow = CustomUrlProvider.GetCustomUrl(segment.Split('-')[0].ToLower());
+                                if (customUrlRow != null)
+                                    organization = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                            }
+                        }
+                        else
+                            organization = OrganizationProvider.GetOrganizationByPseudoId(segment);
+
                         if (organization == null)
                         {
-                            customUrlRow = CustomUrlProvider.GetCustomUrl(segment.Split('-')[0].ToLower());
+                            customUrlRow = CustomUrlProvider.GetCustomUrl(segment.ToLower());
                             if (customUrlRow != null)
-                                organization = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
-                        }
-                    }
-                    else
-                        organization = OrganizationProvider.GetOrganizationByPseudoId(segment);
-
-                    if (organization != null)
-                    {
-                        Security.UserContext.SelectedOrganizationId = organization.OrganizationId;
-                        Security.UserContext uc = Security.UserContext.Current;
-
-                        if (!string.IsNullOrEmpty(instPseudo))
-                            instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, organization.OrganizationId);
-
-                        if (uc != null)
-                        {
-                            if (instance == null)
                             {
-                                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, organization.OrganizationId);
-                                if (coll.Count == 1)
-                                    instance = coll[0];
+                                organization = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                                if (!customUrlRow.IsInstanceIdNull())
+                                    instance = InstanceProvider.GetInstance(customUrlRow.InstanceId, customUrlRow.OrganizationId);
                             }
                         }
 
-                        if (instance != null)
-                            Security.UserContext.SelectedInstanceId = instance.InstanceId;
+                        if (organization != null)
+                        {
+                            Security.UserContext.SelectedOrganizationId = organization.OrganizationId;
+                            Security.UserContext uc = Security.UserContext.Current;
+
+                            if (!string.IsNullOrEmpty(instPseudo))
+                                instance = InstanceProvider.GetInstanceByPseudoId(instPseudo, organization.OrganizationId);
+
+                            if (uc != null)
+                            {
+                                if (instance == null)
+                                {
+                                    coll = WebApplication.LoginProvider.GetLoginInstances(uc.UserId, organization.OrganizationId);
+                                    if (coll.Count == 1)
+                                        instance = coll[0];
+                                }
+                            }
+
+                            if (instance == null)
+                            {
+                                coll = InstanceProvider.GetInstances(organization.OrganizationId, false);
+                                if (coll.Count == 1)
+                                    instance = coll[0];
+                            }
+
+                            if (instance != null)
+                                Security.UserContext.SelectedInstanceId = instance.InstanceId;
+                        }
                     }
                 }
             }
@@ -465,6 +487,7 @@ namespace Micajah.Common.Bll.Providers
                 if (pseudos != null) pseudos = null;
                 if (customUrlRow != null) customUrlRow = null;
                 if (customUrl != null) customUrl = null;
+                if (coll != null) coll = null;
             }
         }
 
@@ -509,7 +532,7 @@ namespace Micajah.Common.Bll.Providers
                     }
 
                     if (instanceId != Guid.Empty)
-                        inst = InstanceProvider.GetInstance(instanceId);
+                        inst = InstanceProvider.GetInstance(instanceId, organizationId);
 
                     if (row != null)
                     {

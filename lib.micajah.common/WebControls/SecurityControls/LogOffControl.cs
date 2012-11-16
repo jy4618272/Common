@@ -127,7 +127,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                 }
                 else if (!InstanceArea.Visible)
                 {
-                    WebApplication.LoginProvider.SignOut();
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    {
+                        WebApplication.LoginProvider.SignOut(true, false);
+                        Response.Redirect("~/");
+                    }
+                    else
+                        WebApplication.LoginProvider.SignOut();
                     return;
                 }
 
