@@ -1,32 +1,39 @@
-﻿.Nm
+﻿div.Mc_Settings
+{
+    padding-bottom: 10px;
+    position: relative;
+    left: -2px;
+}
+
+.Mc_Settings .Nm
 {
     color: #3c357a;
     font-size: 12pt;
     font-weight: bold;
 }
 
-.On
+.Mc_Settings .On
 {
     color: Green;
     font-size: 15pt;
     font-weight: bold;
 }
 
-.Off
+.Mc_Settings .Off
 {
     color: Red;
     font-size: 15pt;
     font-weight: bold;
 }
 
-.Rbl
+.Mc_Settings .Rbl
 {
     color: Black;
     font-size: 9pt;
     font-weight: normal;
 }
 
-.Tc1, .Tc2
+.Mc_Settings .Tc1, .Mc_Settings .Tc2
 {
     border-top: #dedded 1px solid;
     border-bottom: #dedded 1px solid;
@@ -35,24 +42,29 @@
     font-size: 11px;
 }
 
-.Tc1
+.Mc_Settings .Tc1
 {
     background-color: White;
 }
 
-.Tc2
+.Mc_Settings .Tc2
 {
     background-color: #f7f5ff;
 }
 
-a.Lm, a.Lm:hover
+.Mc_Settings a.Lm, .Mc_Settings a.Lm:hover
 {
     font-size: 11pt;
 }
 
-a.Ml
+.Mc_Settings a.Ml
 {
     margin-left: 23px;
+}
+
+.Mc_Settings .Error
+{
+    position: static !important;
 }
 
 /* Overrides DetailMenu styles */

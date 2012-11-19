@@ -9,6 +9,7 @@ using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -139,6 +140,11 @@ namespace Micajah.Common.Bll.Providers
             row.ExternalId = setting.ExternalId;
             row.Visible = setting.Visible;
             row.Handle = setting.Handle;
+            row.ValidationType = setting.Validation.Type;
+            row.ValidationExpression = setting.Validation.Expression;
+            row.MaximumValue = setting.Validation.MaximumValue;
+            row.MinimumValue = setting.Validation.MinimumValue;
+            row.MaxLength = setting.Validation.MaxLength;
 
             if (!levels.HasValue) levels = setting.Levels;
             if ((levels.Value & SettingLevels.Instance) == SettingLevels.Instance)
@@ -274,6 +280,12 @@ namespace Micajah.Common.Bll.Providers
                 setting.ExternalId = row.IsExternalIdNull() ? string.Empty : row.ExternalId;
                 setting.Visible = row.Visible;
                 setting.Handle = row.Handle;
+                setting.ValidationType = row.ValidationType;
+                setting.ValidationExpression = row.ValidationExpression;
+                setting.MaximumValue = row.MaximumValue;
+                setting.MinimumValue = row.MinimumValue;
+                setting.MaxLength = row.MaxLength;
+
                 return setting;
             }
             return null;

@@ -180,10 +180,10 @@ namespace Micajah.Common.WebControls
 
                 if (this.Theme == MasterPageTheme.Modern)
                 {
-                    writer.AddStyleAttribute("background", string.Format(CultureInfo.InvariantCulture, "url(\"{0}\") no-repeat right 10px", ResourceProvider.GetResourceUrl("Images.MasterPageThemes.Modern.DropArrow.png", true)));
+                    writer.AddStyleAttribute("background", string.Format(CultureInfo.InvariantCulture, "url(\"{0}\") no-repeat right 7px", ResourceProvider.GetImageUrl(typeof(TreeView), "Modern.png", true)));
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Position, "relative");
                     writer.AddStyleAttribute(HtmlTextWriterStyle.Left, "10px");
-                    writer.AddStyleAttribute(HtmlTextWriterStyle.Height, "39px");
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.Height, "31px");
                 }
                 else
                 {
@@ -229,9 +229,9 @@ namespace Micajah.Common.WebControls
                 {
                     Style.Add(HtmlTextWriterStyle.BorderColor, "#646464");
                     Style.Add(HtmlTextWriterStyle.MarginLeft, "10px");
-                    Style.Add(HtmlTextWriterStyle.MarginTop, "-10px");
+                    Style.Add(HtmlTextWriterStyle.MarginTop, "-1px");
 
-                    if (Width.Type == UnitType.Pixel) base.Width = Unit.Pixel((int)Width.Value - 3);
+                    if (Width.Type == UnitType.Pixel) base.Width = Unit.Pixel((int)Width.Value - 2);
                 }
                 else
                     Style.Add(HtmlTextWriterStyle.BorderColor, "ActiveBorder");

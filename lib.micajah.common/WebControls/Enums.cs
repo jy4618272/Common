@@ -238,7 +238,7 @@ namespace Micajah.Common.WebControls
     }
 
     /// <summary>
-    /// Specifies the validation data types used by the validator of the Micajah.Common.WebControls.TextBox control.
+    /// Specifies the validation data types.
     /// </summary>
     public enum CustomValidationDataType
     {

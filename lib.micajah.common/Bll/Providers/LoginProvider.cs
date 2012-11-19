@@ -596,22 +596,18 @@ namespace Micajah.Common.Bll.Providers
 
         public static void SetAuthCookie(Guid userId, Guid organizationId, Guid instanceId, bool? isPersistent)
         {
-            if (userId != Guid.Empty)
+            string userName = string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId);
+
+            if (!isPersistent.HasValue)
+                isPersistent = FormsAuthenticationTicketIsPersistent;
+
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                if (!isPersistent.HasValue)
-                    isPersistent = FormsAuthenticationTicketIsPersistent;
-
-                string userName = string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId);
-
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null))
-                {
-                    System.Web.HttpCookie authcookie = System.Web.Security.FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
-                    authcookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
-                    System.Web.HttpContext.Current.Response.AppendCookie(authcookie);
-                }
-                else
-                    FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
+                System.Web.HttpCookie authcookie = System.Web.Security.FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
+                authcookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                System.Web.HttpContext.Current.Response.AppendCookie(authcookie);
             }
+            else FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
         }
 
         #endregion
@@ -790,33 +786,26 @@ namespace Micajah.Common.Bll.Providers
                 if (removeAuthInfo)
                 {
                     FormsAuthentication.SignOut();
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && context != null)
                     {
-                        if (context.Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+
+                        // Expire all the cookies so browser visits us as a brand new user
+                        List<string> cookiesToClear = new List<string>();
+                        foreach (string cookieName in context.Request.Cookies)
                         {
-                            HttpCookie myCookie = new HttpCookie(FormsAuthentication.FormsCookieName);
-                            myCookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
-                            myCookie.Expires = DateTime.Now.AddDays(-1d);
-                            context.Response.Cookies.Add(myCookie);
+                            HttpCookie cookie = context.Request.Cookies[cookieName];
+                            cookiesToClear.Add(cookie.Name);
+                        }
 
-                            List<HttpCookie> list = new List<HttpCookie>();
-                            for (int i = 0; i < context.Request.Cookies.Count; i++)
-                            {
-                                if (string.Compare(context.Request.Cookies[i].Name, FormsAuthentication.FormsCookieName) == 0)
-                                {
-                                    HttpCookie cookie = context.Request.Cookies[i];
-                                    cookie.Expires = DateTime.Now.AddDays(-1d);
-                                    list.Add(cookie);
-                                }
-                            }
+                        foreach (string name in cookiesToClear)
+                        {
+                            HttpCookie cookie = new HttpCookie(name, string.Empty);
+                            cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                            cookie.Expires = DateTime.Today.AddYears(-1);
 
-                            foreach (HttpCookie cookie in list)
-                            {
-                                context.Response.Cookies.Add(cookie);
-                            }
+                            context.Response.Cookies.Set(cookie);
                         }
                     }
-
                 }
                 if (!string.IsNullOrEmpty(redirectUrl))
                 {
@@ -837,9 +826,10 @@ namespace Micajah.Common.Bll.Providers
                             context.Response.Redirect(redirectUrl);
                         }
                         else
-                            context.Response.Redirect(redirectUrl);
+                            context.Response.Redirect("~/");
                     }
                 }
+                //else if (context!=null) context.Response.Redirect(redirectUrl);
             }
         }
 
@@ -1726,7 +1716,7 @@ namespace Micajah.Common.Bll.Providers
                     row.CreatedTime = DateTime.UtcNow;
                     table.AddInvitedLoginRow(row);
 
-                    Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, FrameworkConfiguration.Current.WebApplication.Email.SmtpServer, true, EmailSendingReason.InviteUser);
+                    Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, true, EmailSendingReason.InviteUser);
                 }
             }
 
@@ -1893,7 +1883,7 @@ namespace Micajah.Common.Bll.Providers
             body = body.Replace("{PasswordResetPageUrl}", WebApplication.CreateApplicationUri(ResourceProvider.ResetPasswordPageVirtualPath) + "?r=" + row.ResetPasswordRequestId.ToString("N"));
             body = body.Replace("{ApplicationUrl}", FrameworkConfiguration.Current.WebApplication.Url);
 
-            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, FrameworkConfiguration.Current.WebApplication.Email.SmtpServer, false, EmailSendingReason.ResetPassword);
+            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
         }
 
         /// <summary>

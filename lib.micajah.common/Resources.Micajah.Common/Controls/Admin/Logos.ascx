@@ -3,13 +3,12 @@
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <%@ Register Src="~/Resources.Micajah.Common/Controls/Security/ChangePassword.ascx"
     TagName="ChangePassword" TagPrefix="uc" %>
-<mits:CommonGridView ID="List" runat="server" Width="700px" DataKeyNames="ObjectId, ObjectType"
-    OnRowCommand="List_RowCommand" OnRowUpdating="List_RowUpdating">
+<mits:CommonGridView ID="List" runat="server" Width="700px" DataKeyNames="ObjectId,ObjectType"
+    AutoGenerateEditButton="true">
     <columns>
         <mits:TextBoxField DataField="Name" SortExpression="Name" />
         <mits:TextBoxField DataField="Type" SortExpression="Type" />
         <mits:ImageField DataImageUrlField="Logo" SortExpression="Logo" />
-        <asp:CommandField ShowEditButton="True" ControlStyle-CssClass="Command" HeaderStyle-Width="90px" />
     </columns>
 </mits:CommonGridView>
 <mits:magicform id="EditForm" runat="server" datakeynames="ObjectId" width="550px"

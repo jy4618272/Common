@@ -240,7 +240,7 @@ namespace Micajah.Common.Bll
         /// <returns>The date and time format.</returns>
         public static string GetLongDateTimeFormat(int timeFormat)
         {
-            return ((timeFormat == 0) ? "MMM d, yyyy h:mm tt" : "MMM d, yyyy H:mm");
+            return "MMM d, yyyy " + GetTimeFormat(timeFormat);
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Micajah.Common.Bll
         /// <returns>The date and time format.</returns>
         public static string GetLongDateTimeFormat(int timeFormat, int dateFormat)
         {
-            return GetShortDateFormat(dateFormat) + ((timeFormat == 0) ? " h:mm tt" : " H:mm");
+            return GetShortDateFormat(dateFormat) + GetTimeFormat(timeFormat);
         }
 
         /// <summary>
@@ -404,6 +404,26 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
+        /// Returns the time format.
+        /// </summary>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <returns>The time format.</returns>
+        public static string GetTimeFormat(int timeFormat)
+        {
+            return ((timeFormat == 0) ? " h:mm tt" : " H:mm");
+        }
+
+        /// <summary>
+        /// Returns the time format string.
+        /// </summary>
+        /// <param name="timeFormat">The format to convert time to. Possible values: 0 to use "h:mm tt" (12 hours) format, 1 to use "H:mm" (24 hours) format.</param>
+        /// <returns>The time format string.</returns>
+        public static string GetTimeFormatString(int timeFormat)
+        {
+            return "{0:" + GetTimeFormat(timeFormat) + "}";
+        }
+
+        /// <summary>
         /// Converts the date to string in "d-MMM-yyyy" format.
         /// </summary>
         /// <param name="date">The date to convert.</param>
@@ -483,7 +503,7 @@ namespace Micajah.Common.Bll
         {
             if (timeZone != null)
                 utcTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, timeZone);
-            return string.Format(UnitedStatesCulture, ((timeFormat == 0) ? "{0:h:mm tt}" : "{0:H:mm}"), utcTime);
+            return string.Format(UnitedStatesCulture, GetTimeFormatString(timeFormat), utcTime);
         }
 
         /// <summary>
@@ -579,7 +599,7 @@ namespace Micajah.Common.Bll
         /// <returns>String that contains the formatted date and time.</returns>
         public static string ToLongDateTimeString(DateTime utcDateTime, TimeZoneInfo timeZone, int timeFormat, int dateFormat, bool omitUtc)
         {
-            return ToLongDateTimeString(utcDateTime, timeZone, timeFormat, dateFormat, omitUtc);
+            return ToLongDateTimeString(utcDateTime, timeZone, timeFormat, new int?(dateFormat), omitUtc);
         }
 
         #endregion
@@ -1410,13 +1430,12 @@ namespace Micajah.Common.Bll
         /// <param name="subject">The subject line for the e-mail message.</param>
         /// <param name="body">The message body.</param>
         /// <param name="isBodyHtml">true if the message body is in HTML; else false.</param>
-        /// <param name="smtpServer">The SMTP server.</param>
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="reason">A reason for email sending.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
-        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, string smtpServer, bool async, EmailSendingReason reason)
+        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, bool async, EmailSendingReason reason)
         {
-            EmailSendingEventArgs args = new EmailSendingEventArgs() { SmtpServer = smtpServer, Async = async, Reason = reason };
+            EmailSendingEventArgs args = new EmailSendingEventArgs() { Async = async, Reason = reason };
             return SendEmail(from, to, bcc, subject, body, isBodyHtml, args);
         }
 
@@ -1429,7 +1448,6 @@ namespace Micajah.Common.Bll
         /// <param name="subject">The subject line for the e-mail message.</param>
         /// <param name="body">The message body.</param>
         /// <param name="isBodyHtml">true if the message body is in HTML; else false.</param>
-        /// <param name="smtpServer">The SMTP server.</param>
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="args">An EmailSendingEventArgs that contains the Micajah.Common.Application.WebApplication.EmailSending event data.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
@@ -1455,7 +1473,7 @@ namespace Micajah.Common.Bll
 
                     if (!args.Cancel)
                     {
-                        SmtpClient client = new SmtpClient(args.SmtpServer);
+                        SmtpClient client = new SmtpClient();
                         if (args.Async)
                             client.SendAsync(args.MailMessage, null);
                         else

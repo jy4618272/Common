@@ -189,7 +189,8 @@
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow CssClass="Button">
-            <asp:TableCell ColumnSpan="2">
+            <asp:TableCell></asp:TableCell>
+            <asp:TableCell>
                 <asp:Button ID="SaveButton" runat="server" Text="Save Organization" ValidationGroup="Table1" /><asp:Literal
                     ID="ButtonsSeparator" runat="server">&nbsp;&nbsp;or&nbsp;&nbsp;</asp:Literal><asp:LinkButton
                         ID="LinkButton1" runat="server" Text="Save & Close" ValidationGroup="Table1" /><asp:Literal
@@ -304,7 +305,8 @@
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableFooterRow>
-            <asp:TableCell ColumnSpan="2">
+            <asp:TableCell></asp:TableCell>
+            <asp:TableCell>
                 <asp:Button ID="SaveButton" runat="server" Text="Save Organization" ValidationGroup="Table1" /><asp:Literal
                     ID="ButtonsSeparator" runat="server">&nbsp;&nbsp;or&nbsp;&nbsp;</asp:Literal><asp:LinkButton
                         ID="LinkButton1" runat="server" Text="Save & Close" ValidationGroup="Table1" /><asp:Literal
@@ -422,7 +424,9 @@
             </td>
         </tr>
         <tr class="Button">
-            <td colspan="2">
+            <td>
+            </td>
+            <td>
                 <asp:Button ID="Button1" runat="server" Text="Save Organization" ValidationGroup="Table2" /><asp:Literal
                     ID="Literal7" runat="server">&nbsp;&nbsp;or&nbsp;&nbsp;</asp:Literal><asp:LinkButton
                         ID="LinkButton5" runat="server" Text="Save & Close" ValidationGroup="Table2" /><asp:Literal

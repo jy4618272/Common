@@ -57,13 +57,14 @@ namespace Micajah.Common.WebControls.SecurityControls
         internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
         {
             UserContext ctx = UserContext.Current;
+
             try
             {
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     string url = CustomUrlProvider.GetVanityUrl(ctx != null ? ctx.SelectedOrganization.OrganizationId : UserContext.SelectedOrganizationId, instanceId);
                     url = string.Format("{0}{1}", url, redirectUrl);
-                    errorDiv.Page.Response.Redirect(url, true);
+                    errorDiv.Page.Response.Redirect("https://"+url, true);
                 }
 
                 ctx.SelectInstance(instanceId);
@@ -95,8 +96,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
         {
-            UserContext ctx = UserContext.Current;
-
+            UserContext ctx = UserContext.Current;           
+           
             if (!string.IsNullOrEmpty(redirectUrl))
             {
                 string relativeUrl = WebApplication.CreateApplicationRelativeUrl(redirectUrl);
@@ -108,7 +109,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     object obj = Support.ConvertStringToType(Support.ExtractQueryStringParameterValue(redirectUrl, "pageid"), typeof(Guid));
                     if (obj != null) actionId = (Guid)obj;
 
-                    if (ctx.SelectedOrganization != null)
+                    if (ctx != null && ctx.SelectedOrganization != null)
                     {
                         Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, redirectUrl);
                         if (action != null)
@@ -124,7 +125,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (enableStartMenu)
             {
-                if (ctx.IsOrganizationAdministrator)
+                if (ctx != null && ctx.IsOrganizationAdministrator)
                 {
                     bool redirect = false;
                     Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(ctx, out redirect);
@@ -167,6 +168,9 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 action = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId);
                 LogOffLink.NavigateUrl = ((action == null) ? ResourceProvider.LogOffPageVirtualPath : action.AbsoluteNavigateUrl);
+
+                if (Security.UserContext.SelectedInstanceId != Guid.Empty)
+                    SelectInstance(Security.UserContext.SelectedInstanceId, Request.QueryString["returnurl"], ErrorDiv);
 
                 InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganization.OrganizationId);
                 int count = 0;

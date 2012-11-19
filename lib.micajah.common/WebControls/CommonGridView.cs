@@ -182,7 +182,7 @@ namespace Micajah.Common.WebControls
         [ResourceDefaultValue("CommonGridView_EmptyDataText")]
         public override string EmptyDataText
         {
-            get { return base.EmptyDataText; }
+            get { return (string.IsNullOrEmpty(base.EmptyDataText) ? Resources.CommonGridView_EmptyDataText : base.EmptyDataText); }
             set { base.EmptyDataText = value; }
         }
 
@@ -230,6 +230,22 @@ namespace Micajah.Common.WebControls
                 return ((obj == null) ? Resources.CommonGridView_AddLink_Text : (string)obj);
             }
             set { ViewState["AddLinkCaption"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the CSS class of the add hyperlink.
+        /// </summary>
+        [Category("Appearance")]
+        [Description("The CSS class of the add hyperlink.")]
+        [DefaultValue("")]
+        public string AddLinkCssClass
+        {
+            get
+            {
+                object obj = ViewState["AddLinkCssClass"];
+                return ((obj == null) ? string.Empty : (string)obj);
+            }
+            set { ViewState["AddLinkCssClass"] = value; }
         }
 
         ///<summary>
@@ -1237,7 +1253,14 @@ namespace Micajah.Common.WebControls
                             m_AddLink.ID = "btnAdd";
                             m_AddLink.Text = this.AddLinkCaption;
                             m_AddLink.CausesValidation = false;
-                            m_AddLink.CssClass = ((this.Theme == MasterPageTheme.Modern) ? "Button Green Large" : "Cgv_AddNew");
+                            m_AddLink.CssClass = ((this.Theme == MasterPageTheme.Modern) ? "Button Large" : "Cgv_AddNew");
+                            if (string.IsNullOrEmpty(this.AddLinkCssClass))
+                            {
+                                if (this.Theme == MasterPageTheme.Modern)
+                                    m_AddLink.CssClass += " Green";
+                            }
+                            else
+                                m_AddLink.CssClass += " " + this.AddLinkCssClass;
                             m_AddLink.Click += new EventHandler(AddLink_Click);
                             pnl2.Controls.Add(m_AddLink);
                         }
@@ -1688,7 +1711,7 @@ namespace Micajah.Common.WebControls
             writer.AddAttribute(HtmlTextWriterAttribute.Scope, "col");
             if (columnSpan > 1) writer.AddAttribute(HtmlTextWriterAttribute.Colspan, columnSpan.ToString(CultureInfo.InvariantCulture));
             if (!string.IsNullOrEmpty(borderColor)) writer.AddStyleAttribute(HtmlTextWriterStyle.BorderColor, borderColor);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Cgv_H");
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Cgv_H Cgv_Hg");
             writer.RenderBeginTag(HtmlTextWriterTag.Th);
             writer.Write(headerGroupName);
             writer.RenderEndTag();
@@ -2150,8 +2173,6 @@ namespace Micajah.Common.WebControls
         {
             base.OnInit(e);
 
-            base.EmptyDataText = Resources.CommonGridView_EmptyDataText;
-
             if (!this.DesignMode)
             {
                 Type type = this.GetType();
@@ -2242,10 +2263,13 @@ namespace Micajah.Common.WebControls
             if (RowEditing != null) RowEditing(this, e);
         }
 
+        /// <summary>
+        /// Raises the RowDeleting event.
+        /// </summary>
+        /// <param name="e">A GridViewDeleteEventArgs that contains event data.</param>
         protected override void OnRowDeleting(GridViewDeleteEventArgs e)
         {
-            if (this.RowDeleting != null)
-                base.OnRowDeleting(e);
+            if (RowDeleting != null) RowDeleting(this, e);
         }
 
         protected override void RenderContents(HtmlTextWriter writer)

@@ -91,7 +91,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     redirectUrl = CustomUrlProvider.GetVanityUrl(organizationId, Guid.Empty);
                     redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
-                    errorDiv.Page.Response.Redirect(redirectUrl, true);
+                    errorDiv.Page.Response.Redirect("https://"+redirectUrl, true);
                 }
 
                 ctx.SelectOrganization(organizationId);
@@ -199,6 +199,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                     action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.LoginAsUserPageActionId);
                     if (action != null) LogOnAsAnotherUserLink.NavigateUrl = action.AbsoluteNavigateUrl;
                 }
+
+                if (Security.UserContext.SelectedOrganizationId != Guid.Empty)
+                    SelectOrganization(Security.UserContext.SelectedOrganizationId, Request.QueryString["returnurl"], ErrorDiv);
 
                 OrganizationCollection coll = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
                 int count = 0;

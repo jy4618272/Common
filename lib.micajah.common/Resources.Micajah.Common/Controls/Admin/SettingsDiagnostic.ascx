@@ -49,7 +49,8 @@
         </asp:TableCell>
     </asp:TableRow>
     <asp:TableFooterRow runat="server">
-        <asp:TableCell ColumnSpan="2" runat="server">
+        <asp:TableCell ID="ButtonHeaderCell" runat="server"></asp:TableCell>
+        <asp:TableCell ID="ButtonCell" runat="server">
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td>

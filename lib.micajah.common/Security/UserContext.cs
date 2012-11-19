@@ -209,7 +209,7 @@ namespace Micajah.Common.Security
                             {
                                 (new LoginProvider()).SignOut();
                             }
-                        }
+                        }                        
                     }
                 }
 
@@ -495,6 +495,10 @@ namespace Micajah.Common.Security
             get
             {
                 Guid organizationId = Guid.Empty;
+
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null) && HttpContext.Current.Request.Url.Host.StartsWith(FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, StringComparison.InvariantCultureIgnoreCase))
+                    return organizationId;
+
                 UserContext user = Current;
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     organizationId = GetSelectedOrganizationIdFromSession();
@@ -599,6 +603,10 @@ namespace Micajah.Common.Security
             get
             {
                 Guid instanceId = Guid.Empty;
+
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null) && HttpContext.Current.Request.Url.Host.StartsWith(FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, StringComparison.InvariantCultureIgnoreCase))
+                    return instanceId;
+
                 UserContext user = Current;
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     instanceId = GetSelectedInstanceIdFromSession();
@@ -740,6 +748,9 @@ namespace Micajah.Common.Security
             HttpContext ctx = HttpContext.Current;
             if (ctx != null)
             {
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null) && HttpContext.Current.Request.Url.Host.StartsWith(FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, StringComparison.InvariantCultureIgnoreCase))
+                    return Guid.Empty;
+
                 HttpSessionState session = ctx.Session;
                 if (session != null)
                 {

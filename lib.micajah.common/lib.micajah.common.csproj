@@ -25,7 +25,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -41,6 +41,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -203,6 +204,7 @@
     <Compile Include="Configuration\RulesEngineOutputElement.cs" />
     <Compile Include="Configuration\SecurityElement.cs" />
     <Compile Include="Configuration\SettingElement.cs" />
+    <Compile Include="Configuration\ValidationElement.cs" />
     <Compile Include="Configuration\SettingValueElement.cs" />
     <Compile Include="Configuration\StartThreadElement.cs" />
     <Compile Include="Configuration\SubmenuElement.cs" />
@@ -1746,7 +1748,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\EntityFieldListValues.aspx">
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\EntityFieldListValues.ascx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\EntityFieldListValues.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TextEditorLiteToolBarConfiguration.xml" />
     <EmbeddedResource Include="Resources\TextEditorStandardToolBarConfiguration.xml" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\SideBySide.css" />
@@ -1941,6 +1945,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.ComboBox\Modern.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Cross.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\Modern.png" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
@@ -1985,7 +1990,9 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\GroupsInstancesRoles.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\SettingsDiagnostic.ascx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\SettingsDiagnostic.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Users.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>

@@ -50,7 +50,7 @@
     color: #cccccc;
 }
 
-.iuContainer .iuUploadButton, .iuContainer .iuUploadButton:hover
+.iuContainer .iuUploadButton, .iuContainer .iuUploadButton:hover, .iuContainer .iuUploadButton:focus
 {
     font-weight: bold;
     font-size: 11px;

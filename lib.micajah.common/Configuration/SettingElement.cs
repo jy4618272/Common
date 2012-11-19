@@ -206,6 +206,16 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets or sets the settings for validation of value.
+        /// </summary>
+        [ConfigurationProperty("validation")]
+        public ValidationElement Validation
+        {
+            get { return (ValidationElement)this["validation"]; }
+            set { this["validation"] = value; }
+        }
+
+        /// <summary>
         /// Gets the values of the settings.
         /// </summary>
         [ConfigurationProperty("values", IsDefaultCollection = true)]

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -75,6 +74,7 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_SettingsActionIdListSyncRoot = new object();
         private static readonly object s_SetupActionIdListSyncRoot = new object();
         private static readonly object s_RoleActionIdListSyncRoot = new object();
+        private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
         private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
 
         #endregion
@@ -495,33 +495,43 @@ namespace Micajah.Common.Bll.Providers
             SortedList groupInstanceActionIdList = CacheManager.Current.Get(key) as SortedList;
             if (groupInstanceActionIdList == null)
             {
-                OrganizationDataSet.GroupsInstancesRolesRow gdrRow = ds.GroupsInstancesRoles.FindByGroupIdInstanceId(groupId, instanceId);
-                if (gdrRow != null)
+                lock (s_GroupInstanceActionIdListSyncRoot)
                 {
-                    if (gdrRow.RoleId != RoleProvider.InstanceAdministratorRoleId)
+                    groupInstanceActionIdList = CacheManager.Current.Get(key) as SortedList;
+                    if (groupInstanceActionIdList == null)
                     {
-                        groupInstanceActionIdList = new SortedList();
-
-                        // Fills the collection by the actions that the role has access to.
-                        foreach (Guid actionId in ActionProvider.GetActionIdListByRoleId(gdrRow.RoleId))
+                        OrganizationDataSet.GroupsInstancesRolesRow gdrRow = ds.GroupsInstancesRoles.FindByGroupIdInstanceId(groupId, instanceId);
+                        if (gdrRow != null)
                         {
-                            groupInstanceActionIdList.Add(actionId, true);
-                        }
+                            if (gdrRow.RoleId != RoleProvider.InstanceAdministratorRoleId)
+                            {
+                                groupInstanceActionIdList = new SortedList();
 
-                        // Overrides the access to the actions by the values for the group in the instance.
-                        foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in giaTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'"
-                            , giaTable.GroupIdColumn.ColumnName, groupId.ToString(), giaTable.InstanceIdColumn.ColumnName, instanceId.ToString())))
-                        {
-                            if (groupInstanceActionIdList.Contains(actionRow.ActionId))
-                                groupInstanceActionIdList[actionRow.ActionId] = actionRow.Enabled;
-                            else
-                                groupInstanceActionIdList.Add(actionRow.ActionId, actionRow.Enabled);
-                        }
+                                // Fills the collection by the actions that the role has access to.
+                                foreach (Guid actionId in ActionProvider.GetActionIdListByRoleId(gdrRow.RoleId))
+                                {
+                                    groupInstanceActionIdList.Add(actionId, true);
+                                }
 
-                        CacheManager.Current.Add(key, groupInstanceActionIdList);
+                                // Overrides the access to the actions by the values for the group in the instance.
+                                foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in giaTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'"
+                                    , giaTable.GroupIdColumn.ColumnName, groupId.ToString(), giaTable.InstanceIdColumn.ColumnName, instanceId.ToString())))
+                                {
+                                    if (groupInstanceActionIdList.Contains(actionRow.ActionId))
+                                        groupInstanceActionIdList[actionRow.ActionId] = actionRow.Enabled;
+                                    else
+                                        groupInstanceActionIdList.Add(actionRow.ActionId, actionRow.Enabled);
+                                }
+
+                                CacheManager.Current.Add(key, groupInstanceActionIdList);
+                            }
+                        }
                     }
                 }
             }
+
+            if (groupInstanceActionIdList != null)
+                return (SortedList)groupInstanceActionIdList.Clone();
 
             return groupInstanceActionIdList;
         }
@@ -665,17 +675,13 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void AddAdminActionIdList(bool isOrgAdmin, bool isInstAdmin, ref ArrayList actionIdList)
         {
-            if (isInstAdmin)
-                actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.InstanceAdministratorRoleId));
+            if (actionIdList == null) return;
 
             if (isOrgAdmin)
                 actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
 
-            // Removes duplicate values.
-            HashSet<Guid> set = new HashSet<Guid>((Guid[])actionIdList.ToArray(typeof(Guid)));
-            Guid[] result = new Guid[set.Count];
-            set.CopyTo(result);
-            actionIdList = new ArrayList(result);
+            if (isInstAdmin)
+                actionIdList.AddRange(GetActionIdListByRoleId(RoleProvider.InstanceAdministratorRoleId));
         }
 
         internal static ArrayList GetActionIdList(ArrayList roleIdList, bool isOrgAdmin)
@@ -689,28 +695,30 @@ namespace Micajah.Common.Bll.Providers
 
             AddAdminActionIdList(isOrgAdmin, isInstAdmin, ref actionIdList);
 
+            RemoveDuplicates(ref actionIdList);
+
             return actionIdList;
         }
 
         internal static ArrayList GetActionIdList(ArrayList groupIdList, ArrayList roleIdList, Guid instanceId, Guid organizationId, bool isOrgAdmin, bool isInstAdmin)
         {
-            ArrayList actionIdList = null;
+            ArrayList actionIdList = new ArrayList();
 
             if (groupIdList.Count > 0)
             {
                 groupIdList.Sort();
                 string key = GetActionIdListKey(groupIdList, instanceId);
 
-                actionIdList = CacheManager.Current.Get(key) as ArrayList;
-                if (actionIdList == null)
+                ArrayList list = CacheManager.Current.Get(key) as ArrayList;
+                if (list == null)
                 {
-                    lock (s_GroupInstanceActionIdListSyncRoot)
+                    lock (s_GroupsInstanceActionIdListSyncRoot)
                     {
-                        actionIdList = CacheManager.Current.Get(key) as ArrayList;
-                        if (actionIdList == null)
+                        list = CacheManager.Current.Get(key) as ArrayList;
+                        if (list == null)
                         {
-                            actionIdList = new ArrayList();
-                            SortedList list = new SortedList();
+                            list = new ArrayList();
+                            SortedList list2 = new SortedList();
                             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
 
                             foreach (Guid groupId in groupIdList)
@@ -720,40 +728,34 @@ namespace Micajah.Common.Bll.Providers
                                 {
                                     foreach (Guid actionId in groupInstanceActionIdList.Keys)
                                     {
-                                        if (list.Contains(actionId))
+                                        if (list2.Contains(actionId))
                                         {
-                                            if ((bool)list[actionId])
-                                                list[actionId] = (bool)groupInstanceActionIdList[actionId];
+                                            if ((bool)list2[actionId])
+                                                list2[actionId] = (bool)groupInstanceActionIdList[actionId];
                                         }
                                         else
-                                            list.Add(actionId, (bool)groupInstanceActionIdList[actionId]);
+                                            list2.Add(actionId, (bool)groupInstanceActionIdList[actionId]);
                                     }
                                 }
                             }
 
-                            foreach (Guid actionId in list.Keys)
+                            foreach (Guid actionId in list2.Keys)
                             {
-                                if ((bool)list[actionId])
-                                    actionIdList.Add(actionId);
+                                if ((bool)list2[actionId])
+                                    list.Add(actionId);
                             }
 
-                            CacheManager.Current.Add(key, actionIdList);
+                            CacheManager.Current.Add(key, list);
                         }
                     }
                 }
+
+                actionIdList.AddRange(list);
             }
 
-            if (actionIdList != null)
-            {
-                if (actionIdList.Count == 0) // If an user is instance or organization administrator and has no other role.
-                    actionIdList.AddRange(GetActionIdList(roleIdList, isOrgAdmin));
-                else
-                    AddAdminActionIdList(isOrgAdmin, isInstAdmin, ref actionIdList);
-            }
-            else
-                actionIdList = new ArrayList();
+            actionIdList.AddRange(GetActionIdList(roleIdList, isOrgAdmin));
 
-            return (ArrayList)actionIdList.Clone();
+            return actionIdList;
         }
 
         /// <summary>
@@ -969,7 +971,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void Refresh(Guid groupId, Guid instanceId)
         {
-            lock (s_GroupInstanceActionIdListSyncRoot)
+            lock (s_GroupsInstanceActionIdListSyncRoot)
             {
                 string key = string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId);
                 CacheManager.Current.Remove(key);
@@ -996,6 +998,18 @@ namespace Micajah.Common.Bll.Providers
                         }
                     }
                 }
+            }
+        }
+
+        internal static void RemoveDuplicates(ref ArrayList actionIdList)
+        {
+            ArrayList list = new ArrayList(actionIdList);
+            actionIdList.Clear();
+
+            foreach (Guid actionId in list)
+            {
+                if (!actionIdList.Contains(actionId))
+                    actionIdList.Add(actionId);
             }
         }
 
