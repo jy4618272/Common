@@ -209,7 +209,7 @@ namespace Micajah.Common.Security
                             {
                                 (new LoginProvider()).SignOut();
                             }
-                        }                        
+                        }
                     }
                 }
 
@@ -384,15 +384,12 @@ namespace Micajah.Common.Security
         {
             get
             {
-                string value = "Eastern Standard Time";
+                string value = InstanceProvider.DefaultTimeZoneId;
                 if (base[TimeZoneIdKey] == null)
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                    {
-                        if (!string.IsNullOrEmpty(inst.TimeZoneId))
-                            value = inst.TimeZoneId;
-                    }
+                        value = inst.TimeZoneId;
                 }
                 else
                     value = (string)base[TimeZoneIdKey];
@@ -413,10 +410,7 @@ namespace Micajah.Common.Security
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                    {
-                        if (inst.TimeFormat.HasValue)
-                            value = inst.TimeFormat.Value;
-                    }
+                        value = inst.TimeFormat;
                 }
                 else
                     value = (int)base[TimeFormatKey];
@@ -437,10 +431,7 @@ namespace Micajah.Common.Security
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                    {
-                        if (inst.DateFormat.HasValue)
-                            value = inst.DateFormat.Value;
-                    }
+                        value = inst.DateFormat;
                 }
                 else
                     value = (int)base[DateFormatKey];

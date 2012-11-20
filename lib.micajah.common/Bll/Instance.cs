@@ -58,9 +58,9 @@ namespace Micajah.Common.Bll
             m_InstanceId = Guid.Empty;
 
             m_ExternalId = string.Empty;
-            m_WorkingDays = "1111100";
+            m_WorkingDays = InstanceProvider.DefaultWorkingDays;
             m_Active = true;
-            this.TimeZoneId = string.Empty;
+            this.TimeZoneId = InstanceProvider.DefaultTimeZoneId;
         }
 
         #endregion
@@ -200,12 +200,12 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets ot sets the time format.
         /// </summary>
-        public int? TimeFormat { get; set; }
+        public int TimeFormat { get; set; }
 
         /// <summary>
         /// Gets ot sets the date format.
         /// </summary>
-        public int? DateFormat { get; set; }
+        public int DateFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the working days of the instance.
@@ -432,9 +432,9 @@ namespace Micajah.Common.Bll
                 m_EnableSignupUser = row.EnableSignUpUser;
 
                 m_ExternalId = row.ExternalId;
-                this.TimeZoneId = (row.IsTimeZoneIdNull() ? null : row.TimeZoneId);
-                this.TimeFormat = (row.IsTimeFormatNull() ? null : new int?(row.TimeFormat));
-                this.DateFormat = (row.IsDateFormatNull() ? null : new int?(row.DateFormat));
+                this.TimeZoneId = row.TimeZoneId;
+                this.TimeFormat = row.TimeFormat;
+                this.DateFormat = row.DateFormat;
                 m_WorkingDays = row.WorkingDays;
                 m_Active = row.Active;
                 m_CanceledTime = (row.IsCanceledTimeNull() ? null : new DateTime?(row.CanceledTime));

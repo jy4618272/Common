@@ -124,18 +124,14 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 workingDays = inst.WorkingDays;
                 timeZoneId = inst.TimeZoneId;
-
-                if (inst.TimeFormat.HasValue)
-                    timeFormat = inst.TimeFormat.Value.ToString(CultureInfo.InvariantCulture);
-
-                if (inst.DateFormat.HasValue)
-                    dateFormat = inst.DateFormat.Value.ToString(CultureInfo.InvariantCulture);
+                timeFormat = inst.TimeFormat.ToString(CultureInfo.InvariantCulture);
+                dateFormat = inst.DateFormat.ToString(CultureInfo.InvariantCulture);
             }
 
             BaseControl.WorkingDaysListDataBind(WorkingDays, workingDays);
-            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
-            BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, false);
-            BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, false);
+            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, true);
+            BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, true);
+            BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, true);
         }
 
         #endregion

@@ -220,6 +220,27 @@ END
 
 GO
 
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_TimeZoneId]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_TimeZoneId]
+END
+
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_TimeFormat]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_TimeFormat]
+END
+
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_Mc_Instance_DateFormat]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Mc_Instance] DROP CONSTRAINT [DF_Mc_Instance_DateFormat]
+END
+
+GO
+
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Mc_Message_Mc_Message]') AND parent_object_id = OBJECT_ID(N'[dbo].[Mc_Message]'))
 ALTER TABLE [dbo].[Mc_Message] DROP CONSTRAINT [FK_Mc_Message_Mc_Message]
 GO
@@ -536,6 +557,10 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Us
 DROP TABLE [dbo].[Mc_UsersInstances]
 GO
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Version]') AND type in (N'U'))
+DROP TABLE [dbo].[Mc_Version]
+GO
+
 SET ANSI_NULLS ON
 GO
 
@@ -769,9 +794,9 @@ CREATE TABLE [dbo].[Mc_Instance](
 	[Beta] [bit] NOT NULL,
 	[Deleted] [bit] NOT NULL,
 	[CreatedTime] [datetime] NULL,
-	[TimeZoneId] [nvarchar](100) NULL,
-	[TimeFormat] [int] NULL,
-	[DateFormat] [int] NULL,
+	[TimeZoneId] [nvarchar](100) NOT NULL,
+	[TimeFormat] [int] NOT NULL,
+	[DateFormat] [int] NOT NULL,
  CONSTRAINT [PK_Mc_Instance] PRIMARY KEY CLUSTERED 
 (
 	[InstanceId] ASC
@@ -1022,6 +1047,22 @@ CREATE TABLE [dbo].[Mc_UsersInstances](
 
 GO
 
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Mc_Version](
+	[Version] [int] NOT NULL,
+ CONSTRAINT [PK_Mc_Version] PRIMARY KEY CLUSTERED 
+(
+	[Version] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
 ALTER TABLE [dbo].[Mc_EntityField]  WITH CHECK ADD  CONSTRAINT [FK_Mc_EntityField_Mc_Instance] FOREIGN KEY([InstanceId])
 REFERENCES [dbo].[Mc_Instance] ([InstanceId])
 GO
@@ -1168,6 +1209,15 @@ ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_Beta]  DEFAULT (
 GO
 
 ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_Deleted]  DEFAULT ((0)) FOR [Deleted]
+GO
+
+ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_TimeZoneId]  DEFAULT ('') FOR [TimeZoneId]
+GO
+
+ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_TimeFormat]  DEFAULT ((0)) FOR [TimeFormat]
+GO
+
+ALTER TABLE [dbo].[Mc_Instance] ADD  CONSTRAINT [DF_Mc_Instance_DateFormat]  DEFAULT ((0)) FOR [DateFormat]
 GO
 
 ALTER TABLE [dbo].[Mc_Message]  WITH CHECK ADD  CONSTRAINT [FK_Mc_Message_Mc_Message] FOREIGN KEY([ParentMessageId])
