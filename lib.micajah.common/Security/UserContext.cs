@@ -91,9 +91,9 @@ namespace Micajah.Common.Security
             {
                 Instance inst = this.SelectedInstance;
                 if (inst == null)
-                    return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator);
+                    return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator, true);
                 else
-                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, inst.InstanceId, inst.OrganizationId, this.IsOrganizationAdministrator, this.IsInstanceAdministrator());
+                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, inst.InstanceId, inst.OrganizationId, this.IsOrganizationAdministrator);
             }
         }
 
