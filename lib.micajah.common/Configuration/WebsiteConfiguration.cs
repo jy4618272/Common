@@ -56,7 +56,8 @@ namespace Micajah.Common.Configuration
                         {
                             section = ConfigurationManager.GetSection(SectionName) as WebsiteConfiguration;
 
-                            CacheManager.Current.Add("mc.WebsiteConfiguration", section, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                            if (section != null)
+                                CacheManager.Current.Add("mc.WebsiteConfiguration", section, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                         }
                     }
                 }
