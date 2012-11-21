@@ -68,15 +68,6 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets the settings for custom URLs engine.
-        /// </summary>
-        [ConfigurationProperty("customUrl")]
-        public CustomUrlElement CustomUrl
-        {
-            get { return (CustomUrlElement)this["customUrl"]; }
-        }
-
-        /// <summary>
         /// Gets the DNS domain name.
         /// </summary>
         [ConfigurationProperty("dnsAddress")]
@@ -211,6 +202,22 @@ namespace Micajah.Common.Configuration
         {
             get { return (CopyrightElement)this["copyright"]; }
             set { this["copyright"] = value; }
+        }
+
+        /// <summary>
+        /// Gets the settings for custom URLs engine.
+        /// </summary>
+        [ConfigurationProperty("customUrl")]
+        public CustomUrlElement CustomUrl
+        {
+            get
+            {
+                WebsiteConfiguration website = WebsiteConfiguration.Current;
+                if ((website != null) && website.ElementInformation.IsPresent)
+                    return website.CustomUrl;
+
+                return (CustomUrlElement)this["customUrl"];
+            }
         }
 
         /// <summary>
