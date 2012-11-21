@@ -90,8 +90,11 @@ namespace Micajah.Common.WebControls.SecurityControls
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     redirectUrl = CustomUrlProvider.GetVanityUrl(organizationId, Guid.Empty);
-                    redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
-                    errorDiv.Page.Response.Redirect("https://"+redirectUrl, true);
+                    ActiveInstanceControl.ValidateRedirectUrl(ref returnUrl, true);
+                    if (!string.IsNullOrEmpty(returnUrl))
+                        redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
+
+                    errorDiv.Page.Response.Redirect("https://" + redirectUrl, true);
                 }
 
                 ctx.SelectOrganization(organizationId);
@@ -103,7 +106,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 ActiveInstanceControl.ShowError(ex.Message, errorDiv);
-            }            
+            }
         }
 
         #endregion

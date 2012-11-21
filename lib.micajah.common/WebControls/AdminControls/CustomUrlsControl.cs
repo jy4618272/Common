@@ -44,8 +44,6 @@ namespace Micajah.Common.WebControls.AdminControls
         protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorDiv;
         protected CustomValidator SimpleViewCustomValidator;
 
-        public bool ShowSwitchViewButton { get; set; }
-
         #endregion
 
         #region Private Properties
@@ -93,8 +91,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return m_PartialCustomUrlTextBox;
             }
         }
-
-
+        
         private ComboBox InstanceList
         {
             get
@@ -121,8 +118,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return m_RootAddressesList;
             }
         }
-
-
+        
         #endregion
 
         #region Protected Properties
@@ -131,6 +127,14 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get { return Resources.CustomUrlsControl_CustomUrlsValidator_ErrorMessage; }
         }
+
+        #endregion
+
+        #region Public Properties
+
+        public event EventHandler SaveButtonClick;
+        public bool ShowSwitchViewButton { get; set; }
+        public bool ShowSavedMessage { get; set; }
 
         #endregion
 
@@ -301,13 +305,6 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (row == null)
                         row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
 
-                    if (row == null)
-                    {
-                        System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
-                        if (table != null && table.Table.Rows.Count > 0)
-                            row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                    }
-
                     if (row != null)
                         CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture));
                     else
@@ -316,6 +313,9 @@ namespace Micajah.Common.WebControls.AdminControls
                     SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewMessageLabel_Text;
 
                     Micajah.Common.Application.WebApplication.RefreshAllData();
+
+                    if (SaveButtonClick != null)
+                        SaveButtonClick(sender, e);
                 }
                 catch (Exception ex)
                 {
@@ -342,7 +342,7 @@ namespace Micajah.Common.WebControls.AdminControls
             CustomUrlsMultiView.ActiveViewIndex = 0;
             ChangeViewButton.Text = Resources.CustomUrlsControl_ChangeToAdvancedView_Text;
 
-            SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewTitleLabel_Text;
+            SimpleViewTitleLabel.Text = this.ShowSavedMessage ? Resources.CustomUrlsControl_SimpleViewMessageLabel_Text : Resources.CustomUrlsControl_SimpleViewTitleLabel_Text;
             SimpleViewSaveButton.Text = Resources.CustomUrlsControl_SimpleViewSaveButton_Text;
             SimpleViewCustomValidator.ErrorMessage = Resources.CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage;
 
@@ -359,13 +359,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (row == null)
                     row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
-
-                if (row == null)
-                {
-                    System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
-                    if (table != null && table.Table.Rows.Count > 0)
-                        row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                }
 
                 if (row != null)
                     VanityUrlTextbox.Text = row.PartialCustomUrl.ToLower(CultureInfo.CurrentCulture);

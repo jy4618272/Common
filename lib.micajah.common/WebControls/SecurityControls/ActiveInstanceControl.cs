@@ -63,7 +63,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     string url = CustomUrlProvider.GetVanityUrl(ctx != null ? ctx.SelectedOrganization.OrganizationId : UserContext.SelectedOrganizationId, instanceId);
-                    url = string.Format("{0}{1}", url, redirectUrl);
+                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+                    if (!string.IsNullOrEmpty(redirectUrl))                        
+                        url = string.Format("{0}{1}", url, redirectUrl);
                     errorDiv.Page.Response.Redirect("https://"+url, true);
                 }
 
