@@ -271,19 +271,19 @@ namespace Micajah.Common.Bll.Providers
                         throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
                 }
 
-                if (!CheckCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl))
+                if (row == null)
+                    row = GetCustomUrl(customUrlId);
+
+                if (!CheckCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl) && (row != null && string.Compare(row.FullCustomUrl, fullCustomUrl, true) != 0))
                     throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
-                if (!CheckCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl))
+                if (!CheckCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl) && (row != null && string.Compare(row.PartialCustomUrl, partialCustomUrl, true) != 0))
                     throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
                 if (string.IsNullOrEmpty(fullCustomUrl))
                     fullCustomUrl = string.Empty;
                 if (string.IsNullOrEmpty(partialCustomUrl))
-                    partialCustomUrl = string.Empty;
-
-                if (row == null)
-                    row = GetCustomUrl(customUrlId);
+                    partialCustomUrl = string.Empty;                
 
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
 
@@ -516,13 +516,6 @@ namespace Micajah.Common.Bll.Providers
 
                     if (row == null)
                         row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
-
-                    if (row == null)
-                    {
-                        table = CustomUrlProvider.GetCustomUrls(organizationId);
-                        if (table != null && table.Table.Rows.Count > 0)
-                            row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                    }
 
                     Security.UserContext ctx = Security.UserContext.Current;
                     if (ctx != null)
