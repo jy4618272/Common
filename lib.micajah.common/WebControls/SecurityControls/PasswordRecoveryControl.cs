@@ -102,9 +102,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 LoadResources();
 
                 string loginName = Request.QueryString["l"];
-                if (string.IsNullOrEmpty(loginName))
-                    loginName = LogOnControl.LoginNameInCookie;
-                if (!string.IsNullOrEmpty(loginName)) LoginTextBox.Text = loginName;
+                if (!string.IsNullOrEmpty(loginName))
+                    LoginTextBox.Text = loginName;
 
                 LoginTextBox.Focus();
 
@@ -155,7 +154,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void LogOnPageButton_Click(object sender, EventArgs e)
         {
             string url = null;
-            if (!string.IsNullOrEmpty(LoginTextBox.Text) && (string.Compare(LoginTextBox.Text, LogOnControl.LoginNameInCookie, StringComparison.OrdinalIgnoreCase) != 0))
+            if (!string.IsNullOrEmpty(LoginTextBox.Text))
                 url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text);
             else
                 url = WebApplication.LoginProvider.GetLoginUrl();

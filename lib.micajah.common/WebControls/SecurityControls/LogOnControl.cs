@@ -77,49 +77,6 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         #endregion
 
-        #region Internal Properties
-
-        /// <summary>
-        /// Gets the login name from the cookies collection or remembers it in the cookies collection.
-        /// </summary>
-        internal static string LoginNameInCookie
-        {
-            get
-            {
-                string value = null;
-                HttpCookie cookie = HttpContext.Current.Request.Cookies["Mc_L"];
-                if (cookie != null) value = cookie.Value;
-                return value;
-            }
-            set
-            {
-                HttpCookieCollection cookies = HttpContext.Current.Response.Cookies;
-
-                HttpCookie cookie = new HttpCookie("Mc_L");
-                if (!string.IsNullOrEmpty(value))
-                {
-                    string loginUrl = WebApplication.LoginProvider.GetLoginUrl();
-                    if (!string.IsNullOrEmpty(loginUrl))
-                    {
-                        string path = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.VirtualRootShortPath + "security/");
-                        if (loginUrl.IndexOf(path, StringComparison.OrdinalIgnoreCase) > -1)
-                            cookie.Path = path;
-                        else
-                            cookie.Path = WebApplication.CreateApplicationAbsoluteUrl(loginUrl);
-                    }
-                    cookie.Expires = DateTime.UtcNow.AddYears(1);
-                    cookie.HttpOnly = true;
-                    cookie.Value = value;
-                }
-                else
-                    cookie.Expires = DateTime.UtcNow.AddYears(-1);
-
-                cookies.Add(cookie);
-            }
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -545,7 +502,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void PasswordRecoveryButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect(WebApplication.LoginProvider.GetPasswordRecoveryUrl((!string.IsNullOrEmpty(LoginTextBox.Text) && (string.Compare(LoginTextBox.Text, LoginNameInCookie, StringComparison.OrdinalIgnoreCase) != 0)) ? LoginTextBox.Text : null));
+            Response.Redirect(WebApplication.LoginProvider.GetPasswordRecoveryUrl((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null));
         }
 
         #endregion
@@ -564,8 +521,6 @@ namespace Micajah.Common.WebControls.SecurityControls
                 string loginName = LoginTextBox.Text;
                 if (WebApplication.LoginProvider.Authenticate(loginName, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
                 {
-                    LoginNameInCookie = loginName;
-
                     string redirectUrl = this.ReturnUrl;
                     ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
 
@@ -621,9 +576,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 this.LoadResources();
                 this.LoadLogos();
 
-                string loginName = this.LoginName;
-                if (string.IsNullOrEmpty(loginName)) this.LoginName = loginName = LoginNameInCookie;
-                if (!string.IsNullOrEmpty(loginName)) LoginTextBox.Text = loginName;
+                if (!string.IsNullOrEmpty(this.LoginName))
+                    LoginTextBox.Text = this.LoginName;
             }
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
