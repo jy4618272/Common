@@ -1,89 +1,93 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertEmailSuffix]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertEmailSuffix]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertGroupMappings]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertGroupMappings]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertEmail]') AND type in (N'P', N'PC'))
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertEmail]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_InsertEmail]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertDatabase]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertDatabase]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertEmailSuffix]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertEmailSuffix]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertDatabaseServer]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_InsertDatabaseServer]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertOrganizationLdapGroup]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertOrganizationLdapGroup]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertCustomUrl]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertCustomUrl]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertOrganizationLogin]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertOrganizationLogin]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertDatabase]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertDatabase]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertOrganization]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_InsertOrganization]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertInvitedLogin]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertInvitedLogin]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertOrganizationLdapGroup]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertOrganizationLdapGroup]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertLogin]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_InsertLogin]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResources]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetResources]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertGroupMappings]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertGroupMappings]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetUnitsOfMeasure]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetUnitsOfMeasure]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertInvitedLogin]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertInvitedLogin]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResource]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetResource]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResetPasswordRequest]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetResetPasswordRequest]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResources]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetResources]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResetPasswordRequestsByLoginId]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetResetPasswordRequestsByLoginId]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertCountry]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertCountry]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateWebsite]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateWebsite]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertCustomUrl]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_InsertCustomUrl]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResetPasswordRequest]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetResetPasswordRequest]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetWebsites]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetWebsites]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetUnitsOfMeasureConversion]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetUnitsOfMeasureConversion]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertCountry]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertCountry]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetViewState]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetViewState]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateOrganization]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_UpdateOrganization]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetUnitsOfMeasure]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetUnitsOfMeasure]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateOrganizationLogin]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_UpdateOrganizationLogin]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetUnitsOfMeasureConversion]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetUnitsOfMeasureConversion]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertOrganizationLogin]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_InsertOrganizationLogin]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateLoginToken]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateLoginToken]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateOrganization]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateOrganization]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateLoginSession]') AND type in (N'P', N'PC'))
@@ -98,24 +102,24 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Up
 DROP PROCEDURE [dbo].[Mc_UpdateLoginLdapInfo]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateUnitsOfMeasureOverride]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureOverride]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateWebsite]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_UpdateWebsite]
-GO
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateUnitsOfMeasureConversion]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureConversion]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateResource]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_UpdateResource]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateUnitsOfMeasureOverride]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureOverride]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateUnitsOfMeasure]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasure]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateOrganizationLogin]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateOrganizationLogin]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateResource]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateResource]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_InsertUnitsOfMeasureConversion]') AND type in (N'P', N'PC'))
@@ -158,88 +162,88 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Up
 DROP PROCEDURE [dbo].[Mc_UpdateCustomUrl]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsDomains]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCountries]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetCountries]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCustomUrl]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetCustomUrl]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCustomUrls]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetCustomUrls]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCountries]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetCountries]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteUnitsOfMeasureConversion]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasureConversion]
-GO
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteViewState]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_DeleteViewState]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmail]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetEmail]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmails]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetEmails]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetDatabaseServers]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetDatabaseServers]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCustomUrlsByOrganizationId]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetCustomUrlsByOrganizationId]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetDatabases]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetDatabases]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteGroupMapping]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteGroupMapping]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteInvitedLogin]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteInvitedLogin]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteEmailSuffixes]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteEmailSuffixes]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteCustomUrl]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteCustomUrl]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteEmail]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteEmail]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteResource]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteResource]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteUnitsOfMeasure]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasure]
 GO
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteUnitsOfMeasureConversion]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasureConversion]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetDatabaseServers]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetDatabaseServers]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmail]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetEmail]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetDatabases]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetDatabases]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCustomUrls]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetCustomUrls]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCustomUrlsByOrganizationId]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetCustomUrlsByOrganizationId]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteEmailSuffixes]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteEmailSuffixes]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteGroupMapping]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteGroupMapping]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteEmail]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteEmail]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsDomains]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteCustomUrl]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteCustomUrl]
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteResetPasswordRequest]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_DeleteResetPasswordRequest]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteResource]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteResource]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteOrganizationLogin]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteOrganizationLogin]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteInvitedLogin]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_DeleteInvitedLogin]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteOrganizationLdapGroup]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_DeleteOrganizationLdapGroup]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteOrganizationLogin]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_DeleteOrganizationLogin]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmails]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetEmails]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationLogin]') AND type in (N'P', N'PC'))
@@ -329,6 +333,31 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+CREATE PROCEDURE [dbo].[Mc_InsertEmail]
+(
+	@Email [nvarchar](255),
+	@LoginId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	INSERT INTO dbo.Mc_Email (Email, LoginId)
+	VALUES (@Email, @LoginId)	
+	
+	SELECT Email, LoginId
+	FROM dbo.Mc_Email
+	WHERE (Email = @Email)
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[Mc_InsertEmailSuffix]
 (
 	@EmailSuffixId uniqueidentifier,
@@ -347,7 +376,6 @@ BEGIN
 	FROM dbo.Mc_EmailSuffix
 	WHERE EmailSuffixId = @EmailSuffixId;
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -355,99 +383,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-CREATE PROCEDURE [dbo].[Mc_InsertGroupMappings]
-(
-	@GroupId uniqueidentifier,
-	@OrganizationId uniqueidentifier,
-	@GroupName nvarchar(255),
-	@LdapDomainId uniqueidentifier,
-	@LdapDomainName nvarchar(255),
-	@LdapGroupId uniqueidentifier,
-	@LdapGroupName nvarchar(255)
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	INSERT INTO dbo.Mc_GroupMappings (GroupId, OrganizationId, [GroupName], LdapDomainId, [LdapDomainName], LdapGroupId, [LdapGroupName]) 
-	VALUES (@GroupId, @OrganizationId, @GroupName, @LdapDomainId, @LdapDomainName, @LdapGroupId, @LdapGroupName);
-	
-	SELECT GroupId, OrganizationId, [GroupName], LdapDomainId, [LdapDomainName], LdapGroupId, [LdapGroupName] 
-	FROM dbo.Mc_GroupMappings 
-	WHERE (GroupId = @GroupId);
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-CREATE PROCEDURE [dbo].[Mc_InsertEmail]
-(
-	@Email [nvarchar](255),
-	@LoginId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	INSERT INTO dbo.Mc_Email (Email, LoginId)
-	VALUES (@Email, @LoginId)	
-	
-	SELECT Email, LoginId
-	FROM dbo.Mc_Email
-	WHERE (Email = @Email)
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_InsertDatabase]
-(
-	@DatabaseId uniqueidentifier,
-	@Name nvarchar(255),
-	@Description nvarchar(1024),
-	@UserName nvarchar(255),
-	@Password nvarchar(255),
-	@DatabaseServerId uniqueidentifier,
-	@Private bit,
-	@Deleted bit
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	INSERT INTO dbo.Mc_Database (DatabaseId, [Name], [Description], UserName, [Password], DatabaseServerId, [Private], Deleted) 
-	VALUES (@DatabaseId, @Name, @Description, @UserName, @Password, @DatabaseServerId, @Private, @Deleted);
-	
-	SELECT DatabaseId, [Name], [Description], UserName, [Password], DatabaseServerId, [Private], Deleted 
-	FROM dbo.Mc_Database 
-	WHERE (DatabaseId = @DatabaseId);
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertDatabaseServer]
@@ -473,7 +408,6 @@ BEGIN
 END
 
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -482,54 +416,54 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-
-CREATE PROCEDURE [dbo].[Mc_InsertOrganizationLdapGroup]
+CREATE PROCEDURE [dbo].[Mc_InsertCustomUrl]
 (
-	@Id uniqueidentifier,
+	@CustomUrlId uniqueidentifier,
 	@OrganizationId uniqueidentifier,
-	@DomainId uniqueidentifier,	
-	@Domain nvarchar(255),
-	@ObjectGUID uniqueidentifier,
-	@Name nvarchar(255),
-	@DistinguishedName nvarchar(2048),
-	@CreatedTime datetime
+	@InstanceId uniqueidentifier,
+	@FullCustomUrl nvarchar(1024),
+	@PartialCustomUrl nvarchar(1024)
 )
 AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	INSERT INTO [dbo].[Mc_OrganizationsLdapGroups]([Id],[OrganizationId],[DomainId], [Domain],[ObjectGUID],[Name],[DistinguishedName],[CreatedTime])
-    VALUES(@Id,@OrganizationId, @DomainId, @Domain, @ObjectGUID, @Name, @DistinguishedName, @CreatedTime)
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_InsertOrganizationLogin]
-(
-	@OrganizationId uniqueidentifier,
-	@LoginId uniqueidentifier,
-	@OrganizationAdministrator bit,
-	@Active bit
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	INSERT INTO dbo.Mc_OrganizationsLogins (OrganizationId, LoginId, OrganizationAdministrator, Active)
-	VALUES (@OrganizationId, @LoginId, @OrganizationAdministrator, @Active);
+	INSERT INTO dbo.Mc_CustomUrl (CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl)
+	VALUES (@CustomUrlId, @OrganizationId, @InstanceId, @FullCustomUrl, @PartialCustomUrl);
 	
-	SELECT OrganizationId, LoginId, OrganizationAdministrator, Active
-	FROM dbo.Mc_OrganizationsLogins
-	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
+	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
+	FROM dbo.Mc_CustomUrl
+	WHERE CustomUrlId = @CustomUrlId;
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_InsertDatabase]
+(
+	@DatabaseId uniqueidentifier,
+	@Name nvarchar(255),
+	@Description nvarchar(1024),
+	@UserName nvarchar(255),
+	@Password nvarchar(255),
+	@DatabaseServerId uniqueidentifier,
+	@Private bit,
+	@Deleted bit
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	INSERT INTO dbo.Mc_Database (DatabaseId, [Name], [Description], UserName, [Password], DatabaseServerId, [Private], Deleted) 
+	VALUES (@DatabaseId, @Name, @Description, @UserName, @Password, @DatabaseServerId, @Private, @Deleted);
+	
+	SELECT DatabaseId, [Name], [Description], UserName, [Password], DatabaseServerId, [Private], Deleted 
+	FROM dbo.Mc_Database 
+	WHERE (DatabaseId = @DatabaseId);
 END
 
 GO
@@ -539,7 +473,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_InsertOrganization]
 (
@@ -586,6 +519,33 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[Mc_InsertOrganizationLdapGroup]
+(
+	@Id uniqueidentifier,
+	@OrganizationId uniqueidentifier,
+	@DomainId uniqueidentifier,	
+	@Domain nvarchar(255),
+	@ObjectGUID uniqueidentifier,
+	@Name nvarchar(255),
+	@DistinguishedName nvarchar(2048),
+	@CreatedTime datetime
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	INSERT INTO [dbo].[Mc_OrganizationsLdapGroups]([Id],[OrganizationId],[DomainId], [Domain],[ObjectGUID],[Name],[DistinguishedName],[CreatedTime])
+    VALUES(@Id,@OrganizationId, @DomainId, @Domain, @ObjectGUID, @Name, @DistinguishedName, @CreatedTime)
+END
 
 GO
 
@@ -595,6 +555,61 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_InsertLogin]
+(
+	@LoginId uniqueidentifier,
+	@LoginName nvarchar(255),
+	@Password nvarchar(50),
+	@Token varchar(50)
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	INSERT INTO dbo.Mc_Login (LoginId, LoginName, [Password], Deleted, Token) 
+	VALUES (@LoginId, @LoginName, @Password, 0, @Token);
+	
+	SELECT LoginId, FirstName, LastName, LoginName, [Password], ProfileUpdated, Deleted, SessionId, Token
+	FROM dbo.Mc_Login 
+	WHERE (LoginId = @LoginId);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_InsertGroupMappings]
+(
+	@GroupId uniqueidentifier,
+	@OrganizationId uniqueidentifier,
+	@GroupName nvarchar(255),
+	@LdapDomainId uniqueidentifier,
+	@LdapDomainName nvarchar(255),
+	@LdapGroupId uniqueidentifier,
+	@LdapGroupName nvarchar(255)
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	INSERT INTO dbo.Mc_GroupMappings (GroupId, OrganizationId, [GroupName], LdapDomainId, [LdapDomainName], LdapGroupId, [LdapGroupName]) 
+	VALUES (@GroupId, @OrganizationId, @GroupName, @LdapDomainId, @LdapDomainName, @LdapGroupId, @LdapGroupName);
+	
+	SELECT GroupId, OrganizationId, [GroupName], LdapDomainId, [LdapDomainName], LdapGroupId, [LdapGroupName] 
+	FROM dbo.Mc_GroupMappings 
+	WHERE (GroupId = @GroupId);
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 CREATE PROCEDURE [dbo].[Mc_InsertInvitedLogin]
 (
@@ -616,7 +631,6 @@ BEGIN
 	FROM dbo.Mc_InvitedLogin
 	WHERE (InvitedLoginId = @InvitedLoginId);
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -624,89 +638,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
-CREATE PROCEDURE [dbo].[Mc_InsertLogin]
-(
-	@LoginId uniqueidentifier,
-	@LoginName nvarchar(255),
-	@Password nvarchar(50)
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	INSERT INTO dbo.Mc_Login (LoginId, LoginName, [Password], Deleted) 
-	VALUES (@LoginId, @LoginName, @Password, 0);
-	
-	SELECT LoginId, LoginName, [Password], Deleted 
-	FROM dbo.Mc_Login 
-	WHERE (LoginId = @LoginId);
-END
-
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetResources]
-(
-	@LocalObjectType nvarchar(50),
-	@LocalObjectId nvarchar(255)
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT ResourceId, ParentResourceId, LocalObjectType, LocalObjectId, Content, ContentType, [Name], Width, Height, Align, Temporary, CreatedTime
-	FROM dbo.Mc_Resource
-	WHERE (LocalObjectType = @LocalObjectType) AND (LocalObjectId = @LocalObjectId)
-	ORDER BY CreatedTime, Name;
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetUnitsOfMeasure]
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT [UnitsOfMeasureId]
-      ,[OrganizationId]
-      ,[SingularName]
-      ,[SingularAbbrv]
-      ,[PluralName]
-      ,[PluralAbbrv]
-      ,[GroupName]
-      ,[LocalName]
-	FROM [dbo].[Mc_UnitsOfMeasure]
-	ORDER BY [OrganizationId] asc, [GroupName] asc, [SingularName] asc;
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetResource]
 (
@@ -742,7 +673,6 @@ BEGIN
 	WHERE (ResourceId = @ResId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -751,20 +681,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [dbo].[Mc_GetResetPasswordRequest]
+CREATE PROCEDURE [dbo].[Mc_GetResources]
 (
-	@ResetPasswordRequestId uniqueidentifier
+	@LocalObjectType nvarchar(50),
+	@LocalObjectId nvarchar(255)
 )
 AS
 BEGIN
 	SET NOCOUNT OFF;
-	
-	SELECT ResetPasswordRequestId, LoginId, CreatedTime
-	FROM dbo.Mc_ResetPasswordRequest
-	WHERE (ResetPasswordRequestId = @ResetPasswordRequestId);
-END
 
+	SELECT ResourceId, ParentResourceId, LocalObjectType, LocalObjectId, Content, ContentType, [Name], Width, Height, Align, Temporary, CreatedTime
+	FROM dbo.Mc_Resource
+	WHERE (LocalObjectType = @LocalObjectType) AND (LocalObjectId = @LocalObjectId)
+	ORDER BY CreatedTime, Name;
+END
 
 GO
 
@@ -773,7 +703,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetResetPasswordRequestsByLoginId]
 (
@@ -788,6 +717,37 @@ BEGIN
 	WHERE (LoginId = @LoginId);
 END
 
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[Mc_UpdateWebsite]
+(
+	@WebsiteId uniqueidentifier,
+	@Name nvarchar(255),
+	@Url nvarchar(2048),
+	@Description nvarchar(1024),
+	@AdminContactInfo nvarchar(2048),
+	@Deleted bit
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	UPDATE dbo.Mc_WebSite
+	SET [Name] = @Name, Url = @Url, [Description] = @Description, AdminContactInfo = @AdminContactInfo, Deleted = @Deleted 
+	WHERE (WebsiteId = @WebsiteId);
+	
+	SELECT WebsiteId, [Name], Url, [Description], AdminContactInfo, Deleted 
+	FROM dbo.Mc_WebSite 
+	WHERE (WebsiteId = @WebsiteId);
+END
+
 
 GO
 
@@ -797,6 +757,44 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_GetResetPasswordRequest]
+(
+	@ResetPasswordRequestId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+	
+	SELECT ResetPasswordRequestId, LoginId, CreatedTime
+	FROM dbo.Mc_ResetPasswordRequest
+	WHERE (ResetPasswordRequestId = @ResetPasswordRequestId);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetWebsites]
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT WebsiteId, [Name], Url, [Description], AdminContactInfo, Deleted 
+	FROM dbo.Mc_Website 
+	WHERE (Deleted = 0);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertCountry]
@@ -817,7 +815,6 @@ BEGIN
 END
 
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -826,25 +823,17 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [dbo].[Mc_InsertCustomUrl]
+CREATE PROCEDURE [dbo].[Mc_GetViewState]
 (
-	@CustomUrlId uniqueidentifier,
-	@OrganizationId uniqueidentifier,
-	@InstanceId uniqueidentifier,
-	@FullCustomUrl nvarchar(1024),
-	@PartialCustomUrl nvarchar(1024)
+    @ViewStateId uniqueidentifier
 )
 AS
 BEGIN
-	SET NOCOUNT OFF;
+    SET NOCOUNT ON;
 
-	INSERT INTO dbo.Mc_CustomUrl (CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl)
-	VALUES (@CustomUrlId, @OrganizationId, @InstanceId, @FullCustomUrl, @PartialCustomUrl);
-	
-	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
-	FROM dbo.Mc_CustomUrl
-	WHERE CustomUrlId = @CustomUrlId;
+    SELECT ViewState
+    FROM dbo.Mc_ViewState WITH (READUNCOMMITTED)
+    WHERE (ViewStateId = @ViewStateId);
 END
 
 GO
@@ -855,17 +844,22 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [dbo].[Mc_GetWebsites]
+CREATE PROCEDURE [dbo].[Mc_GetUnitsOfMeasure]
 AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	SELECT WebsiteId, [Name], Url, [Description], AdminContactInfo, Deleted 
-	FROM dbo.Mc_Website 
-	WHERE (Deleted = 0);
+	SELECT [UnitsOfMeasureId]
+      ,[OrganizationId]
+      ,[SingularName]
+      ,[SingularAbbrv]
+      ,[PluralName]
+      ,[PluralAbbrv]
+      ,[GroupName]
+      ,[LocalName]
+	FROM [dbo].[Mc_UnitsOfMeasure]
+	ORDER BY [OrganizationId] asc, [GroupName] asc, [SingularName] asc;
 END
-
 
 GO
 
@@ -874,7 +868,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetUnitsOfMeasureConversion]
 (
@@ -894,7 +887,6 @@ BEGIN
 	AND (@UnitOfMeasureTo IS NULL OR UnitOfMeasureTo = @UnitOfMeasureTo);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -903,21 +895,24 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [dbo].[Mc_GetViewState]
+CREATE PROCEDURE [dbo].[Mc_InsertOrganizationLogin]
 (
-    @ViewStateId uniqueidentifier
+	@OrganizationId uniqueidentifier,
+	@LoginId uniqueidentifier,
+	@OrganizationAdministrator bit,
+	@Active bit
 )
 AS
 BEGIN
-    SET NOCOUNT ON;
+	SET NOCOUNT OFF;
 
-    SELECT ViewState
-    FROM dbo.Mc_ViewState WITH (READUNCOMMITTED)
-    WHERE (ViewStateId = @ViewStateId);
+	INSERT INTO dbo.Mc_OrganizationsLogins (OrganizationId, LoginId, OrganizationAdministrator, Active)
+	VALUES (@OrganizationId, @LoginId, @OrganizationAdministrator, @Active);
+	
+	SELECT OrganizationId, LoginId, OrganizationAdministrator, Active
+	FROM dbo.Mc_OrganizationsLogins
+	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
 END
-
-
 GO
 
 SET ANSI_NULLS ON
@@ -926,6 +921,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_UpdateLoginToken]
+(
+	@LoginId uniqueidentifier,
+	@Token varchar(50)
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	UPDATE dbo.Mc_Login
+	SET Token = @Token
+	WHERE LoginId = @LoginId;
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 CREATE PROCEDURE [dbo].[Mc_UpdateOrganization]
 (
@@ -980,7 +996,6 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -988,37 +1003,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-CREATE PROCEDURE [dbo].[Mc_UpdateOrganizationLogin]
-(
-	@OrganizationId uniqueidentifier,
-	@LoginId uniqueidentifier,
-	@OrganizationAdministrator bit,
-	@Active bit
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	UPDATE dbo.Mc_OrganizationsLogins 
-	SET OrganizationAdministrator = (CASE WHEN @OrganizationAdministrator IS NULL THEN OrganizationAdministrator ELSE @OrganizationAdministrator END)
-		, Active = (CASE WHEN @Active IS NULL THEN Active ELSE @Active END)
-	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
-	
-	SELECT OrganizationId, LoginId, OrganizationAdministrator, LdapDomain, LdapUserAlias, LdapSecurityId, LdapUserId, Active
-	FROM dbo.Mc_OrganizationsLogins
-	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateLoginSession]
 (
@@ -1034,7 +1018,6 @@ BEGIN
 	WHERE LoginId = @LoginId;
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1042,7 +1025,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateLogin]
 (
@@ -1070,7 +1052,6 @@ BEGIN
 	WHERE (LoginId = @LoginId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1078,7 +1059,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateLoginLdapInfo]    
 (    
@@ -1110,7 +1090,6 @@ BEGIN
  FROM dbo.Mc_OrganizationsLogins    
  WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);    
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1119,6 +1098,39 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureConversion]
+(
+	@UnitOfMeasureFrom uniqueidentifier,
+	@UnitOfMeasureTo uniqueidentifier,
+	@OrganizationId uniqueidentifier,
+	@Factor float
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	UPDATE [dbo].[Mc_UnitsOfMeasureConversion]
+	SET [Factor] = @Factor
+	WHERE UnitOfMeasureFrom = @UnitOfMeasureFrom
+	AND UnitOfMeasureTo = @UnitOfMeasureTo
+	AND OrganizationId = @OrganizationId;
+
+	SELECT [UnitOfMeasureFrom]
+      ,[UnitOfMeasureTo]
+      ,[Factor]
+	FROM [dbo].[Mc_UnitsOfMeasureConversion]
+	WHERE UnitOfMeasureFrom = @UnitOfMeasureFrom
+	AND UnitOfMeasureTo = @UnitOfMeasureTo
+	AND OrganizationId = @OrganizationId;
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureOverride]
 (
@@ -1201,7 +1213,6 @@ BEGIN
 	end
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1209,109 +1220,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
-CREATE PROCEDURE [dbo].[Mc_UpdateWebsite]
-(
-	@WebsiteId uniqueidentifier,
-	@Name nvarchar(255),
-	@Url nvarchar(2048),
-	@Description nvarchar(1024),
-	@AdminContactInfo nvarchar(2048),
-	@Deleted bit
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	UPDATE dbo.Mc_WebSite
-	SET [Name] = @Name, Url = @Url, [Description] = @Description, AdminContactInfo = @AdminContactInfo, Deleted = @Deleted 
-	WHERE (WebsiteId = @WebsiteId);
-	
-	SELECT WebsiteId, [Name], Url, [Description], AdminContactInfo, Deleted 
-	FROM dbo.Mc_WebSite 
-	WHERE (WebsiteId = @WebsiteId);
-END
-
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasureConversion]
-(
-	@UnitOfMeasureFrom uniqueidentifier,
-	@UnitOfMeasureTo uniqueidentifier,
-	@OrganizationId uniqueidentifier,
-	@Factor float
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	UPDATE [dbo].[Mc_UnitsOfMeasureConversion]
-	SET [Factor] = @Factor
-	WHERE UnitOfMeasureFrom = @UnitOfMeasureFrom
-	AND UnitOfMeasureTo = @UnitOfMeasureTo
-	AND OrganizationId = @OrganizationId;
-
-	SELECT [UnitOfMeasureFrom]
-      ,[UnitOfMeasureTo]
-      ,[Factor]
-	FROM [dbo].[Mc_UnitsOfMeasureConversion]
-	WHERE UnitOfMeasureFrom = @UnitOfMeasureFrom
-	AND UnitOfMeasureTo = @UnitOfMeasureTo
-	AND OrganizationId = @OrganizationId;
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_UpdateResource]
-(
-	@ResourceId uniqueidentifier,
-	@LocalObjectType nvarchar(50),
-	@LocalObjectId nvarchar(50),
-	@Temporary bit
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	UPDATE dbo.Mc_Resource 
-	SET 
-		LocalObjectType = @LocalObjectType,
-		LocalObjectId = @LocalObjectId,
-		Temporary = @Temporary
-	WHERE (ResourceId = @ResourceId) OR (ParentResourceId = @ResourceId);
-	
-	SELECT ResourceId, ParentResourceId, LocalObjectType, LocalObjectId, Content, ContentType, [Name], Width, Height, Align, Temporary, CreatedTime
-	FROM dbo.Mc_Resource 
-	WHERE ResourceId = @ResourceId;
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateUnitsOfMeasure]
 (
@@ -1351,7 +1259,6 @@ BEGIN
 	AND [OrganizationId] = @OrganizationId;
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1360,6 +1267,63 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_UpdateOrganizationLogin]
+(
+	@OrganizationId uniqueidentifier,
+	@LoginId uniqueidentifier,
+	@OrganizationAdministrator bit,
+	@Active bit
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	UPDATE dbo.Mc_OrganizationsLogins 
+	SET OrganizationAdministrator = (CASE WHEN @OrganizationAdministrator IS NULL THEN OrganizationAdministrator ELSE @OrganizationAdministrator END)
+		, Active = (CASE WHEN @Active IS NULL THEN Active ELSE @Active END)
+	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
+	
+	SELECT OrganizationId, LoginId, OrganizationAdministrator, LdapDomain, LdapUserAlias, LdapSecurityId, LdapUserId, Active
+	FROM dbo.Mc_OrganizationsLogins
+	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_UpdateResource]
+(
+	@ResourceId uniqueidentifier,
+	@LocalObjectType nvarchar(50),
+	@LocalObjectId nvarchar(50),
+	@Temporary bit
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	UPDATE dbo.Mc_Resource 
+	SET 
+		LocalObjectType = @LocalObjectType,
+		LocalObjectId = @LocalObjectId,
+		Temporary = @Temporary
+	WHERE (ResourceId = @ResourceId) OR (ParentResourceId = @ResourceId);
+	
+	SELECT ResourceId, ParentResourceId, LocalObjectType, LocalObjectId, Content, ContentType, [Name], Width, Height, Align, Temporary, CreatedTime
+	FROM dbo.Mc_Resource 
+	WHERE ResourceId = @ResourceId;
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 CREATE PROCEDURE [dbo].[Mc_InsertUnitsOfMeasureConversion]
 (
@@ -1392,7 +1356,6 @@ BEGIN
 	AND UnitOfMeasureTo = @UnitOfMeasureTo
 	AND OrganizationId = @OrganizationId;
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1400,7 +1363,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_InsertViewState]
 (
@@ -1416,7 +1378,6 @@ BEGIN
 	VALUES (@ViewStateId, @ViewState, @ExpirationTime);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1424,7 +1385,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_InsertUnitsOfMeasure]
 (
@@ -1472,7 +1432,6 @@ BEGIN
 	WHERE [UnitsOfMeasureId] = @UnitsOfMeasureId
 	AND [OrganizationId] = @OrganizationId;
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1480,7 +1439,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_InsertResetPasswordRequest]
 (
@@ -1499,7 +1457,6 @@ BEGIN
 	FROM dbo.Mc_ResetPasswordRequest
 	WHERE (ResetPasswordRequestId = @ResetPasswordRequestId);
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1507,7 +1464,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_InsertResource]
 (
@@ -1535,7 +1491,6 @@ BEGIN
 	FROM dbo.Mc_Resource 
 	WHERE ResourceId = @ResourceId;
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1543,7 +1498,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_UpdateDatabaseServer]
@@ -1570,7 +1524,6 @@ BEGIN
 END
 
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1578,7 +1531,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateEmailSuffix]
 (
@@ -1597,7 +1549,6 @@ BEGIN
 	FROM dbo.Mc_EmailSuffix
 	WHERE EmailSuffixId = @EmailSuffixId;
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -1605,7 +1556,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateDatabase]
 (
@@ -1631,7 +1581,6 @@ BEGIN
 	WHERE (DatabaseId = @DatabaseId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1639,7 +1588,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_InsertWebsite]
@@ -1664,7 +1612,6 @@ BEGIN
 END
 
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1672,7 +1619,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_UpdateCustomUrl]
 (
@@ -1692,6 +1638,132 @@ BEGIN
 	FROM dbo.Mc_CustomUrl
 	WHERE CustomUrlId = @CustomUrlId;
 END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetCountries]
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT CountryId, [Name]
+	FROM dbo.Mc_Country
+	ORDER BY [Name];
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetCustomUrl]
+(
+	@CustomUrlId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
+	FROM dbo.Mc_CustomUrl
+	WHERE (CustomUrlId = @CustomUrlId);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_DeleteViewState]
+(
+    @Now datetime
+)
+AS
+BEGIN
+    SET NOCOUNT OFF;
+    
+	DELETE dbo.Mc_ViewState
+	WHERE ExpirationTime < @Now;
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasure]
+(
+	@UnitsOfMeasureId uniqueidentifier,
+	@OrganizationId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	DELETE FROM [dbo].[Mc_UnitsOfMeasureConversion]
+    WHERE OrganizationId = @OrganizationId
+    AND (UnitOfMeasureFrom = @UnitsOfMeasureId OR UnitOfMeasureTo = @UnitsOfMeasureId);
+
+	DELETE FROM [dbo].[Mc_UnitsOfMeasure] 
+	WHERE OrganizationId = @OrganizationId
+	AND UnitsOfMeasureId = @UnitsOfMeasureId;
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasureConversion]
+(
+	@UnitOfMeasureFrom uniqueidentifier,
+	@UnitOfMeasureTo uniqueidentifier,
+	@OrganizationId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	DELETE FROM dbo.[Mc_UnitsOfMeasureConversion]
+	WHERE UnitOfMeasureFrom = @UnitOfMeasureFrom
+	AND UnitOfMeasureTo = @UnitOfMeasureTo
+	AND OrganizationId = @OrganizationId;
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetDatabaseServers]
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT DatabaseServerId, [Name], InstanceName, Port, [Description], WebsiteId, Deleted 
+	FROM dbo.Mc_DatabaseServer 
+	WHERE (Deleted = 0);
+END
 
 GO
 
@@ -1702,6 +1774,170 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+CREATE PROCEDURE [dbo].[Mc_GetEmail]
+(
+	@Email [nvarchar](255)
+)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT Email, LoginId
+	FROM dbo.Mc_Email
+	WHERE (Email = @Email)
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetDatabases]
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT DatabaseId, [Name], [Description], UserName, [Password], DatabaseServerId, [Private], Deleted 
+	FROM dbo.Mc_Database
+	WHERE (Deleted = 0);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetCustomUrls]
+(
+	@OrganizationId uniqueidentifier,
+	@InstanceId uniqueidentifier,
+	@FullCustomUrl nvarchar(1024),
+	@PartialCustomUrl nvarchar(1024)
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
+	FROM dbo.Mc_CustomUrl
+	WHERE 
+		(OrganizationId = @OrganizationId)
+		AND (	(InstanceId = @InstanceId)
+				OR  ((@InstanceId IS NULL) AND (InstanceId IS NULL))
+		)
+	UNION
+	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
+	FROM dbo.Mc_CustomUrl
+	WHERE
+		(	(FullCustomUrl = @FullCustomUrl) 
+			AND (@FullCustomUrl IS NOT NULL)
+		)
+		OR 	(	(PartialCustomUrl = @PartialCustomUrl)
+				AND (@PartialCustomUrl IS NOT NULL)
+		);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetCustomUrlsByOrganizationId]
+(
+	@OrganizationId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
+	FROM dbo.Mc_CustomUrl
+	WHERE (OrganizationId = @OrganizationId);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_DeleteEmailSuffixes]  
+(  
+ @OrganizationId uniqueidentifier,
+ @InstanceId uniqueidentifier
+)  
+AS  
+BEGIN  
+ SET NOCOUNT OFF;  
+
+ IF @InstanceId IS NOT NULL
+ BEGIN
+   DELETE FROM dbo.Mc_EmailSuffix  
+   WHERE InstanceId = @InstanceId;  
+ END
+ ELSE  
+   DELETE FROM dbo.Mc_EmailSuffix  
+   WHERE OrganizationId = @OrganizationId AND InstanceId IS NULL;  
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_DeleteGroupMapping]
+(
+	@GroupId uniqueidentifier,
+	@LdapDomainId uniqueidentifier,
+	@LdapGroupId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	DELETE FROM dbo.Mc_GroupMappings
+	WHERE GroupId = @GroupId AND LdapDomainId = @LdapDomainId AND LdapGroupId = @LdapGroupId;
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[Mc_DeleteEmail]  
+(  
+ @LoginId uniqueidentifier
+)  
+AS  
+BEGIN  
+	SET NOCOUNT OFF;  
+	DELETE FROM dbo.Mc_Email  
+	WHERE LoginId = @LoginId
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
 (
@@ -1738,7 +1974,6 @@ BEGIN
 	ORDER BY Domain
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -1746,323 +1981,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetCustomUrl]
-(
-	@CustomUrlId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
-	FROM dbo.Mc_CustomUrl
-	WHERE (CustomUrlId = @CustomUrlId);
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetCustomUrls]
-(
-	@OrganizationId uniqueidentifier,
-	@InstanceId uniqueidentifier,
-	@FullCustomUrl nvarchar(1024),
-	@PartialCustomUrl nvarchar(1024)
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
-	FROM dbo.Mc_CustomUrl
-	WHERE 
-		(OrganizationId = @OrganizationId)
-		AND (	(InstanceId = @InstanceId)
-				OR  ((@InstanceId IS NULL) AND (InstanceId IS NULL))
-		)
-	UNION
-	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
-	FROM dbo.Mc_CustomUrl
-	WHERE
-		(	(FullCustomUrl = @FullCustomUrl) 
-			AND (@FullCustomUrl IS NOT NULL)
-		)
-		OR 	(	(PartialCustomUrl = @PartialCustomUrl)
-				AND (@PartialCustomUrl IS NOT NULL)
-		);
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetCountries]
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT CountryId, [Name]
-	FROM dbo.Mc_Country
-	ORDER BY [Name];
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasureConversion]
-(
-	@UnitOfMeasureFrom uniqueidentifier,
-	@UnitOfMeasureTo uniqueidentifier,
-	@OrganizationId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	DELETE FROM dbo.[Mc_UnitsOfMeasureConversion]
-	WHERE UnitOfMeasureFrom = @UnitOfMeasureFrom
-	AND UnitOfMeasureTo = @UnitOfMeasureTo
-	AND OrganizationId = @OrganizationId;
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_DeleteViewState]
-(
-    @Now datetime
-)
-AS
-BEGIN
-    SET NOCOUNT OFF;
-    
-	DELETE dbo.Mc_ViewState
-	WHERE ExpirationTime < @Now;
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-CREATE PROCEDURE [dbo].[Mc_GetEmail]
-(
-	@Email [nvarchar](255)
-)
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	SELECT Email, LoginId
-	FROM dbo.Mc_Email
-	WHERE (Email = @Email)
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-CREATE PROCEDURE [dbo].[Mc_GetEmails]
-(
-	@LoginId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	SELECT Email, LoginId
-	FROM dbo.Mc_Email
-	WHERE (LoginId = @LoginId)
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetDatabaseServers]
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT DatabaseServerId, [Name], InstanceName, Port, [Description], WebsiteId, Deleted 
-	FROM dbo.Mc_DatabaseServer 
-	WHERE (Deleted = 0);
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetCustomUrlsByOrganizationId]
-(
-	@OrganizationId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT CustomUrlId, OrganizationId, InstanceId, FullCustomUrl, PartialCustomUrl
-	FROM dbo.Mc_CustomUrl
-	WHERE (OrganizationId = @OrganizationId);
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetDatabases]
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	SELECT DatabaseId, [Name], [Description], UserName, [Password], DatabaseServerId, [Private], Deleted 
-	FROM dbo.Mc_Database
-	WHERE (Deleted = 0);
-END
-
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_DeleteGroupMapping]
-(
-	@GroupId uniqueidentifier,
-	@LdapDomainId uniqueidentifier,
-	@LdapGroupId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	DELETE FROM dbo.Mc_GroupMappings
-	WHERE GroupId = @GroupId AND LdapDomainId = @LdapDomainId AND LdapGroupId = @LdapGroupId;
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_DeleteInvitedLogin]
-(
-	@InvitedLoginId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-
-	DELETE FROM dbo.Mc_InvitedLogin
-	WHERE 
-		(InvitedLoginId = @InvitedLoginId)
-		OR (DATEDIFF(DAY, CreatedTime, GETUTCDATE()) >= 30);
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_DeleteEmailSuffixes]  
-(  
- @OrganizationId uniqueidentifier,
- @InstanceId uniqueidentifier
-)  
-AS  
-BEGIN  
- SET NOCOUNT OFF;  
-
- IF @InstanceId IS NOT NULL
- BEGIN
-   DELETE FROM dbo.Mc_EmailSuffix  
-   WHERE InstanceId = @InstanceId;  
- END
- ELSE  
-   DELETE FROM dbo.Mc_EmailSuffix  
-   WHERE OrganizationId = @OrganizationId AND InstanceId IS NULL;  
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 CREATE PROCEDURE [dbo].[Mc_DeleteCustomUrl]
 (
@@ -2075,7 +1993,6 @@ BEGIN
 	DELETE FROM dbo.Mc_CustomUrl
 	WHERE CustomUrlId = @CustomUrlId;
 END
-
 GO
 
 SET ANSI_NULLS ON
@@ -2084,20 +2001,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_DeleteResetPasswordRequest]
+(
+	@ResetPasswordRequestId uniqueidentifier
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
 
-
-CREATE PROCEDURE [dbo].[Mc_DeleteEmail]  
-(  
- @LoginId uniqueidentifier
-)  
-AS  
-BEGIN  
-	SET NOCOUNT OFF;  
-	DELETE FROM dbo.Mc_Email  
-	WHERE LoginId = @LoginId
+	DELETE FROM dbo.Mc_ResetPasswordRequest
+	WHERE 
+		(ResetPasswordRequestId = @ResetPasswordRequestId)
+		OR (DATEDIFF(MINUTE, CreatedTime, GETUTCDATE()) > 60);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2105,7 +2022,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_DeleteResource]
 (
@@ -2133,22 +2049,17 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[Mc_DeleteUnitsOfMeasure]
+CREATE PROCEDURE [dbo].[Mc_DeleteOrganizationLogin]
 (
-	@UnitsOfMeasureId uniqueidentifier,
-	@OrganizationId uniqueidentifier
+	@OrganizationId uniqueidentifier,
+	@LoginId uniqueidentifier
 )
 AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	DELETE FROM [dbo].[Mc_UnitsOfMeasureConversion]
-    WHERE OrganizationId = @OrganizationId
-    AND (UnitOfMeasureFrom = @UnitsOfMeasureId OR UnitOfMeasureTo = @UnitsOfMeasureId);
-
-	DELETE FROM [dbo].[Mc_UnitsOfMeasure] 
-	WHERE OrganizationId = @OrganizationId
-	AND UnitsOfMeasureId = @UnitsOfMeasureId;
+	DELETE FROM dbo.Mc_OrganizationsLogins 
+	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
 END
 
 
@@ -2160,19 +2071,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [dbo].[Mc_DeleteResetPasswordRequest]
+CREATE PROCEDURE [dbo].[Mc_DeleteInvitedLogin]
 (
-	@ResetPasswordRequestId uniqueidentifier
+	@InvitedLoginId uniqueidentifier
 )
 AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	DELETE FROM dbo.Mc_ResetPasswordRequest
+	DELETE FROM dbo.Mc_InvitedLogin
 	WHERE 
-		(ResetPasswordRequestId = @ResetPasswordRequestId)
-		OR (DATEDIFF(MINUTE, CreatedTime, GETUTCDATE()) > 60);
+		(InvitedLoginId = @InvitedLoginId)
+		OR (DATEDIFF(DAY, CreatedTime, GETUTCDATE()) >= 30);
 END
 
 GO
@@ -2182,7 +2092,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_DeleteOrganizationLdapGroup]
@@ -2198,7 +2107,6 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId) AND (Domain = @Domain)
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2208,21 +2116,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-
-CREATE PROCEDURE [dbo].[Mc_DeleteOrganizationLogin]
+CREATE PROCEDURE [dbo].[Mc_GetEmails]
 (
-	@OrganizationId uniqueidentifier,
 	@LoginId uniqueidentifier
 )
 AS
 BEGIN
-	SET NOCOUNT OFF;
+	SET NOCOUNT ON;
 
-	DELETE FROM dbo.Mc_OrganizationsLogins 
-	WHERE (OrganizationId = @OrganizationId) AND (LoginId = @LoginId);
+	SELECT Email, LoginId
+	FROM dbo.Mc_Email
+	WHERE (LoginId = @LoginId)
 END
-
-
 
 GO
 
@@ -2231,7 +2136,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationLogin]    
 (    
@@ -2249,7 +2153,6 @@ BEGIN
  WHERE (ol.OrganizationId = @OrganizationId) AND (ol.LoginId = @LoginId);    
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2257,7 +2160,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizations]  
 AS  
@@ -2271,7 +2173,6 @@ BEGIN
  FROM dbo.Mc_Organization   
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2279,7 +2180,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginsByOrganizationId]      
 (      
@@ -2289,13 +2189,12 @@ AS
 BEGIN      
 	SET NOCOUNT OFF;      
 
-	SELECT l.LoginId, l.FirstName, l.LastName, l.LoginName, l.[Password], l.ProfileUpdated, l.SessionId, l.Deleted
+	SELECT l.LoginId, l.FirstName, l.LastName, l.LoginName, l.[Password], l.ProfileUpdated, l.Deleted, l.SessionId, l.Token
 		, ol.OrganizationAdministrator, ol.LdapDomain, ol.LdapDomainFull, ol.LdapUserAlias, ol.LdapUPN, ol.LdapSecurityId, ol.LdapUserId, ol.LdapOUPath, ol.Active      
 	FROM dbo.Mc_OrganizationsLogins AS ol      
 	INNER JOIN dbo.Mc_Login AS l      
 		ON (ol.LoginId = l.LoginId) AND (ol.OrganizationId = @OrganizationId) AND (l.Deleted = 0);
 END
-
 
 GO
 
@@ -2304,7 +2203,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginByEmail]      
@@ -2327,7 +2225,6 @@ BEGIN
  ORDER BY o.LdapServerAddress DESC;  
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2335,7 +2232,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginByLoginName]
 (
@@ -2345,7 +2241,7 @@ AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	SELECT l.LoginId, l.FirstName, l.LastName, l.LoginName, l.[Password], l.ProfileUpdated, l.Deleted, l.SessionId
+	SELECT l.LoginId, l.FirstName, l.LastName, l.LoginName, l.[Password], l.ProfileUpdated, l.Deleted, l.SessionId, l.Token
 	FROM dbo.Mc_Login AS l
 	LEFT JOIN dbo.Mc_Email AS e 
 		ON l.LoginId = e.LoginId AND e.Email = @LoginName
@@ -2359,7 +2255,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsAll]
@@ -2384,7 +2279,6 @@ BEGIN
 	ORDER BY [Name]
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2392,7 +2286,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]
@@ -2416,7 +2309,6 @@ BEGIN
 	ORDER BY [Name]
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2424,7 +2316,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroups]
@@ -2449,7 +2340,6 @@ BEGIN
 	ORDER BY [Name]
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2457,7 +2347,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsByLdapDomain]
 (
@@ -2476,7 +2365,6 @@ BEGIN
 	ORDER BY o.LdapServerAddress DESC;
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2484,7 +2372,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsByLoginId]
 (  
@@ -2503,7 +2390,6 @@ BEGIN
 		ON (ol.OrganizationId = o.OrganizationId) AND (ol.LoginId = @LoginId) AND (o.Deleted = 0) AND (o.Active = 1) AND (ol.Active = 1);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2511,7 +2397,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffixesByOrganizationId]  
 (  
@@ -2530,7 +2415,6 @@ BEGIN
  WHERE ((OrganizationId = @OrganizationId) AND (InstanceId IS NOT NULL));  
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2538,7 +2422,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetGroupMappings]
 (
@@ -2553,7 +2436,6 @@ BEGIN
 	WHERE (OrganizationId = @OrganizationId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2561,7 +2443,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffixesByInstanceId]  
 (  
@@ -2576,7 +2457,6 @@ BEGIN
  WHERE (InstanceId = @InstanceId);  
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2584,7 +2464,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffix]
 (
@@ -2599,7 +2478,6 @@ BEGIN
 	WHERE (EmailSuffixId = @EmailSuffixId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2607,7 +2485,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetEmailSuffixes]  
 (  
@@ -2629,7 +2506,6 @@ BEGIN
   );  
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2637,7 +2513,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetLogin]
 (
@@ -2647,7 +2522,7 @@ AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	SELECT LoginId, FirstName, LastName, LoginName, [Password], ProfileUpdated, Deleted, SessionId
+	SELECT LoginId, FirstName, LastName, LoginName, [Password], ProfileUpdated, Deleted, SessionId, Token
 	FROM dbo.Mc_Login
 	WHERE LoginId = @LoginId;
 END
@@ -2659,7 +2534,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetLoginByDomainName]      
 (      
@@ -2686,7 +2560,6 @@ BEGIN
  ORDER BY o.LdapServerAddress DESC;
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2694,7 +2567,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetLdapServerDetails]
 (
@@ -2710,7 +2582,6 @@ BEGIN
 		OrganizationId = @OrganizationId;
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2718,7 +2589,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetInvitedLogin]
 (
@@ -2733,7 +2603,6 @@ BEGIN
 	WHERE (InvitedLoginId = @InvitedLoginId);
 END
 
-
 GO
 
 SET ANSI_NULLS ON
@@ -2741,7 +2610,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[Mc_GetInvitedLoginsByOrganizationId]
 (
@@ -2755,6 +2623,5 @@ BEGIN
 	FROM dbo.Mc_InvitedLogin
 	WHERE (OrganizationId = @OrganizationId);
 END
-
 
 GO

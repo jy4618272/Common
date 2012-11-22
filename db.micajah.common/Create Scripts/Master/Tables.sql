@@ -707,6 +707,7 @@ CREATE TABLE [dbo].[Mc_Login](
 	[ProfileUpdated] [smalldatetime] NOT NULL,
 	[Deleted] [bit] NOT NULL,
 	[SessionId] [varchar](50) NULL,
+	[Token] [varchar](50) NULL,
  CONSTRAINT [PK_Mc_Login] PRIMARY KEY CLUSTERED 
 (
 	[LoginId] ASC
