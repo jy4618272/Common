@@ -30,7 +30,7 @@ namespace Micajah.Common.WebControls
             get
             {
                 if (m_InnerControl == null)
-                    m_InnerControl = this.FindControl("Settings") as TokenControl;
+                    m_InnerControl = this.FindControl("Token") as TokenControl;
                 return m_InnerControl;
             }
         }
