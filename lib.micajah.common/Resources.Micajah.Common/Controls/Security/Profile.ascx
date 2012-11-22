@@ -1,5 +1,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.ProfileControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
+<%@ Register Src="~/Resources.Micajah.Common/Controls/Security/Token.ascx" TagName="Token" TagPrefix="uc" %>
 <mits:MagicForm ID="EditForm" runat="server" DataSourceID="EntityDataSource" DataKeyNames="UserId"
     Width="550px" OnDataBound="EditForm_DataBound">
     <fields>
@@ -34,6 +35,11 @@
         <mits:TemplateField PaddingLeft="false">
             <ItemTemplate>
                 <asp:DropDownList ID="DateFormatList" runat="server" Width="140px"  />
+            </ItemTemplate>
+        </mits:TemplateField>
+        <mits:TemplateField PaddingLeft="false">
+            <ItemTemplate>
+                <uc:Token ID="Token" runat="server" />
             </ItemTemplate>
         </mits:TemplateField>
         <asp:TemplateField>

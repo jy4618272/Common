@@ -1092,12 +1092,22 @@ namespace Micajah.Common.Bll
         /// <returns>An System.String object that represents the pseudo unique identifier.</returns>
         public static string GeneratePseudoUnique()
         {
+            return GeneratePseudoUnique(6);
+        }
+
+        /// <summary>
+        /// Generates the pseudo unique identifier with specified length.
+        /// </summary>
+        /// <param name="length">The length of the identifier.</param>
+        /// <returns>An System.String object that represents the pseudo unique identifier.</returns>
+        public static string GeneratePseudoUnique(int length)
+        {
             //"abcdefghijkmnopqrstuvwxyz0123456789"
             RandomNumberGenerator rng = RandomNumberGenerator.Create();
-            byte[] pass_bytes = new byte[6];
+            byte[] pass_bytes = new byte[length];
             rng.GetBytes(pass_bytes);
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < length; i++)
             {
                 // Convert the random bytes to ascii values 33-126
                 pass_bytes[i] = (byte)(pass_bytes[i] % 93 + 33);

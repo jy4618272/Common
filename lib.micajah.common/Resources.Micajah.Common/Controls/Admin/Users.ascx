@@ -3,6 +3,8 @@
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <%@ Register Src="~/Resources.Micajah.Common/Controls/Security/ChangePassword.ascx"
     TagName="ChangePassword" TagPrefix="uc" %>
+<%@ Register Src="~/Resources.Micajah.Common/Controls/Security/Token.ascx" TagName="Token"
+    TagPrefix="uc" %>
 <script type="text/javascript">
     //<![CDATA[
     function NodeClicking(sender, eventArgs) {
@@ -78,6 +80,11 @@
                 <mits:TextBoxField DataField="SecondaryEmails" MaxLength="255" Columns="65" Rows="3" TextMode="MultiLine" ControlStyle-Width="350px" Visible="false" />
                 <mits:CheckBoxListField DataField="GroupId" DataSourceId="GroupDataSource"
                     DataTextField="Name" DataValueField="GroupId" Required="True" Visible="false" />
+                <mits:TemplateField PaddingLeft="false" InsertVisible="false">
+                    <ItemTemplate>
+                        <uc:Token ID="Token" runat="server" />
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
                         <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>

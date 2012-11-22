@@ -4934,6 +4934,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Token.
+        /// </summary>
+        internal static string ProfileControl_EditForm_TokenField_HeaderText {
+            get {
+                return ResourceManager.GetString("ProfileControl_EditForm_TokenField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deserialization failed..
         /// </summary>
         internal static string RecurrenceRule_DeserializationFailed {
@@ -6474,6 +6483,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string TokenControl_ResetTokenButton_Text {
+            get {
+                return ResourceManager.GetString("TokenControl_ResetTokenButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Error! Try again..
         /// </summary>
         internal static string UpdateProgress_FailureText {
@@ -6993,6 +7011,15 @@ namespace Micajah.Common.Properties {
         internal static string UsersControl_EditForm_TitleField_HeaderText {
             get {
                 return ResourceManager.GetString("UsersControl_EditForm_TitleField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token.
+        /// </summary>
+        internal static string UsersControl_EditForm_TokenField_HeaderText {
+            get {
+                return ResourceManager.GetString("UsersControl_EditForm_TokenField_HeaderText", resourceCulture);
             }
         }
         

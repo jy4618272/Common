@@ -71,7 +71,8 @@ namespace Micajah.Common.Bll.Providers
         internal const string LogOnControlVirtualPath = VirtualRootPath + "controls/security/login.ascx";
         internal const string SettingsControlVirtualPath = VirtualRootPath + "controls/admin/settings.ascx";
         internal const string RecurringScheduleControlVirtualPath = VirtualRootPath + "controls/recurrenceschedulecontrol.ascx";
-        internal const string CustomUrlsControlVirtualPath = VirtualRootPath + "controls/admin/CustomUrls.ascx";
+        internal const string CustomUrlsControlVirtualPath = VirtualRootPath + "controls/admin/customurls.ascx";
+        internal const string TokenControlVirtualPath = VirtualRootPath + "controls/security/token.ascx";
 
         #endregion
 

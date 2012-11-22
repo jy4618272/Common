@@ -340,6 +340,10 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
+    <Compile Include="WebControls\Token.cs" />
+    <Compile Include="WebControls\SecurityControls\TokenControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="WebControls\WebEventHandler.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -1948,6 +1952,11 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Gear.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\Modern.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v101.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Token.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v102.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v103.sql" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

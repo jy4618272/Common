@@ -11,6 +11,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using Micajah.Common.WebControls.SecurityControls;
 using Micajah.Common.WebControls.SetupControls;
 using Telerik.Web.UI;
 
@@ -126,6 +127,7 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[17].Visible = visible;
             EditForm.Fields[18].Visible = visible;
             EditForm.Fields[19].Visible = visible;
+            EditForm.Fields[20].Visible = visible;
         }
 
         private void AddBreadCrumbs(Micajah.Common.Bll.Action action, object sender)
@@ -305,6 +307,9 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (!row.IsDateFormatNull())
                     dateFormat = row.DateFormat.ToString(CultureInfo.InvariantCulture);
+
+                TokenControl token = (TokenControl)EditForm.FindControl("Token");
+                token.LoginId = row.UserId;
             }
 
             BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
@@ -535,6 +540,7 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[15].HeaderText = Resources.UsersControl_EditForm_TimeZoneField_HeaderText;
             EditForm.Fields[16].HeaderText = Resources.UsersControl_EditForm_TimeFormatField_HeaderText;
             EditForm.Fields[17].HeaderText = Resources.UsersControl_EditForm_DateFormatField_HeaderText;
+            EditForm.Fields[20].HeaderText = Resources.UsersControl_EditForm_TokenField_HeaderText;
 
             PasswordForm.ObjectName = Resources.UsersControl_PwdForm_ObjectName;
             LoadResources(EditUserGroupsForm, this.GetType().BaseType.Name);

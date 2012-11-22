@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActionsControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
     <value>Description</value>
@@ -2517,5 +2517,14 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="ProfileControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
     <value>Date Format</value>
+  </data>
+  <data name="TokenControl_ResetTokenButton_Text" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ProfileControl_EditForm_TokenField_HeaderText" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="UsersControl_EditForm_TokenField_HeaderText" xml:space="preserve">
+    <value>Token</value>
   </data>
 </root>

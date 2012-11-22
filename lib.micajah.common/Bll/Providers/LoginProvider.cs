@@ -993,6 +993,7 @@ namespace Micajah.Common.Bll.Providers
                 command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier, 16).Value = Guid.NewGuid();
                 command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = EncryptPassword(password);
+                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = Support.GeneratePseudoUnique(32);
 
                 return Support.GetDataRow(command);
             }
@@ -1320,6 +1321,38 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (drv.Row.Table.Columns.Contains("SessionId") && (!Support.IsNullOrDBNull(drv["SessionId"])))
                     return (string)drv["SessionId"];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the token of the specified login from the data source.
+        /// </summary>
+        /// <param name="loginId">The unique identifier for the login to get information for.</param>
+        /// <returns>The token of the specified login.</returns>
+        public virtual string GetToken(Guid loginId)
+        {
+            DataRowView drv = GetLogin(loginId);
+            if (drv != null)
+            {
+                if (!Support.IsNullOrDBNull(drv["Token"]))
+                    return (string)drv["Token"];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the token of the specified login from the data source.
+        /// </summary>
+        /// <param name="loginName">The name for the login to get information for.</param>
+        /// <returns>The token of the specified login.</returns>
+        public virtual string GetToken(string loginName)
+        {
+            DataRowView drv = GetLogin(loginName);
+            if (drv != null)
+            {
+                if (!Support.IsNullOrDBNull(drv["Token"]))
+                    return (string)drv["Token"];
             }
             return null;
         }
@@ -1884,6 +1917,52 @@ namespace Micajah.Common.Bll.Providers
             body = body.Replace("{ApplicationUrl}", FrameworkConfiguration.Current.WebApplication.Url);
 
             Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
+        }
+
+        /// <summary>
+        /// Generates a new token for the specified login.
+        /// </summary>
+        /// <param name="loginId">The unique identifier for the login to reset token of.</param>
+        /// <returns>A newly generated token.</returns>
+        public virtual string ResetToken(Guid loginId)
+        {
+            string token = Support.GeneratePseudoUnique(32);
+            SqlConnection connection = null;
+            SqlCommand command = null;
+
+            try
+            {
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+
+                command = new SqlCommand("[dbo].[Mc_UpdateLoginToken]", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
+
+                Support.ExecuteNonQuery(command);
+            }
+            finally
+            {
+                if (connection != null) connection.Dispose();
+                if (command != null) command.Dispose();
+            }
+
+            return token;
+        }
+
+        /// <summary>
+        /// Generates a new token for the specified login.
+        /// </summary>
+        /// <param name="loginName">The name for the login to reset token of.</param>
+        /// <returns>A newly generated token.</returns>
+        public virtual string ResetToken(string loginName)
+        {
+            Guid loginId = Guid.Empty;
+            DataRowView drv = GetLogin(loginName);
+            if (drv != null)
+                loginId = (Guid)drv["LoginId"];
+
+            return ResetToken(loginId);
         }
 
         /// <summary>
