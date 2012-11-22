@@ -64,9 +64,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     string url = CustomUrlProvider.GetVanityUrl(ctx != null ? ctx.SelectedOrganization.OrganizationId : UserContext.SelectedOrganizationId, instanceId);
                     ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
-                    if (!string.IsNullOrEmpty(redirectUrl))                        
-                        url = string.Format("{0}{1}", url, redirectUrl);
-                    errorDiv.Page.Response.Redirect("https://"+url, true);
+                    if (!string.IsNullOrEmpty(redirectUrl))
+                        url += redirectUrl;
+                    errorDiv.Page.Response.Redirect((errorDiv.Page.Request.IsSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp) + Uri.SchemeDelimiter + url, true);
                 }
 
                 ctx.SelectInstance(instanceId);
@@ -98,8 +98,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
         {
-            UserContext ctx = UserContext.Current;           
-           
+            UserContext ctx = UserContext.Current;
+
             if (!string.IsNullOrEmpty(redirectUrl))
             {
                 string relativeUrl = WebApplication.CreateApplicationRelativeUrl(redirectUrl);

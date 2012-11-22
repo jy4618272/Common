@@ -92,9 +92,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                     redirectUrl = CustomUrlProvider.GetVanityUrl(organizationId, Guid.Empty);
                     ActiveInstanceControl.ValidateRedirectUrl(ref returnUrl, true);
                     if (!string.IsNullOrEmpty(returnUrl))
-                        redirectUrl = string.Format("{0}{1}", redirectUrl, returnUrl);
-
-                    errorDiv.Page.Response.Redirect("https://" + redirectUrl, true);
+                        redirectUrl += returnUrl;
+                    errorDiv.Page.Response.Redirect((errorDiv.Page.Request.IsSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp) + Uri.SchemeDelimiter + redirectUrl, true);
                 }
 
                 ctx.SelectOrganization(organizationId);
