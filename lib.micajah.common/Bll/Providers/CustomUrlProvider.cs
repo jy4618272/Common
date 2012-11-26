@@ -375,16 +375,9 @@ namespace Micajah.Common.Bll.Providers
 
                 if (uc != null)
                 {
-                    try
-                    {
-                        uc.SelectOrganization(org.OrganizationId);
-                        if (instance != null)
-                            uc.SelectInstance(instance.InstanceId);
-                    }
-                    catch (System.Security.Authentication.AuthenticationException)
-                    {
-                        (new LoginProvider()).SignOut();
-                    }
+                    uc.SelectOrganization(org.OrganizationId);
+                    if (instance != null)
+                        uc.SelectInstance(instance.InstanceId);
                 }
                 else
                     Security.UserContext.VanityUrl = string.Empty;

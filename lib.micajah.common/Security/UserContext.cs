@@ -960,20 +960,13 @@ namespace Micajah.Common.Security
                                     UserContext.SelectedInstanceId = coll[0].InstanceId;
                             }
 
-                            try
-                            {
-                                if (UserContext.SelectedOrganizationId != Guid.Empty)
-                                    user.SelectOrganization(UserContext.SelectedOrganizationId);
+                            if (UserContext.SelectedOrganizationId != Guid.Empty)
+                                user.SelectOrganization(UserContext.SelectedOrganizationId);
 
-                                if (UserContext.SelectedInstanceId != Guid.Empty)
-                                    user.SelectInstance(UserContext.SelectedInstanceId);
+                            if (UserContext.SelectedInstanceId != Guid.Empty)
+                                user.SelectInstance(UserContext.SelectedInstanceId);
 
-                                Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
-                            }
-                            catch (AuthenticationException)
-                            {
-                                (new LoginProvider()).SignOut();
-                            }
+                            Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
                         }
                     }
                     else
