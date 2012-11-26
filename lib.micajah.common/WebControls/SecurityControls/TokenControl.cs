@@ -61,6 +61,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void Page_Load(object sender, EventArgs e)
         {
             ResetTokenButton.Text = Resources.TokenControl_ResetTokenButton_Text;
+            ResetTokenButton.OnClientClick = string.Concat("return confirm('", Resources.TokenControl_ResetTokenButton_ConfirmText, "');");
         }
 
         protected void ResetTokenButton_Click(object sender, EventArgs e)

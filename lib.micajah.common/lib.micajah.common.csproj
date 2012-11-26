@@ -2004,9 +2004,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\SettingsDiagnostic.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Users.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Users.ascx" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ActiveInstance.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
