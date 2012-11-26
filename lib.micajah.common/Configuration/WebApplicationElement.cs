@@ -18,7 +18,7 @@ namespace Micajah.Common.Configuration
         /// <summary>
         /// The required schema version of the database.
         /// </summary>
-        internal const int RequiredDatabaseVersion = 103;
+        internal const int RequiredDatabaseVersion = 104;
 
         private string m_ApplicationUrl;
         private object m_AuthenticationMode;
