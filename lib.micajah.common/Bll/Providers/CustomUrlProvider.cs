@@ -283,7 +283,7 @@ namespace Micajah.Common.Bll.Providers
                 if (string.IsNullOrEmpty(fullCustomUrl))
                     fullCustomUrl = string.Empty;
                 if (string.IsNullOrEmpty(partialCustomUrl))
-                    partialCustomUrl = string.Empty;                
+                    partialCustomUrl = string.Empty;
 
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
 
@@ -375,9 +375,16 @@ namespace Micajah.Common.Bll.Providers
 
                 if (uc != null)
                 {
-                    uc.SelectOrganization(org.OrganizationId);
-                    if (instance != null)
-                        uc.SelectInstance(instance.InstanceId);
+                    try
+                    {
+                        uc.SelectOrganization(org.OrganizationId);
+                        if (instance != null)
+                            uc.SelectInstance(instance.InstanceId);
+                    }
+                    catch (System.Security.Authentication.AuthenticationException)
+                    {
+                        (new LoginProvider()).SignOut();
+                    }
                 }
                 else
                     Security.UserContext.VanityUrl = string.Empty;
