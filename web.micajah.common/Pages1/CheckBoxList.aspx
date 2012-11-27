@@ -15,4 +15,7 @@
     <br />
     <br />
     <mits:CheckBox ID="CheckBox1" runat="server" RenderingMode="OnOffSwitch" />
+    <br />
+    <br />
+    <mits:CheckBox ID="CheckBox2" runat="server" RenderingMode="OnOffSwitch" />
 </asp:Content>
