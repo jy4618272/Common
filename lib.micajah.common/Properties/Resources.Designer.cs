@@ -4934,7 +4934,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Token.
+        ///   Looks up a localized string similar to API Token.
         /// </summary>
         internal static string ProfileControl_EditForm_TokenField_HeaderText {
             get {
@@ -6483,6 +6483,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reset your API Token?\r\nThis will cause any previously setup mobile applications or other integrated applications to stop working until the API token is updated in those applications..
+        /// </summary>
+        internal static string TokenControl_ResetTokenButton_ConfirmText {
+            get {
+                return ResourceManager.GetString("TokenControl_ResetTokenButton_ConfirmText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
         internal static string TokenControl_ResetTokenButton_Text {
@@ -7015,7 +7024,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Token.
+        ///   Looks up a localized string similar to API Token.
         /// </summary>
         internal static string UsersControl_EditForm_TokenField_HeaderText {
             get {

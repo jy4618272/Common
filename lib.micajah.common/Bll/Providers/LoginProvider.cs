@@ -1227,7 +1227,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source based on the unique identifier for the login.
+        /// Gets information from the data source based on the name for the login.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
         /// <returns>An object populated with the specified login's information from the data source.</returns>
@@ -1283,6 +1283,33 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
             return drv;
+        }
+
+        /// <summary>
+        /// Gets information from the data source based on the token for the login.
+        /// </summary>
+        /// <param name="token">The token for the login to get information for.</param>
+        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        public virtual DataRowView GetLoginByToken(string token)
+        {
+            SqlConnection connection = null;
+            SqlCommand command = null;
+
+            try
+            {
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+
+                command = new SqlCommand("dbo.Mc_GetLoginByToken", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
+
+                return Support.GetDataRowView(command);
+            }
+            finally
+            {
+                if (connection != null) connection.Dispose();
+                if (command != null) command.Dispose();
+            }
         }
 
         /// <summary>

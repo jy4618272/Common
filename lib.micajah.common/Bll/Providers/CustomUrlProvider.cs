@@ -283,7 +283,7 @@ namespace Micajah.Common.Bll.Providers
                 if (string.IsNullOrEmpty(fullCustomUrl))
                     fullCustomUrl = string.Empty;
                 if (string.IsNullOrEmpty(partialCustomUrl))
-                    partialCustomUrl = string.Empty;                
+                    partialCustomUrl = string.Empty;
 
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
 

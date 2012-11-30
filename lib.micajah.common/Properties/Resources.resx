@@ -2522,9 +2522,12 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Reset</value>
   </data>
   <data name="ProfileControl_EditForm_TokenField_HeaderText" xml:space="preserve">
-    <value>Token</value>
+    <value>API Token</value>
   </data>
   <data name="UsersControl_EditForm_TokenField_HeaderText" xml:space="preserve">
-    <value>Token</value>
+    <value>API Token</value>
+  </data>
+  <data name="TokenControl_ResetTokenButton_ConfirmText" xml:space="preserve">
+    <value>Are you sure you want to reset your API Token?\r\nThis will cause any previously setup mobile applications or other integrated applications to stop working until the API token is updated in those applications.</value>
   </data>
 </root>

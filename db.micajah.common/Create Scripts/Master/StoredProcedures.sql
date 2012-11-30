@@ -50,8 +50,8 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Ge
 DROP PROCEDURE [dbo].[Mc_GetResetPasswordRequestsByLoginId]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateWebsite]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_UpdateWebsite]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsDomains]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetResetPasswordRequest]') AND type in (N'P', N'PC'))
@@ -162,6 +162,10 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Up
 DROP PROCEDURE [dbo].[Mc_UpdateCustomUrl]
 GO
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_UpdateWebsite]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_UpdateWebsite]
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetCountries]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetCountries]
 GO
@@ -214,8 +218,8 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_De
 DROP PROCEDURE [dbo].[Mc_DeleteEmail]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsDomains]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_DeleteCustomUrl]') AND type in (N'P', N'PC'))
@@ -246,16 +250,16 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Ge
 DROP PROCEDURE [dbo].[Mc_GetEmails]
 GO
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetLoginsByOrganizationId]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetLoginsByOrganizationId]
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationLogin]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetOrganizationLogin]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizations]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetOrganizations]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetLoginsByOrganizationId]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetLoginsByOrganizationId]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetLoginByToken]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetLoginByToken]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetLoginByEmail]') AND type in (N'P', N'PC'))
@@ -266,24 +270,24 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_Ge
 DROP PROCEDURE [dbo].[Mc_GetLoginByLoginName]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsAll]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsAll]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]
-GO
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroups]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroups]
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsByLdapDomain]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Mc_GetOrganizationsByLdapDomain]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsLdapGroupsAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsAll]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsByLoginId]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Mc_GetOrganizationsByLoginId]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizations]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetOrganizations]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetOrganizationsByLdapDomain]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Mc_GetOrganizationsByLdapDomain]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmailSuffixesByOrganizationId]') AND type in (N'P', N'PC'))
@@ -725,29 +729,40 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [dbo].[Mc_UpdateWebsite]
+CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
 (
-	@WebsiteId uniqueidentifier,
-	@Name nvarchar(255),
-	@Url nvarchar(2048),
-	@Description nvarchar(1024),
-	@AdminContactInfo nvarchar(2048),
-	@Deleted bit
-)
+	@OrganizationId uniqueidentifier)
 AS
 BEGIN
 	SET NOCOUNT OFF;
-
-	UPDATE dbo.Mc_WebSite
-	SET [Name] = @Name, Url = @Url, [Description] = @Description, AdminContactInfo = @AdminContactInfo, Deleted = @Deleted 
-	WHERE (WebsiteId = @WebsiteId);
 	
-	SELECT WebsiteId, [Name], Url, [Description], AdminContactInfo, Deleted 
-	FROM dbo.Mc_WebSite 
-	WHERE (WebsiteId = @WebsiteId);
+	SELECT 
+		Domain
+		,[DomainId]
+		,CASE [Id]
+			WHEN '00000000-0000-0000-0000-000000000000' THEN NEWID()
+		END as [Id]
+		,[OrganizationId]
+		,[ObjectGUID]
+		,[Name]
+		,[DistinguishedName]
+		,[CreatedTime]
+	FROM
+	(
+		SELECT 
+			DISTINCT Domain
+			, [DomainId] as [DomainId]
+			, '00000000-0000-0000-0000-000000000000' as [Id]
+			, @OrganizationId as [OrganizationId]
+			, '00000000-0000-0000-0000-000000000000' as [ObjectGUID]
+			, '' as [Name]
+			, '' as [DistinguishedName]
+			, GETUTCDATE() as [CreatedTime]
+		FROM [dbo].[Mc_OrganizationsLdapGroups]
+		WHERE (OrganizationId = @OrganizationId)
+	) A	
+	ORDER BY Domain
 END
-
 
 GO
 
@@ -1646,6 +1661,38 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+CREATE PROCEDURE [dbo].[Mc_UpdateWebsite]
+(
+	@WebsiteId uniqueidentifier,
+	@Name nvarchar(255),
+	@Url nvarchar(2048),
+	@Description nvarchar(1024),
+	@AdminContactInfo nvarchar(2048),
+	@Deleted bit
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	UPDATE dbo.Mc_WebSite
+	SET [Name] = @Name, Url = @Url, [Description] = @Description, AdminContactInfo = @AdminContactInfo, Deleted = @Deleted 
+	WHERE (WebsiteId = @WebsiteId);
+	
+	SELECT WebsiteId, [Name], Url, [Description], AdminContactInfo, Deleted 
+	FROM dbo.Mc_WebSite 
+	WHERE (WebsiteId = @WebsiteId);
+END
+
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[Mc_GetCountries]
 AS
 BEGIN
@@ -1939,39 +1986,26 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsDomains]
+
+CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]
 (
-	@OrganizationId uniqueidentifier)
+	@OrganizationId uniqueidentifier
+)
 AS
 BEGIN
 	SET NOCOUNT OFF;
 	
-	SELECT 
-		Domain
-		,[DomainId]
-		,CASE [Id]
-			WHEN '00000000-0000-0000-0000-000000000000' THEN NEWID()
-		END as [Id]
-		,[OrganizationId]
-		,[ObjectGUID]
-		,[Name]
-		,[DistinguishedName]
-		,[CreatedTime]
-	FROM
-	(
-		SELECT 
-			DISTINCT Domain
-			, [DomainId] as [DomainId]
-			, '00000000-0000-0000-0000-000000000000' as [Id]
-			, @OrganizationId as [OrganizationId]
-			, '00000000-0000-0000-0000-000000000000' as [ObjectGUID]
-			, '' as [Name]
-			, '' as [DistinguishedName]
-			, GETUTCDATE() as [CreatedTime]
-		FROM [dbo].[Mc_OrganizationsLdapGroups]
-		WHERE (OrganizationId = @OrganizationId)
-	) A	
-	ORDER BY Domain
+	SELECT [Id]
+      ,[OrganizationId]
+	  ,[DomainId]
+      ,[Domain]
+      ,[ObjectGUID]
+      ,[Name]
+      ,[DistinguishedName]
+      ,[CreatedTime]
+	FROM [dbo].[Mc_OrganizationsLdapGroups]
+	WHERE (OrganizationId = @OrganizationId)
+	ORDER BY [Name]
 END
 
 GO
@@ -2137,6 +2171,29 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+CREATE PROCEDURE [dbo].[Mc_GetLoginsByOrganizationId]      
+(      
+	@OrganizationId uniqueidentifier      
+)      
+AS      
+BEGIN      
+	SET NOCOUNT OFF;      
+
+	SELECT l.LoginId, l.FirstName, l.LastName, l.LoginName, l.[Password], l.ProfileUpdated, l.Deleted, l.SessionId, l.Token
+		, ol.OrganizationAdministrator, ol.LdapDomain, ol.LdapDomainFull, ol.LdapUserAlias, ol.LdapUPN, ol.LdapSecurityId, ol.LdapUserId, ol.LdapOUPath, ol.Active      
+	FROM dbo.Mc_OrganizationsLogins AS ol      
+	INNER JOIN dbo.Mc_Login AS l      
+		ON (ol.LoginId = l.LoginId) AND (ol.OrganizationId = @OrganizationId) AND (l.Deleted = 0);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationLogin]    
 (    
  @OrganizationId uniqueidentifier,    
@@ -2161,39 +2218,17 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[Mc_GetOrganizations]  
-AS  
-BEGIN  
- SET NOCOUNT OFF;  
-  
- SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId  
-  , FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, LdapServerAddress, LdapServerPort, LdapDomain, LdapUserName, LdapPassword, LdapDomains  
-  , ExpirationTime, GraceDays, ExternalId, Active, CanceledTime, Trial, Beta, Deleted, CreatedTime, BillingPlan
-  , Street, Street2, City, [State], PostalCode, Country, Currency
- FROM dbo.Mc_Organization   
-END
+CREATE PROCEDURE [dbo].[Mc_GetLoginByToken]
+(
+	@Token varchar(50)
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
 
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[Mc_GetLoginsByOrganizationId]      
-(      
-	@OrganizationId uniqueidentifier      
-)      
-AS      
-BEGIN      
-	SET NOCOUNT OFF;      
-
-	SELECT l.LoginId, l.FirstName, l.LastName, l.LoginName, l.[Password], l.ProfileUpdated, l.Deleted, l.SessionId, l.Token
-		, ol.OrganizationAdministrator, ol.LdapDomain, ol.LdapDomainFull, ol.LdapUserAlias, ol.LdapUPN, ol.LdapSecurityId, ol.LdapUserId, ol.LdapOUPath, ol.Active      
-	FROM dbo.Mc_OrganizationsLogins AS ol      
-	INNER JOIN dbo.Mc_Login AS l      
-		ON (ol.LoginId = l.LoginId) AND (ol.OrganizationId = @OrganizationId) AND (l.Deleted = 0);
+	SELECT LoginId, FirstName, LastName, LoginName, [Password], ProfileUpdated, Deleted, SessionId, Token
+	FROM dbo.Mc_Login
+	WHERE Token = @Token;
 END
 
 GO
@@ -2257,67 +2292,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsAll]
-(
-	@OrganizationId uniqueidentifier,
-	@Domain nvarchar(255)
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-	
-	SELECT [Id]
-      ,[OrganizationId]
-	  ,[DomainId]
-      ,[Domain]
-      ,[ObjectGUID]
-      ,[Name]
-      ,[DistinguishedName]
-      ,[CreatedTime]
-	FROM [dbo].[Mc_OrganizationsLdapGroups]
-	WHERE (OrganizationId = @OrganizationId) AND (Domain = @Domain)
-	ORDER BY [Name]
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsByOrganizationId]
-(
-	@OrganizationId uniqueidentifier
-)
-AS
-BEGIN
-	SET NOCOUNT OFF;
-	
-	SELECT [Id]
-      ,[OrganizationId]
-	  ,[DomainId]
-      ,[Domain]
-      ,[ObjectGUID]
-      ,[Name]
-      ,[DistinguishedName]
-      ,[CreatedTime]
-	FROM [dbo].[Mc_OrganizationsLdapGroups]
-	WHERE (OrganizationId = @OrganizationId)
-	ORDER BY [Name]
-END
-
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
 CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroups]
 (
 	@OrganizationId uniqueidentifier,
@@ -2348,21 +2322,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[Mc_GetOrganizationsByLdapDomain]
+
+CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroupsAll]
 (
-	@LdapDomain nvarchar(255)
+	@OrganizationId uniqueidentifier,
+	@Domain nvarchar(255)
 )
 AS
 BEGIN
 	SET NOCOUNT OFF;
-
-	SELECT o.OrganizationId, o.PseudoId, o.[Name], o.[Description], o.WebsiteUrl, o.DatabaseId
-		, o.FiscalYearStartMonth, o.FiscalYearStartDay, o.WeekStartsDay, o.LdapServerAddress, o.LdapServerPort, o.LdapDomain, o.LdapUserName, o.LdapPassword, o.LdapDomains
-		, o.ExpirationTime, o.GraceDays, o.ExternalId, o.Active, o.CanceledTime, o.Trial, o.Beta, o.Deleted, o.CreatedTime, o.BillingPlan
-		, o.Street, o.Street2, o.City, o.[State], o.PostalCode, o.Country, o.Currency
-	FROM dbo.Mc_Organization AS o
-	WHERE (o.Deleted = 0) AND (o.Active = 1) AND (',' + o.LdapDomains + ',' like '%,' + @LdapDomain + ',%')
-	ORDER BY o.LdapServerAddress DESC;
+	
+	SELECT [Id]
+      ,[OrganizationId]
+	  ,[DomainId]
+      ,[Domain]
+      ,[ObjectGUID]
+      ,[Name]
+      ,[DistinguishedName]
+      ,[CreatedTime]
+	FROM [dbo].[Mc_OrganizationsLdapGroups]
+	WHERE (OrganizationId = @OrganizationId) AND (Domain = @Domain)
+	ORDER BY [Name]
 END
 
 GO
@@ -2388,6 +2368,51 @@ BEGIN
 	FROM dbo.Mc_OrganizationsLogins AS ol
 	INNER JOIN dbo.Mc_Organization AS o
 		ON (ol.OrganizationId = o.OrganizationId) AND (ol.LoginId = @LoginId) AND (o.Deleted = 0) AND (o.Active = 1) AND (ol.Active = 1);
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetOrganizations]  
+AS  
+BEGIN  
+ SET NOCOUNT OFF;  
+  
+ SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId  
+  , FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, LdapServerAddress, LdapServerPort, LdapDomain, LdapUserName, LdapPassword, LdapDomains  
+  , ExpirationTime, GraceDays, ExternalId, Active, CanceledTime, Trial, Beta, Deleted, CreatedTime, BillingPlan
+  , Street, Street2, City, [State], PostalCode, Country, Currency
+ FROM dbo.Mc_Organization   
+END
+
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Mc_GetOrganizationsByLdapDomain]
+(
+	@LdapDomain nvarchar(255)
+)
+AS
+BEGIN
+	SET NOCOUNT OFF;
+
+	SELECT o.OrganizationId, o.PseudoId, o.[Name], o.[Description], o.WebsiteUrl, o.DatabaseId
+		, o.FiscalYearStartMonth, o.FiscalYearStartDay, o.WeekStartsDay, o.LdapServerAddress, o.LdapServerPort, o.LdapDomain, o.LdapUserName, o.LdapPassword, o.LdapDomains
+		, o.ExpirationTime, o.GraceDays, o.ExternalId, o.Active, o.CanceledTime, o.Trial, o.Beta, o.Deleted, o.CreatedTime, o.BillingPlan
+		, o.Street, o.Street2, o.City, o.[State], o.PostalCode, o.Country, o.Currency
+	FROM dbo.Mc_Organization AS o
+	WHERE (o.Deleted = 0) AND (o.Active = 1) AND (',' + o.LdapDomains + ',' like '%,' + @LdapDomain + ',%')
+	ORDER BY o.LdapServerAddress DESC;
 END
 
 GO
