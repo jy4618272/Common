@@ -86,6 +86,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string CustomStyleSheet = "Styles.Custom.css";
         internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-1.3.4.css";
         internal const string CommonGridViewModernStyleSheet = "Styles.CommonGridViewModern.css";
+        internal const string AccountSettingsStyleSheet = "Styles.AccountSettings.css"; 
         internal const string GlobalModernStyleSheet = "Styles.GlobalModern.css";
         internal const string GlobalStyleSheet = "Styles.Global.css";
         internal const string LogOnStyleSheet = "Styles.LogOn.css";
@@ -230,6 +231,8 @@ namespace Micajah.Common.Bll.Providers
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(GetManifestResourceString(resourceName), MasterPageTheme.Modern, MasterPageThemeColor.NotSet));
             else if (resourceName.EndsWith(CommonGridViewModernStyleSheet, StringComparison.OrdinalIgnoreCase))
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessCommonGridViewModernStyleSheet(GetManifestResourceString(resourceName)));
+            else if (resourceName.EndsWith(AccountSettingsStyleSheet, StringComparison.OrdinalIgnoreCase))
+                content = UnicodeEncoding.UTF8.GetBytes(ProcessAccountSettingsStyleSheet(GetManifestResourceString(resourceName)));
             else if (resourceName.EndsWith(OnOffSwitchStyleSheet, StringComparison.OrdinalIgnoreCase))
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessOnOffSwitchStyleSheet(GetManifestResourceString(resourceName)));
             else if (resourceName.EndsWith(NoticeMessageBoxStyleSheet, StringComparison.OrdinalIgnoreCase))
@@ -406,6 +409,11 @@ namespace Micajah.Common.Bll.Providers
         private static string ProcessCommonGridViewModernStyleSheet(string styleSheetContent)
         {
             return ProcessStyleSheet(styleSheetContent, new string[] { "Search.png", "DropMenu.png", "Gear.png", "Cross.png" }, "Images.Micajah.Common.WebControls.CommonGridView.{0}");
+        }
+
+        private static string ProcessAccountSettingsStyleSheet(string styleSheetContent)
+        {
+            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "assets.png", "billing.png", "credit_card.png", "discover.png", "email.png", "help.png", "ldap.png", "mastercard.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "visa.png" }, "Images.Micajah.Common.WebControls.AdminControls.AccountSettings.{0}");
         }
 
         private static string ProcessComboBoxModernStyleSheet(string styleSheetContent)
