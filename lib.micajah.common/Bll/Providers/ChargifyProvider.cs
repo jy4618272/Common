@@ -75,7 +75,7 @@ namespace Micajah.Common.Bll.Providers
 
                 int _cid = 0;
                 bool _checked = false;
-                if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || !bool.TryParse(setting.Value, out _checked)) continue;
+                if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || setting.DefaultValue=="-1" || !bool.TryParse(setting.Value, out _checked)) continue;
                 chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _checked ? 1 : 0);
             }
 

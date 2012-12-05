@@ -93,6 +93,31 @@ xmp {
   font-size: 100%;
 }
 
+    .rtWrapperTopCenter {position: relative;}
+    div.RadToolTip .rtWrapperTopCenter a.rtCloseButton
+    {
+        position: absolute;
+        top: -18px;
+        right: -16px;
+        background-image: url("$fancy_close.png$") !important;
+        background-position: 0 0 !important;
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    .Error {position: static !important;}
+    
+    .ccformsubmit {text-align: center;}
+
+    p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset, figure {margin-bottom: 20px;}
+    h1, h2, h3, h4, h5, xx-large, x-large, large, p {font-weight: normal;}
+    h1 {font-size: 25px;}
+    h2 {font-size: 23px;}
+    h3 {font-size: 21px;}
+    h4 {font-size: 19px;}
+    h5 {font-size: 17px;}
+    h6 {font-size: 15px;}
+    
     a {font-family: arial, Sans-Serif; color: #42657C;} 
     table {border-collapse: collapse; border-spacing: 0; width: 100%;}
     th,td,caption {font-weight: normal; vertical-align: top; text-align: left;}
@@ -100,6 +125,8 @@ xmp {
 
     .planinfo {margin: 0; width: 600px;}
     .planinfo small.plandescsm {float: left;}
+    small {color: #999999; font-size: 75%; font-family: arial,helvetica,sans-serif;} 
+
     .account-head {overflow:hidden; margin-top: 30px;}
     .account-type {width: 90px; max-width: 150px; border-right: 1px solid #417da6; overflow: hidden; float: left; padding: 7px 0;}
     .planinfo h2, .payment-set h4 {margin: 0; padding: 0; line-height: 1em;}
@@ -163,6 +190,22 @@ xmp {
     .training p span {font-size: 1.4em;}
     #training-consulting td p {padding: 15px 0 0;}
     .purchase {float: right; margin-top: 12px;}
+
+/* --  CC Update Pop -- */
+
+#credit_card_form .content .cards_select {margin: 0 74px;}
+#credit_card_form {min-width: 350px; overflow: hidden; padding: 10px;}
+#credit_card_form .content {color: #333333; font-size: 12px; width: 380px;}
+#credit_card_form .content h2 {border-bottom: 1px solid #DDDDDD !important; font-size: 16px; margin: 0 0 10px -10px; padding: 0 10px 10px; width: 100%;}  
+ul.cards {height: 32px; margin: 0 0 25px !important;}
+ul.cards li {float: left; list-style-type: none; margin: 0 7px 0 0 !important;}
+ul.cards .card.visa {background-image: url("$visa.png$");}
+ul.cards .card.master {background-image: url("$mastercard.png$");}
+ul.cards .card.american-express {background-image: url("$amex.png$");}
+ul.cards .card.discover {background-image: url("$discover.png$");}
+ul.cards .card {background-position: 0 0; background-repeat: no-repeat; float: left; height: 32px; text-indent: -9999px; width: 51px;}
+ul.cards li.text {color: #999999; font-size: 11px; position: relative; top: 9px;}
+dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3px;}
     
 
 /* Clear Floated Elements
@@ -271,6 +314,21 @@ xmp {
 }
 
 /*---- Tooltip css  ---------------------------------------------*/
+
+.tooltipSetting {
+	/* CSS3 Gradients */
+	background: #404040; /* Old browsers */
+	background: -moz-linear-gradient(top,  #4e4e4e 0%, #404040 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4e4e4e), color-stop(100%,#404040)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #4e4e4e 0%,#404040 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #4e4e4e 0%,#404040 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #4e4e4e 0%,#404040 100%); /* IE10+ */
+	background: linear-gradient(top,  #4e4e4e 0%,#404040 100%); /* W3C */
+    border-color: #404040;
+    color: #FFFFFF !important;
+    font-family: arial,sans-serif !important;
+    font-size: 13px !important;
+}
 
 /* --- Container --- */
 .tooltip span

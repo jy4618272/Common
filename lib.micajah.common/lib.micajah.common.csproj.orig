@@ -1957,7 +1957,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v102.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v103.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v104.sql" />
+<<<<<<< HEAD
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\amex.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\assets.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\billing.png" />
@@ -1973,7 +1973,9 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\ssl.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\visa.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\fancy_close.png" />
+=======
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v104.sql" />
+>>>>>>> ccfe84c31f9cc16d195db761bfd60eff4ba9b2a2
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

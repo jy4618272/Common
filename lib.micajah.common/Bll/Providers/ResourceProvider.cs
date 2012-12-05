@@ -413,7 +413,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static string ProcessAccountSettingsStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "assets.png", "billing.png", "credit_card.png", "discover.png", "email.png", "help.png", "ldap.png", "mastercard.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "visa.png" }, "Images.Micajah.Common.WebControls.AdminControls.AccountSettings.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "assets.png", "billing.png", "credit_card.png", "discover.png", "email.png", "help.png", "ldap.png", "mastercard.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "visa.png", "fancy_close.png" }, "Images.Micajah.Common.WebControls.AdminControls.AccountSettings.{0}");
         }
 
         private static string ProcessComboBoxModernStyleSheet(string styleSheetContent)

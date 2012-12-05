@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.AdminControls.AccountSettingsControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4" %>
 <asp:PlaceHolder ID="PageContent" runat="server">
 <div class="planinfo">
     <div class="account-head">
@@ -9,7 +10,7 @@
         </div>
         <div class="payment-set">
             <div class="payment-update">
-                <a id="inline" class="buttons" rel="facebox" href="#credit_card_form">Update credit card</a>
+                <a id="aBtnCCUpdate" class="buttons" rel="facebox" href="#credit_card_form">Update credit card</a>
             </div>
             <div class="payment-status">
                 <h4><asp:Literal ID="lCCStatus" runat="server" Text="No Credit Card on File."></asp:Literal></h4><small class="plandescsm"><asp:Literal ID="lNextBillDate" runat="server" Text="Next billed on 8 October 2011" Visible="False"></asp:Literal></small>
@@ -52,8 +53,9 @@
         </div>
         <div id="phonesupport">
             <h4>Phone Support</h4><span id="phone-service"><h4><asp:Literal ID="lPhoneSupport" runat="server" Text="(866) 996-1200"></asp:Literal></h4></span>
-            <div class="feature-toggle">
-                <mits:CheckBox ID="chkPhoneSupport" runat="server" RenderingMode="OnOffSwitch"/>
+            <div class="feature-toggle" id="divbtPhoneSupportOnOff">
+                <mits:CheckBox ID="chkPhoneSupport" runat="server" RenderingMode="OnOffSwitch" AutoPostBack="True" OnCheckedChanged="checkBox_CheckedChanged"/>
+                <asp:PlaceHolder runat="server" ID="phPhoneSupportToolTip"></asp:PlaceHolder>
             </div>
         </div>
     </div>
@@ -64,30 +66,30 @@
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>1 Hour</strong> <span>$175</span></p>
+                        <p><strong>1 Hour</strong><asp:Label runat="server" ID="lblTraining1HourPrice"></asp:Label></p>
                     </div>
                     <div class="purchase">
-                        <asp:Button runat="server" ID="btnPurchase1Hour" CssClass="Green" Text="Purchase"/>
+                        <asp:Button runat="server" ID="btnPurchase1Hour" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>3 Hours</strong> <span>$475</span></p>
+                        <p><strong>3 Hours</strong><asp:Label runat="server" ID="lblTraining3HoursPrice"></asp:Label></p>
                     </div>
                     <div class="purchase">
-                        <asp:Button runat="server" ID="btnPurchase3Hours" CssClass="Green" Text="Purchase"/>
+                        <asp:Button runat="server" ID="btnPurchase3Hours" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>5 Hours</strong> <span>$675</span></p>
+                        <p><strong>8 Hours</strong><asp:Label runat="server" ID="lblTraining8HoursPrice"></asp:Label></p>
                     </div>
                     <div class="purchase">
-                        <asp:Button runat="server" ID="btnPurchase5Hours" CssClass="Green" Text="Purchase"/>
+                        <asp:Button runat="server" ID="btnPurchase8Hours" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
                     </div>
                 </td>
             </tr>
@@ -96,11 +98,71 @@
     <div class="account-heading"><h2>Cancel Account</h2></div>
     <div id="cancel-account">
         <div style="width: 225px; float: right;">
-            <asp:Button runat="server" ID="btnCancelMyAccount" CssClass="Large Red" Text="Cancel My Account"/>
+            <asp:Button runat="server" ID="btnCancelMyAccount" CssClass="Large Red" Text="Cancel My Account" Enabled="False"/>
         </div>
         <div>
             Note that you will lose information stored on our servers once you delete your account.
         </div>
     </div>
 </div>
+
+<!-- Pop ups from here down -->
+<telerik:RadToolTip runat="server" ID="RadToolTip1" TargetControlID="aBtnCCUpdate" IsClientID="True"
+    ShowEvent="OnClick" HideEvent="ManualClose" Position="Center" RelativeTo="BrowserWindow" EnableShadow="True" OffsetY="-1" Modal="True"
+    Width="400px" Height="400px">
+            <div id="credit_card_form">    
+            <div class="content">
+                <asp:UpdatePanel runat="server" ID="UpdatePanel3">
+                <ContentTemplate>
+                <mits:NoticeMessageBox runat="server" ID="msgStatus" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
+                 <div class="cards_select">  
+                    <ul class="cards">
+                        <li>
+                        <span data-name="visa" title="Visa" class="card visa">Visa</span>
+                        </li>    
+                        <li>
+                        <span data-name="master" title="Mastercard" class="card master">Mastercard</span>
+                        </li>    
+                        <li>
+                        <span data-name="american-express" title="American Express" class="card american-express">American Express</span>
+                        </li>    
+                        <li>
+                        <span data-name="discover" title="Discover" class="card discover">Discover</span>
+                        </li>
+                    </ul>
+                </div>
+                 <dl class="form">
+                   <dt><label>Email</label></dt>
+                    <dd><mits:TextBox runat="server" ID="txtEmail" Required="True" ValidationType="RegularExpression" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Width="300"/></dd>
+                 </dl>
+                 <dl class="form">
+                    <dt><label>Full Name</label></dt>
+                    <dd><mits:TextBox runat="server" ID="txtFullName" Required="True" Width="300"/></dd>
+                 </dl>
+                 <dl class="form">
+                   <dt><label>Card Number</label></dt>
+                   <dd><mits:TextBox runat="server" ID="txtCCNumber" Required="True" Width="300"/></dd>
+                 </dl>
+                 <dl class="form expiration">
+                   <dt><label>Expiration</label></dt>
+                   <dd>
+                       <mits:TextBox runat="server" ID="txtCCExpMonth" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
+                       <span>&nbsp;/&nbsp;</span>
+                       <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="12" MaximumValue="17" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
+                   </dd>
+                 </dl>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="btnUpdateCC" EventName="Click"/>
+                    <asp:PostBackTrigger ControlID="btnPurchase1Hour"/>
+                    <asp:PostBackTrigger ControlID="btnPurchase3Hours"/>
+                    <asp:PostBackTrigger ControlID="btnPurchase8Hours"/>
+                </Triggers>
+                </asp:UpdatePanel>    
+                 <div class="ccformsubmit">
+                    <asp:Button runat="server" ID="btnUpdateCC" CssClass="Large Green" Text="Update Credit Card" OnClick="btnUpdateCC_Click"/>
+	            </div>
+            </div>
+            </div>
+</telerik:RadToolTip>
 </asp:PlaceHolder>

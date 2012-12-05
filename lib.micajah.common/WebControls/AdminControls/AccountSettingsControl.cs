@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using ChargifyNET;
+using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using ChargifyNET;
+using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -30,15 +35,34 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Label lblPurchaseSum;
         protected Repeater Repeater1;
         protected Repeater Repeater2;
-        protected Button UpdateButton;
-        protected Button ChargifyPayButton;
+
+        protected Label lblTraining1HourPrice;
+        protected Label lblTraining3HoursPrice;
+        protected Label lblTraining8HoursPrice;
+
+        protected Button btnPurchase1Hour;
+        protected Button btnPurchase3Hours;
+        protected Button btnPurchase8Hours;
+
         protected HyperLink CancelLink;
         protected PlaceHolder ButtonsSeparator;
+        protected PlaceHolder phPhoneSupportToolTip;
         protected CheckBox chkPhoneSupport;
 
         private SettingCollection m_PaidSettings;
         private SettingCollection m_CounterSettings;
         private decimal m_TotalSum = 0;
+
+        protected TextBox txtEmail;
+        protected TextBox txtFullName;
+        protected TextBox txtCCNumber;
+        protected TextBox txtCCExpMonth;
+        protected TextBox txtCCExpYear;
+        protected NoticeMessageBox msgStatus;
+
+        protected RadToolTip RadToolTip1;
+
+        protected ChargifyConnect mChargify = null;
 
         protected decimal TotalAmount
         {
@@ -92,28 +116,91 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                return BillingPlan.Free;
                 return UserContext.Current.SelectedOrganization.BillingPlan;
             }
         }
 
+        protected ChargifyConnect Chargify
+        {
+            get { if (mChargify == null) mChargify = ChargifyProvider.CreateChargify(); return mChargify; }
+        }
+
+        protected bool IsNewSubscription
+        {
+            get { return ViewState["IsNewSubscription"] == null ? true : (bool)ViewState["IsNewSubscription"]; }
+            set { ViewState["IsNewSubscription"] = value; }
+        }
+
         private void List_DataBind()
         {
-            Repeater1.DataSource = this.PaidSettings;
-            Repeater1.DataBind();
             Repeater2.DataSource = this.CounterSettings;
             Repeater2.DataBind();
+            InitPhoneSupport();
+            TotalAmount = m_TotalSum;
+            if (TotalAmount > 0)
+            {
+                lBillingPlanName.Text = "PAID";
+                lSumPerMonth.Text = "$" + TotalAmount.ToString("0.00") + " per Month";
+                if (CurrentBillingPlan == BillingPlan.Free) Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
+            }
+            else
+            {
+                lBillingPlanName.Text = "FREE";
+                lSumPerMonth.Text = "per Month";
+                if (CurrentBillingPlan == BillingPlan.Paid) Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
+            }
+            InitBillingControls(!IsPostBack);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             EnsureActiveInstance();
+            Repeater1.DataSource = this.PaidSettings;
+            Repeater1.DataBind();
+
             if (IsPostBack) return;
 
+            if (Request.QueryString["st"]=="ok")
+            {
+                Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
+                masterPage.MessageType = NoticeMessageType.Success;
+                masterPage.Message = "Thank You. Your Credit Card Registered Successfully!";
+            }
+
             this.List_DataBind();
-            InitBillingControls(true);
             lPhoneSupport.Text = FrameworkConfiguration.Current.WebApplication.Support.Phone;
+
+            SettingCollection settings = this.PaidSettings;
+            if (settings["Training1Hour"] != null)
+                lblTraining1HourPrice.Text = settings["Training1Hour"].Price.ToString("$0.00");
+            if (settings["Training3Hours"] != null)
+                lblTraining3HoursPrice.Text = settings["Training3Hours"].Price.ToString("$0.00");
+            if (settings["Training8Hours"] != null)
+                lblTraining8HoursPrice.Text = settings["Training8Hours"].Price.ToString("$0.00");
+
+            ICustomer _cust = Chargify.LoadCustomer(OrganizationId.ToString());
+
+            if (_cust != null)
+            {
+                txtEmail.Text = _cust.Email;
+                txtFullName.Text = _cust.FirstName + " " + _cust.LastName;
+                IDictionary<int, ISubscription> _subscrList = Chargify.GetSubscriptionListForCustomer(_cust.ChargifyID);
+                if (_subscrList.Count > 0)
+                {
+                    ICreditCardView _cc = null;
+                    foreach (KeyValuePair<int, ISubscription> kvp in _subscrList)
+                    {
+                        _cc = kvp.Value.CreditCard;
+                        break;
+                    }
+                    txtCCNumber.Text = _cc.FullNumber;
+                    txtCCExpMonth.Text = _cc.ExpirationMonth.ToString();
+                    txtCCExpYear.Text = _cc.ExpirationYear.ToString().Length > 2 ? _cc.ExpirationYear.ToString().Substring(2) : _cc.ExpirationYear.ToString();
+                }
+                IsNewSubscription = false;
+            }
+            else IsNewSubscription = true;
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -139,169 +226,30 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private void InitBillingControls(bool updateUsage)
         {
-            lBillingPlanName.Text = CurrentBillingPlan.ToString();
+            if (CurrentBillingPlan == BillingPlan.Free) return;
 
-            if (CurrentBillingPlan != BillingPlan.Free)
+            DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
+            ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
+            ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, OrganizationId);
+            if (_custSubscr != null)
             {
-                DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
-                ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
-                ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, OrganizationId);
-                if (_custSubscr != null)
-                {
-                    _expDate = _custSubscr.CurrentPeriodEndsAt;
-                    if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr.SubscriptionID, OrganizationId);
-                    TotalAmount = m_TotalSum;
-                    lCCStatus.Text = "Credit Card Registered.";
-                    lSumPerMonth.Text = "$" + TotalAmount.ToString("0.00") + " per Month";
-                    TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
-                }
-                else lCCStatus.Text = "No Credit Card on File.";
+                _expDate = _custSubscr.CurrentPeriodEndsAt;
+                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr.SubscriptionID, OrganizationId);
+                TotalAmount = m_TotalSum;
+                SubscriptionId = _custSubscr.SubscriptionID;
+                lCCStatus.Text = "Credit Card Registered.";
+                TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
                 if (_expDate.HasValue)
                 {
                     lNextBillDate.Visible = true;
                     lNextBillDate.Text = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
                 }
             }
-        }
-
-        private void UpdateSettings()
-        {
-            NameValueCollection form = Request.Form;
-            SettingCollection settings = this.PaidSettings;
-            string value = null;
-
-            foreach (Setting setting in settings)
-            {
-                value = form[string.Concat(ControlIdPrefix, setting.SettingId.ToString("N"))];
-                setting.Value = ((value == null) ? "false" : "true");
-            }
-
-            settings.UpdateValues(OrganizationId, InstanceId);
-
-            UserContext.Current.Refresh();
-        }
-
-        private static Control CreateCheckBox(Setting setting, bool allowDisableState, bool diagnoseConflictingSettings, int visibleChildSettingsCount)
-        {
-            Control container = null;
-            HtmlGenericControl ctl = null;
-
-            try
-            {
-                string str = setting.SettingId.ToString("N");
-                string controlId = string.Concat(ControlIdPrefix, str);
-
-                bool isChecked = false;
-                if (!Boolean.TryParse(setting.Value, out isChecked))
-                {
-                    if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
-                }
-
-                container = new Control();
-                ctl = new HtmlGenericControl("input");
-                ctl.Attributes["type"] = "checkbox";
-                ctl.Attributes["class"] = "Nm";
-                ctl.Attributes["id"] = ctl.Attributes["name"] = controlId;
-                if (allowDisableState && (visibleChildSettingsCount > 0))
-                    ctl.Attributes["onclick"] = string.Concat("ChangeDisabledState('", str, "', (!this.checked));");
-                if (isChecked) ctl.Attributes["checked"] = "checked";
-                if (diagnoseConflictingSettings)
-                {
-                    ctl.Disabled = true;
-                    ctl.Style.Add(HtmlTextWriterStyle.Color, "Gray");
-                }
-                container.Controls.Add(ctl);
-
-                return container;
-            }
-            finally
-            {
-                if (container != null) container.Dispose();
-                if (ctl != null) ctl.Dispose();
-            }
-        }
-
-        private void CreateSettingControl(Setting setting, Control container, Control pricecontainer, int visibleChildSettingsCount)
-        {
-            if (setting == null) return;
-            if (setting.SettingId == SettingProvider.MasterPageCustomStyleSheetSettingId) return;
-
-            string _val = setting.Value;
-
-            if (CurrentBillingPlan == BillingPlan.Free)
-            {
-                if (setting.Paid)
-                {
-                    Label _lbl = new Label();
-                    _lbl.CssClass = "Nm";
-                    bool _defValue = false;
-                    bool.TryParse(setting.DefaultValue, out _defValue);
-                    if (_defValue)
-                    {
-                        _lbl.Text = "On";
-                        _lbl.ForeColor = System.Drawing.Color.Green;
-                    }
-                    else
-                    {
-                        _lbl.Text = "Off";
-                        _lbl.ForeColor = System.Drawing.Color.Red;
-                    }
-                    container.Controls.Add(_lbl);
-                }
-                else
-                {
-                    Label _lbl = new Label();
-                    _lbl.Font.Bold = true;
-                    if (int.Parse(_val) > setting.UsageCountLimit) _lbl.ForeColor = System.Drawing.Color.Red;
-                    _lbl.Text = _val + " of " + setting.UsageCountLimit.ToString();
-                    container.Controls.Add(_lbl);
-                }
-            }
             else
             {
-                Label _lblPrice = new Label();
-                _lblPrice.CssClass = "Nm";
-                _lblPrice.Font.Bold = false;
-
-                if (setting.Paid)
-                {
-                    container.Controls.Add(CreateCheckBox(setting, false, false, visibleChildSettingsCount));
-                    if (setting.Price > 0)
-                    {
-                        _lblPrice.Text = "$" + setting.Price.ToString("0.00") + "/month";
-                        bool _isChecked = false;
-                        bool.TryParse(setting.Value, out _isChecked);
-                        if (_isChecked) m_TotalSum += setting.Price;
-                        else _lblPrice.Font.Strikeout = true;
-                        if (pricecontainer != null) pricecontainer.Controls.Add(_lblPrice);
-                    }
-                }
-                else
-                {
-                    int _paidQty = int.Parse(_val) - setting.UsageCountLimit;
-                    Label _lbl = new Label();
-                    _lbl.Font.Bold = true;
-                    _lbl.Text = _val;
-                    container.Controls.Add(_lbl);
-                    decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
-                    _lblPrice.Text = (setting.UsageCountLimit > 0 ? setting.UsageCountLimit.ToString() + " * $0.0/each" : string.Empty) + (_paidQty > 0 ? (setting.UsageCountLimit > 0 ? " + " : string.Empty) + _paidQty.ToString() + " * $" + setting.Price.ToString("0.00") + "/each" : string.Empty) + " = $" + _priceMonth.ToString("0.00") + "/month";
-                    m_TotalSum += _priceMonth;
-                    if (pricecontainer != null) pricecontainer.Controls.Add(_lblPrice);
-                }
+                lCCStatus.Text = "No Credit Card on File.";
+                DisablePurchaseButtons();
             }
-        }
-
-        private void Repeater_ItemDataBound(RepeaterItemEventArgs e, string controlHolderId, string priceHolderId)
-        {
-            Setting setting = e.Item.DataItem as Setting;
-            if (setting == null) return;
-
-            Control controlHoder1 = e.Item.FindControl(controlHolderId);
-            if (controlHoder1 == null) return;
-            Control priceHolder = e.Item.FindControl(priceHolderId);
-
-            CreateSettingControl(setting, controlHoder1, priceHolder, 0);
-
         }
 
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -311,6 +259,11 @@ namespace Micajah.Common.WebControls.AdminControls
 
             Setting setting = e.Item.DataItem as Setting;
             if (setting == null) return;
+            if (setting.ShortName == "btPhoneSupport") return;
+            if (setting.ShortName == "Training1Hour") return;
+            if (setting.ShortName == "Training3Hours") return;
+            if (setting.ShortName == "Training8Hours") return;
+
             
             bool isChecked = false;
             if (!Boolean.TryParse(setting.Value, out isChecked))
@@ -318,11 +271,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
             }
 
-            if (setting.ShortName=="btPhoneSupport")
-            {
-                chkPhoneSupport.Checked = isChecked;
-                return;
-            }
+            if (isChecked && setting.Paid && setting.Price > 0) m_TotalSum += setting.Price;
 
             HtmlGenericControl div0 = new HtmlGenericControl("div");
             div0.Attributes["class"] = "account-option";
@@ -333,13 +282,236 @@ namespace Micajah.Common.WebControls.AdminControls
 
             HtmlGenericControl div = new HtmlGenericControl("div");
             div.Attributes["class"] = "feature-toggle";
+            div.Attributes["id"] = "div" + setting.ShortName+"OnOff";
             Micajah.Common.WebControls.CheckBox checkBox = new Micajah.Common.WebControls.CheckBox();
             checkBox.ID = "chkOptionOnOff_" + setting.SettingId.ToString("N");
             checkBox.RenderingMode=CheckBoxRenderingMode.OnOffSwitch;
             checkBox.Checked = isChecked;
+            checkBox.AutoPostBack = true;
+            checkBox.CheckedChanged += new EventHandler(checkBox_CheckedChanged);
             div.Controls.Add(checkBox);
+            if (setting.Paid && setting.Price > 0) div.Controls.Add(CreateToolTip(setting));
             div0.Controls.Add(div);
             e.Item.Controls.Add(div0);
+        }
+
+        private RadToolTip CreateToolTip(Setting setting)
+        {
+            var radToolTip = new RadToolTip();
+            radToolTip.ID = "rtt" + setting.ShortName;
+            radToolTip.IsClientID = true;
+            radToolTip.TargetControlID = "div" + setting.ShortName + "OnOff";
+            radToolTip.RelativeTo = ToolTipRelativeDisplay.Element;
+            radToolTip.ShowEvent = ToolTipShowEvent.OnMouseOver;
+            radToolTip.Position = ToolTipPosition.MiddleRight;
+            radToolTip.HideEvent=ToolTipHideEvent.LeaveTargetAndToolTip;
+            radToolTip.BackColor = System.Drawing.ColorTranslator.FromHtml("#404040");
+            radToolTip.ForeColor = System.Drawing.ColorTranslator.FromHtml("#FFFFFF");
+            radToolTip.BorderColor = System.Drawing.ColorTranslator.FromHtml("#404040");
+            radToolTip.Width = 300;
+            radToolTip.Text =
+                "By clicking OK,<br /> you will turn on the " + setting.CustomName + "<br />and incure a monthly charge of $" + setting.Price.ToString("0.00") + ".";
+            return radToolTip;
+        }
+
+        private void DisablePurchaseButtons()
+        {
+
+            string _script = "alert(\"Please, Register Your Credit Card before.\"); return false;";
+                btnPurchase1Hour.OnClientClick =
+                    btnPurchase3Hours.OnClientClick = btnPurchase8Hours.OnClientClick = _script;
+        }
+
+        protected void btnPurchaseHours_Click(object sender, EventArgs e)
+        {
+            Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage) Page.Master;
+            masterPage.MessageType=NoticeMessageType.Error;
+            decimal amount = 0;
+
+            Button btn = sender as Button;
+            Setting setting = null;
+            string trainingName = string.Empty;
+
+            switch (btn.ID)
+            {
+                case "btnPurchase1Hour":
+                    setting = PaidSettings["Training1Hour"];
+                    trainingName = "Training 1 Hour";
+                    break;
+                case "btnPurchase3Hours":
+                    setting = PaidSettings["Training3Hours"];
+                    trainingName = "Training 3 Hours";
+                    break;
+                case "btnPurchase8Hours":
+                    setting = PaidSettings["Training8Hours"];
+                    trainingName = "Training 8 Hours";
+                    break;
+            }
+
+            if (setting==null)
+            {
+                masterPage.Message = "Component definition is not found.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(setting.ExternalId))
+            {
+                masterPage.Message = "Component External Id is not defined.";
+                return;
+            }
+
+            int _cid = 0;
+            int _count = 1;
+
+            if (!int.TryParse(setting.ExternalId, out _cid))
+            {
+                masterPage.Message = "Component External Id is invalid.";
+                return;                
+            }
+
+            try
+            {
+                ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
+                _chargify.AddUsage(SubscriptionId, _cid, _count, "Purchase Training");
+//                _chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
+            }
+            catch (ChargifyException cex)
+            {
+                if ((int)cex.StatusCode == 422)
+                {
+                    masterPage.Message = "Credit Card Transaction Failed!";
+                }
+                else masterPage.Message = cex.Message;
+                return;
+            }
+            catch (Exception ex)
+            {
+                masterPage.Message = ex.Message;
+                return;                
+            }
+            masterPage.MessageType=NoticeMessageType.Success;
+            masterPage.Message = "Your " + trainingName +
+                                 " proccessed successfully! You will receive confirmation email.";
+            UserContext usr = UserContext.Current;
+            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) + usr.FirstName + " " +
+                              usr.LastName + " from " + usr.SelectedOrganization.Name + " purchased " + trainingName;
+            string _body1 = "Hi, " + usr.FirstName + " " + usr.LastName + "\r\n\r\nYou purchased " +
+                            FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName +
+                            ".\r\nOur support team will contact with you ASAP to schedule a time when we can do a training for you.\r\n\r\nThanks.";
+            string _body2 = "Please, contact me via Email" +
+                           (!string.IsNullOrEmpty(usr.Phone) ? " or by phone " + usr.Phone : string.Empty) +
+                           (!string.IsNullOrEmpty(usr.MobilePhone) ? " or by mobile " + usr.MobilePhone : string.Empty) +
+                           " to schedule a time when we can do a training.";
+            try
+            {
+
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, UserContext.Current.Email,
+                                  string.Empty, "Thank You for purchase " + FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName, _body1, false, false, EmailSendingReason.Undefined);
+                Support.SendEmail(UserContext.Current.Email, FrameworkConfiguration.Current.WebApplication.Support.Email,
+                                  string.Empty, _subject, _body2, false, false, EmailSendingReason.Undefined);
+            }
+            catch (Exception ex)
+            {
+                masterPage.MessageType = NoticeMessageType.Warning;
+                masterPage.Message = "Your " + trainingName +
+                                     " proccessed successfully! But Confirmation emails was not sent.";
+                masterPage.MessageDescription = ex.ToString();
+            }
+        }
+
+        protected void InitPhoneSupport()
+        {
+            SettingCollection settings = this.PaidSettings;
+            Setting setting = settings["btPhoneSupport"];
+            if (setting==null) return;
+
+            bool isChecked = false;
+            if (!Boolean.TryParse(setting.Value, out isChecked))
+            {
+                if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
+            }
+            if (isChecked && setting.Paid && setting.Price > 0) m_TotalSum += setting.Price;
+            if (setting.Paid && setting.Price>0) phPhoneSupportToolTip.Controls.Add(CreateToolTip(setting));
+            if (!IsPostBack) chkPhoneSupport.Checked = isChecked;
+        }
+
+        protected void checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = sender as CheckBox;
+            SettingCollection settings = this.PaidSettings;
+            if (chk.ID=="chkPhoneSupport")
+            {
+                settings["btPhoneSupport"].Value = chk.Checked.ToString();
+            }
+            else
+            {
+                Guid settingId = Guid.Parse(chk.ID.Replace("chkOptionOnOff_", string.Empty));
+                settings[settingId].Value = chk.Checked.ToString();                
+            }
+            settings.UpdateValues(OrganizationId, InstanceId);
+            UserContext.Current.Refresh();
+            this.List_DataBind();
+        }
+
+        protected void btnUpdateCC_Click(object sender, EventArgs e)
+        {
+            string _OrgIdStr = OrganizationId.ToString();
+
+            ICustomer _cust = IsNewSubscription ? new Customer() : Chargify.LoadCustomer(_OrgIdStr);
+
+            _cust.SystemID = _OrgIdStr;
+            _cust.Organization = UserContext.Current.SelectedOrganization.Name;
+            _cust.Email = txtEmail.Text;
+            string[] _arrName = txtFullName.Text.Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+            _cust.FirstName = _arrName[0];
+            _cust.LastName = _arrName.Length > 1 ? _arrName[1] : string.Empty;
+
+            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000+int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+
+            msgStatus.Visible = true;
+            msgStatus.MessageType = NoticeMessageType.Error;
+            if (IsNewSubscription)
+            {
+                _cust = Chargify.CreateCustomer(_cust);
+                try
+                {
+                    Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                }
+                catch (ChargifyException cex)
+                {
+                    if ((int)cex.StatusCode == 422) msgStatus.Message = "Invalid Credit Card Information!";
+                    else msgStatus.Message = cex.Message;
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    msgStatus.Message = ex.Message;
+                    return;
+                }
+
+            }
+            else
+            {
+                Chargify.UpdateCustomer(_cust);
+                ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, UserContext.Current.SelectedOrganization.OrganizationId);
+                try
+                {
+                    if (_custSubscr != null) Chargify.UpdateSubscriptionCreditCard(_custSubscr, _ccattr);
+                    else Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                }
+                catch (ChargifyException cex)
+                {
+                    if ((int)cex.StatusCode == 422) msgStatus.Message = "Invalid Credit Card Information!";
+                    else msgStatus.Message = cex.Message;
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    msgStatus.Message = ex.Message;
+                    return;
+                }
+            }
+            Response.Redirect("accountsettings.aspx?st=ok");
         }
 
         protected void Repeater2_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -365,90 +537,68 @@ namespace Micajah.Common.WebControls.AdminControls
             int usageCount = 0;
             int.TryParse(setting.Value, out usageCount);
 
-            if (CurrentBillingPlan == BillingPlan.Free)
+            int _paidQty = usageCount - setting.UsageCountLimit;
+            decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
+            m_TotalSum += _priceMonth;
+
+
+            if (setting.UsageCountLimit>1 && usageCount<=setting.UsageCountLimit)
             {
-                if (setting.UsageCountLimit>1)
-                {
-                    HtmlGenericControl span = new HtmlGenericControl("span");
-                    if (usageCount < setting.UsageCountLimit) span.Attributes["class"] = "under";
-                    else if (usageCount > setting.UsageCountLimit) span.Attributes["class"] = "over";
-                    else span.Attributes["class"] = "even";
-                    span.InnerText = usageCount.ToString();
-                    h4.Controls.Add(span);
-                    h4.Controls.Add(new LiteralControl(" of "+setting.UsageCountLimit.ToString()));
-                }
-                else h4.InnerText = usageCount.ToString();
-                div.Controls.Add(h4);
-                tdCol.Controls.Add(div);
+                HtmlGenericControl span = new HtmlGenericControl("span");
+                if (usageCount < setting.UsageCountLimit) span.Attributes["class"] = "under";
+                else if (usageCount > setting.UsageCountLimit) span.Attributes["class"] = "over";
+                else span.Attributes["class"] = "even";
+                span.InnerText = usageCount.ToString();
+                h4.Controls.Add(span);
+                h4.Controls.Add(new LiteralControl(" of "+setting.UsageCountLimit.ToString()));
+            }
+            else h4.InnerText = usageCount.ToString();
+            div.Controls.Add(h4);
+            tdCol.Controls.Add(div);
+            div = new HtmlGenericControl("div");
+            div.Attributes["class"] = "clearfix";
+            tdCol.Controls.Add(div);
+            if (setting.UsageCountLimit > 1 && usageCount<=setting.UsageCountLimit)
+            {
                 div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "clearfix";
-                tdCol.Controls.Add(div);
-                if (setting.UsageCountLimit > 1)
+                div.Attributes["class"] = "progress";
+                HtmlGenericControl divBar = new HtmlGenericControl("div");
+                divBar.Attributes["class"] = "bar";
+                if (usageCount<setting.UsageCountLimit)
                 {
-                    div = new HtmlGenericControl("div");
-                    div.Attributes["class"] = "progress";
-                    HtmlGenericControl divBar = new HtmlGenericControl("div");
-                    divBar.Attributes["class"] = "bar";
-                    if (usageCount<setting.UsageCountLimit)
-                    {
-                        int width = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * (decimal)usageCount);
-                        divBar.Style.Add(HtmlTextWriterStyle.Width, width.ToString() + "%");                        
-                    }
-                    else if (usageCount>setting.UsageCountLimit)
-                    {
-//                        div.Attributes["class"] = "progress-red";
-                        divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
-                    }
-                    else
-                    {
-//                        div.Attributes["class"] = "progress-green";
-                        divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
-                    }
-                    div.Controls.Add(divBar);
-                    tdCol.Controls.Add(div);
+                    int width = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * (decimal)usageCount);
+                    divBar.Style.Add(HtmlTextWriterStyle.Width, width.ToString() + "%");                        
                 }
-                else if (setting.UsageCountLimit==1)
+                else if (usageCount>setting.UsageCountLimit)
                 {
-                    div = new HtmlGenericControl("div");
-                    div.Attributes["class"] = "paid-account";
-                    HyperLink a=new HyperLink();
-                    a.ID = "aTooltip";
-                    a.NavigateUrl = "#";
-                    a.CssClass = "tooltip_right tooltip";
-                    HtmlGenericControl span = new HtmlGenericControl("span");
-                    span.InnerHtml = "1st " + setting.CustomName + " is always FREE.<br />$" +
-                                     setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
-                    HtmlGenericControl h3 = new HtmlGenericControl("h3");
-                    if (usageCount > setting.UsageCountLimit) h3.InnerText = "$" + Convert.ToString((usageCount - setting.UsageCountLimit) * setting.Price);
-                    else h3.InnerText = "$0.00";
-                    a.Controls.Add(span);
-                    a.Controls.Add(h3);
-                    div.Controls.Add(a);
-                    tdCol.Controls.Add(div);
+//                        div.Attributes["class"] = "progress-red";
+                    divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
                 }
                 else
                 {
-                    div = new HtmlGenericControl("div");
-                    div.Attributes["class"] = "paid-account";
-                    tdCol.Controls.Add(div);
+//                        div.Attributes["class"] = "progress-green";
+                    divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
                 }
+                div.Controls.Add(divBar);
+                tdCol.Controls.Add(div);
             }
-            else
+            else if (setting.UsageCountLimit==0 || setting.UsageCountLimit==1 || usageCount>setting.UsageCountLimit)
             {
-                h4.InnerText = usageCount.ToString();
-                div.Controls.Add(h4);
-                tdCol.Controls.Add(div);
-                div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "clearfix";
-                tdCol.Controls.Add(div);
                 div = new HtmlGenericControl("div");
                 div.Attributes["class"] = "paid-account";
-                HtmlAnchor a = new HtmlAnchor();
-                a.HRef = "#";
-                a.Attributes["class"] = "tooltip_right tooltip";
+                HyperLink a=new HyperLink();
+                a.ID = "aTooltip";
+                a.NavigateUrl = "#"+setting.ShortName;
+                a.CssClass = "tooltip_right tooltip";
                 HtmlGenericControl span = new HtmlGenericControl("span");
-                span.InnerHtml = setting.UsageCountLimit.ToString()+" " + setting.CustomName + " is always FREE.<br />$" +
-                                 setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
+                if (setting.UsageCountLimit==0)
+                    span.InnerHtml = "$" + setting.Price.ToString("0.00") + " for each " + setting.CustomName;
+                else if (setting.UsageCountLimit==1)
+                    span.InnerHtml = "1st " + setting.CustomName + " is always FREE.<br />$" +
+                                setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
+                else if (setting.UsageCountLimit>1)
+                    span.InnerHtml = setting.UsageCountLimit.ToString()+" " + setting.CustomName + " is always FREE.<br />$" +
+                                setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
                 HtmlGenericControl h3 = new HtmlGenericControl("h3");
                 if (usageCount > setting.UsageCountLimit) h3.InnerText = "$" + Convert.ToString((usageCount - setting.UsageCountLimit) * setting.Price);
                 else h3.InnerText = "$0.00";
@@ -457,45 +607,13 @@ namespace Micajah.Common.WebControls.AdminControls
                 div.Controls.Add(a);
                 tdCol.Controls.Add(div);
             }
-        }
-
-        protected void UpdateButton_Click(object sender, EventArgs e)
-        {
-            this.UpdateSettings();
-
-            this.List_DataBind();
-            InitBillingControls(true);
-        }
-
-        protected void UpdateBillingPlanButton_Click(object sender, EventArgs e)
-        {
-            if (CurrentBillingPlan == BillingPlan.Free)
+            else
             {
-                Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
-                Response.Redirect(Request.Url.ToString());
+                div = new HtmlGenericControl("div");
+                div.Attributes["class"] = "paid-account";
+                tdCol.Controls.Add(div);
             }
-            else Response.Redirect("ChargifySubscribe.aspx");
         }
-
-        protected void ChargifyPayButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ICharge _charge = ChargifyProvider.CreateChargify().CreateCharge(SubscriptionId, TotalAmount, "Manual Payment");
-
-                if (!_charge.Success) ((Micajah.Common.Pages.MasterPage)Page.Master).Message = "Can't charge $" + TotalAmount.ToString("0.00") + " amount!";
-            }
-            catch (ChargifyException cex)
-            {
-                if ((int)cex.StatusCode == 422)
-                {
-                    ((Micajah.Common.Pages.MasterPage)Page.Master).Message = "Credit Card Transaction Failed!";
-                }
-            }
-            this.List_DataBind();
-            InitBillingControls(false);
-        }
-
         #endregion
     }
 }
