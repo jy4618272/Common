@@ -14,33 +14,15 @@ namespace Micajah.Common.Bll.Providers
         {
             // new instance
             ChargifyConnect _chargify = new ChargifyConnect();
-            bool azureDeployed = UsefulExtensions.IsRunningAzure();
-            if (!azureDeployed)
-            {
-                ChargifyAccountRetrieverSection config = ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
-                ChargifyAccountElement accountInfo = config.GetDefaultOrFirst();
-                _chargify.apiKey = accountInfo.ApiKey;
-                _chargify.Password = accountInfo.ApiPassword;
-                _chargify.URL = accountInfo.Site;
-                _chargify.SharedKey = accountInfo.SharedKey;
-                _chargify.UseJSON = config.UseJSON;
-            }
-            else
-            {
-                // Is azure deployed
-                _chargify.apiKey = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_API_KEY");
-                _chargify.Password = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_API_PASSWORD");
-                _chargify.URL = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_SITE_URL");
-                _chargify.SharedKey = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_SHARED_KEY");
-                if (!string.IsNullOrEmpty(UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_USE_JSON")))
-                {
-                    _chargify.UseJSON = bool.Parse(UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_USE_JSON"));
-                }
-                else
-                {
-                    _chargify.UseJSON = false;
-                }
-            }
+
+            ChargifyAccountRetrieverSection config = ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
+            ChargifyAccountElement accountInfo = config.GetDefaultOrFirst();
+            _chargify.apiKey = accountInfo.ApiKey;
+            _chargify.Password = accountInfo.ApiPassword;
+            _chargify.URL = accountInfo.Site;
+            _chargify.SharedKey = accountInfo.SharedKey;
+            _chargify.UseJSON = config.UseJSON;
+
             return _chargify;
         }
 
