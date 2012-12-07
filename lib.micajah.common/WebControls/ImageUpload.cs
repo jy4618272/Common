@@ -140,7 +140,7 @@ namespace Micajah.Common.WebControls
                 table["LocalObjectType"] = this.LocalObjectType;
                 table["LocalObjectId"] = this.LocalObjectId;
 
-                return WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.ImageUploadPageVirtualPath)
+                return CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ImageUploadPageVirtualPath)
                     + "?p=" + HttpUtility.UrlEncodeUnicode(Support.SaveProperties(table));
             }
         }

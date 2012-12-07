@@ -453,7 +453,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (lnk != null)
             {
                 lnk.Text = Resources.UsersControl_InviteUsersLink_Text;
-                lnk.NavigateUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.InviteUsersPageVirtualPath);
+                lnk.NavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.InviteUsersPageVirtualPath);
             }
         }
 
@@ -483,7 +483,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 checkBoxList.Items.Insert(0, new ListItem(Resources.UsersControl_EditUserActiveForm_Organization, Guid.Empty.ToString()));
 
-                ArrayList list = UserProvider.GetInstanceIdListWhereUserIsInactive((Guid)EditUserActiveForm.DataKey[0], UserContext.SelectedOrganizationId);
+                ArrayList list = UserProvider.GetInstanceIdListWhereUserIsInactive((Guid)EditUserActiveForm.DataKey[0], UserContext.Current.SelectedOrganizationId);
                 foreach (ListItem item in checkBoxList.Items)
                 {
                     item.Selected = true;
@@ -520,7 +520,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
 
             CheckBoxList instanceList = EditUserActiveForm.FindControl("InstanceList") as CheckBoxList;
             if (instanceList != null)
@@ -601,7 +601,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (m_UserContext.SelectedOrganization.DataSet.Group.Rows.Count == 0)
                 {
                     MasterPage.Message = Resources.UsersControl_NoGroupError_Message;
-                    MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.UsersControl_NoGroupError_Description, WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsPageVirtualPath));
+                    MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.UsersControl_NoGroupError_Description, CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsPageVirtualPath));
                     UpdatePanel1.Visible = false;
                     return;
                 }

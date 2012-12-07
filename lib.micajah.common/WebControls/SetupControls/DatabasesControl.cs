@@ -39,7 +39,7 @@ namespace Micajah.Common.WebControls.SetupControls
             {
                 List.EmptyDataText = string.Format(CultureInfo.CurrentCulture
                     , Resources.DatabasesControl_ErrorMessage_NoDatabaseServer
-                    , WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.DatabaseServersPageVirtualPath));
+                    , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.DatabaseServersPageVirtualPath));
                 List.ShowAddLink = EditForm.Visible = false;
             }
             base.OnLoad(e);

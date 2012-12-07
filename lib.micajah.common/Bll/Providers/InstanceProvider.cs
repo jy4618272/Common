@@ -115,7 +115,9 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         private static Guid InsertInstance(string name, string description, bool enableSignupUser
             , string externalId, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
-            , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg, Guid? templateInstanceId)
+            , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg
+            , Guid? templateInstanceId
+            , string partialCustomUrl)
         {
             if (refreshOrganizationData) WebApplication.RefreshAllData();
 
@@ -211,6 +213,9 @@ namespace Micajah.Common.Bll.Providers
 
             if (configure) ConfigureInstance(instanceId, organizationId);
 
+            if (!string.IsNullOrEmpty(partialCustomUrl))
+                CustomUrlProvider.InsertCustomUrl(organizationId, instanceId, null, partialCustomUrl);
+
             if (refreshOrganizationData) WebApplication.RefreshOrganizationData(organizationId);
 
             RaiseInstanceInserted(inst, userId, templateInstance);
@@ -248,11 +253,11 @@ namespace Micajah.Common.Bll.Providers
         #region Internal Methods
 
         internal static Guid InsertFirstInstance(string timeZoneId, Guid? templateInstanceId, Guid organizationId
-            , string adminEmail, string adminPassword
+            , string adminEmail, string adminPassword, string partialCustomUrl
             , bool sendNotificationEmail, bool refreshOrganiationData)
         {
             return InsertInstance(Resources.InstanceProvider_FirstInstance_Name, null, false, null, timeZoneId, 0, 0, null, true, null, false, false, null, organizationId
-                , adminEmail, adminPassword, sendNotificationEmail, refreshOrganiationData, false, true, templateInstanceId);
+                , adminEmail, adminPassword, sendNotificationEmail, refreshOrganiationData, false, true, templateInstanceId, partialCustomUrl);
         }
 
         /// <summary>
@@ -280,7 +285,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static Instance GetFirstInstance()
         {
-            return GetFirstInstance(UserContext.SelectedOrganizationId);
+            return GetFirstInstance(UserContext.Current.SelectedOrganizationId);
         }
 
         internal static Instance GetFirstInstance(Guid organizationId)
@@ -643,7 +648,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertInstance(string name, string description, bool active, bool beta)
         {
-            return InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, null);
+            return InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, null, null);
         }
 
         /// <summary>
@@ -664,7 +669,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
         {
-            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null);
+            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null, null);
         }
 
         /// <summary>
@@ -688,7 +693,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
         {
-            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null);
+            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null, null);
         }
 
         /// <summary>

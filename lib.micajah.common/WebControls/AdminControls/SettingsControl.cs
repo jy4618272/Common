@@ -562,14 +562,14 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 case SettingLevels.Organization:
                     if (this.Action != null)
-                        settings.UpdateValues(m_UserContext.SelectedOrganization.OrganizationId);
+                        settings.UpdateValues(m_UserContext.SelectedOrganizationId);
                     break;
                 case SettingLevels.Instance:
                     if (this.Action != null)
-                        settings.UpdateValues(m_UserContext.SelectedOrganization.OrganizationId, UserContext.SelectedInstanceId);
+                        settings.UpdateValues(m_UserContext.SelectedOrganizationId, m_UserContext.SelectedInstanceId);
                     break;
                 case SettingLevels.Group:
-                    settings.UpdateValues(m_UserContext.SelectedOrganization.OrganizationId, this.InstanceId, this.GroupId);
+                    settings.UpdateValues(m_UserContext.SelectedOrganizationId, this.InstanceId, this.GroupId);
                     break;
             }
 
@@ -618,7 +618,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (user != null)
                     {
                         if (user.SelectedInstance == null)
-                            Response.Redirect(ResourceProvider.GetActiveInstancePageUrl(Request.Url.PathAndQuery, false));
+                            Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery));
                     }
                 }
             }
@@ -736,7 +736,7 @@ namespace Micajah.Common.WebControls.AdminControls
             else
             {
                 if (string.IsNullOrEmpty(this.ReturnUrl))
-                    CancelLink.NavigateUrl = string.Concat(WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsInstancesRolesPageVirtualPath), "?GroupId=", GroupId.ToString("N"));
+                    CancelLink.NavigateUrl = string.Concat(CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsInstancesRolesPageVirtualPath), "?GroupId=", GroupId.ToString("N"));
 
                 DetailMenu1.Visible = false;
 

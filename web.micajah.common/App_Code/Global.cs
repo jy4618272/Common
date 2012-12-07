@@ -24,7 +24,7 @@ public class Global : Micajah.Common.Application.WebApplication
         {
             if (ctx.Request != null)
             {
-                if (ctx.Request.Url.ToString().Contains("://localhost"))
+                if (ctx.Request.Url.ToString().Contains("localhost"))
                     e.Cancel = true;
             }
         }

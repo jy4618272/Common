@@ -352,7 +352,7 @@ namespace Micajah.Common.Bll
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static MeasureUnitCollection GetUnits()
         {
-            Guid orgId = Micajah.Common.Security.UserContext.SelectedOrganizationId;
+            Guid orgId = Micajah.Common.Security.UserContext.Current.SelectedOrganizationId;
             if (orgId.Equals(Guid.Empty))
                 return new MeasureUnitCollection();
             else return MeasureUnitCollection.GetUnits(orgId);
@@ -386,7 +386,7 @@ namespace Micajah.Common.Bll
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static MeasureUnitCollection GetUnitsByGroup(string groupName)
         {
-            Guid orgId = Micajah.Common.Security.UserContext.SelectedOrganizationId;
+            Guid orgId = Micajah.Common.Security.UserContext.Current.SelectedOrganizationId;
             if (orgId.Equals(Guid.Empty))
                 return new MeasureUnitCollection();
             else return MeasureUnitCollection.GetUnitsByGroup(orgId, groupName);
@@ -405,7 +405,7 @@ namespace Micajah.Common.Bll
 
         public static MeasureUnitCollection GetUnitsByUnitType(string unitType)
         {
-            Guid orgId = Micajah.Common.Security.UserContext.SelectedOrganizationId;
+            Guid orgId = Micajah.Common.Security.UserContext.Current.SelectedOrganizationId;
             if (orgId.Equals(Guid.Empty))
                 return new MeasureUnitCollection();
             else return MeasureUnitCollection.GetUnitsByUnitType(orgId, unitType);

@@ -1,10 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
-using Micajah.Common.Configuration;
-using System.Collections.Generic;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -70,7 +69,6 @@ namespace Micajah.Common.Bll.Providers
             {
                 row.Url = string.Join("\r\n", list.ToArray());
                 WebApplication.CommonDataSetTableAdapters.WebsiteTableAdapter.Update(row);
-                WebApplication.RefreshWebsiteId();
             }
         }
 
@@ -86,69 +84,38 @@ namespace Micajah.Common.Bll.Providers
         internal static CommonDataSet.WebsiteRow GetWebsiteRowByUrl(params string[] urls)
         {
             CommonDataSet.WebsiteRow site = null;
-            Organization org = null;            
-            CommonDataSet.CustomUrlRow customUrlRow = null;
-            try
+
+            foreach (CommonDataSet.WebsiteRow row in WebApplication.CommonDataSet.Website)
             {
-                foreach (CommonDataSet.WebsiteRow row in WebApplication.CommonDataSet.Website)
+                foreach (string url in urls)
                 {
+                    if (row.Url.Contains(url))
+                    {
+                        site = row;
+                        break;
+                    }
+                }
+                if (site != null) break;
+            }
+
+            if (site == null)
+            {
+                if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                {
+                    Instance inst = new Instance();
+
                     foreach (string url in urls)
                     {
-                        if (row.Url.Contains(url))
-                        {
-                            site = row;
-                            break;
-                        }
-                    }
-                    if (site != null) break;
-                }
+                        Organization org = null;
 
-                if (site == null)
-                {
-                    if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    {
-                        foreach (string url in urls)
-                        {
-                            string[] segments = url.Split('.');
-                            if (segments.Length > 1)
-                            {
-                                string segment = segments[0].ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
-                                if (segment.Contains("-"))
-                                {
-                                    org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
+                        CustomUrlProvider.ParseHost(CustomUrlProvider.RemoveSchemeFormUri(url), ref org, ref inst);
 
-                                    if (org == null)
-                                    {
-                                        customUrlRow = CustomUrlProvider.GetCustomUrl(segment.Split('-')[0]);
-                                        if (customUrlRow != null)
-                                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
-                                    }
-                                }
-                                else
-                                {
-                                    org = OrganizationProvider.GetOrganizationByPseudoId(segment);
+                        if (org != null)
+                            site = WebsiteProvider.GetWebsiteRowByOrganizationId(org.OrganizationId);
 
-                                    if (org == null)
-                                    {
-                                        customUrlRow = CustomUrlProvider.GetCustomUrl(segment);
-                                        if (customUrlRow != null)
-                                            org = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
-                                    }
-                                }
-
-                                if (org != null)
-                                    site = WebsiteProvider.GetWebsiteRowByOrganizationId(org.OrganizationId);
-
-                                if (site != null) break;
-                            }
-                        }
+                        if (site != null) break;
                     }
                 }
-            }
-            finally
-            {
-                if (customUrlRow != null) customUrlRow = null;
-                if (org != null) org = null;
             }
 
             return site;
@@ -306,38 +273,8 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The first URL of the web site.</returns>
         public static string GetWebsiteUrl(Guid websiteId)
         {
-            string url = null;
             CommonDataSet.WebsiteRow row = WebApplication.CommonDataSet.Website.FindByWebsiteId(websiteId);
-            if (row != null)
-            {
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                {
-                    string defaultUrl = string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
-
-                    if (System.Web.HttpContext.Current != null &&  System.Web.HttpContext.Current.Request != null &&  System.Web.HttpContext.Current.Request.Url != null)
-                        defaultUrl = string.Format("{0}{1}{2}", System.Web.HttpContext.Current.Request.Url.Scheme, Uri.SchemeDelimiter, defaultUrl);                    
-
-                    if (!defaultUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (!defaultUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                            defaultUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + defaultUrl;
-                    }
-
-                    foreach (string websiteUrl in row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        if (string.Compare(websiteUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst) == 0 ||
-                            string.Compare(websiteUrl, defaultUrl) == 0)
-                        {
-                            url = defaultUrl;
-                            break;
-                        }
-                    }
-                }
-                
-                if (string.IsNullOrEmpty(url))
-                    url = row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0];
-            }
-            return url;
+            return ((row == null) ? null : row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0]);
         }
 
         #endregion

@@ -83,7 +83,7 @@ namespace Micajah.Common.WebControls
             {
                 object obj = this.ViewState["OrganizationId"];
                 if (obj == null)
-                    obj = UserContext.SelectedOrganizationId;
+                    obj = UserContext.Current.SelectedOrganizationId;
                 return ((obj == null) ? Guid.Empty : (Guid)obj);
             }
             set { this.ViewState["OrganizationId"] = value; }

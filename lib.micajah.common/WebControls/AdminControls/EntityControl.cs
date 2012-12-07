@@ -106,7 +106,7 @@ namespace Micajah.Common.WebControls.AdminControls
                         Guid? instanceId = null;
                         if (this.Entity.HierarchyStartLevel == EntityLevel.Instance)
                             instanceId = this.SelectedInstanceId;
-                        m_EntityCustomNodeTypes = this.Entity.GetCustomNodeTypes(UserContext.SelectedOrganizationId, this.SelectedInstanceId);
+                        m_EntityCustomNodeTypes = this.Entity.GetCustomNodeTypes(UserContext.Current.SelectedOrganizationId, this.SelectedInstanceId);
                     }
                 }
                 return m_EntityCustomNodeTypes;
@@ -233,7 +233,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (Entity.HierarchyStartLevel == EntityLevel.Instance)
                 instanceId = this.SelectedInstanceId;
 
-            Tree.DataSource = EntityNodeProvider.GetEntityNodesTree(UserContext.SelectedOrganizationId, instanceId, this.Entity.Id, this.Entity.Name);
+            Tree.DataSource = EntityNodeProvider.GetEntityNodesTree(UserContext.Current.SelectedOrganizationId, instanceId, this.Entity.Id, this.Entity.Name);
             Tree.Rebind(saveExpandedState);
 
             if (Tree.Nodes.Count > 0)
@@ -278,7 +278,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 RadTreeNode rtn = new RadTreeNode();
                 rtn.Text = sourceNode.Text;
-                rtn.Value = EntityNodeProvider.InsertEntityNode(UserContext.SelectedOrganizationId, this.SelectedInstanceId, source.Name, source.EntityNodeTypeId, source.EntityId, new Guid(targetNode.Value), this.Entity.HierarchyStartLevel).ToString();
+                rtn.Value = EntityNodeProvider.InsertEntityNode(UserContext.Current.SelectedOrganizationId, this.SelectedInstanceId, source.Name, source.EntityNodeTypeId, source.EntityId, new Guid(targetNode.Value), this.Entity.HierarchyStartLevel).ToString();
                 rtn.Category = sourceNode.Category;
                 rtn.ContextMenuID = sourceNode.ContextMenuID;
                 targetNode.Nodes.Add(rtn);
@@ -352,7 +352,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
             Guid? instanceId = null;
             if (Entity.HierarchyStartLevel == EntityLevel.Instance)
                 instanceId = this.SelectedInstanceId;
@@ -434,7 +434,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (isCopy)
                 {
-                    EntityNodeProvider.CopyEntityNode(UserContext.SelectedOrganizationId, this.SelectedInstanceId, sourceId, destId, this.Entity.HierarchyStartLevel);
+                    EntityNodeProvider.CopyEntityNode(UserContext.Current.SelectedOrganizationId, this.SelectedInstanceId, sourceId, destId, this.Entity.HierarchyStartLevel);
                     RadTreeNode rtn = new RadTreeNode();
                     rtn.Text = sourceNode.Text;
                     rtn.Value = sourceNode.Value;
@@ -470,7 +470,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (!maxRestricted)
                 {
-                    Guid entityId = Bll.Providers.EntityNodeProvider.InsertEntityNode(UserContext.SelectedOrganizationId, this.SelectedInstanceId, "new", new Guid(menuItemValues[1]), this.EntityId, new Guid(e.Node.Value), this.Entity.HierarchyStartLevel);
+                    Guid entityId = Bll.Providers.EntityNodeProvider.InsertEntityNode(UserContext.Current.SelectedOrganizationId, this.SelectedInstanceId, "new", new Guid(menuItemValues[1]), this.EntityId, new Guid(e.Node.Value), this.Entity.HierarchyStartLevel);
                     RadTreeNode rtn = new RadTreeNode();
                     rtn.Text = "new";
                     rtn.Value = entityId.ToString("N");
@@ -502,7 +502,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 RadTreeNode rtn = new RadTreeNode();
                 rtn.Text = e.Node.Text + "_Copy" + (e.Node.ParentNode.Nodes.Count + 1).ToString(CultureInfo.InvariantCulture);
-                rtn.Value = EntityNodeProvider.InsertEntityNode(UserContext.SelectedOrganizationId, this.SelectedInstanceId, rtn.Text, source.EntityNodeTypeId, source.EntityId, source.ParentEntityNodeId, this.Entity.HierarchyStartLevel).ToString();
+                rtn.Value = EntityNodeProvider.InsertEntityNode(UserContext.Current.SelectedOrganizationId, this.SelectedInstanceId, rtn.Text, source.EntityNodeTypeId, source.EntityId, source.ParentEntityNodeId, this.Entity.HierarchyStartLevel).ToString();
                 rtn.Category = e.Node.Category;
                 rtn.ContextMenuID = e.Node.ContextMenuID;
                 e.Node.ParentNode.Nodes.Add(rtn);
@@ -526,7 +526,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InstancesDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void InstanceList_DataBound(object sender, EventArgs e)

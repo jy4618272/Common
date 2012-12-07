@@ -64,14 +64,14 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
             e.InputParameters["active"] = true;
         }
 
@@ -118,7 +118,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 linkField.HeaderText = Resources.RulesControl_List_InputParametersLinkColumns_HeaderText;
                 linkField.Text = Resources.RulesControl_List_InputParametersLinkColumns_Text;
-                linkField.DataNavigateUrlFormatString = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.VirtualRootShortPath + "admin/ruleparameters.aspx?RuleId={0:N}");
+                linkField.DataNavigateUrlFormatString = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.VirtualRootShortPath + "admin/ruleparameters.aspx?RuleId={0:N}");
                 linkField.HeaderGroup = Resources.RulesControl_List_ParametersLinkColumns_HeaderGroup;
             }
 
@@ -127,7 +127,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 linkField.HeaderText = Resources.RulesControl_List_OutputParametersLinkColumns_HeaderText;
                 linkField.Text = Resources.RulesControl_List_OutputParametersLinkColumns_Text;
-                linkField.DataNavigateUrlFormatString = WebApplication.CreateApplicationAbsoluteUrl((string)FormRuleEngine.DataKey["OutputEditPage"]);
+                linkField.DataNavigateUrlFormatString = CustomUrlProvider.CreateApplicationAbsoluteUrl((string)FormRuleEngine.DataKey["OutputEditPage"]);
                 linkField.HeaderGroup = Resources.RulesControl_List_ParametersLinkColumns_HeaderGroup;
             }
 

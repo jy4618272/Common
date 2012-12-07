@@ -1631,7 +1631,7 @@
     <value>URL is reserved</value>
   </data>
   <data name="UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated" xml:space="preserve">
-    <value>Your account in the Organization "{0}" is inactivated.</value>
+    <value>Your account in the Organization "{0}" is inactivated or doesn't exist.&lt;br /&gt;&lt;a href="{1}"&gt;Click here&lt;/a&gt; if you are trying log in to another organization.</value>
   </data>
   <data name="OrganizationLdapSettingsControl_EditForm_LdapConfirmNewPasswordField_HeaderText" xml:space="preserve">
     <value>Confirm New Password</value>

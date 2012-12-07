@@ -91,7 +91,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return m_PartialCustomUrlTextBox;
             }
         }
-        
+
         private ComboBox InstanceList
         {
             get
@@ -118,7 +118,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return m_RootAddressesList;
             }
         }
-        
+
         #endregion
 
         #region Protected Properties
@@ -213,20 +213,20 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InstanceListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void EntityListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
 
                 Guid? instanceId = null;
                 if (this.InstanceList != null)
@@ -262,17 +262,18 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSourceSimpleView_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void EntityDataSourceSimpleView_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                UserContext user = UserContext.Current;
+                e.InputParameters["organizationId"] = user.SelectedOrganizationId;
 
-                if (UserContext.SelectedInstanceId != Guid.Empty)
-                    e.InputParameters["instanceId"] = UserContext.SelectedInstanceId;
+                if (user.SelectedInstanceId != Guid.Empty)
+                    e.InputParameters["instanceId"] = user.SelectedInstanceId;
                 else
                     e.InputParameters["instanceId"] = null;
 
@@ -347,7 +348,7 @@ namespace Micajah.Common.WebControls.AdminControls
             SimpleViewCustomValidator.ErrorMessage = Resources.CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage;
 
 
-            VanityUrlDomainLabel.Text = string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
+            VanityUrlDomainLabel.Text = string.Format(CultureInfo.InvariantCulture, ".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
             CustomUrlsMultiView.ActiveViewIndex = 0;
 
             if (!Page.IsPostBack)

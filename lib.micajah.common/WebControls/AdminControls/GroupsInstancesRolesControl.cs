@@ -351,7 +351,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected static string GetSettingsLink(object groupId, object instanceId)
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}?GroupId={1:N}&InstanceId={2:N}", WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GroupSettingsInInstancePageVirtualPath), groupId, instanceId);
+            return string.Format(CultureInfo.InvariantCulture, "{0}?GroupId={1:N}&InstanceId={2:N}", CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GroupSettingsInInstancePageVirtualPath), groupId, instanceId);
         }
 
         #endregion

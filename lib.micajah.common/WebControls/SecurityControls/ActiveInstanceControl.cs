@@ -8,7 +8,6 @@ using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 
@@ -56,23 +55,17 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="redirectUrl">The URL to redirect to.</param>
         internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
         {
-            UserContext ctx = UserContext.Current;
-
             try
             {
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                {
-                    string url = CustomUrlProvider.GetVanityUrl(ctx != null ? ctx.SelectedOrganization.OrganizationId : UserContext.SelectedOrganizationId, instanceId);
-                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
-                    if (!string.IsNullOrEmpty(redirectUrl))
-                        url += redirectUrl;
-                    errorDiv.Page.Response.Redirect((errorDiv.Page.Request.IsSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp) + Uri.SchemeDelimiter + url, true);
-                }
+                UserContext user = UserContext.Current;
 
-                ctx.SelectInstance(instanceId);
+                user.SelectInstance(instanceId);
 
                 ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
-                if (!string.IsNullOrEmpty(redirectUrl))
+
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(user.SelectedOrganizationId, instanceId, redirectUrl));
+                else if (!string.IsNullOrEmpty(redirectUrl))
                     errorDiv.Page.Response.Redirect(redirectUrl);
             }
             catch (AuthenticationException ex)
@@ -98,11 +91,11 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
         {
-            UserContext ctx = UserContext.Current;
+            UserContext user = UserContext.Current;
 
             if (!string.IsNullOrEmpty(redirectUrl))
             {
-                string relativeUrl = WebApplication.CreateApplicationRelativeUrl(redirectUrl);
+                string relativeUrl = CustomUrlProvider.CreateApplicationRelativeUrl(redirectUrl);
                 if (string.Compare(relativeUrl, "/", StringComparison.OrdinalIgnoreCase) == 0)
                     redirectUrl = null;
                 else
@@ -111,12 +104,12 @@ namespace Micajah.Common.WebControls.SecurityControls
                     object obj = Support.ConvertStringToType(Support.ExtractQueryStringParameterValue(redirectUrl, "pageid"), typeof(Guid));
                     if (obj != null) actionId = (Guid)obj;
 
-                    if (ctx != null && ctx.SelectedOrganization != null)
+                    if (user != null && user.SelectedOrganization != null)
                     {
                         Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, redirectUrl);
                         if (action != null)
                         {
-                            if (!ctx.ActionIdList.Contains(action.ActionId))
+                            if (!user.ActionIdList.Contains(action.ActionId))
                                 redirectUrl = null;
                         }
                         else
@@ -127,17 +120,17 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (enableStartMenu)
             {
-                if (ctx != null && ctx.IsOrganizationAdministrator)
+                if (user != null && user.IsOrganizationAdministrator)
                 {
                     bool redirect = false;
-                    Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(ctx, out redirect);
+                    Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(user, out redirect);
                     if (!redirect)
-                        redirectUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath);
+                        redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath);
                 }
             }
 
             if (string.IsNullOrEmpty(redirectUrl))
-                redirectUrl = ctx.StartPageUrl;
+                redirectUrl = user.StartPageUrl;
         }
 
         #endregion
@@ -158,9 +151,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                 UserContext user = UserContext.Current;
 
                 if (user.SelectedOrganization == null)
-                    Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery, false));
+                    Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery));
 
-                Micajah.Common.Bll.Action action = ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
+                Micajah.Common.Bll.Action action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, action);
 
                 if (string.Compare(Request.QueryString["ai"], "1", StringComparison.OrdinalIgnoreCase) == 0)
@@ -170,9 +163,6 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 action = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId);
                 LogOffLink.NavigateUrl = ((action == null) ? ResourceProvider.LogOffPageVirtualPath : action.AbsoluteNavigateUrl);
-
-                if (Security.UserContext.SelectedInstanceId != Guid.Empty)
-                    SelectInstance(Security.UserContext.SelectedInstanceId, Request.QueryString["returnurl"], ErrorDiv);
 
                 InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganization.OrganizationId);
                 int count = 0;

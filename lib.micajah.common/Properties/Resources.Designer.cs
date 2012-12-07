@@ -6600,7 +6600,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account in the Organization &quot;{0}&quot; is inactivated..
+        ///   Looks up a localized string similar to Your account in the Organization &quot;{0}&quot; is inactivated or doesn&apos;t exist.&lt;br /&gt;&lt;a href=&quot;{1}&quot;&gt;Click here&lt;/a&gt; if you are trying log in to another organization..
         /// </summary>
         internal static string UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated {
             get {

@@ -413,7 +413,7 @@ namespace Micajah.Common.Bll.Providers
                         OrganizationDataSet.GroupRow row = table.NewGroupRow();
 
                         row.GroupId = Guid.Empty;
-                        row.OrganizationId = UserContext.SelectedOrganizationId;
+                        row.OrganizationId = UserContext.Current.SelectedOrganizationId;
                         row.Name = Resources.GroupProvider_OrganizationAdministratorGroupName;
                         row.Description = Resources.GroupProvider_OrganizationAdministratorGroupDescription;
                         row.BuiltIn = true;
@@ -495,7 +495,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertGroup(string name, string description)
         {
-            return InsertGroup(name, description, UserContext.SelectedOrganizationId, false, false);
+            return InsertGroup(name, description, UserContext.Current.SelectedOrganizationId, false, false);
         }
 
         /// <summary>
@@ -520,7 +520,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateGroup(Guid groupId, string name, string description)
         {
-            UpdateGroup(groupId, name, description, UserContext.SelectedOrganizationId);
+            UpdateGroup(groupId, name, description, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>

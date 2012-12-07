@@ -326,7 +326,7 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                return this.IsDetailMenuPage ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : WebApplication.CreateApplicationAbsoluteUrl(m_NavigateUrl);
+                return this.IsDetailMenuPage ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : CustomUrlProvider.CreateApplicationAbsoluteUrl(m_NavigateUrl);
             }
         }
 
@@ -442,7 +442,7 @@ namespace Micajah.Common.Bll
                 {
                     string navigateUrl = this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this);
                     bool isDetailMenu = ((this.ActionType == ActionType.Page) && (string.Compare(navigateUrl, string.Empty, StringComparison.OrdinalIgnoreCase) == 0));
-                    return isDetailMenu ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : WebApplication.CreateApplicationAbsoluteUrl(navigateUrl);
+                    return isDetailMenu ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl);
                 }
                 return this.AbsoluteNavigateUrl;
             }
@@ -748,7 +748,7 @@ namespace Micajah.Common.Bll
                 return this.Find(
                     delegate(Action action)
                     {
-                        return (string.Compare((isAbsoluteNavigateUrl ? action.AbsoluteNavigateUrl : WebApplication.CreateApplicationRelativeUrl(action.NavigateUrl)), navigateUrl, StringComparison.OrdinalIgnoreCase) == 0);
+                        return (string.Compare((isAbsoluteNavigateUrl ? action.AbsoluteNavigateUrl : CustomUrlProvider.CreateApplicationRelativeUrl(action.NavigateUrl)), navigateUrl, StringComparison.OrdinalIgnoreCase) == 0);
                     });
             }
         }
@@ -769,7 +769,7 @@ namespace Micajah.Common.Bll
                     {
                         if (!(string.IsNullOrEmpty(action.NavigateUrl) || string.IsNullOrEmpty(navigateUrl) || action.IsDetailMenuPage))
                         {
-                            string[] p1 = (isAbsoluteNavigateUrl ? action.AbsoluteNavigateUrl : WebApplication.CreateApplicationRelativeUrl(action.NavigateUrl)).Split('?');
+                            string[] p1 = (isAbsoluteNavigateUrl ? action.AbsoluteNavigateUrl : CustomUrlProvider.CreateApplicationRelativeUrl(action.NavigateUrl)).Split('?');
                             string[] p2 = navigateUrl.Split('?');
 
                             if (((string.Compare(p1[0], p2[0], StringComparison.OrdinalIgnoreCase) == 0)) && (p1.Length > 1) && (p2.Length > 1))

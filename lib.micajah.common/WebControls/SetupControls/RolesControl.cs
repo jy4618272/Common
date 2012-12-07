@@ -85,7 +85,7 @@ namespace Micajah.Common.WebControls.SetupControls
             else
             {
                 Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId((Guid)actionId);
-                str = ((action == null) ? string.Empty : WebApplication.CreateApplicationRelativeUrl(action.AbsoluteNavigateUrl));
+                str = ((action == null) ? string.Empty : CustomUrlProvider.CreateApplicationRelativeUrl(action.AbsoluteNavigateUrl));
             }
             return str;
         }

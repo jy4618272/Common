@@ -69,7 +69,7 @@ namespace Micajah.Common.WebControls.AdminControls
                         Guid? instanceId = null;
                         if (this.Entity.HierarchyStartLevel == EntityLevel.Instance)
                             instanceId = this.SelectedInstanceId;
-                        m_EntityCustomNodeTypes = this.Entity.GetCustomNodeTypes(UserContext.SelectedOrganizationId, this.SelectedInstanceId);
+                        m_EntityCustomNodeTypes = this.Entity.GetCustomNodeTypes(UserContext.Current.SelectedOrganizationId, this.SelectedInstanceId);
                     }
                 }
                 return m_EntityCustomNodeTypes;
@@ -106,7 +106,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
             if (Entity.HierarchyStartLevel == EntityLevel.Instance)
                 e.InputParameters["instanceId"] = this.SelectedInstanceId;
             e.InputParameters["entityId"] = EntityId;
@@ -134,13 +134,13 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void InstancesDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void InstanceList_DataBound(object sender, EventArgs e)

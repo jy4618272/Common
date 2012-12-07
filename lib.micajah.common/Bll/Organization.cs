@@ -696,14 +696,17 @@ namespace Micajah.Common.Bll
         /// <returns>true, if the specified organization is found; otherwise, false.</returns>
         internal bool Load(Guid organizationId)
         {
-            CommonDataSet.OrganizationRow orgRow = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
-            if (orgRow != null)
+            if (organizationId != Guid.Empty)
             {
-                Load(orgRow);
+                CommonDataSet.OrganizationRow orgRow = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
+                if (orgRow != null)
+                {
+                    Load(orgRow);
 
-                this.Reset();
+                    this.Reset();
 
-                return true;
+                    return true;
+                }
             }
             return false;
         }

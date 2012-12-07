@@ -428,7 +428,7 @@ namespace Micajah.Common.WebControls
                         else if (item.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
                         {
                             if (user.SelectedOrganization == null)
-                                customAbsoluteNavigateUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
+                                customAbsoluteNavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
                             else
                                 continue;
                         }

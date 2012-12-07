@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Mail;
 using System.Reflection;
+using System.Security.Authentication;
 using System.Security.Principal;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using System.Web.Configuration;
@@ -33,11 +33,9 @@ namespace Micajah.Common.Application
         private static OrganizationDataSetTableAdapters s_OrganizationDataSetTableAdapters;
         private static SortedList s_OrganizationDataSetTableAdaptersList;
         private static LoginProvider s_LoginProvider;
-        private static Guid? s_WebSiteId;
 
         // The objects which are used to synchronize access to the cached objects.
         private static object s_CommonDataSetSyncRoot = new object();
-        private static object s_WebSiteIdSyncRoot = new object();
         private static object s_EntitiesSyncRoot = new object();
         private static object s_RulesEnginesSyncRoot = new object();
         private static object s_StartThreadsSyncRoot = new object();
@@ -99,18 +97,8 @@ namespace Micajah.Common.Application
         {
             get
             {
-                if (!s_WebSiteId.HasValue)
-                {
-                    lock (s_WebSiteIdSyncRoot)
-                    {
-                        if (!s_WebSiteId.HasValue)
-                        {
-                            CommonDataSet.WebsiteRow row = WebsiteProvider.GetWebsiteRowByUrl(Hosts.ToArray());
-                            s_WebSiteId = ((row != null) ? row.WebsiteId : Guid.Empty);
-                        }
-                    }
-                }
-                return s_WebSiteId.Value;
+                CommonDataSet.WebsiteRow row = WebsiteProvider.GetWebsiteRowByUrl(Hosts.ToArray());
+                return ((row != null) ? row.WebsiteId : Guid.Empty);
             }
         }
 
@@ -301,7 +289,6 @@ namespace Micajah.Common.Application
         {
             WebApplicationElement.CurrentDatabaseVersion = 0;
             RefreshCommonDataSet(false);
-            RefreshWebsiteId();
             RefreshCollections();
         }
 
@@ -431,14 +418,6 @@ namespace Micajah.Common.Application
         internal static void RefreshOrganizationDataSetByOrganizationId(Guid organizationId)
         {
             RemoveOrganizationDataSetByOrganizationId(organizationId);
-        }
-
-        /// <summary>
-        /// Refreshes the identifier of the web site, which the current web application is beign run.
-        /// </summary>
-        internal static void RefreshWebsiteId()
-        {
-            s_WebSiteId = null;
         }
 
         /// <summary>
@@ -608,19 +587,17 @@ namespace Micajah.Common.Application
             string pageUrl = Request.AppRelativeCurrentExecutionFilePath;
 
             if (ResourceProvider.IsResourceUrl(pageUrl))
+            {
                 Context.SkipAuthorization = true;
-
-            if (Context.SkipAuthorization)
-                return;
-
-            if (ActionProvider.IsPublicPage(pageUrl))
+            }
+            else if (ActionProvider.IsPublicPage(pageUrl))
             {
                 if ((!FrameworkConfiguration.Current.WebApplication.Password.EnablePasswordRetrieval) &&
                     (string.Compare(pageUrl, ResourceProvider.PasswordRecoveryPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0))
                     throw new HttpException(404, Resources.Error_404);
                 else
                 {
-                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
+                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
                     if (action != null)
                         Context.SkipAuthorization = (!action.AuthenticationRequired);
                     else
@@ -707,63 +684,182 @@ namespace Micajah.Common.Application
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_PostAcquireRequestState(object sender, EventArgs e)
         {
-            HttpContext ctx = HttpContext.Current;
+            HttpContext http = HttpContext.Current;
 
-            if (ctx.Session != null)
+            if (http == null) return;
+            if (http.Session == null) return;
+
+            UserContext user = null;
+            Micajah.Common.Bll.Action action = null;
+
+            CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
+            string host = http.Request.Url.Host;
+            bool isDefaultPartialCustomUrl = false;
+
+            if (customUrlSettings.Enabled)
+                isDefaultPartialCustomUrl = CustomUrlProvider.IsDefaultVanityUrl(host);
+
+            if (!isDefaultPartialCustomUrl)
             {
-                UserContext user = null;
-
-                if (ctx.Session.IsNewSession)
+                if (http.Session.IsNewSession)
                 {
                     user = UserContext.Current;
                     if (user != null)
-                        LoginProvider.UpdateSession(user.UserId, ctx.Session.SessionID);
+                        LoginProvider.UpdateSession(user.UserId, http.Session.SessionID);
                 }
 
-                if (!ctx.SkipAuthorization)
+                if (!http.SkipAuthorization)
                 {
                     if (user == null)
                         user = UserContext.Current;
 
                     if (user == null)
                     {
-                        Micajah.Common.Bll.Action action = ActionProvider.FindAction(CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
+                        action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
                         if (action != null)
                         {
                             if (action.AuthenticationRequired)
                                 LoginProvider.SignOut(true, Request.Url.PathAndQuery);
                         }
                     }
-                    else if (!LoginProvider.ValidateSession(user.UserId, ctx.Session.SessionID))
+                    else if (!LoginProvider.ValidateSession(user.UserId, http.Session.SessionID))
                     {
-                        if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                        if (!customUrlSettings.Enabled)
                             LoginProvider.SignOut(true, true, true);
                     }
                 }
+            }
 
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (ctx.Session.IsNewSession || string.Compare(Security.UserContext.VanityUrl, System.Web.HttpContext.Current.Request.Url.Host, true) != 0))
+            if (!customUrlSettings.Enabled)
+                return;
+
+            if (!((http.User != null) && (http.User.Identity != null) && http.User.Identity.IsAuthenticated))
+                return;
+
+            if (http.Session.IsNewSession || (string.Compare(host, UserContext.VanityUrl, StringComparison.OrdinalIgnoreCase) != 0))
+            {
+                if (isDefaultPartialCustomUrl)
+                    return;
+
+                Guid organizationId = Guid.Empty;
+                Guid instanceId = Guid.Empty;
+                string vanityUrl = null;
+                bool setAuthCookie = true;
+
+                CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
+
+                if (organizationId == Guid.Empty)
                 {
-                    string url = null;
-                    UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
-                    if (Security.UserContext.SelectedOrganizationId != Guid.Empty && HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null && HttpContext.Current.User.Identity.IsAuthenticated)
+                    Guid userId = Guid.Empty;
+                    LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
+
+                    if (userId != Guid.Empty)
                     {
-                        url = CustomUrlProvider.GetVanityUrl(Security.UserContext.SelectedOrganizationId, Security.UserContext.SelectedInstanceId);
-                        url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
-                        if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
-                            Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, Request.Url.PathAndQuery));
+                        setAuthCookie = false;
+                        vanityUrl = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
                     }
-                    else if (HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.User.Identity != null && HttpContext.Current.User.Identity.IsAuthenticated)
+                }
+                else
+                {
+                    vanityUrl = host;
+                    UserContext.VanityUrl = host;
+                }
+
+                if (string.IsNullOrEmpty(vanityUrl))
+                {
+                    if (!isDefaultPartialCustomUrl)
                     {
-                        Guid userId = Guid.Empty;
-                        Guid organizationId = Guid.Empty;
-                        Guid instanceId = Guid.Empty;
-                        LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
-                        if (userId != Guid.Empty)
+                        http.Session.Abandon(); // Important fix of the issue with the same SessionID for all the child domains.
+
+                        http.Response.Redirect(CustomUrlProvider.CreateApplicationUri(http.Request.Url.PathAndQuery));
+                    }
+                }
+                else
+                {
+                    if (string.Compare(host, vanityUrl, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        if (user == null)
+                            user = UserContext.Current;
+
+                        if (user != null)
                         {
-                            url = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
-                            url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
-                            if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
-                                Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, Request.Url.PathAndQuery));
+                            try
+                            {
+                                user.SelectOrganization(organizationId, setAuthCookie, null, null);
+                                user.SelectInstance(instanceId, setAuthCookie, null);
+                            }
+                            catch (AuthenticationException)
+                            {
+                                http.Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId));
+                            }
+
+                            return;
+                        }
+                    }
+
+                    if (string.Compare(host, customUrlSettings.PartialCustomUrlRootAddressesFirst, StringComparison.OrdinalIgnoreCase) == 0)
+                        http.Session.Abandon(); // Important fix of the issue with the same SessionID for all the child domains.
+
+                    http.Response.Redirect(CustomUrlProvider.CreateApplicationUri(vanityUrl, http.Request.Url.PathAndQuery));
+                }
+
+            }
+            else
+            {
+                if (user == null)
+                    user = UserContext.Current;
+
+                if (user != null)
+                {
+                    string loginUrl = string.Empty;
+                    Guid organizationId = Guid.Empty;
+                    Guid instanceId = Guid.Empty;
+
+                    CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
+
+                    if (user.SelectedOrganizationId != Guid.Empty)
+                    {
+                        if (user.SelectedOrganizationId != organizationId)
+                            loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                        else
+                        {
+                            if (instanceId == Guid.Empty)
+                            {
+                                try
+                                {
+                                    user.SelectOrganization(organizationId, true, null, null);
+                                }
+                                catch (AuthenticationException)
+                                {
+                                    loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                                }
+                            }
+                            else if (user.SelectedInstanceId != instanceId)
+                            {
+                                loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId, instanceId, null);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    user.SelectInstance(instanceId, true, null);
+                                }
+                                catch (AuthenticationException)
+                                {
+                                    loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId, instanceId, null);
+                                }
+                            }
+                        }
+                    }
+                    else if (organizationId != Guid.Empty)
+                        loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+
+                    if (!string.IsNullOrEmpty(loginUrl))
+                    {
+                        if ((loginUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
+                            && (http.Request.Url.ToString().IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) == -1))
+                        {
+                            http.Response.Redirect(loginUrl);
                         }
                     }
                 }
@@ -788,73 +884,6 @@ namespace Micajah.Common.Application
         {
             if (Micajah.Common.Pages.PageStatePersister.IsInUse)
                 ViewStateProvider.DeleteExpiredViewState();
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Converts the specified URL to the application relative URL if it is possible.
-        /// </summary>
-        /// <param name="url">The URL to convert.</param>
-        /// <returns>The string that represents the application relative URL or original URL, if the conversion is not possible.</returns>
-        public static string CreateApplicationRelativeUrl(string url)
-        {
-            if (!string.IsNullOrEmpty(url))
-            {
-                url = Regex.Replace(url, "default.aspx", string.Empty, RegexOptions.IgnoreCase);
-                if (url.StartsWith("~", StringComparison.OrdinalIgnoreCase)) url = url.Remove(0, 1);
-                if (!string.IsNullOrEmpty(RootPath)) url = Regex.Replace(url, RootPath, string.Empty, RegexOptions.IgnoreCase);
-            }
-            return url;
-        }
-
-        /// <summary>
-        /// Converts the specified URL to the application absolute URL if it is possible.
-        /// </summary>
-        /// <param name="url">The URL to convert.</param>
-        /// <returns>The string that represents the application absolute URL or original URL, if the conversion is not possible.</returns>
-        public static string CreateApplicationAbsoluteUrl(string url)
-        {
-            if (!string.IsNullOrEmpty(url))
-            {
-                if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)
-                    || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)
-                    || url.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase)))
-                {
-                    if (url.StartsWith("~", StringComparison.OrdinalIgnoreCase)) url = url.Remove(0, 1);
-                    if (!url.StartsWith("/", StringComparison.OrdinalIgnoreCase)) url = "/" + url;
-                    if (!string.IsNullOrEmpty(RootPath))
-                    {
-                        if (!url.ToUpperInvariant().Contains(RootPath.ToUpperInvariant() + "/"))
-                            url = RootPath + url;
-                    }
-                    url = Regex.Replace(url, "default.aspx", string.Empty, RegexOptions.IgnoreCase);
-                }
-            }
-            return url;
-        }
-
-        /// <summary>
-        /// Converts the specified URL to the URI if it is possible.
-        /// </summary>
-        /// <param name="url">The URL to convert.</param>
-        /// <returns>The string that represents the URI or original URL, if the conversion is not possible.</returns>
-        public static string CreateApplicationUri(string url)
-        {
-            if (!string.IsNullOrEmpty(url))
-            {
-                if (!(url.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) || url.StartsWith(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
-                {
-                    if (url.StartsWith("~", StringComparison.OrdinalIgnoreCase)) url = url.Remove(0, 1);
-                    if (!url.StartsWith("/", StringComparison.OrdinalIgnoreCase)) url = "/" + url;
-                    if (FrameworkConfiguration.Current.WebApplication.Url.EndsWith("/", StringComparison.OrdinalIgnoreCase)) url = url.Remove(0, 1);
-                    url = FrameworkConfiguration.Current.WebApplication.Url + url;
-                    url = Regex.Replace(url, "default.aspx", string.Empty, RegexOptions.IgnoreCase);
-                }
-            }
-            return url;
         }
 
         #endregion

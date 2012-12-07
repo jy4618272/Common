@@ -211,7 +211,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 this.ShowDescription(string.Format(CultureInfo.CurrentCulture
                        , Resources.SignupUserControl_DescriptionLabel_Text_UserExists
-                       , string.Concat(WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.PasswordRecoveryPageVirtualPath), "?l=", HttpUtility.UrlEncodeUnicode(loginName))));
+                       , string.Concat(CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.PasswordRecoveryPageVirtualPath), "?l=", HttpUtility.UrlEncodeUnicode(loginName))));
 
                 returnValue = 2;
             }
@@ -255,7 +255,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!IsPostBack)
             {
-                string url = WebApplication.LoginProvider.GetLoginUrl();
+                string url = WebApplication.LoginProvider.GetLoginUrl(false);
                 if (this.InvitedLoginId == Guid.Empty)
                 {
                     if (!string.IsNullOrEmpty(Request.Url.Query))
@@ -328,7 +328,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                         WebApplication.LoginProvider.CancelInvitation(this.InvitedLoginId);
 
                     LogOnPageLink3.Text = Resources.SignupUserControl_LoginPageLink_Text_ClickHereToLogin;
-                    LogOnPageLink3.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(loginName);
+                    LogOnPageLink3.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(loginName, false);
                     LogOnPageLink3.Visible = true;
 
                     TitleLabel.Text = Resources.SignupUserControl_TitleLabel_SuccessText;

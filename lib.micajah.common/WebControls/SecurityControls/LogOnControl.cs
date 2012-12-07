@@ -198,45 +198,51 @@ namespace Micajah.Common.WebControls.SecurityControls
                 if (!Boolean.TryParse(isPersistentString, out isPersistent)) isPersistent = false;
             }
 
-            if (!(string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(password) || (this.OrganizationId == Guid.Empty)))
+            Guid organizationId = this.OrganizationId;
+            Guid instanceId = this.InstanceId;
+
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+            {
+                if (organizationId == Guid.Empty)
+                {
+                    string host = Request.Url.Host;
+                    if (!CustomUrlProvider.IsDefaultVanityUrl(host))
+                        CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
+                }
+                else
+                {
+                    string vanityUrl = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
+
+                    if (!string.IsNullOrEmpty(vanityUrl) && (string.Compare(Request.Url.Host, vanityUrl, StringComparison.OrdinalIgnoreCase) != 0))
+                    {
+                        if (string.IsNullOrEmpty(redirectUrl))
+                            redirectUrl = Request.Url.PathAndQuery;
+                        else
+                            redirectUrl = Request.Url.PathAndQuery + ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl);
+
+                        Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, vanityUrl, redirectUrl));
+                    }
+                }
+            }
+
+            if (!(string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(password) || (organizationId == Guid.Empty)))
             {
                 try
                 {
-                    (new LoginProvider()).SignOut(true, false);
+                    if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                        (new LoginProvider()).SignOut(true, false);
 
                     if (string.Compare(Request.QueryString["on"], bool.TrueString, StringComparison.OrdinalIgnoreCase) == 0)
                         WebApplication.RefreshCommonDataSet(true);
 
-                    WebApplication.LoginProvider.Authenticate(loginName, Support.Decrypt(password), false, isPersistent, this.OrganizationId, this.InstanceId);
+                    WebApplication.LoginProvider.Authenticate(loginName, Support.Decrypt(password), false, isPersistent, organizationId, instanceId);
 
                     ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+
                     if (string.IsNullOrEmpty(redirectUrl))
                         redirectUrl = "~/";
 
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    {
-                        string url = CustomUrlProvider.GetVanityUrl(this.OrganizationId, this.InstanceId);
-                        url = url.ToLower().Replace("https://", string.Empty).Replace("http://", string.Empty);
-
-                        if (!string.IsNullOrEmpty(url) && string.Compare(System.Web.HttpContext.Current.Request.Url.Host, url, true) != 0)
-                        {
-                            Security.UserContext.SelectedOrganizationId = Guid.Empty;
-                            Security.UserContext.SelectedInstanceId = Guid.Empty;
-                            Security.UserContext.Current = null;
-
-                            if (redirectUrl != "~/")
-                                Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, redirectUrl));
-                            else
-                                Response.Redirect(string.Format("{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, url, ResolveUrl(redirectUrl)));
-                        }
-                        else
-                        {
-                            Security.UserContext.SelectedOrganizationId = this.OrganizationId;
-                            Security.UserContext.SelectedInstanceId = this.InstanceId;
-                        }
-                    }
-                    else
-                        Response.Redirect(redirectUrl);
+                    Response.Redirect(redirectUrl);
 
                 }
                 catch (AuthenticationException ex)
@@ -347,7 +353,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl))
                     {
-                        HeaderLeftLogoLink.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl);
+                        HeaderLeftLogoLink.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl);
                         HeaderLeftLogoLink.ToolTip = FrameworkConfiguration.Current.WebApplication.Copyright.CompanyName;
                         HeaderLeftLogoLink.Visible = true;
                     }
@@ -365,7 +371,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.LogoImageUrl))
                 {
-                    HeaderRightLogoLink.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.LogoImageUrl);
+                    HeaderRightLogoLink.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.LogoImageUrl);
                     HeaderRightLogoLink.ToolTip = FrameworkConfiguration.Current.WebApplication.Name;
                 }
                 else
@@ -428,7 +434,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.LogoImageUrl))
                 {
-                    link.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.LogoImageUrl);
+                    link.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.LogoImageUrl);
                     link.ToolTip = FrameworkConfiguration.Current.WebApplication.Name;
                 }
                 else
@@ -502,7 +508,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void PasswordRecoveryButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect(WebApplication.LoginProvider.GetPasswordRecoveryUrl((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null));
+            Response.Redirect(WebApplication.LoginProvider.GetPasswordRecoveryUrl(((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null), false));
         }
 
         #endregion
@@ -637,7 +643,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 using (Image img = new Image())
                 {
-                    img.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl);
+                    img.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl);
                     img.ToolTip = FrameworkConfiguration.Current.WebApplication.Copyright.CompanyName;
 
                     RenderHeader(writer, img);

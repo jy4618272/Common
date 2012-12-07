@@ -136,7 +136,7 @@ namespace Micajah.Common.Bll.Providers
                                 , (int)ActionType.GlobalNavigationLink)))
                             {
                                 if (row.ActionId == LoginGlobalNavigationLinkActionId)
-                                    row.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl();
+                                    row.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(false);
                                 else if (row.ActionId == MyAccountGlobalNavigationLinkActionId)
                                 {
                                     if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
@@ -909,7 +909,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the authentication is not required for the specified URL; otherwise, false.</returns>
         internal static bool IsPublicPage(string navigateUrl)
         {
-            Action action = FindAction(Guid.Empty, WebApplication.CreateApplicationAbsoluteUrl(navigateUrl), PublicActions);
+            Action action = FindAction(Guid.Empty, CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl), PublicActions);
             if (action != null)
                 return ((!SetupActionIdList.Contains(action.ActionId)) || (string.Compare(navigateUrl, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
             return false;
@@ -937,7 +937,7 @@ namespace Micajah.Common.Bll.Providers
         {
             if (!string.IsNullOrEmpty(navigateUrl))
                 navigateUrl = navigateUrl.Split('?')[0];
-            bool result = (string.Compare(WebApplication.CreateApplicationAbsoluteUrl(navigateUrl), WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.FrameworkPageVirtualPath), StringComparison.OrdinalIgnoreCase) == 0);
+            bool result = (string.Compare(CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl), CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.FrameworkPageVirtualPath), StringComparison.OrdinalIgnoreCase) == 0);
             if (!result)
             {
                 Action action = FindAction(navigateUrl);
