@@ -515,7 +515,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 HttpRequest request = HttpContext.Current.Request;
 
-                url = request.Url.Scheme + Uri.SchemeDelimiter + host;
+                url = request.Url.Scheme + Uri.SchemeDelimiter + RemoveSchemeFormUri(host);
 
                 if (FrameworkConfiguration.Current.WebApplication.AddPort)
                 {
