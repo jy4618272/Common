@@ -530,7 +530,7 @@ namespace Micajah.Common.Bll.Providers
             else
                 url += CreateApplicationAbsoluteUrl(pathAndQuery);
 
-            return url;
+            return url.TrimEnd('/');
         }
 
         /// <summary>
