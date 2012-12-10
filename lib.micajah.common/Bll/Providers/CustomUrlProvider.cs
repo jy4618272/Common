@@ -70,11 +70,7 @@ namespace Micajah.Common.Bll.Providers
         {
             CommonDataSet.CustomUrlRow row = GetCustomUrl(customUrlId);
             if (row != null)
-            {
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Delete(customUrlId);
-
-                WebsiteProvider.RemoveWebsiteUrls(row.OrganizationId, row.FullCustomUrl, row.PartialCustomUrl);
-            }
         }
 
         /// <summary>
@@ -243,11 +239,6 @@ namespace Micajah.Common.Bll.Providers
                 WebApplication.CommonDataSet.CustomUrl.AddCustomUrlRow(row);
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(row);
 
-                if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, row.PartialCustomUrl);
-                else
-                    WebsiteProvider.AddWebsiteUrls(organizationId, row.FullCustomUrl, string.Format(CultureInfo.InvariantCulture, "{0}.{1}", row.PartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst));
-
                 return row.CustomUrlId;
             }
             finally
@@ -303,12 +294,6 @@ namespace Micajah.Common.Bll.Providers
                     partialCustomUrl = string.Empty;
 
                 WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
-
-                if (row != null)
-                {
-                    WebsiteProvider.RemoveWebsiteUrls(row.OrganizationId, row.FullCustomUrl, row.PartialCustomUrl);
-                    WebsiteProvider.AddWebsiteUrls(row.OrganizationId, fullCustomUrl, partialCustomUrl);
-                }
             }
             finally
             {

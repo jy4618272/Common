@@ -746,13 +746,15 @@ namespace Micajah.Common.Application
             if (!((http.User != null) && (http.User.Identity != null) && http.User.Identity.IsAuthenticated))
                 return;
 
+            string redirectUrl = string.Empty;
+            Guid organizationId = Guid.Empty;
+            Guid instanceId = Guid.Empty;
+
             if (http.Session.IsNewSession || (string.Compare(host, UserContext.VanityUrl, StringComparison.OrdinalIgnoreCase) != 0))
             {
                 if (isDefaultPartialCustomUrl)
                     return;
 
-                Guid organizationId = Guid.Empty;
-                Guid instanceId = Guid.Empty;
                 string vanityUrl = null;
                 bool setAuthCookie = true;
 
@@ -781,7 +783,7 @@ namespace Micajah.Common.Application
                     {
                         http.Session.Abandon(); // Important fix of the issue with the same SessionID for all the child domains.
 
-                        http.Response.Redirect(CustomUrlProvider.CreateApplicationUri(http.Request.Url.PathAndQuery));
+                        redirectUrl = CustomUrlProvider.CreateApplicationUri(http.Request.Url.PathAndQuery);
                     }
                 }
                 else
@@ -800,23 +802,18 @@ namespace Micajah.Common.Application
                             }
                             catch (AuthenticationException)
                             {
-                                string loginUrl = LoginProvider.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.CreateApplicationUri(host, null));
-
-                                if ((loginUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
-                                    && (http.Request.Url.ToString().IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) == -1))
-                                {
-                                    http.Response.Redirect(loginUrl);
-                                }
+                                redirectUrl = LoginProvider.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.CreateApplicationUri(host, null));
                             }
-
-                            return;
                         }
                     }
 
-                    if (string.Compare(host, customUrlSettings.PartialCustomUrlRootAddressesFirst, StringComparison.OrdinalIgnoreCase) == 0)
-                        http.Session.Abandon(); // Important fix of the issue with the same SessionID for all the child domains.
+                    if (string.IsNullOrEmpty(redirectUrl))
+                    {
+                        if (string.Compare(host, customUrlSettings.PartialCustomUrlRootAddressesFirst, StringComparison.OrdinalIgnoreCase) == 0)
+                            http.Session.Abandon(); // Important fix of the issue with the same SessionID for all the child domains.
 
-                    http.Response.Redirect(CustomUrlProvider.CreateApplicationUri(vanityUrl, http.Request.Url.PathAndQuery));
+                        redirectUrl = CustomUrlProvider.CreateApplicationUri(vanityUrl, http.Request.Url.PathAndQuery);
+                    }
                 }
 
             }
@@ -827,16 +824,12 @@ namespace Micajah.Common.Application
 
                 if (user != null)
                 {
-                    string loginUrl = string.Empty;
-                    Guid organizationId = Guid.Empty;
-                    Guid instanceId = Guid.Empty;
-
                     CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
 
                     if (user.SelectedOrganizationId != Guid.Empty)
                     {
                         if (user.SelectedOrganizationId != organizationId)
-                            loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
+                            redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
                         else
                         {
                             if (instanceId == Guid.Empty)
@@ -847,12 +840,12 @@ namespace Micajah.Common.Application
                                 }
                                 catch (AuthenticationException)
                                 {
-                                    loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
+                                    redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
                                 }
                             }
                             else if (user.SelectedInstanceId != instanceId)
                             {
-                                loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
+                                redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                             }
                             else
                             {
@@ -862,22 +855,22 @@ namespace Micajah.Common.Application
                                 }
                                 catch (AuthenticationException)
                                 {
-                                    loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
+                                    redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                                 }
                             }
                         }
                     }
                     else if (organizationId != Guid.Empty)
-                        loginUrl = LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                        redirectUrl = LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                }
+            }
 
-                    if (!string.IsNullOrEmpty(loginUrl))
-                    {
-                        if ((loginUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
-                            && (http.Request.Url.ToString().IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) == -1))
-                        {
-                            http.Response.Redirect(loginUrl);
-                        }
-                    }
+            if (!string.IsNullOrEmpty(redirectUrl))
+            {
+                if ((redirectUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
+                    && (http.Request.Url.ToString().IndexOf(redirectUrl, StringComparison.OrdinalIgnoreCase) == -1))
+                {
+                    http.Response.Redirect(redirectUrl);
                 }
             }
         }

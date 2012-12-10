@@ -795,24 +795,27 @@ namespace Micajah.Common.Security
             return null;
         }
 
-        internal void CheckWebSite(Guid? organizationId, Guid? instanceId, string returnUrl)
+        internal void CheckWebSite(Guid organizationId, Guid? instanceId, string returnUrl)
         {
-            if (organizationId.HasValue)
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId.Value);
-                if (WebApplication.WebsiteId != webSiteId)
+                if (!CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
+                    return;
+            }
+
+            Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
+            if (WebApplication.WebsiteId != webSiteId)
+            {
+                if (string.IsNullOrEmpty(returnUrl))
                 {
-                    if (string.IsNullOrEmpty(returnUrl))
+                    HttpContext http = HttpContext.Current;
+                    if (http != null)
                     {
-                        HttpContext http = HttpContext.Current;
-                        if (http != null)
-                        {
-                            if (http.Request != null)
-                                returnUrl = http.Request.QueryString["returnurl"];
-                        }
+                        if (http.Request != null)
+                            returnUrl = http.Request.QueryString["returnurl"];
                     }
-                    (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId.Value, instanceId.GetValueOrDefault(), returnUrl));
                 }
+                (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
             }
         }
 

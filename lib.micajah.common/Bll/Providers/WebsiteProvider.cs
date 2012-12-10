@@ -13,67 +13,6 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class WebsiteProvider
     {
-        #region Private Methods
-
-        /// <summary>
-        /// Updates the URLs list of the web site, that the specified organization is associated with.
-        /// </summary>
-        /// <param name="organizationId">The unique identifier of the organization.</param>
-        /// <param name="operationCode">The code of the operation: 0 - add, 1 - remove.</param>
-        /// <param name="urls">The URLs to add or remove.</param>
-        private static void UpdateWebsiteUrl(Guid organizationId, int operationCode, params string[] urls)
-        {
-            CommonDataSet.WebsiteRow row = GetWebsiteRowByOrganizationId(organizationId);
-            if (row == null) return;
-
-            string[] existingUrls = row.Url.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            List<string> list = new List<string>(existingUrls);
-            int decrement = 0;
-
-            foreach (string url in urls)
-            {
-                if (string.IsNullOrEmpty(url)) continue;
-
-                string correctUrl = url;
-                if (!correctUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase))
-                    correctUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + correctUrl;
-
-                bool urlExists = false;
-                int index = 0;
-                foreach (string existingUrl in existingUrls)
-                {
-                    if (string.Compare(correctUrl, existingUrl, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        urlExists = true;
-                        break;
-                    }
-                    index++;
-                }
-                if (urlExists)
-                {
-                    if (operationCode == 1)
-                    {
-                        index -= decrement;
-                        if (index < list.Count)
-                        {
-                            list.RemoveAt(index);
-                            decrement++;
-                        }
-                    }
-                }
-                else if (operationCode == 0)
-                    list.Add(correctUrl);
-            }
-
-            if (list.Count != existingUrls.Length)
-            {
-                row.Url = string.Join("\r\n", list.ToArray());
-                WebApplication.CommonDataSetTableAdapters.WebsiteTableAdapter.Update(row);
-            }
-        }
-
-        #endregion
-
         #region Internal Methods
 
         /// <summary>
@@ -155,26 +94,6 @@ namespace Micajah.Common.Bll.Providers
         {
             CommonDataSet.WebsiteRow row = GetWebsiteRowByOrganizationId(organizationId);
             return ((row == null) ? Guid.Empty : row.WebsiteId);
-        }
-
-        /// <summary>
-        /// Adds the specified URLs to the URLs list of the web site, that the specified organization is associated with.
-        /// </summary>
-        /// <param name="organizationId">The unique identifier of the organization.</param>
-        /// <param name="urls">The URLs to add.</param>
-        internal static void AddWebsiteUrls(Guid organizationId, params string[] urls)
-        {
-            UpdateWebsiteUrl(organizationId, 0, urls);
-        }
-
-        /// <summary>
-        /// Removes the specified URLs from the URLs list of the web site, that the specified organization is associated with.
-        /// </summary>
-        /// <param name="organizationId">The unique identifier of the organization.</param>
-        /// <param name="urls">The URLs to remove.</param>
-        internal static void RemoveWebsiteUrls(Guid organizationId, params string[] urls)
-        {
-            UpdateWebsiteUrl(organizationId, 1, urls);
         }
 
         #endregion
