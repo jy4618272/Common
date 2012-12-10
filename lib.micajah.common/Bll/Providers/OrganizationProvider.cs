@@ -186,8 +186,6 @@ namespace Micajah.Common.Bll.Providers
                 , partialCustomUrl
                 , sendNotificationEmail, refreshAllData);
 
-            if (refreshAllData) WebApplication.RefreshAllData();
-
             return organizationId;
         }
 
@@ -776,7 +774,7 @@ namespace Micajah.Common.Bll.Providers
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
                 , partialCustomUrl
-                , sendNotificationEmail, true);
+                , sendNotificationEmail, false);
         }
 
         /// <summary>

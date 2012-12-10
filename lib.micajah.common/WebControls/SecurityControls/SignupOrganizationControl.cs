@@ -629,6 +629,8 @@ function InstanceRequiredValidation(source, arguments) {{
 
             SettingProvider.InitializeStartMenuCheckedItemsSetting(orgId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instId) : null));
 
+            WebApplication.RefreshAllData(false);
+
             Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
                 , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
                 , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));

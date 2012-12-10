@@ -267,9 +267,19 @@ namespace Micajah.Common.Application
         /// </summary>
         internal static void RefreshAllData()
         {
+            RefreshAllData(true);
+        }
+
+        /// <summary>
+        /// Refreshes all cached data.
+        /// </summary>
+        /// <param name="refreshUserContext">Whether the current user context should be refreshed.</param>
+        internal static void RefreshAllData(bool refreshUserContext)
+        {
             RefreshCommonData();
             RefreshOrganizationDataSets();
-            UserContext.RefreshCurrent();
+            if (refreshUserContext)
+                UserContext.RefreshCurrent();
         }
 
         /// <summary>
@@ -790,7 +800,13 @@ namespace Micajah.Common.Application
                             }
                             catch (AuthenticationException)
                             {
-                                http.Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId));
+                                string loginUrl = LoginProvider.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.CreateApplicationUri(host, null));
+
+                                if ((loginUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
+                                    && (http.Request.Url.ToString().IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) == -1))
+                                {
+                                    http.Response.Redirect(loginUrl);
+                                }
                             }
 
                             return;
@@ -820,7 +836,7 @@ namespace Micajah.Common.Application
                     if (user.SelectedOrganizationId != Guid.Empty)
                     {
                         if (user.SelectedOrganizationId != organizationId)
-                            loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                            loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
                         else
                         {
                             if (instanceId == Guid.Empty)
@@ -831,12 +847,12 @@ namespace Micajah.Common.Application
                                 }
                                 catch (AuthenticationException)
                                 {
-                                    loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                                    loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
                                 }
                             }
                             else if (user.SelectedInstanceId != instanceId)
                             {
-                                loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId, instanceId, null);
+                                loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                             }
                             else
                             {
@@ -846,13 +862,13 @@ namespace Micajah.Common.Application
                                 }
                                 catch (AuthenticationException)
                                 {
-                                    loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId, instanceId, null);
+                                    loginUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                                 }
                             }
                         }
                     }
                     else if (organizationId != Guid.Empty)
-                        loginUrl = WebApplication.LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                        loginUrl = LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
 
                     if (!string.IsNullOrEmpty(loginUrl))
                     {

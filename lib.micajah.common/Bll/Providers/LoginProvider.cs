@@ -462,7 +462,8 @@ namespace Micajah.Common.Bll.Providers
 
         internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl)
         {
-            return GetLoginUrl(loginName, password, Guid.Empty, Guid.Empty, newOrg, returnUrl, CustomUrlProvider.GetVanityUri(organizationId, instanceId));
+            CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
+            return GetLoginUrl(loginName, password, (customUrlSettings.Enabled ? Guid.Empty : organizationId), (customUrlSettings.Enabled ? Guid.Empty : instanceId), newOrg, returnUrl, CustomUrlProvider.GetVanityUri(organizationId, instanceId));
         }
 
         /// <summary>
