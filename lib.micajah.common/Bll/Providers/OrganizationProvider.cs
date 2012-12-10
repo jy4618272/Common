@@ -17,13 +17,6 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class OrganizationProvider
     {
-        #region Members
-
-        private const int DefaultExpirationDays = 7;
-        private const int DefaultGraceDays = 7;
-
-        #endregion
-
         #region Events
 
         /// <summary>
@@ -769,7 +762,7 @@ namespace Micajah.Common.Bll.Providers
         {
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
                 , null, null, null
-                , DateTime.UtcNow.Date.AddDays(DefaultExpirationDays), DefaultGraceDays, true, null, true
+                , null, 0, true, null, true
                 , street, street2, city, state, postalCode, country, currency
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
