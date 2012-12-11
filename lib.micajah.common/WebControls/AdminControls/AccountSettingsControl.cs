@@ -13,7 +13,6 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
-using ChargifyNET;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -359,7 +358,6 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
             masterPage.MessageType = NoticeMessageType.Error;
-            decimal amount = 0;
 
             Setting setting = null;
             string trainingName = string.Empty;
