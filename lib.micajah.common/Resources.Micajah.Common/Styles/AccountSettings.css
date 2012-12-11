@@ -1,99 +1,4 @@
-﻿a,
-abbr,
-acronym,
-address,
-applet,
-article,
-aside,
-audio,
-b,
-big,
-blockquote,
-body,
-canvas,
-caption,
-center,
-cite,
-code,
-dd,
-del,
-details,
-dfn,
-dialog,
-div,
-dl,
-dt,
-em,
-embed,
-fieldset,
-figcaption,
-figure,
-font,
-footer,
-form,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-header,
-hgroup,
-hr,
-html,
-i,
-iframe,
-img,
-ins,
-kbd,
-label,
-legend,
-li,
-mark,
-menu,
-meter,
-nav,
-object,
-ol,
-output,
-p,
-pre,
-progress,
-q,
-rp,
-rt,
-ruby,
-s,
-samp,
-section,
-small,
-span,
-strike,
-strong,
-sub,
-summary,
-sup,
-table,
-tbody,
-td,
-tfoot,
-th,
-thead,
-time,
-tr,
-tt,
-u,
-ul,
-var,
-video,
-xmp {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  font-size: 100%;
-}
-
-    .rtWrapperTopCenter {position: relative;}
+﻿    .rtWrapperTopCenter {position: relative;}
     div.RadToolTip .rtWrapperTopCenter a.rtCloseButton
     {
         position: absolute;
@@ -108,8 +13,8 @@ xmp {
     .Error {position: static !important;}
     
     .ccformsubmit {text-align: center;}
-
-    p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset, figure {margin-bottom: 20px;}
+    .accsettings a, div, h1, h2, h3, h4, h5, h6, span {border: 0 none; margin: 0; padding: 0; font-size: 100%;}
+    p, dl, hr, h1, h2, h3, h4, h5, h6 {margin-bottom: 20px;}
     h1, h2, h3, h4, h5, xx-large, x-large, large, p {font-weight: normal;}
     h1 {font-size: 25px;}
     h2 {font-size: 23px;}
@@ -118,7 +23,7 @@ xmp {
     h5 {font-size: 17px;}
     h6 {font-size: 15px;}
     
-    a {font-family: arial, Sans-Serif; color: #42657C;} 
+    .accsettings a {font-family: arial, Sans-Serif; color: #42657C;} 
     table {border-collapse: collapse; border-spacing: 0; width: 100%;}
     th,td,caption {font-weight: normal; vertical-align: top; text-align: left;}
     table td, table th {padding: 10px; line-height: 1.3em; vertical-align: middle;}
@@ -177,10 +82,10 @@ xmp {
     #support{margin-bottom: 40px;}
     #emailsupport h4 {padding-left: 40px; background: url('$help.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
     .email-emailsupport {float: right; margin-top: 8px;}
-    #phonesupport h4 {padding-left: 40px; background: url('$phone.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
+    .phonesupport-label {padding-left: 40px; background: url('$phone.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
     #phone-service {display: none; color: #006792;}
     #phone-service h4 {background: none;}
-    #emailsupport, #phonesupport {width: 100%; max-width: 600px; margin: 0; overflow: hidden; padding: 10px 0;} 
+    #emailsupport, .phonesupport {width: 100%; max-width: 600px; margin: 0; overflow: hidden; padding: 10px 0;} 
 
 /* -- Training Section -- */
     #training-consulting table tbody tr, #training-consulting table tbody td, #training-consulting table tbody {border: none;}

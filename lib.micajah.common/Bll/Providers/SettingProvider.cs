@@ -723,29 +723,7 @@ namespace Micajah.Common.Bll.Providers
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} = 1", table.PaidColumn.ColumnName);
             SettingCollection settings = new SettingCollection();
             foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
-            if (instanceId != Guid.Empty) FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
-            else
-            {
-                OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-                OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
-                DataRow[] svRow = null;
-                string columnName = svTable.ValueColumn.ColumnName;
-
-                foreach (Setting setting in settings)
-                {
-                    setting.Value = setting.DefaultValue;
-                    svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, "{0}='{1}' AND {2}='{3}'", svTable.SettingIdColumn.ColumnName, setting.SettingId, svTable.OrganizationIdColumn.ColumnName, organizationId));
-                    foreach (DataRow _row in svRow)
-                    {
-                        bool _checked = false;
-                        if (bool.TryParse(_row[columnName].ToString(), out _checked) && _checked)
-                        {
-                            setting.Value = _row[columnName].ToString();
-                            break;
-                        }
-                    }
-                }
-            }
+            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
             settings.Sort();
             return settings;
         }
@@ -755,21 +733,29 @@ namespace Micajah.Common.Bll.Providers
             return GetPaidSettings(organizationId, Guid.Empty);
         }
 
-        internal static SettingCollection GetCounterSettings(Guid organizationId)
+        internal static SettingCollection GetCounterSettings(Guid organizationId, Guid instanceId)
         {
             CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
-            string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0 AND {1} = 0", table.PriceColumn.ColumnName, table.PaidColumn.ColumnName);
+            string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
             SettingCollection settings = new SettingCollection();
-            foreach (CommonDataSet.SettingRow _srow in table.Select(filter))
+            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
+            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+
+            foreach (Setting setting in settings)
             {
-                Setting _setting = CreateSetting(_srow);
-                int _cval = _setting.GetCounterValue(organizationId);
+                if (setting.Paid) continue;
+
+                int _cval = setting.GetCounterValue(organizationId);
                 if (_cval < 0) continue;
-                _setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
-                settings.Add(_setting);
+                setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
             }
             settings.Sort();
             return settings;
+        }
+
+        internal static SettingCollection GetCounterSettings(Guid organizationId)
+        {
+            return GetCounterSettings(organizationId, Guid.Empty);
         }
 
         /// <summary>

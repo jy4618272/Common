@@ -3,6 +3,18 @@
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4" %>
 <asp:PlaceHolder ID="PageContent" runat="server">
+<script type="text/javascript">
+
+    // Override $.fancybox.init to fix ASP.NET PostBack bug;
+    var fancyboxInitOld = $.fancybox.init;
+    $.fancybox.init = function () {
+        fancyboxInitOld.apply(arguments);
+        $("#fancybox-tmp, #fancybox-loading, #fancybox-overlay, #fancybox-wrap").appendTo("form:first");
+    };
+
+    // Your code ...
+
+</script>
 <div class="planinfo">
     <div class="account-head">
         <div class="account-type">
@@ -51,8 +63,8 @@
             <div class="email-emailsupport"><asp:HyperLink runat="server" NavigateUrl="~/support" CssClass="buttons" Text="Submit a Ticket"></asp:HyperLink></div>
             <h4>Online Support</h4>
         </div>
-        <div id="phonesupport">
-            <h4>Phone Support</h4><span id="phone-service"><h4><asp:Literal ID="lPhoneSupport" runat="server" Text="(866) 996-1200"></asp:Literal></h4></span>
+        <div id="divPhoneSupport" class="accsettings phonesupport" runat="server">
+            <h4 class="accsettings phonesupport-label">Phone Support</h4><span id="phone-service" class="accsettings"><h4 class="accsettings"><asp:Literal ID="lPhoneSupport" runat="server" Text="(866) 996-1200"></asp:Literal></h4></span>
             <div class="feature-toggle" id="divbtPhoneSupportOnOff">
                 <mits:CheckBox ID="chkPhoneSupport" runat="server" RenderingMode="OnOffSwitch" AutoPostBack="True" OnCheckedChanged="checkBox_CheckedChanged"/>
                 <asp:PlaceHolder runat="server" ID="phPhoneSupportToolTip"></asp:PlaceHolder>
@@ -66,7 +78,7 @@
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>1 Hour</strong><asp:Label runat="server" ID="lblTraining1HourPrice"></asp:Label></p>
+                        <p><strong>1 Hour&nbsp;</strong><asp:Label runat="server" ID="lblTraining1HourPrice"></asp:Label></p>
                     </div>
                     <div class="purchase">
                         <asp:Button runat="server" ID="btnPurchase1Hour" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
@@ -104,65 +116,69 @@
             Note that you will lose information stored on our servers once you delete your account.
         </div>
     </div>
+    <div class="account-heading"><h2>Payment History</h2></div>
+    <mits:CommonGridView ID="cgvTransactList" runat="server" DataKeyNames="ID" AutoGenerateColumns="False" AllowSorting="False" Width="600px">
+        <columns>
+            <mits:TextBoxField DataField="CreatedAt" HeaderText="Date" DataFormatString="{0:d-MMM-yyyy}"/>
+            <mits:TextBoxField DataField="Memo" HeaderText="Memo"/>
+            <asp:TemplateField HeaderText="Status">
+                <ItemTemplate>
+                    <asp:Label ID="lbStatus" runat="server" Text='<%# (bool)Eval("Success") ? "Success" : "Failed" %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <mits:TextBoxField DataField="Amount" HeaderText="Amount" DataFormatString="{0:C}" />
+        </columns>
+    </mits:CommonGridView>
 </div>
 
 <!-- Pop ups from here down -->
-<telerik:RadToolTip runat="server" ID="RadToolTip1" TargetControlID="aBtnCCUpdate" IsClientID="True"
-    ShowEvent="OnClick" HideEvent="ManualClose" Position="Center" RelativeTo="BrowserWindow" EnableShadow="True" OffsetY="-1" Modal="True"
-    Width="400px" Height="400px">
-            <div id="credit_card_form">    
-            <div class="content">
-                <asp:UpdatePanel runat="server" ID="UpdatePanel3">
-                <ContentTemplate>
-                <mits:NoticeMessageBox runat="server" ID="msgStatus" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
-                 <div class="cards_select">  
-                    <ul class="cards">
-                        <li>
-                        <span data-name="visa" title="Visa" class="card visa">Visa</span>
-                        </li>    
-                        <li>
-                        <span data-name="master" title="Mastercard" class="card master">Mastercard</span>
-                        </li>    
-                        <li>
-                        <span data-name="american-express" title="American Express" class="card american-express">American Express</span>
-                        </li>    
-                        <li>
-                        <span data-name="discover" title="Discover" class="card discover">Discover</span>
-                        </li>
-                    </ul>
-                </div>
-                 <dl class="form">
-                   <dt><label>Email</label></dt>
-                    <dd><mits:TextBox runat="server" ID="txtEmail" Required="True" ValidationType="RegularExpression" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Width="300"/></dd>
-                 </dl>
-                 <dl class="form">
-                    <dt><label>Full Name</label></dt>
-                    <dd><mits:TextBox runat="server" ID="txtFullName" Required="True" Width="300"/></dd>
-                 </dl>
-                 <dl class="form">
-                   <dt><label>Card Number</label></dt>
-                   <dd><mits:TextBox runat="server" ID="txtCCNumber" Required="True" Width="300"/></dd>
-                 </dl>
-                 <dl class="form expiration">
-                   <dt><label>Expiration</label></dt>
-                   <dd>
-                       <mits:TextBox runat="server" ID="txtCCExpMonth" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
-                       <span>&nbsp;/&nbsp;</span>
-                       <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="12" MaximumValue="17" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
-                   </dd>
-                 </dl>
-                </ContentTemplate>
-                <Triggers>
-                    <asp:AsyncPostBackTrigger ControlID="btnUpdateCC" EventName="Click"/>
-                    <asp:PostBackTrigger ControlID="btnPurchase1Hour"/>
-                    <asp:PostBackTrigger ControlID="btnPurchase3Hours"/>
-                    <asp:PostBackTrigger ControlID="btnPurchase8Hours"/>
-                </Triggers>
-                </asp:UpdatePanel>    
-                 <div class="ccformsubmit">
-                    <asp:Button runat="server" ID="btnUpdateCC" CssClass="Large Green" Text="Update Credit Card" OnClick="btnUpdateCC_Click"/>
-	            </div>
-            </div>
-            </div>
-</telerik:RadToolTip>
+<div style="display: none;">
+    <div id="credit_card_form">    
+    <div class="content">
+        <asp:UpdatePanel runat="server" ID="UpdatePanel3">
+        <ContentTemplate>
+        <mits:NoticeMessageBox runat="server" ID="msgStatus" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
+        <asp:HiddenField runat="server" ID="hfPurchaseTrainingHours" Value="0"/>
+            <div class="cards_select">  
+            <ul class="cards">
+                <li>
+                <span data-name="visa" title="Visa" class="card visa">Visa</span>
+                </li>    
+                <li>
+                <span data-name="master" title="Mastercard" class="card master">Mastercard</span>
+                </li>    
+                <li>
+                <span data-name="american-express" title="American Express" class="card american-express">American Express</span>
+                </li>    
+                <li>
+                <span data-name="discover" title="Discover" class="card discover">Discover</span>
+                </li>
+            </ul>
+        </div>
+            <dl class="form">
+            <dt><label>Card Number</label></dt>
+            <dd><mits:TextBox runat="server" ID="txtCCNumber" Required="True" Width="300"/></dd>
+            </dl>
+            <dl class="form expiration">
+            <dt><label>Expiration</label></dt>
+            <dd>
+                <mits:TextBox runat="server" ID="txtCCExpMonth" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
+                <span>&nbsp;/&nbsp;</span>
+                <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="12" MaximumValue="17" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
+            </dd>
+            </dl>
+            <div class="ccformsubmit">
+                <asp:Button runat="server" ID="btnUpdateCC" CssClass="Large Green" Text="Update Credit Card" OnClick="btnUpdateCC_Click"/>
+	        </div>
+        </ContentTemplate>
+        <Triggers>
+            <asp:AsyncPostBackTrigger ControlID="btnUpdateCC" EventName="Click"/>
+            <asp:PostBackTrigger ControlID="btnPurchase1Hour"/>
+            <asp:PostBackTrigger ControlID="btnPurchase3Hours"/>
+            <asp:PostBackTrigger ControlID="btnPurchase8Hours"/>
+        </Triggers>
+        </asp:UpdatePanel>    
+    </div>
+    </div>
+</div>
 </asp:PlaceHolder>
