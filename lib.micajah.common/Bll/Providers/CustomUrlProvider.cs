@@ -330,7 +330,7 @@ namespace Micajah.Common.Bll.Providers
 
                         if (org == null)
                         {
-                            CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(segment);
+                            CommonDataSet.CustomUrlRow row = GetCustomUrl(segment);
                             if (row != null)
                                 org = OrganizationProvider.GetOrganization(row.OrganizationId);
                         }
@@ -382,10 +382,10 @@ namespace Micajah.Common.Bll.Providers
                 CommonDataSet.CustomUrlRow row = null;
 
                 if (instanceId != Guid.Empty)
-                    row = CustomUrlProvider.GetCustomUrl(organizationId, instanceId);
+                    row = GetCustomUrl(organizationId, instanceId);
 
                 if (row == null)
-                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(organizationId);
+                    row = GetCustomUrlByOrganizationId(organizationId);
 
                 if (instanceId != Guid.Empty)
                     inst = InstanceProvider.GetInstance(instanceId, organizationId);
@@ -526,7 +526,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instance">An instance.</param>
         public static void ParseHost(string host, ref Organization organization, ref Instance instance)
         {
-            CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(host);
+            CommonDataSet.CustomUrlRow row = GetCustomUrl(host);
             if (row != null)
             {
                 organization = OrganizationProvider.GetOrganization(row.OrganizationId);
