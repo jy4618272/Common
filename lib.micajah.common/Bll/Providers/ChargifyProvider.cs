@@ -65,7 +65,7 @@ namespace Micajah.Common.Bll.Providers
 
             foreach (Setting setting in CounterSettings)
             {
-                if (string.IsNullOrEmpty(setting.ExternalId)) continue;
+                if (string.IsNullOrEmpty(setting.ExternalId) || setting.Paid) continue;
 
                 int _cid = 0;
                 string _val = setting.Value;
