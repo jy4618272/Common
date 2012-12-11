@@ -829,7 +829,7 @@ namespace Micajah.Common.Application
                     if (user.SelectedOrganizationId != Guid.Empty)
                     {
                         if (user.SelectedOrganizationId != organizationId)
-                            redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
+                            redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                         else
                         {
                             if (instanceId == Guid.Empty)
