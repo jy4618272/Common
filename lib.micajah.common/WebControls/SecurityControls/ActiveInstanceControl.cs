@@ -89,10 +89,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             return false;
         }
 
-        internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
+        // Just validates the access rights of current user to specified URL.
+        internal static void ValidateRedirectUrl(ref string redirectUrl)
         {
-            UserContext user = UserContext.Current;
-
             if (!string.IsNullOrEmpty(redirectUrl))
             {
                 string relativeUrl = CustomUrlProvider.CreateApplicationRelativeUrl(redirectUrl);
@@ -103,6 +102,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                     Guid actionId = Guid.Empty;
                     object obj = Support.ConvertStringToType(Support.ExtractQueryStringParameterValue(redirectUrl, "pageid"), typeof(Guid));
                     if (obj != null) actionId = (Guid)obj;
+
+                    UserContext user = UserContext.Current;
 
                     if (user != null && user.SelectedOrganization != null)
                     {
@@ -117,6 +118,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                     }
                 }
             }
+        }
+
+        internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
+        {
+            UserContext user = UserContext.Current;
+
+            ValidateRedirectUrl(ref redirectUrl);
 
             if (enableStartMenu)
             {

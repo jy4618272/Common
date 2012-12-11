@@ -78,7 +78,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// Stores the specified organization identifier and redirects to originally requested URL.
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
-        internal static void SelectOrganization(Guid organizationId, string returnUrl, HtmlGenericControl errorDiv)
+        internal static void SelectOrganization(Guid organizationId, string returnUrl, bool validateRedirectUrl, HtmlGenericControl errorDiv)
         {
             try
             {
@@ -86,7 +86,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
-                    ActiveInstanceControl.ValidateRedirectUrl(ref returnUrl, true);
+                    if (validateRedirectUrl)
+                        ActiveInstanceControl.ValidateRedirectUrl(ref returnUrl, true);
 
                     errorDiv.Page.Session.Clear();
 
@@ -96,7 +97,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     UserContext.Current.SelectOrganization(organizationId);
 
-                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+                    if (validateRedirectUrl)
+                        ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
 
                     if (!string.IsNullOrEmpty(redirectUrl))
                         errorDiv.Page.Response.Redirect(redirectUrl);
@@ -235,7 +237,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     OrganizationArea.Visible = false;
                     OrLabel3.Visible = false;
                     ErrorDiv.Style.Add(HtmlTextWriterStyle.PaddingBottom, "7px");
-                    SelectOrganization(coll[0].OrganizationId, Request.QueryString["returnurl"], ErrorDiv);
+                    SelectOrganization(coll[0].OrganizationId, Request.QueryString["returnurl"], true, ErrorDiv);
                 }
                 else
                 {
@@ -264,7 +266,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], ErrorDiv);
+                SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorDiv);
         }
 
         protected void LogOffLink_Click(object sender, EventArgs e)

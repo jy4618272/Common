@@ -174,7 +174,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                ActiveOrganizationControl.SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, ErrorDiv);
+                ActiveOrganizationControl.SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorDiv);
         }
 
         #endregion
