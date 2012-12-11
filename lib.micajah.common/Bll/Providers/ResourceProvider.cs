@@ -86,7 +86,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string CustomStyleSheet = "Styles.Custom.css";
         internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-1.3.4.css";
         internal const string CommonGridViewModernStyleSheet = "Styles.CommonGridViewModern.css";
-        internal const string AccountSettingsStyleSheet = "Styles.AccountSettings.css"; 
+        internal const string AccountSettingsStyleSheet = "Styles.AccountSettings.css";
         internal const string GlobalModernStyleSheet = "Styles.GlobalModern.css";
         internal const string GlobalStyleSheet = "Styles.Global.css";
         internal const string LogOnStyleSheet = "Styles.LogOn.css";
@@ -272,7 +272,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static string GetResourceUrlFormat(bool createApplicationAbsoluteUrl)
         {
-            return ((createApplicationAbsoluteUrl ? WebApplication.CreateApplicationAbsoluteUrl(ResourceHandlerVirtualPath) : ResourceHandlerVirtualPath) + "?d={0}");
+            return ((createApplicationAbsoluteUrl ? CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceHandlerVirtualPath) : ResourceHandlerVirtualPath) + "?d={0}");
         }
 
         private static byte[] GetManifestResourceBytes(string resourceName)
@@ -425,7 +425,14 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
-        internal static string GetActiveInstancePageUrl(string returnUrl, bool anotherInstanceIsRequired)
+        internal static string GetActiveOrganizationUrl(string returnUrl, bool anotherOrganizationIsRequired)
+        {
+            if (string.IsNullOrEmpty(returnUrl))
+                return ResourceProvider.ActiveOrganizationPageVirtualPath;
+            return string.Concat(ResourceProvider.ActiveOrganizationPageVirtualPath, "?returnurl=", HttpUtility.UrlEncodeUnicode(returnUrl), (anotherOrganizationIsRequired ? "&ao=1" : string.Empty));
+        }
+
+        internal static string GetActiveInstanceUrl(string returnUrl, bool anotherInstanceIsRequired)
         {
             if (string.IsNullOrEmpty(returnUrl))
                 return ResourceProvider.ActiveInstancePageVirtualPath;
@@ -444,7 +451,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static string GetDetailMenuPageUrl(Guid actionId)
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}?pageid={1:N}", WebApplication.CreateApplicationAbsoluteUrl(DetailMenuPageVirtualPath), actionId);
+            return string.Format(CultureInfo.InvariantCulture, "{0}?pageid={1:N}", CustomUrlProvider.CreateApplicationAbsoluteUrl(DetailMenuPageVirtualPath), actionId);
         }
 
         internal static void GetResource(string resourceName, ref byte[] content, ref string contentType, ref string name, ref bool cacheable)
@@ -509,9 +516,14 @@ namespace Micajah.Common.Bll.Providers
             return GetManifestResourceString(string.Concat(ResourceProvider.ManifestResourceNamePrefix, ".SqlScripts.", dbType, ".", sqlScriptName, ".sql"));
         }
 
+        internal static string GetJavaScript(string src)
+        {
+            return "<script type=\"text/javascript\" src=\"" + src + "\"></script>";
+        }
+
         internal static bool IsDetailMenuPageUrl(string virtualPath)
         {
-            return (string.Compare(WebApplication.CreateApplicationRelativeUrl(virtualPath), DetailMenuPageVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
+            return (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(virtualPath), DetailMenuPageVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         internal static bool IsMasterPageThemeColorStyleSheet(string resourceName, out MasterPageTheme masterPageTheme, out MasterPageThemeColor masterPageThemeColor)
@@ -549,7 +561,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static bool IsResourceUrl(string virtualPath)
         {
-            return (string.Compare(WebApplication.CreateApplicationRelativeUrl(virtualPath), ResourceHandlerVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
+            return (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(virtualPath), ResourceHandlerVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         internal static bool IsIconImageResource(string resourceName, IconSize iconSize)
@@ -565,6 +577,11 @@ namespace Micajah.Common.Bll.Providers
         internal static string GetImageUrl(Type type, string name, bool createApplicationAbsoluteUrl)
         {
             return GetResourceUrl(string.Format(CultureInfo.InvariantCulture, "Images.{0}.{1}", type.FullName, name), createApplicationAbsoluteUrl);
+        }
+
+        internal static void RegisterScriptResource(Control ctl, string key, string resourceName)
+        {
+            ScriptManager.RegisterStartupScript(ctl, ctl.GetType(), key, GetJavaScript(ResourceProvider.GetResourceUrl(resourceName, true)), false);
         }
 
         internal static void RegisterStyleSheetResource(Control ctl, string resourceName, string id)
@@ -595,14 +612,14 @@ namespace Micajah.Common.Bll.Providers
             {
                 Type pageType = page.GetType();
                 if (registerStyleSheetLoader)
-                    ScriptManager.RegisterClientScriptInclude(page, page.GetType(), "Micajah.Common.StyleSheetLoader", ResourceProvider.GetResourceUrl(StyleSheetLoader, true));
+                    RegisterScriptResource(page, "Micajah.Common.StyleSheetLoader", StyleSheetLoader);
                 ScriptManager.RegisterStartupScript(page, pageType, resourceName, string.Format(CultureInfo.InvariantCulture, "Micajah.Common.StyleSheetLoader.getInstance().addStyleSheet(\"{0}\");\r\n", resourceUrl), true);
             }
         }
 
-        internal static void RegisterValidatorScriptResource(Page page)
+        internal static void RegisterValidatorScriptResource(Control ctl)
         {
-            ScriptManager.RegisterStartupScript(page, page.GetType(), "ValidatorScript", "<script type=\"text/javascript\" src=\"" + ResourceProvider.GetResourceUrl("Scripts.Validator.js", true) + "\"></script>", false);
+            RegisterScriptResource(ctl, "ValidatorScript", "Scripts.Validator.js");
         }
 
         #endregion
@@ -688,16 +705,19 @@ namespace Micajah.Common.Bll.Providers
             return GetActiveOrganizationUrl(null, false);
         }
 
-        public static string GetActiveOrganizationUrl(string returnUrl, bool anotherOrganizationIsRequired)
+        public static string GetActiveOrganizationUrl(string returnUrl)
         {
-            if (string.IsNullOrEmpty(returnUrl))
-                return ResourceProvider.ActiveOrganizationPageVirtualPath;
-            return string.Concat(ResourceProvider.ActiveOrganizationPageVirtualPath, "?returnurl=", HttpUtility.UrlEncodeUnicode(returnUrl), (anotherOrganizationIsRequired ? "&ao=1" : string.Empty));
+            return GetActiveOrganizationUrl(returnUrl, false);
         }
 
-        public static string GetActiveInstancePageUrl()
+        public static string GetActiveInstanceUrl()
         {
-            return GetActiveInstancePageUrl(null, false);
+            return GetActiveInstanceUrl(null, false);
+        }
+
+        public static string GetActiveInstanceUrl(string returnUrl)
+        {
+            return GetActiveInstanceUrl(returnUrl, false);
         }
 
         public static string GetResourceUrl(Guid resourceId)

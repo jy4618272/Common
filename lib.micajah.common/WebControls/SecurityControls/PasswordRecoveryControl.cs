@@ -97,7 +97,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!IsPostBack)
             {
-                Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
+                Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
 
                 LoadResources();
 
@@ -155,9 +155,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             string url = null;
             if (!string.IsNullOrEmpty(LoginTextBox.Text))
-                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text);
+                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
             else
-                url = WebApplication.LoginProvider.GetLoginUrl();
+                url = WebApplication.LoginProvider.GetLoginUrl(false);
             Response.Redirect(url);
         }
 

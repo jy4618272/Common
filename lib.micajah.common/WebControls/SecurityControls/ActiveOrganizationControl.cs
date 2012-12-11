@@ -4,14 +4,12 @@ using System.Security.Authentication;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Data;
-using Micajah.Common.Dal;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
-using Micajah.Common.Configuration;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -74,7 +72,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         #endregion
 
-        #region Private Methods
+        #region Internal Methods
 
         /// <summary>
         /// Stores the specified organization identifier and redirects to originally requested URL.
@@ -82,35 +80,33 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="organizationId">The organization identifier.</param>
         internal static void SelectOrganization(Guid organizationId, string returnUrl, HtmlGenericControl errorDiv)
         {
-            UserContext ctx = UserContext.Current;
             try
             {
                 string redirectUrl = returnUrl;
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
-                    redirectUrl = CustomUrlProvider.GetVanityUrl(organizationId, Guid.Empty);
                     ActiveInstanceControl.ValidateRedirectUrl(ref returnUrl, true);
-                    if (!string.IsNullOrEmpty(returnUrl))
-                        redirectUrl += returnUrl;
-                    errorDiv.Page.Response.Redirect((errorDiv.Page.Request.IsSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp) + Uri.SchemeDelimiter + redirectUrl, true);
+
+                    errorDiv.Page.Session.Clear();
+
+                    errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(organizationId, Guid.Empty, returnUrl));
                 }
+                else
+                {
+                    UserContext.Current.SelectOrganization(organizationId);
 
-                ctx.SelectOrganization(organizationId);
+                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
 
-                ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
-                if (!string.IsNullOrEmpty(redirectUrl))
-                    errorDiv.Page.Response.Redirect(redirectUrl);
+                    if (!string.IsNullOrEmpty(redirectUrl))
+                        errorDiv.Page.Response.Redirect(redirectUrl);
+                }
             }
             catch (AuthenticationException ex)
             {
                 ActiveInstanceControl.ShowError(ex.Message, errorDiv);
             }
         }
-
-        #endregion
-
-        #region Internal Methods
 
         internal static void OrganizationListItemDataBound(DataListItemEventArgs e)
         {
@@ -130,7 +126,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                                 if (expirationLink != null)
                                 {
                                     expirationLink.Text = string.Format(CultureInfo.InvariantCulture, Resources.ActiveOrganizationControl_OrganizationList_ExpirationLink_Text, days);
-                                    expirationLink.NavigateUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.SupportPageVirtualPath) + "?o=" + org.OrganizationId.ToString("N");
+                                    expirationLink.NavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.SupportPageVirtualPath) + "?o=" + org.OrganizationId.ToString("N");
                                     expirationLink.Visible = true;
                                 }
                             }
@@ -149,7 +145,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                                 HyperLink orgLink = e.Item.FindControl("OrgLink") as HyperLink;
                                 if (orgLink != null)
                                 {
-                                    orgLink.NavigateUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.SupportPageVirtualPath) + "?o=" + org.OrganizationId.ToString("N");
+                                    orgLink.NavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.SupportPageVirtualPath) + "?o=" + org.OrganizationId.ToString("N");
                                     orgLink.Visible = true;
                                 }
                             }
@@ -174,7 +170,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!IsPostBack)
             {
-                Micajah.Common.Bll.Action action = ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
+                Micajah.Common.Bll.Action action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, action);
 
                 if (string.Compare(Request.QueryString["ao"], "1", StringComparison.OrdinalIgnoreCase) == 0)
@@ -201,9 +197,6 @@ namespace Micajah.Common.WebControls.SecurityControls
                     action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.LoginAsUserPageActionId);
                     if (action != null) LogOnAsAnotherUserLink.NavigateUrl = action.AbsoluteNavigateUrl;
                 }
-
-                if (Security.UserContext.SelectedOrganizationId != Guid.Empty)
-                    SelectOrganization(Security.UserContext.SelectedOrganizationId, Request.QueryString["returnurl"], ErrorDiv);
 
                 OrganizationCollection coll = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
                 int count = 0;

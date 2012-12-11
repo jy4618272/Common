@@ -569,11 +569,11 @@ namespace Micajah.Common.Bll
 
         public static RuleCollection GetRules(Guid ruleEngineId)
         {
-            Guid? instanceId = UserContext.SelectedInstanceId;
+            Guid? instanceId = UserContext.Current.SelectedInstanceId;
             if (instanceId.Value == Guid.Empty) instanceId = null;
 
             RuleCollection coll = new RuleCollection();
-            foreach (OrganizationDataSet.RuleRow row in RuleEngineProvider.GetRules(ruleEngineId, UserContext.SelectedOrganizationId, instanceId))
+            foreach (OrganizationDataSet.RuleRow row in RuleEngineProvider.GetRules(ruleEngineId, UserContext.Current.SelectedOrganizationId, instanceId))
             {
                 coll.Add(Rule.Create(row));
             }

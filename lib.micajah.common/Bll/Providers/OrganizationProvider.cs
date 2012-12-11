@@ -17,13 +17,6 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class OrganizationProvider
     {
-        #region Members
-
-        private const int DefaultExpirationDays = 7;
-        private const int DefaultGraceDays = 7;
-
-        #endregion
-
         #region Events
 
         /// <summary>
@@ -103,6 +96,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country, string currency
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
+            , string partialCustomUrl
             , bool sendNotificationEmail, bool refreshAllData)
         {
             adminEmail = Support.TrimString(adminEmail, UserProvider.EmailMaxLength);
@@ -182,9 +176,8 @@ namespace Micajah.Common.Bll.Providers
 
             InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
                 , adminEmail, password
+                , partialCustomUrl
                 , sendNotificationEmail, refreshAllData);
-
-            if (refreshAllData) WebApplication.RefreshAllData();
 
             return organizationId;
         }
@@ -681,7 +674,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -707,7 +700,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, firstName, lastName, middleName, null, null, null
+                , adminEmail, null, firstName, lastName, middleName, null, null, null, null
                 , sendNotificationEmail, true);
         }
 
@@ -732,7 +725,7 @@ namespace Micajah.Common.Bll.Providers
                 , expirationTime, graceDays, active, canceledTime, trial
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -764,15 +757,17 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country, string currency
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string title, string phone, string mobilePhone
+            , string partialCustomUrl
             , bool sendNotificationEmail)
         {
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
                 , null, null, null
-                , DateTime.UtcNow.Date.AddDays(DefaultExpirationDays), DefaultGraceDays, true, null, true
+                , null, 0, true, null, true
                 , street, street2, city, state, postalCode, country, currency
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
-                , sendNotificationEmail, true);
+                , partialCustomUrl
+                , sendNotificationEmail, false);
         }
 
         /// <summary>

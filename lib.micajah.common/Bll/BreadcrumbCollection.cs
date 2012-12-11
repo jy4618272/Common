@@ -27,7 +27,7 @@ namespace Micajah.Common.Bll
                 homeItem = ActionProvider.FindAction(user.StartPageUrl);
             else
             {
-                homeItem = ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl("~/default.aspx"));
+                homeItem = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl("~/default.aspx"));
                 if (homeItem != null)
                 {
                     if (homeItem.AuthenticationRequired) homeItem = null;

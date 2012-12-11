@@ -6,13 +6,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls;
+using Micajah.Common.Application;
 
 namespace Micajah.Common.Pages
 {
@@ -128,7 +128,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         private string ApplicationAbsoluteNavigateUrl
         {
-            get { return WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery); }
+            get { return CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery); }
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Micajah.Common.Pages
                     using (Image img = new Image())
                     {
                         img.ToolTip = FrameworkConfiguration.Current.WebApplication.Name;
-                        img.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(url);
+                        img.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(url);
                         ctl = img;
                     }
                 }
@@ -668,7 +668,7 @@ namespace Micajah.Common.Pages
                 {
                     if (m_UserContext != null)
                         return this.ActiveAction.AbsoluteNavigateUrl.Equals(m_UserContext.StartPageUrl, StringComparison.OrdinalIgnoreCase);
-                    else if (string.Compare(this.ActiveAction.AbsoluteNavigateUrl, WebApplication.CreateApplicationAbsoluteUrl("/default.aspx"), StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(this.ActiveAction.AbsoluteNavigateUrl, CustomUrlProvider.CreateApplicationAbsoluteUrl("/default.aspx"), StringComparison.OrdinalIgnoreCase) == 0)
                         return (!this.ActiveAction.AuthenticationRequired);
                 }
                 return false;
@@ -798,13 +798,13 @@ namespace Micajah.Common.Pages
                 else
                 {
                     Micajah.Common.Bll.Action item = ActiveAction.Clone();
-                    item.NavigateUrl = WebApplication.CreateApplicationRelativeUrl(Request.Url.PathAndQuery);
+                    item.NavigateUrl = CustomUrlProvider.CreateApplicationRelativeUrl(Request.Url.PathAndQuery);
 
                     if (!string.IsNullOrEmpty(CustomName))
                     {
                         item.IsCustom = true;
                         item.Name = CustomName;
-                        if (!string.IsNullOrEmpty(CustomNavigateUrl)) item.NavigateUrl = WebApplication.CreateApplicationRelativeUrl(CustomNavigateUrl);
+                        if (!string.IsNullOrEmpty(CustomNavigateUrl)) item.NavigateUrl = CustomUrlProvider.CreateApplicationRelativeUrl(CustomNavigateUrl);
                         if (!string.IsNullOrEmpty(CustomDescription)) item.Description = CustomDescription;
                     }
 
@@ -1146,12 +1146,10 @@ namespace Micajah.Common.Pages
 
                 if (m_UserContext != null)
                 {
-                    m_UserContext.CheckWebSite(null, returnUrl);
-
                     if (m_OrganizationId == Guid.Empty)
-                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl, false);
+                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
                     else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && m_ActiveAction.InstanceRequired && (m_InstanceId == Guid.Empty))
-                        redirectUrl = ResourceProvider.GetActiveInstancePageUrl(returnUrl, false);
+                        redirectUrl = ResourceProvider.GetActiveInstanceUrl(returnUrl);
                     else if (m_ActiveAction.ActionType == ActionType.Page || m_ActiveAction.ActionType == ActionType.GlobalNavigationLink)
                     {
                         accessDenied = m_ActiveAction.AccessDenied();
@@ -1163,7 +1161,12 @@ namespace Micajah.Common.Pages
                     accessDenied = true;
 
                 if (accessDenied)
-                    throw new HttpException(403, Resources.Error_403);
+                {
+                    if (m_UserContext != null)
+                        throw new HttpException(403, Resources.Error_403);
+                    else
+                        redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
+                }
 
                 if (!string.IsNullOrEmpty(redirectUrl))
                     Response.Redirect(redirectUrl);
@@ -1316,7 +1319,7 @@ namespace Micajah.Common.Pages
                     using (Literal fancyBoxScript = new Literal())
                     {
                         fancyBoxScript.ID = "FancyBoxScript";
-                        fancyBoxScript.Text = "<script src=\"" + ResourceProvider.FancyBoxScriptUrl + "\" type=\"text/javascript\"></script>";
+                        fancyBoxScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.FancyBoxScriptUrl);
                         page.Header.Controls.AddAt(0, fancyBoxScript);
                     }
                 }
@@ -1326,7 +1329,7 @@ namespace Micajah.Common.Pages
                     using (Literal jQueryScript = new Literal())
                     {
                         jQueryScript.ID = "JQueryScript";
-                        jQueryScript.Text = "<script src=\"" + ResourceProvider.JQueryScriptUrl + "\" type=\"text/javascript\"></script>";
+                        jQueryScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.JQueryScriptUrl);
                         page.Header.Controls.AddAt(0, jQueryScript);
                     }
                 }
@@ -1412,7 +1415,7 @@ namespace Micajah.Common.Pages
                     if (this.OrganizationId != m_OrganizationId)
                         Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery, true));
                     else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && m_ActiveAction.InstanceRequired && (this.InstanceId != m_InstanceId))
-                        Response.Redirect(ResourceProvider.GetActiveInstancePageUrl(Request.Url.PathAndQuery, true));
+                        Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, true));
                 }
             }
         }

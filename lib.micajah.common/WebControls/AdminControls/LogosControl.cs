@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll;
@@ -91,7 +92,7 @@ namespace Micajah.Common.WebControls.AdminControls
             dt.Columns.Add("ObjectType");
 
             DataRow dr = dt.NewRow();
-            dr["ObjectId"] = string.Format("{0:N}", this.SelectedObjectId);
+            dr["ObjectId"] = string.Format(CultureInfo.InvariantCulture, "{0:N}", this.SelectedObjectId);
             dr["ObjectType"] = this.SelectedObjectType;
             dt.Rows.Add(dr);
 

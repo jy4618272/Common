@@ -323,7 +323,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static OrganizationDataSet.EntityFieldDataTable GetEntityField(Guid entityFieldId)
         {
-            return GetEntityField(entityFieldId, UserContext.SelectedOrganizationId);
+            return GetEntityField(entityFieldId, UserContext.Current.SelectedOrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -364,7 +364,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static OrganizationDataSet.EntityFieldListsValuesDataTable GetEntityFieldListValues(Guid entityFieldId, bool? active)
         {
-            return GetEntityFieldListValues(entityFieldId, UserContext.SelectedOrganizationId, active);
+            return GetEntityFieldListValues(entityFieldId, UserContext.Current.SelectedOrganizationId, active);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -384,7 +384,7 @@ namespace Micajah.Common.Bll.Providers
         public static OrganizationDataSet.EntityFieldListsValuesDataTable GetEntityFieldListValue(Guid entityFieldListValueId)
         {
             OrganizationDataSet.EntityFieldListsValuesDataTable table = null;
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.SelectedOrganizationId);
+            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null)
             {
                 table = new OrganizationDataSet.EntityFieldListsValuesDataTable();
@@ -396,7 +396,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityField(Guid entityFieldId)
         {
-            DeleteEntityField(entityFieldId, UserContext.SelectedOrganizationId);
+            DeleteEntityField(entityFieldId, UserContext.Current.SelectedOrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Delete)]
@@ -411,7 +411,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityFieldListValue(Guid entityFieldListValueId)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.SelectedOrganizationId);
+            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null) adapters.EntityFieldListsValuesTableAdapter.Delete(entityFieldListValueId);
 
             WebApplication.RefreshEntities();
@@ -469,7 +469,7 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddEntityFieldListsValuesRow(row);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.SelectedOrganizationId);
+            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null) adapters.EntityFieldListsValuesTableAdapter.Update(row);
 
             WebApplication.RefreshEntities();
@@ -495,7 +495,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityFieldListValue(Guid entityFieldListValueId, Guid entityFieldId, string name, string value, bool Default, bool active)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.SelectedOrganizationId);
+            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null) adapters.EntityFieldListsValuesTableAdapter.Update(entityFieldListValueId, entityFieldId, name, value, Default, active);
 
             WebApplication.RefreshEntities();

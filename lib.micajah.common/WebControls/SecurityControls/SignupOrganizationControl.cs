@@ -277,7 +277,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 if (!isValid)
                 {
                     errorMessage = Resources.SignupOrganizationControl_EmailValidator1_ErrorMessage + "<br />"
-                        + BaseControl.GetHyperlink(WebApplication.LoginProvider.GetLoginUrl(email), Resources.SignupOrganizationControl_LoginLink_Text, null, "_parent");
+                        + BaseControl.GetHyperlink(WebApplication.LoginProvider.GetLoginUrl(email, false), Resources.SignupOrganizationControl_LoginLink_Text, null, "_parent");
                 }
             }
             else
@@ -372,9 +372,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     captchaTextBoxLabel.Visible = false;
             }
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "ValidatorScript"
-                , string.Format(CultureInfo.InvariantCulture, "<script src='{0}' type='text/javascript'></script>", Micajah.Common.Bll.Providers.ResourceProvider.GetResourceUrl("Scripts.Validator.js", true))
-                , false);
+            ResourceProvider.RegisterValidatorScriptResource(this.Page);
         }
 
         protected void OrganizationName1_TextChanged(object sender, EventArgs e)
@@ -530,7 +528,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     if (!string.IsNullOrEmpty(OrganizationUrl.Text))
                     {
                         CustomUrlProvider.ValidatePartialCustomUrl(OrganizationUrl.Text);
-                        args.IsValid = CustomUrlProvider.CheckCustomUrl(OrganizationUrl.Text);
+                        args.IsValid = CustomUrlProvider.ValidateCustomUrl(OrganizationUrl.Text);
                     }
                 }
                 catch (Exception ex) { errorMessage = ex.Message; }
@@ -558,7 +556,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 if (!string.IsNullOrEmpty(OrganizationUrl.Text))
                 {
                     CustomUrlProvider.ValidatePartialCustomUrl(OrganizationUrl.Text);
-                    OrganizationUrlTick.Visible = OrganizationUrl.IsValid = args.IsValid = CustomUrlProvider.CheckCustomUrl(OrganizationUrl.Text);
+                    OrganizationUrlTick.Visible = OrganizationUrl.IsValid = args.IsValid = CustomUrlProvider.ValidateCustomUrl(OrganizationUrl.Text);
                 }
                 else
                     args.IsValid = true;
@@ -622,18 +620,18 @@ function InstanceRequiredValidation(source, arguments) {{
                 , null, null, null, null, null, null, CurrencyList.SelectedValue
                 , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
+                , OrganizationUrl.Text
                 , true);
 
             Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
 
             SettingProvider.InitializeStartMenuCheckedItemsSetting(orgId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instId) : null));
 
-            if (!string.IsNullOrEmpty(OrganizationUrl.Text))
-                CustomUrlProvider.InsertCustomUrl(orgId, instId, null, OrganizationUrl.Text);
+            WebApplication.RefreshAllData(false);
 
-            Response.Redirect(Micajah.Common.Application.WebApplication.LoginProvider.GetLoginUrl(Email2.Text
+            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
                 , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
-                , WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
+                , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
         }
 
         #endregion

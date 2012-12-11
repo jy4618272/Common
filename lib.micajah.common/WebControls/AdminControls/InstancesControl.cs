@@ -16,7 +16,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private void Redirect()
         {
-            if (UserContext.SelectedInstanceId == (Guid)EditForm.DataKey[0])
+            if (UserContext.Current.SelectedInstanceId == (Guid)EditForm.DataKey[0])
             {
                 Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.InstancesPageActionId);
                 if (action != null)

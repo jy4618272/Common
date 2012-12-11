@@ -83,7 +83,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void RedirectToLoginPage()
         {
-            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl());
+            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(false));
         }
 
         private void ShowErrorMessage(string message)
@@ -128,7 +128,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!this.IsPostBack)
             {
-                Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
+                Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
 
                 this.LoadResources();
                 this.ValidateResetPasswordRequest();
@@ -192,9 +192,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             string url = null;
             if (!string.IsNullOrEmpty(LoginTextBox.Text))
-                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text);
+                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
             else
-                url = WebApplication.LoginProvider.GetLoginUrl();
+                url = WebApplication.LoginProvider.GetLoginUrl(false);
             Response.Redirect(url);
         }
 

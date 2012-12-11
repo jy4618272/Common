@@ -17,7 +17,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (field != null)
             {
                 field.Text = Resources.RulesControl_List_Caption;
-                field.DataNavigateUrlFormatString = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.VirtualRootShortPath + "admin/rules.aspx?RuleEngineId={0:N}");
+                field.DataNavigateUrlFormatString = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.VirtualRootShortPath + "admin/rules.aspx?RuleEngineId={0:N}");
             }
         }
 

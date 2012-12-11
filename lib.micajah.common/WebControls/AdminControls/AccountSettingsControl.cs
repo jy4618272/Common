@@ -239,7 +239,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (user != null)
                 {
                     if (user.SelectedInstance == null)
-                        Response.Redirect(ResourceProvider.GetActiveInstancePageUrl(Request.Url.PathAndQuery, false));
+                        Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, false));
                 }
             }
         }

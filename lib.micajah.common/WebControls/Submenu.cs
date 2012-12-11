@@ -417,7 +417,7 @@ namespace Micajah.Common.WebControls
                     hl.NavigateUrl = action.CustomAbsoluteNavigateUrl;
                     hl.ToolTip = action.CustomDescription;
                     if (showIcon && (action.SubmenuItemType == SubmenuItemType.ImageButton))
-                        hl.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(action.SubmenuItemImageUrl);
+                        hl.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(action.SubmenuItemImageUrl);
                     return hl;
                 }
             }

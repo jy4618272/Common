@@ -45,15 +45,6 @@ namespace Micajah.Common.Configuration
         #region Internal Properties
 
         /// <summary>
-        /// Gets the value indicating whether the non-default port should be added to the URL of the application.
-        /// </summary>
-        [ConfigurationProperty("addPort", DefaultValue = true)]
-        internal bool AddPort
-        {
-            get { return (bool)this["addPort"]; }
-        }
-
-        /// <summary>
         /// Gets or sets the current schema version of the database.
         /// </summary>
         internal static int CurrentDatabaseVersion
@@ -99,6 +90,15 @@ namespace Micajah.Common.Configuration
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets the value indicating whether the non-default port should be added to the URL of the application.
+        /// </summary>
+        [ConfigurationProperty("addPort", DefaultValue = true)]
+        public bool AddPort
+        {
+            get { return (bool)this["addPort"]; }
+        }
 
         /// <summary>
         /// Gets or sets the name of the application project.
