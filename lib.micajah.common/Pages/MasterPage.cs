@@ -1319,7 +1319,7 @@ namespace Micajah.Common.Pages
                     using (Literal fancyBoxScript = new Literal())
                     {
                         fancyBoxScript.ID = "FancyBoxScript";
-                        fancyBoxScript.Text = "<script src=\"" + ResourceProvider.FancyBoxScriptUrl + "\" type=\"text/javascript\"></script>";
+                        fancyBoxScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.FancyBoxScriptUrl);
                         page.Header.Controls.AddAt(0, fancyBoxScript);
                     }
                 }
@@ -1329,7 +1329,7 @@ namespace Micajah.Common.Pages
                     using (Literal jQueryScript = new Literal())
                     {
                         jQueryScript.ID = "JQueryScript";
-                        jQueryScript.Text = "<script src=\"" + ResourceProvider.JQueryScriptUrl + "\" type=\"text/javascript\"></script>";
+                        jQueryScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.JQueryScriptUrl);
                         page.Header.Controls.AddAt(0, jQueryScript);
                     }
                 }

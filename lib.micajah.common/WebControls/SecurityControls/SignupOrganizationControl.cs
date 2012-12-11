@@ -372,9 +372,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     captchaTextBoxLabel.Visible = false;
             }
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "ValidatorScript"
-                , string.Format(CultureInfo.InvariantCulture, "<script src='{0}' type='text/javascript'></script>", Micajah.Common.Bll.Providers.ResourceProvider.GetResourceUrl("Scripts.Validator.js", true))
-                , false);
+            ResourceProvider.RegisterValidatorScriptResource(this.Page);
         }
 
         protected void OrganizationName1_TextChanged(object sender, EventArgs e)

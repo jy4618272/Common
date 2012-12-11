@@ -516,6 +516,11 @@ namespace Micajah.Common.Bll.Providers
             return GetManifestResourceString(string.Concat(ResourceProvider.ManifestResourceNamePrefix, ".SqlScripts.", dbType, ".", sqlScriptName, ".sql"));
         }
 
+        internal static string GetJavaScript(string src)
+        {
+            return "<script type=\"text/javascript\" src=\"" + src + "\"></script>";
+        }
+
         internal static bool IsDetailMenuPageUrl(string virtualPath)
         {
             return (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(virtualPath), DetailMenuPageVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
@@ -574,6 +579,11 @@ namespace Micajah.Common.Bll.Providers
             return GetResourceUrl(string.Format(CultureInfo.InvariantCulture, "Images.{0}.{1}", type.FullName, name), createApplicationAbsoluteUrl);
         }
 
+        internal static void RegisterScriptResource(Control ctl, string key, string resourceName)
+        {
+            ScriptManager.RegisterStartupScript(ctl, ctl.GetType(), key, GetJavaScript(ResourceProvider.GetResourceUrl(resourceName, true)), false);
+        }
+
         internal static void RegisterStyleSheetResource(Control ctl, string resourceName, string id)
         {
             RegisterStyleSheetResource(ctl, resourceName, id, true);
@@ -602,14 +612,14 @@ namespace Micajah.Common.Bll.Providers
             {
                 Type pageType = page.GetType();
                 if (registerStyleSheetLoader)
-                    ScriptManager.RegisterClientScriptInclude(page, page.GetType(), "Micajah.Common.StyleSheetLoader", ResourceProvider.GetResourceUrl(StyleSheetLoader, true));
+                    RegisterScriptResource(page, "Micajah.Common.StyleSheetLoader", StyleSheetLoader);
                 ScriptManager.RegisterStartupScript(page, pageType, resourceName, string.Format(CultureInfo.InvariantCulture, "Micajah.Common.StyleSheetLoader.getInstance().addStyleSheet(\"{0}\");\r\n", resourceUrl), true);
             }
         }
 
-        internal static void RegisterValidatorScriptResource(Page page)
+        internal static void RegisterValidatorScriptResource(Control ctl)
         {
-            ScriptManager.RegisterStartupScript(page, page.GetType(), "ValidatorScript", "<script type=\"text/javascript\" src=\"" + ResourceProvider.GetResourceUrl("Scripts.Validator.js", true) + "\"></script>", false);
+            RegisterScriptResource(ctl, "ValidatorScript", "Scripts.Validator.js");
         }
 
         #endregion
