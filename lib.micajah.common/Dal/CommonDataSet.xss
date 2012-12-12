@@ -13,7 +13,7 @@
     <Shape ID="DesignTable:DatabaseServer" ZOrder="31" X="802" Y="-302" Height="182" Width="156" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
     <Shape ID="DesignTable:Role" ZOrder="30" X="539" Y="-480" Height="163" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="177" />
     <Shape ID="DesignTable:RolesActions" ZOrder="29" X="275" Y="-482" Height="68" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
-    <Shape ID="DesignTable:Setting" ZOrder="4" X="274" Y="-367" Height="429" Width="159" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="425" />
+    <Shape ID="DesignTable:Setting" ZOrder="4" X="282" Y="-367" Height="467" Width="153" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="463" />
     <Shape ID="DesignTable:SettingListsValues" ZOrder="28" X="542" Y="-95" Height="106" Width="171" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="120" />
     <Shape ID="DesignTable:UnitsOfMeasureConversion" ZOrder="8" X="-8" Y="227" Height="106" Width="224" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="102" />
     <Shape ID="DesignTable:UnitsOfMeasure" ZOrder="7" X="283" Y="121" Height="219" Width="159" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="215" />
@@ -140,23 +140,23 @@
     <Connector ID="DesignRelation:FK_Mc_Setting_Mc_Setting" ZOrder="5" LineWidth="11">
       <RoutePoints>
         <Point>
-          <X>274</X>
+          <X>282</X>
           <Y>-267</Y>
         </Point>
         <Point>
-          <X>244</X>
+          <X>252</X>
           <Y>-267</Y>
         </Point>
         <Point>
-          <X>244</X>
+          <X>252</X>
           <Y>-375</Y>
         </Point>
         <Point>
-          <X>291</X>
+          <X>299</X>
           <Y>-375</Y>
         </Point>
         <Point>
-          <X>291</X>
+          <X>299</X>
           <Y>-367</Y>
         </Point>
       </RoutePoints>
@@ -164,7 +164,7 @@
     <Connector ID="DesignRelation:FK_Mc_SettingListsValues_Mc_Setting" ZOrder="35" LineWidth="11">
       <RoutePoints>
         <Point>
-          <X>433</X>
+          <X>435</X>
           <Y>-45</Y>
         </Point>
         <Point>
@@ -296,7 +296,7 @@
           <Y>-228</Y>
         </Point>
         <Point>
-          <X>274</X>
+          <X>282</X>
           <Y>-228</Y>
         </Point>
       </RoutePoints>

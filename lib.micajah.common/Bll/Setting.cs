@@ -380,11 +380,12 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets or sets the value indicating the setting should be handled.
         /// </summary>
-        public bool Handle
-        {
-            get;
-            set;
-        }
+        public bool Handle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to icon of the setting.
+        /// </summary>
+        public string IconUrl { get; set; }
 
         public string CustomDescription
         {

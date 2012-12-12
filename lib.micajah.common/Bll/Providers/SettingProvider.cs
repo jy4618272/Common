@@ -140,6 +140,7 @@ namespace Micajah.Common.Bll.Providers
             row.ExternalId = setting.ExternalId;
             row.Visible = setting.Visible;
             row.Handle = setting.Handle;
+            row.IconUrl = setting.IconUrl;
             row.ValidationType = setting.Validation.Type;
             row.ValidationExpression = setting.Validation.Expression;
             row.MaximumValue = setting.Validation.MaximumValue;
@@ -280,6 +281,7 @@ namespace Micajah.Common.Bll.Providers
                 setting.ExternalId = row.IsExternalIdNull() ? string.Empty : row.ExternalId;
                 setting.Visible = row.Visible;
                 setting.Handle = row.Handle;
+                setting.IconUrl = row.IconUrl;
                 setting.ValidationType = row.ValidationType;
                 setting.ValidationExpression = row.ValidationExpression;
                 setting.MaximumValue = row.MaximumValue;

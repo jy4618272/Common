@@ -145,16 +145,6 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the URL to the paid upgrade page.
-        /// </summary>
-        [ConfigurationProperty("paidUpgradeUrl")]
-        public string PaidUpgradeUrl
-        {
-            get { return (string)this["paidUpgradeUrl"]; }
-            set { this["paidUpgradeUrl"] = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the value indicating the setting should be handled.
         /// </summary>
         [ConfigurationProperty("handle", DefaultValue = false)]
@@ -162,6 +152,26 @@ namespace Micajah.Common.Configuration
         {
             get { return (bool)this["handle"]; }
             set { this["handle"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the URL to icon of the setting.
+        /// </summary>
+        [ConfigurationProperty("iconUrl")]
+        public string IconUrl
+        {
+            get { return (string)this["iconUrl"]; }
+            set { this["iconUrl"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the URL to the paid upgrade page.
+        /// </summary>
+        [ConfigurationProperty("paidUpgradeUrl")]
+        public string PaidUpgradeUrl
+        {
+            get { return (string)this["paidUpgradeUrl"]; }
+            set { this["paidUpgradeUrl"] = value; }
         }
 
         /// <summary>

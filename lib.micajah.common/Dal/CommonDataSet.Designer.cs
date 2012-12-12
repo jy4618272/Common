@@ -1123,7 +1123,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ActionDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class ActionDataTable : global::System.Data.TypedTableBase<ActionRow> {
             
             private global::System.Data.DataColumn columnActionId;
             
@@ -1527,12 +1527,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 ActionDataTable cln = ((ActionDataTable)(base.Clone()));
                 cln.InitVars();
@@ -1808,7 +1802,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class WebsiteDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class WebsiteDataTable : global::System.Data.TypedTableBase<WebsiteRow> {
             
             private global::System.Data.DataColumn columnWebsiteId;
             
@@ -1959,12 +1953,6 @@ namespace Micajah.Common.Dal {
             public WebsiteRow FindByWebsiteId(System.Guid WebsiteId) {
                 return ((WebsiteRow)(this.Rows.Find(new object[] {
                             WebsiteId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2154,7 +2142,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ActionsParentActionsDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class ActionsParentActionsDataTable : global::System.Data.TypedTableBase<ActionsParentActionsRow> {
             
             private global::System.Data.DataColumn columnActionId;
             
@@ -2268,12 +2256,6 @@ namespace Micajah.Common.Dal {
                 return ((ActionsParentActionsRow)(this.Rows.Find(new object[] {
                             ActionId,
                             ParentActionId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2440,7 +2422,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class DatabaseDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class DatabaseDataTable : global::System.Data.TypedTableBase<DatabaseRow> {
             
             private global::System.Data.DataColumn columnDatabaseId;
             
@@ -2616,12 +2598,6 @@ namespace Micajah.Common.Dal {
             public DatabaseRow FindByDatabaseId(System.Guid DatabaseId) {
                 return ((DatabaseRow)(this.Rows.Find(new object[] {
                             DatabaseId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2819,7 +2795,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class DatabaseServerDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class DatabaseServerDataTable : global::System.Data.TypedTableBase<DatabaseServerRow> {
             
             private global::System.Data.DataColumn columnDatabaseServerId;
             
@@ -3029,12 +3005,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 DatabaseServerDataTable cln = ((DatabaseServerDataTable)(base.Clone()));
                 cln.InitVars();
@@ -3236,7 +3206,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RoleDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class RoleDataTable : global::System.Data.TypedTableBase<RoleRow> {
             
             private global::System.Data.DataColumn columnRoleId;
             
@@ -3401,12 +3371,6 @@ namespace Micajah.Common.Dal {
             public RoleRow FindByRoleId(System.Guid RoleId) {
                 return ((RoleRow)(this.Rows.Find(new object[] {
                             RoleId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3604,7 +3568,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RolesActionsDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class RolesActionsDataTable : global::System.Data.TypedTableBase<RolesActionsRow> {
             
             private global::System.Data.DataColumn columnRoleId;
             
@@ -3718,12 +3682,6 @@ namespace Micajah.Common.Dal {
                 return ((RolesActionsRow)(this.Rows.Find(new object[] {
                             RoleId,
                             ActionId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3890,7 +3848,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class SettingDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class SettingDataTable : global::System.Data.TypedTableBase<SettingRow> {
             
             private global::System.Data.DataColumn columnSettingId;
             
@@ -3925,6 +3883,8 @@ namespace Micajah.Common.Dal {
             private global::System.Data.DataColumn columnVisible;
             
             private global::System.Data.DataColumn columnHandle;
+            
+            private global::System.Data.DataColumn columnIconUrl;
             
             private global::System.Data.DataColumn columnPaid;
             
@@ -4115,6 +4075,14 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IconUrlColumn {
+                get {
+                    return this.columnIconUrl;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn PaidColumn {
                 get {
                     return this.columnPaid;
@@ -4240,6 +4208,7 @@ namespace Micajah.Common.Dal {
                         string PaidUpgradeUrl, 
                         bool Visible, 
                         bool Handle, 
+                        string IconUrl, 
                         bool Paid, 
                         int UsageCountLimit, 
                         decimal Price, 
@@ -4268,6 +4237,7 @@ namespace Micajah.Common.Dal {
                         PaidUpgradeUrl,
                         Visible,
                         Handle,
+                        IconUrl,
                         Paid,
                         UsageCountLimit,
                         Price,
@@ -4293,12 +4263,6 @@ namespace Micajah.Common.Dal {
             public SettingRow FindBySettingId(System.Guid SettingId) {
                 return ((SettingRow)(this.Rows.Find(new object[] {
                             SettingId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4335,6 +4299,7 @@ namespace Micajah.Common.Dal {
                 this.columnPaidUpgradeUrl = base.Columns["PaidUpgradeUrl"];
                 this.columnVisible = base.Columns["Visible"];
                 this.columnHandle = base.Columns["Handle"];
+                this.columnIconUrl = base.Columns["IconUrl"];
                 this.columnPaid = base.Columns["Paid"];
                 this.columnUsageCountLimit = base.Columns["UsageCountLimit"];
                 this.columnPrice = base.Columns["Price"];
@@ -4383,6 +4348,8 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnVisible);
                 this.columnHandle = new global::System.Data.DataColumn("Handle", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnHandle);
+                this.columnIconUrl = new global::System.Data.DataColumn("IconUrl", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIconUrl);
                 this.columnPaid = new global::System.Data.DataColumn("Paid", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPaid);
                 this.columnUsageCountLimit = new global::System.Data.DataColumn("UsageCountLimit", typeof(int), null, global::System.Data.MappingType.Element);
@@ -4433,6 +4400,8 @@ namespace Micajah.Common.Dal {
                 this.columnVisible.DefaultValue = ((bool)(true));
                 this.columnHandle.AllowDBNull = false;
                 this.columnHandle.DefaultValue = ((bool)(false));
+                this.columnIconUrl.AllowDBNull = false;
+                this.columnIconUrl.DefaultValue = ((string)(""));
                 this.columnPaid.DefaultValue = ((bool)(false));
                 this.columnUsageCountLimit.DefaultValue = ((int)(0));
                 this.columnPrice.DefaultValue = ((decimal)(0m));
@@ -4577,7 +4546,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class SettingListsValuesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class SettingListsValuesDataTable : global::System.Data.TypedTableBase<SettingListsValuesRow> {
             
             private global::System.Data.DataColumn columnSettingListValueId;
             
@@ -4709,12 +4678,6 @@ namespace Micajah.Common.Dal {
             public SettingListsValuesRow FindBySettingListValueId(System.Guid SettingListValueId) {
                 return ((SettingListsValuesRow)(this.Rows.Find(new object[] {
                             SettingListValueId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4891,7 +4854,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class UnitsOfMeasureConversionDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class UnitsOfMeasureConversionDataTable : global::System.Data.TypedTableBase<UnitsOfMeasureConversionRow> {
             
             private global::System.Data.DataColumn columnUnitOfMeasureFrom;
             
@@ -5028,12 +4991,6 @@ namespace Micajah.Common.Dal {
                             OrganizationId,
                             UnitOfMeasureTo,
                             UnitOfMeasureFrom})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5209,7 +5166,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class UnitsOfMeasureDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class UnitsOfMeasureDataTable : global::System.Data.TypedTableBase<UnitsOfMeasureRow> {
             
             private global::System.Data.DataColumn columnUnitsOfMeasureId;
             
@@ -5405,12 +5362,6 @@ namespace Micajah.Common.Dal {
                 return ((UnitsOfMeasureRow)(this.Rows.Find(new object[] {
                             UnitsOfMeasureId,
                             OrganizationId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5619,7 +5570,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class InvitedLoginDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class InvitedLoginDataTable : global::System.Data.TypedTableBase<InvitedLoginRow> {
             
             private global::System.Data.DataColumn columnInvitedLoginId;
             
@@ -5773,12 +5724,6 @@ namespace Micajah.Common.Dal {
             public InvitedLoginRow FindByInvitedLoginId(System.Guid InvitedLoginId) {
                 return ((InvitedLoginRow)(this.Rows.Find(new object[] {
                             InvitedLoginId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5964,7 +5909,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class CountryDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class CountryDataTable : global::System.Data.TypedTableBase<CountryRow> {
             
             private global::System.Data.DataColumn columnCountryId;
             
@@ -6071,12 +6016,6 @@ namespace Micajah.Common.Dal {
             public CountryRow FindByCountryId(System.Guid CountryId) {
                 return ((CountryRow)(this.Rows.Find(new object[] {
                             CountryId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6244,7 +6183,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ResourceDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class ResourceDataTable : global::System.Data.TypedTableBase<ResourceRow> {
             
             private global::System.Data.DataColumn columnResourceId;
             
@@ -6468,12 +6407,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 ResourceDataTable cln = ((ResourceDataTable)(base.Clone()));
                 cln.InitVars();
@@ -6676,7 +6609,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class OrganizationDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class OrganizationDataTable : global::System.Data.TypedTableBase<OrganizationRow> {
             
             private global::System.Data.DataColumn columnOrganizationId;
             
@@ -7152,12 +7085,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 OrganizationDataTable cln = ((OrganizationDataTable)(base.Clone()));
                 cln.InitVars();
@@ -7479,7 +7406,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class CustomUrlDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class CustomUrlDataTable : global::System.Data.TypedTableBase<CustomUrlRow> {
             
             private global::System.Data.DataColumn columnCustomUrlId;
             
@@ -7622,12 +7549,6 @@ namespace Micajah.Common.Dal {
             public CustomUrlRow FindByCustomUrlId(System.Guid CustomUrlId) {
                 return ((CustomUrlRow)(this.Rows.Find(new object[] {
                             CustomUrlId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7809,7 +7730,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class GroupMappingsDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class GroupMappingsDataTable : global::System.Data.TypedTableBase<GroupMappingsRow> {
             
             private global::System.Data.DataColumn columnGroupId;
             
@@ -7967,12 +7888,6 @@ namespace Micajah.Common.Dal {
                 rowGroupMappingsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowGroupMappingsRow);
                 return rowGroupMappingsRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8162,7 +8077,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ResetPasswordRequestDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class ResetPasswordRequestDataTable : global::System.Data.TypedTableBase<ResetPasswordRequestRow> {
             
             private global::System.Data.DataColumn columnResetPasswordRequestId;
             
@@ -8273,12 +8188,6 @@ namespace Micajah.Common.Dal {
                 rowResetPasswordRequestRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowResetPasswordRequestRow);
                 return rowResetPasswordRequestRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8450,7 +8359,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EmailSuffixDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EmailSuffixDataTable : global::System.Data.TypedTableBase<EmailSuffixRow> {
             
             private global::System.Data.DataColumn columnEmailSuffixId;
             
@@ -8575,12 +8484,6 @@ namespace Micajah.Common.Dal {
                 rowEmailSuffixRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowEmailSuffixRow);
                 return rowEmailSuffixRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8753,7 +8656,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EmailDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EmailDataTable : global::System.Data.TypedTableBase<EmailRow> {
             
             private global::System.Data.DataColumn columnEmail;
             
@@ -8860,12 +8763,6 @@ namespace Micajah.Common.Dal {
             public EmailRow FindByEmail(string Email) {
                 return ((EmailRow)(this.Rows.Find(new object[] {
                             Email})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -9034,7 +8931,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class OrganizationsLdapGroupsDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class OrganizationsLdapGroupsDataTable : global::System.Data.TypedTableBase<OrganizationsLdapGroupsRow> {
             
             private global::System.Data.DataColumn columnId;
             
@@ -9200,12 +9097,6 @@ namespace Micajah.Common.Dal {
                 rowOrganizationsLdapGroupsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowOrganizationsLdapGroupsRow);
                 return rowOrganizationsLdapGroupsRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -10630,6 +10521,17 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableSetting.HandleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string IconUrl {
+                get {
+                    return ((string)(this[this.tableSetting.IconUrlColumn]));
+                }
+                set {
+                    this[this.tableSetting.IconUrlColumn] = value;
                 }
             }
             
