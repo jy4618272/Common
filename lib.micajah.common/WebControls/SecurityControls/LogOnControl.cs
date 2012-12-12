@@ -347,36 +347,39 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void LoadLogos()
         {
-            if (HeaderLeftLogoLink != null)
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern)
             {
-                if (m_Organization == null)
+                if (HeaderLeftLogoLink != null)
                 {
-                    if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl))
+                    if (m_Organization == null)
                     {
-                        HeaderLeftLogoLink.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl);
-                        HeaderLeftLogoLink.ToolTip = FrameworkConfiguration.Current.WebApplication.Copyright.CompanyName;
-                        HeaderLeftLogoLink.Visible = true;
+                        if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl))
+                        {
+                            HeaderLeftLogoLink.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl);
+                            HeaderLeftLogoLink.ToolTip = FrameworkConfiguration.Current.WebApplication.Copyright.CompanyName;
+                            HeaderLeftLogoLink.Visible = true;
+                        }
+                        else
+                        {
+                            HeaderLeftLogoLink.Text = FrameworkConfiguration.Current.WebApplication.Copyright.CompanyName;
+                            HeaderLeftLogoLink.Visible = true;
+                        }
                     }
                     else
-                    {
-                        HeaderLeftLogoLink.Text = FrameworkConfiguration.Current.WebApplication.Copyright.CompanyName;
-                        HeaderLeftLogoLink.Visible = true;
-                    }
+                        CreateLogo(m_Organization, m_Instance, ref HeaderLeftLogoLink);
                 }
-                else
-                    CreateLogo(m_Organization, m_Instance, ref HeaderLeftLogoLink);
-            }
 
-            if (HeaderRightLogoLink != null)
-            {
-                if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.LogoImageUrl))
+                if (HeaderRightLogoLink != null)
                 {
-                    HeaderRightLogoLink.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.LogoImageUrl);
-                    HeaderRightLogoLink.ToolTip = FrameworkConfiguration.Current.WebApplication.Name;
+                    if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.LogoImageUrl))
+                    {
+                        HeaderRightLogoLink.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.LogoImageUrl);
+                        HeaderRightLogoLink.ToolTip = FrameworkConfiguration.Current.WebApplication.Name;
+                    }
+                    else
+                        HeaderRightLogoLink.Text = FrameworkConfiguration.Current.WebApplication.Name;
+                    HeaderRightLogoLink.Visible = true;
                 }
-                else
-                    HeaderRightLogoLink.Text = FrameworkConfiguration.Current.WebApplication.Name;
-                HeaderRightLogoLink.Visible = true;
             }
 
             if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
@@ -639,6 +642,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="writer">The System.Web.UI.HtmlTextWriter to render content to.</param>
         public static void RenderHeader(HtmlTextWriter writer)
         {
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
+                return;
+
             if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.Copyright.CompanyLogoImageUrl))
             {
                 using (Image img = new Image())
@@ -666,6 +672,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="organizationId">The identifier of the instance to render logo of.</param>
         public static void RenderHeader(HtmlTextWriter writer, Guid organizationId, Guid instanceId)
         {
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
+                return;
+
             if (organizationId != Guid.Empty)
             {
                 Organization org = new Organization();
