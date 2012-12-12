@@ -51,7 +51,7 @@ namespace Micajah.Common.WebControls.SetupControls
         protected void RedirectToActionOrStartPage(Guid actionId)
         {
             Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId(actionId);
-            Response.Redirect((action != null) ? action.AbsoluteNavigateUrl : UserContext.Current.StartPageUrl);
+            Response.Redirect((action != null) ? action.CustomAbsoluteNavigateUrl : UserContext.Current.StartPageUrl);
         }
 
         protected virtual void EditFormInitialize()

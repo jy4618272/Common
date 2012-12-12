@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -32,6 +31,7 @@ namespace Micajah.Common.WebControls
         private bool m_ItemsIsLoaded;
         private HtmlGenericControl m_Container;
         private System.Guid? m_SelectedItemId;
+        private bool m_ModernTheme;
 
         #endregion
 
@@ -50,6 +50,7 @@ namespace Micajah.Common.WebControls
                 m_IsFrameworkAdmin = m_UserContext.IsFrameworkAdministrator;
                 m_IsAuthenticated = true;
             }
+            m_ModernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
         }
 
         /// <summary>
@@ -98,9 +99,17 @@ namespace Micajah.Common.WebControls
                     {
                         if (m_MasterPage.ActiveAction != null)
                         {
-                            Micajah.Common.Bll.Action item = ActionProvider.PagesAndControls.FindSubmenuActionByActionId(m_MasterPage.ActiveAction.ActionId, this.ParentActionId);
-                            if (item != null)
-                                itemId = item.ActionId;
+                            switch (m_Position)
+                            {
+                                case SubmenuPosition.Left:
+                                    itemId = m_MasterPage.ActiveAction.ActionId;
+                                    break;
+                                case SubmenuPosition.Top:
+                                    Micajah.Common.Bll.Action item = ActionProvider.PagesAndControls.FindSubmenuActionByActionId(m_MasterPage.ActiveAction.ActionId, this.ParentActionId);
+                                    if (item != null)
+                                        itemId = item.ActionId;
+                                    break;
+                            }
                         }
                     }
                     m_SelectedItemId = itemId;
@@ -202,14 +211,14 @@ namespace Micajah.Common.WebControls
                 ulMain.Attributes["class"] = "Mp_Sm";
                 m_Container.Controls.Add(ulMain);
 
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                if (!m_ModernTheme)
                     secondLevelItemCssClass = "S";
 
                 bool first = true;
-                foreach (Action item in Items)
+                foreach (Action item in this.Items)
                 {
                     liMain = new HtmlGenericControl("li");
-                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                    if (m_ModernTheme)
                     {
                         liMain.Attributes["class"] = "F";
                         if (first)
@@ -225,13 +234,13 @@ namespace Micajah.Common.WebControls
                     if (item.GroupInDetailMenu)
                     {
                         lbl = new Label();
-                        if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                        if (!m_ModernTheme)
                             lbl.CssClass = "F";
                         lbl.Text = item.CustomName;
                         liMain.Controls.Add(lbl);
                     }
                     else
-                        liMain.Controls.Add(CreateLink(item, ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) ? null : "F")));
+                        liMain.Controls.Add(CreateLink(item, (m_ModernTheme ? null : "F"), m_ModernTheme));
 
                     ulMain.Controls.Add(liMain);
 
@@ -240,31 +249,45 @@ namespace Micajah.Common.WebControls
                         ActionCollection availableChildActions = item.GetAvailableChildActions(m_IsAuthenticated, m_IsFrameworkAdmin, m_ActionIdList);
                         if (availableChildActions.Count > 0)
                         {
-                            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                            if (!m_ModernTheme)
                                 ulSub = new HtmlGenericControl("ul");
 
                             foreach (Action item2 in availableChildActions)
                             {
                                 liSub = new HtmlGenericControl("li");
-                                if (!string.IsNullOrEmpty(secondLevelItemCssClass))
-                                    liSub.Attributes["class"] = secondLevelItemCssClass;
+
+                                string cssClass = secondLevelItemCssClass;
+                                if (item2.HighlightInSubmenu)
+                                {
+                                    if (!string.IsNullOrEmpty(cssClass)) cssClass += " ";
+                                    cssClass += "H";
+                                }
+                                if (item2.ActionId == this.SelectedItemId)
+                                {
+                                    if (!string.IsNullOrEmpty(cssClass)) cssClass += " ";
+                                    cssClass += "S";
+                                }
+
+                                if (!string.IsNullOrEmpty(cssClass))
+                                    liSub.Attributes["class"] = cssClass;
+
                                 if (!((item2.SubmenuItemHorizontalAlign == HorizontalAlign.NotSet) || (item2.SubmenuItemHorizontalAlign == HorizontalAlign.Left)))
                                     liSub.Style[HtmlTextWriterStyle.TextAlign] = item2.SubmenuItemHorizontalAlign.ToString().ToLowerInvariant();
 
-                                liSub.Controls.Add(CreateLink(item2, secondLevelItemCssClass));
+                                liSub.Controls.Add(CreateLink(item2, secondLevelItemCssClass, true, m_ModernTheme));
 
-                                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                                if (m_ModernTheme)
                                     ulMain.Controls.Add(liSub);
                                 else
                                     ulSub.Controls.Add(liSub);
                             }
 
-                            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                            if (!m_ModernTheme)
                                 liMain.Controls.Add(ulSub);
                         }
                     }
 
-                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                    if (!m_ModernTheme)
                     {
                         liMain = new HtmlGenericControl("li");
                         liMain.Attributes["class"] = "L";
@@ -292,9 +315,7 @@ namespace Micajah.Common.WebControls
 
             try
             {
-
-
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                if (m_ModernTheme)
                 {
                     m_Container.Attributes["class"] = "Mp_Smt";
 
@@ -308,7 +329,7 @@ namespace Micajah.Common.WebControls
                         {
                             if (item.ActionId == this.SelectedItemId)
                                 li.Attributes["class"] = "S";
-                            li.Controls.Add(CreateLink(item));
+                            li.Controls.Add(CreateLink(item, m_ModernTheme));
                             ul.Controls.Add(li);
                         }
                     }
@@ -327,7 +348,7 @@ namespace Micajah.Common.WebControls
                             m_Container.Controls.Add(lbl);
                         }
                         else
-                            m_Container.Controls.Add(CreateLink(item, "F"));
+                            m_Container.Controls.Add(CreateLink(item, "F", m_ModernTheme));
 
                         m_Container.Controls.Add(new LiteralControl("&nbsp;:&nbsp;"));
 
@@ -338,7 +359,7 @@ namespace Micajah.Common.WebControls
                             {
                                 foreach (Action item2 in availableChildActions)
                                 {
-                                    m_Container.Controls.Add(CreateLink(item2, "S"));
+                                    m_Container.Controls.Add(CreateLink(item2, "S", m_ModernTheme));
                                     m_Container.Controls.Add(new LiteralControl("&nbsp;|&nbsp;"));
                                 }
 
@@ -362,10 +383,11 @@ namespace Micajah.Common.WebControls
         /// Creates a new hyperlink from specified action.
         /// </summary>
         /// <param name="action">The actionm to create link from.</param>
+        /// <param name="modernTheme">Whether the theme is modern.</param>
         /// <returns>The Link that represents hyperlink from specified action.</returns>
-        internal static Control CreateLink(Action action)
+        internal static Control CreateLink(Action action, bool modernTheme)
         {
-            return CreateLink(action, null);
+            return CreateLink(action, null, modernTheme);
         }
 
         /// <summary>
@@ -373,10 +395,11 @@ namespace Micajah.Common.WebControls
         /// </summary>
         /// <param name="action">The action to create link from.</param>
         /// <param name="cssClass">The css class of the link.</param>
+        /// <param name="modernTheme">Whether the theme is modern.</param>
         /// <returns>The Link that represents hyperlink with specifies css class from specified action.</returns>
-        internal static Control CreateLink(Action action, string cssClass)
+        internal static Control CreateLink(Action action, string cssClass, bool modernTheme)
         {
-            return CreateLink(action, cssClass, false);
+            return CreateLink(action, cssClass, false, modernTheme);
         }
 
         /// <summary>
@@ -385,8 +408,9 @@ namespace Micajah.Common.WebControls
         /// <param name="action">The action to create link from.</param>
         /// <param name="cssClass">The css class of the link.</param>
         /// <param name="showIcon">Whether the icon of the link is shown.</param>
+        /// <param name="modernTheme">Whether the theme is modern.</param>
         /// <returns>The Link that represents hyperlink with specifies css class from specified action.</returns>
-        internal static Control CreateLink(Action action, string cssClass, bool showIcon)
+        internal static Control CreateLink(Action action, string cssClass, bool showIcon, bool modernTheme)
         {
             if (action == null) return null;
             if (cssClass == null) cssClass = string.Empty;
@@ -396,7 +420,7 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                if ((action.SubmenuItemType == SubmenuItemType.Button) && (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern))
+                if ((action.SubmenuItemType == SubmenuItemType.Button) && (!modernTheme))
                 {
                     btn = new HtmlInputButton("button");
                     btn.Attributes["value"] = action.CustomName;
@@ -449,7 +473,7 @@ namespace Micajah.Common.WebControls
                 {
                     case SubmenuPosition.Left:
                         int width = FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Width;
-                        int decrement = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) ? 40 : 8;
+                        int decrement = m_ModernTheme ? 40 : 8;
                         if (width > decrement)
                             width -= decrement;
 

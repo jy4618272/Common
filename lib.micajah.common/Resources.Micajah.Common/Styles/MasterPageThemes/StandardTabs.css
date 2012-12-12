@@ -264,6 +264,11 @@ ul.Mp_Sm li ul
     padding-left:0px;
 }
 
+ul.Mp_Sm li a img
+{
+    padding-right: 5px;
+}
+
 ul.Mp_Sm li, .Mp_Lah
 {    
     padding-bottom: 8px;

@@ -373,6 +373,23 @@ ul.Mp_Sm li a:hover
     background-color: #E9E9E9;
 }
 
+ul.Mp_Sm li a img
+{
+    padding-right: 5px;
+}
+
+/* ------------ Submenu highlighted item ------------ */
+ul.Mp_Sm li.H
+{
+    font-weight: bold;
+}
+
+/* ------------ Submenu selected item ------------ */
+ul.Mp_Sm li.S a
+{
+    background-color: #E9E9E9;
+}
+
 /*------------ Submenu first level item ------------ */
 .Mp_Sm li.F
 {

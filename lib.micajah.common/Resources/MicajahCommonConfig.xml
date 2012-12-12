@@ -60,9 +60,19 @@
         <action id="00000000-0000-0000-0000-000000000023" type="Page" name="My Password" description="Edit my password" navigateUrl="/mc/security/changepassword.aspx" orderNumber="2" authenticationRequired="true" instanceRequired="false" />
       </actions>
     </action>
-    <action id="00000000-0000-0000-0000-000000000009" type="Page" name="Configuration" description="Configuration" navigateUrl="" authenticationRequired="true" instanceRequired="false" visible="false" roles="OrgAdmin,InstAdmin">
+    <action id="00000000-0000-0000-0000-000000000009" type="Page" name="Configuration" description="Configuration" navigateUrl="" authenticationRequired="true" instanceRequired="false" visible="false" roles="OrgAdmin,InstAdmin" handle="true">
       <detailMenu show="false" />
       <actions>
+        <action id="4D82C78F-D583-41F6-A540-A4393F4DDE26" type="Page" name="Account Settings" navigateUrl="" orderNumber="-100000" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" handle="true">
+          <detailMenu showDescription="false" group="true" />
+          <actions>
+            <action id="BA74DDA9-A12F-4987-BE66-45137F2F21B2" type="Page" name="My Account" description="Setup Payment Settings" navigateUrl="/mc/admin/accountsettings.aspx" orderNumber="1" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
+              <actions>
+                <action id="F757E6E1-AF2B-4A65-8BEE-548529AE88E4" type="Page" name="Update Credit Card" description="Setup Chargify Credit Card Subscription" navigateUrl="/mc/admin/chargifysubscribe.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" visible="false" />
+              </actions>
+            </action>
+          </actions>
+        </action>
         <action id="79ECE501-03D6-4494-B2A4-6CB6B9EFD9C2" type="Page" name="Integration" navigateUrl="" orderNumber="13" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
           <detailMenu showDescription="false" group="true" />
           <actions>
@@ -73,7 +83,7 @@
             </action>
           </actions>
         </action>
-        <action id="B399B062-CA0B-4296-A43C-F9DA8B2C60BC" type="Page" name="More Configuration" description="More Configuration" navigateUrl="" orderNumber="2147483647" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
+        <action id="B399B062-CA0B-4296-A43C-F9DA8B2C60BC" type="Page" name="More Configuration" description="More Configuration" navigateUrl="" orderNumber="100000" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
           <detailMenu show="true" showChildren="false" showDescription="false" group="true" highlight="false" iconUrl="" />
           <actions>
             <action id="00000000-0000-0000-0000-000000000020" type="Page" name="CSS Style Override" description="CSS Style Override" navigateUrl="/mc/admin/customstylesheetedit.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
@@ -104,11 +114,6 @@
             <action id="00000000-0000-0000-0000-000000000010" type="Page" name="Instances" description="Manage the Instances" navigateUrl="/mc/admin/instance.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
             <action id="00000000-0000-0000-0000-000000000044" type="Page" name="Measure Units" description="Manage the Measure Units &amp; Conversion" navigateUrl="/mc/admin/measureunits.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
             <action id="D2FC3868-F8C5-4DE4-BE33-D538C276CE7B" type="Page" name="Organization Profile" description="Edit organization profile" navigateUrl="/mc/admin/organizationprofile.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
-            <action id="BA74DDA9-A12F-4987-BE66-45137F2F21B2" type="Page" name="Account Settings" description="Setup Payment Settings" navigateUrl="/mc/admin/accountsettings.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" handle="true">
-              <actions>
-                <action id="F757E6E1-AF2B-4A65-8BEE-548529AE88E4" type="Page" name="Update Credit Card" description="Setup Chargify Credit Card Subscription" navigateUrl="/mc/admin/chargifysubscribe.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
-              </actions>
-            </action>
             <action id="5759D9DE-5998-4886-AA7D-8865B8252AE1" type="Page" name="Login Updates Notice Settings" description="Edit the notice settings for the Login updates" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
               <settings>
                 <setting id="00000000-0000-0000-0000-000000000081" type="OnOffSwitch" name="Login Updates Notice Settings" shortName="EmailElement" defaultValue="true">
@@ -176,7 +181,7 @@
     <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="10000" authenticationRequired="true" instanceRequired="false" />
     <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="10001" authenticationRequired="true" instanceRequired="false" />
     <action id="00000000-0000-0000-0000-000000000043" type="GlobalNavigationLink" name="Log In" description="Log In" navigateUrl="/web.micajah.common/mc/login.aspx" orderNumber="10002" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="10000" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" />
+    <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="10000" authenticationRequired="true" instanceRequired="false" handle="true" roles="OrgAdmin,InstAdmin" />
     <action id="00000000-0000-0000-0000-000000000005" type="GlobalNavigationLink" name="My Profile" description="Edit personal settings" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" handle="true" orderNumber="10010" authenticationRequired="true" instanceRequired="false" />
     <action id="00000000-0000-0000-0000-000000000006" type="GlobalNavigationLink" name="Log Out" description="Log Out" navigateUrl="/mc/logoff.aspx" orderNumber="10020" authenticationRequired="true" instanceRequired="false" />
   </actions>

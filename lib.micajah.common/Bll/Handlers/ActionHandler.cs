@@ -141,6 +141,13 @@ namespace Micajah.Common.Bll.Handlers
         {
             if (action == null)
                 return null;
+
+            if ((action.ActionId == ActionProvider.ConfigurationPageActionId) || (action.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId))
+            {
+                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                    return CustomUrlProvider.CreateApplicationRelativeUrl(ResourceProvider.AccountSettingsVirtualPath);
+            }
+
             return action.NavigateUrl;
         }
 

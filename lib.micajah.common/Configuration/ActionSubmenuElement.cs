@@ -68,6 +68,16 @@ namespace Micajah.Common.Configuration
             set { this["horizontalAlign"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value that indicates whether the action is highlighted in the submenu.
+        /// </summary>
+        [ConfigurationProperty("highlight")]
+        public bool Highlight
+        {
+            get { return (bool)this["highlight"]; }
+            set { this["highlight"] = value; }
+        }
+
         #endregion
     }
 }

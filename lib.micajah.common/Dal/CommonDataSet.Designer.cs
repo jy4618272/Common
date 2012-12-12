@@ -1173,6 +1173,8 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnDetailMenuIconSize;
             
+            private global::System.Data.DataColumn columnHighlightInSubmenu;
+            
             private global::System.Data.DataColumn columnBuiltIn;
             
             private global::System.Data.DataColumn columnHandle;
@@ -1404,6 +1406,14 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn HighlightInSubmenuColumn {
+                get {
+                    return this.columnHighlightInSubmenu;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn BuiltInColumn {
                 get {
                     return this.columnBuiltIn;
@@ -1480,6 +1490,7 @@ namespace Micajah.Common.Dal {
                         bool HighlightInDetailMenu, 
                         int DetailMenuTheme, 
                         int DetailMenuIconSize, 
+                        bool HighlightInSubmenu, 
                         bool BuiltIn, 
                         bool Handle) {
                 ActionRow rowActionRow = ((ActionRow)(this.NewRow()));
@@ -1508,6 +1519,7 @@ namespace Micajah.Common.Dal {
                         HighlightInDetailMenu,
                         DetailMenuTheme,
                         DetailMenuIconSize,
+                        HighlightInSubmenu,
                         BuiltIn,
                         Handle};
                 if ((parentActionRowByFK_Mc_Action_Mc_Action != null)) {
@@ -1566,6 +1578,7 @@ namespace Micajah.Common.Dal {
                 this.columnHighlightInDetailMenu = base.Columns["HighlightInDetailMenu"];
                 this.columnDetailMenuTheme = base.Columns["DetailMenuTheme"];
                 this.columnDetailMenuIconSize = base.Columns["DetailMenuIconSize"];
+                this.columnHighlightInSubmenu = base.Columns["HighlightInSubmenu"];
                 this.columnBuiltIn = base.Columns["BuiltIn"];
                 this.columnHandle = base.Columns["Handle"];
             }
@@ -1621,6 +1634,8 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnDetailMenuTheme);
                 this.columnDetailMenuIconSize = new global::System.Data.DataColumn("DetailMenuIconSize", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDetailMenuIconSize);
+                this.columnHighlightInSubmenu = new global::System.Data.DataColumn("HighlightInSubmenu", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnHighlightInSubmenu);
                 this.columnBuiltIn = new global::System.Data.DataColumn("BuiltIn", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBuiltIn);
                 this.columnHandle = new global::System.Data.DataColumn("Handle", typeof(bool), null, global::System.Data.MappingType.Element);
@@ -1667,6 +1682,8 @@ namespace Micajah.Common.Dal {
                 this.columnGroupInDetailMenu.DefaultValue = ((bool)(false));
                 this.columnHighlightInDetailMenu.AllowDBNull = false;
                 this.columnHighlightInDetailMenu.DefaultValue = ((bool)(false));
+                this.columnHighlightInSubmenu.AllowDBNull = false;
+                this.columnHighlightInSubmenu.DefaultValue = ((bool)(false));
                 this.columnBuiltIn.AllowDBNull = false;
                 this.columnBuiltIn.DefaultValue = ((bool)(false));
                 this.columnHandle.AllowDBNull = false;
@@ -9578,6 +9595,17 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableAction.DetailMenuIconSizeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool HighlightInSubmenu {
+                get {
+                    return ((bool)(this[this.tableAction.HighlightInSubmenuColumn]));
+                }
+                set {
+                    this[this.tableAction.HighlightInSubmenuColumn] = value;
                 }
             }
             

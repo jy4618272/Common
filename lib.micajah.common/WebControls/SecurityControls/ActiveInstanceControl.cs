@@ -180,10 +180,15 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 if (count == 0)
                 {
+                    string url = string.Empty;
+                    action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.ConfigurationPageActionId);
+                    if (action != null)
+                        url = action.CustomAbsoluteNavigateUrl;
+
                     ShowError(
                         (user.IsOrganizationAdministrator
                             ? Resources.UserContext_ErrorMessage_YouAreNotAssociatedWithInstances + "<br />"
-                                + string.Format(CultureInfo.InvariantCulture, Resources.ActiveInstanceControl_ConfigureOrganization, ResourceProvider.GetDetailMenuPageUrl(ActionProvider.ConfigurationPageActionId))
+                                + string.Format(CultureInfo.InvariantCulture, Resources.ActiveInstanceControl_ConfigureOrganization, url)
                             : Resources.UserContext_ErrorMessage_YouAreNotAssociatedWithInstances)
                         , ErrorDiv);
                 }

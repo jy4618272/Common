@@ -724,7 +724,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (string.IsNullOrEmpty(this.ReturnUrl))
                     {
                         if (action != null)
-                            CancelLink.NavigateUrl = action.AbsoluteNavigateUrl;
+                            CancelLink.NavigateUrl = action.CustomAbsoluteNavigateUrl;
                     }
                 }
 

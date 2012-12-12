@@ -87,10 +87,11 @@ namespace Micajah.Common.WebControls
 
         private static Control CreateLinkAsListItem(Micajah.Common.Bll.Action action, string cssClass)
         {
+            bool moderTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
             using (HtmlGenericControl li = new HtmlGenericControl("li"))
             {
                 if (!string.IsNullOrEmpty(cssClass)) li.Attributes["class"] = cssClass;
-                li.Controls.Add(Submenu.CreateLink(action));
+                li.Controls.Add(Submenu.CreateLink(action, moderTheme));
                 return li;
             }
         }
@@ -159,7 +160,7 @@ namespace Micajah.Common.WebControls
 
                         foreach (Micajah.Common.Bll.Action item in this.Items)
                         {
-                            itemCtl = Submenu.CreateLink(item, ((item.ActionId == mainMenuItemId) ? "S" : null));
+                            itemCtl = Submenu.CreateLink(item, ((item.ActionId == mainMenuItemId) ? "S" : null), false);
                             ctrl.Add(itemCtl);
                         }
 

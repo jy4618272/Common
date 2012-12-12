@@ -164,8 +164,13 @@ namespace Micajah.Common.WebControls.AdminControls
             if (IsPostBack) return;
 
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-            
+
+            masterPage.SubmenuPosition = SubmenuPosition.Left;
+            masterPage.VisibleSubmenu = true;
+            masterPage.VisibleLeftArea = true;
+            masterPage.VisibleBreadcrumbs = false;
             masterPage.EnableFancyBox = true;
+
             this.RegisterFancyBoxInitScript();
 
             if (Request.QueryString["st"] == "ok")
@@ -282,7 +287,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (setting.ShortName == "Training3Hours") return;
             if (setting.ShortName == "Training8Hours") return;
 
-            
+
             bool isChecked = false;
             if (!Boolean.TryParse(setting.Value, out isChecked))
             {
@@ -291,22 +296,22 @@ namespace Micajah.Common.WebControls.AdminControls
 
             HtmlGenericControl div0 = new HtmlGenericControl("div");
             div0.Attributes["class"] = "account-option";
-            HtmlGenericControl h4= new HtmlGenericControl("h4");
-//            h4.Attributes["style"] = "background: url('/images/account.gif') top left no-repeat;";
+            HtmlGenericControl h4 = new HtmlGenericControl("h4");
+            //            h4.Attributes["style"] = "background: url('/images/account.gif') top left no-repeat;";
             h4.InnerText = setting.CustomName;
             div0.Controls.Add(h4);
 
             HtmlGenericControl div = new HtmlGenericControl("div");
             div.Attributes["class"] = "feature-toggle";
-            div.Attributes["id"] = "div" + setting.ShortName+"OnOff";
+            div.Attributes["id"] = "div" + setting.ShortName + "OnOff";
             Micajah.Common.WebControls.CheckBox checkBox = new Micajah.Common.WebControls.CheckBox();
             checkBox.ID = "chkOptionOnOff_" + setting.SettingId.ToString("N");
-            checkBox.RenderingMode=CheckBoxRenderingMode.OnOffSwitch;
+            checkBox.RenderingMode = CheckBoxRenderingMode.OnOffSwitch;
             checkBox.Checked = isChecked;
             checkBox.AutoPostBack = true;
             checkBox.CheckedChanged += new EventHandler(checkBox_CheckedChanged);
             div.Controls.Add(checkBox);
-//            if (setting.Paid && setting.Price > 0) div.Controls.Add(CreateToolTip(setting));
+            //            if (setting.Paid && setting.Price > 0) div.Controls.Add(CreateToolTip(setting));
             div0.Controls.Add(div);
             e.Item.Controls.Add(div0);
         }
@@ -320,7 +325,7 @@ namespace Micajah.Common.WebControls.AdminControls
             radToolTip.RelativeTo = ToolTipRelativeDisplay.Element;
             radToolTip.ShowEvent = ToolTipShowEvent.OnMouseOver;
             radToolTip.Position = ToolTipPosition.MiddleRight;
-            radToolTip.HideEvent=ToolTipHideEvent.LeaveTargetAndToolTip;
+            radToolTip.HideEvent = ToolTipHideEvent.LeaveTargetAndToolTip;
             radToolTip.BackColor = System.Drawing.ColorTranslator.FromHtml("#404040");
             radToolTip.ForeColor = System.Drawing.ColorTranslator.FromHtml("#FFFFFF");
             radToolTip.BorderColor = System.Drawing.ColorTranslator.FromHtml("#404040");
@@ -378,16 +383,16 @@ namespace Micajah.Common.WebControls.AdminControls
                     break;
             }
 
-            if (setting==null)
+            if (setting == null)
             {
-                masterPage.Message = trainingName+": Component definition is not found.";
+                masterPage.Message = trainingName + ": Component definition is not found.";
                 this.List_DataBind();
                 return;
             }
 
             if (string.IsNullOrEmpty(setting.ExternalId))
             {
-                masterPage.Message = trainingName+": Component External Id is not defined.";
+                masterPage.Message = trainingName + ": Component External Id is not defined.";
                 this.List_DataBind();
                 return;
             }
@@ -397,22 +402,22 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!int.TryParse(setting.ExternalId, out _cid))
             {
-                masterPage.Message = trainingName+": Component External Id is invalid.";
+                masterPage.Message = trainingName + ": Component External Id is invalid.";
                 this.List_DataBind();
-                return;                
+                return;
             }
 
             try
             {
                 ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
                 _chargify.AddUsage(SubscriptionId, _cid, _count, "Purchase Training");
-//                _chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
+                //                _chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
             }
             catch (ChargifyException cex)
             {
                 if ((int)cex.StatusCode == 422)
                 {
-                    masterPage.Message = trainingName+": Credit Card Transaction Failed!";
+                    masterPage.Message = trainingName + ": Credit Card Transaction Failed!";
                 }
                 else masterPage.Message = cex.Message;
                 this.List_DataBind();
@@ -422,9 +427,9 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 masterPage.Message = ex.Message;
                 this.List_DataBind();
-                return;                
+                return;
             }
-            masterPage.MessageType=NoticeMessageType.Success;
+            masterPage.MessageType = NoticeMessageType.Success;
             masterPage.Message = "Your " + trainingName +
                                  " proccessed successfully! You will receive confirmation email.";
             UserContext usr = UserContext.Current;
@@ -459,7 +464,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             SettingCollection settings = this.PaidSettings;
             Setting setting = settings["PhoneSupport"];
-            if (setting==null)
+            if (setting == null)
             {
                 divPhoneSupport.Visible = false;
                 return;
@@ -472,7 +477,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
             }
             if (isChecked && setting.Paid && setting.Price > 0) m_TotalSum += setting.Price;
-            if (setting.Paid && setting.Price>0) phPhoneSupportToolTip.Controls.Add(CreateToolTip(setting));
+            if (setting.Paid && setting.Price > 0) phPhoneSupportToolTip.Controls.Add(CreateToolTip(setting));
             if (!IsPostBack) chkPhoneSupport.Checked = isChecked;
         }
 
@@ -480,14 +485,14 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             CheckBox chk = sender as CheckBox;
             SettingCollection settings = this.PaidSettings;
-            if (chk.ID=="chkPhoneSupport")
+            if (chk.ID == "chkPhoneSupport")
             {
                 settings["PhoneSupport"].Value = chk.Checked.ToString();
             }
             else
             {
                 Guid settingId = Guid.Parse(chk.ID.Replace("chkOptionOnOff_", string.Empty));
-                settings[settingId].Value = chk.Checked.ToString();                
+                settings[settingId].Value = chk.Checked.ToString();
             }
             settings.UpdateValues(OrganizationId, InstanceId);
             UserContext.Current.Refresh();
@@ -506,7 +511,7 @@ namespace Micajah.Common.WebControls.AdminControls
             _cust.FirstName = UserContext.Current.FirstName;
             _cust.LastName = UserContext.Current.LastName;
 
-            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000+int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000 + int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
             msgStatus.Visible = true;
             msgStatus.MessageType = NoticeMessageType.Error;
@@ -551,7 +556,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     return;
                 }
             }
-            if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value!="0")
+            if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value != "0")
             {
                 switch (hfPurchaseTrainingHours.Value)
                 {
@@ -567,14 +572,14 @@ namespace Micajah.Common.WebControls.AdminControls
                 }
             }
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-            Response.Redirect("accountsettings.aspx?st=ok"+(!string.IsNullOrEmpty(masterPage.Message) ? "&msg="+HttpUtility.UrlEncode(masterPage.Message) : string.Empty));
+            Response.Redirect(ResourceProvider.AccountSettingsVirtualPath +"?st=ok" + (!string.IsNullOrEmpty(masterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(masterPage.Message) : string.Empty));
         }
 
         protected void Repeater2_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e == null) return;
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
-            
+
             Setting setting = e.Item.DataItem as Setting;
             if (setting == null) return;
 
@@ -608,7 +613,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 int _paidQty = usageCount - setting.UsageCountLimit;
                 decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
-                m_TotalSum += _priceMonth;                
+                m_TotalSum += _priceMonth;
             }
 
 
@@ -629,49 +634,49 @@ namespace Micajah.Common.WebControls.AdminControls
             div = new HtmlGenericControl("div");
             div.Attributes["class"] = "clearfix";
             tdCol.Controls.Add(div);
-            if (setting.UsageCountLimit > 1 && usageCount<=setting.UsageCountLimit)
+            if (setting.UsageCountLimit > 1 && usageCount <= setting.UsageCountLimit)
             {
                 div = new HtmlGenericControl("div");
                 div.Attributes["class"] = "progress";
                 HtmlGenericControl divBar = new HtmlGenericControl("div");
                 divBar.Attributes["class"] = "bar";
-                if (usageCount<setting.UsageCountLimit)
+                if (usageCount < setting.UsageCountLimit)
                 {
                     int width = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * (decimal)usageCount);
-                    divBar.Style.Add(HtmlTextWriterStyle.Width, width.ToString() + "%");                        
+                    divBar.Style.Add(HtmlTextWriterStyle.Width, width.ToString() + "%");
                 }
-                else if (usageCount>setting.UsageCountLimit)
+                else if (usageCount > setting.UsageCountLimit)
                 {
-//                        div.Attributes["class"] = "progress-red";
+                    //                        div.Attributes["class"] = "progress-red";
                     divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
                 }
                 else
                 {
-//                        div.Attributes["class"] = "progress-green";
+                    //                        div.Attributes["class"] = "progress-green";
                     divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
                 }
                 div.Controls.Add(divBar);
                 tdCol.Controls.Add(div);
             }
-            else if (setting.Paid || setting.UsageCountLimit==0 || setting.UsageCountLimit==1 || usageCount>setting.UsageCountLimit)
+            else if (setting.Paid || setting.UsageCountLimit == 0 || setting.UsageCountLimit == 1 || usageCount > setting.UsageCountLimit)
             {
                 div = new HtmlGenericControl("div");
                 div.Attributes["class"] = "accsettings paid-account";
-                HyperLink a=new HyperLink();
+                HyperLink a = new HyperLink();
                 a.ID = "aTooltip";
-                a.NavigateUrl = "#"+setting.ShortName;
+                a.NavigateUrl = "#" + setting.ShortName;
                 a.CssClass = "accsettings tooltip_right tooltip";
                 HtmlGenericControl span = new HtmlGenericControl("span");
                 span.Attributes["class"] = "accsettings";
                 if (setting.Paid)
                     span.InnerHtml = "$" + setting.Price.ToString("0.00") + " / month if option is enabled";
-                else if (setting.UsageCountLimit==0)
+                else if (setting.UsageCountLimit == 0)
                     span.InnerHtml = "$" + setting.Price.ToString("0.00") + " / month for each " + setting.CustomName;
-                else if (setting.UsageCountLimit==1)
+                else if (setting.UsageCountLimit == 1)
                     span.InnerHtml = "1st " + setting.CustomName + " is always FREE.<br />$" +
                                 setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
-                else if (setting.UsageCountLimit>1)
-                    span.InnerHtml = setting.UsageCountLimit.ToString()+" " + setting.CustomName + " is always FREE.<br />$" +
+                else if (setting.UsageCountLimit > 1)
+                    span.InnerHtml = setting.UsageCountLimit.ToString() + " " + setting.CustomName + " is always FREE.<br />$" +
                                 setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
                 HtmlGenericControl h3 = new HtmlGenericControl("h3");
                 if (setting.Paid) h3.InnerText = "$" + setting.Price.ToString("0.00");

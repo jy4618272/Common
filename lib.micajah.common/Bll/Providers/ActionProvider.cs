@@ -64,7 +64,7 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid LdapUserInfoPageActionId = new Guid("5749FF70-4592-4B91-8579-5E7E203C0410");
         internal readonly static Guid SignUpOrganizationPageActionId = new Guid("3E9E3609-7F2A-4DF2-92DF-DFFBD6978E84");
         internal readonly static Guid StartPageActionId = new Guid("4CB3BB95-A829-4DF7-BAD8-05FB38FF019A");
-        internal readonly static Guid AccountSettingsPageActionId = new Guid("BA74DDA9-A12F-4987-BE66-45137F2F21B2");
+        internal readonly static Guid AccountSettingsPageActionId = new Guid("4D82C78F-D583-41F6-A540-A4393F4DDE26");
 
         // The objects which are used to synchronize access to the cached collections and lists.
         private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
@@ -446,6 +446,7 @@ namespace Micajah.Common.Bll.Providers
             row.SubmenuItemTypeId = (int)submenu.ItemType;
             row.SubmenuItemWidth = submenu.Width;
             row.SubmenuItemHorizontalAlignId = (int)submenu.HorizontalAlign;
+            row.HighlightInSubmenu = submenu.Highlight;
         }
 
         private static void FillActionIdList(CommonDataSet.ActionRow row, ref ArrayList list)
@@ -604,6 +605,7 @@ namespace Micajah.Common.Bll.Providers
                 action.SubmenuItemHorizontalAlign = (HorizontalAlign)row.SubmenuItemHorizontalAlignId;
                 if (row.SubmenuItemWidth > 0)
                     action.SubmenuItemWidth = Unit.Pixel(row.SubmenuItemWidth);
+                action.HighlightInSubmenu = row.HighlightInSubmenu;
                 action.NavigateUrl = (row.IsNavigateUrlNull() ? null : row.NavigateUrl);
                 action.LearnMoreUrl = row.LearnMoreUrl;
                 action.VideoUrl = row.VideoUrl;

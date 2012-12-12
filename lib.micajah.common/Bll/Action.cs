@@ -194,6 +194,11 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
+        /// Gets or sets a value that indicates whether the action is highlighted in the submenu.
+        /// </summary>
+        public bool HighlightInSubmenu { get; set; }
+
+        /// <summary>
         /// Gets or sets the URL of the action to navigate.
         /// </summary>
         public string NavigateUrl
@@ -571,6 +576,7 @@ namespace Micajah.Common.Bll
             item.SubmenuItemType = this.SubmenuItemType;
             item.SubmenuItemHorizontalAlign = this.SubmenuItemHorizontalAlign;
             item.SubmenuItemWidth = this.SubmenuItemWidth;
+            item.HighlightInSubmenu = this.HighlightInSubmenu;
             item.NavigateUrl = this.NavigateUrl;
             item.LearnMoreUrl = this.LearnMoreUrl;
             item.VideoUrl = this.VideoUrl;
@@ -676,7 +682,7 @@ namespace Micajah.Common.Bll
             }
             else if (this.Count > 1)
             {
-                Sort(CompareByOrderNumberAndName);
+                Sort();
             }
         }
 

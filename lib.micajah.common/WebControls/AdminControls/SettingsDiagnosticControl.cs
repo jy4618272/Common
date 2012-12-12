@@ -162,7 +162,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.ConfigurationPageActionId);
                 if (action != null)
-                    CancelLink.NavigateUrl = action.AbsoluteNavigateUrl;
+                    CancelLink.NavigateUrl = action.CustomAbsoluteNavigateUrl;
 
                 this.ApplyFilters();
             }

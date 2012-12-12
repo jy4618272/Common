@@ -87,7 +87,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void mfChargifyCustomer_Action(object sender, Micajah.Common.WebControls.MagicFormActionEventArgs e)
         {
-            if (e.Action == CommandActions.Cancel) Response.Redirect("AccountSettings.aspx");
+            if (e.Action == CommandActions.Cancel) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath);
         }
 
         protected void mfChargifyCustomer_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
@@ -141,7 +141,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     throw;
                 }
             }
-            Response.Redirect("AccountSettings.aspx");
+            Response.Redirect(ResourceProvider.AccountSettingsVirtualPath);
         }
 
         #endregion
