@@ -161,8 +161,6 @@ namespace Micajah.Common.WebControls.AdminControls
             Repeater1.DataSource = this.PaidSettings;
             Repeater1.DataBind();
 
-            if (IsPostBack) return;
-
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
 
             masterPage.SubmenuPosition = SubmenuPosition.Left;
@@ -170,6 +168,8 @@ namespace Micajah.Common.WebControls.AdminControls
             masterPage.VisibleLeftArea = true;
             masterPage.VisibleBreadcrumbs = false;
             masterPage.EnableFancyBox = true;
+
+            if (IsPostBack) return;
 
             this.RegisterFancyBoxInitScript();
 
