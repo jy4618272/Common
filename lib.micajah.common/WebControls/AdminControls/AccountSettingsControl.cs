@@ -141,14 +141,12 @@ namespace Micajah.Common.WebControls.AdminControls
             TotalAmount = m_TotalSum;
             if (TotalAmount > 0)
             {
-                lBillingPlanName.Text = "PAID";
-                lSumPerMonth.Text = "$" + TotalAmount.ToString("0.00") + " per Month";
+                lBillingPlanName.Text = "$" + TotalAmount.ToString("0.00");
                 if (CurrentBillingPlan == BillingPlan.Free) Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
             }
             else
             {
                 lBillingPlanName.Text = "FREE";
-                lSumPerMonth.Text = "per Month";
                 if (CurrentBillingPlan == BillingPlan.Paid) Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
             }
             InitBillingControls(!IsPostBack);
@@ -297,7 +295,7 @@ namespace Micajah.Common.WebControls.AdminControls
             HtmlGenericControl div0 = new HtmlGenericControl("div");
             div0.Attributes["class"] = "account-option";
             HtmlGenericControl h4 = new HtmlGenericControl("h4");
-            //            h4.Attributes["style"] = "background: url('/images/account.gif') top left no-repeat;";
+            if (!string.IsNullOrEmpty(setting.IconUrl)) h4.Attributes["style"] = "background: url('" + setting.IconUrl+ "') top left no-repeat;";
             h4.InnerText = setting.CustomName;
             div0.Controls.Add(h4);
 
