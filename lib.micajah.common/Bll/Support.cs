@@ -1464,38 +1464,31 @@ namespace Micajah.Common.Bll
         public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, EmailSendingEventArgs args)
         {
             bool sent = false;
-            MailMessage msg = null;
 
-            try
+            MailMessage msg = new MailMessage(from, to);
+            msg.Subject = subject;
+            msg.Body = body;
+            msg.IsBodyHtml = isBodyHtml;
+            if (!string.IsNullOrEmpty(bcc))
+                msg.Bcc.Add(bcc);
+
+            if (args != null)
             {
-                msg = new MailMessage(from, to);
-                msg.Subject = subject;
-                msg.Body = body;
-                msg.IsBodyHtml = isBodyHtml;
-                if (!string.IsNullOrEmpty(bcc))
-                    msg.Bcc.Add(bcc);
+                args.MailMessage = msg;
 
-                if (args != null)
+                WebApplication.RaiseEmailSending(args);
+
+                if (!args.Cancel)
                 {
-                    args.MailMessage = msg;
-
-                    WebApplication.RaiseEmailSending(args);
-
-                    if (!args.Cancel)
+                    using (SmtpClient client = new SmtpClient())
                     {
-                        SmtpClient client = new SmtpClient();
                         if (args.Async)
                             client.SendAsync(args.MailMessage, null);
                         else
                             client.Send(args.MailMessage);
-
-                        sent = true;
                     }
+                    sent = true;
                 }
-            }
-            finally
-            {
-                if (msg != null) msg.Dispose();
             }
 
             return sent;
