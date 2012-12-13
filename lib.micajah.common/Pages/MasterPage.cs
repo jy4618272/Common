@@ -6,13 +6,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls;
-using Micajah.Common.Application;
 
 namespace Micajah.Common.Pages
 {
@@ -58,7 +58,8 @@ namespace Micajah.Common.Pages
         private Footer m_Footer;
         private Control[] m_DefaultPageContent;
         private ContentPlaceHolder m_ContentPlaceHolder;
-        private NoticeMessageBox m_NoticeArea;
+        private NoticeMessageBox m_NoticeMessageBox;
+        private NoticeMessageBox m_HeaderMessageBox;
 
         private string m_PageTitle;
         private string m_CustomName;
@@ -390,6 +391,21 @@ namespace Micajah.Common.Pages
             }
             set { m_HeaderLogoTarget = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the message to be shown on the page at the header.
+        /// </summary>
+        public string HeaderMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the message to be shown on the page at the header.
+        /// </summary>
+        public NoticeMessageType HeaderMessageType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message description to be shown on the page at the header.
+        /// </summary>
+        public string HeaderMessageDescription { get; set; }
 
         /// <summary>
         /// The HTML to be shown at the left area below of the submenu.
@@ -824,17 +840,33 @@ namespace Micajah.Common.Pages
             Controls.Add(m_BreadCrumbs);
         }
 
-        private void CreateNoticeArea()
+        private void CreateHeaderMessageBox()
+        {
+            if (!string.IsNullOrEmpty(this.HeaderMessage))
+            {
+                m_HeaderMessageBox = new NoticeMessageBox();
+                m_HeaderMessageBox.Width = Unit.Percentage(100);
+                m_HeaderMessageBox.Size = NoticeMessageBoxSize.Small;
+                m_HeaderMessageBox.HorizontalAlign = HorizontalAlign.Center;
+                m_HeaderMessageBox.Visible = false;
+                m_HeaderMessageBox.Message = this.HeaderMessage;
+                m_HeaderMessageBox.MessageType = this.HeaderMessageType;
+                m_HeaderMessageBox.Description = this.HeaderMessageDescription;
+                Controls.Add(m_HeaderMessageBox);
+            }
+        }
+
+        private void CreateNoticeMessageBox()
         {
             if (!string.IsNullOrEmpty(this.Message))
             {
-                m_NoticeArea = new NoticeMessageBox();
-                m_NoticeArea.Width = Unit.Percentage(100);
-                m_NoticeArea.Visible = false;
-                m_NoticeArea.Message = this.Message;
-                m_NoticeArea.MessageType = this.MessageType;
-                m_NoticeArea.Description = this.MessageDescription;
-                Controls.Add(m_NoticeArea);
+                m_NoticeMessageBox = new NoticeMessageBox();
+                m_NoticeMessageBox.Width = Unit.Percentage(100);
+                m_NoticeMessageBox.Visible = false;
+                m_NoticeMessageBox.Message = this.Message;
+                m_NoticeMessageBox.MessageType = this.MessageType;
+                m_NoticeMessageBox.Description = this.MessageDescription;
+                Controls.Add(m_NoticeMessageBox);
             }
         }
 
@@ -1043,10 +1075,10 @@ namespace Micajah.Common.Pages
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_Pmc");
             writer.RenderBeginTag(HtmlTextWriterTag.Div); // Page's main content
 
-            if (m_NoticeArea != null)
+            if (m_NoticeMessageBox != null)
             {
-                m_NoticeArea.Visible = true;
-                RenderControl(writer, m_NoticeArea);
+                m_NoticeMessageBox.Visible = true;
+                RenderControl(writer, m_NoticeMessageBox);
             }
 
             if ((m_DefaultPageContent != null) && (m_DefaultPageContent.Length > 0))
@@ -1079,6 +1111,12 @@ namespace Micajah.Common.Pages
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                 this.RenderLeftAreaLayer(writer);
+
+            if (m_HeaderMessageBox != null)
+            {
+                m_HeaderMessageBox.Visible = true;
+                RenderControl(writer, m_HeaderMessageBox);
+            }
 
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_NnFtr"); // Non-footer
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
@@ -1469,6 +1507,8 @@ namespace Micajah.Common.Pages
 
             SetPageTitle();
 
+            this.CreateHeaderMessageBox();
+
             if (this.VisibleHeader)
             {
                 m_Header = new Header();
@@ -1477,7 +1517,7 @@ namespace Micajah.Common.Pages
 
             this.CreateMenus();
             this.CreateBreadCrumbs();
-            this.CreateNoticeArea();
+            this.CreateNoticeMessageBox();
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                 this.CreateApplicationLogo();

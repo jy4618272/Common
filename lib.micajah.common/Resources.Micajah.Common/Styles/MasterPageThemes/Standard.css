@@ -170,6 +170,11 @@ div.Mp_B table tr td span.L
     _margin-left: 0 !important;
 }
 
+.Mp_Pc .Notification
+{
+    margin-bottom: 15px;
+}
+
 .Mp_PcSlgOnFtrOn
 {
     padding-bottom: 167px;

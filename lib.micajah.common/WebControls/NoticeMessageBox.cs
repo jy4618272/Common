@@ -101,6 +101,22 @@ namespace Micajah.Common.WebControls
             set { ViewState["Width"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the horizontal alignment of the message in the control.
+        /// </summary>
+        [Category("Layout")]
+        [Description("The horizontal alignment of the message in the control.")]
+        [DefaultValue(HorizontalAlign.NotSet)]
+        public HorizontalAlign HorizontalAlign
+        {
+            get
+            {
+                object obj = ViewState["HorizontalAlign"];
+                return ((obj == null) ? HorizontalAlign.NotSet : (HorizontalAlign)obj);
+            }
+            set { ViewState["HorizontalAlign"] = value; }
+        }
+
         #endregion
 
         #region Private Properties
@@ -154,6 +170,8 @@ namespace Micajah.Common.WebControls
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Notification " + this.MessageType.ToString() + " " + this.Size.ToString());
             if (!Width.IsEmpty)
                 writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Width.ToString());
+            if (this.HorizontalAlign != HorizontalAlign.NotSet)
+                writer.AddStyleAttribute(HtmlTextWriterStyle.TextAlign, this.HorizontalAlign.ToString().ToLowerInvariant());
             writer.RenderBeginTag(HtmlTextWriterTag.Div); // Div
 
             writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");

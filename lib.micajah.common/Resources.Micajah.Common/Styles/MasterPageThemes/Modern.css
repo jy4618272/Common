@@ -273,6 +273,11 @@ div.Mp_B span.L
     _margin-left: 0 !important;
 }
 
+.Mp_Pc .Notification
+{
+    margin-bottom: 15px;
+}
+
 .Mp_Pm
 {
     padding: 20px 5% 20px 5%;
