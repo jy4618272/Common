@@ -531,7 +531,6 @@ namespace Micajah.Common.WebControls.AdminControls
                     msgStatus.Message = ex.Message;
                     return;
                 }
-
             }
             else
             {
@@ -554,6 +553,9 @@ namespace Micajah.Common.WebControls.AdminControls
                     return;
                 }
             }
+
+            OrganizationProvider.UpdateOrganizationCreditCardStatus(OrganizationId, CreditCardStatus.Registered);
+
             if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value != "0")
             {
                 switch (hfPurchaseTrainingHours.Value)

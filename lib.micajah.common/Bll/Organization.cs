@@ -56,6 +56,7 @@ namespace Micajah.Common.Bll
         private bool m_Deleted;
         private bool m_Visible;
         private BillingPlan m_BillingPlan;
+        private CreditCardStatus m_CreditCardStatus;
         private string m_Street;
         private string m_Street2;
         private string m_City;
@@ -92,6 +93,7 @@ namespace Micajah.Common.Bll
             m_Active = true;
             m_Visible = true;
             m_BillingPlan = BillingPlan.Free;
+            m_CreditCardStatus=CreditCardStatus.NotRegistered;
             m_Street = string.Empty;
             m_Street2 = string.Empty;
             m_City = string.Empty;
@@ -547,6 +549,15 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
+        /// Gets or sets the organization CreditCardStatus (Not Registered, Registered, Expired, Declined).
+        /// </summary>
+        public CreditCardStatus CreditCardStatus
+        {
+            get { return m_CreditCardStatus; }
+            set { m_CreditCardStatus = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the street of the organization.
         /// </summary>
         public string Street
@@ -742,6 +753,7 @@ namespace Micajah.Common.Bll
                 if (!row.IsCreatedTimeNull()) m_CreatedTime = new DateTime?(row.CreatedTime);
                 m_Deleted = row.Deleted;
                 m_BillingPlan = (BillingPlan)row.BillingPlan;
+                m_CreditCardStatus = (CreditCardStatus) row.CreditCardStatus;
                 m_Street = row.Street;
                 m_Street2 = row.Street2;
                 m_City = row.City;
@@ -814,6 +826,7 @@ namespace Micajah.Common.Bll
 
                 m_Deleted = (bool)row["Deleted"];
                 m_BillingPlan = (BillingPlan)((byte)row["BillingPlan"]);
+                m_CreditCardStatus = (CreditCardStatus)((byte)row["CreditCardStatus"]);
                 m_Street = (string)row["Street"];
                 m_Street2 = (string)row["Street2"];
                 m_City = (string)row["City"];

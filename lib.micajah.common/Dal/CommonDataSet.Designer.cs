@@ -6692,6 +6692,8 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnCurrency;
             
+            private global::System.Data.DataColumn columnCreditCardStatus;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public OrganizationDataTable() {
@@ -6983,6 +6985,14 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CreditCardStatusColumn {
+                get {
+                    return this.columnCreditCardStatus;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -7050,7 +7060,8 @@ namespace Micajah.Common.Dal {
                         string State, 
                         string PostalCode, 
                         string Country, 
-                        string Currency) {
+                        string Currency, 
+                        byte CreditCardStatus) {
                 OrganizationRow rowOrganizationRow = ((OrganizationRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         OrganizationId,
@@ -7084,7 +7095,8 @@ namespace Micajah.Common.Dal {
                         State,
                         PostalCode,
                         Country,
-                        Currency};
+                        Currency,
+                        CreditCardStatus};
                 if ((parentDatabaseRowByFK_Mc_Organization_Mc_Database != null)) {
                     columnValuesArray[5] = parentDatabaseRowByFK_Mc_Organization_Mc_Database[0];
                 }
@@ -7149,6 +7161,7 @@ namespace Micajah.Common.Dal {
                 this.columnPostalCode = base.Columns["PostalCode"];
                 this.columnCountry = base.Columns["Country"];
                 this.columnCurrency = base.Columns["Currency"];
+                this.columnCreditCardStatus = base.Columns["CreditCardStatus"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7218,6 +7231,8 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnCountry);
                 this.columnCurrency = new global::System.Data.DataColumn("Currency", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCurrency);
+                this.columnCreditCardStatus = new global::System.Data.DataColumn("CreditCardStatus", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreditCardStatus);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnOrganizationId}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
@@ -7292,6 +7307,8 @@ namespace Micajah.Common.Dal {
                 this.columnCurrency.AllowDBNull = false;
                 this.columnCurrency.DefaultValue = ((string)(""));
                 this.columnCurrency.MaxLength = 3;
+                this.columnCreditCardStatus.AllowDBNull = false;
+                this.columnCreditCardStatus.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -11929,6 +11946,17 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableOrganization.CurrencyColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte CreditCardStatus {
+                get {
+                    return ((byte)(this[this.tableOrganization.CreditCardStatusColumn]));
+                }
+                set {
+                    this[this.tableOrganization.CreditCardStatusColumn] = value;
                 }
             }
             

@@ -50,7 +50,7 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("PostalCode", "PostalCode");
             TableMapping.ColumnMappings.Add("Country", "Country");
             TableMapping.ColumnMappings.Add("Currency", "Currency");
-
+            TableMapping.ColumnMappings.Add("CreditCardStatus", "CreditCardStatus");
             #endregion
 
             #region InsertCommand
@@ -80,6 +80,8 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@PostalCode", SqlDbType.NVarChar, 20, ParameterDirection.Input, 0, 0, "PostalCode", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Country", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Country", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Currency", SqlDbType.Char, 3, ParameterDirection.Input, 0, 0, "Currency", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@CreditCardStatus", SqlDbType.TinyInt, 1, ParameterDirection.Input, 3, 0, "CreditCardStatus", DataRowVersion.Current, false, null, "", "", ""));
+
 
             #endregion
 
@@ -117,6 +119,7 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@PostalCode", SqlDbType.NVarChar, 20, ParameterDirection.Input, 0, 0, "PostalCode", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Country", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Country", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Currency", SqlDbType.Char, 3, ParameterDirection.Input, 0, 0, "Currency", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@CreditCardStatus", SqlDbType.TinyInt, 1, ParameterDirection.Input, 3, 0, "CreditCardStatus", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 

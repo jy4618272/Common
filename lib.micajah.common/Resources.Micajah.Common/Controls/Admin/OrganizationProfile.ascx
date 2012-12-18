@@ -36,6 +36,11 @@
                         <mits:ComboBox ID="cmbBillingPlan" runat="server" DataValueField="BillingPlan" Required="false" />
                     </ItemTemplate>
                 </mits:TemplateField>
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>                    
+                        <mits:ComboBox ID="cmbCreditCardStatus" runat="server" DataValueField="CreditCardStatus" Required="false" />
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
                         <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
@@ -58,6 +63,7 @@
                 <asp:Parameter Name="ldapDomains" Type="String" ConvertEmptyStringToNull="False" />
                 <asp:Parameter Name="beta" Type="Boolean" />
                 <asp:Parameter Name="BillingPlan" Type="Int32" />
+                <asp:Parameter Name="CreditCardStatus" Type="Int32" />
             </UpdateParameters>
             <SelectParameters>
                 <asp:Parameter Name="organizationId" Type="Object" />

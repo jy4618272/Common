@@ -2197,6 +2197,9 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="OrganizationsControl_EditForm_BillingPlan_HeaderText" xml:space="preserve">
     <value>Billing Plan</value>
   </data>
+  <data name="OrganizationsControl_EditForm_CreditCardStatus_HeaderText" xml:space="preserve">
+    <value>Credit Card Status</value>
+  </data>
   <data name="OrganizationLdapSettingsControl_CheckLdapServerAddress_ErrorText" xml:space="preserve">
     <value>Please use a valid external WAN IP Address</value>
   </data>

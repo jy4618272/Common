@@ -114,6 +114,7 @@
     <Compile Include="Application\StartTheadItem.cs" />
     <Compile Include="Bll\Handlers\ActionHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyHandler.cs" />
+    <Compile Include="Bll\Handlers\ChargifyWebhookHandler.cs" />
     <Compile Include="Bll\Handlers\SettingHandler.cs" />
     <Compile Include="Bll\Handlers\LdapHandler.cs" />
     <Compile Include="Bll\LdapProcess.cs" />
@@ -1968,6 +1969,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\phone.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\visa.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v105.sql" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

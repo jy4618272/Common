@@ -50,7 +50,9 @@ namespace Micajah.Common.Bll.Providers
 
         public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Guid OrganizationId)
         {
+            decimal _TotalSum = 0;
             SettingCollection PaidSettings = SettingProvider.GetPaidSettings(OrganizationId);
+
             foreach (Setting setting in PaidSettings)
             {
                 if (string.IsNullOrEmpty(setting.ExternalId)) continue;
@@ -59,6 +61,7 @@ namespace Micajah.Common.Bll.Providers
                 bool _checked = false;
                 if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || setting.DefaultValue=="-1" || !bool.TryParse(setting.Value, out _checked)) continue;
                 chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _checked ? 1 : 0);
+                _TotalSum += setting.Price;
             }
 
             SettingCollection CounterSettings = SettingProvider.GetCounterSettings(OrganizationId);
@@ -74,8 +77,17 @@ namespace Micajah.Common.Bll.Providers
                 if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || string.IsNullOrEmpty(_val) || !int.TryParse(_val, out _count)) continue;
 
                 chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
-            }
-        }
 
+                int _paidQty = _count - setting.UsageCountLimit;
+                decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
+                _TotalSum += _priceMonth;
+            }
+
+            Organization _org = OrganizationProvider.GetOrganization(OrganizationId);
+            if (_org == null) return;
+
+            if (_TotalSum>0 && _org.BillingPlan==BillingPlan.Free) OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
+            else if (_TotalSum==0 && _org.BillingPlan!=BillingPlan.Free)  OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Free);
+        }
     }
 }

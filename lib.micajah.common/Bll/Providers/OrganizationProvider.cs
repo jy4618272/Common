@@ -200,7 +200,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomains">The organization ldap domains.</param>
         private static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
-            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains, int BillingPlan)
+            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains, int BillingPlan, int CreditCardStatus)
         {
             if (!string.IsNullOrEmpty(websiteUrl))
                 Support.ValidateUrl(websiteUrl);
@@ -275,6 +275,7 @@ namespace Micajah.Common.Bll.Providers
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
             if (BillingPlan >= 0) row.BillingPlan = (byte)BillingPlan;
+            if (CreditCardStatus >= 0) row.CreditCardStatus = (byte) CreditCardStatus;
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
 
@@ -784,7 +785,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, null, null, null, -1);
+            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, null, null, null, -1, -1);
         }
 
         /// <summary>
@@ -801,9 +802,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomains">The organization ldap domains.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl
-            , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay, string emailSuffixes, string ldapDomains, bool? beta, int billingPlan)
+            , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay, string emailSuffixes, string ldapDomains, bool? beta, int billingPlan, int CreditCardStatus)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, beta, emailSuffixes, ldapDomains, billingPlan);
+            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, beta, emailSuffixes, ldapDomains, billingPlan, CreditCardStatus);
         }
 
         /// <summary>
@@ -825,7 +826,7 @@ namespace Micajah.Common.Bll.Providers
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
             , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null, -1);
+            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null, -1, -1);
         }
 
         /// <summary>
@@ -939,6 +940,28 @@ namespace Micajah.Common.Bll.Providers
             if (row == null) return;
 
             row.BillingPlan = (byte)billingPlan;
+
+            WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
+            UserContext.RefreshCurrent();
+
+            Organization org = new Organization();
+            org.Load(row);
+
+            RaiseOrganizationUpdated(org);
+        }
+
+        /// <summary>
+        /// Updates the credit card status for the specified organization.
+        /// </summary>
+        /// <param name="organizationId">The identifier of the organization.</param>
+        /// <param name="creditCardStatus">The credit card status.</param>
+        public static void UpdateOrganizationCreditCardStatus(Guid organizationId, CreditCardStatus creditCardStatus)
+        {
+            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
+            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
+            if (row == null) return;
+
+            row.CreditCardStatus = (byte)creditCardStatus;
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
