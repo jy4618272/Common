@@ -259,9 +259,6 @@
     <Compile Include="WebControls\AdminControls\AccountSettingsControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\AdminControls\ChargifySubscribeControl.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="WebControls\AdminControls\LogosControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -1878,12 +1875,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v96.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\ChargifySubscribe.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\ChargifySubscribe.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\NotificationCross.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v97.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v97.sql" />
@@ -1970,6 +1961,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\visa.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v105.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v105.sql" />
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />

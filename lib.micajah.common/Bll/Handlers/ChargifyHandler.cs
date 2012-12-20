@@ -24,10 +24,13 @@ namespace Micajah.Common.Bll.Handlers
                 ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
                 foreach (Organization _org in _orgs)
                 {
-                    if (_org.BillingPlan == BillingPlan.Free) continue;
-                    ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, _org.OrganizationId);
-                    if (_custSubscr == null) continue;
-                    ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr.SubscriptionID, _org.OrganizationId);
+                    InstanceCollection _insts = InstanceProvider.GetInstances(_org.OrganizationId, false);
+                    foreach (Instance _inst in _insts)
+                    {
+                        ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, _org.OrganizationId, _inst.InstanceId);
+                        if (_custSubscr == null) continue;
+                        ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr.SubscriptionID, _org.OrganizationId, _inst.InstanceId);                        
+                    }
                 }
             }
             catch (Exception ex)

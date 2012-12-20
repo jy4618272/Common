@@ -730,11 +730,6 @@ namespace Micajah.Common.Bll.Providers
             return settings;
         }
 
-        internal static SettingCollection GetPaidSettings(Guid organizationId)
-        {
-            return GetPaidSettings(organizationId, Guid.Empty);
-        }
-
         internal static SettingCollection GetCounterSettings(Guid organizationId, Guid instanceId)
         {
             CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
@@ -742,22 +737,23 @@ namespace Micajah.Common.Bll.Providers
             SettingCollection settings = new SettingCollection();
             foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
-
-            foreach (Setting setting in settings)
+            for (int i = 0; i < settings.Count; i++)
             {
-                if (setting.Paid) continue;
-
-                int _cval = setting.GetCounterValue(organizationId);
-                if (_cval < 0) continue;
-                setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
+                Setting setting = settings[i];
+                if (!setting.Paid)
+                {
+                    int _cval = setting.GetCounterValue(organizationId, instanceId);
+                    if (_cval < 0)
+                    {
+                        settings.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                    setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
+                }
             }
             settings.Sort();
             return settings;
-        }
-
-        internal static SettingCollection GetCounterSettings(Guid organizationId)
-        {
-            return GetCounterSettings(organizationId, Guid.Empty);
         }
 
         /// <summary>

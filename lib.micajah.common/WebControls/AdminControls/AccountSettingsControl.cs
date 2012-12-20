@@ -118,7 +118,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                return UserContext.Current.SelectedOrganization.BillingPlan;
+                return UserContext.Current.SelectedInstance.BillingPlan;
             }
         }
 
@@ -142,12 +142,12 @@ namespace Micajah.Common.WebControls.AdminControls
             if (TotalAmount > 0)
             {
                 lBillingPlanName.Text = "$" + TotalAmount.ToString("0.00");
-                if (CurrentBillingPlan == BillingPlan.Free) Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
+                if (CurrentBillingPlan == BillingPlan.Free) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Paid);
             }
             else
             {
                 lBillingPlanName.Text = "FREE";
-                if (CurrentBillingPlan == BillingPlan.Paid) Micajah.Common.Bll.Providers.OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
+                if (CurrentBillingPlan == BillingPlan.Paid) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Free);
             }
             InitBillingControls(!IsPostBack);
         }
@@ -188,24 +188,19 @@ namespace Micajah.Common.WebControls.AdminControls
             if (settings["Training8Hours"] != null)
                 lblTraining8HoursPrice.Text = settings["Training8Hours"].Price.ToString("$0.00");
 
-            ICustomer _cust = Chargify.LoadCustomer(OrganizationId.ToString());
-
-            if (_cust != null)
+            ISubscription _subscription = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
+            if (_subscription != null)
             {
-                IDictionary<int, ISubscription> _subscrList = Chargify.GetSubscriptionListForCustomer(_cust.ChargifyID);
-                if (_subscrList.Count > 0)
+                ICreditCardView _cc = _subscription.CreditCard;
+                if (_cc != null)
                 {
-                    ICreditCardView _cc = null;
-                    foreach (KeyValuePair<int, ISubscription> kvp in _subscrList)
-                    {
-                        _cc = kvp.Value.CreditCard;
-                        break;
-                    }
                     txtCCNumber.Text = _cc.FullNumber;
                     txtCCExpMonth.Text = _cc.ExpirationMonth.ToString();
-                    txtCCExpYear.Text = _cc.ExpirationYear.ToString().Length > 2 ? _cc.ExpirationYear.ToString().Substring(2) : _cc.ExpirationYear.ToString();
+                    txtCCExpYear.Text = _cc.ExpirationYear.ToString().Length > 2
+                                            ? _cc.ExpirationYear.ToString().Substring(2)
+                                            : _cc.ExpirationYear.ToString();
+                    IsNewSubscription = false;
                 }
-                IsNewSubscription = false;
             }
             else IsNewSubscription = true;
         }
@@ -249,12 +244,11 @@ namespace Micajah.Common.WebControls.AdminControls
         private void InitBillingControls(bool updateUsage)
         {
             DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
-            ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
-            ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, OrganizationId);
-            if (_custSubscr != null)
+            ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
+            if (_custSubscr != null && _custSubscr.CreditCard!=null)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
-                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr.SubscriptionID, OrganizationId);
+                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, OrganizationId, InstanceId);
                 TotalAmount = m_TotalSum;
                 SubscriptionId = _custSubscr.SubscriptionID;
                 lCCStatus.Text = "Credit Card Registered.";
@@ -264,7 +258,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     lNextBillDate.Visible = true;
                     lNextBillDate.Text = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
                 }
-                cgvTransactList.DataSource = _chargify.GetTransactionsForSubscription(_custSubscr.SubscriptionID, 1, 25);
+                cgvTransactList.DataSource = Chargify.GetTransactionsForSubscription(_custSubscr.SubscriptionID, 1, 25);
             }
             else
             {
@@ -407,9 +401,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             try
             {
-                ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
-                _chargify.AddUsage(SubscriptionId, _cid, _count, "Purchase Training");
-                //                _chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
+                Chargify.AddUsage(SubscriptionId, _cid, _count, "Purchase Training");
             }
             catch (ChargifyException cex)
             {
@@ -499,62 +491,86 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void btnUpdateCC_Click(object sender, EventArgs e)
         {
-            string _OrgIdStr = OrganizationId.ToString();
+            if (txtCCNumber.Text.Contains("XXXX")) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath);
 
-            ICustomer _cust = IsNewSubscription ? new Customer() : Chargify.LoadCustomer(_OrgIdStr);
+            string _CustSystemId = OrganizationId.ToString()+","+InstanceId.ToString();
 
-            _cust.SystemID = _OrgIdStr;
-            _cust.Organization = UserContext.Current.SelectedOrganization.Name;
-            _cust.Email = UserContext.Current.Email;
-            _cust.FirstName = UserContext.Current.FirstName;
-            _cust.LastName = UserContext.Current.LastName;
-
-            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000 + int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+            ICustomer _cust = Chargify.LoadCustomer(_CustSystemId);
+            ISubscription _subscr = null;
+            UserContext _uctx = UserContext.Current;
 
             msgStatus.Visible = true;
             msgStatus.MessageType = NoticeMessageType.Error;
-            if (IsNewSubscription)
+
+            try
             {
-                _cust = Chargify.CreateCustomer(_cust);
-                try
+                if (_cust == null)
                 {
-                    Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                    msgStatus.Message = "Can't create Chargify Customer!";
+                    _cust = new Customer();
+                    _cust.SystemID = _CustSystemId;
+                    _cust.Organization = _uctx.SelectedOrganization.Name + " " + _uctx.SelectedInstance.Name;
+                    _cust.Email = _uctx.Email;
+                    _cust.FirstName = _uctx.FirstName;
+                    _cust.LastName = _uctx.LastName;
+                    _cust = Chargify.CreateCustomer(_cust);
                 }
-                catch (ChargifyException cex)
+                else if (_cust.Organization != _uctx.SelectedOrganization.Name + " " + _uctx.SelectedInstance.Name || _cust.Email != _uctx.Email || _cust.FirstName != _uctx.FirstName || _cust.LastName != _uctx.LastName)
                 {
-                    if ((int)cex.StatusCode == 422) msgStatus.Message = "Invalid Credit Card Information!";
-                    else msgStatus.Message = cex.Message;
-                    return;
+                    msgStatus.Message = "Can't update Chargify Customer!";
+                    _cust.Organization = _uctx.SelectedOrganization.Name + " " + _uctx.SelectedInstance.Name;
+                    _cust.Email = _uctx.Email;
+                    _cust.FirstName = _uctx.FirstName;
+                    _cust.LastName = _uctx.LastName;
+                    _cust = Chargify.UpdateCustomer(_cust);
+                    msgStatus.Message = "Can't get Chargify Customer Substriction!";
+                    _subscr = ChargifyProvider.GetCustomerSubscription(Chargify, _cust.ChargifyID);
                 }
-                catch (Exception ex)
+                else
                 {
-                    msgStatus.Message = ex.Message;
-                    return;
+                    msgStatus.Message = "Can't get Chargify Customer Substriction!";
+                    _subscr = ChargifyProvider.GetCustomerSubscription(Chargify, _cust.ChargifyID);                    
                 }
             }
-            else
+            catch (ChargifyException cex)
             {
-                Chargify.UpdateCustomer(_cust);
-                ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, UserContext.Current.SelectedOrganization.OrganizationId);
-                try
-                {
-                    if (_custSubscr != null) Chargify.UpdateSubscriptionCreditCard(_custSubscr, _ccattr);
-                    else Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
-                }
-                catch (ChargifyException cex)
-                {
-                    if ((int)cex.StatusCode == 422) msgStatus.Message = "Invalid Credit Card Information!";
-                    else msgStatus.Message = cex.Message;
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    msgStatus.Message = ex.Message;
-                    return;
-                }
+                if ((int)cex.StatusCode != 422) msgStatus.Message += " "+cex.Message;
+                return;
+            }
+            catch (Exception ex)
+            {
+                msgStatus.Message += " "+ex.Message;
+                return;
             }
 
-            OrganizationProvider.UpdateOrganizationCreditCardStatus(OrganizationId, CreditCardStatus.Registered);
+            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000 + int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+
+            try
+            {
+                if (_subscr == null)
+                {
+                    msgStatus.Message = "Can't create Chargify Subscription!";
+                    _subscr=Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                }
+                else
+                {
+                    msgStatus.Message = "Can't update Chargify Subscription!";
+                    Chargify.UpdateSubscriptionCreditCard(_subscr, _ccattr);
+                }
+            }
+            catch (ChargifyException cex)
+            {
+                if ((int)cex.StatusCode == 422) msgStatus.Message += " Invalid Credit Card Information!";
+                else msgStatus.Message += " "+cex.Message;
+                return;
+            }
+            catch (Exception ex)
+            {
+                msgStatus.Message += " "+ex.Message;
+                return;
+            }
+
+            InstanceProvider.UpdateInstance(_uctx.SelectedInstance, CreditCardStatus.Registered);
 
             if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value != "0")
             {

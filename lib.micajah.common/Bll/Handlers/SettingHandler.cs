@@ -72,7 +72,7 @@
         /// </summary>
         /// <param name="setting">The setting to get decription of.</param>
         /// <returns>The System.String that represents the description of the setting.</returns>
-        public virtual int GetUsedItemsCount(Setting setting, System.Guid OrganizationId)
+        public virtual int GetUsedItemsCount(Setting setting, System.Guid OrganizationId, System.Guid InstanceId)
         {
             return -1;
         }

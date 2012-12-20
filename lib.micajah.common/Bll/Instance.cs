@@ -37,6 +37,8 @@ namespace Micajah.Common.Bll
         private SettingCollection m_Settings;
         private SortedList m_GroupIdRoleIdList;
         private string m_EmailSuffixes;
+        private BillingPlan m_BillingPlan;
+        private CreditCardStatus m_CreditCardStatus;
         private Collection<string> m_EmailSuffixesList;
 
         // The objects which are used to synchronize access to the cached objects.
@@ -61,6 +63,8 @@ namespace Micajah.Common.Bll
             m_WorkingDays = InstanceProvider.DefaultWorkingDays;
             m_Active = true;
             this.TimeZoneId = InstanceProvider.DefaultTimeZoneId;
+            m_BillingPlan = BillingPlan.Free;
+            m_CreditCardStatus = CreditCardStatus.NotRegistered;
         }
 
         #endregion
@@ -262,6 +266,24 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
+        /// Gets or sets the instance BillingPlan (Free, Paid, Custom).
+        /// </summary>
+        public BillingPlan BillingPlan
+        {
+            get { return m_BillingPlan; }
+            set { m_BillingPlan = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the instance CreditCardStatus (Not Registered, Registered, Expired, Declined).
+        /// </summary>
+        public CreditCardStatus CreditCardStatus
+        {
+            get { return m_CreditCardStatus; }
+            set { m_CreditCardStatus = value; }
+        }
+
+        /// <summary>
         /// Gets the organization which this instance belong to.
         /// </summary>
         public Organization Organization
@@ -449,6 +471,9 @@ namespace Micajah.Common.Bll
                 m_GroupIdRoleIdList = null;
                 m_EmailSuffixes = null;
                 m_EmailSuffixesList = null;
+
+                m_BillingPlan = (BillingPlan)row.BillingPlan;
+                m_CreditCardStatus = (CreditCardStatus)row.CreditCardStatus;
             }
         }
 

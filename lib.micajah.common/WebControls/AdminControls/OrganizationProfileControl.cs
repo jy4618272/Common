@@ -18,30 +18,10 @@ namespace Micajah.Common.WebControls.AdminControls
         private ComboBox m_MonthList;
         private ComboBox m_DayList;
         private ComboBox m_WeekStartsDayList;
-        private ComboBox m_BillingPlan;
-        private ComboBox m_CreditCardStatus;
 
         #endregion
 
         #region Private Properties
-
-        private ComboBox BillingPlanCombobox
-        {
-            get
-            {
-                if (m_BillingPlan == null) m_BillingPlan = EditForm.FindControl("cmbBillingPlan") as ComboBox;
-                return m_BillingPlan;
-            }
-        }
-
-        private ComboBox CreditCardStatusCombobox
-        {
-            get
-            {
-                if (m_CreditCardStatus == null) m_CreditCardStatus = EditForm.FindControl("cmbCreditCardStatus") as ComboBox;
-                return m_CreditCardStatus;
-            }
-        }
 
         private ComboBox MonthList
         {
@@ -108,20 +88,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 DayList.SelectedValue = org.FiscalYearStartDay.Value.ToString(CultureInfo.InvariantCulture);
             if (org.WeekStartsDay.HasValue)
                 WeekStartsDayList.SelectedValue = (org.WeekStartsDay.Value).ToString(CultureInfo.InvariantCulture);
-
-            BillingPlanCombobox.Items.Add(new RadComboBoxItem(BillingPlan.Free.ToString(), ((int)BillingPlan.Free).ToString(CultureInfo.InvariantCulture)));
-            BillingPlanCombobox.Items.Add(new RadComboBoxItem(BillingPlan.Paid.ToString(), ((int)BillingPlan.Paid).ToString(CultureInfo.InvariantCulture)));
-            BillingPlanCombobox.Items.Add(new RadComboBoxItem(BillingPlan.Custom.ToString(), ((int)BillingPlan.Custom).ToString(CultureInfo.InvariantCulture)));
-
-            BillingPlanCombobox.SelectedValue = ((int)((Organization)EditForm.DataItem).BillingPlan).ToString(CultureInfo.InvariantCulture);
-
-            CreditCardStatusCombobox.Items.Add(new RadComboBoxItem(CreditCardStatus.NotRegistered.ToString(), ((int)CreditCardStatus.NotRegistered).ToString(CultureInfo.InvariantCulture)));
-            CreditCardStatusCombobox.Items.Add(new RadComboBoxItem(CreditCardStatus.Registered.ToString(), ((int)CreditCardStatus.Registered).ToString(CultureInfo.InvariantCulture)));
-            CreditCardStatusCombobox.Items.Add(new RadComboBoxItem(CreditCardStatus.Expired.ToString(), ((int)CreditCardStatus.Expired).ToString(CultureInfo.InvariantCulture)));
-            CreditCardStatusCombobox.Items.Add(new RadComboBoxItem(CreditCardStatus.Declined.ToString(), ((int)CreditCardStatus.Declined).ToString(CultureInfo.InvariantCulture)));
-
-            CreditCardStatusCombobox.SelectedValue = ((int)((Organization)EditForm.DataItem).CreditCardStatus).ToString(CultureInfo.InvariantCulture);
-
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
@@ -147,15 +113,6 @@ namespace Micajah.Common.WebControls.AdminControls
             else
                 e.InputParameters["weekStartsDay"] = null;
 
-            if (int.TryParse(this.BillingPlanCombobox.SelectedValue, out value))
-                e.InputParameters["BillingPlan"] = value;
-            else
-                e.InputParameters["BillingPlan"] = 0;
-
-            if (int.TryParse(this.CreditCardStatusCombobox.SelectedValue, out value))
-                e.InputParameters["CreditCardStatus"] = value;
-            else
-                e.InputParameters["CreditCardStatus"] = 0;
         }
 
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
@@ -175,8 +132,6 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_FiscalYearStartMonth_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_FiscalYearStartDay_HeaderText;
             EditForm.Fields[5].HeaderText = Resources.OrganizationsControl_EditForm_WeekStartsDay_HeaderText;
-            EditForm.Fields[9].HeaderText = Resources.OrganizationsControl_EditForm_BillingPlan_HeaderText;
-            EditForm.Fields[10].HeaderText = Resources.OrganizationsControl_EditForm_CreditCardStatus_HeaderText;
         }
 
         protected override void OnLoad(EventArgs e)

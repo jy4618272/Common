@@ -1019,6 +1019,10 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnDateFormat;
             
+            private global::System.Data.DataColumn columnBillingPlan;
+            
+            private global::System.Data.DataColumn columnCreditCardStatus;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public InstanceDataTable() {
@@ -1190,6 +1194,22 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn BillingPlanColumn {
+                get {
+                    return this.columnBillingPlan;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CreditCardStatusColumn {
+                get {
+                    return this.columnCreditCardStatus;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1242,7 +1262,9 @@ namespace Micajah.Common.Dal {
                         System.DateTime CreatedTime, 
                         string TimeZoneId, 
                         int TimeFormat, 
-                        int DateFormat) {
+                        int DateFormat, 
+                        byte BillingPlan, 
+                        byte CreditCardStatus) {
                 InstanceRow rowInstanceRow = ((InstanceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         InstanceId,
@@ -1261,7 +1283,9 @@ namespace Micajah.Common.Dal {
                         CreatedTime,
                         TimeZoneId,
                         TimeFormat,
-                        DateFormat};
+                        DateFormat,
+                        BillingPlan,
+                        CreditCardStatus};
                 rowInstanceRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowInstanceRow);
                 return rowInstanceRow;
@@ -1308,6 +1332,8 @@ namespace Micajah.Common.Dal {
                 this.columnTimeZoneId = base.Columns["TimeZoneId"];
                 this.columnTimeFormat = base.Columns["TimeFormat"];
                 this.columnDateFormat = base.Columns["DateFormat"];
+                this.columnBillingPlan = base.Columns["BillingPlan"];
+                this.columnCreditCardStatus = base.Columns["CreditCardStatus"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1347,6 +1373,10 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnTimeFormat);
                 this.columnDateFormat = new global::System.Data.DataColumn("DateFormat", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDateFormat);
+                this.columnBillingPlan = new global::System.Data.DataColumn("BillingPlan", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnBillingPlan);
+                this.columnCreditCardStatus = new global::System.Data.DataColumn("CreditCardStatus", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreditCardStatus);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnInstanceId}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
@@ -1387,6 +1417,10 @@ namespace Micajah.Common.Dal {
                 this.columnTimeFormat.DefaultValue = ((int)(0));
                 this.columnDateFormat.AllowDBNull = false;
                 this.columnDateFormat.DefaultValue = ((int)(0));
+                this.columnBillingPlan.AllowDBNull = false;
+                this.columnBillingPlan.DefaultValue = ((byte)(0));
+                this.columnCreditCardStatus.AllowDBNull = false;
+                this.columnCreditCardStatus.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8281,6 +8315,28 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableInstance.DateFormatColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte BillingPlan {
+                get {
+                    return ((byte)(this[this.tableInstance.BillingPlanColumn]));
+                }
+                set {
+                    this[this.tableInstance.BillingPlanColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte CreditCardStatus {
+                get {
+                    return ((byte)(this[this.tableInstance.CreditCardStatusColumn]));
+                }
+                set {
+                    this[this.tableInstance.CreditCardStatusColumn] = value;
                 }
             }
             

@@ -20,8 +20,8 @@ namespace Micajah.Common.Bll.Handlers
         {
             ChargifyAccountRetrieverSection config =
                 ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
-            if (config==null) throw new NoNullAllowedException("Chargify section is not defined in a web.config file");
-            if (!data.IsChargifyWebhookContentValid(signature, config.GetSharedKeyForDefaultOrFirstSite())) throw new InvalidDataException("Chargify Webhook Exception. Data was INVALID through self-validation. WebhookID: "+webhookID.ToString()+" Data: " + data);
+            if (config==null) throw new HttpException(500, "Chargify section is not defined in a web.config file", new NoNullAllowedException("Chargify section is not defined in a web.config file"));
+            if (!data.IsChargifyWebhookContentValid(signature, config.GetSharedKeyForDefaultOrFirstSite())) throw new HttpException(500, "Chargify Webhook Exception. Data was INVALID through self-validation.", new InvalidDataException("Chargify Webhook Exception. Data was INVALID through self-validation. WebhookID: "+webhookID.ToString()+" Data: " + data));
             NameValueCollection query = new NameValueCollection();
             string[] _arr = data.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string _arrElem in _arr)
@@ -31,17 +31,23 @@ namespace Micajah.Common.Bll.Handlers
             }
 
             Guid _orgId = Guid.Empty;
+            Guid _instId = Guid.Empty;
             string _event = query["event"];
 
             if (_event == "payment_success" || _event == "renewal_failure" || _event == "payment_failure")
             {
-                if (string.IsNullOrEmpty(query["payload[subscription][customer][reference]"])) throw new InvalidDataException("Chargify \""+_event+"\" Webhook event. Customer Refererence Guid is not defined. WebhookID: " + webhookID.ToString() + " Data: " + data);
-                if (!Guid.TryParse(query["payload[subscription][customer][reference]"], out _orgId)) throw new InvalidDataException("Chargify \""+_event+"\" Webhook event. Customer Refererence Guid is invalid. Reference: \"" + query["payload[subscription][customer][reference]"] + "\" WebhookID: " + webhookID.ToString() + " Data: " + data);
-                Organization _org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(_orgId);
-                if (_org == null) throw new InvalidDataException("Chargify \"" + _event + "\" Webhook event. Can't find Organization for Refererence: \"" + query["payload[subscription][customer][reference]"] + "\" WebhookID: " + webhookID.ToString() + " Data: " + data);
+                if (string.IsNullOrEmpty(query["payload[subscription][customer][reference]"])) throw new HttpException(500, "Chargify \"" + _event + "\" Webhook event. Customer Refererence Organization and Instance Guids is not defined.", new InvalidDataException("Chargify \"" + _event + "\" Webhook event. Customer Refererence Organization and Instance Guids is not defined. WebhookID: " + webhookID.ToString() + " Data: " + data));
+                string[] _arrCustRef = query["payload[subscription][customer][reference]"].Split(new string[] {";",","}, StringSplitOptions.RemoveEmptyEntries);
+                if (_arrCustRef.Length < 2) new HttpException(500, "Chargify \"" + _event + "\" Webhook event. Instance Refererence Guid is not defined.", new InvalidDataException("Chargify \"" + _event + "\" Webhook event. Instance Refererence Guid is not defined. WebhookID: " + webhookID.ToString() + " Data: " + data));
+                if (!Guid.TryParse(_arrCustRef[0], out _orgId)) throw new HttpException(500, "Chargify \""+_event+"\" Webhook event. Customer Organization Refererence Guid is invalid.", new InvalidDataException("Chargify \""+_event+"\" Webhook event. Customer Organization Refererence Guid is invalid. Reference: \"" + query["payload[subscription][customer][reference]"] + "\" WebhookID: " + webhookID.ToString() + " Data: " + data));
+                if (!Guid.TryParse(_arrCustRef[1], out _instId)) throw new HttpException(500, "Chargify \"" + _event + "\" Webhook event. Customer Instance Refererence Guid is invalid.", new InvalidDataException("Chargify \"" + _event + "\" Webhook event. Customer Instance Refererence Guid is invalid. Reference: \"" + query["payload[subscription][customer][reference]"] + "\" WebhookID: " + webhookID.ToString() + " Data: " + data));
+                Organization _org = Providers.OrganizationProvider.GetOrganization(_orgId);
+                if (_org == null) throw new HttpException(500, "Chargify \"" + _event + "\" Webhook event. Can't find Organization for Refererence", new InvalidDataException("Chargify \"" + _event + "\" Webhook event. Can't find Organization for Refererence: \"" + query["payload[subscription][customer][reference]"] + "\" WebhookID: " + webhookID.ToString() + " Data: " + data));
+                Instance _inst = Providers.InstanceProvider.GetInstance(_instId, _orgId);
+                if (_inst == null) throw new HttpException(500, "Chargify \"" + _event + "\" Webhook event. Can't find Instance for Refererence", new InvalidDataException("Chargify \"" + _event + "\" Webhook event. Can't find Instance for Refererence: \"" + query["payload[subscription][customer][reference]"] + "\" WebhookID: " + webhookID.ToString() + " Data: " + data));
                 if (_event == "renewal_failure" || _event == "payment_failure")
                 {
-                    Providers.OrganizationProvider.UpdateOrganizationCreditCardStatus(_orgId, CreditCardStatus.Declined);
+                    Providers.InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Declined);
                     string _uEmail = query["payload[subscription][customer][email]"];
                     string _appName = FrameworkConfiguration.Current.WebApplication.Name;
                     string _supportEmail = FrameworkConfiguration.Current.WebApplication.Support.Email;
@@ -54,15 +60,15 @@ namespace Micajah.Common.Bll.Handlers
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Chargify \"" + _event + "\" Webhook event. Can't send support email. WebhookID: " + webhookID.ToString() + " Data: " + data+" Error: "+ex.ToString());
+                        throw new HttpException(500, "Chargify \"" + _event + "\" Webhook event. Can't send support email.", ex);
                     }
                 }
-                else if (_event == "payment_success" && _org.CreditCardStatus!=CreditCardStatus.Registered)
+                else if (_event == "payment_success" && _inst.CreditCardStatus!=CreditCardStatus.Registered)
                 {
-                    Providers.OrganizationProvider.UpdateOrganizationCreditCardStatus(_orgId, CreditCardStatus.Registered);
+                    Providers.InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Registered);
                 }
             }
-            else throw new ArgumentException("Unknown Chargify Webhook event. WebhookID: " + webhookID.ToString() + " Data: " + data);
+            else throw new HttpException(500, "Unknown Chargify Webhook \""+_event+"\" event.", new ArgumentException("Unknown Chargify Webhook \""+_event+" event. WebhookID: " + webhookID.ToString() + " Data: " + data));
         }
     }
 }

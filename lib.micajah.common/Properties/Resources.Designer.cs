@@ -4475,26 +4475,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Billing Plan.
-        /// </summary>
-        internal static string OrganizationsControl_EditForm_BillingPlan_HeaderText {
-            get {
-                return ResourceManager.GetString("OrganizationsControl_EditForm_BillingPlan_HeaderText", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Billing Plan.
-        /// </summary>
-        internal static string OrganizationsControl_EditForm_CreditCardStatus_HeaderText
-        {
-            get
-            {
-                return ResourceManager.GetString("OrganizationsControl_EditForm_CreditCardStatus_HeaderText", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Canceled time.
         /// </summary>
         internal static string OrganizationsControl_EditForm_CanceledTimeField_HeaderText {
@@ -4511,7 +4491,7 @@ namespace Micajah.Common.Properties {
                 return ResourceManager.GetString("OrganizationsControl_EditForm_CreatedTimeField_HeaderText", resourceCulture);
             }
         }
-                
+        
         /// <summary>
         ///   Looks up a localized string similar to Database.
         /// </summary>

@@ -495,9 +495,9 @@ namespace Micajah.Common.Bll
             return result;
         }
 
-        public int GetCounterValue(Guid organizationId)
+        public int GetCounterValue(Guid organizationId, Guid instanceId)
         {
-            return Handlers.SettingHandler.Current.GetUsedItemsCount(this, organizationId);
+            return Handlers.SettingHandler.Current.GetUsedItemsCount(this, organizationId, instanceId);
         }
 
         /// <summary>

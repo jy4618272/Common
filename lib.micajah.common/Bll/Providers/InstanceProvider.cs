@@ -769,7 +769,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
         public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, true);
+            UpdateInstance(instanceId, name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, true, -1, -1);
         }
 
         /// <summary>
@@ -791,7 +791,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
         /// <param name="raiseEvent">Whether the Micajah.Common.Bll.Providers.InstanceProvider.InstanceUpdated event will be raised.</param>
-        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent)
+        /// <param name="billingPlan"></param>
+        /// <param name="creditCardStatus"></param>
+        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent, int billingPlan, int creditCardStatus)
         {
             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
             if (ds == null) return;
@@ -825,6 +827,8 @@ namespace Micajah.Common.Bll.Providers
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
+            if (billingPlan >= 0) row.BillingPlan = (byte)billingPlan;
+            if (creditCardStatus >= 0) row.CreditCardStatus = (byte)creditCardStatus;
             row.Deleted = false;
 
             OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
@@ -871,7 +875,29 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateInstance(Instance instance, bool raiseEvent)
         {
             if (instance != null)
-                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent);
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent, -1, -1);
+        }
+
+        /// <summary>
+        /// Updates the details of specified instance.
+        /// </summary>
+        /// <param name="instance">The instance to update.</param>
+        /// <param name="billingPlan"></param>
+        public static void UpdateInstance(Instance instance, BillingPlan billingPlan)
+        {
+            if (instance != null)
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, false, (int)billingPlan, -1);
+        }
+
+        /// <summary>
+        /// Updates the details of specified instance.
+        /// </summary>
+        /// <param name="instance">The instance to update.</param>
+        /// <param name="creditCardStatus"></param>
+        public static void UpdateInstance(Instance instance, CreditCardStatus creditCardStatus)
+        {
+            if (instance != null)
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, false, -1, (int)creditCardStatus);
         }
 
         /// <summary>

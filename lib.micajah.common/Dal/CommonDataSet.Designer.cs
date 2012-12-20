@@ -6676,8 +6676,6 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnCreatedTime;
             
-            private global::System.Data.DataColumn columnBillingPlan;
-            
             private global::System.Data.DataColumn columnStreet;
             
             private global::System.Data.DataColumn columnStreet2;
@@ -6691,8 +6689,6 @@ namespace Micajah.Common.Dal {
             private global::System.Data.DataColumn columnCountry;
             
             private global::System.Data.DataColumn columnCurrency;
-            
-            private global::System.Data.DataColumn columnCreditCardStatus;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -6921,14 +6917,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn BillingPlanColumn {
-                get {
-                    return this.columnBillingPlan;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn StreetColumn {
                 get {
                     return this.columnStreet;
@@ -6980,14 +6968,6 @@ namespace Micajah.Common.Dal {
             public global::System.Data.DataColumn CurrencyColumn {
                 get {
                     return this.columnCurrency;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn CreditCardStatusColumn {
-                get {
-                    return this.columnCreditCardStatus;
                 }
             }
             
@@ -7053,15 +7033,13 @@ namespace Micajah.Common.Dal {
                         bool Beta, 
                         bool Deleted, 
                         System.DateTime CreatedTime, 
-                        byte BillingPlan, 
                         string Street, 
                         string Street2, 
                         string City, 
                         string State, 
                         string PostalCode, 
                         string Country, 
-                        string Currency, 
-                        byte CreditCardStatus) {
+                        string Currency) {
                 OrganizationRow rowOrganizationRow = ((OrganizationRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         OrganizationId,
@@ -7088,15 +7066,13 @@ namespace Micajah.Common.Dal {
                         Beta,
                         Deleted,
                         CreatedTime,
-                        BillingPlan,
                         Street,
                         Street2,
                         City,
                         State,
                         PostalCode,
                         Country,
-                        Currency,
-                        CreditCardStatus};
+                        Currency};
                 if ((parentDatabaseRowByFK_Mc_Organization_Mc_Database != null)) {
                     columnValuesArray[5] = parentDatabaseRowByFK_Mc_Organization_Mc_Database[0];
                 }
@@ -7153,7 +7129,6 @@ namespace Micajah.Common.Dal {
                 this.columnBeta = base.Columns["Beta"];
                 this.columnDeleted = base.Columns["Deleted"];
                 this.columnCreatedTime = base.Columns["CreatedTime"];
-                this.columnBillingPlan = base.Columns["BillingPlan"];
                 this.columnStreet = base.Columns["Street"];
                 this.columnStreet2 = base.Columns["Street2"];
                 this.columnCity = base.Columns["City"];
@@ -7161,7 +7136,6 @@ namespace Micajah.Common.Dal {
                 this.columnPostalCode = base.Columns["PostalCode"];
                 this.columnCountry = base.Columns["Country"];
                 this.columnCurrency = base.Columns["Currency"];
-                this.columnCreditCardStatus = base.Columns["CreditCardStatus"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7215,8 +7189,6 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnDeleted);
                 this.columnCreatedTime = new global::System.Data.DataColumn("CreatedTime", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCreatedTime);
-                this.columnBillingPlan = new global::System.Data.DataColumn("BillingPlan", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnBillingPlan);
                 this.columnStreet = new global::System.Data.DataColumn("Street", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnStreet);
                 this.columnStreet2 = new global::System.Data.DataColumn("Street2", typeof(string), null, global::System.Data.MappingType.Element);
@@ -7231,8 +7203,6 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnCountry);
                 this.columnCurrency = new global::System.Data.DataColumn("Currency", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCurrency);
-                this.columnCreditCardStatus = new global::System.Data.DataColumn("CreditCardStatus", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCreditCardStatus);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnOrganizationId}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
@@ -7284,7 +7254,6 @@ namespace Micajah.Common.Dal {
                 this.columnDeleted.AllowDBNull = false;
                 this.columnDeleted.DefaultValue = ((bool)(false));
                 this.columnCreatedTime.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
-                this.columnBillingPlan.DefaultValue = ((byte)(0));
                 this.columnStreet.AllowDBNull = false;
                 this.columnStreet.DefaultValue = ((string)(""));
                 this.columnStreet.MaxLength = 255;
@@ -7307,8 +7276,6 @@ namespace Micajah.Common.Dal {
                 this.columnCurrency.AllowDBNull = false;
                 this.columnCurrency.DefaultValue = ((string)(""));
                 this.columnCurrency.MaxLength = 3;
-                this.columnCreditCardStatus.AllowDBNull = false;
-                this.columnCreditCardStatus.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -11858,22 +11825,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte BillingPlan {
-                get {
-                    try {
-                        return ((byte)(this[this.tableOrganization.BillingPlanColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'BillingPlan\' in table \'Organization\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableOrganization.BillingPlanColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string Street {
                 get {
                     return ((string)(this[this.tableOrganization.StreetColumn]));
@@ -11946,17 +11897,6 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableOrganization.CurrencyColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte CreditCardStatus {
-                get {
-                    return ((byte)(this[this.tableOrganization.CreditCardStatusColumn]));
-                }
-                set {
-                    this[this.tableOrganization.CreditCardStatusColumn] = value;
                 }
             }
             
@@ -12065,18 +12005,6 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCreatedTimeNull() {
                 this[this.tableOrganization.CreatedTimeColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsBillingPlanNull() {
-                return this.IsNull(this.tableOrganization.BillingPlanColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetBillingPlanNull() {
-                this[this.tableOrganization.BillingPlanColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

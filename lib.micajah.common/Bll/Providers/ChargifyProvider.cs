@@ -33,13 +33,18 @@ namespace Micajah.Common.Bll.Providers
             return accountInfo.ProductHandle;
         }
 
-        public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, Guid OrganizationId)
+        public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, Guid OrganizationId, Guid InstanceId)
         {
-            ICustomer _cust = chargify.LoadCustomer(OrganizationId.ToString());
-            
+            ICustomer _cust = chargify.LoadCustomer(OrganizationId.ToString() + "," + InstanceId.ToString());
+
             if (_cust == null) return null;
-            
-            IDictionary<int, ISubscription> _subscrList = chargify.GetSubscriptionListForCustomer(_cust.ChargifyID);
+
+            return GetCustomerSubscription(chargify, _cust.ChargifyID);
+        }
+
+        public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, int chargifyCustomerId)
+        {           
+            IDictionary<int, ISubscription> _subscrList = chargify.GetSubscriptionListForCustomer(chargifyCustomerId);
             
             if (_subscrList.Count<= 0) return null;
 
@@ -48,10 +53,10 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Guid OrganizationId)
+        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Guid OrganizationId, Guid InstanceId)
         {
             decimal _TotalSum = 0;
-            SettingCollection PaidSettings = SettingProvider.GetPaidSettings(OrganizationId);
+            SettingCollection PaidSettings = SettingProvider.GetPaidSettings(OrganizationId, InstanceId);
 
             foreach (Setting setting in PaidSettings)
             {
@@ -64,7 +69,7 @@ namespace Micajah.Common.Bll.Providers
                 _TotalSum += setting.Price;
             }
 
-            SettingCollection CounterSettings = SettingProvider.GetCounterSettings(OrganizationId);
+            SettingCollection CounterSettings = SettingProvider.GetCounterSettings(OrganizationId, InstanceId);
 
             foreach (Setting setting in CounterSettings)
             {
@@ -83,11 +88,11 @@ namespace Micajah.Common.Bll.Providers
                 _TotalSum += _priceMonth;
             }
 
-            Organization _org = OrganizationProvider.GetOrganization(OrganizationId);
-            if (_org == null) return;
+            Instance _inst = InstanceProvider.GetInstance(InstanceId, OrganizationId);
+            if (_inst == null) return;
 
-            if (_TotalSum>0 && _org.BillingPlan==BillingPlan.Free) OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Paid);
-            else if (_TotalSum==0 && _org.BillingPlan!=BillingPlan.Free)  OrganizationProvider.UpdateOrganizationBillingPlan(OrganizationId, BillingPlan.Free);
+            if (_TotalSum>0 && _inst.BillingPlan==BillingPlan.Free) InstanceProvider.UpdateInstance(_inst, BillingPlan.Paid);
+            else if (_TotalSum==0 && _inst.BillingPlan!=BillingPlan.Free) InstanceProvider.UpdateInstance(_inst, BillingPlan.Free);
         }
     }
 }
