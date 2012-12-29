@@ -2787,6 +2787,24 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template.
+        /// </summary>
+        internal static string InstancesControl_EditForm_TemplateField_HeaderText {
+            get {
+                return ResourceManager.GetString("InstancesControl_EditForm_TemplateField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vanity Url.
+        /// </summary>
+        internal static string InstancesControl_EditForm_VanityUrlField_HeaderText {
+            get {
+                return ResourceManager.GetString("InstancesControl_EditForm_VanityUrlField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         internal static string InstancesControl_List_ActiveColumn_HeaderText {

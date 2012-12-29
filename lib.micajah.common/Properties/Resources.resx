@@ -2527,4 +2527,10 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="TokenControl_ResetTokenButton_ConfirmText" xml:space="preserve">
     <value>Are you sure you want to reset your API Token?\r\nThis will cause any previously setup mobile applications or other integrated applications to stop working until the API token is updated in those applications.</value>
   </data>
+  <data name="InstancesControl_EditForm_TemplateField_HeaderText" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="InstancesControl_EditForm_VanityUrlField_HeaderText" xml:space="preserve">
+    <value>Vanity Url</value>
+  </data>
 </root>

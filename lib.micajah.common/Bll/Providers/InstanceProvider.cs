@@ -646,9 +646,11 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="beta">The beta status.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static Guid InsertInstance(string name, string description, bool active, bool beta)
+        public static Guid InsertInstance(string name, string description, bool active, bool beta, string vanityUrl, Guid templateInstanceId)
         {
-            return InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, null, null);
+            Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, templateInstanceId, null);
+            CustomUrlProvider.InsertCustomUrl(UserContext.Current.SelectedOrganizationId, instanceId, null, vanityUrl.ToLowerInvariant());
+            return instanceId;
         }
 
         /// <summary>
