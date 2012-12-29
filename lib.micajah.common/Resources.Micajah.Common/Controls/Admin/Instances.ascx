@@ -25,9 +25,13 @@
                         </table>
                     </ItemTemplate>
                 </mits:TemplateField>
-                <mits:TemplateField PaddingLeft="false">
+                <mits:TemplateField>
                     <ItemTemplate>
-                        <asp:DropDownList id="TemplateList" runat="server"  DataSourceId="InstanceListDataSource" DataTextField="Name" DataValueField="InstanceId" Width="350px" />
+                        <table cellpadding="0" cellspacing="0">
+                            <tr style="vertical-align: top;">
+                                <td><asp:DropDownList id="TemplateList" runat="server"  DataSourceId="InstanceListDataSource" DataTextField="Name" DataValueField="InstanceId" Width="350px" /></td>
+                            </tr>
+                        </table>                        
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:TextBoxField DataField="Description" MaxLength="1024" Columns="65" ControlStyle-Width="350px" Rows="3" TextMode="MultiLine" />                
