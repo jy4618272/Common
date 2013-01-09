@@ -94,8 +94,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (!string.IsNullOrEmpty(redirectUrl))
             {
-                string relativeUrl = CustomUrlProvider.CreateApplicationRelativeUrl(redirectUrl);
-                if (string.Compare(relativeUrl, "/", StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(redirectUrl), "/", StringComparison.OrdinalIgnoreCase) == 0)
                     redirectUrl = null;
                 else
                 {
@@ -103,28 +102,30 @@ namespace Micajah.Common.WebControls.SecurityControls
                     object obj = Support.ConvertStringToType(Support.ExtractQueryStringParameterValue(redirectUrl, "pageid"), typeof(Guid));
                     if (obj != null) actionId = (Guid)obj;
 
-                    UserContext user = UserContext.Current;
-
-                    if (user != null && user.SelectedOrganization != null)
+                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, CustomUrlProvider.CreateApplicationAbsoluteUrl(redirectUrl));
+                    if (action != null)
                     {
-                        Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, redirectUrl);
-                        if (action != null)
+                        if (action.AuthenticationRequired)
                         {
-                            if (!user.ActionIdList.Contains(action.ActionId))
-                                redirectUrl = null;
+                            UserContext user = UserContext.Current;
+                            if (user != null && user.SelectedOrganization != null)
+                            {
+                                if (!user.ActionIdList.Contains(action.ActionId))
+                                    redirectUrl = null;
+                            }
                         }
-                        else
-                            redirectUrl = null;
                     }
+                    else
+                        redirectUrl = null;
                 }
             }
         }
 
         internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
         {
-            UserContext user = UserContext.Current;
-
             ValidateRedirectUrl(ref redirectUrl);
+
+            UserContext user = UserContext.Current;
 
             if (enableStartMenu)
             {

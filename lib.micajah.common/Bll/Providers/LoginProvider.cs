@@ -451,7 +451,7 @@ namespace Micajah.Common.Bll.Providers
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 sb.Append("&returnurl=");
-                sb.Append(HttpUtility.UrlEncodeUnicode(returnUrl));
+                sb.Append(HttpUtility.UrlEncodeUnicode(CustomUrlProvider.CreateApplicationAbsoluteUrl(returnUrl)));
             }
 
             if (applicationUrl == null)
