@@ -53,20 +53,31 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// </summary>
         /// <param name="instanceId">The instance identifier to select.</param>
         /// <param name="redirectUrl">The URL to redirect to.</param>
-        internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
+        internal static void SelectInstance(Guid instanceId, string redirectUrl, bool validateRedirectUrl, HtmlGenericControl errorDiv)
         {
             try
             {
                 UserContext user = UserContext.Current;
 
-                user.SelectInstance(instanceId);
-
-                ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
-
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                {
+                    if (validateRedirectUrl)
+                        ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
+
+                    errorDiv.Page.Session.Clear();
+
                     errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(user.SelectedOrganizationId, instanceId, redirectUrl));
-                else if (!string.IsNullOrEmpty(redirectUrl))
-                    errorDiv.Page.Response.Redirect(redirectUrl);
+                }
+                else
+                {
+                    user.SelectInstance(instanceId);
+
+                    //if (validateRedirectUrl)
+                    ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
+
+                    if (!string.IsNullOrEmpty(redirectUrl))
+                        errorDiv.Page.Response.Redirect(redirectUrl);
+                }
             }
             catch (AuthenticationException ex)
             {
@@ -197,7 +208,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     InstanceArea.Visible = false;
                     LogOffDescriptionLabel.Visible = false;
-                    SelectInstance(coll[0].InstanceId, Request.QueryString["returnurl"], ErrorDiv);
+                    SelectInstance(coll[0].InstanceId, Request.QueryString["returnurl"], true, ErrorDiv);
                 }
                 else
                 {
@@ -219,7 +230,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], ErrorDiv);
+                SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorDiv);
         }
 
         #endregion
