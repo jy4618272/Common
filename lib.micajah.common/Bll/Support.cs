@@ -1434,6 +1434,7 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Sends the message with specified details to an SMTP server for delivery.
         /// </summary>
+        /// <param name="sender">A System.String that contains the sender's address for this e-mail message.</param>
         /// <param name="from">A System.String that contains the address of the sender of the e-mail message.</param>
         /// <param name="to">A System.String that contains the addresses of the recipients of the e-mail message.</param>
         /// <param name="bcc">A System.String that contains the blind carbon copy (BCC) recipients for the e-mail message.</param>
@@ -1443,15 +1444,16 @@ namespace Micajah.Common.Bll
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="reason">A reason for email sending.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
-        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, bool async, EmailSendingReason reason)
+        public static bool SendEmail(string sender, string from, string to, string bcc, string subject, string body, bool isBodyHtml, bool async, EmailSendingReason reason)
         {
             EmailSendingEventArgs args = new EmailSendingEventArgs() { Async = async, Reason = reason };
-            return SendEmail(from, to, bcc, subject, body, isBodyHtml, args);
+            return SendEmail(sender, from, to, bcc, subject, body, isBodyHtml, args);
         }
 
         /// <summary>
         /// Sends the message with specified details to an SMTP server for delivery.
         /// </summary>
+        /// <param name="sender">A System.String that contains the sender's address for this e-mail message.</param>
         /// <param name="from">A System.String that contains the address of the sender of the e-mail message.</param>
         /// <param name="to">A System.String that contains the addresses of the recipients of the e-mail message.</param>
         /// <param name="bcc">A System.String that contains the blind carbon copy (BCC) recipients for the e-mail message.</param>
@@ -1461,11 +1463,22 @@ namespace Micajah.Common.Bll
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="args">An EmailSendingEventArgs that contains the Micajah.Common.Application.WebApplication.EmailSending event data.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
-        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, EmailSendingEventArgs args)
+        public static bool SendEmail(string sender, string from, string to, string bcc, string subject, string body, bool isBodyHtml, EmailSendingEventArgs args)
         {
             bool sent = false;
 
-            MailMessage msg = new MailMessage(from, to);
+            MailMessage msg = new MailMessage();
+            if (!string.IsNullOrEmpty(sender))
+                msg.Sender = new MailAddress(sender);
+            if (!string.IsNullOrEmpty(from))
+            {
+                if (string.Compare(from, to, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    if (string.Compare(from, sender, StringComparison.OrdinalIgnoreCase) != 0)
+                        msg.From = new MailAddress(from);
+                }
+            }
+            msg.To.Add(to);
             msg.Subject = subject;
             msg.Body = body;
             msg.IsBodyHtml = isBodyHtml;
