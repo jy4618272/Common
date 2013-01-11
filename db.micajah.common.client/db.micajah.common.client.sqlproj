@@ -100,8 +100,8 @@
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
     <Folder Include="Stored Procedures\" />
-    <Folder Include="Change Scripts" />
-    <Folder Include="Change Scripts\v99" />
+    <Folder Include="Sql Scripts" />
+    <Folder Include="Sql Scripts\v99" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Mc_User.sql">
@@ -524,9 +524,10 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <None Include="Change Scripts\v99\ConvertDateTimeToUtc.sql" />
+    <None Include="Sql Scripts\v99\ConvertDateTimeToUtc.sql" />
+    <PostDeploy Include="Sql Scripts\PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="PostDeployment.sql" />
+    <None Include="SqlSchemaCompareToLocal.scmp" />
   </ItemGroup>
 </Project>

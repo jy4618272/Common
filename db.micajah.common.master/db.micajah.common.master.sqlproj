@@ -100,10 +100,10 @@
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
     <Folder Include="Stored Procedures\" />
-    <Folder Include="Scripts" />
-    <Folder Include="Scripts\Change Scripts" />
-    <Folder Include="Scripts\Change Scripts\v99" />
-    <Folder Include="Scripts\Change Scripts\v74" />
+    <Folder Include="Sql Scripts" />
+    <Folder Include="Sql Scripts\Change Scripts" />
+    <Folder Include="Sql Scripts\Change Scripts\v99" />
+    <Folder Include="Sql Scripts\Change Scripts\v74" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Mc_DatabaseServer.sql">
@@ -514,10 +514,13 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <PostDeploy Include="PostDeployment.sql" />
-    <None Include="Scripts\Change Scripts\v74\Action_ConvertToXml.sql" />
-    <None Include="Scripts\Change Scripts\v74\Role_ConvertToXml.sql" />
-    <None Include="Scripts\Change Scripts\v74\Setting_ConvertToXml.sql" />
-    <None Include="Scripts\Change Scripts\v99\ConvertDateTimeToUtc.sql" />
+    <None Include="Sql Scripts\Change Scripts\v74\Action_ConvertToXml.sql" />
+    <None Include="Sql Scripts\Change Scripts\v74\Role_ConvertToXml.sql" />
+    <None Include="Sql Scripts\Change Scripts\v74\Setting_ConvertToXml.sql" />
+    <None Include="Sql Scripts\Change Scripts\v99\ConvertDateTimeToUtc.sql" />
+    <PostDeploy Include="Sql Scripts\PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SqlSchemaCompareToLocal.scmp" />
   </ItemGroup>
 </Project>
