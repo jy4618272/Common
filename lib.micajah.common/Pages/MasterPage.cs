@@ -748,7 +748,7 @@ namespace Micajah.Common.Pages
         /// <summary>
         /// Gets a value that indicates the current page is admin page.
         /// </summary>
-        public bool IsAdminPage
+        public virtual bool IsAdminPage
         {
             get
             {
