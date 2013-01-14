@@ -52,6 +52,7 @@
 .Notification.Normal div
 {
     padding: 10px 10px 10px 55px;
+    min-height: 30px;
 }
 
 .Notification.Small div
