@@ -745,6 +745,17 @@ namespace Micajah.Common.Pages
             }
         }
 
+        /// <summary>
+        /// Gets a value that indicates the current page is admin page.
+        /// </summary>
+        public bool IsAdminPage
+        {
+            get
+            {
+                return (Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1);
+            }
+        }
+
         #endregion
 
         #region Events
@@ -876,6 +887,14 @@ namespace Micajah.Common.Pages
             {
                 m_MainMenu = new MainMenu();
                 Controls.Add(m_MainMenu);
+            }
+
+            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) && this.IsAdminPage)
+            {
+                this.SubmenuParentActionId = ActionProvider.ConfigurationPageActionId;
+                this.SubmenuPosition = WebControls.SubmenuPosition.Left;
+                this.VisibleSubmenu = true;
+                this.VisibleLeftArea = true;
             }
 
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)

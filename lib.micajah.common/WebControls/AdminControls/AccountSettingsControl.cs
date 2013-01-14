@@ -157,9 +157,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
 
-            masterPage.SubmenuPosition = SubmenuPosition.Left;
-            masterPage.VisibleSubmenu = true;
-            masterPage.VisibleLeftArea = true;
             masterPage.VisibleBreadcrumbs = false;
             masterPage.EnableFancyBox = true;
 
