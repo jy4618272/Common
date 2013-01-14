@@ -2533,4 +2533,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="InstancesControl_EditForm_VanityUrlField_HeaderText" xml:space="preserve">
     <value>Vanity Url</value>
   </data>
+  <data name="SettingsControl_SuccessMessage" xml:space="preserve">
+    <value>Your changes have been saved.</value>
+  </data>
 </root>

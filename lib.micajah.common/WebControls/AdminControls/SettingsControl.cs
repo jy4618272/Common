@@ -784,11 +784,13 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void UpdateButton_Click(object sender, EventArgs e)
         {
             this.UpdateSettings();
+            this.List_DataBind();
 
-            if (string.IsNullOrEmpty(CancelLink.NavigateUrl))
-                this.List_DataBind();
-            else
-                Response.Redirect(CancelLink.NavigateUrl);
+            if (this.MasterPage != null)
+            {
+                m_MasterPage.MessageType = NoticeMessageType.Success;
+                m_MasterPage.Message = Resources.SettingsControl_SuccessMessage;
+            }
         }
 
         #endregion

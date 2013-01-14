@@ -5618,6 +5618,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your changes have been saved..
+        /// </summary>
+        internal static string SettingsControl_SuccessMessage {
+            get {
+                return ResourceManager.GetString("SettingsControl_SuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Groups Settings.
         /// </summary>
         internal static string SettingsDiagnosticControl_FormTable_ObjectName_GroupsSettings {
