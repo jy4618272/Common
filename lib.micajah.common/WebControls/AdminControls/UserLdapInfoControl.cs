@@ -65,15 +65,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         #endregion
 
-        #region Private Methods
-
-        private void Redirect()
-        {
-            RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
-        }
-
-        #endregion
-
         #region Protected Methods
 
         protected void Page_Load(object sender, EventArgs e)
@@ -424,7 +415,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (e.Exception == null)
             {
-                this.Redirect();
+                this.RedirectToConfigurationPage();
             }
         }
 
@@ -434,7 +425,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
             {
-                this.Redirect();
+                this.RedirectToConfigurationPage();
             }
         }
 

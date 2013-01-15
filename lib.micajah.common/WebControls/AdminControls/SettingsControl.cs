@@ -635,11 +635,12 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-        private void Repeater_ItemDataBound(RepeaterItemEventArgs e, Control controlHolder)
+        private void Repeater_ItemDataBound(RepeaterItemEventArgs e, string controlHolderId)
         {
             Setting setting = e.Item.DataItem as Setting;
             if (setting == null) return;
 
+            Control controlHolder = e.Item.FindControl(controlHolderId);
             if (controlHolder == null) return;
 
             SettingCollection childSettings = setting.ChildSettings;
@@ -687,7 +688,15 @@ namespace Micajah.Common.WebControls.AdminControls
                     paidUpgradeLink.Text = Resources.SettingsControl_PaidUpgradeLink_Text;
                     paidUpgradeLink.NavigateUrl = setting.PaidUpgradeUrl;
                     controlHolder.Controls.Add(paidUpgradeLink);
+                    leftMargin = true;
                 }
+            }
+
+            if (m_IsModernTheme && leftMargin)
+            {
+                HtmlGenericControl div = controlHolder as HtmlGenericControl;
+                if (div != null)
+                    div.Attributes["class"] += " Modern";
             }
 
             repeater2.DataSource = childSettings;
@@ -776,18 +785,7 @@ namespace Micajah.Common.WebControls.AdminControls
             Setting setting = e.Item.DataItem as Setting;
             if (setting == null) return;
 
-            Control controlHoder1 = e.Item.FindControl("ControlHolder1");
-            if (controlHoder1 != null)
-            {
-                if (m_IsModernTheme)
-                {
-                    HtmlGenericControl div = controlHoder1 as HtmlGenericControl;
-                    if (div != null)
-                        div.Attributes["class"] += " Modern";
-                }
-
-                Repeater_ItemDataBound(e, controlHoder1);
-            }
+            Repeater_ItemDataBound(e, "ControlHolder1");
         }
 
         protected void Repeater2_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -798,7 +796,7 @@ namespace Micajah.Common.WebControls.AdminControls
             Setting setting = e.Item.DataItem as Setting;
             if (setting == null) return;
 
-            Repeater_ItemDataBound(e, e.Item.FindControl("ControlHolder2"));
+            Repeater_ItemDataBound(e, "ControlHolder2");
 
             Label label = e.Item.FindControl("NameLabel2") as Label;
             if (label != null)
@@ -824,7 +822,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (this.MasterPage != null)
                     {
                         m_MasterPage.MessageType = NoticeMessageType.Success;
-                        m_MasterPage.Message = Resources.SettingsControl_SuccessMessage;
+                        m_MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
                     }
                 }
             }

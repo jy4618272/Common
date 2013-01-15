@@ -502,6 +502,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your changes have been saved..
+        /// </summary>
+        internal static string BaseEditFormControl_SuccessMessage {
+            get {
+                return ResourceManager.GetString("BaseEditFormControl_SuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The current password is not valid.
         /// </summary>
         internal static string ChangePasswordControl_CurrentPasswordIsNotValid {
@@ -5614,15 +5623,6 @@ namespace Micajah.Common.Properties {
         internal static string SettingsControl_SettingValueUndefined {
             get {
                 return ResourceManager.GetString("SettingsControl_SettingValueUndefined", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your changes have been saved..
-        /// </summary>
-        internal static string SettingsControl_SuccessMessage {
-            get {
-                return ResourceManager.GetString("SettingsControl_SuccessMessage", resourceCulture);
             }
         }
         

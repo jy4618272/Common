@@ -1,5 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll.Providers;
@@ -230,5 +233,21 @@ namespace Micajah.Common.WebControls
         }
 
         #endregion
+
+        #region Public Methods
+
+        public string RenderControl()
+        {
+            StringBuilder sb = new StringBuilder();
+            using (StringWriter sw = new StringWriter(sb, CultureInfo.InvariantCulture))
+            {
+                HtmlTextWriter w = new HtmlTextWriter(sw);
+                this.Render(w);
+                return sb.ToString();
+            }
+        }
+
+        #endregion
+
     }
 }
