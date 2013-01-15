@@ -417,7 +417,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private static Control CreateCheckBox(Setting setting, bool diagnoseConflictingSettings)
         {
             Control container = null;
-            HtmlGenericControl ctl = null;
+            HtmlInputCheckBox checkBox = null;
 
             try
             {
@@ -431,24 +431,23 @@ namespace Micajah.Common.WebControls.AdminControls
                 }
 
                 container = new Control();
-                ctl = new HtmlGenericControl("input");
-                ctl.Attributes["type"] = "checkbox";
-                ctl.Attributes["class"] = "Nm";
-                ctl.Attributes["id"] = ctl.Attributes["name"] = controlId;
-                if (isChecked) ctl.Attributes["checked"] = "checked";
+                checkBox = new HtmlInputCheckBox();
+                checkBox.Attributes["class"] = "Nm";
+                checkBox.ID = controlId;
+                checkBox.Checked = isChecked;
                 if (diagnoseConflictingSettings)
                 {
-                    ctl.Disabled = true;
-                    ctl.Style.Add(HtmlTextWriterStyle.Color, "Gray");
+                    checkBox.Disabled = true;
+                    checkBox.Style.Add(HtmlTextWriterStyle.Color, "Gray");
                 }
-                container.Controls.Add(ctl);
+                container.Controls.Add(checkBox);
 
                 return container;
             }
             finally
             {
                 if (container != null) container.Dispose();
-                if (ctl != null) ctl.Dispose();
+                if (checkBox != null) checkBox.Dispose();
             }
         }
 
@@ -498,6 +497,20 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (select != null) select.Dispose();
                 if (ctl != null) ctl.Dispose();
             }
+        }
+
+        private string GetCheckBoxValue(string id)
+        {
+            string value = "false";
+            foreach (string key in Request.Form.AllKeys)
+            {
+                if (key.EndsWith(id, StringComparison.Ordinal))
+                {
+                    value = "true";
+                    break;
+                }
+            }
+            return value;
         }
 
         private void LoadResources()
@@ -907,18 +920,17 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             string id = string.Concat(ControlIdPrefix, settingId.ToString("N"));
             string value = Request.Form[id];
-            id += this.IdSeparator;
 
             if (settingType == SettingType.CheckBox)
             {
-                value = ((value == null) ? "false" : "true");
+                value = GetCheckBoxValue(id);
             }
             else if (settingType == SettingType.Value)
             {
                 foreach (string key in Request.Form.AllKeys)
                 {
-                    if (key.EndsWith(id + "txt", StringComparison.Ordinal)
-                        || key.EndsWith(id + "rdp", StringComparison.Ordinal))
+                    if (key.EndsWith(id + this.IdSeparator + "txt", StringComparison.Ordinal)
+                        || key.EndsWith(id + this.IdSeparator + "rdp", StringComparison.Ordinal))
                     {
                         Control ctl = Support.FindTargetControl(key.Substring(0, key.Length - 4), this, true);
                         if (ctl != null)
@@ -937,15 +949,6 @@ namespace Micajah.Common.WebControls.AdminControls
                                     value = (datePicker.IsEmpty ? string.Empty : TimeZoneInfo.ConvertTimeToUtc(datePicker.SelectedDate, m_UserContext.TimeZone).ToString("g"));
                                     break;
                                 }
-                                else
-                                {
-                                    CheckBox checkBox = ctl as CheckBox;
-                                    if (checkBox != null)
-                                    {
-                                        value = checkBox.Checked.ToString();
-                                        break;
-                                    }
-                                }
                             }
                         }
                     }
@@ -953,15 +956,7 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             else if (m_IsModernTheme && (settingType == SettingType.OnOffSwitch))
             {
-                value = "false";
-                foreach (string key in Request.Form.AllKeys)
-                {
-                    if (key.EndsWith(id + "CheckBox", StringComparison.Ordinal))
-                    {
-                        value = "true";
-                        break;
-                    }
-                }
+                value = GetCheckBoxValue(id + this.IdSeparator + "CheckBox");
             }
 
             return value;
