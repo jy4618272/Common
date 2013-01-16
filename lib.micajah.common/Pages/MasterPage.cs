@@ -766,7 +766,8 @@ namespace Micajah.Common.Pages
         {
             get
             {
-                return (Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1);
+                return ((Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1)
+                    && ((this.ActiveAction != null) && (m_ActiveAction.ActionId != ActionProvider.StartPageActionId)));
             }
         }
 
