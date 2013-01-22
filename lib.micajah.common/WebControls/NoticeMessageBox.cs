@@ -189,6 +189,8 @@ namespace Micajah.Common.WebControls
 
             if (this.Size == NoticeMessageBoxSize.Normal)
             {
+                if (string.IsNullOrEmpty(this.Description))
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "NoDescr");
                 writer.RenderBeginTag(HtmlTextWriterTag.H4); // H4
                 writer.RenderBeginTag(HtmlTextWriterTag.Span); // Span
                 switch (this.MessageType)
@@ -214,6 +216,11 @@ namespace Micajah.Common.WebControls
                 writer.RenderBeginTag(HtmlTextWriterTag.Strong); // Strong
             if (!string.IsNullOrEmpty(this.Message))
                 writer.Write(this.Message);
+            else if (this.Size == NoticeMessageBoxSize.Small)
+            {
+                if (string.IsNullOrEmpty(this.Description))
+                    writer.Write("&nbsp;");
+            }
             writer.RenderEndTag(); // H4 or Strong
 
             if (!string.IsNullOrEmpty(this.Description))
