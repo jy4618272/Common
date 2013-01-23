@@ -2536,4 +2536,10 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="BaseEditFormControl_SuccessMessage" xml:space="preserve">
     <value>Your changes have been saved.</value>
   </data>
+  <data name="SignupOrganizationControl_OrganizationUrlValidator_ErrorMessage" xml:space="preserve">
+    <value>Invalid URL</value>
+  </data>
+  <data name="CustomUrlProvider_InvalidUrl" xml:space="preserve">
+    <value>Invalid URL</value>
+  </data>
 </root>

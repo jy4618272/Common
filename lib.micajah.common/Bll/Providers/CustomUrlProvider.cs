@@ -27,11 +27,17 @@ namespace Micajah.Common.Bll.Providers
         {
             if (partialCustomUrl != null)
             {
-                foreach (string address in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
+                Regex re = new Regex("^[0-9a-z][0-9a-z-]{1,18}[0-9a-z]$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                if (re.IsMatch(partialCustomUrl))
                 {
-                    if (partialCustomUrl.StartsWith(address, StringComparison.OrdinalIgnoreCase))
-                        throw new ConstraintException(Resources.CustomUrlProvider_UrlReserved);
+                    foreach (string address in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
+                    {
+                        if (partialCustomUrl.StartsWith(address, StringComparison.OrdinalIgnoreCase))
+                            throw new ConstraintException(Resources.CustomUrlProvider_UrlReserved);
+                    }
                 }
+                else
+                    throw new DataException(Resources.CustomUrlProvider_InvalidUrl);
             }
         }
 
