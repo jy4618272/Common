@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -219,6 +220,14 @@ namespace Micajah.Common.WebControls.SecurityControls
                     , m_OrgId, true
                     , false, true
                     , 0, 0, out password);
+
+                List<Guid> list2 = new List<Guid>();
+                foreach (Guid id in list)
+                {
+                    list2.Add(id);
+                }
+
+                UserProvider.RaiseUserUpdated(m_UserContext.UserId, m_OrgId, list2);
 
                 RoleList.ClearSelection();
                 InstanceList.ClearSelection();
