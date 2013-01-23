@@ -170,19 +170,26 @@ namespace Micajah.Common.Bll.Providers
             bool isOrganizationAdministratorModified = false;
             bool isOrganizationAdministrator = false;
 
-            if ((groupId != null) && (!addGroup))
+            if (groupId != null)
             {
                 isOrganizationAdministrator = string.Concat(",", groupId, ",").Contains("," + Guid.Empty.ToString() + ",");
 
-                if (row == null)
-                    row = GetUserRow(userId, organizationId);
-
-                isOrganizationAdministratorModified = ((row.IsOrganizationAdministratorNull() ? false : row.OrganizationAdministrator) != isOrganizationAdministrator);
-
-                if (isOrganizationAdministratorModified && (!isOrganizationAdministrator))
+                if (addGroup)
                 {
-                    if (UserIsLastAdministrator(userId, organizationId))
-                        throw new DataException(Resources.UserProvider_ErrorMessage_YouMustBeOrganizationAdministrator);
+                    isOrganizationAdministratorModified = isOrganizationAdministrator;
+                }
+                else
+                {
+                    if (row == null)
+                        row = GetUserRow(userId, organizationId);
+
+                    isOrganizationAdministratorModified = ((row.IsOrganizationAdministratorNull() ? false : row.OrganizationAdministrator) != isOrganizationAdministrator);
+
+                    if (isOrganizationAdministratorModified && (!isOrganizationAdministrator))
+                    {
+                        if (UserIsLastAdministrator(userId, organizationId))
+                            throw new DataException(Resources.UserProvider_ErrorMessage_YouMustBeOrganizationAdministrator);
+                    }
                 }
             }
 

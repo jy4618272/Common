@@ -3318,6 +3318,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inject Me as Organization Administrator.
+        /// </summary>
+        internal static string LogOnAsUserControl_InjectButton_Text {
+            get {
+                return ResourceManager.GetString("LogOnAsUserControl_InjectButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instance.
         /// </summary>
         internal static string LogOnAsUserControl_InstanceListLabel_Text {

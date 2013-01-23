@@ -2542,4 +2542,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="CustomUrlProvider_InvalidUrl" xml:space="preserve">
     <value>Invalid URL</value>
   </data>
+  <data name="LogOnAsUserControl_InjectButton_Text" xml:space="preserve">
+    <value>Inject Me as Organization Administrator</value>
+  </data>
 </root>
