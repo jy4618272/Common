@@ -67,7 +67,7 @@
             Visible="False" EnableSelect="True" OnAction="List_Action" AutoGenerateColumns="False"
             DataSourceID="EntityListDataSource" PageSize="50" OnRowDataBound="List_RowDataBound">
             <CaptionControls>
-                <asp:LinkButton ID="InjectButton" runat="server" OnClick="InjectButton_Click"></asp:LinkButton>
+                <asp:LinkButton ID="InjectButton" runat="server" Visible="false" OnClick="InjectButton_Click"></asp:LinkButton>
             </CaptionControls>
             <columns>
                 <mits:TextBoxField DataField="Name" SortExpression="Name" />

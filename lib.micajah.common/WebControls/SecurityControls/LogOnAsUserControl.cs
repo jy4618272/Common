@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -206,12 +207,15 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (!WebApplication.LoginProvider.LoginIsOrganizationAdministrator(m_UserContext.UserId, m_OrgId))
             {
+                ArrayList list = GroupProvider.GetGroupIdList(m_OrgId, Guid.Empty, RoleProvider.InstanceAdministratorRoleId);
+                list.Add(Guid.Empty);
+
                 string password = null;
                 UserProvider.AddUserToOrganization(m_UserContext.LoginName, null, null, null
                     , null, null, null, null, null, null
                     , null, null, null, null, null
                     , null, null, null
-                    , Guid.Empty.ToString(), true
+                    , Support.ConvertListToString(list), true
                     , m_OrgId, true
                     , false, true
                     , 0, 0, out password);

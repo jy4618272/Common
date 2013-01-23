@@ -23,6 +23,54 @@ namespace Micajah.Common.Bll.Providers
         #region Private Methods
 
         /// <summary>
+        /// Returns the list of the groups wich have the specified roles in the specified instance.
+        /// </summary>
+        /// <param name="organizationId">The organizations' identifier.</param>
+        /// <param name="instanceId">The instance's identifier.</param>
+        /// <param name="roleIdList">An array containing the unique identifiers of the roles.</param>
+        /// <returns>The list of the groups.</returns>
+        public static ArrayList GetGroupIdList(Guid organizationId, Guid instanceId, ArrayList roleIdList)
+        {
+            ArrayList groupIdList = new ArrayList();
+            if (roleIdList != null)
+            {
+                if (roleIdList.Count > 0)
+                {
+                    OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
+                    if (ds != null)
+                    {
+                        OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
+
+                        StringBuilder sb = new StringBuilder();
+                        foreach (Guid roleId in roleIdList)
+                        {
+                            sb.AppendFormat(CultureInfo.InvariantCulture, ",'{0}'", roleId);
+                        }
+
+                        if (sb.Length > 0)
+                        {
+                            sb.Remove(0, 1);
+
+                            string filter = string.Empty;
+                            if (instanceId != Guid.Empty)
+                                filter = string.Concat(gdrTable.InstanceIdColumn.ColumnName, " = '", instanceId.ToString(), "'");
+                            if (!string.IsNullOrEmpty(filter))
+                                filter += " AND ";
+                            filter += string.Concat("CONVERT(", gdrTable.RoleIdColumn.ColumnName, ", 'System.String') IN (", sb.ToString(), ")");
+
+                            foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(filter))
+                            {
+                                if (!groupIdList.Contains(gdrRow.GroupId))
+                                    groupIdList.Add(gdrRow.GroupId);
+                            }
+                        }
+                    }
+                }
+            }
+            return groupIdList;
+        }
+
+        /// <summary>
         /// Returns the object populated with information of the built-in group that is associated to the specified instance.
         /// </summary>
         /// <param name="ds">The data source to get data from.</param>
@@ -448,30 +496,23 @@ namespace Micajah.Common.Bll.Providers
         public static ArrayList GetGroupIdList(Guid organizationId, Guid instanceId, params string[] roleShortName)
         {
             ArrayList groupIdList = new ArrayList();
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds != null)
-            {
-                ArrayList roleIdList = RoleProvider.GetRoleIdListByShortNames(roleShortName);
-                OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
+            if (roleShortName != null)
+                groupIdList = GetGroupIdList(organizationId, instanceId, RoleProvider.GetRoleIdListByShortNames(roleShortName));
+            return groupIdList;
+        }
 
-                StringBuilder sb = new StringBuilder();
-                foreach (Guid roleId in roleIdList)
-                {
-                    sb.AppendFormat(CultureInfo.InvariantCulture, ",'{0}'", roleId);
-                }
-
-                if (sb.Length > 0)
-                {
-                    sb.Remove(0, 1);
-
-                    foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(
-                        string.Concat(gdrTable.InstanceIdColumn.ColumnName, " = '", instanceId.ToString(), "' AND CONVERT(", gdrTable.RoleIdColumn.ColumnName, ", 'System.String') IN (", sb.ToString(), ")")))
-                    {
-                        if (!groupIdList.Contains(gdrRow.GroupId))
-                            groupIdList.Add(gdrRow.GroupId);
-                    }
-                }
-            }
+        /// <summary>
+        /// Returns the list of the groups wich have the specified roles in the specified instance.
+        /// </summary>
+        /// <param name="organizationId">The organizations' identifier.</param>
+        /// <param name="instanceId">The instance's identifier.</param>
+        /// <param name="roleIdList">An array containing the unique identifiers of the roles.</param>
+        /// <returns>The list of the groups.</returns>
+        public static ArrayList GetGroupIdList(Guid organizationId, Guid instanceId, params Guid[] roleIdList)
+        {
+            ArrayList groupIdList = new ArrayList();
+            if (roleIdList != null)
+                groupIdList = GetGroupIdList(organizationId, instanceId, new ArrayList(roleIdList));
             return groupIdList;
         }
 
