@@ -1,5 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll.Providers;
@@ -186,6 +189,8 @@ namespace Micajah.Common.WebControls
 
             if (this.Size == NoticeMessageBoxSize.Normal)
             {
+                if (string.IsNullOrEmpty(this.Description))
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "NoDescr");
                 writer.RenderBeginTag(HtmlTextWriterTag.H4); // H4
                 writer.RenderBeginTag(HtmlTextWriterTag.Span); // Span
                 switch (this.MessageType)
@@ -211,6 +216,11 @@ namespace Micajah.Common.WebControls
                 writer.RenderBeginTag(HtmlTextWriterTag.Strong); // Strong
             if (!string.IsNullOrEmpty(this.Message))
                 writer.Write(this.Message);
+            else if (this.Size == NoticeMessageBoxSize.Small)
+            {
+                if (string.IsNullOrEmpty(this.Description))
+                    writer.Write("&nbsp;");
+            }
             writer.RenderEndTag(); // H4 or Strong
 
             if (!string.IsNullOrEmpty(this.Description))
@@ -230,5 +240,21 @@ namespace Micajah.Common.WebControls
         }
 
         #endregion
+
+        #region Public Methods
+
+        public string RenderControl()
+        {
+            StringBuilder sb = new StringBuilder();
+            using (StringWriter sw = new StringWriter(sb, CultureInfo.InvariantCulture))
+            {
+                HtmlTextWriter w = new HtmlTextWriter(sw);
+                this.Render(w);
+                return sb.ToString();
+            }
+        }
+
+        #endregion
+
     }
 }

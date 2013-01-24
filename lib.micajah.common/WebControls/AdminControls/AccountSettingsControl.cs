@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Drawing;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -11,7 +8,6 @@ using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Telerik.Web.UI;
 
@@ -161,9 +157,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
 
-            masterPage.SubmenuPosition = SubmenuPosition.Left;
-            masterPage.VisibleSubmenu = true;
-            masterPage.VisibleLeftArea = true;
             masterPage.VisibleBreadcrumbs = false;
             masterPage.EnableFancyBox = true;
 
@@ -245,7 +238,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
             ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
-            if (_custSubscr != null && _custSubscr.CreditCard!=null)
+            if (_custSubscr != null && _custSubscr.CreditCard != null)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
                 if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, OrganizationId, InstanceId);
@@ -289,7 +282,7 @@ namespace Micajah.Common.WebControls.AdminControls
             HtmlGenericControl div0 = new HtmlGenericControl("div");
             div0.Attributes["class"] = "account-option";
             HtmlGenericControl h4 = new HtmlGenericControl("h4");
-            if (!string.IsNullOrEmpty(setting.IconUrl)) h4.Attributes["style"] = "background: url('" + setting.IconUrl+ "') top left no-repeat;";
+            if (!string.IsNullOrEmpty(setting.IconUrl)) h4.Attributes["style"] = "background: url('" + setting.IconUrl + "') top left no-repeat;";
             h4.InnerText = setting.CustomName;
             div0.Controls.Add(h4);
 
@@ -435,9 +428,9 @@ namespace Micajah.Common.WebControls.AdminControls
             try
             {
 
-                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, UserContext.Current.Email,
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, null, usr.Email,
                                   string.Empty, "Thank You for purchase " + FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName, _body1, false, false, EmailSendingReason.Undefined);
-                Support.SendEmail(UserContext.Current.Email, FrameworkConfiguration.Current.WebApplication.Support.Email,
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, usr.Email, FrameworkConfiguration.Current.WebApplication.Support.Email,
                                   string.Empty, _subject, _body2, false, false, EmailSendingReason.Undefined);
             }
             catch (Exception ex)
@@ -493,7 +486,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (txtCCNumber.Text.Contains("XXXX")) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath);
 
-            string _CustSystemId = OrganizationId.ToString()+","+InstanceId.ToString();
+            string _CustSystemId = OrganizationId.ToString() + "," + InstanceId.ToString();
 
             ICustomer _cust = Chargify.LoadCustomer(_CustSystemId);
             ISubscription _subscr = null;
@@ -529,17 +522,17 @@ namespace Micajah.Common.WebControls.AdminControls
                 else
                 {
                     msgStatus.Message = "Can't get Chargify Customer Substriction!";
-                    _subscr = ChargifyProvider.GetCustomerSubscription(Chargify, _cust.ChargifyID);                    
+                    _subscr = ChargifyProvider.GetCustomerSubscription(Chargify, _cust.ChargifyID);
                 }
             }
             catch (ChargifyException cex)
             {
-                if ((int)cex.StatusCode != 422) msgStatus.Message += " "+cex.Message;
+                if ((int)cex.StatusCode != 422) msgStatus.Message += " " + cex.Message;
                 return;
             }
             catch (Exception ex)
             {
-                msgStatus.Message += " "+ex.Message;
+                msgStatus.Message += " " + ex.Message;
                 return;
             }
 
@@ -550,7 +543,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (_subscr == null)
                 {
                     msgStatus.Message = "Can't create Chargify Subscription!";
-                    _subscr=Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                    _subscr = Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
                 }
                 else
                 {
@@ -561,12 +554,12 @@ namespace Micajah.Common.WebControls.AdminControls
             catch (ChargifyException cex)
             {
                 if ((int)cex.StatusCode == 422) msgStatus.Message += " Invalid Credit Card Information!";
-                else msgStatus.Message += " "+cex.Message;
+                else msgStatus.Message += " " + cex.Message;
                 return;
             }
             catch (Exception ex)
             {
-                msgStatus.Message += " "+ex.Message;
+                msgStatus.Message += " " + ex.Message;
                 return;
             }
 
@@ -588,7 +581,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 }
             }
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-            Response.Redirect(ResourceProvider.AccountSettingsVirtualPath +"?st=ok" + (!string.IsNullOrEmpty(masterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(masterPage.Message) : string.Empty));
+            Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=ok" + (!string.IsNullOrEmpty(masterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(masterPage.Message) : string.Empty));
         }
 
         protected void Repeater2_ItemDataBound(object sender, RepeaterItemEventArgs e)

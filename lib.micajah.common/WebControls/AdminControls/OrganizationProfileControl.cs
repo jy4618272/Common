@@ -52,15 +52,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         #endregion
 
-        #region Private Methods
-
-        private void Redirect()
-        {
-            RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
-        }
-
-        #endregion
-
         #region Protected Methods
 
         protected void EditForm_DataBound(object sender, EventArgs e)
@@ -154,7 +145,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             if (e.Exception == null)
-                this.Redirect();
+                this.RedirectToConfigurationPage();
         }
 
         protected override void EditForm_ItemCommand(object sender, CommandEventArgs e)
@@ -162,7 +153,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
-                this.Redirect();
+                this.RedirectToConfigurationPage();
         }
 
         #endregion

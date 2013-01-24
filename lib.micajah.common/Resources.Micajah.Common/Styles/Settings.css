@@ -1,11 +1,4 @@
-﻿div.Mc_Settings
-{
-    padding-bottom: 10px;
-    position: relative;
-    left: -2px;
-}
-
-.Mc_Settings .Nm
+﻿.Mc_Settings .Nm
 {
     color: #3c357a;
     font-size: 12pt;
@@ -60,6 +53,31 @@
 .Mc_Settings a.Ml
 {
     margin-left: 23px;
+}
+
+div.Mc_Settings
+{
+    padding-bottom: 10px;
+    position: relative;
+    left: -2px;
+}
+
+div.Mc_Settings.Modern
+{
+    min-height: 27px;
+}
+
+div.Mc_Settings.Modern .iPhoneCheckContainer
+{
+    float: left;
+    margin-bottom: 10px;
+}
+
+div.Mc_Settings.Modern a.Lm
+{
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .Mc_Settings .Error

@@ -156,7 +156,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                ActiveInstanceControl.SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, ErrorDiv);
+                ActiveInstanceControl.SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorDiv);
         }
 
         protected void OrganizationList_ItemDataBound(object sender, DataListItemEventArgs e)

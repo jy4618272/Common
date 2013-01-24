@@ -398,12 +398,23 @@ namespace Micajah.Common.WebControls
                 }
             }
 
-            ListItem item = m_DateRange.Items.FindByValue(((int)StandardDateRange.Custom).ToString(CultureInfo.InvariantCulture)) as ListItem;
+            int standardDateRange = (int)StandardDateRange.Rolling30Days;
+
+            if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null && System.Web.HttpContext.Current.Session["DateRange_SelectedValue"] != null)
+            {
+                if (!(Int32.TryParse(System.Web.HttpContext.Current.Session["DateRange_SelectedValue"].ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out standardDateRange)))
+                    standardDateRange = (int)StandardDateRange.Rolling30Days;
+            }
+
+            ListItem item = m_DateRange.Items.FindByValue(standardDateRange.ToString(CultureInfo.InvariantCulture)) as ListItem;
             if (item != null) item.Selected = true;
         }
 
         private void DateRange_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
+                System.Web.HttpContext.Current.Session["DateRange_SelectedValue"] = m_DateRange.SelectedValue;
+            
             if (this.SelectedIndexChanged != null) SelectedIndexChanged(sender, e);
         }
 

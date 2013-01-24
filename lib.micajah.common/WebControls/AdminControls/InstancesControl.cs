@@ -4,6 +4,8 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using Micajah.Common.Configuration;
+using System.Globalization;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -49,6 +51,9 @@ namespace Micajah.Common.WebControls.AdminControls
             base.LoadResources();
 
             List.Columns[0].HeaderText = Resources.InstancesControl_List_NameColumn_HeaderText;
+
+            EditForm.Fields[1].HeaderText = Resources.InstancesControl_EditForm_VanityUrlField_HeaderText;
+            EditForm.Fields[2].HeaderText = Resources.InstancesControl_EditForm_TemplateField_HeaderText;
         }
 
         protected override void List_PageIndexChanged(object sender, EventArgs e)
@@ -96,6 +101,40 @@ namespace Micajah.Common.WebControls.AdminControls
                 EditFormReset();
         }
 
+        protected override void List_Action(object sender, CommonGridViewActionEventArgs e)
+        {
+            base.List_Action(sender, e);
+            
+            switch (e.Action)
+            {
+                case CommandActions.Add:                    
+                    EditForm.Fields[1].Visible = true;
+                    EditForm.Fields[2].Visible = true;
+                    break;
+
+                default:
+                    EditForm.Fields[1].Visible = false;
+                    EditForm.Fields[2].Visible = false;
+                    break;
+            }
+        }
+
+        protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
+        {
+            if (e != null)
+            {
+                TextBox PartialCustomUrlTextBox = EditForm.FindControl("PartialCustomUrlTextBox") as TextBox;
+                if (PartialCustomUrlTextBox != null)
+                    e.InputParameters["vanityUrl"] = PartialCustomUrlTextBox.Text;
+
+
+                DropDownList TemplateList = EditForm.FindControl("TemplateList") as DropDownList;
+                if (TemplateList != null)
+                    e.InputParameters["templateInstanceId"] = new Guid(TemplateList.SelectedValue);
+            }
+        }
+
         #endregion
     }
 }
+

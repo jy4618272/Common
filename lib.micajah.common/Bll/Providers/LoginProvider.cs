@@ -451,7 +451,7 @@ namespace Micajah.Common.Bll.Providers
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 sb.Append("&returnurl=");
-                sb.Append(HttpUtility.UrlEncodeUnicode(returnUrl));
+                sb.Append(HttpUtility.UrlEncodeUnicode(CustomUrlProvider.CreateApplicationAbsoluteUrl(returnUrl)));
             }
 
             if (applicationUrl == null)
@@ -829,7 +829,10 @@ namespace Micajah.Common.Bll.Providers
                     if (sendEmailNotification)
                     {
                         UserContext user = UserContext.Current;
-                        UserProvider.SendChangeLoginEmail(GetEmail(loginId), ((user == null) ? Guid.Empty : user.SelectedOrganizationId));
+                        if (user == null)
+                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), Guid.Empty, null);
+                        else
+                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), user.SelectedOrganizationId, user.Email);
                     }
                 }
             }
@@ -879,7 +882,10 @@ namespace Micajah.Common.Bll.Providers
                 if (sendEmailNotification && GetEmail(loginId) != "")
                 {
                     UserContext user = UserContext.Current;
-                    UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, ((user == null) ? Guid.Empty : user.SelectedOrganizationId));
+                    if (user == null)
+                        UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, Guid.Empty, null);
+                    else
+                        UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, user.SelectedOrganizationId, user.Email);
                 }
                 return true;
             }
@@ -1690,11 +1696,13 @@ namespace Micajah.Common.Bll.Providers
             emailsList = new List<string>(emails.Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             if (emailsList.Count == 0) return;
 
+            WebApplicationElement webAppSettings = FrameworkConfiguration.Current.WebApplication;
+
             string url = CustomUrlProvider.CreateApplicationUri(ResourceProvider.SignupUserPageVirtualPath) + "?i=";
-            string subject = string.Format(CultureInfo.CurrentCulture, Resources.EmailNotification_InviteUser_Subject, invitedByFullName, FrameworkConfiguration.Current.WebApplication.Name);
+            string subject = string.Format(CultureInfo.CurrentCulture, Resources.EmailNotification_InviteUser_Subject, invitedByFullName, webAppSettings.Name);
 
             StringBuilder sb = new StringBuilder(Resources.EmailNotification_InviteUser_Body);
-            sb.Replace("{ApplicationName}", FrameworkConfiguration.Current.WebApplication.Name);
+            sb.Replace("{ApplicationName}", webAppSettings.Name);
             sb.Replace("{ApplicationUrl}", CustomUrlProvider.ApplicationUri);
             sb.Replace("{InvitedByFullName}", invitedByFullName);
             sb.Replace("{InvitedByEmail}", invitedByEmail);
@@ -1717,7 +1725,7 @@ namespace Micajah.Common.Bll.Providers
                     row.CreatedTime = DateTime.UtcNow;
                     table.AddInvitedLoginRow(row);
 
-                    Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, true, EmailSendingReason.InviteUser);
+                    Support.SendEmail(webAppSettings.Support.Email, invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, true, EmailSendingReason.InviteUser);
                 }
             }
 
@@ -1884,7 +1892,7 @@ namespace Micajah.Common.Bll.Providers
             body = body.Replace("{PasswordResetPageUrl}", CustomUrlProvider.CreateApplicationUri(ResourceProvider.ResetPasswordPageVirtualPath) + "?r=" + row.ResetPasswordRequestId.ToString("N"));
             body = body.Replace("{ApplicationUrl}", CustomUrlProvider.ApplicationUri);
 
-            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
+            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, null, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
         }
 
         /// <summary>

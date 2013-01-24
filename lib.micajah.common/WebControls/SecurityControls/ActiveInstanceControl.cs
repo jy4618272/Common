@@ -53,20 +53,31 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// </summary>
         /// <param name="instanceId">The instance identifier to select.</param>
         /// <param name="redirectUrl">The URL to redirect to.</param>
-        internal static void SelectInstance(Guid instanceId, string redirectUrl, HtmlGenericControl errorDiv)
+        internal static void SelectInstance(Guid instanceId, string redirectUrl, bool validateRedirectUrl, HtmlGenericControl errorDiv)
         {
             try
             {
                 UserContext user = UserContext.Current;
 
-                user.SelectInstance(instanceId);
-
-                ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
-
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                {
+                    if (validateRedirectUrl)
+                        ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
+
+                    errorDiv.Page.Session.Clear();
+
                     errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(user.SelectedOrganizationId, instanceId, redirectUrl));
-                else if (!string.IsNullOrEmpty(redirectUrl))
-                    errorDiv.Page.Response.Redirect(redirectUrl);
+                }
+                else
+                {
+                    user.SelectInstance(instanceId);
+
+                    //if (validateRedirectUrl)
+                    ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
+
+                    if (!string.IsNullOrEmpty(redirectUrl))
+                        errorDiv.Page.Response.Redirect(redirectUrl);
+                }
             }
             catch (AuthenticationException ex)
             {
@@ -94,8 +105,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (!string.IsNullOrEmpty(redirectUrl))
             {
-                string relativeUrl = CustomUrlProvider.CreateApplicationRelativeUrl(redirectUrl);
-                if (string.Compare(relativeUrl, "/", StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(redirectUrl), "/", StringComparison.OrdinalIgnoreCase) == 0)
                     redirectUrl = null;
                 else
                 {
@@ -103,28 +113,30 @@ namespace Micajah.Common.WebControls.SecurityControls
                     object obj = Support.ConvertStringToType(Support.ExtractQueryStringParameterValue(redirectUrl, "pageid"), typeof(Guid));
                     if (obj != null) actionId = (Guid)obj;
 
-                    UserContext user = UserContext.Current;
-
-                    if (user != null && user.SelectedOrganization != null)
+                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, CustomUrlProvider.CreateApplicationAbsoluteUrl(redirectUrl));
+                    if (action != null)
                     {
-                        Micajah.Common.Bll.Action action = ActionProvider.FindAction(actionId, redirectUrl);
-                        if (action != null)
+                        if (action.AuthenticationRequired)
                         {
-                            if (!user.ActionIdList.Contains(action.ActionId))
-                                redirectUrl = null;
+                            UserContext user = UserContext.Current;
+                            if (user != null && user.SelectedOrganization != null)
+                            {
+                                if (!user.ActionIdList.Contains(action.ActionId))
+                                    redirectUrl = null;
+                            }
                         }
-                        else
-                            redirectUrl = null;
                     }
+                    else
+                        redirectUrl = null;
                 }
             }
         }
 
         internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
         {
-            UserContext user = UserContext.Current;
-
             ValidateRedirectUrl(ref redirectUrl);
+
+            UserContext user = UserContext.Current;
 
             if (enableStartMenu)
             {
@@ -196,7 +208,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     InstanceArea.Visible = false;
                     LogOffDescriptionLabel.Visible = false;
-                    SelectInstance(coll[0].InstanceId, Request.QueryString["returnurl"], ErrorDiv);
+                    SelectInstance(coll[0].InstanceId, Request.QueryString["returnurl"], true, ErrorDiv);
                 }
                 else
                 {
@@ -218,7 +230,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], ErrorDiv);
+                SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorDiv);
         }
 
         #endregion

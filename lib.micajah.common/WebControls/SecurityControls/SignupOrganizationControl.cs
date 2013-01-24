@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -549,6 +550,7 @@ function InstanceRequiredValidation(source, arguments) {{
             if (args == null) return;
 
             OrganizationUrlTick.Visible = OrganizationUrl.IsValid = args.IsValid = false;
+            OrganizationUrlValidator.ErrorMessage = Resources.SignupOrganizationControl_OrganizationUrlValidator_ErrorMessage;
 
             try
             {
@@ -561,7 +563,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 else
                     args.IsValid = true;
             }
-            catch (Exception ex)
+            catch (DataException ex)
             {
                 OrganizationUrlValidator.ErrorMessage = ex.Message;
 

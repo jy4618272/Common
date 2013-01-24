@@ -704,7 +704,7 @@ namespace Micajah.Common.Security
         private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool setAuthCookie, bool? isPersistent, Guid? instanceId)
         {
             if (this.SelectedOrganizationId != newOrganization.OrganizationId)
-                CheckWebSite(newOrganization.OrganizationId, instanceId, null);
+                CheckWebSite(newOrganization.OrganizationId, instanceId);
 
             Guid currentInstanceId = instanceId.GetValueOrDefault();
 
@@ -795,7 +795,7 @@ namespace Micajah.Common.Security
             return null;
         }
 
-        internal void CheckWebSite(Guid organizationId, Guid? instanceId, string returnUrl)
+        internal void CheckWebSite(Guid organizationId, Guid? instanceId)
         {
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
@@ -806,14 +806,12 @@ namespace Micajah.Common.Security
             Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
             if (WebApplication.WebsiteId != webSiteId)
             {
-                if (string.IsNullOrEmpty(returnUrl))
+                string returnUrl = null;
+                HttpContext http = HttpContext.Current;
+                if (http != null)
                 {
-                    HttpContext http = HttpContext.Current;
-                    if (http != null)
-                    {
-                        if (http.Request != null)
-                            returnUrl = http.Request.QueryString["returnurl"];
-                    }
+                    if (http.Request != null)
+                        returnUrl = http.Request.Url.PathAndQuery;
                 }
                 (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
             }

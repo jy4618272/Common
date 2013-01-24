@@ -78,27 +78,25 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// Stores the specified organization identifier and redirects to originally requested URL.
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
-        internal static void SelectOrganization(Guid organizationId, string returnUrl, bool validateRedirectUrl, HtmlGenericControl errorDiv)
+        internal static void SelectOrganization(Guid organizationId, string redirectUrl, bool validateRedirectUrl, HtmlGenericControl errorDiv)
         {
             try
             {
-                string redirectUrl = returnUrl;
-
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     if (validateRedirectUrl)
-                        ActiveInstanceControl.ValidateRedirectUrl(ref returnUrl, true);
+                        ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
 
                     errorDiv.Page.Session.Clear();
 
-                    errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(organizationId, Guid.Empty, returnUrl));
+                    errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(organizationId, Guid.Empty, redirectUrl));
                 }
                 else
                 {
                     UserContext.Current.SelectOrganization(organizationId);
 
-                    if (validateRedirectUrl)
-                        ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+                    //if (validateRedirectUrl)
+                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
 
                     if (!string.IsNullOrEmpty(redirectUrl))
                         errorDiv.Page.Response.Redirect(redirectUrl);

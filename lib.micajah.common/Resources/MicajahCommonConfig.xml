@@ -95,8 +95,7 @@
                   </actions>
                 </action>
               </actions>
-            </action>
-            <action id="291F64C6-EF01-4D22-864D-AE3B4FF92D38" type="Page" name="Custom URLs" description="Manage the Custom URLs" navigateUrl="/mc/admin/customurls.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" visible="false"/>
+            </action>            
             <action id="00000000-0000-0000-0000-000000000018" type="Page" name="Diagnose Settings" description="Diagnose the Settings of the Users or Groups" navigateUrl="/mc/admin/settingsdiagnostic.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
             <action id="00000000-0000-0000-0000-000000000011" type="Page" name="Groups" description="Manage the Groups" navigateUrl="/mc/admin/group.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
               <actions>

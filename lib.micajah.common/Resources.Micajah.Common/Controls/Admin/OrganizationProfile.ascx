@@ -52,8 +52,6 @@
                 <asp:Parameter Name="emailSuffixes" Type="String" ConvertEmptyStringToNull="False" />
                 <asp:Parameter Name="ldapDomains" Type="String" ConvertEmptyStringToNull="False" />
                 <asp:Parameter Name="beta" Type="Boolean" />
-                <asp:Parameter Name="BillingPlan" Type="Int32" />
-                <asp:Parameter Name="CreditCardStatus" Type="Int32" />
             </UpdateParameters>
             <SelectParameters>
                 <asp:Parameter Name="organizationId" Type="Object" />

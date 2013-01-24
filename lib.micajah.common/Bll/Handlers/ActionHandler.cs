@@ -78,8 +78,6 @@ namespace Micajah.Common.Bll.Handlers
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances);
                 else if (action.ActionId == ActionProvider.CustomUrlsPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled);
-                else if (action.ActionId == ActionProvider.AccountSettingsPageActionId)
-                    accessDenied = (!UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.StartPageActionId)
                     Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(UserContext.Current, out accessDenied);
                 else if ((action.ActionId == ActionProvider.LdapIntegrationPageActionId)

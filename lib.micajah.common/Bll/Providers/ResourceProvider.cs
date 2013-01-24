@@ -30,15 +30,15 @@ namespace Micajah.Common.Bll.Providers
 
         #region Admin Pages
 
-        internal const string GroupsPageVirtualPath = VirtualRootShortPath + "admin/group.aspx";
-        internal const string GroupsInstancesRolesPageVirtualPath = VirtualRootShortPath + "admin/groupsinstancesroles.aspx";
-        internal const string GroupSettingsInInstancePageVirtualPath = VirtualRootShortPath + "admin/groupsettingsininstance.aspx";
-        internal const string InstancePageVirtualPath = VirtualRootShortPath + "admin/instance.aspx";
-        internal const string InviteUsersPageVirtualPath = VirtualRootShortPath + "admin/inviteusers.aspx";
-        internal const string UsersPageVirtualPath = VirtualRootShortPath + "admin/user.aspx";
-        internal const string SettingsPageVirtualPath = VirtualRootShortPath + "admin/settings.aspx";
-        internal const string StartPageVirtualPath = VirtualRootShortPath + "admin/start.aspx";
-        internal const string AccountSettingsVirtualPath = VirtualRootShortPath + "admin/accountsettings.aspx";
+        internal const string GroupsPageVirtualPath = AdminVirtualRootShortPath + "group.aspx";
+        internal const string GroupsInstancesRolesPageVirtualPath = AdminVirtualRootShortPath + "groupsinstancesroles.aspx";
+        internal const string GroupSettingsInInstancePageVirtualPath = AdminVirtualRootShortPath + "groupsettingsininstance.aspx";
+        internal const string InstancePageVirtualPath = AdminVirtualRootShortPath + "instance.aspx";
+        internal const string InviteUsersPageVirtualPath = AdminVirtualRootShortPath + "inviteusers.aspx";
+        internal const string UsersPageVirtualPath = AdminVirtualRootShortPath + "user.aspx";
+        internal const string SettingsPageVirtualPath = AdminVirtualRootShortPath + "settings.aspx";
+        internal const string StartPageVirtualPath = AdminVirtualRootShortPath + "start.aspx";
+        internal const string AccountSettingsVirtualPath = AdminVirtualRootShortPath + "accountsettings.aspx";
 
         #endregion
 
@@ -80,6 +80,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string ManifestResourceNamePrefix = "Micajah.Common.Resources.Micajah.Common";
         internal const string VirtualRootPath = "~/Resources.Micajah.Common/";
         internal const string VirtualRootShortPath = "~/mc/";
+        internal const string AdminVirtualRootShortPath = "~/mc/admin/";
         internal const string ResourceHandlerVirtualPath = "~/mc.axd";
 
         internal const string StyleSheetLoader = "Scripts.StyleSheetLoader.js";

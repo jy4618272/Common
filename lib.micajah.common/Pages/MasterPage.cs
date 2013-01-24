@@ -177,6 +177,20 @@ namespace Micajah.Common.Pages
             }
         }
 
+        /// <summary>
+        /// Gets a value that indicates whether the current postback is being executed in partial-rendering mode.
+        /// </summary>
+        private bool IsInAsyncPostBack
+        {
+            get
+            {
+                ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
+                if (scriptManager != null)
+                    return scriptManager.IsInAsyncPostBack;
+                return false;
+            }
+        }
+
         #endregion
 
         #region Internal Properties
@@ -745,6 +759,18 @@ namespace Micajah.Common.Pages
             }
         }
 
+        /// <summary>
+        /// Gets a value that indicates the current page is admin page.
+        /// </summary>
+        public virtual bool IsAdminPage
+        {
+            get
+            {
+                return ((Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1)
+                    && ((this.ActiveAction != null) && (m_ActiveAction.ActionId != ActionProvider.StartPageActionId)));
+            }
+        }
+
         #endregion
 
         #region Events
@@ -858,16 +884,16 @@ namespace Micajah.Common.Pages
 
         private void CreateNoticeMessageBox()
         {
+            m_NoticeMessageBox = new NoticeMessageBox();
+            m_NoticeMessageBox.Width = Unit.Percentage(100);
+            m_NoticeMessageBox.Visible = false;
             if (!string.IsNullOrEmpty(this.Message))
             {
-                m_NoticeMessageBox = new NoticeMessageBox();
-                m_NoticeMessageBox.Width = Unit.Percentage(100);
-                m_NoticeMessageBox.Visible = false;
                 m_NoticeMessageBox.Message = this.Message;
                 m_NoticeMessageBox.MessageType = this.MessageType;
                 m_NoticeMessageBox.Description = this.MessageDescription;
-                Controls.Add(m_NoticeMessageBox);
             }
+            Controls.Add(m_NoticeMessageBox);
         }
 
         private void CreateMenus()
@@ -876,6 +902,14 @@ namespace Micajah.Common.Pages
             {
                 m_MainMenu = new MainMenu();
                 Controls.Add(m_MainMenu);
+            }
+
+            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) && this.IsAdminPage)
+            {
+                this.SubmenuParentActionId = ActionProvider.ConfigurationPageActionId;
+                this.SubmenuPosition = WebControls.SubmenuPosition.Left;
+                this.VisibleSubmenu = true;
+                this.VisibleLeftArea = true;
             }
 
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)
@@ -1037,6 +1071,31 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
+        /// Renders the notice message box.
+        /// </summary>
+        /// <param name="writer">The HtmlTextWriter to render content to.</param>
+        private void RenderNoticeMessageBox(HtmlTextWriter writer)
+        {
+            if (writer == null) return;
+
+            writer.AddAttribute(HtmlTextWriterAttribute.Id, "Mp_Mbx");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div); // Container
+
+            if (!string.IsNullOrEmpty(this.Message))
+            {
+                m_NoticeMessageBox.Visible = true;
+                if (this.IsInAsyncPostBack)
+                    this.RegisterUpdateScript("Mp_Mbx", m_NoticeMessageBox.RenderControl());
+                else
+                {
+                    RenderControl(writer, m_NoticeMessageBox);
+                }
+            }
+
+            writer.RenderEndTag(); // Container
+        }
+
+        /// <summary>
         /// Renders the page content's cell.
         /// </summary>
         /// <param name="writer">The HtmlTextWriter to render content to.</param>
@@ -1067,7 +1126,10 @@ namespace Micajah.Common.Pages
                 this.RenderHelpLink(writer);
 
             if (m_UpdateBreadcrumbs)
-                this.RegisterUpdateBreadCrumbsScript();
+            {
+                if (this.IsInAsyncPostBack)
+                    this.RegisterUpdateScript("Mp_B", m_BreadCrumbs.RenderContent());
+            }
             else
                 m_BreadCrumbs.RenderControl(writer);
             m_BreadCrumbs.Visible = false;
@@ -1075,11 +1137,7 @@ namespace Micajah.Common.Pages
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_Pmc");
             writer.RenderBeginTag(HtmlTextWriterTag.Div); // Page's main content
 
-            if (m_NoticeMessageBox != null)
-            {
-                m_NoticeMessageBox.Visible = true;
-                RenderControl(writer, m_NoticeMessageBox);
-            }
+            this.RenderNoticeMessageBox(writer);
 
             if ((m_DefaultPageContent != null) && (m_DefaultPageContent.Length > 0))
             {
@@ -1258,17 +1316,17 @@ namespace Micajah.Common.Pages
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
         }
 
-        private void RegisterUpdateBreadCrumbsScript()
+        private void RegisterUpdateScript(string clientId, string content)
         {
-            ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
-            if ((scriptManager != null) && scriptManager.IsInAsyncPostBack)
-            {
-                string str = m_BreadCrumbs.RenderContent().Replace("'", "&#039;").Replace("\r\n", string.Empty);
-                Regex rgx = new Regex(">\\s+<", RegexOptions.Multiline);
-                str = rgx.Replace(str, "><");
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Mp_Update_" + clientId, "Mp_Update('" + clientId + "', '" + PrepareHtml(content) + "');\r\n", true);
+        }
 
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "UpdateBreadCrumbs", "Mp_UpdateBreadCrumbs('" + str + "');\r\n", true);
-            }
+        private static string PrepareHtml(string value)
+        {
+            string str = value.Replace("'", "&#039;").Replace("\r\n", string.Empty);
+            Regex rgx = new Regex(">\\s+<", RegexOptions.Multiline);
+            str = rgx.Replace(str, "><");
+            return str;
         }
 
         #endregion
