@@ -272,7 +272,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 string provider = Request.QueryString["provider"];
                 if (!string.IsNullOrEmpty(provider))
                 {
-                    if (string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0)
+                    if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
                     {
                         try
                         {
