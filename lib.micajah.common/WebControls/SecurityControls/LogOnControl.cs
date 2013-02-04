@@ -368,7 +368,18 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void CheckSignupUser()
         {
-            if ((this.OrganizationId == Guid.Empty) || (this.InstanceId == Guid.Empty)) return;
+            if ((this.OrganizationId == Guid.Empty) || (this.InstanceId == Guid.Empty))
+            {
+                Guid orgId = Guid.Empty;
+                Guid insId = Guid.Empty;
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && m_Organization == null)
+                    CustomUrlProvider.ParseHost(HttpContext.Current.Request.Url.Host, ref orgId, ref insId);
+
+                this.OrganizationId = orgId;
+                this.InstanceId = insId;
+
+                if ((this.OrganizationId == Guid.Empty) || (this.InstanceId == Guid.Empty)) return;
+            }
 
             Organization organization = OrganizationProvider.GetOrganization(this.OrganizationId);
 
