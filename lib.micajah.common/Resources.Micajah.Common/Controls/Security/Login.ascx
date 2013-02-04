@@ -10,12 +10,12 @@
 </div>
 <div id="MainContainer" runat="server" style="position: absolute; top: 50%; height: 220px;
     margin-top: -110px; width: 100%; z-index: 500001;">
-    <div id="ErrorDiv" runat="server" class="ErrorMessage" style="text-align: center;
-        padding-bottom: 5px;" />
     <table id="FormTable" class="FormTable" runat="server" align="center" cellspacing="10">
         <tr id="TitleContainer" runat="server" class="Caption">
             <td colspan="2" style="text-align: center;">
                 <asp:Image ID="LogoImage" runat="server" /><asp:Label ID="TitleLabel" runat="server"></asp:Label>
+                <div id="ErrorDiv" runat="server" class="ErrorMessage" style="text-align: center;
+                    padding: 5px 0 5px 0;" />
             </td>
         </tr>
         <tr>

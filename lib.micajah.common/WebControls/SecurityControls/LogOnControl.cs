@@ -318,8 +318,6 @@ namespace Micajah.Common.WebControls.SecurityControls
         private void InitializeControls()
         {
             ErrorDiv.EnableViewState = false;
-            if (string.IsNullOrEmpty(ErrorDiv.InnerHtml))
-                ErrorDiv.Visible = false;
 
             LoginTextBox.Required = true;
             LoginTextBox.ShowRequired = false;
@@ -373,7 +371,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 Guid orgId = Guid.Empty;
                 Guid insId = Guid.Empty;
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && m_Organization == null)
-                    CustomUrlProvider.ParseHost(HttpContext.Current.Request.Url.Host, ref orgId, ref insId);
+                    CustomUrlProvider.ParseHost(Request.Url.Host, ref orgId, ref insId);
 
                 this.OrganizationId = orgId;
                 this.InstanceId = insId;
@@ -732,8 +730,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 
-            TitleContainer.Visible = ((!string.IsNullOrEmpty(TitleLabel.Text)) || LogoImage.Visible);
+            TitleContainer.Visible = ((!string.IsNullOrEmpty(TitleLabel.Text)) || LogoImage.Visible || (!string.IsNullOrEmpty(ErrorDiv.InnerHtml)));
             TitleLabel.Visible = (!LogoImage.Visible);
+            ErrorDiv.Visible = (!string.IsNullOrEmpty(ErrorDiv.InnerHtml));
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
@@ -751,7 +750,6 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         public void ShowErrorMessage(string message)
         {
-            ErrorDiv.Visible = true;
             ErrorDiv.InnerHtml = message;
         }
 
