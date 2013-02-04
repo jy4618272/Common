@@ -62,6 +62,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// </summary>
         protected HtmlGenericControl ErrorDiv;
 
+        protected HtmlGenericControl LogoImagePanel;
         protected Image LogoImage;
         protected HtmlGenericControl MainContainer;
         protected HtmlTable FormTable;
@@ -463,9 +464,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
 
             if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
-                LogoImage.Visible = false;
+                LogoImagePanel.Visible = false;
             else
             {
+                LogoImagePanel.Visible = true;
                 LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
                 if (FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight > 0)
                     m_MainContainerHeight += FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight;
@@ -730,8 +732,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 
-            TitleContainer.Visible = ((!string.IsNullOrEmpty(TitleLabel.Text)) || LogoImage.Visible || (!string.IsNullOrEmpty(ErrorDiv.InnerHtml)));
-            TitleLabel.Visible = (!LogoImage.Visible);
+            TitleContainer.Visible = (!string.IsNullOrEmpty(TitleLabel.Text));
             ErrorDiv.Visible = (!string.IsNullOrEmpty(ErrorDiv.InnerHtml));
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
