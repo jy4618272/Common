@@ -38,7 +38,7 @@ namespace Micajah.Common.Configuration
         /// <summary>
         /// Gets or sets the value endpoint address of Google OpenID Provider.
         /// </summary>
-        [ConfigurationProperty("openIdProviderEndpointAddress", IsRequired = true)]
+        [ConfigurationProperty("openIdProviderEndpointAddress")]
         public string OpenIdProviderEndpointAddress
         {
             get { return (string)this["openIdProviderEndpointAddress"]; }
