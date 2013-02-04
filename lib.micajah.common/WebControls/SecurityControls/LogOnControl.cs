@@ -643,6 +643,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                         LinkEmailPanel.Visible = true;
                         FormTable.Visible = false;
+                        LogoImagePanel.Visible = false;
 
                         m_MainContainerHeight = 150;
                     }
