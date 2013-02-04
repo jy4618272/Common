@@ -233,7 +233,7 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             row.WebsiteUrl = websiteUrl;
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
                 if (ldapDomains != null)
                     row.LdapDomains = ldapDomains;
@@ -280,7 +280,7 @@ namespace Micajah.Common.Bll.Providers
             Organization org = new Organization();
             org.Load(row);
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
                 EmailSuffixProvider.DeleteEmailSuffixes(organizationId, null);
                 if (!string.IsNullOrEmpty(emailSuffixes))

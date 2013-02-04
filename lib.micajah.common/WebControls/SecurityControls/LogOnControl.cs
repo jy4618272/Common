@@ -481,7 +481,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             PasswordRecoveryButton.Text = Resources.LogOnControl_PasswordRecoveryLink_Text;
             PasswordRecoveryButton.Visible = FrameworkConfiguration.Current.WebApplication.Password.EnablePasswordRetrieval;
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 LoginLabel.Text = Resources.LoginElement_LdapLoginLabelText;
             else
             {

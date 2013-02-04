@@ -151,7 +151,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             LogOnPageLink2.Text = LogOnPageLink1.Text = Resources.SignupUserControl_LoginPageLink_Text_ReturnToLoginPage;
             CaptchaLabel.Text = Resources.SignupUserControl_CaptchaLabel_Text;
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 LoginLabel.Text = LoginLabel1.Text = Resources.LoginElement_LdapLoginLabelText;
             else
                 LoginLabel.Text = LoginLabel1.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginLabelText;

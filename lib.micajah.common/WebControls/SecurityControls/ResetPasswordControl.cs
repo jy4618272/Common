@@ -75,7 +75,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             PasswordLabel.Text = Resources.ResetPasswordControl_PasswordLabel_Text;
             ConfirmPasswordLabel.Text = Resources.ResetPasswordControl_ConfirmPasswordLabel_Text;
             LogOnPageButton.Text = LogOnPageButton2.Text = Resources.ResetPasswordControl_LoginPageLink_Text_ReturnToLoginPage;
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 LoginLabel.Text = Resources.LoginElement_LdapLoginLabelText;
             else
                 LoginLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginLabelText;

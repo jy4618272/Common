@@ -85,7 +85,7 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.LdapMappingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapServerSettingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
-                    accessDenied = !(FrameworkConfiguration.Current.WebApplication.EnableLdap && UserContext.Current.SelectedOrganization.Beta);
+                    accessDenied = !(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
                     accessDenied = ((UserContext.Current != null) && (UserContext.Current.SelectedOrganization == null));
             }

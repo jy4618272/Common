@@ -663,7 +663,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            if ((drv == null) && FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if ((drv == null) && FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 drv = LdapAuthenticate(loginName, password, usePasswordEncryption, organizationId);
 
             if (drv == null)

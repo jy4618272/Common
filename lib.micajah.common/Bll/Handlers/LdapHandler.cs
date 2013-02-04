@@ -41,7 +41,7 @@ namespace Micajah.Common.Bll.Handlers
             {
                 this.ThreadState = ThreadStateType.Running;
 
-                if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+                if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 {
                     organizationCollection = OrganizationProvider.GetOrganizations(false, false);
 
@@ -125,7 +125,7 @@ namespace Micajah.Common.Bll.Handlers
             try
             {
                 this.ThreadState = ThreadStateType.Running;
-                if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+                if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 {
                     organization = OrganizationProvider.GetOrganization(organizationId);
 

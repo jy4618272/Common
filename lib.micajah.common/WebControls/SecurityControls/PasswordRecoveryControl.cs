@@ -73,7 +73,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             LogOnPageButton2.Text = LogOnPageButton.Text = Resources.PasswordRecoveryControl_LogOnPageLink_Text;
             LoginLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginLabelText;
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
 
                 LoginTextBox.ValidationExpression = FrameworkConfiguration.Current.WebApplication.Login.LoginValidationExpression;

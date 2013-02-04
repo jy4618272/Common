@@ -129,7 +129,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (!IsPostBack)
             {
-                if (!FrameworkConfiguration.Current.WebApplication.EnableLdap)
+                if (!FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 {
                     EditForm.Fields[6].Visible = false;
                     EditForm.Fields[7].Visible = false;
