@@ -341,7 +341,7 @@ namespace Micajah.Common.WebControls.AdminControls
             base.LoadResources();
 
             DnsAddressCaptionLabel.Text = Resources.CustomUrlsControl_DnsAddressCaptionLabel_Text;
-            DnsAddressLabel.Text = FrameworkConfiguration.Current.WebApplication.DnsAddress;
+            DnsAddressLabel.Text = FrameworkConfiguration.Current.WebApplication.CustomUrl.DnsAddress;
 
             EditForm.Fields[0].HeaderText = Resources.CustomUrlsControl_EditForm_NameField_HeaderText;
             EditForm.Fields[1].HeaderText = Resources.CustomUrlsControl_EditForm_FullCustomUrlField_HeaderText;

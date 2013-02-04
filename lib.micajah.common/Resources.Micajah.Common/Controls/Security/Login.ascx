@@ -42,6 +42,7 @@
                     <tr>
                         <td class="Pl">
                             <asp:Button ID="LogOnButton" runat="server" TabIndex="3" CssClass="Btn" />
+                            <asp:HyperLink ID="LogOnViaGoogleLink" runat="server" TabIndex="4" CssClass="Return Pl" />
                         </td>
                         <td align="right" style="vertical-align: middle;">
                             <asp:LinkButton ID="PasswordRecoveryButton" runat="server" TabIndex="5" CssClass="Return"></asp:LinkButton>
@@ -63,4 +64,16 @@
             </td>
         </tr>
     </table>
+    <div id="LinkEmailPanel" runat="server" style="text-align: center;">
+        <p>
+            <asp:Label ID="LinkEmailLabel" runat="server" Font-Bold="true" /></p>
+        <asp:LinkButton ID="LinkEmailButton" runat="server" CssClass="Large" />&nbsp;&nbsp;&nbsp;
+        <asp:LinkButton ID="CancelLinkEmailButton" runat="server" CssClass="Large" />
+        <br />
+        <br />
+        <p>
+            <asp:Label ID="OrLabel1" runat="server" Font-Bold="true" />&nbsp;
+            <asp:LinkButton ID="LogOffLink" runat="server" OnClick="LogOffLink_Click" />
+        </p>
+    </div>
 </div>

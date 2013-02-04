@@ -70,10 +70,30 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected IButtonControl SignupUserButton;
         protected HyperLink HeaderLeftLogoLink;
         protected HyperLink HeaderRightLogoLink;
+        protected HyperLink LogOnViaGoogleLink;
+        protected HtmlGenericControl LinkEmailPanel;
+        protected Label LinkEmailLabel;
+        protected LinkButton LinkEmailButton;
+        protected LinkButton CancelLinkEmailButton;
+        protected Label OrLabel1;
+        protected LinkButton LogOffLink;
 
         private Organization m_Organization;
         private Instance m_Instance;
         private int m_MainContainerHeight;
+
+        #endregion
+
+        #region Private Properties
+
+        private string EmailToLink
+        {
+            get
+            {
+                string str = Request.QueryString["openid.ext1.value.alias1"];
+                return (string.IsNullOrEmpty(str) ? string.Empty : str);
+            }
+        }
 
         #endregion
 
@@ -227,22 +247,19 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!(string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(password) || (organizationId == Guid.Empty)))
             {
+                if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                    (new LoginProvider()).SignOut(true, false);
+
+                if (string.Compare(Request.QueryString["on"], bool.TrueString, StringComparison.OrdinalIgnoreCase) == 0)
+                    WebApplication.RefreshCommonDataSet(true);
+
                 try
                 {
-                    if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                        (new LoginProvider()).SignOut(true, false);
-
-                    if (string.Compare(Request.QueryString["on"], bool.TrueString, StringComparison.OrdinalIgnoreCase) == 0)
-                        WebApplication.RefreshCommonDataSet(true);
-
                     WebApplication.LoginProvider.Authenticate(loginName, Support.Decrypt(password), false, isPersistent, organizationId, instanceId);
 
                     ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
 
-                    if (string.IsNullOrEmpty(redirectUrl))
-                        redirectUrl = "~/";
-
-                    Response.Redirect(redirectUrl);
+                    Response.Redirect(string.IsNullOrEmpty(redirectUrl) ? ResourceProvider.ActiveOrganizationPageVirtualPath : redirectUrl);
 
                 }
                 catch (AuthenticationException ex)
@@ -250,12 +267,59 @@ namespace Micajah.Common.WebControls.SecurityControls
                     ShowErrorMessage(ex.Message);
                 }
             }
+            else
+            {
+                string provider = Request.QueryString["provider"];
+                if (!string.IsNullOrEmpty(provider))
+                {
+                    if (string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        try
+                        {
+                            loginName = GoogleProvider.ProcessRequest(HttpContext.Current);
+                        }
+                        catch (AuthenticationException ex)
+                        {
+                            ShowErrorMessage(ex.Message);
+                        }
+
+                        if (!string.IsNullOrEmpty(loginName))
+                        {
+                            string message = null;
+
+                            try
+                            {
+                                if (WebApplication.LoginProvider.Authenticate(loginName, null, false, true, organizationId, instanceId))
+                                {
+                                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+
+                                    Response.Redirect(string.IsNullOrEmpty(redirectUrl) ? ResourceProvider.ActiveOrganizationPageVirtualPath : redirectUrl);
+                                }
+                            }
+                            catch (AuthenticationException ex)
+                            {
+                                message = ex.Message;
+                            }
+
+                            if (!string.IsNullOrEmpty(message))
+                            {
+                                if (WebApplication.LoginProvider.GetLogin(loginName) == null)
+                                    message = string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountIsNotFound, loginName);
+                            }
+
+                            if (!string.IsNullOrEmpty(message))
+                                this.ShowErrorMessage(message);
+                        }
+                    }
+                }
+            }
         }
 
         private void InitializeControls()
         {
             ErrorDiv.EnableViewState = false;
-            ErrorDiv.Visible = false;
+            if (string.IsNullOrEmpty(ErrorDiv.InnerHtml))
+                ErrorDiv.Visible = false;
 
             LoginTextBox.Required = true;
             LoginTextBox.ShowRequired = false;
@@ -266,6 +330,9 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             LogOnButton.Click += new EventHandler(LogOnButton_Click);
 
+            LogOnViaGoogleLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?provider=google";
+            LogOnViaGoogleLink.Visible = FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
+
             PasswordRecoveryButton.CausesValidation = false;
             PasswordRecoveryButton.Click += new EventHandler(PasswordRecoveryButton_Click);
 
@@ -275,6 +342,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             Button btn = SignupUserButton as Button;
             if (btn != null) btn.UseSubmitBehavior = false;
             SignupUserButton.Click += new EventHandler(SignupUserButton_Click);
+
+            LinkEmailPanel.Visible = false;
+            LinkEmailButton.Click += new EventHandler(LinkEmailButton_Click);
+            CancelLinkEmailButton.Click += new EventHandler(CancelLinkEmailButton_Click);
 
             if (HeaderLeftLogoLink != null)
             {
@@ -397,6 +468,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             TitleLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.TitleLabelText;
             PasswordLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.PasswordLabelText;
             LogOnButton.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginButtonText;
+            LogOnViaGoogleLink.Text = Resources.LogOnControl_LogOnViaGoogleLink_Text;
             PasswordRecoveryButton.Text = Resources.LogOnControl_PasswordRecoveryLink_Text;
             PasswordRecoveryButton.Visible = FrameworkConfiguration.Current.WebApplication.Password.EnablePasswordRetrieval;
 
@@ -411,6 +483,11 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             SignupUserTitleLabel.Text = Resources.LogOnControl_SignupUserTitleLabel_Text;
             SignupUserButton.Text = Resources.LogOnControl_SignupUserButton_Text;
+
+            LinkEmailButton.Text = Resources.LogOnControl_LinkEmailButton_Text;
+            CancelLinkEmailButton.Text = Resources.LogOnControl_CancelLinkEmailButton_Text;
+            OrLabel1.Text = Resources.LogOnControl_OrLabel1_Text;
+            LogOffLink.Text = Resources.LogOnControl_LogOffLink_Text;
         }
 
         /// <summary>
@@ -447,6 +524,14 @@ namespace Micajah.Common.WebControls.SecurityControls
             writer.RenderEndTag();
 
             writer.RenderEndTag();
+        }
+
+        private void RedirectAfterLogOn()
+        {
+            string redirectUrl = this.ReturnUrl;
+            ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+
+            Response.Redirect(string.IsNullOrEmpty(redirectUrl) ? ResourceProvider.ActiveOrganizationPageVirtualPath : redirectUrl);
         }
 
         private static void CreateLogo(Organization org, Instance inst, ref HyperLink link)
@@ -514,6 +599,18 @@ namespace Micajah.Common.WebControls.SecurityControls
             Response.Redirect(WebApplication.LoginProvider.GetPasswordRecoveryUrl(((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null), false));
         }
 
+        private void LinkEmailButton_Click(object sender, EventArgs e)
+        {
+            EmailProvider.InsertEmail(this.EmailToLink, WebApplication.LoginProvider.GetLoginId(LoginTextBox.Text));
+
+            this.RedirectAfterLogOn();
+        }
+
+        private void CancelLinkEmailButton_Click(object sender, EventArgs e)
+        {
+            this.RedirectAfterLogOn();
+        }
+
         #endregion
 
         #region Protected Methods
@@ -527,13 +624,19 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             try
             {
-                string loginName = LoginTextBox.Text;
-                if (WebApplication.LoginProvider.Authenticate(loginName, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
+                if (WebApplication.LoginProvider.Authenticate(LoginTextBox.Text, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
                 {
-                    string redirectUrl = this.ReturnUrl;
-                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+                    if (!string.IsNullOrEmpty(this.EmailToLink))
+                    {
+                        LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, this.EmailToLink);
 
-                    Response.Redirect(string.IsNullOrEmpty(redirectUrl) ? ResourceProvider.ActiveOrganizationPageVirtualPath : redirectUrl);
+                        LinkEmailPanel.Visible = true;
+                        FormTable.Visible = false;
+
+                        m_MainContainerHeight = 150;
+                    }
+                    else
+                        this.RedirectAfterLogOn();
                 }
             }
             catch (AuthenticationException ex)
@@ -550,6 +653,11 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void SignupUserButton_Click(object sender, EventArgs e)
         {
             Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}?o={1:N}&d={2:N}", ResourceProvider.SignupUserPageVirtualPath, this.OrganizationId, this.InstanceId));
+        }
+
+        protected void LogOffLink_Click(object sender, EventArgs e)
+        {
+            WebApplication.LoginProvider.SignOut();
         }
 
         #endregion

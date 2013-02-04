@@ -59,15 +59,6 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets the DNS domain name.
-        /// </summary>
-        [ConfigurationProperty("dnsAddress")]
-        internal string DnsAddress
-        {
-            get { return (string)this["dnsAddress"]; }
-        }
-
-        /// <summary>
         /// Gets the login names of the administrators of the framework.
         /// </summary>
         [ConfigurationProperty("frameworkAdministrators")]
@@ -299,6 +290,16 @@ namespace Micajah.Common.Configuration
         {
             get { return (MasterPageElement)this["masterPage"]; }
             set { this["masterPage"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the integration settings.
+        /// </summary>
+        [ConfigurationProperty("integration")]
+        public IntegrationElement Integration
+        {
+            get { return (IntegrationElement)this["integration"]; }
+            set { this["integration"] = value; }
         }
 
         #endregion

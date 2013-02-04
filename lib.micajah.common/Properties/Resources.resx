@@ -2545,4 +2545,34 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="LogOnAsUserControl_InjectButton_Text" xml:space="preserve">
     <value>Inject Me as Organization Administrator</value>
   </data>
+  <data name="GoogleProvider_AuthenticationCancelled" xml:space="preserve">
+    <value>Authentication via Google was cancelled by user.</value>
+  </data>
+  <data name="GoogleProvider_AuthenticationFailed" xml:space="preserve">
+    <value>Authentication via Google failed.</value>
+  </data>
+  <data name="GoogleProvider_AuthenticationFailedWithStatus" xml:space="preserve">
+    <value>Authentication via Google failed with status "{0}".</value>
+  </data>
+  <data name="LogOnControl_LogOnViaGoogleLink_Text" xml:space="preserve">
+    <value>Google</value>
+  </data>
+  <data name="LogOnControl_CancelLinkEmailButton_Text" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="LogOnControl_LinkEmailButton_Text" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="LogOnControl_LinkEmailLabel_Text" xml:space="preserve">
+    <value>Do you want to link email "{0}" to the account that you already logged in?</value>
+  </data>
+  <data name="LogOnControl_LogOffLink_Text" xml:space="preserve">
+    <value>Click here to log out.</value>
+  </data>
+  <data name="LogOnControl_OrLabel1_Text" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YourAccountIsNotFound" xml:space="preserve">
+    <value>The account "{0}" is not found. Please try to log in using another account.</value>
+  </data>
 </root>
