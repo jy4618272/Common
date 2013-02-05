@@ -217,8 +217,7 @@ namespace Micajah.Common.Security
                                 if (string.IsNullOrEmpty(http.User.Identity.Name)) // Checks if the user is logged out from another URL, but the session was not cleaned up.
                                 {
                                     string loginUrl = WebApplication.LoginProvider.GetLoginUrl(false);
-                                    if ((loginUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
-                                        && (http.Request.Url.ToString().IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) == -1)) // Checks if current page is not login page.
+                                    if (!LoginProvider.IsLoginUrl(http.Request.Url.ToString())) // Checks if current page is not login page.
                                     {
                                         http.Session.Clear();
                                         user = null;
@@ -797,22 +796,31 @@ namespace Micajah.Common.Security
 
         internal void CheckWebSite(Guid organizationId, Guid? instanceId)
         {
+            string returnUrl = null;
+            HttpContext http = HttpContext.Current;
+            if (http != null)
+            {
+                if (http.Request != null)
+                    returnUrl = http.Request.Url.PathAndQuery;
+            }
+
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                if (!CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
+                if (CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
+                {
+                    if (LoginProvider.IsLoginUrl(http.Request.Url.ToString()))
+                    {
+                        if (GoogleProvider.IsGoogleProviderRequest(http.Request))
+                            return;
+                    }
+                }
+                else
                     return;
             }
 
             Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
             if (WebApplication.WebsiteId != webSiteId)
             {
-                string returnUrl = null;
-                HttpContext http = HttpContext.Current;
-                if (http != null)
-                {
-                    if (http.Request != null)
-                        returnUrl = http.Request.Url.PathAndQuery;
-                }
                 (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
             }
         }

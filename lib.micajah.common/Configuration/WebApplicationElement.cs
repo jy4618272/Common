@@ -59,15 +59,6 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets the DNS domain name.
-        /// </summary>
-        [ConfigurationProperty("dnsAddress")]
-        internal string DnsAddress
-        {
-            get { return (string)this["dnsAddress"]; }
-        }
-
-        /// <summary>
         /// Gets the login names of the administrators of the framework.
         /// </summary>
         [ConfigurationProperty("frameworkAdministrators")]
@@ -214,8 +205,10 @@ namespace Micajah.Common.Configuration
             {
                 WebsiteConfiguration website = WebsiteConfiguration.Current;
                 if ((website != null) && website.ElementInformation.IsPresent)
-                    return website.CustomUrl;
-
+                {
+                    if (website.CustomUrl.ElementInformation.IsPresent)
+                        return website.CustomUrl;
+                }
                 return (CustomUrlElement)this["customUrl"];
             }
         }
@@ -228,16 +221,6 @@ namespace Micajah.Common.Configuration
         {
             get { return (bool)this["enableMultipleInstances"]; }
             set { this["enableMultipleInstances"] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the value indicating whether the application supports ldap.
-        /// </summary>
-        [ConfigurationProperty("enableLdap")]
-        public bool EnableLdap
-        {
-            get { return (bool)this["enableLdap"]; }
-            set { this["enableLdap"] = value; }
         }
 
         /// <summary>
@@ -299,6 +282,37 @@ namespace Micajah.Common.Configuration
         {
             get { return (MasterPageElement)this["masterPage"]; }
             set { this["masterPage"] = value; }
+        }
+
+        /// <summary>
+        /// Gets the integration settings.
+        /// </summary>
+        [ConfigurationProperty("integration")]
+        public IntegrationElement Integration
+        {
+            get
+            {
+                IntegrationElement elem = new IntegrationElement();
+
+                WebsiteConfiguration website = WebsiteConfiguration.Current;
+                if ((website != null) && website.ElementInformation.IsPresent)
+                {
+                    IntegrationElement value = (IntegrationElement)this["integration"];
+                    elem.Ldap = value.Ldap;
+                    elem.Google = value.Google;
+
+                    if (website.Integration.ElementInformation.IsPresent)
+                    {
+                        if (website.Integration.Ldap.ElementInformation.IsPresent)
+                            elem.Ldap = website.Integration.Ldap;
+
+                        if (website.Integration.Google.ElementInformation.IsPresent)
+                            elem.Google = website.Integration.Google;
+                    }
+                }
+
+                return elem;
+            }
         }
 
         #endregion

@@ -2148,6 +2148,33 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication via Google was cancelled by user..
+        /// </summary>
+        internal static string GoogleProvider_AuthenticationCancelled {
+            get {
+                return ResourceManager.GetString("GoogleProvider_AuthenticationCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication via Google failed..
+        /// </summary>
+        internal static string GoogleProvider_AuthenticationFailed {
+            get {
+                return ResourceManager.GetString("GoogleProvider_AuthenticationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication via Google failed with status &quot;{0}&quot;..
+        /// </summary>
+        internal static string GoogleProvider_AuthenticationFailedWithStatus {
+            get {
+                return ResourceManager.GetString("GoogleProvider_AuthenticationFailedWithStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Group &quot;{0}&quot; already exists.
         /// </summary>
         internal static string GroupProvider_ErrorMessage_GroupAlreadyExists {
@@ -3399,11 +3426,56 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string LogOnControl_CancelLinkEmailButton_Text {
+            get {
+                return ResourceManager.GetString("LogOnControl_CancelLinkEmailButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Instance is inactive..
         /// </summary>
         internal static string LogOnControl_InstanceIsInactive {
             get {
                 return ResourceManager.GetString("LogOnControl_InstanceIsInactive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string LogOnControl_LinkEmailButton_Text {
+            get {
+                return ResourceManager.GetString("LogOnControl_LinkEmailButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to link email &quot;{0}&quot; to the account that you already logged in?.
+        /// </summary>
+        internal static string LogOnControl_LinkEmailLabel_Text {
+            get {
+                return ResourceManager.GetString("LogOnControl_LinkEmailLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click here to log out..
+        /// </summary>
+        internal static string LogOnControl_LogOffLink_Text {
+            get {
+                return ResourceManager.GetString("LogOnControl_LogOffLink_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google.
+        /// </summary>
+        internal static string LogOnControl_LogOnViaGoogleLink_Text {
+            get {
+                return ResourceManager.GetString("LogOnControl_LogOnViaGoogleLink_Text", resourceCulture);
             }
         }
         
@@ -3431,6 +3503,15 @@ namespace Micajah.Common.Properties {
         internal static string LogOnControl_OrganizationIsNotFound {
             get {
                 return ResourceManager.GetString("LogOnControl_OrganizationIsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Or.
+        /// </summary>
+        internal static string LogOnControl_OrLabel1_Text {
+            get {
+                return ResourceManager.GetString("LogOnControl_OrLabel1_Text", resourceCulture);
             }
         }
         
@@ -6659,6 +6740,15 @@ namespace Micajah.Common.Properties {
         internal static string UserContext_ErrorMessage_YourAccountIsDeleted {
             get {
                 return ResourceManager.GetString("UserContext_ErrorMessage_YourAccountIsDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The account &quot;{0}&quot; is not found. Please try to log in using another account..
+        /// </summary>
+        internal static string UserContext_ErrorMessage_YourAccountIsNotFound {
+            get {
+                return ResourceManager.GetString("UserContext_ErrorMessage_YourAccountIsNotFound", resourceCulture);
             }
         }
         

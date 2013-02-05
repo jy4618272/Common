@@ -78,6 +78,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\ChargifyNET.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+    </Reference>
     <Reference Include="Micajah.Common.LdapAdapter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5584840979da6ebb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\Micajah.Common.LdapAdapter.dll</HintPath>
@@ -120,6 +132,7 @@
     <Compile Include="Bll\LdapProcess.cs" />
     <Compile Include="Bll\Providers\ChargifyProvider.cs" />
     <Compile Include="Bll\Providers\EmailProvider.cs" />
+    <Compile Include="Bll\Providers\GoogleProvider.cs" />
     <Compile Include="Bll\Providers\ViewStateProvider.cs" />
     <Compile Include="Bll\StartThread.cs">
       <SubType>Component</SubType>
@@ -191,9 +204,12 @@
     <Compile Include="Configuration\CopyrightElement.cs" />
     <Compile Include="Configuration\CustomUrlElement.cs" />
     <Compile Include="Configuration\EmailElement.cs" />
+    <Compile Include="Configuration\GoogleIntegrationElement.cs" />
     <Compile Include="Configuration\HeaderElement.cs" />
     <Compile Include="Configuration\HelpLinkElement.cs" />
+    <Compile Include="Configuration\IntegrationElement.cs" />
     <Compile Include="Configuration\Interfaces.cs" />
+    <Compile Include="Configuration\LdapIntegrationElement.cs" />
     <Compile Include="Configuration\LeftAreaElement.cs" />
     <Compile Include="Configuration\LoginElement.cs" />
     <Compile Include="Configuration\MainMenuElement.cs" />
@@ -1983,6 +1999,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\Validator.js" />
+    <Content Include="Runtime\DotNetOpenAuth.Core.dll" />
+    <Content Include="Runtime\DotNetOpenAuth.OpenId.dll" />
+    <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.dll" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.pdb" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />

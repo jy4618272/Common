@@ -78,6 +78,15 @@ namespace Micajah.Common.Configuration
             get { return (CustomUrlElement)this["customUrl"]; }
         }
 
+        /// <summary>
+        /// Gets the integration settings.
+        /// </summary>
+        [ConfigurationProperty("integration")]
+        public IntegrationElement Integration
+        {
+            get { return (IntegrationElement)this["integration"]; }
+        }
+
         #endregion
     }
 }
