@@ -358,7 +358,7 @@ namespace Micajah.Common.Bll.Providers
             if (string.IsNullOrEmpty(host))
                 return false;
 
-            return string.IsNullOrEmpty(host.ToLowerInvariant().Replace(DefaultVanityUrl, string.Empty));
+            return (string.Compare(host, DefaultVanityUrl, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         public static bool IsDefaultVanityUrl(HttpContext http)
