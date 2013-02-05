@@ -78,46 +78,46 @@
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>1 Hour&nbsp;</strong><asp:Label runat="server" ID="lblTraining1HourPrice"></asp:Label></p>
+                        <p><strong>1 Hour&nbsp;</strong><asp:Label runat="server" ID="lblTraining1HourPrice" Width="150"></asp:Label></p>
                     </div>
                     <div class="purchase">
-                        <asp:Button runat="server" ID="btnPurchase1Hour" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
+                        <asp:Button runat="server" ID="btnPurchase1Hour" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click" OnClientClick="return confirm('Are You sure You want to purchase 1 hour training?');"/>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>3 Hours</strong><asp:Label runat="server" ID="lblTraining3HoursPrice"></asp:Label></p>
+                        <p><strong>3 Hours</strong><asp:Label runat="server" ID="lblTraining3HoursPrice" Width="150"></asp:Label></p>
                     </div>
                     <div class="purchase">
-                        <asp:Button runat="server" ID="btnPurchase3Hours" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
+                        <asp:Button runat="server" ID="btnPurchase3Hours" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click" OnClientClick="return confirm('Are You sure You want to purchase 3 hours training?');"/>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>
                     <div class="training">
-                        <p><strong>8 Hours</strong><asp:Label runat="server" ID="lblTraining8HoursPrice"></asp:Label></p>
+                        <p><strong>8 Hours</strong><asp:Label runat="server" ID="lblTraining8HoursPrice" Width="150"></asp:Label></p>
                     </div>
                     <div class="purchase">
-                        <asp:Button runat="server" ID="btnPurchase8Hours" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click"/>
+                        <asp:Button runat="server" ID="btnPurchase8Hours" CssClass="Green" Text="Purchase" OnClick="btnPurchaseHours_Click" OnClientClick="return confirm('Are You sure You want to purchase 8 hours training?');"/>
                     </div>
                 </td>
             </tr>
         </table>
     </div>
-    <div class="account-heading"><h2>Cancel Account</h2></div>
-    <div id="cancel-account">
+    <div id="divCancelAccountHeader" runat="server" Visible="False" class="account-heading"><h2>Cancel Account</h2></div>
+    <div id="divCancelAccount" runat="server" Visible="False">
         <div style="width: 225px; float: right;">
-            <asp:Button runat="server" ID="btnCancelMyAccount" CssClass="Large Red" Text="Cancel My Account" Enabled="False"/>
+            <asp:Button runat="server" ID="btnCancelMyAccount" CssClass="Large Red" Text="Cancel My Account" OnClick="btnCancelMyAccount_Click" OnClientClick="return confirm('Are You sure to delete your credit card registration?');"/>
         </div>
         <div>
-            Note that you will lose information stored on our servers once you delete your account.
+            Note that you will cancel your credit card registration.
         </div>
     </div>
-    <div class="account-heading"><h2>Payment History</h2></div>
-    <mits:CommonGridView ID="cgvTransactList" runat="server" DataKeyNames="ID" AutoGenerateColumns="False" AllowSorting="False" Width="600px">
+    <div class="account-heading" id="divPaymentHistoryHeader" runat="server" Visible="False"><h2>Payment History</h2></div>
+    <mits:CommonGridView ID="cgvTransactList" runat="server" AutoGenerateColumns="False" AllowSorting="False" Width="600px" Visible="False">
         <columns>
             <mits:TextBoxField DataField="CreatedAt" HeaderText="Date" DataFormatString="{0:d-MMM-yyyy}"/>
             <mits:TextBoxField DataField="Memo" HeaderText="Memo"/>
@@ -164,7 +164,7 @@
             <dd>
                 <mits:TextBox runat="server" ID="txtCCExpMonth" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
                 <span>&nbsp;/&nbsp;</span>
-                <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="12" MaximumValue="17" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
+                <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="13" MaximumValue="23" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
             </dd>
             </dl>
             <div class="ccformsubmit">

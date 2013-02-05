@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -22,6 +23,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected HtmlControl divCCInfo;
         protected Button btnUpdateBillingPlan;
+        protected Button btnCancelMyAccount;
         protected Literal lBillingPlanName;
         protected Literal lSumPerMonth;
         protected Literal lCCStatus;
@@ -46,6 +48,9 @@ namespace Micajah.Common.WebControls.AdminControls
         protected PlaceHolder phPhoneSupportToolTip;
         protected CheckBox chkPhoneSupport;
         protected HtmlContainerControl divPhoneSupport;
+        protected HtmlContainerControl divCancelAccountHeader;
+        protected HtmlContainerControl divCancelAccount;
+        protected HtmlContainerControl divPaymentHistoryHeader;
 
         private SettingCollection m_PaidSettings;
         private SettingCollection m_CounterSettings;
@@ -159,16 +164,29 @@ namespace Micajah.Common.WebControls.AdminControls
 
             masterPage.VisibleBreadcrumbs = false;
             masterPage.EnableFancyBox = true;
+            this.RegisterFancyBoxInitScript();
 
             if (IsPostBack) return;
 
-            this.RegisterFancyBoxInitScript();
+            lblTraining1HourPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
+            lblTraining3HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
+            lblTraining8HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
 
             if (Request.QueryString["st"] == "ok")
             {
                 masterPage.MessageType = NoticeMessageType.Success;
                 masterPage.Message = "Thank You. Your Credit Card Registered Successfully!";
                 if (!string.IsNullOrEmpty(Request.QueryString["msg"])) masterPage.Message += Request.QueryString["msg"];
+            }
+            else if (Request.QueryString["st"] == "cancel")
+            {
+                masterPage.MessageType = NoticeMessageType.Success;
+                masterPage.Message = "Your Credit Card registration was Removed Successfully!";
+            }
+            else if (Request.QueryString["st"] == "reactivated")
+            {
+                masterPage.MessageType = NoticeMessageType.Success;
+                masterPage.Message = "Your Credit Card registration was Reactivated Successfully!";
             }
 
             this.List_DataBind();
@@ -194,6 +212,8 @@ namespace Micajah.Common.WebControls.AdminControls
                                             : _cc.ExpirationYear.ToString();
                     IsNewSubscription = false;
                 }
+                divCancelAccountHeader.Visible = _cc != null && _subscription.State != SubscriptionState.Canceled;
+                divCancelAccount.Visible = divCancelAccountHeader.Visible;
             }
             else IsNewSubscription = true;
         }
@@ -238,7 +258,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
             ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
-            if (_custSubscr != null && _custSubscr.CreditCard != null)
+            if (_custSubscr != null && _custSubscr.CreditCard != null && _custSubscr.State!=SubscriptionState.Canceled)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
                 if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, OrganizationId, InstanceId);
@@ -251,12 +271,24 @@ namespace Micajah.Common.WebControls.AdminControls
                     lNextBillDate.Visible = true;
                     lNextBillDate.Text = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
                 }
-                cgvTransactList.DataSource = Chargify.GetTransactionsForSubscription(_custSubscr.SubscriptionID, 1, 25);
             }
             else
             {
                 lCCStatus.Text = "No Credit Card on File.";
                 if (!IsPostBack) DisablePurchaseButtons();
+            }
+            if (_custSubscr!=null && _custSubscr.CreditCard!=null)
+            {
+                System.Collections.Generic.List<TransactionType> transTypes=new List<TransactionType>();
+                transTypes.Add(TransactionType.Payment);
+                System.Collections.Generic.IDictionary<int, ITransaction> trans = Chargify.GetTransactionsForSubscription(_custSubscr.SubscriptionID, 1, 25, transTypes);
+                if (trans != null && trans.Count > 0)
+                {
+                    divPaymentHistoryHeader.Visible = true;
+                    cgvTransactList.Visible = true;
+                    cgvTransactList.DataSource = trans.Values;
+                    cgvTransactList.DataBind();
+                }
             }
         }
 
@@ -482,10 +514,23 @@ namespace Micajah.Common.WebControls.AdminControls
             this.List_DataBind();
         }
 
+        protected void btnCancelMyAccount_Click(object sender, EventArgs e)
+        {
+            if (ChargifyProvider.DeleteCustomerSubscription(Chargify, OrganizationId, InstanceId))
+            {
+                InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, CreditCardStatus.NotRegistered);
+                Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=cancel");
+            }
+            else
+            {
+                Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
+                masterPage.MessageType = NoticeMessageType.Error;
+                masterPage.Message = "Your Credit Card Registration was not deleted!";
+            }
+        }
+
         protected void btnUpdateCC_Click(object sender, EventArgs e)
         {
-            if (txtCCNumber.Text.Contains("XXXX")) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath);
-
             string _CustSystemId = OrganizationId.ToString() + "," + InstanceId.ToString();
 
             ICustomer _cust = Chargify.LoadCustomer(_CustSystemId);
@@ -536,6 +581,21 @@ namespace Micajah.Common.WebControls.AdminControls
                 return;
             }
 
+            if (txtCCNumber.Text.Contains("XXXX"))
+            {
+                if (_subscr != null && _subscr.CreditCard!=null && _subscr.State != SubscriptionState.Active)
+                {
+                    Chargify.ReactivateSubscription(_subscr.SubscriptionID);
+                    Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=reactivated");
+                }
+                txtCCNumber.Text = string.Empty;
+                txtCCExpMonth.Text = string.Empty;
+                txtCCExpYear.Text = string.Empty;
+                msgStatus.Message = "Invalid Credit Card Information!";
+                msgStatus.Description = "Please, input correct data.";
+                return;
+            }
+
             CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000 + int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
             try
@@ -549,6 +609,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     msgStatus.Message = "Can't update Chargify Subscription!";
                     Chargify.UpdateSubscriptionCreditCard(_subscr, _ccattr);
+                    if (_subscr.State != SubscriptionState.Active) Chargify.ReactivateSubscription(_subscr.SubscriptionID);
                 }
             }
             catch (ChargifyException cex)
@@ -679,14 +740,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 span.Attributes["class"] = "accsettings";
                 if (setting.Paid)
                     span.InnerHtml = "$" + setting.Price.ToString("0.00") + " / month if option is enabled";
-                else if (setting.UsageCountLimit == 0)
-                    span.InnerHtml = "$" + setting.Price.ToString("0.00") + " / month for each " + setting.CustomName;
-                else if (setting.UsageCountLimit == 1)
-                    span.InnerHtml = "1st " + setting.CustomName + " is always FREE.<br />$" +
-                                setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
-                else if (setting.UsageCountLimit > 1)
-                    span.InnerHtml = setting.UsageCountLimit.ToString() + " " + setting.CustomName + " is always FREE.<br />$" +
-                                setting.Price.ToString("0.00") + " / month for additional " + setting.CustomName;
+                else
+                    span.InnerHtml = setting.CustomDescription;
                 HtmlGenericControl h3 = new HtmlGenericControl("h3");
                 if (setting.Paid) h3.InnerText = "$" + setting.Price.ToString("0.00");
                 else if (usageCount > setting.UsageCountLimit) h3.InnerText = "$" + Convert.ToString((usageCount - setting.UsageCountLimit) * setting.Price);

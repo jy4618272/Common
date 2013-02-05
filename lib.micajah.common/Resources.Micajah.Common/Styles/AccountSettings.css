@@ -39,7 +39,7 @@
     .payment-update {float: right; margin-top: 15px;}
     .payment-status {margin-top: 8px; padding-left: 50px; background: url($credit_card.png$) 10px 0px no-repeat; min-height: 32px;}
     .account-heading {margin: 40px 0 20px; padding: 10px 15px 10px 0; border-bottom: 2px solid #417da6;}
-    .account-heading.cancel-account
+    .cancel-account
     {
         background: #f97171;
         background: -moz-linear-gradient(top, #f97171 0%, #df3e3e 100%);
@@ -54,7 +54,6 @@
         padding-left: 15px;
         border: none;
     }
-    .account-heading.cancel-account h2 {font-size: .98em;}
     .account-option {width: 100%; margin: 0; overflow: hidden; padding: 16px 0;}
     .account-option h4 {padding-left: 40px; line-height: 32px; padding-top: 2px; float: left; margin-top: 0; margin-bottom: 0;}
     
@@ -316,7 +315,7 @@ dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3
 .tooltip_focus_diagonal_right span,
 .tooltip_focus_diagonal_left span
 	{
-	min-width: 180px; /* Tooltip Width */
+	min-width: 100px; /* Tooltip Width */
 	font-family: arial, sans-serif !important; /* Tooltip Base Font Family */
 	font-size: 13px !important; /* Tooltip Base Font Size */
 	line-height: normal !important;
@@ -395,7 +394,7 @@ dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3
 .tooltip_focus_diagonal_right span,
 .tooltip_focus_diagonal_left span
 	{
-	min-width: 300px; /* Tooltip Width */
+	min-width: 200px; /* Tooltip Width */
 	font-family: arial, sans-serif !important; /* Tooltip Base Font Family */
 	font-size: 13px !important; /* Tooltip Base Font Size */
 	line-height: normal !important;

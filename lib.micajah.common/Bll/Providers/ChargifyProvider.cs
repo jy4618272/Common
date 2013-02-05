@@ -12,10 +12,13 @@ namespace Micajah.Common.Bll.Providers
     {
         public static ChargifyConnect CreateChargify()
         {
+            ChargifyAccountRetrieverSection config = ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
+
+            if (config == null) return null;
+
             // new instance
             ChargifyConnect _chargify = new ChargifyConnect();
 
-            ChargifyAccountRetrieverSection config = ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
             ChargifyAccountElement accountInfo = config.GetDefaultOrFirst();
             _chargify.apiKey = accountInfo.ApiKey;
             _chargify.Password = accountInfo.ApiPassword;
@@ -42,6 +45,13 @@ namespace Micajah.Common.Bll.Providers
             return GetCustomerSubscription(chargify, _cust.ChargifyID);
         }
 
+        public static bool DeleteCustomerSubscription(ChargifyConnect chargify, Guid OrganizationId, Guid InstanceId)
+        {
+            ISubscription subscr = GetCustomerSubscription(chargify, OrganizationId, InstanceId);
+            if (subscr==null) return false;
+            return chargify.DeleteSubscription(subscr.SubscriptionID, "Cancel Account Registration");
+        }
+
         public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, int chargifyCustomerId)
         {           
             IDictionary<int, ISubscription> _subscrList = chargify.GetSubscriptionListForCustomer(chargifyCustomerId);
@@ -65,7 +75,7 @@ namespace Micajah.Common.Bll.Providers
                 int _cid = 0;
                 bool _checked = false;
                 if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || setting.DefaultValue=="-1" || !bool.TryParse(setting.Value, out _checked)) continue;
-                chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _checked ? 1 : 0);
+                if (SubscriptionId!=0) chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _checked ? 1 : 0);
                 _TotalSum += setting.Price;
             }
 
@@ -81,7 +91,7 @@ namespace Micajah.Common.Bll.Providers
 
                 if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || string.IsNullOrEmpty(_val) || !int.TryParse(_val, out _count)) continue;
 
-                chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
+                if (SubscriptionId!=0) chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
 
                 int _paidQty = _count - setting.UsageCountLimit;
                 decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
