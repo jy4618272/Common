@@ -29,6 +29,21 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
+        #region Internal Methods
+
+        internal static bool IsGoogleProviderRequest(HttpRequest request)
+        {
+            string provider = request.QueryString["provider"];
+            if (!string.IsNullOrEmpty(provider))
+            {
+                if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                    return true;
+            }
+            return false;
+        }
+
+        #endregion
+
         #region Public Methods
 
         public static string ProcessRequest(HttpContext context)

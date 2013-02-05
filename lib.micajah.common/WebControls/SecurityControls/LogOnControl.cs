@@ -270,47 +270,43 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
             else
             {
-                string provider = Request.QueryString["provider"];
-                if (!string.IsNullOrEmpty(provider))
+                if (GoogleProvider.IsGoogleProviderRequest(Request))
                 {
-                    if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                    try
                     {
+                        loginName = GoogleProvider.ProcessRequest(HttpContext.Current);
+                    }
+                    catch (AuthenticationException ex)
+                    {
+                        ShowErrorMessage(ex.Message);
+                    }
+
+                    if (!string.IsNullOrEmpty(loginName))
+                    {
+                        string message = null;
+
                         try
                         {
-                            loginName = GoogleProvider.ProcessRequest(HttpContext.Current);
+                            if (WebApplication.LoginProvider.Authenticate(loginName, null, false, true, organizationId, instanceId))
+                            {
+                                ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
+
+                                Response.Redirect(string.IsNullOrEmpty(redirectUrl) ? ResourceProvider.ActiveOrganizationPageVirtualPath : redirectUrl);
+                            }
                         }
                         catch (AuthenticationException ex)
                         {
-                            ShowErrorMessage(ex.Message);
+                            message = ex.Message;
                         }
 
-                        if (!string.IsNullOrEmpty(loginName))
+                        if (!string.IsNullOrEmpty(message))
                         {
-                            string message = null;
-
-                            try
-                            {
-                                if (WebApplication.LoginProvider.Authenticate(loginName, null, false, true, organizationId, instanceId))
-                                {
-                                    ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
-
-                                    Response.Redirect(string.IsNullOrEmpty(redirectUrl) ? ResourceProvider.ActiveOrganizationPageVirtualPath : redirectUrl);
-                                }
-                            }
-                            catch (AuthenticationException ex)
-                            {
-                                message = ex.Message;
-                            }
-
-                            if (!string.IsNullOrEmpty(message))
-                            {
-                                if (WebApplication.LoginProvider.GetLogin(loginName) == null)
-                                    message = string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountIsNotFound, loginName);
-                            }
-
-                            if (!string.IsNullOrEmpty(message))
-                                this.ShowErrorMessage(message);
+                            if (WebApplication.LoginProvider.GetLogin(loginName) == null)
+                                message = string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountIsNotFound, loginName);
                         }
+
+                        if (!string.IsNullOrEmpty(message))
+                            this.ShowErrorMessage(message);
                     }
                 }
             }

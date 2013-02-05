@@ -153,7 +153,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="details">An System.Object array containing zero or more objects that represents the optional details for authentication.</param>
         /// <param name="usePasswordEncryption">true to use encryption for password before compare login details; otherwise, false.</param>
         /// <returns>DataRowView with the user information</returns>
-        private DataRowView LdapAuthenticate(string loginName, string password, bool usePasswordEncryption, Guid organiationId)
+        private DataRowView LdapAuthenticate(string loginName, string password, bool usePasswordEncryption, Guid organizationId)
         {
             DataRowView drv = null;
             LdapProvider server = null;
@@ -209,8 +209,8 @@ namespace Micajah.Common.Bll.Providers
             }
 
             //Get Organization Id from authentication details
-            if (organiationId != Guid.Empty)
-                orgId = organiationId;
+            if (organizationId != Guid.Empty)
+                orgId = organizationId;
 
             if (orgId == Guid.Empty)
             {
@@ -464,6 +464,12 @@ namespace Micajah.Common.Bll.Providers
         {
             CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
             return GetLoginUrl(loginName, password, (customUrlSettings.Enabled ? Guid.Empty : organizationId), (customUrlSettings.Enabled ? Guid.Empty : instanceId), newOrg, returnUrl, CustomUrlProvider.GetVanityUri(organizationId, instanceId));
+        }
+
+        internal static bool IsLoginUrl(string url)
+        {
+            string loginUrl = WebApplication.LoginProvider.GetLoginUrl(false);
+            return ((loginUrl.IndexOf(url, StringComparison.OrdinalIgnoreCase) > -1) || (url.IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) > -1));
         }
 
         /// <summary>
