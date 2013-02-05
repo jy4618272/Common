@@ -174,7 +174,7 @@ namespace Micajah.Common.Bll.Providers
             if (user != null)
             {
                 string hashedPassword = password;
-                if (usePasswordEncryption) hashedPassword = WebApplication.LoginProvider.EncryptPassword(password);
+                if (usePasswordEncryption) hashedPassword = EncryptPassword(password);
 
                 if (user.Password == hashedPassword)
                     return GetLogin(user.LocalLoginId);
@@ -351,7 +351,7 @@ namespace Micajah.Common.Bll.Providers
         {
             IUser user = null;
             string hashedPassword = password;
-            if (usePasswordEncryption) hashedPassword = WebApplication.LoginProvider.EncryptPassword(password);
+            if (usePasswordEncryption) hashedPassword = EncryptPassword(password);
 
             Guid orgID = Guid.Empty;
             string ldapServer = "";
