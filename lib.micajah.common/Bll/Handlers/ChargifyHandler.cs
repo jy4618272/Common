@@ -5,6 +5,7 @@ using System.Text;
 using Micajah.Common.Bll.Providers;
 using ChargifyNET;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Micajah.Common.Bll.Handlers
 {
@@ -18,15 +19,11 @@ namespace Micajah.Common.Bll.Handlers
         public void Start()
         {
             this.ThreadState = ThreadStateType.Running;
+
             try
             {
                 ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
-                if (_chargify==null)
-                {
-                    EventLog.WriteEntry("Micajah.Common.Bll.Handlers.ChargifyHandler", "No Chargify configuration settings found.", System.Diagnostics.EventLogEntryType.Information);
-                    this.ThreadState = ThreadStateType.Finished;
-                    return;
-                }
+                if (_chargify == null) throw new Exception("No Chargify configuration settings found.");
 
                 int updatedCount = 0;
                 OrganizationCollection _orgs = OrganizationProvider.GetOrganizations(false, false);
@@ -41,15 +38,21 @@ namespace Micajah.Common.Bll.Handlers
                         if (_custSubscr!=null) updatedCount++;
                     }
                 }
-
-                EventLog.WriteEntry("Micajah.Common.Bll.Handlers.ChargifyHandler", "Updated "+updatedCount.ToString()+" customers Chargify subcription allocations.", System.Diagnostics.EventLogEntryType.Information);
             }
             catch (Exception ex)
             {
                 this.ThreadState = ThreadStateType.Failed;
                 this.ErrorException = ex;
-                EventLog.WriteEntry("Micajah.Common.Bll.Handlers.ChargifyHandler", ex.ToString(), System.Diagnostics.EventLogEntryType.Error);
-                return;
+                try
+                {
+                    if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.ChargifyHandler"))
+                        EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.ChargifyHandler", "Application");
+                    EventLog.WriteEntry("Micajah.Common.Bll.Handlers.ChargifyHandler", ex.ToString(), EventLogEntryType.Error);
+                }
+                catch
+                {
+                    throw new Exception(ex.ToString());
+                }
             }
             this.ThreadState = ThreadStateType.Finished;
         }
