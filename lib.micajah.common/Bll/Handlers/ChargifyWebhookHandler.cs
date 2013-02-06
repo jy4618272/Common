@@ -46,13 +46,15 @@ namespace Micajah.Common.Bll.Handlers
                 {
                     Providers.InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Declined);
                     string _uEmail = query["payload[subscription][customer][email]"];
+                    string _uFirstName = query["payload[subscription][customer][first_name]"];
+                    string _uLastName = query["payload[subscription][customer][first_name]"];
                     string _appName = FrameworkConfiguration.Current.WebApplication.Name;
                     string _salesEmail = FrameworkConfiguration.Current.WebApplication.Email.SalesTeam;
-                    string _subject = _appName + " Chargify payment attempt failded.";
-                    string _body = "Chargify service can't process payment operation for \"" + _org.Name + " "+_inst.Name+"\" organization instance.\r\n. Operation status is " + _event;
+                    string _subject = _org.Name+" "+_inst.Name + " Chargify payment attempt failded.";
+                    string _body = _appName +" Chargify service can't process payment operation for \"" + _org.Name + " "+_inst.Name+"\" organization instance.\r\n. Operation status is " + _event+"\r\n\r\nContact User Email: "+_uEmail+" "+_uFirstName+" "+_uLastName;
                     if (!string.IsNullOrEmpty(_salesEmail))
                     {
-                        Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, _uEmail, _salesEmail, string.Empty, _subject, _body, false, false, EmailSendingReason.Undefined);
+                        Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Support.Email, _salesEmail, string.Empty, _subject, _body, false, false, EmailSendingReason.Undefined);
                     }
                 }
                 else if (_event == "payment_success" && _inst.CreditCardStatus != CreditCardStatus.Registered)

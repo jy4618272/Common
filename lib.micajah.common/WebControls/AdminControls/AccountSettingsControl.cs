@@ -448,21 +448,21 @@ namespace Micajah.Common.WebControls.AdminControls
             masterPage.Message = "Your " + trainingName +
                                  " proccessed successfully! You will receive confirmation email.";
             UserContext usr = UserContext.Current;
-            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) + usr.FirstName + " " +
-                              usr.LastName + " from " + usr.SelectedOrganization.Name + " purchased " + trainingName;
-            string _body1 = "Hi, " + usr.FirstName + " " + usr.LastName + "\r\n\r\nYou purchased " +
+            string _usrFullName = usr.FirstName + " " + usr.LastName;
+            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) +  _usrFullName + " from " + usr.SelectedOrganization.Name+ " "+usr.SelectedInstance.Name + " purchased " + trainingName+".";
+            string _body1 = "Hi, " + _usrFullName + "\r\n\r\nYou purchased " +
                             FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName +
                             ".\r\nOur support team will contact with you ASAP to schedule a time when we can do a training for you.\r\n\r\nThanks.";
-            string _body2 = "Please, contact me via Email" +
+            string _body2 = "Please, contact me via Email " + usr.Email +
                            (!string.IsNullOrEmpty(usr.Phone) ? " or by phone " + usr.Phone : string.Empty) +
                            (!string.IsNullOrEmpty(usr.MobilePhone) ? " or by mobile " + usr.MobilePhone : string.Empty) +
                            " to schedule a time when we can do a training.";
             try
             {
 
-                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, null, usr.Email,
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Email.SalesTeam, FrameworkConfiguration.Current.WebApplication.Email.SalesTeam, usr.Email,
                                   string.Empty, "Thank You for purchase " + FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName, _body1, false, false, EmailSendingReason.Undefined);
-                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, usr.Email, FrameworkConfiguration.Current.WebApplication.Support.Email,
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Email.SalesTeam,
                                   string.Empty, _subject, _body2, false, false, EmailSendingReason.Undefined);
             }
             catch (Exception ex)
