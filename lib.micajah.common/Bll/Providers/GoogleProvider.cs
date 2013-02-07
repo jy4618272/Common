@@ -29,11 +29,11 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
-        #region Internal Methods
+        #region Public Methods
 
-        internal static bool IsGoogleProviderRequest(HttpRequest request)
+        public static bool IsGoogleProviderRequest(HttpRequest request)
         {
-            string provider = request.QueryString["provider"];
+            string provider = GetProviderName(request);
             if (!string.IsNullOrEmpty(provider))
             {
                 if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
@@ -42,11 +42,7 @@ namespace Micajah.Common.Bll.Providers
             return false;
         }
 
-        #endregion
-
-        #region Public Methods
-
-        public static string ProcessRequest(HttpContext context)
+        public static string ProcessAuthenticationRequest(HttpContext context)
         {
             OpenIdRelyingParty relyingParty = null;
             Exception exception = null;
@@ -58,7 +54,7 @@ namespace Micajah.Common.Bll.Providers
                 IAuthenticationResponse authResponse = relyingParty.GetResponse(new HttpRequestWrapper(context.Request));
                 if (authResponse == null)
                 {
-                    string domain = context.Request.QueryString["domain"];
+                    string domain = GetDomain(context.Request);
                     Identifier id = null;
                     if (string.IsNullOrEmpty(domain) || (!Identifier.TryParse(domain, out id)))
                         id = Identifier.Parse(FrameworkConfiguration.Current.WebApplication.Integration.Google.OpenIdProviderEndpointAddress);
@@ -100,6 +96,21 @@ namespace Micajah.Common.Bll.Providers
                 throw exception;
 
             return null;
+        }
+
+        public static string GetReturnUrl(HttpRequest request)
+        {
+            return request.QueryString["callback"];
+        }
+
+        public static string GetDomain(HttpRequest request)
+        {
+            return request.QueryString["domain"];
+        }
+
+        public static string GetProviderName(HttpRequest request)
+        {
+            return request.QueryString["provider"];
         }
 
         #endregion

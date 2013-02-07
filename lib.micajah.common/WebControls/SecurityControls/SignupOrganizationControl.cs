@@ -618,22 +618,33 @@ function InstanceRequiredValidation(source, arguments) {{
             if (!string.IsNullOrEmpty(SelectedInstance.Text))
                 templateInstanceId = new Guid(SelectedInstance.Text);
 
+            string returnUrl = null;
+            string domain = null;
+            if (GoogleProvider.IsGoogleProviderRequest(Request))
+            {
+                domain = GoogleProvider.GetDomain(Request);
+                returnUrl = GoogleProvider.GetReturnUrl(Request);
+            }
+
             Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, this.WebSiteUrl
                 , null, null, null, null, null, null, CurrencyList.SelectedValue
                 , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
-                , OrganizationUrl.Text
+                , domain, OrganizationUrl.Text, GoogleProvider.GetProviderName(Request)
                 , true);
 
             Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
 
-            SettingProvider.InitializeStartMenuCheckedItemsSetting(orgId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instId) : null));
-
             WebApplication.RefreshAllData(false);
 
-            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
-                , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
-                , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
+                    , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
+                    , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
+            }
+            else
+                Response.Redirect(returnUrl);
         }
 
         #endregion

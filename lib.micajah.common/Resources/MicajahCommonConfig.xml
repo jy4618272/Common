@@ -175,6 +175,7 @@
       </actions>
       <settings>
         <setting id="97F2F811-BB75-4550-AE92-007202A4BA29" type="Value" name="Start Menu Checked Items" shortName="StartMenuCheckedItems" />
+        <setting id="6192CC54-6656-4F42-B526-EE333F1670B4" type="Value" name="Provider Name" shortName="ProviderName" />
       </settings>
     </action>
     <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="10000" authenticationRequired="true" instanceRequired="false" />

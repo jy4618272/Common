@@ -806,15 +806,7 @@ namespace Micajah.Common.Security
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                if (CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
-                {
-                    if (LoginProvider.IsLoginUrl(http.Request.Url.ToString()))
-                    {
-                        if (GoogleProvider.IsGoogleProviderRequest(http.Request))
-                            return;
-                    }
-                }
-                else
+                if (!CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
                     return;
             }
 
