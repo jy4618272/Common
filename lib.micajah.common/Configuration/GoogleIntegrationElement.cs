@@ -66,13 +66,13 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the consumer key secret.
+        /// Gets or sets the consumer secret.
         /// </summary>
-        [ConfigurationProperty("consumerKeySecret")]
-        public string ConsumerKeySecret
+        [ConfigurationProperty("consumerSecret")]
+        public string ConsumerSecret
         {
-            get { return (string)this["consumerKeySecret"]; }
-            set { this["consumerKeySecret"] = value; }
+            get { return (string)this["consumerSecret"]; }
+            set { this["consumerSecret"] = value; }
         }
 
         #endregion
