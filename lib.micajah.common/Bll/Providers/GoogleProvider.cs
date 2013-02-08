@@ -27,6 +27,14 @@ namespace Micajah.Common.Bll.Providers
             return relyingParty;
         }
 
+        private static string GetRequestValue(HttpRequest request, string name)
+        {
+            string value = request.QueryString[name];
+            if (value == null)
+                value = request.Form[name];
+            return value;
+        }
+
         #endregion
 
         #region Public Methods
@@ -100,17 +108,17 @@ namespace Micajah.Common.Bll.Providers
 
         public static string GetReturnUrl(HttpRequest request)
         {
-            return request.QueryString["callback"];
+            return GetRequestValue(request, "callback");
         }
 
         public static string GetDomain(HttpRequest request)
         {
-            return request.QueryString["domain"];
+            return GetRequestValue(request, "domain");
         }
 
         public static string GetProviderName(HttpRequest request)
         {
-            return request.QueryString["provider"];
+            return GetRequestValue(request, "provider");
         }
 
         #endregion
