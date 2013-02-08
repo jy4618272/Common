@@ -45,6 +45,36 @@ namespace Micajah.Common.Configuration
             set { this["openIdProviderEndpointAddress"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the application name.
+        /// </summary>
+        [ConfigurationProperty("applicationName")]
+        public string ApplicationName
+        {
+            get { return (string)this["applicationName"]; }
+            set { this["applicationName"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the consumer key.
+        /// </summary>
+        [ConfigurationProperty("consumerKey")]
+        public string ConsumerKey
+        {
+            get { return (string)this["consumerKey"]; }
+            set { this["consumerKey"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the consumer key secret.
+        /// </summary>
+        [ConfigurationProperty("consumerKeySecret")]
+        public string ConsumerKeySecret
+        {
+            get { return (string)this["consumerKeySecret"]; }
+            set { this["consumerKeySecret"] = value; }
+        }
+
         #endregion
     }
 }
