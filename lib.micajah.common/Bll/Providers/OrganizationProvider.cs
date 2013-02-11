@@ -96,7 +96,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country, string currency
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
-            , string partialCustomUrl
+            , string emailSuffixes, string partialCustomUrl, string providerName
             , bool sendNotificationEmail, bool refreshAllData)
         {
             adminEmail = Support.TrimString(adminEmail, UserProvider.EmailMaxLength);
@@ -151,6 +151,13 @@ namespace Micajah.Common.Bll.Providers
             Organization org = new Organization();
             org.Load(row);
 
+            if (emailSuffixes != null)
+            {
+                EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref emailSuffixes);
+
+                org.EmailSuffixes = emailSuffixes;
+            }
+
             RaiseOrganizationInserted(org);
 
             if (!string.IsNullOrEmpty(password))
@@ -174,10 +181,27 @@ namespace Micajah.Common.Bll.Providers
                       , 0, 0, out password);
             }
 
-            InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
+            Guid instId = InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
                 , adminEmail, password
                 , partialCustomUrl
                 , sendNotificationEmail, refreshAllData);
+
+            Setting setting = SettingProvider.GetSettingByShortName("StartMenuCheckedItems");
+            if (setting != null)
+            {
+                setting.Value = bool.TrueString;
+                SettingProvider.UpdateSettingValue(setting, organizationId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instId) : null), null);
+            }
+
+            if (!string.IsNullOrEmpty(providerName))
+            {
+                setting = SettingProvider.GetSettingByShortName("ProviderName");
+                if (setting != null)
+                {
+                    setting.Value = providerName;
+                    SettingProvider.UpdateSettingValue(setting, organizationId, null, null);
+                }
+            }
 
             return organizationId;
         }
@@ -282,14 +306,9 @@ namespace Micajah.Common.Bll.Providers
 
             if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
-                EmailSuffixProvider.DeleteEmailSuffixes(organizationId, null);
-                if (!string.IsNullOrEmpty(emailSuffixes))
-                {
-                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
-                    EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, null, emailSuffixes);
+                EmailSuffixProvider.UpdateEmailSuffixName(organizationId, null, ref emailSuffixes);
 
-                    org.EmailSuffixes = emailSuffixes;
-                }
+                org.EmailSuffixes = emailSuffixes;
             }
 
             UserContext.RefreshCurrent();
@@ -673,7 +692,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -699,7 +718,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, firstName, lastName, middleName, null, null, null, null
+                , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null, null
                 , sendNotificationEmail, true);
         }
 
@@ -724,7 +743,7 @@ namespace Micajah.Common.Bll.Providers
                 , expirationTime, graceDays, active, canceledTime, trial
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -756,7 +775,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country, string currency
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string title, string phone, string mobilePhone
-            , string partialCustomUrl
+            , string emailSuffixes, string partialCustomUrl, string providerName
             , bool sendNotificationEmail)
         {
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
@@ -765,7 +784,7 @@ namespace Micajah.Common.Bll.Providers
                 , street, street2, city, state, postalCode, country, currency
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
-                , partialCustomUrl
+                , emailSuffixes, partialCustomUrl, providerName
                 , sendNotificationEmail, false);
         }
 

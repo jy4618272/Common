@@ -202,13 +202,9 @@ namespace Micajah.Common.Bll.Providers
 
             if (emailSuffixes != null)
             {
-                if (!String.IsNullOrEmpty(emailSuffixes))
-                {
-                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
-                    EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixes);
+                EmailSuffixProvider.InsertEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
 
-                    inst.EmailSuffixes = emailSuffixes;
-                }
+                inst.EmailSuffixes = emailSuffixes;
             }
 
             if (configure) ConfigureInstance(instanceId, organizationId);
@@ -845,14 +841,9 @@ namespace Micajah.Common.Bll.Providers
 
             if (emailSuffixes != null)
             {
-                EmailSuffixProvider.DeleteEmailSuffixes(organizationId, instanceId);
-                if (!String.IsNullOrEmpty(emailSuffixes))
-                {
-                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
-                    EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixes);
+                EmailSuffixProvider.UpdateEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
 
-                    inst.EmailSuffixes = emailSuffixes;
-                }
+                inst.EmailSuffixes = emailSuffixes;
             }
 
             UserContext.RefreshCurrent();

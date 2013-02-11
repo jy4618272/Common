@@ -27,13 +27,21 @@ namespace Micajah.Common.Bll.Providers
             return relyingParty;
         }
 
+        private static string GetRequestValue(HttpRequest request, string name)
+        {
+            string value = request.QueryString[name];
+            if (value == null)
+                value = request.Form[name];
+            return value;
+        }
+
         #endregion
 
-        #region Internal Methods
+        #region Public Methods
 
-        internal static bool IsGoogleProviderRequest(HttpRequest request)
+        public static bool IsGoogleProviderRequest(HttpRequest request)
         {
-            string provider = request.QueryString["provider"];
+            string provider = GetProviderName(request);
             if (!string.IsNullOrEmpty(provider))
             {
                 if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
@@ -42,11 +50,7 @@ namespace Micajah.Common.Bll.Providers
             return false;
         }
 
-        #endregion
-
-        #region Public Methods
-
-        public static string ProcessRequest(HttpContext context)
+        public static string ProcessAuthenticationRequest(HttpContext context)
         {
             OpenIdRelyingParty relyingParty = null;
             Exception exception = null;
@@ -58,7 +62,7 @@ namespace Micajah.Common.Bll.Providers
                 IAuthenticationResponse authResponse = relyingParty.GetResponse(new HttpRequestWrapper(context.Request));
                 if (authResponse == null)
                 {
-                    string domain = context.Request.QueryString["domain"];
+                    string domain = GetDomain(context.Request);
                     Identifier id = null;
                     if (string.IsNullOrEmpty(domain) || (!Identifier.TryParse(domain, out id)))
                         id = Identifier.Parse(FrameworkConfiguration.Current.WebApplication.Integration.Google.OpenIdProviderEndpointAddress);
@@ -100,6 +104,21 @@ namespace Micajah.Common.Bll.Providers
                 throw exception;
 
             return null;
+        }
+
+        public static string GetReturnUrl(HttpRequest request)
+        {
+            return GetRequestValue(request, "callback");
+        }
+
+        public static string GetDomain(HttpRequest request)
+        {
+            return GetRequestValue(request, "domain");
+        }
+
+        public static string GetProviderName(HttpRequest request)
+        {
+            return GetRequestValue(request, "provider");
         }
 
         #endregion

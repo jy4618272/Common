@@ -85,6 +85,18 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the class. 
+        /// </summary>
+        public LogOnControl()
+        {
+            EnableCustomHandling = true;
+        }
+
+        #endregion
+
         #region Private Properties
 
         private string EmailToLink
@@ -193,6 +205,11 @@ namespace Micajah.Common.WebControls.SecurityControls
             set { ViewState["ReturnUrl"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value that indicates whether the custom handling is enabled on the page that contains this control.
+        /// </summary>
+        public bool EnableCustomHandling { get; set; }
+
         #endregion
 
         #region Events
@@ -274,7 +291,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     try
                     {
-                        loginName = GoogleProvider.ProcessRequest(HttpContext.Current);
+                        loginName = GoogleProvider.ProcessAuthenticationRequest(HttpContext.Current);
                     }
                     catch (AuthenticationException ex)
                     {
@@ -287,6 +304,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                         try
                         {
+                            EmailSuffixProvider.ParseEmailSuffixName(GoogleProvider.GetDomain(Request), ref organizationId, ref instanceId);
+
                             if (WebApplication.LoginProvider.Authenticate(loginName, null, false, true, organizationId, instanceId))
                             {
                                 ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
@@ -306,7 +325,11 @@ namespace Micajah.Common.WebControls.SecurityControls
                         }
 
                         if (!string.IsNullOrEmpty(message))
+                        {
                             this.ShowErrorMessage(message);
+
+                            this.EnableCustomHandling = false;
+                        }
                     }
                 }
             }

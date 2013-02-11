@@ -215,18 +215,16 @@ namespace Micajah.Common.Bll.Providers
             if (orgId == Guid.Empty)
             {
                 // Get Organization Id by Email Suffix
-                if (!string.IsNullOrEmpty(loginName) && loginName.Contains("@") && EmailSuffixProvider.IsEmailSuffixExist())
+                if (!string.IsNullOrEmpty(loginName) && loginName.Contains("@"))
                 {
                     string[] parts = loginName.Split('@');
-                    DataTable table = EmailSuffixProvider.GetEmailSuffixes(null, null, parts[1]);
 
-                    if (table.Rows.Count > 0)
-                        orgId = (Guid)table.Rows[0]["OrganizationId"];
+                    orgId = EmailSuffixProvider.GetOrganizationId(parts[1]);
 
                     // Get Organization Id by Ldap Domain
                     if (orgId == Guid.Empty)
                     {
-                        table = GetOrganizationsByLdapDomain(parts[1]);
+                        DataTable table = GetOrganizationsByLdapDomain(parts[1]);
 
                         if (table.Rows.Count > 0)
                             orgId = (Guid)table.Rows[0]["OrganizationId"];

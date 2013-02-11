@@ -9,7 +9,6 @@ using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -863,16 +862,6 @@ namespace Micajah.Common.Bll.Providers
         internal static void UpdateOrganizationSettingsValues(SettingCollection settings, Guid organizationId)
         {
             UpdateSettingsValues(settings, organizationId, null, null);
-        }
-
-        internal static void InitializeStartMenuCheckedItemsSetting(Guid organizationId, Guid? instanceId)
-        {
-            Setting setting = GetSettingByShortName("StartMenuCheckedItems");
-            if (setting != null)
-            {
-                setting.Value = bool.TrueString;
-                SettingProvider.UpdateSettingValue(setting, organizationId, instanceId, null);
-            }
         }
 
         #endregion
