@@ -33,6 +33,7 @@ namespace Micajah.Common.Bll.Handlers
                     InstanceCollection _insts = InstanceProvider.GetInstances(_org.OrganizationId, false);
                     foreach (Instance _inst in _insts)
                     {
+                        if (_inst.BillingPlan==BillingPlan.Custom) continue;
                         ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, _org.OrganizationId, _inst.InstanceId);
                         ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _org.OrganizationId, _inst.InstanceId);
                         if (_custSubscr!=null) updatedCount++;

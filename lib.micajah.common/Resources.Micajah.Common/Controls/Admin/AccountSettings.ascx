@@ -21,7 +21,7 @@
             <h2><asp:Literal ID="lBillingPlanName" runat="server" Text="FREE"></asp:Literal></h2><small class="plandescsm"><asp:Literal ID="lSumPerMonth" runat="server" Text="per Month"></asp:Literal></small>
         </div>
         <div class="payment-set">
-            <div class="payment-update">
+            <div class="payment-update" id="divPaymentUpdate" runat="server">
                 <a id="aBtnCCUpdate" class="buttons" rel="facebox" href="#credit_card_form">Update credit card</a>
             </div>
             <div class="payment-status">

@@ -37,6 +37,11 @@
                 <mits:TextBoxField DataField="Description" MaxLength="1024" Columns="65" ControlStyle-Width="350px" Rows="3" TextMode="MultiLine" />                
                 <mits:CheckBoxField DataField="Beta" />
                 <mits:CheckBoxField DataField="Active" DefaultChecked="True" />
+                <mits:TemplateField PaddingLeft="false" HeaderText="Billing Plan">
+                    <ItemTemplate>                    
+                        <mits:ComboBox ID="cmbBillingPlan" runat="server" DataValueField="BillingPlan" Required="false" />
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TemplateField>
                     <itemtemplate>
                         <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>

@@ -51,6 +51,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected HtmlContainerControl divCancelAccountHeader;
         protected HtmlContainerControl divCancelAccount;
         protected HtmlContainerControl divPaymentHistoryHeader;
+        protected HtmlContainerControl divPaymentUpdate;
 
         private SettingCollection m_PaidSettings;
         private SettingCollection m_CounterSettings;
@@ -163,8 +164,12 @@ namespace Micajah.Common.WebControls.AdminControls
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
 
             masterPage.VisibleBreadcrumbs = false;
-            masterPage.EnableFancyBox = true;
-            this.RegisterFancyBoxInitScript();
+            
+            if (CurrentBillingPlan != BillingPlan.Custom)
+            {
+                masterPage.EnableFancyBox = true;
+                this.RegisterFancyBoxInitScript();
+            }
 
             if (IsPostBack) return;
 
@@ -198,6 +203,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 lblTraining3HoursPrice.Text = settings["Training3Hours"].Price.ToString("$0.00");
             if (settings["Training8Hours"] != null)
                 lblTraining8HoursPrice.Text = settings["Training8Hours"].Price.ToString("$0.00");
+
+            if (CurrentBillingPlan == BillingPlan.Custom) return;
 
             ISubscription _subscription = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
             if (_subscription != null)
@@ -257,6 +264,22 @@ namespace Micajah.Common.WebControls.AdminControls
         private void InitBillingControls(bool updateUsage)
         {
             DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
+
+            if (CurrentBillingPlan==BillingPlan.Custom)
+            {
+                lCCStatus.Text = "Custom Billing Plan.";
+                lNextBillDate.Text = _expDate.HasValue ? "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy") : string.Empty;
+                divPaymentUpdate.Visible = false;
+                btnPurchase1Hour.Visible = false;
+                btnPurchase3Hours.Visible = false;
+                btnPurchase8Hours.Visible = false;
+                divCancelAccountHeader.Visible = false;
+                divCancelAccount.Visible = false;
+                divPaymentHistoryHeader.Visible = false;
+                cgvTransactList.Visible = false;
+                return;
+            }
+
             ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
             if (_custSubscr != null && _custSubscr.CreditCard != null && _custSubscr.State!=SubscriptionState.Canceled)
             {

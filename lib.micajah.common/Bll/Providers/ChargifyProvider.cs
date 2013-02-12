@@ -99,7 +99,9 @@ namespace Micajah.Common.Bll.Providers
             }
 
             Instance _inst = InstanceProvider.GetInstance(InstanceId, OrganizationId);
+
             if (_inst == null) return;
+            if (_inst.BillingPlan == BillingPlan.Custom) return;
 
             if (_TotalSum>0 && _inst.BillingPlan==BillingPlan.Free) InstanceProvider.UpdateInstance(_inst, BillingPlan.Paid);
             else if (_TotalSum==0 && _inst.BillingPlan!=BillingPlan.Free) InstanceProvider.UpdateInstance(_inst, BillingPlan.Free);
