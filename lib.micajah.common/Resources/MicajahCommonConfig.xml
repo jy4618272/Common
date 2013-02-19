@@ -81,6 +81,7 @@
                 <action id="72B411D0-FB81-4444-B217-AFC4416A5319" type="Page" name="Ldap Group Mappings" description="Ldap Group Mappings" navigateUrl="/mc/admin/ldapgroupmappings.aspx" orderNumber="2" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" alternativeParents="00000000-0000-0000-0000-000000000011" visible="false"/>
               </actions>
             </action>
+			  <action id="D79FFA5D-54C2-4EB0-AB47-42DDA41C1380" type="Page" name="Google Integration" orderNumber="2" description="Setup Google integration to manage all login accounts" navigateUrl="/mc/admin/googleintegration.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" />
           </actions>
         </action>
         <action id="B399B062-CA0B-4296-A43C-F9DA8B2C60BC" type="Page" name="More Configuration" description="More Configuration" navigateUrl="" orderNumber="100000" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">

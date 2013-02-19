@@ -90,6 +90,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
+    <Reference Include="Google.GData.Apps, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e6feebfe441b89cb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Google.GData.Apps.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Google.GData.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Micajah.Common.LdapAdapter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5584840979da6ebb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\Micajah.Common.LdapAdapter.dll</HintPath>
@@ -273,6 +285,9 @@
     <Compile Include="Security\LdapAdapter\LdapIntegration.cs" />
     <Compile Include="Security\LdapAdapter\LdapServer.cs" />
     <Compile Include="WebControls\AdminControls\AccountSettingsControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\AdminControls\GoogleIntegrationControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\LogosControl.cs">
@@ -1978,6 +1993,12 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v105.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v105.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\GoogleIntegration.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\GoogleIntegration.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
@@ -2002,6 +2023,9 @@
     <Content Include="Runtime\DotNetOpenAuth.Core.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll" />
+    <Content Include="Runtime\Google.GData.Apps.dll" />
+    <Content Include="Runtime\Google.GData.Client.dll" />
+    <Content Include="Runtime\Google.GData.Extensions.dll" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.dll" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.pdb" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />

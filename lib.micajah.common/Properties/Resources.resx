@@ -2575,4 +2575,37 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="UserContext_ErrorMessage_YourAccountIsNotFound" xml:space="preserve">
     <value>The account "{0}" is not found. Please try to log in using another account.</value>
   </data>
+  <data name="GoogleIntegrationControl_Description_Text" xml:space="preserve">
+    <value>To set up your system to replicate user data over Google please review the follow articles. &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#creating_an_administrator_account" target="_blank"&gt;Creating an Administrator account&lt;/a&gt; and &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#enabling_the_provisioning_api" target="_blank"&gt;Enabling the Provisioning API&lt;/a&gt;</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_GoogleDomain_HeaderText" xml:space="preserve">
+    <value>Google Domain</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_GoogleEmail_HeaderText" xml:space="preserve">
+    <value>Google Email</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_GooglePassword_HeaderText" xml:space="preserve">
+    <value>Google Password</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Google connect details</value>
+  </data>
+  <data name="GoogleIntegrationControl_GoogleSetup_Text" xml:space="preserve">
+    <value>Google Setup Check</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step1_LinkButton_Text" xml:space="preserve">
+    <value>Retrieve all Users in a Domain</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step1_Text" xml:space="preserve">
+    <value>Step 1</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step2_LinkButton_Text" xml:space="preserve">
+    <value>Retrieve all Groups in a Domain</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step2_Text" xml:space="preserve">
+    <value>Step 2</value>
+  </data>
+  <data name="GoogleIntegrationControl_UpdateProgress_Text" xml:space="preserve">
+    <value>Please wait, processing your request...&lt;br/&gt;</value>
+  </data>
 </root>

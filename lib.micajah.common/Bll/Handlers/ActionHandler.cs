@@ -88,6 +88,8 @@ namespace Micajah.Common.Bll.Handlers
                     accessDenied = !(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
                     accessDenied = ((UserContext.Current != null) && (UserContext.Current.SelectedOrganization == null));
+                else if (action.ActionId == ActionProvider.GoogleIntegrationPageActionId)
+                    accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
             }
 
             return accessDenied;

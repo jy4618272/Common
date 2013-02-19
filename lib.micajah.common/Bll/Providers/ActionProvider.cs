@@ -64,6 +64,7 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid LdapUserInfoPageActionId = new Guid("5749FF70-4592-4B91-8579-5E7E203C0410");
         internal readonly static Guid SignUpOrganizationPageActionId = new Guid("3E9E3609-7F2A-4DF2-92DF-DFFBD6978E84");
         internal readonly static Guid StartPageActionId = new Guid("4CB3BB95-A829-4DF7-BAD8-05FB38FF019A");
+        internal readonly static Guid GoogleIntegrationPageActionId = new Guid("D79FFA5D-54C2-4EB0-AB47-42DDA41C1380");
 
         // The objects which are used to synchronize access to the cached collections and lists.
         private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
