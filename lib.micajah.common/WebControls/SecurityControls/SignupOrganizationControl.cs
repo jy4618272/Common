@@ -112,12 +112,25 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 return string.Format(CultureInfo.InvariantCulture, @"function SetOrganizationUrl(elem1) {{
     var elem2 = document.getElementById('{0}_txt');
-    if (elem1 && elem2) {{
+    if (elem1 && elem2)
         elem2.value = elem1.value.replace(/[^a-zA-Z 0-9]+|[\s]+/g, '').toLowerCase();
-    }}
 }}
 "
                     , OrganizationUrl.ClientID);
+            }
+        }
+
+        private string ShowLogoImageClientScript
+        {
+            get
+            {
+                return string.Format(CultureInfo.InvariantCulture, @"if (window.top == window.self) {{
+    var elem = document.getElementById('{0}');
+    if (elem)
+        elem.style.display = 'inline';
+}}
+"
+                    , LogoImage1.ClientID);
             }
         }
 
@@ -336,6 +349,9 @@ function InstanceRequiredValidation(source, arguments) {{
                 MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
 
                 this.Page.Form.Target = "_parent";
+
+                LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ShowLogoImage", this.ShowLogoImageClientScript, true);
 
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {

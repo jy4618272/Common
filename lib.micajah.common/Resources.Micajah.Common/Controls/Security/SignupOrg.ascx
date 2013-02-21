@@ -3,7 +3,7 @@
 <%@ Register Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" TagPrefix="telerik" %>
 <div id="Step1Panel" runat="server">
     <div class="Logo">
-        <asp:Image ID="LogoImage1" runat="server" Visible="false" /></div>
+        <asp:Image ID="LogoImage1" runat="server" /></div>
     <div style="padding-top: 20px;">
         <table id="Step1Form" runat="server" align="center">
             <tr>
