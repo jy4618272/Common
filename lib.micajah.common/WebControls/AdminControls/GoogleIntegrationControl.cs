@@ -65,15 +65,15 @@ namespace Micajah.Common.WebControls.AdminControls
                 UserFeed userFeed = service.RetrieveAllUsers();
 
                 DataTable dt = new DataTable();
-                dt.Columns.Add("User Name", typeof(string));
-                dt.Columns.Add("Given Name", typeof(string));
-                dt.Columns.Add("Family Name", typeof(string));
-                dt.Columns.Add("Is Admin", typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_UsernameColumn_HeaderText, typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_FirstNameColumn_HeaderText, typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_LastNameColumn_HeaderText, typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_AdminColumn_HeaderText, typeof(string));
 
                 for (int i = 0; i < userFeed.Entries.Count; i++)
                 {
                     UserEntry userEntry = userFeed.Entries[i] as UserEntry;
-                    dt.Rows.Add(userEntry.Login.UserName, userEntry.Name.GivenName, userEntry.Name.FamilyName, userEntry.Login.Admin ? "yes" : "no");
+                    dt.Rows.Add(userEntry.Login.UserName, userEntry.Name.GivenName, userEntry.Name.FamilyName, userEntry.Login.Admin ? Resources.GoogleIntegrationControl_AdminColumn_Value : string.Empty);
                 }
 
                 gvStep1Results.DataSource = dt;
@@ -83,13 +83,7 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             catch (AppsException a)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("A Google Apps error occurred.<br>");
-                sb.AppendFormat("Error code: {0}<br>", a.ErrorCode);
-                sb.AppendFormat("Invalid input: {0}<br>", a.InvalidInput);
-                sb.AppendFormat("Reason: {0}<br>", a.Reason);
-
-                lblStep1Error.Text = sb.ToString();
+                lblStep1Error.Text = string.Format(CultureInfo.CurrentCulture, Resources.GoogleIntegrationControl_GoogleAppsError_Text, a.ErrorCode, a.InvalidInput, a.Reason);
                 mvStep1.SetActiveView(vwStep1Error);
             }
             catch (Exception ex)
@@ -107,10 +101,10 @@ namespace Micajah.Common.WebControls.AdminControls
                 AppsExtendedFeed groupsFeed = service.Groups.RetrieveAllGroups();
 
                 DataTable dt = new DataTable();
-                dt.Columns.Add("Group Id", typeof(string));
-                dt.Columns.Add("Group Name", typeof(string));
-                dt.Columns.Add("Group Description", typeof(string));
-                dt.Columns.Add("Group Members", typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_NameColumn_HeaderText, typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_IdColumn_HeaderText, typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_DescriptionColumn_HeaderText, typeof(string));
+                dt.Columns.Add(Resources.GoogleIntegrationControl_MembersColumn_HeaderText, typeof(string));
 
                 for (int i = 0; i < groupsFeed.Entries.Count; i++)
                 {
@@ -122,14 +116,14 @@ namespace Micajah.Common.WebControls.AdminControls
                     {
                         MemberEntry memberEntry = memberFeed.Entries[j] as MemberEntry;
                         if (string.Compare(memberEntry.MemberId, "*", true) == 0)
-                            sb.AppendFormat("Group contains all users");
+                            sb.AppendFormat(Resources.GoogleIntegrationControl_MembersColumn_AllUsersValue);
                         else
                             sb.AppendFormat("{0}<br>", memberEntry.MemberId);
                     }
 
-                    dt.Rows.Add(groupEntry.GroupId, groupEntry.GroupName, groupEntry.Description, sb.ToString());
+                    dt.Rows.Add(groupEntry.GroupName, groupEntry.GroupId, groupEntry.Description, sb.ToString());
                 }
-                
+
                 gvStep2Results.DataSource = dt;
                 gvStep2Results.DataBind();
 
@@ -137,13 +131,7 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             catch (AppsException a)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("A Google Apps error occurred.<br>");
-                sb.AppendFormat("Error code: {0}<br>", a.ErrorCode);
-                sb.AppendFormat("Invalid input: {0}<br>", a.InvalidInput);
-                sb.AppendFormat("Reason: {0}<br>", a.Reason);
-
-                lblStep2Error.Text = sb.ToString();
+                lblStep2Error.Text = string.Format(CultureInfo.CurrentCulture, Resources.GoogleIntegrationControl_GoogleAppsError_Text, a.ErrorCode, a.InvalidInput, a.Reason);
                 mvStep2.SetActiveView(vwStep2Error);
             }
             catch (Exception ex)
@@ -197,20 +185,6 @@ namespace Micajah.Common.WebControls.AdminControls
             upStep2Progress.HideAfter = int.MaxValue;
             upStep2Progress.ShowSuccessText = false;
             upStep2Progress.PostBackControlId = this.lbStep2.ClientID;
-        }
-
-        /// <summary>
-        /// Raises the PreRender event and registers client scripts.
-        /// </summary>
-        /// <param name="e">An EventArgs that contains no event data.</param>
-        protected override void OnPreRender(EventArgs e)
-        {
-            base.OnPreRender(e);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
         }
 
         #endregion

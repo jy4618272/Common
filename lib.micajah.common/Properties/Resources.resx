@@ -2575,8 +2575,29 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="UserContext_ErrorMessage_YourAccountIsNotFound" xml:space="preserve">
     <value>The account "{0}" is not found. Please try to log in using another account.</value>
   </data>
+  <data name="GoogleProvider_ImportFailed" xml:space="preserve">
+    <value>Import users from Google failed with error "{0}".</value>
+  </data>
+  <data name="SignupOrganizationControl_ContinueLabel_Text" xml:space="preserve">
+    <value>Please press button below to proceed.</value>
+  </data>
+  <data name="SignupOrganizationControl_Step4Link_Text" xml:space="preserve">
+    <value>Continue &gt;</value>
+  </data>
+  <data name="SignupOrganizationControl_Step4TitleLiteral_Text" xml:space="preserve">
+    <value>Import users</value>
+  </data>
+  <data name="GoogleIntegrationControl_AdminColumn_HeaderText" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="GoogleIntegrationControl_AdminColumn_Value" xml:space="preserve">
+    <value>yes</value>
+  </data>
+  <data name="GoogleIntegrationControl_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
   <data name="GoogleIntegrationControl_Description_Text" xml:space="preserve">
-    <value>To set up your system to replicate user data over Google please review the follow articles. &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#creating_an_administrator_account" target="_blank"&gt;Creating an Administrator account&lt;/a&gt; and &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#enabling_the_provisioning_api" target="_blank"&gt;Enabling the Provisioning API&lt;/a&gt;</value>
+    <value>To set up your system to replicate user data from Google please review the follow articles: &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#creating_an_administrator_account" target="_blank"&gt;Creating an Administrator account&lt;/a&gt; and &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#enabling_the_provisioning_api" target="_blank"&gt;Enabling the Provisioning API&lt;/a&gt;</value>
   </data>
   <data name="GoogleIntegrationControl_EditForm_GoogleDomain_HeaderText" xml:space="preserve">
     <value>Google Domain</value>
@@ -2590,8 +2611,29 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="GoogleIntegrationControl_EditForm_ObjectName" xml:space="preserve">
     <value>Google connect details</value>
   </data>
+  <data name="GoogleIntegrationControl_FirstNameColumn_HeaderText" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="GoogleIntegrationControl_GoogleAppsError_Text" xml:space="preserve">
+    <value>A Google Apps error occurred.&lt;br&gt;Error code: {0}&lt;br&gt;Invalid input: {1}&lt;br&gt;Reason: {2}&lt;br&gt;</value>
+  </data>
   <data name="GoogleIntegrationControl_GoogleSetup_Text" xml:space="preserve">
     <value>Google Setup Check</value>
+  </data>
+  <data name="GoogleIntegrationControl_IdColumn_HeaderText" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="GoogleIntegrationControl_LastNameColumn_HeaderText" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="GoogleIntegrationControl_MembersColumn_AllUsersValue" xml:space="preserve">
+    <value>Group contains all users</value>
+  </data>
+  <data name="GoogleIntegrationControl_MembersColumn_HeaderText" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="GoogleIntegrationControl_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="GoogleIntegrationControl_Step1_LinkButton_Text" xml:space="preserve">
     <value>Retrieve all Users in a Domain</value>
@@ -2608,16 +2650,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="GoogleIntegrationControl_UpdateProgress_Text" xml:space="preserve">
     <value>Please wait, processing your request...&lt;br/&gt;</value>
   </data>
-  <data name="GoogleProvider_ImportFailed" xml:space="preserve">
-    <value>Import users from Google failed with error "{0}".</value>
-  </data>
-  <data name="SignupOrganizationControl_ContinueLabel_Text" xml:space="preserve">
-    <value>Please press button below to proceed.</value>
-  </data>
-  <data name="SignupOrganizationControl_Step4Link_Text" xml:space="preserve">
-    <value>Continue &gt;</value>
-  </data>
-  <data name="SignupOrganizationControl_Step4TitleLiteral_Text" xml:space="preserve">
-    <value>Import users</value>
+  <data name="GoogleIntegrationControl_UsernameColumn_HeaderText" xml:space="preserve">
+    <value>User Name</value>
   </data>
 </root>

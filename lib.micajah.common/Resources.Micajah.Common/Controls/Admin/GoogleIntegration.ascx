@@ -39,7 +39,7 @@
             </td>
         </tr>
         <tr>
-            <td class="Mf_R Mf_Rf">                
+            <td class="Mf_R Mf_Rf" style="width:125px;">
                 <label class="Mf_Ht"><asp:Literal ID="lblGoogleDomain" runat="server" /> </label>
             </td>
             <td class="Mf_R Mf_Rf">
