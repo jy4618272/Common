@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Text;
+using System.Web;
+using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
@@ -96,7 +98,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country, string currency
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
-            , string emailSuffixes, string partialCustomUrl, string providerName
+            , string partialCustomUrl, HttpRequest request
             , bool sendNotificationEmail, bool refreshAllData)
         {
             adminEmail = Support.TrimString(adminEmail, UserProvider.EmailMaxLength);
@@ -151,11 +153,15 @@ namespace Micajah.Common.Bll.Providers
             Organization org = new Organization();
             org.Load(row);
 
-            if (emailSuffixes != null)
-            {
-                EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref emailSuffixes);
+            string domain = null;
+            if (GoogleProvider.IsGoogleProviderRequest(request))
+                domain = GoogleProvider.GetDomain(request);
 
-                org.EmailSuffixes = emailSuffixes;
+            if (domain != null)
+            {
+                EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref domain);
+
+                org.EmailSuffixes = domain;
             }
 
             RaiseOrganizationInserted(org);
@@ -181,7 +187,7 @@ namespace Micajah.Common.Bll.Providers
                       , 0, 0, out password);
             }
 
-            Guid instId = InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
+            Guid instanceId = InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
                 , adminEmail, password
                 , partialCustomUrl
                 , sendNotificationEmail, refreshAllData);
@@ -190,16 +196,20 @@ namespace Micajah.Common.Bll.Providers
             if (setting != null)
             {
                 setting.Value = bool.TrueString;
-                SettingProvider.UpdateSettingValue(setting, organizationId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instId) : null), null);
+                SettingProvider.UpdateSettingValue(setting, organizationId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instanceId) : null), null);
             }
 
-            if (!string.IsNullOrEmpty(providerName))
+            if (request != null)
             {
-                setting = SettingProvider.GetSettingByShortName("ProviderName");
-                if (setting != null)
+                string providerName = GoogleProvider.GetProviderName(request);
+                if (!string.IsNullOrEmpty(providerName))
                 {
-                    setting.Value = providerName;
-                    SettingProvider.UpdateSettingValue(setting, organizationId, null, null);
+                    setting = SettingProvider.GetSettingByShortName("ProviderName");
+                    if (setting != null)
+                    {
+                        setting.Value = providerName;
+                        SettingProvider.UpdateSettingValue(setting, organizationId, null, null);
+                    }
                 }
             }
 
@@ -692,7 +702,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -718,7 +728,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, 0, true, null, false
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null, null
+                , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null
                 , sendNotificationEmail, true);
         }
 
@@ -743,7 +753,7 @@ namespace Micajah.Common.Bll.Providers
                 , expirationTime, graceDays, active, canceledTime, trial
                 , null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -775,7 +785,7 @@ namespace Micajah.Common.Bll.Providers
             , string street, string street2, string city, string state, string postalCode, string country, string currency
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string title, string phone, string mobilePhone
-            , string emailSuffixes, string partialCustomUrl, string providerName
+            , string partialCustomUrl, HttpRequest request
             , bool sendNotificationEmail)
         {
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
@@ -784,7 +794,7 @@ namespace Micajah.Common.Bll.Providers
                 , street, street2, city, state, postalCode, country, currency
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
-                , emailSuffixes, partialCustomUrl, providerName
+                , partialCustomUrl, request
                 , sendNotificationEmail, false);
         }
 

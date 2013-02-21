@@ -291,7 +291,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     try
                     {
-                        loginName = GoogleProvider.ProcessAuthenticationRequest(HttpContext.Current);
+                        loginName = GoogleProvider.ProcessOpenIdAuthenticationRequest(Context);
                     }
                     catch (AuthenticationException ex)
                     {
@@ -348,7 +348,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             LogOnButton.Click += new EventHandler(LogOnButton_Click);
 
-            LogOnViaGoogleLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?provider=google";
+            LogOnViaGoogleLink.NavigateUrl = GoogleProvider.GetLoginUrl();
             LogOnViaGoogleLink.Visible = FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
 
             PasswordRecoveryButton.CausesValidation = false;

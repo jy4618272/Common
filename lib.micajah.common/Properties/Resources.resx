@@ -2608,4 +2608,16 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="GoogleIntegrationControl_UpdateProgress_Text" xml:space="preserve">
     <value>Please wait, processing your request...&lt;br/&gt;</value>
   </data>
+  <data name="GoogleProvider_ImportFailed" xml:space="preserve">
+    <value>Import users from Google failed with error "{0}".</value>
+  </data>
+  <data name="SignupOrganizationControl_ContinueLabel_Text" xml:space="preserve">
+    <value>Please press button below to proceed.</value>
+  </data>
+  <data name="SignupOrganizationControl_Step4Link_Text" xml:space="preserve">
+    <value>Continue &gt;</value>
+  </data>
+  <data name="SignupOrganizationControl_Step4TitleLiteral_Text" xml:space="preserve">
+    <value>Import users</value>
+  </data>
 </root>

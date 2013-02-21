@@ -215,41 +215,6 @@ namespace Micajah.Common.Bll.Providers
             return svRow;
         }
 
-        /// <summary>
-        /// Updates the values of the specified settings.
-        /// </summary>
-        /// <param name="settings">>The settings to update.</param>
-        /// <param name="organizationId">The identifier of the organization.</param>
-        /// <param name="instanceId">The identifier of the instance.</param>
-        /// <param name="groupId">The identifier of the group.</param>
-        private static void UpdateSettingsValues(SettingCollection settings, Guid organizationId, Guid? instanceId, Guid? groupId)
-        {
-            if (settings == null) return;
-
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
-
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
-            Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
-            Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
-            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instId, grpId);
-
-            foreach (Setting setting in settings)
-            {
-                OrganizationDataSet.SettingsValuesRow svRow = UpdateSettingValueRow(setting, organizationId, instanceId, groupId, svTable, filter);
-                if (svRow != null)
-                {
-                    if (svRow.RowState == DataRowState.Detached)
-                        svTable.AddSettingsValuesRow(svRow);
-                }
-            }
-
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            adapters.SettingsValuesTableAdapter.Update(svTable);
-
-            Refresh();
-        }
-
         #endregion
 
         #region Internal Methods
@@ -832,36 +797,38 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Updates the instance level settings for the specified organization's instance.
+        /// Updates the values of the specified settings.
         /// </summary>
-        /// <param name="settings">The settings to update.</param>
-        /// <param name="organizationId">The identifier of the organization which the instance belong to.</param>
-        /// <param name="instanceId">The identifier of the instance to update the settings for.</param>
-        internal static void UpdateInstanceSettingsValues(SettingCollection settings, Guid organizationId, Guid instanceId)
-        {
-            UpdateSettingsValues(settings, organizationId, instanceId, null);
-        }
-
-        /// <summary>
-        /// Updates the group level settings for the specified organization's group in specified instance.
-        /// </summary>
-        /// <param name="settings">The settings to update.</param>
-        /// <param name="organizationId">The identifier of the organization which the group belong to.</param>
+        /// <param name="settings">>The settings to update.</param>
+        /// <param name="organizationId">The identifier of the organization.</param>
         /// <param name="instanceId">The identifier of the instance.</param>
-        /// <param name="groupId">The identifier of the group to update the settings for.</param>
-        internal static void UpdateGroupSettingsValues(SettingCollection settings, Guid organizationId, Guid instanceId, Guid groupId)
+        /// <param name="groupId">The identifier of the group.</param>
+        internal static void UpdateSettingsValues(SettingCollection settings, Guid organizationId, Guid? instanceId, Guid? groupId)
         {
-            UpdateSettingsValues(settings, organizationId, instanceId, groupId);
-        }
+            if (settings == null) return;
 
-        /// <summary>
-        /// Updates the organization level settings for the specified organization.
-        /// </summary>
-        /// <param name="settings">The settings to update.</param>
-        /// <param name="organizationId">The identifier of the organization to update the settings for.</param>
-        internal static void UpdateOrganizationSettingsValues(SettingCollection settings, Guid organizationId)
-        {
-            UpdateSettingsValues(settings, organizationId, null, null);
+            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
+            if (orgDataSet == null) return;
+
+            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
+            Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
+            Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
+            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instId, grpId);
+
+            foreach (Setting setting in settings)
+            {
+                OrganizationDataSet.SettingsValuesRow svRow = UpdateSettingValueRow(setting, organizationId, instanceId, groupId, svTable, filter);
+                if (svRow != null)
+                {
+                    if (svRow.RowState == DataRowState.Detached)
+                        svTable.AddSettingsValuesRow(svRow);
+                }
+            }
+
+            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            adapters.SettingsValuesTableAdapter.Update(svTable);
+
+            Refresh();
         }
 
         #endregion

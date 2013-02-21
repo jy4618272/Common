@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll
 {
@@ -669,6 +668,21 @@ namespace Micajah.Common.Bll
 
         #endregion
 
+        #region Private Methods
+
+        private void UpdateValues(Guid organizationId, Guid? instanceId, Guid? groupId)
+        {
+            if (ValuesUpdating != null)
+                ValuesUpdating(this, new SettingCollectionUpdateValuesEventArgs(organizationId, instanceId, groupId));
+
+            SettingProvider.UpdateSettingsValues(this, organizationId, instanceId, groupId);
+
+            if (ValuesUpdated != null)
+                ValuesUpdated(this, new SettingCollectionUpdateValuesEventArgs(organizationId, instanceId, groupId));
+        }
+
+        #endregion
+
         #region Internal Methods
 
         /// <summary>
@@ -820,11 +834,7 @@ namespace Micajah.Common.Bll
         /// <param name="organizationId">The identifier of the organization to update the settings for.</param>
         public void UpdateValues(Guid organizationId)
         {
-            if (ValuesUpdating != null) ValuesUpdating(this, new SettingCollectionUpdateValuesEventArgs(organizationId));
-
-            SettingProvider.UpdateOrganizationSettingsValues(this, organizationId);
-
-            if (ValuesUpdated != null) ValuesUpdated(this, new SettingCollectionUpdateValuesEventArgs(organizationId));
+            UpdateValues(organizationId, null, null);
         }
 
         /// <summary>
@@ -834,11 +844,7 @@ namespace Micajah.Common.Bll
         /// <param name="instanceId">The identifier of the instance to update the settings for.</param>
         public void UpdateValues(Guid organizationId, Guid instanceId)
         {
-            if (ValuesUpdating != null) ValuesUpdating(this, new SettingCollectionUpdateValuesEventArgs(organizationId, instanceId));
-
-            SettingProvider.UpdateInstanceSettingsValues(this, organizationId, instanceId);
-
-            if (ValuesUpdated != null) ValuesUpdated(this, new SettingCollectionUpdateValuesEventArgs(organizationId, instanceId));
+            UpdateValues(organizationId, instanceId, null);
         }
 
         /// <summary>
@@ -849,11 +855,7 @@ namespace Micajah.Common.Bll
         /// <param name="groupId">The identifier of the group to update the settings for.</param>
         public void UpdateValues(Guid organizationId, Guid instanceId, Guid groupId)
         {
-            if (ValuesUpdating != null) ValuesUpdating(this, new SettingCollectionUpdateValuesEventArgs(organizationId, instanceId, groupId));
-
-            SettingProvider.UpdateGroupSettingsValues(this, organizationId, instanceId, groupId);
-
-            if (ValuesUpdated != null) ValuesUpdated(this, new SettingCollectionUpdateValuesEventArgs(organizationId, instanceId, groupId));
+            UpdateValues(organizationId, new Guid?(instanceId), new Guid?(groupId));
         }
 
         #endregion
@@ -885,6 +887,13 @@ namespace Micajah.Common.Bll
         }
 
         public SettingCollectionUpdateValuesEventArgs(Guid organizationId, Guid instanceId, Guid groupId)
+        {
+            m_OrganizationId = organizationId;
+            m_InstanceId = instanceId;
+            m_GroupId = groupId;
+        }
+
+        public SettingCollectionUpdateValuesEventArgs(Guid organizationId, Guid? instanceId, Guid? groupId)
         {
             m_OrganizationId = organizationId;
             m_InstanceId = instanceId;

@@ -81,7 +81,7 @@
                 <action id="72B411D0-FB81-4444-B217-AFC4416A5319" type="Page" name="Ldap Group Mappings" description="Ldap Group Mappings" navigateUrl="/mc/admin/ldapgroupmappings.aspx" orderNumber="2" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" alternativeParents="00000000-0000-0000-0000-000000000011" visible="false"/>
               </actions>
             </action>
-			  <action id="D79FFA5D-54C2-4EB0-AB47-42DDA41C1380" type="Page" name="Google Integration" orderNumber="2" description="Setup Google integration to manage all login accounts" navigateUrl="/mc/admin/googleintegration.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" />
+            <action id="D79FFA5D-54C2-4EB0-AB47-42DDA41C1380" type="Page" name="Google Integration" orderNumber="2" description="Setup Google integration to manage all login accounts" navigateUrl="/mc/admin/googleintegration.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" />
           </actions>
         </action>
         <action id="B399B062-CA0B-4296-A43C-F9DA8B2C60BC" type="Page" name="More Configuration" description="More Configuration" navigateUrl="" orderNumber="100000" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
@@ -96,7 +96,7 @@
                   </actions>
                 </action>
               </actions>
-            </action>            
+            </action>
             <action id="00000000-0000-0000-0000-000000000018" type="Page" name="Diagnose Settings" description="Diagnose the Settings of the Users or Groups" navigateUrl="/mc/admin/settingsdiagnostic.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
             <action id="00000000-0000-0000-0000-000000000011" type="Page" name="Groups" description="Manage the Groups" navigateUrl="/mc/admin/group.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
               <actions>
@@ -177,6 +177,7 @@
       <settings>
         <setting id="97F2F811-BB75-4550-AE92-007202A4BA29" type="Value" name="Start Menu Checked Items" shortName="StartMenuCheckedItems" />
         <setting id="6192CC54-6656-4F42-B526-EE333F1670B4" type="Value" name="Provider Name" shortName="ProviderName" />
+        <setting id="465D5319-DFCF-45BD-9C6D-49FCB6BE9C78" type="Value" name="Refresh Token" shortName="RefreshToken" />
       </settings>
     </action>
     <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="10000" authenticationRequired="true" instanceRequired="false" />

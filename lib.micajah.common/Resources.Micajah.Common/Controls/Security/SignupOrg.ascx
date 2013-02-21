@@ -200,8 +200,7 @@
                     <td>
                         <mits:TextBox ID="ConfirmPassword" runat="server" Required="true" ValidationGroup="Step2"
                             TextMode="Password" Width="350px" /><asp:CustomValidator ID="PasswordCompareValidator"
-                                runat="server" Display="Dynamic" ValidationGroup="Step2" CssClass="Error"
-                                ClientValidationFunction="PasswordCompareValidation" />
+                                runat="server" Display="Dynamic" ValidationGroup="Step2" CssClass="Error" ClientValidationFunction="PasswordCompareValidation" />
                     </td>
                 </tr>
                 <tr>
@@ -277,6 +276,35 @@
             </td>
         </tr>
     </table>
+</div>
+<div id="Step4Panel" runat="server">
+    <div class="Mp_Dm">
+        <table align="center" style="width: 575px;">
+            <tr>
+                <td style="padding-top: 20px;">
+                    <h1>
+                        <asp:Literal ID="Step4TitleLiteral" runat="server"></asp:Literal></h1>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 20px;">
+                    <asp:Label ID="ErrorLabel" runat="server" CssClass="Error Block"></asp:Label>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 10px;">
+                    <p>
+                        <asp:Label ID="ContinueLabel" runat="server"></asp:Label></p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 20px;">
+                    <asp:HyperLink ID="Step4Link" runat="server" CssClass="Button Green Large">
+                    </asp:HyperLink>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountriesView"
     TypeName="Micajah.Common.Bll.Providers.CountryProvider"></asp:ObjectDataSource>

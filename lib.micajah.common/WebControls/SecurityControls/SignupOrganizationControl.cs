@@ -93,6 +93,12 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Button Step3Button;
         protected System.Web.UI.WebControls.TextBox SelectedInstance;
 
+        protected HtmlGenericControl Step4Panel;
+        protected Literal Step4TitleLiteral;
+        protected Label ErrorLabel;
+        protected Label ContinueLabel;
+        protected HyperLink Step4Link;
+
         protected ObjectDataSource CountriesDataSource;
         protected ObjectDataSource InstanceListDataSource;
 
@@ -244,6 +250,10 @@ function InstanceRequiredValidation(source, arguments) {{
             CustomizeLiteral.Text = Resources.SignupOrganizationControl_CustomizeLiteral_Text;
             Step3Button.Text = Resources.SignupOrganizationControl_Step3Button_Text;
 
+            Step4TitleLiteral.Text = Resources.SignupOrganizationControl_Step4TitleLiteral_Text;
+            ContinueLabel.Text = Resources.SignupOrganizationControl_ContinueLabel_Text;
+            Step4Link.Text = Resources.SignupOrganizationControl_Step4Link_Text;
+
             if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
                 LogoImage1.Visible = LogoImage2.Visible = false;
             else
@@ -295,6 +305,11 @@ function InstanceRequiredValidation(source, arguments) {{
             base.OnPreRender(e);
 
             Micajah.Common.Pages.MasterPage.AddGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
+
+            if (Step4Panel.Visible)
+            {
+                ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(DetailMenuTheme.Modern), DetailMenuTheme.Modern.ToString());
+            }
 
             if (Step3Panel.Visible)
             {
@@ -353,15 +368,36 @@ function InstanceRequiredValidation(source, arguments) {{
             {
                 this.LoadResources();
 
+                Step1Panel.Visible = false;
+                Step2Panel.Visible = false;
+                Step3Panel.Visible = false;
+                Step4Panel.Visible = false;
+
+                if (GoogleProvider.IsGoogleProviderRequest(Request))
+                {
+                    string returnUrl = null;
+
+                    try
+                    {
+                        GoogleProvider.ProcessOAuth2AuthorizationResponse(Context, ref returnUrl);
+                    }
+                    catch (System.Security.Authentication.AuthenticationException ex)
+                    {
+                        ErrorLabel.Text = ex.Message;
+                        Step4Link.NavigateUrl = returnUrl;
+                        Step4Panel.Visible = true;
+
+                        return;
+                    }
+                }
+
                 // Use this hack for CustomValidator for Modern theme.
                 PasswordCompareValidator.Attributes["controltovalidate2"] = ConfirmPassword.ClientID;
                 InstanceRequiredValidator.Attributes["controltovalidate2"] = SelectedInstance.ClientID;
 
-                OrganizationUrlRow.Visible = (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled);
+                OrganizationUrlRow.Visible = FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled;
 
                 Step1Panel.Visible = true;
-                Step2Panel.Visible = false;
-                Step3Panel.Visible = false;
 
                 BaseControl.TimeZoneListDataBind(TimeZoneList, null, false);
                 this.FillCurrencyList();
@@ -618,33 +654,23 @@ function InstanceRequiredValidation(source, arguments) {{
             if (!string.IsNullOrEmpty(SelectedInstance.Text))
                 templateInstanceId = new Guid(SelectedInstance.Text);
 
-            string returnUrl = null;
-            string domain = null;
-            if (GoogleProvider.IsGoogleProviderRequest(Request))
-            {
-                domain = GoogleProvider.GetDomain(Request);
-                returnUrl = GoogleProvider.GetReturnUrl(Request);
-            }
-
             Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, this.WebSiteUrl
                 , null, null, null, null, null, null, CurrencyList.SelectedValue
                 , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
-                , domain, OrganizationUrl.Text, GoogleProvider.GetProviderName(Request)
+                , OrganizationUrl.Text, this.Request
                 , true);
 
             Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
 
             WebApplication.RefreshAllData(false);
 
-            if (string.IsNullOrEmpty(returnUrl))
-            {
-                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
-                    , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
-                    , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
-            }
-            else
-                Response.Redirect(returnUrl);
+            if (GoogleProvider.IsGoogleProviderRequest(this.Request))
+                GoogleProvider.ProcessOAuth2AuthorizationRequest(this.Context);
+
+            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
+                , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
+                , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
         }
 
         #endregion

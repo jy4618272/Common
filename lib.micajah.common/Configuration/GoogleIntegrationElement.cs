@@ -56,23 +56,37 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the consumer key.
+        /// Gets or sets the client ID.
         /// </summary>
-        [ConfigurationProperty("consumerKey")]
-        public string ConsumerKey
+        [ConfigurationProperty("clientId")]
+        public string ClientId
         {
-            get { return (string)this["consumerKey"]; }
-            set { this["consumerKey"] = value; }
+            get { return (string)this["clientId"]; }
+            set { this["clientId"] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the consumer secret.
+        /// Gets or sets the client secret.
         /// </summary>
-        [ConfigurationProperty("consumerSecret")]
-        public string ConsumerSecret
+        [ConfigurationProperty("clientSecret")]
+        public string ClientSecret
         {
-            get { return (string)this["consumerSecret"]; }
-            set { this["consumerSecret"] = value; }
+            get { return (string)this["clientSecret"]; }
+            set { this["clientSecret"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the space delimited set of permissions the application requests.
+        /// </summary>
+        [ConfigurationProperty("scope")]
+        public string Scope
+        {
+            get
+            {
+                string value = (string)this["scope"];
+                return (string.IsNullOrEmpty(value) ? "https://apps-apis.google.com/a/feeds/user/" : value);
+            }
+            set { this["scope"] = value; }
         }
 
         #endregion
