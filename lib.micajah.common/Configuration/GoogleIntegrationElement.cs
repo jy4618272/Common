@@ -41,7 +41,11 @@ namespace Micajah.Common.Configuration
         [ConfigurationProperty("openIdProviderEndpointAddress")]
         public string OpenIdProviderEndpointAddress
         {
-            get { return (string)this["openIdProviderEndpointAddress"]; }
+            get
+            {
+                string value = (string)this["openIdProviderEndpointAddress"];
+                return (string.IsNullOrEmpty(value) ? "https://www.google.com/accounts/o8/id" : value);
+            }
             set { this["openIdProviderEndpointAddress"] = value; }
         }
 
