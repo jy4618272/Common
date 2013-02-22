@@ -96,7 +96,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private void Redirect()
         {
             string redirectUrl = Request.QueryString["returnurl"];
-            Micajah.Common.WebControls.SecurityControls.ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, false);
+            Micajah.Common.WebControls.SecurityControls.ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);
             if (!string.IsNullOrEmpty(redirectUrl))
                 Response.Redirect(redirectUrl);
         }

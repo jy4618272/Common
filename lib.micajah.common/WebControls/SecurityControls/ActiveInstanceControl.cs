@@ -62,7 +62,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                 {
                     if (validateRedirectUrl)
-                        ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
+                        ValidateRedirectUrl(ref redirectUrl, true);
 
                     errorDiv.Page.Session.Clear();
 
@@ -73,7 +73,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     user.SelectInstance(instanceId);
 
                     //if (validateRedirectUrl)
-                    ValidateRedirectUrl(ref redirectUrl, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance));
+                    ValidateRedirectUrl(ref redirectUrl, true);
 
                     if (!string.IsNullOrEmpty(redirectUrl))
                         errorDiv.Page.Response.Redirect(redirectUrl);
@@ -132,25 +132,16 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
         }
 
-        internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartMenu)
+        internal static void ValidateRedirectUrl(ref string redirectUrl, bool enableStartPage)
         {
             ValidateRedirectUrl(ref redirectUrl);
 
-            UserContext user = UserContext.Current;
-
-            if (enableStartMenu)
+            if (enableStartPage && string.IsNullOrEmpty(redirectUrl))
             {
-                if (user != null && user.IsOrganizationAdministrator)
-                {
-                    bool redirect = false;
-                    Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(user, out redirect);
-                    if (!redirect)
-                        redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath);
-                }
+                UserContext user = UserContext.Current;
+                if (user != null)
+                    redirectUrl = user.StartPageUrl;
             }
-
-            if (string.IsNullOrEmpty(redirectUrl))
-                redirectUrl = user.StartPageUrl;
         }
 
         #endregion
