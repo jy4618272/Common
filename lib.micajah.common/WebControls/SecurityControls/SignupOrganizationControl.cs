@@ -334,6 +334,10 @@ function InstanceRequiredValidation(source, arguments) {{
                     ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(DetailMenuTheme.Modern), DetailMenuTheme.Modern.ToString());
 
                     ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SelectItemClientScript", this.SelectItemClientScript, true);
+
+                    string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
+                    if (!string.IsNullOrEmpty(code))
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
                 }
                 else
                 {

@@ -93,6 +93,24 @@ namespace Micajah.Common.Configuration
             set { this["scope"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the code for Google AdWords conversion tracking.
+        /// </summary>
+        [ConfigurationProperty("conversionCode")]
+        public TextConfigurationElement<string> ConversionCode
+        {
+            get { return (TextConfigurationElement<string>)this["conversionCode"]; }
+        }
+
+        /// <summary>
+        /// Gets or sets the code for Google Analytics.
+        /// </summary>
+        [ConfigurationProperty("analyticsCode")]
+        public TextConfigurationElement<string> AnalyticsCode
+        {
+            get { return (TextConfigurationElement<string>)this["analyticsCode"]; }
+        }
+
         #endregion
     }
 }
