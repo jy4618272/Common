@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Security;
 
@@ -9,6 +8,7 @@ namespace Micajah.Common.Bll
     /// <summary>
     /// The collection of bread crumbs.
     /// </summary>
+    [Serializable]
     public sealed class BreadcrumbCollection : ActionCollection
     {
         #region Private Methods
