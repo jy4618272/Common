@@ -2653,4 +2653,10 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="GoogleIntegrationControl_UsernameColumn_HeaderText" xml:space="preserve">
     <value>User Name</value>
   </data>
+  <data name="GoogleIntegrationControl_ImportUsers_LinkButton_Text" xml:space="preserve">
+    <value>Import/update these users</value>
+  </data>
+  <data name="GoogleIntegrationControl_ImportUsers_Result_Text" xml:space="preserve">
+    <value>Import/update was successfull for {0} users. &lt;br/&gt; Import/update was failed for {1} users.</value>
+  </data>
 </root>

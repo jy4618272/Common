@@ -37,6 +37,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected Label lblStep1;
         protected LinkButton lbStep1;
+        protected LinkButton lbImportUsers;
         protected UpdateProgress upStep1Progress;
         protected MultiView mvStep1;
         protected View vwStep1Result;
@@ -80,6 +81,9 @@ namespace Micajah.Common.WebControls.AdminControls
                 gvStep1Results.DataBind();
 
                 mvStep1.SetActiveView(vwStep1Result);
+
+                lbImportUsers.Text = Resources.GoogleIntegrationControl_ImportUsers_LinkButton_Text;
+                lbImportUsers.Visible = lbImportUsers.Enabled = dt.Rows.Count > 0;
             }
             catch (AppsException a)
             {
@@ -141,6 +145,91 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
+        protected void lbImportUsers_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AppsService service = new AppsService(txtGoogleDomain.Text, txtGoogleEmail.Text, txtGooglePassword.Text);
+                UserFeed userFeed = service.RetrieveAllUsers();
+                int failed = 0;
+                int count = userFeed.Entries.Count;
+
+                for (int i = 0; i < userFeed.Entries.Count; i++)
+                {
+                    try
+                    {
+                        UserEntry userEntry = userFeed.Entries[i] as UserEntry;
+                        if (userEntry != null)
+                        {
+                            Guid instanceId = InstanceProvider.GetFirstInstanceId(UserContext.Current.SelectedOrganizationId);
+                            Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(UserContext.Current.SelectedOrganizationId, instanceId);
+
+                            string groups = groupId.ToString();
+
+                            if (userEntry.Login.Admin)
+                            {
+                                groups = Guid.Empty.ToString();
+
+                                Bll.Instance inst = new Bll.Instance();
+                                if (inst.Load(UserContext.Current.SelectedOrganizationId, instanceId))
+                                {
+                                    System.Collections.IList roleIdList = inst.GroupIdRoleIdList.GetValueList();
+                                    if (roleIdList != null)
+                                    {
+                                        Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
+                                        if (roleId != Guid.Empty)
+                                        {
+                                            int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
+                                            if (idx > -1)
+                                            {
+                                                groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
+                                                groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                            }
+                                        }
+
+                                        roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
+                                        if (roleId != Guid.Empty)
+                                        {
+                                            int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
+                                            if (idx > -1)
+                                            {
+                                                groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
+                                                groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Guid loginId = UserProvider.AddUserToOrganization(string.Format("{0}@{1}", userEntry.Login.UserName, txtGoogleDomain.Text), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
+                            , null, null, null, null, null
+                            , null, null, null, null, null, null
+                            , groups, UserContext.Current.SelectedOrganizationId
+                            , "12345", false, false);
+
+                            UserProvider.RaiseUserInserted(loginId, UserContext.Current.SelectedOrganizationId, null, Bll.Support.ConvertStringToGuidList(groups));
+                        }
+                    }
+                    catch { failed++; }
+                }
+
+                lbImportUsers.Enabled = false;
+                lbImportUsers.Enabled = false;
+
+                lbImportUsers.Text = string.Format(CultureInfo.CurrentCulture, Resources.GoogleIntegrationControl_ImportUsers_Result_Text, count - failed, failed);
+            }
+            catch (AppsException a)
+            {
+                lblStep1Error.Text = string.Format(CultureInfo.CurrentCulture, Resources.GoogleIntegrationControl_GoogleAppsError_Text, a.ErrorCode, a.InvalidInput, a.Reason);
+                mvStep1.SetActiveView(vwStep1Error);
+            }
+            catch (Exception ex)
+            {
+                lblStep1Error.Text = ex.Message;
+                mvStep1.SetActiveView(vwStep1Error);
+            }
+        }
+
         protected void gvStep2Results_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -170,6 +259,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
             lblStep1.Text = Resources.GoogleIntegrationControl_Step1_Text;
             lbStep1.Text = Resources.GoogleIntegrationControl_Step1_LinkButton_Text;
+
+            lbImportUsers.Text = Resources.GoogleIntegrationControl_ImportUsers_LinkButton_Text;
 
             upStep1Progress.ProgressText = Resources.GoogleIntegrationControl_UpdateProgress_Text;
             upStep1Progress.Timeout = int.MaxValue;

@@ -2256,6 +2256,24 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import/update these users.
+        /// </summary>
+        internal static string GoogleIntegrationControl_ImportUsers_LinkButton_Text {
+            get {
+                return ResourceManager.GetString("GoogleIntegrationControl_ImportUsers_LinkButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import/update was successfull for {0} users. &lt;br/&gt; Import/update was failed for {1} users..
+        /// </summary>
+        internal static string GoogleIntegrationControl_ImportUsers_Result_Text {
+            get {
+                return ResourceManager.GetString("GoogleIntegrationControl_ImportUsers_Result_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last Name.
         /// </summary>
         internal static string GoogleIntegrationControl_LastNameColumn_HeaderText {

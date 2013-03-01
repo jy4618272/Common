@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Web;
+using System.Data;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.RelyingParty;
@@ -279,11 +280,71 @@ namespace Micajah.Common.Bll.Providers
 
         public static void ImportUsers(Guid organizationId, string domain, OAuth2Parameters parameters)
         {
-            // TODO: Imports the users from Google.
+            AppsService service = CreateAppsService(domain, parameters);
+            if (service != null)
+            {
+                UserFeed userFeed = service.RetrieveAllUsers();
+                if (userFeed != null)
+                {
+                    if (userFeed.Entries.Count > 0)
+                    {
+                        for (int i = 0; i < userFeed.Entries.Count; i++)
+                        {
+                            UserEntry userEntry = userFeed.Entries[i] as UserEntry;
+                            if (userEntry != null)
+                            {
+                                Guid instanceId = InstanceProvider.GetFirstInstanceId(organizationId);
+                                Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(organizationId, instanceId);
 
-            //AppsService service = CreateAppsService(domain, parameters);
-            //service.RetrieveAllUsers();
-            //service.CreateUser(...);
+                                string groups = groupId.ToString();
+
+                                if (userEntry.Login.Admin)
+                                {
+                                    groups = Guid.Empty.ToString();
+
+                                    Bll.Instance inst = new Bll.Instance();
+                                    if (inst.Load(organizationId, instanceId))
+                                    {
+                                        System.Collections.IList roleIdList = inst.GroupIdRoleIdList.GetValueList();
+                                        if (roleIdList != null)
+                                        {
+                                            Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
+                                            if (roleId != Guid.Empty)
+                                            {
+                                                int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
+                                                if (idx > -1)
+                                                {
+                                                    groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
+                                                    groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                                }
+                                            }
+
+                                            roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
+                                            if (roleId != Guid.Empty)
+                                            {
+                                                int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
+                                                if (idx > -1)
+                                                {
+                                                    groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
+                                                    groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Guid loginId = UserProvider.AddUserToOrganization(string.Format("{0}@{1}", userEntry.Login.UserName, domain), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
+                                , null, null, null, null, null
+                                , null, null, null, null, null, null
+                                , groups, organizationId
+                                , "12345", false, false);
+
+                                UserProvider.RaiseUserInserted(loginId, organizationId, null, Bll.Support.ConvertStringToGuidList(groups));
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static void UpdateOAuth2RefreshToken(Guid organizationId, string refreshToken)

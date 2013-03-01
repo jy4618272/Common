@@ -257,6 +257,39 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Returns the highest by rank built-in role from specified roles list.
+        /// </summary>
+        /// <param name="roleIdList">The array of roles identifiers.</param>
+        /// <returns>The role identifier.</returns>
+        internal static Guid GetHighestBuiltInRoleId(IList roleIdList)
+        {
+            CommonDataSet.RoleRow searchedRoleRow = null;
+
+            if (roleIdList != null)
+            {
+                CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role;
+                CommonDataSet.RoleRow row = null;
+
+                foreach (Guid roleId in roleIdList)
+                {
+                    if (IsBuiltIn(roleId))
+                    {
+                        row = table.FindByRoleId(roleId);
+                        if (row != null)
+                        {
+                            if (searchedRoleRow == null)
+                                searchedRoleRow = row;
+                            else if (row.Rank < searchedRoleRow.Rank)
+                                searchedRoleRow = row;
+                        }
+                    }
+                }
+            }
+
+            return ((searchedRoleRow == null) ? Guid.Empty : searchedRoleRow.RoleId);
+        }
+
+        /// <summary>
         /// Returns a navigate URL of the start page's action of the specified role.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>

@@ -86,6 +86,8 @@
         <asp:MultiView ID="mvStep1" runat="server">
             <asp:View ID="vwStep1Result" runat="server">
                 <mits:CommonGridView ID="gvStep1Results" runat="server" Width="620px" AllowPaging="False" AllowSorting="False" AutoGenerateColumns="true" />
+                <br />
+                <asp:LinkButton ID="lbImportUsers" Font-Size="Medium" runat="server" OnClick="lbImportUsers_Click" />                
             </asp:View>
             <asp:View ID="vwStep1Error" runat="server">
                 <span style="color: #000066; background-color: #FFEFAC; font-family: Arial; font-size: 18px; font-weight: bold; padding: 3px 8px 3px 8px;">
