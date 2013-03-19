@@ -96,9 +96,10 @@ namespace Micajah.Common.WebControls.Reports
                     {
                         foreach (OrganizationDataSet.UserRow admin in orgAdmins)
                         {
+                            if (string.IsNullOrEmpty(admin.Email)) continue;
                             string[] arr = orgAdmin.Email.Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries);
                             string eSuffix = arr.Length > 1 ? arr[1] : arr[0];
-                            if (org.EmailSuffixes.Contains(eSuffix))
+                            if (!string.IsNullOrEmpty(org.EmailSuffixes) && org.EmailSuffixes.Contains(eSuffix))
                             {
                                 orgAdmin = admin;
                                 break;
@@ -110,9 +111,9 @@ namespace Micajah.Common.WebControls.Reports
                 }
                 if (orgAdmin!=null)
                 {
-                    afName = orgAdmin.FirstName + " " + orgAdmin.LastName;
-                    aEmail = orgAdmin.Email;
-                    aPhone = orgAdmin.Phone;                                            
+                    afName = (!string.IsNullOrEmpty(orgAdmin.FirstName) ?  orgAdmin.FirstName : string.Empty) + (!string.IsNullOrEmpty(orgAdmin.LastName) ? " " + orgAdmin.LastName : string.Empty);
+                    aEmail = !string.IsNullOrEmpty(orgAdmin.Email) ? orgAdmin.Email : string.Empty;
+                    aPhone = !string.IsNullOrEmpty(orgAdmin.Phone) ? orgAdmin.Phone : string.Empty;
                 }
                 InstanceCollection insts = InstanceProvider.GetInstances(org.OrganizationId, false);
                 foreach (Instance inst in insts)
