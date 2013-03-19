@@ -51,6 +51,7 @@
         <action id="00000000-0000-0000-0000-000000000038" type="Page" name="Database Servers" description="Manage the Database Servers" navigateUrl="/mc/setup/databaseservers.aspx" orderNumber="8" authenticationRequired="true" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000039" type="Page" name="Databases" description="Manage the Databases" navigateUrl="/mc/setup/databases.aspx" orderNumber="9" authenticationRequired="true" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000040" type="Page" name="Organizations" description="Manage the Organizations" navigateUrl="/mc/setup/organizations.aspx" orderNumber="10" authenticationRequired="true" instanceRequired="false" />
+        <action id="7062A21C-BA40-4A8F-9F33-DA68751E4F0D" type="Page" name="Activity Report" description="Build Application Accounts Activity Report" navigateUrl="/mc/activityreport.aspx" orderNumber="11" handle="true" authenticationRequired="true" instanceRequired="false" />
       </actions>
     </action>
     <action id="00000000-0000-0000-0000-000000000021" type="Page" name="My Account" description="Edit personal settings" navigateUrl="" handle="true" authenticationRequired="true" instanceRequired="false" visible="false" >

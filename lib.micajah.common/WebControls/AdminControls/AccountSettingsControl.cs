@@ -52,6 +52,10 @@ namespace Micajah.Common.WebControls.AdminControls
         protected HtmlContainerControl divCancelAccount;
         protected HtmlContainerControl divPaymentHistoryHeader;
         protected HtmlContainerControl divPaymentUpdate;
+        protected HtmlContainerControl divAccountHead;
+        protected HtmlContainerControl divAccountType;
+        protected HtmlContainerControl divTrainingHeader;
+        protected HtmlContainerControl divTraining;
 
         private SettingCollection m_PaidSettings;
         private SettingCollection m_CounterSettings;
@@ -67,6 +71,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected RadToolTip RadToolTip1;
 
         protected ChargifyConnect mChargify = null;
+        protected bool ChargifyEnabled = FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
 
         protected decimal TotalAmount
         {
@@ -165,13 +170,17 @@ namespace Micajah.Common.WebControls.AdminControls
 
             masterPage.VisibleBreadcrumbs = false;
             
-            if (CurrentBillingPlan != BillingPlan.Custom)
+            if (ChargifyEnabled && CurrentBillingPlan != BillingPlan.Custom)
             {
                 masterPage.EnableFancyBox = true;
                 this.RegisterFancyBoxInitScript();
             }
 
             if (IsPostBack) return;
+
+            this.List_DataBind();
+
+            if (CurrentBillingPlan == BillingPlan.Custom || !ChargifyEnabled) return;
 
             lblTraining1HourPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
             lblTraining3HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
@@ -194,8 +203,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 masterPage.Message = "Your Credit Card registration was Reactivated Successfully!";
             }
 
-            this.List_DataBind();
-
             SettingCollection settings = this.PaidSettings;
             if (settings["Training1Hour"] != null)
                 lblTraining1HourPrice.Text = settings["Training1Hour"].Price.ToString("$0.00");
@@ -203,8 +210,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 lblTraining3HoursPrice.Text = settings["Training3Hours"].Price.ToString("$0.00");
             if (settings["Training8Hours"] != null)
                 lblTraining8HoursPrice.Text = settings["Training8Hours"].Price.ToString("$0.00");
-
-            if (CurrentBillingPlan == BillingPlan.Custom) return;
 
             ISubscription _subscription = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
             if (_subscription != null)
@@ -267,12 +272,17 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (CurrentBillingPlan==BillingPlan.Custom)
             {
-                lCCStatus.Text = "Custom Billing Plan.";
-                lNextBillDate.Text = _expDate.HasValue ? "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy") : string.Empty;
+                lCCStatus.Text = "Custom Billing Plan";
+                divAccountType.Visible = false;
+            }
+            
+            if (!ChargifyEnabled) divAccountHead.Visible = false;
+
+            if (CurrentBillingPlan==BillingPlan.Custom || !ChargifyEnabled)
+            {
                 divPaymentUpdate.Visible = false;
-                btnPurchase1Hour.Visible = false;
-                btnPurchase3Hours.Visible = false;
-                btnPurchase8Hours.Visible = false;
+                divTrainingHeader.Visible = false;
+                divTraining.Visible = false;
                 divCancelAccountHeader.Visible = false;
                 divCancelAccount.Visible = false;
                 divPaymentHistoryHeader.Visible = false;
@@ -683,7 +693,11 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
                 }
-                if (!isChecked) return;
+                if (!isChecked)
+                {
+                    e.Item.Controls.Clear();
+                    return;
+                }
             }
 
             Control tdCol = e.Item.FindControl("AccUsageCol");
@@ -700,6 +714,13 @@ namespace Micajah.Common.WebControls.AdminControls
 
             int usageCount = 0;
             int.TryParse(setting.Value, out usageCount);
+            if (!ChargifyEnabled || CurrentBillingPlan==BillingPlan.Custom)
+            {
+                h4.InnerText = usageCount.ToString();
+                div.Controls.Add(h4);
+                tdCol.Controls.Add(div);
+                return;
+            }
 
             if (setting.Paid) m_TotalSum += setting.Price;
             else

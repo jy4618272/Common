@@ -18,8 +18,9 @@ namespace Micajah.Common.Bll.Handlers
 
         public void Start()
         {
-            this.ThreadState = ThreadStateType.Running;
+            if (!Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled) return;
 
+            this.ThreadState = ThreadStateType.Running;
             try
             {
                 ChargifyConnect _chargify = ChargifyProvider.CreateChargify();

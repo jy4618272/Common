@@ -45,6 +45,15 @@ namespace Micajah.Common.Configuration
             set { this["google"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the settings of the Chargify integration.
+        /// </summary>
+        [ConfigurationProperty("chargify")]
+        public ChargifyIntegrationElement Chargify
+        {
+            get { return (ChargifyIntegrationElement)this["chargify"]; }
+            set { this["chargify"] = value; }
+        }
         #endregion
     }
 }

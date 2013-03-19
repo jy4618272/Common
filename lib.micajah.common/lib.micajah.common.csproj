@@ -207,6 +207,7 @@
     <Compile Include="Configuration\BaseConfigurationElementCollection.cs" />
     <Compile Include="Configuration\BaseConfigurationSection.cs" />
     <Compile Include="Configuration\BreadcrumbsElement.cs" />
+    <Compile Include="Configuration\ChargifyIntegrationElement.cs" />
     <Compile Include="Configuration\CurrencyElement.cs" />
     <Compile Include="Configuration\EntityEventElement.cs" />
     <Compile Include="Configuration\EntityHierarchyElement.cs" />
@@ -374,6 +375,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
+    <Compile Include="WebControls\ActivityReportControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="WebControls\Token.cs" />
     <Compile Include="WebControls\SecurityControls\TokenControl.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -694,9 +698,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\CommonGridView.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ComboBox.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\DateRange.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\HtmlEditor.js" />
@@ -1941,7 +1943,9 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\WebEventHandler.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\WebEventHandler.ascx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\WebEventHandler.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\GlobalModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\SignupOrganization.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicFormModern.css" />
@@ -2002,6 +2006,12 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\GoogleIntegration.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ActivityReport.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\ActivityReport.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <Content Include="Runtime\ChargifyNET.dll" />

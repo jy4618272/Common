@@ -16,8 +16,8 @@
 
 </script>
 <div class="planinfo">
-    <div class="account-head">
-        <div class="account-type">
+    <div class="account-head" id="divAccountHead" runat="server">
+        <div class="account-type" id="divAccountType" runat="server">
             <h2><asp:Literal ID="lBillingPlanName" runat="server" Text="FREE"></asp:Literal></h2><small class="plandescsm"><asp:Literal ID="lSumPerMonth" runat="server" Text="per Month"></asp:Literal></small>
         </div>
         <div class="payment-set">
@@ -71,8 +71,8 @@
             </div>
         </div>
     </div>
-    <div class="account-heading"><h2>Training and Consulting</h2></div>
-    <div id="training-consulting">
+    <div class="account-heading" id="divTrainingHeader" runat="server"><h2>Training and Consulting</h2></div>
+    <div id="divTraining" runat="server">
         <p>Choose one of our training packages for a comprehensive set up and training session, including configuring your emails, setting up your business rules (SLA's), and creating your custom searches. Plus we'll help you make basic changes to your customer portal to reflect your brand, as well as walk you through the crucial parts of your SherpaDesk admin.</p>
         <table>
             <tr>

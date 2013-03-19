@@ -90,6 +90,8 @@ namespace Micajah.Common.Bll.Handlers
                     accessDenied = ((UserContext.Current != null) && (UserContext.Current.SelectedOrganization == null));
                 else if (action.ActionId == ActionProvider.GoogleIntegrationPageActionId)
                     accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
+                else if (action.ActionId == ActionProvider.ActivityReportActionId)
+                    accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
             }
 
             return accessDenied;

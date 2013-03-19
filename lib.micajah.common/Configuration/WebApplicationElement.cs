@@ -308,6 +308,9 @@ namespace Micajah.Common.Configuration
 
                         if (website.Integration.Google.ElementInformation.IsPresent)
                             elem.Google = website.Integration.Google;
+
+                        if (website.Integration.Chargify.ElementInformation.IsPresent)
+                            elem.Chargify = website.Integration.Chargify;
                     }
                 }
 
