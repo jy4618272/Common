@@ -46,7 +46,21 @@ namespace Micajah.Common.WebControls.Reports
 
             //Init datatable columns
             CommonDataSet.SettingDataTable table = Micajah.Common.Application.WebApplication.CommonDataSet.Setting;
-            string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
+            string filter = string.Format(CultureInfo.InvariantCulture, "{0} = "+ ((int)SettingType.Counter).ToString(), table.SettingTypeIdColumn.ColumnName);
+            SettingCollection counterSettings = new SettingCollection();
+            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) counterSettings.Add(SettingProvider.CreateSetting(_srow));
+            foreach (Setting setting in counterSettings)
+            {
+                DataColumn dtCol = new DataColumn(setting.ShortName, Type.GetType("System.Int32"));
+                dtCol.DefaultValue = -1;
+                dt.Columns.Add(dtCol);
+                BoundField col = new BoundField();
+                col.HeaderText = setting.CustomName;
+                col.DataField = setting.ShortName;
+                cgvList.Columns.Add(col);
+            }
+
+            filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
             SettingCollection ss = new SettingCollection();
             foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) ss.Add(SettingProvider.CreateSetting(_srow));
 
@@ -65,7 +79,7 @@ namespace Micajah.Common.WebControls.Reports
                     dt.Columns.Add(dtCol);
                 }
                 BoundField col=new BoundField();
-                col.HeaderText = setting.Name;
+                col.HeaderText = setting.CustomName;
                 col.DataField = setting.ShortName;
                 cgvList.Columns.Add(col);
             }
@@ -128,6 +142,9 @@ namespace Micajah.Common.WebControls.Reports
                     row["AdminFullName"] = afName;
                     row["AdminEmail"] = aEmail;
                     row["AdminPhone"] = aPhone;
+                    foreach (Setting setting in counterSettings)
+                        row[setting.ShortName] = setting.GetCounterValue(org.OrganizationId, inst.InstanceId);
+
                     SettingCollection settings=SettingProvider.GetCounterSettings(org.OrganizationId, inst.InstanceId);
                     foreach (Setting setting in settings)
                     {

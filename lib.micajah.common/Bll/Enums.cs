@@ -74,7 +74,12 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// On/Off switch.
         /// </summary>
-        OnOffSwitch = 4
+        OnOffSwitch = 4,
+
+        /// <summary>
+        /// The counter value.
+        /// </summary>
+        Counter = 5
     }
 
     /// <summary>

@@ -10,7 +10,6 @@
                 <mits:ButtonField ShowHeader="true" HeaderGroup="Administrator" DataTextField="AdminFullName" HeaderText="Full Name"></mits:ButtonField>
                 <mits:ButtonField ShowHeader="true" HeaderGroup="Administrator" DataTextField="AdminEmail" HeaderText="Email"></mits:ButtonField>
                 <mits:ButtonField ShowHeader="true" HeaderGroup="Administrator" DataTextField="AdminPhone" HeaderText="Phone"></mits:ButtonField>
-                <asp:BoundField DataField="LastActivityDate" HeaderText="Last Activity" DataFormatString="{0:d-MMM-yyyy}"></asp:BoundField>
             </columns>
         </mits:CommonGridView>
     </ContentTemplate>
