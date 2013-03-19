@@ -97,7 +97,7 @@ namespace Micajah.Common.WebControls.Reports
                         foreach (OrganizationDataSet.UserRow admin in orgAdmins)
                         {
                             if (string.IsNullOrEmpty(admin.Email)) continue;
-                            string[] arr = orgAdmin.Email.Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries);
+                            string[] arr = admin.Email.Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries);
                             string eSuffix = arr.Length > 1 ? arr[1] : arr[0];
                             if (!string.IsNullOrEmpty(org.EmailSuffixes) && org.EmailSuffixes.Contains(eSuffix))
                             {
