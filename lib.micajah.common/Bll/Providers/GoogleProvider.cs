@@ -196,7 +196,12 @@ namespace Micajah.Common.Bll.Providers
                 if (string.IsNullOrEmpty(error))
                 {
                     if (organizationId != Guid.Empty) // It means the organization is already registered.
-                        context.Response.Redirect(GetLoginUrl(domain));
+                    {
+                        if (string.IsNullOrEmpty(returnUrl))
+                            returnUrl = GetLoginUrl(domain);
+
+                        context.Response.Redirect(returnUrl);
+                    }
                 }
                 else
                 {
@@ -212,9 +217,9 @@ namespace Micajah.Common.Bll.Providers
                 {
                     OAuth2Parameters parameters = CreateOAuth2Parameters(CreateGoogleProvderRequestUrl(context.Request.Url.ToString()), accessCode);
 
-                    GoogleProvider.UpdateOAuth2RefreshToken(organizationId, parameters.RefreshToken);
+                    UpdateOAuth2RefreshToken(organizationId, parameters.RefreshToken);
 
-                    GoogleProvider.ImportUsers(organizationId, domain, parameters);
+                    ImportUsers(organizationId, domain, parameters);
 
                     if (string.IsNullOrEmpty(returnUrl))
                         returnUrl = GetLoginUrl(domain);
