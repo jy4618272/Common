@@ -90,6 +90,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=3.1.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Google.GData.Apps, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e6feebfe441b89cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\Google.GData.Apps.dll</HintPath>
@@ -2038,6 +2042,9 @@
     <Content Include="Runtime\DotNetOpenAuth.Core.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll" />
+    <Content Include="Runtime\EPPlus.dll" />
+    <Content Include="Runtime\EPPlus.pdb" />
+    <Content Include="Runtime\EPPlus.XML" />
     <Content Include="Runtime\Google.GData.Apps.dll" />
     <Content Include="Runtime\Google.GData.Client.dll" />
     <Content Include="Runtime\Google.GData.Extensions.dll" />
