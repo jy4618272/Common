@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
@@ -27,12 +28,17 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Literal lBillingPlanName;
         protected Literal lSumPerMonth;
         protected Literal lCCStatus;
-        protected Literal lNextBillDate;
+        protected HtmlGenericControl smallNextBillDate;
         protected Literal lPhoneSupport;
         protected Label lblPurchase;
         protected Label lblPurchaseSum;
+        protected Literal lAccountUsage;
         protected Repeater Repeater1;
+        protected HtmlContainerControl divPaidUsageHeader;
         protected Repeater Repeater2;
+        protected HtmlContainerControl divFreeUsageHeader;
+        protected Repeater Repeater3;
+        protected Repeater Repeater4;
 
         protected Label lblTraining1HourPrice;
         protected Label lblTraining3HoursPrice;
@@ -142,21 +148,156 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private void List_DataBind()
         {
-            Repeater2.DataSource = this.CounterSettings;
-            Repeater2.DataBind();
-            InitPhoneSupport();
-            TotalAmount = m_TotalSum;
-            if (TotalAmount > 0)
+            if (!ChargifyEnabled || CurrentBillingPlan == BillingPlan.Custom)
             {
-                lBillingPlanName.Text = "$" + TotalAmount.ToString("0.00");
-                if (CurrentBillingPlan == BillingPlan.Free) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Paid);
+                if (CurrentBillingPlan == BillingPlan.Custom)
+                {
+                    lCCStatus.Text = "Custom Billing Plan";
+                    divAccountType.Visible = false;
+                }
+
+                divAccountHead.Visible = ChargifyEnabled;
+                divPaymentUpdate.Visible = false;
+                divTrainingHeader.Visible = false;
+                divTraining.Visible = false;
+                divCancelAccountHeader.Visible = false;
+                divCancelAccount.Visible = false;
+                divPaymentHistoryHeader.Visible = false;
+                cgvTransactList.Visible = false;
+                divPhoneSupport.Visible = false;
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("SettingName", Type.GetType("System.String")));
+                dt.Columns.Add(new DataColumn("UsageCount", Type.GetType("System.Int32")));
+                foreach(Setting setting in this.CounterSettings)
+                {
+                    if (setting.Paid)
+                    {
+                        bool isChecked;
+                        if (!Boolean.TryParse(setting.Value, out isChecked))
+                        {
+                            if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
+                        }
+                        if (!isChecked) continue;
+                    }
+                    DataRow row = dt.NewRow();
+                    row["SettingName"] = setting.CustomName;
+                    int usageCount;
+                    int.TryParse(setting.Value, out usageCount);
+                    row["UsageCount"] = usageCount;
+                    dt.Rows.Add(row);
+                }
+                lAccountUsage.Text = "Account Usage";
+                divFreeUsageHeader.Visible = false;
+                Repeater2.DataSource = dt;
+                Repeater2.DataBind();
+                Repeater3.Visible = false;
+                Repeater4.Visible = false;
             }
             else
             {
-                lBillingPlanName.Text = "FREE";
-                if (CurrentBillingPlan == BillingPlan.Paid) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Free);
+                Repeater2.Visible = false;
+                InitPhoneSupport();
+                InitBillingControls(!IsPostBack);
+
+                DataTable dtPaid = new DataTable();
+                dtPaid.Columns.Add(new DataColumn("SettingName", Type.GetType("System.String")));
+                dtPaid.Columns.Add(new DataColumn("UsageCount", Type.GetType("System.Int32")));
+                dtPaid.Columns.Add(new DataColumn("UsageCountLimit", Type.GetType("System.Int32")));
+                dtPaid.Columns.Add(new DataColumn("Price", Type.GetType("System.Decimal")));
+                dtPaid.Columns.Add(new DataColumn("SettingDescription", Type.GetType("System.String")));
+
+
+                DataTable dtFree = new DataTable();
+                dtFree.Columns.Add(new DataColumn("SettingName", Type.GetType("System.String")));
+                dtFree.Columns.Add(new DataColumn("UsageCount", Type.GetType("System.Int32")));
+                dtFree.Columns.Add(new DataColumn("UsageCountLimit", Type.GetType("System.Int32")));
+                dtFree.Columns.Add(new DataColumn("UsagePersent", Type.GetType("System.Int32")));
+
+                foreach (Setting setting in this.CounterSettings)
+                {
+                    if (setting.Paid)
+                    {
+                        bool isChecked;
+                        if (!Boolean.TryParse(setting.Value, out isChecked))
+                        {
+                            if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
+                        }
+                        if (!isChecked) continue;
+                    }
+                    if (setting.Paid)
+                    {
+                        m_TotalSum += setting.Price;
+                        DataRow row = dtPaid.NewRow();
+                        row["SettingName"] = setting.CustomName;
+                        row["UsageCount"] = -1;
+                        row["UsageCountLimit"] = -1;
+                        row["Price"] = setting.Price;
+                        dtPaid.Rows.Add(row);
+                    }
+                    else
+                    {
+                        int usageCount;
+                        int.TryParse(setting.Value, out usageCount);
+                        int _paidQty = usageCount - setting.UsageCountLimit;
+                        decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
+                        if (_priceMonth > 0)
+                        {
+                            m_TotalSum += _priceMonth;
+                            DataRow row = dtPaid.NewRow();
+                            row["SettingName"] = setting.CustomName;
+                            row["UsageCount"] = usageCount;
+                            row["UsageCountLimit"] = setting.UsageCountLimit;
+                            row["Price"] = _priceMonth;
+                            row["SettingDescription"] = setting.CustomDescription;
+                            dtPaid.Rows.Add(row);
+                        }
+                        else
+                        {
+                            DataRow row = dtFree.NewRow();
+                            row["SettingName"] = setting.CustomName;
+                            row["UsageCount"] = usageCount;
+                            row["UsageCountLimit"] = setting.UsageCountLimit;
+                            row["UsagePersent"] = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * usageCount);
+                            dtFree.Rows.Add(row);                            
+                        }
+                    }
+                }
+                if (dtPaid.Rows.Count>0)
+                {
+                    lAccountUsage.Text = "Paid Usage";
+                    Repeater3.DataSource = dtPaid;
+                    Repeater3.DataBind();
+                }
+                else
+                {
+                    divPaidUsageHeader.Visible = false;
+                    Repeater3.Visible = false;
+                }
+                if (dtFree.Rows.Count>0)
+                {
+                    divFreeUsageHeader.Visible = true;
+                    Repeater4.Visible = true;
+                    Repeater4.DataSource = dtFree;
+                    Repeater4.DataBind();
+                }
+                else
+                {
+                    divFreeUsageHeader.Visible = false;
+                    Repeater4.Visible = false;
+                }
+                TotalAmount = m_TotalSum;
+                if (TotalAmount > 0)
+                {
+                    lBillingPlanName.Text = "$" + TotalAmount.ToString("0.00");
+                    if (CurrentBillingPlan == BillingPlan.Free) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Paid);
+                }
+                else
+                {
+                    lBillingPlanName.Text = "FREE";
+                    if (CurrentBillingPlan == BillingPlan.Paid) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Free);
+                }
             }
-            InitBillingControls(!IsPostBack);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -269,27 +410,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private void InitBillingControls(bool updateUsage)
         {
             DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
-
-            if (CurrentBillingPlan==BillingPlan.Custom)
-            {
-                lCCStatus.Text = "Custom Billing Plan";
-                divAccountType.Visible = false;
-            }
             
-            if (!ChargifyEnabled) divAccountHead.Visible = false;
-
-            if (CurrentBillingPlan==BillingPlan.Custom || !ChargifyEnabled)
-            {
-                divPaymentUpdate.Visible = false;
-                divTrainingHeader.Visible = false;
-                divTraining.Visible = false;
-                divCancelAccountHeader.Visible = false;
-                divCancelAccount.Visible = false;
-                divPaymentHistoryHeader.Visible = false;
-                cgvTransactList.Visible = false;
-                return;
-            }
-
             ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
             if (_custSubscr != null && _custSubscr.CreditCard != null && _custSubscr.State!=SubscriptionState.Canceled)
             {
@@ -301,8 +422,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
                 if (_expDate.HasValue)
                 {
-                    lNextBillDate.Visible = true;
-                    lNextBillDate.Text = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
+                    smallNextBillDate.Visible = true;
+                    smallNextBillDate.InnerText = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
                 }
             }
             else
@@ -364,25 +485,6 @@ namespace Micajah.Common.WebControls.AdminControls
             //            if (setting.Paid && setting.Price > 0) div.Controls.Add(CreateToolTip(setting));
             div0.Controls.Add(div);
             e.Item.Controls.Add(div0);
-        }
-
-        private RadToolTip CreateToolTip(Setting setting)
-        {
-            var radToolTip = new RadToolTip();
-            radToolTip.ID = "rtt" + setting.ShortName;
-            radToolTip.IsClientID = true;
-            radToolTip.TargetControlID = "div" + setting.ShortName + "OnOff";
-            radToolTip.RelativeTo = ToolTipRelativeDisplay.Element;
-            radToolTip.ShowEvent = ToolTipShowEvent.OnMouseOver;
-            radToolTip.Position = ToolTipPosition.MiddleRight;
-            radToolTip.HideEvent = ToolTipHideEvent.LeaveTargetAndToolTip;
-            radToolTip.BackColor = System.Drawing.ColorTranslator.FromHtml("#404040");
-            radToolTip.ForeColor = System.Drawing.ColorTranslator.FromHtml("#FFFFFF");
-            radToolTip.BorderColor = System.Drawing.ColorTranslator.FromHtml("#404040");
-            radToolTip.Width = 300;
-            radToolTip.Text =
-                "By clicking OK,<br /> you will turn on the " + setting.CustomName + "<br />and incure a monthly charge of $" + setting.Price.ToString("0.00") + ".";
-            return radToolTip;
         }
 
         private void DisablePurchaseButtons()
@@ -525,7 +627,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
             }
             if (isChecked && setting.Paid && setting.Price > 0) m_TotalSum += setting.Price;
-            if (setting.Paid && setting.Price > 0) phPhoneSupportToolTip.Controls.Add(CreateToolTip(setting));
             if (!IsPostBack) chkPhoneSupport.Checked = isChecked;
         }
 
@@ -676,131 +777,6 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
             Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=ok" + (!string.IsNullOrEmpty(masterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(masterPage.Message) : string.Empty));
-        }
-
-        protected void Repeater2_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            if (e == null) return;
-            if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
-
-            Setting setting = e.Item.DataItem as Setting;
-            if (setting == null) return;
-
-            if (setting.Paid)
-            {
-                bool isChecked = false;
-                if (!Boolean.TryParse(setting.Value, out isChecked))
-                {
-                    if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
-                }
-                if (!isChecked)
-                {
-                    e.Item.Controls.Clear();
-                    return;
-                }
-            }
-
-            Control tdCol = e.Item.FindControl("AccUsageCol");
-
-            HtmlGenericControl div = new HtmlGenericControl("div");
-            div.Attributes["class"] = "featurelabel";
-            HtmlGenericControl h5 = new HtmlGenericControl("h5");
-            h5.InnerText = setting.CustomName;
-            div.Controls.Add(h5);
-            tdCol.Controls.Add(div);
-            div = new HtmlGenericControl("div");
-            div.Attributes["class"] = "account-usage-amount";
-            HtmlGenericControl h4 = new HtmlGenericControl("h4");
-
-            int usageCount = 0;
-            int.TryParse(setting.Value, out usageCount);
-            if (!ChargifyEnabled || CurrentBillingPlan==BillingPlan.Custom)
-            {
-                h4.InnerText = usageCount.ToString();
-                div.Controls.Add(h4);
-                tdCol.Controls.Add(div);
-                return;
-            }
-
-            if (setting.Paid) m_TotalSum += setting.Price;
-            else
-            {
-                int _paidQty = usageCount - setting.UsageCountLimit;
-                decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
-                m_TotalSum += _priceMonth;
-            }
-
-
-            if (setting.UsageCountLimit > 1 && usageCount <= setting.UsageCountLimit)
-            {
-                HtmlGenericControl span = new HtmlGenericControl("span");
-                if (usageCount < setting.UsageCountLimit) span.Attributes["class"] = "under";
-                else if (usageCount > setting.UsageCountLimit) span.Attributes["class"] = "over";
-                else span.Attributes["class"] = "even";
-                span.InnerText = usageCount.ToString();
-                h4.Controls.Add(span);
-                h4.Controls.Add(new LiteralControl(" of " + setting.UsageCountLimit.ToString()));
-            }
-            else if (setting.Paid) h4.InnerText = "Enabled";
-            else h4.InnerText = usageCount.ToString();
-            div.Controls.Add(h4);
-            tdCol.Controls.Add(div);
-            div = new HtmlGenericControl("div");
-            div.Attributes["class"] = "clearfix";
-            tdCol.Controls.Add(div);
-            if (setting.UsageCountLimit > 1 && usageCount <= setting.UsageCountLimit)
-            {
-                div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "progress";
-                HtmlGenericControl divBar = new HtmlGenericControl("div");
-                divBar.Attributes["class"] = "bar";
-                if (usageCount < setting.UsageCountLimit)
-                {
-                    int width = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * (decimal)usageCount);
-                    divBar.Style.Add(HtmlTextWriterStyle.Width, width.ToString() + "%");
-                }
-                else if (usageCount > setting.UsageCountLimit)
-                {
-                    //                        div.Attributes["class"] = "progress-red";
-                    divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
-                }
-                else
-                {
-                    //                        div.Attributes["class"] = "progress-green";
-                    divBar.Style.Add(HtmlTextWriterStyle.Width, "100%");
-                }
-                div.Controls.Add(divBar);
-                tdCol.Controls.Add(div);
-            }
-            else if (setting.Paid || setting.UsageCountLimit == 0 || setting.UsageCountLimit == 1 || usageCount > setting.UsageCountLimit)
-            {
-                div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "accsettings paid-account";
-                HyperLink a = new HyperLink();
-                a.ID = "aTooltip";
-                a.NavigateUrl = "#" + setting.ShortName;
-                a.CssClass = "accsettings tooltip_right tooltip";
-                HtmlGenericControl span = new HtmlGenericControl("span");
-                span.Attributes["class"] = "accsettings";
-                if (setting.Paid)
-                    span.InnerHtml = "$" + setting.Price.ToString("0.00") + " / month if option is enabled";
-                else
-                    span.InnerHtml = setting.CustomDescription;
-                HtmlGenericControl h3 = new HtmlGenericControl("h3");
-                if (setting.Paid) h3.InnerText = "$" + setting.Price.ToString("0.00");
-                else if (usageCount > setting.UsageCountLimit) h3.InnerText = "$" + Convert.ToString((usageCount - setting.UsageCountLimit) * setting.Price);
-                else h3.InnerText = "$0.00";
-                a.Controls.Add(span);
-                a.Controls.Add(h3);
-                div.Controls.Add(a);
-                tdCol.Controls.Add(div);
-            }
-            else
-            {
-                div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "accsettings paid-account";
-                tdCol.Controls.Add(div);
-            }
         }
         #endregion
     }
