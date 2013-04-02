@@ -56,10 +56,7 @@ namespace Micajah.Common.WebControls.AdminControls
             ComboBox cmb = EditForm.FindControl("cmbBillingPlan") as ComboBox;
             if (cmb != null)
             {
-                cmb.Items.Add(new RadComboBoxItem(BillingPlan.Free.ToString(), ((int)BillingPlan.Free).ToString(CultureInfo.InvariantCulture)));
-                cmb.Items.Add(new RadComboBoxItem(BillingPlan.Paid.ToString(), ((int)BillingPlan.Paid).ToString(CultureInfo.InvariantCulture)));
-                cmb.Items.Add(new RadComboBoxItem(BillingPlan.Custom.ToString(), ((int)BillingPlan.Custom).ToString(CultureInfo.InvariantCulture)));
-                cmb.SelectedValue = ((int)((Instance)EditForm.DataItem).BillingPlan).ToString(CultureInfo.InvariantCulture);
+                cmb.SelectedValue = ((Instance) EditForm.DataItem).BillingPlan == BillingPlan.Custom ? "1" : "0";
             }
         }
 
@@ -93,8 +90,13 @@ namespace Micajah.Common.WebControls.AdminControls
                     Guid instId = (Guid) EditForm.DataKey[0];
                     Instance inst = UserContext.Current.SelectedInstance;
                     if (inst == null || inst.InstanceId != instId) inst = InstanceProvider.GetInstance(instId);
-                    if (inst.BillingPlan!=(BillingPlan)val)
-                        InstanceProvider.UpdateInstance(inst, (BillingPlan)val);
+                    if (inst.BillingPlan!=BillingPlan.Custom && val==1) InstanceProvider.UpdateInstance(inst, BillingPlan.Custom);
+                    else if (inst.BillingPlan==BillingPlan.Custom && val==0)
+                    {
+                        ChargifyNET.ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
+                        ChargifyNET.ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, inst.OrganizationId, inst.InstanceId);
+                        ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, inst);
+                    }
                 }
             }
             this.Redirect();

@@ -63,10 +63,10 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Guid OrganizationId, Guid InstanceId)
+        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst)
         {
             decimal _TotalSum = 0;
-            SettingCollection PaidSettings = SettingProvider.GetPaidSettings(OrganizationId, InstanceId);
+            SettingCollection PaidSettings = SettingProvider.GetPaidSettings(inst.OrganizationId, inst.InstanceId);
 
             foreach (Setting setting in PaidSettings)
             {
@@ -79,7 +79,7 @@ namespace Micajah.Common.Bll.Providers
                 _TotalSum += setting.Price;
             }
 
-            SettingCollection CounterSettings = SettingProvider.GetCounterSettings(OrganizationId, InstanceId);
+            SettingCollection CounterSettings = SettingProvider.GetCounterSettings(inst.OrganizationId, inst.InstanceId);
 
             foreach (Setting setting in CounterSettings)
             {
@@ -98,13 +98,8 @@ namespace Micajah.Common.Bll.Providers
                 _TotalSum += _priceMonth;
             }
 
-            Instance _inst = InstanceProvider.GetInstance(InstanceId, OrganizationId);
-
-            if (_inst == null) return;
-            if (_inst.BillingPlan == BillingPlan.Custom) return;
-
-            if (_TotalSum>0 && _inst.BillingPlan==BillingPlan.Free) InstanceProvider.UpdateInstance(_inst, BillingPlan.Paid);
-            else if (_TotalSum==0 && _inst.BillingPlan!=BillingPlan.Free) InstanceProvider.UpdateInstance(_inst, BillingPlan.Free);
+            if (_TotalSum>0 && inst.BillingPlan!=BillingPlan.Paid) InstanceProvider.UpdateInstance(inst, BillingPlan.Paid);
+            else if (_TotalSum==0 && inst.BillingPlan!=BillingPlan.Free) InstanceProvider.UpdateInstance(inst, BillingPlan.Free);
         }
     }
 }
