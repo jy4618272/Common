@@ -39,7 +39,7 @@ namespace Micajah.Common.Bll.Handlers
                         ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _inst);
                         if (_custSubscr!=null) updatedCount++;
                         if (_custSubscr == null && _inst.CreditCardStatus == CreditCardStatus.Registered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.NotRegistered);
-                        else if (_custSubscr != null && _custSubscr.State != SubscriptionState.Active && _inst.CreditCardStatus == CreditCardStatus.Registered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.NotRegistered);
+                        else if (_custSubscr != null && _custSubscr.State != SubscriptionState.Active && _inst.CreditCardStatus == CreditCardStatus.Registered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Declined);
                     }
                 }
             }

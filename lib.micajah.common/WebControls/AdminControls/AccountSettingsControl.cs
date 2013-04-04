@@ -412,13 +412,13 @@ namespace Micajah.Common.WebControls.AdminControls
             DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
             
             ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
-            if (_custSubscr != null && _custSubscr.CreditCard != null && _custSubscr.State!=SubscriptionState.Canceled)
+            if (_custSubscr != null && _custSubscr.CreditCard != null)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
                 if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.SelectedInstance);
                 TotalAmount = m_TotalSum;
                 SubscriptionId = _custSubscr.SubscriptionID;
-                lCCStatus.Text = "Credit Card Registered.";
+                lCCStatus.Text = "Credit Card Registered and "+_custSubscr.State.ToString()+".";
                 TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
                 if (_expDate.HasValue)
                 {
