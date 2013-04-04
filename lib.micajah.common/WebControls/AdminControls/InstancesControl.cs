@@ -54,10 +54,11 @@ namespace Micajah.Common.WebControls.AdminControls
         void EditForm_DataBound(object sender, EventArgs e)
         {
             ComboBox cmb = EditForm.FindControl("cmbBillingPlan") as ComboBox;
-            if (cmb != null)
+            if (cmb != null && EditForm.DataItem != null)
             {
-                cmb.SelectedValue = ((Instance) EditForm.DataItem).BillingPlan == BillingPlan.Custom ? "1" : "0";
+                cmb.SelectedValue = ((Instance)EditForm.DataItem).BillingPlan == BillingPlan.Custom ? "1" : "0";
             }
+            else cmb.SelectedValue = "0";
         }
 
         protected override void LoadResources()
