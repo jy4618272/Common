@@ -127,6 +127,10 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -674,6 +678,7 @@
     <None Include="Migrated rules for lib.micajah.common.ruleset" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />
     <Content Include="Runtime\Telerik.Web.UI.Skins.dll" />

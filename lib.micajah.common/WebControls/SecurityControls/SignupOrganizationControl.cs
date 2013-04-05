@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -11,6 +12,7 @@ using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.WebControls.SetupControls;
+using Newtonsoft.Json;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -72,8 +74,10 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected CustomValidator EmailValidator2;
         protected Image EmailTick2;
         protected Label PasswordLabel;
+        protected HtmlTableRow PasswordRow;
         protected TextBox Password;
         protected CustomValidator PasswordValidator;
+        protected HtmlTableRow ConfirmPasswordRow;
         protected Label ConfirmPasswordLabel;
         protected TextBox ConfirmPassword;
         protected CustomValidator PasswordCompareValidator;
@@ -93,11 +97,11 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Button Step3Button;
         protected System.Web.UI.WebControls.TextBox SelectedInstance;
 
-        protected HtmlGenericControl Step4Panel;
-        protected Literal Step4TitleLiteral;
+        protected HtmlGenericControl ErrorPanel;
+        protected Image LogoImage3;
         protected Label ErrorLabel;
-        protected Label ContinueLabel;
-        protected HyperLink Step4Link;
+        protected Label ErrorContinueLabel;
+        protected HyperLink ErrorContinueLink;
 
         protected ObjectDataSource CountriesDataSource;
         protected ObjectDataSource InstanceListDataSource;
@@ -190,6 +194,12 @@ function InstanceRequiredValidation(source, arguments) {{
             set { this.ViewState["NewPassword"] = value; }
         }
 
+        private string OAuth2Parameters
+        {
+            get { return (string)this.ViewState["OAuth2Parameters"]; }
+            set { this.ViewState["OAuth2Parameters"] = value; }
+        }
+
         private string WebSiteUrl
         {
             get
@@ -263,14 +273,13 @@ function InstanceRequiredValidation(source, arguments) {{
             CustomizeLiteral.Text = Resources.SignupOrganizationControl_CustomizeLiteral_Text;
             Step3Button.Text = Resources.SignupOrganizationControl_Step3Button_Text;
 
-            Step4TitleLiteral.Text = Resources.SignupOrganizationControl_Step4TitleLiteral_Text;
-            ContinueLabel.Text = Resources.SignupOrganizationControl_ContinueLabel_Text;
-            Step4Link.Text = Resources.SignupOrganizationControl_Step4Link_Text;
+            ErrorContinueLabel.Text = Resources.SignupOrganizationControl_ErrorContinueLabel_Text;
+            ErrorContinueLink.Text = Resources.SignupOrganizationControl_ErrorContinueLink_Text;
 
             if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
-                LogoImage1.Visible = LogoImage2.Visible = false;
+                LogoImage1.Visible = LogoImage2.Visible = LogoImage3.Visible = false;
             else
-                LogoImage1.ImageUrl = LogoImage2.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                LogoImage1.ImageUrl = LogoImage2.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
         }
 
         private void FillCurrencyList()
@@ -318,11 +327,6 @@ function InstanceRequiredValidation(source, arguments) {{
             base.OnPreRender(e);
 
             Micajah.Common.Pages.MasterPage.AddGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
-
-            if (Step4Panel.Visible)
-            {
-                ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(DetailMenuTheme.Modern), DetailMenuTheme.Modern.ToString());
-            }
 
             if (Step3Panel.Visible)
             {
@@ -391,24 +395,50 @@ function InstanceRequiredValidation(source, arguments) {{
                 Step1Panel.Visible = false;
                 Step2Panel.Visible = false;
                 Step3Panel.Visible = false;
-                Step4Panel.Visible = false;
+                ErrorPanel.Visible = false;
 
-                if (GoogleProvider.IsGoogleProviderRequest(Request))
+                if (GoogleProvider.IsGoogleProviderRequest(this.Request))
                 {
                     string returnUrl = null;
+                    OAuth2Parameters parameters = null;
 
                     try
                     {
-                        GoogleProvider.ProcessOAuth2AuthorizationResponse(Context, ref returnUrl);
+                        GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
+                        this.OAuth2Parameters = JsonConvert.SerializeObject(parameters);
                     }
                     catch (System.Security.Authentication.AuthenticationException ex)
                     {
+                        ErrorContinueLink.NavigateUrl = returnUrl;
                         ErrorLabel.Text = ex.Message;
-                        Step4Link.NavigateUrl = returnUrl;
-                        Step4Panel.Visible = true;
+                        ErrorPanel.Visible = true;
 
                         return;
                     }
+
+                    string email = null;
+                    string firstName = null;
+                    string lastName = null;
+                    string timeZone = null;
+
+                    GoogleProvider.GetUserProfile(parameters.AccessToken, out email, out firstName, out lastName, out timeZone);
+
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        Email1.Text = email;
+                        Email1.ReadOnly = true;
+                    }
+
+                    if (!string.IsNullOrEmpty(firstName))
+                        FirstName.Text = firstName;
+
+                    if (!string.IsNullOrEmpty(lastName))
+                        LastName.Text = lastName;
+
+                    HowYouHearAboutUs.Text = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
+
+                    PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
+                    PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
                 }
 
                 // Use this hack for CustomValidator for Modern theme.
@@ -686,7 +716,12 @@ function InstanceRequiredValidation(source, arguments) {{
             WebApplication.RefreshAllData(false);
 
             if (GoogleProvider.IsGoogleProviderRequest(this.Request))
-                GoogleProvider.ProcessOAuth2AuthorizationRequest(this.Context);
+            {
+                string returnUrl = null;
+                OAuth2Parameters parameters = JsonConvert.DeserializeObject<OAuth2Parameters>(this.OAuth2Parameters);
+
+                GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
+            }
 
             Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
                 , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true

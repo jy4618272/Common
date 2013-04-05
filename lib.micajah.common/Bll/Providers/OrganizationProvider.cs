@@ -157,7 +157,13 @@ namespace Micajah.Common.Bll.Providers
             if (GoogleProvider.IsGoogleProviderRequest(request))
                 domain = GoogleProvider.GetDomain(request);
 
-            if (domain != null)
+            if (string.IsNullOrEmpty(domain))
+            {
+                string returnUrl = null;
+                GoogleProvider.ParseOAuth2AuthorizationRequestState(request, ref domain, ref returnUrl);
+            }
+
+            if (!string.IsNullOrEmpty(domain))
             {
                 EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref domain);
 
