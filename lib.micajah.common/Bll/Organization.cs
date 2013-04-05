@@ -97,6 +97,7 @@ namespace Micajah.Common.Bll
             m_PostalCode = string.Empty;
             m_Country = string.Empty;
             m_Currency = string.Empty;
+            HowYouHearAboutUs = string.Empty;
         }
 
         #endregion
@@ -598,6 +599,11 @@ namespace Micajah.Common.Bll
             set { m_Currency = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the value for how this organization hear about us.
+        /// </summary>
+        public string HowYouHearAboutUs { get; set; }
+
         #endregion
 
         #region Operators
@@ -737,6 +743,7 @@ namespace Micajah.Common.Bll
                 m_PostalCode = row.PostalCode;
                 m_Country = row.Country;
                 m_Currency = row.Currency;
+                HowYouHearAboutUs = row.HowYouHearAboutUs;
 
                 this.Reset();
             }
@@ -808,6 +815,7 @@ namespace Micajah.Common.Bll
                 m_PostalCode = (string)row["PostalCode"];
                 m_Country = (string)row["Country"];
                 m_Currency = (string)row["Currency"];
+                HowYouHearAboutUs = (string)row["HowYouHearAboutUs"];
 
                 this.Reset();
             }

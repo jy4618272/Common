@@ -30,6 +30,7 @@
     [PostalCode]           NVARCHAR (20)    CONSTRAINT [DF_Mc_Organization_PostalCode] DEFAULT (N'') NOT NULL,
     [Country]              NVARCHAR (255)   CONSTRAINT [DF_Mc_Organization_Country] DEFAULT (N'') NOT NULL,
     [Currency]             CHAR (3)         CONSTRAINT [DF_Mc_Organization_Currency] DEFAULT ('') NOT NULL,
+    [HowYouHearAboutUs]    NVARCHAR(255)	CONSTRAINT [DF_Mc_Organization_HowYouHearAboutUs] DEFAULT ('') NOT NULL, 
     CONSTRAINT [PK_Mc_Organization] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
     CONSTRAINT [FK_Mc_Organization_Mc_Database] FOREIGN KEY ([DatabaseId]) REFERENCES [dbo].[Mc_Database] ([DatabaseId])
 );

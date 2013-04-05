@@ -113,7 +113,7 @@
                         <asp:Label ID="HowYouHearAboutUsLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
                     <td>
-                        <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" Width="350px" />
+                        <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" MaxLength="255" Width="350px" />
                     </td>
                 </tr>
                 <tr class="Group">

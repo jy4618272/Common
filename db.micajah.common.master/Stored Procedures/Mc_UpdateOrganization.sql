@@ -28,7 +28,8 @@
 		@State nvarchar(255), 
 		@PostalCode nvarchar(20), 
 		@Country nvarchar(255), 
-		@Currency  char(3)
+		@Currency char(3),
+		@HowYouHearAboutUs nvarchar(255)
 	)
 	AS
 	BEGIN
@@ -39,13 +40,13 @@
 			, FiscalYearStartMonth = @FiscalYearStartMonth, FiscalYearStartDay = @FiscalYearStartDay, WeekStartsDay = @WeekStartsDay
 			, LdapServerAddress = @LdapServerAddress, LdapServerPort = @LdapServerPort, LdapDomain = @LdapDomain, LdapUserName = @LdapUserName, LdapPassword = @LdapPassword, LdapDomains = @LdapDomains
 			, ExpirationTime = @ExpirationTime, GraceDays = @GraceDays, Active = @Active, CanceledTime = @CanceledTime, Trial = @Trial, Beta = @Beta, Deleted = @Deleted
-			, @Street = Street, @Street2 = Street2, @City = City, @State = [State], @PostalCode = PostalCode, @Country = Country, @Currency = Currency
+			, Street = @Street, Street2 = @Street2, City = @City, [State] = @State, PostalCode = @PostalCode, Country = @Country, Currency = @Currency, HowYouHearAboutUs = @HowYouHearAboutUs
 		WHERE (OrganizationId = @OrganizationId);
 
 		SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
 			, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, LdapServerAddress, LdapServerPort, LdapDomain, LdapUserName, LdapPassword, LdapDomains
 			, ExpirationTime, GraceDays, ExternalId, Active, CanceledTime, Trial, Beta, Deleted, CreatedTime
-			, Street, Street2, City, [State], PostalCode, Country, Currency
+			, Street, Street2, City, [State], PostalCode, Country, Currency, HowYouHearAboutUs
 		FROM dbo.Mc_Organization
 		WHERE (OrganizationId = @OrganizationId);
 	END

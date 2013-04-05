@@ -705,7 +705,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 templateInstanceId = new Guid(SelectedInstance.Text);
 
             Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, this.WebSiteUrl
-                , null, null, null, null, null, null, CurrencyList.SelectedValue
+                , null, null, null, null, null, null, CurrencyList.SelectedValue, HowYouHearAboutUs.Text
                 , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
                 , OrganizationUrl.Text, this.Request
