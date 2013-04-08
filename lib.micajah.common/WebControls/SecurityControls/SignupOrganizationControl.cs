@@ -339,7 +339,11 @@ function InstanceRequiredValidation(source, arguments) {{
 
                     ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SelectItemClientScript", this.SelectItemClientScript, true);
 
-                    string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
+                    string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
+                    if (!string.IsNullOrEmpty(code))
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
+
+                    code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
                     if (!string.IsNullOrEmpty(code))
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
                 }
