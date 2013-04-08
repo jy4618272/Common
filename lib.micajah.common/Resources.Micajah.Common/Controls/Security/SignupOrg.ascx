@@ -164,7 +164,7 @@
                         </asp:DropDownList>
                     </td>
                 </tr>
-                <tr class="Group">
+                <tr id="EmailAndPasswordGroupRow" runat="server" class="Group">
                     <td colspan="2">
                         <div>
                             <asp:Literal ID="EmailAndPasswordLabel" runat="server"></asp:Literal></div>
