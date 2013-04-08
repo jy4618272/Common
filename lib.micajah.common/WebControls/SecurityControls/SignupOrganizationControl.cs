@@ -69,6 +69,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected DropDownList CurrencyList;
 
         protected Literal EmailAndPasswordLabel;
+        protected HtmlTableRow Email2Row;
         protected Label EmailLabel2;
         protected TextBox Email2;
         protected CustomValidator EmailValidator2;
@@ -441,8 +442,8 @@ function InstanceRequiredValidation(source, arguments) {{
 
                     HowYouHearAboutUs.Text = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
 
-                    PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
-                    PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
+                    EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
+                    Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
                 }
 
                 // Use this hack for CustomValidator for Modern theme.

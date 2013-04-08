@@ -170,7 +170,7 @@
                             <asp:Literal ID="EmailAndPasswordLabel" runat="server"></asp:Literal></div>
                     </td>
                 </tr>
-                <tr>
+                <tr id="Email2Row" runat="server">
                     <td>
                         <asp:Label ID="EmailLabel2" runat="server" CssClass="Large"></asp:Label>
                     </td>
