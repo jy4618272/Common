@@ -106,6 +106,9 @@ namespace Micajah.Common.WebControls.Reports
                 worksheet.Cells[1, i].Value = "Monthly Billable";
                 i++;
                 worksheet.Cells[1, i].Value = "Credit Card Status";
+                i++;
+                worksheet.Cells[1, i].Value = "How'd You Hear About Us";
+
                 using (var range = worksheet.Cells[1, 1, 1, i])
                 {
                     range.Style.Font.Bold = true;
@@ -169,6 +172,10 @@ namespace Micajah.Common.WebControls.Reports
             colGrid.HeaderText = "Credit Card Status";
             colGrid.DataField = "CreditCardStatus";
             cgvList.Columns.Add(colGrid);
+            colGrid = new BoundField();
+            colGrid.HeaderText = "How'd You Hear About Us";
+            colGrid.DataField = "HowYouHearAboutUs";
+            cgvList.Columns.Add(colGrid);
         }
 
         private DataTable BuildReport()
@@ -207,6 +214,7 @@ namespace Micajah.Common.WebControls.Reports
 
             dt.Columns.Add(new DataColumn("MonthlyBillable", Type.GetType("System.Decimal")));
             dt.Columns.Add(new DataColumn("CreditCardStatus", Type.GetType("System.String")));
+            dt.Columns.Add(new DataColumn("HowYouHearAboutUs", Type.GetType("System.String")));
 
             OrganizationCollection orgs = OrganizationProvider.GetOrganizations(false, false);
 
@@ -287,6 +295,7 @@ namespace Micajah.Common.WebControls.Reports
                     }
                     row["MonthlyBillable"] = monthlySum;
                     row["CreditCardStatus"] = inst.CreditCardStatus.ToString();
+                    row["HowYouHearAboutUs"] = org.HowYouHearAboutUs;
                     dt.Rows.Add(row);
                 }
             }
