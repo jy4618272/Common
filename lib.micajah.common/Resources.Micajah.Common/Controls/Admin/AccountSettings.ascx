@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.AdminControls.AccountSettingsControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
-<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4" %>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4" %>
 <asp:PlaceHolder ID="PageContent" runat="server">
 <script type="text/javascript">
 
@@ -25,7 +25,7 @@
                 <a id="aBtnCCUpdate" class="buttons" rel="facebox" href="#credit_card_form">Update credit card</a>
             </div>
             <div class="payment-status">
-                <h4><asp:Literal ID="lCCStatus" runat="server" Text="No Credit Card on File."></asp:Literal></h4><small class="plandescsm"><asp:Literal ID="lNextBillDate" runat="server" Text="Next billed on 8 October 2011" Visible="False"></asp:Literal></small>
+                <h4><asp:Literal ID="lCCStatus" runat="server" Text="No Credit Card on File."></asp:Literal></h4><small class="plandescsm" ID="smallNextBillDate" runat="server" Visible="False">Next billed on 8 October 2011</small>
             </div>
         </div>
     </div>
@@ -34,8 +34,34 @@
     <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
     </asp:Repeater>
     <!-- Account Usage -->
-    <div class="account-heading"><h2>Account Usage</h2></div>
-    <asp:Repeater ID="Repeater2" runat="server" OnItemDataBound="Repeater2_ItemDataBound">
+    <div class="account-heading" id="divPaidUsageHeader" runat="server"><h2><asp:Literal runat="server" ID="lAccountUsage">Account Usage</asp:Literal></h2></div>
+    <asp:Repeater ID="Repeater2" runat="server">
+        <HeaderTemplate>
+            <table class="account-usage">
+                <tbody>
+        </HeaderTemplate>
+        <ItemTemplate>
+            <tr>
+                <td class="feature">
+                    <div class="featurelabel"><h5><%# DataBinder.Eval(Container.DataItem, "SettingName")%></h5></div>
+                    <div class="account-usage-amount"><h4><%# DataBinder.Eval(Container.DataItem, "UsageCount")%></h4></div>
+                </td>
+            </tr>
+        </ItemTemplate>
+        <AlternatingItemTemplate>
+            <tr>
+                <td class="feature">
+                    <div class="featurelabel"><h5><%# DataBinder.Eval(Container.DataItem, "SettingName")%></h5></div>
+                    <div class="account-usage-amount"><h4><%# DataBinder.Eval(Container.DataItem, "UsageCount")%></h4></div>
+                </td>
+            </tr>
+        </AlternatingItemTemplate>
+        <FooterTemplate>
+                </tbody>
+            </table>
+        </FooterTemplate>
+    </asp:Repeater>
+    <asp:Repeater ID="Repeater3" runat="server">
         <HeaderTemplate>
             <table class="account-usage">
                 <tbody>
@@ -43,12 +69,65 @@
         <ItemTemplate>
             <tr>
                 <td class="feature" id="AccUsageCol" runat="server">
+                    <div class="featurelabel"><h5><%# DataBinder.Eval(Container.DataItem, "SettingName")%></h5></div>
+                    <div class="account-usage-amount"><h4><%# (int)DataBinder.Eval(Container.DataItem, "UsageCount") == -1 ? "Enabled" : DataBinder.Eval(Container.DataItem, "UsageCount") %></h4></div>
+                    <div class="clearfix"></div>
+                    <div class="accsettings paid-account">
+                        <a class="accsettings tooltip_right tooltip" href="#">
+                            <span class="accsettings"><%# (int)DataBinder.Eval(Container.DataItem, "UsageCount") == -1 ? DataBinder.Eval(Container.DataItem, "Price", "{0:c}") + " / month if option is enabled" : DataBinder.Eval(Container.DataItem, "SettingDescription")%></span>
+                            <h3><%# DataBinder.Eval(Container.DataItem, "Price", "{0:c}")%></h3>
+                        </a>
+                    </div>
                 </td>
             </tr>
         </ItemTemplate>
         <AlternatingItemTemplate>
             <tr>
                 <td class="feature" id="AccUsageCol" runat="server">
+                    <div class="featurelabel"><h5><%# DataBinder.Eval(Container.DataItem, "SettingName")%></h5></div>
+                    <div class="account-usage-amount"><h4><%# (int)DataBinder.Eval(Container.DataItem, "UsageCount") == -1 ? "Enabled" : DataBinder.Eval(Container.DataItem, "UsageCount") %></h4></div>
+                    <div class="clearfix"></div>
+                    <div class="accsettings paid-account">
+                        <a class="accsettings tooltip_right tooltip" href="#">
+                            <span class="accsettings"><%# (int)DataBinder.Eval(Container.DataItem, "UsageCount") == -1 ? DataBinder.Eval(Container.DataItem, "Price", "{0:c}") + " / month if option is enabled" : DataBinder.Eval(Container.DataItem, "SettingDescription")%></span>
+                            <h3><%# DataBinder.Eval(Container.DataItem, "Price", "{0:c}")%></h3>
+                        </a>                        
+                    </div>
+                </td>
+            </tr>
+        </AlternatingItemTemplate>
+        <FooterTemplate>
+                </tbody>
+            </table>
+        </FooterTemplate>
+    </asp:Repeater>
+    <div class="account-heading" id="divFreeUsageHeader" runat="server" Visible="False"><h2>Free Usage</h2></div>
+    <asp:Repeater ID="Repeater4" runat="server" Visible="False">
+        <HeaderTemplate>
+            <table class="account-usage">
+                <tbody>
+        </HeaderTemplate>
+        <ItemTemplate>
+            <tr>
+                <td class="feature" id="AccUsageCol" runat="server">
+                    <div class="featurelabel"><h5><%# DataBinder.Eval(Container.DataItem, "SettingName")%></h5></div>
+                    <div class="account-usage-amount"><h4><span class="under"><%# DataBinder.Eval(Container.DataItem, "UsageCount")%></span>&nbsp;of&nbsp;<%# DataBinder.Eval(Container.DataItem, "UsageCountLimit")%></h4></div>
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="bar" style='<%# "width:" +  DataBinder.Eval(Container.DataItem, "UsagePersent") + "%;"%>'></div>
+                    </div>
+                </td>
+            </tr>
+        </ItemTemplate>
+        <AlternatingItemTemplate>
+            <tr>
+                <td class="feature" id="AccUsageCol" runat="server">
+                    <div class="featurelabel"><h5><%# DataBinder.Eval(Container.DataItem, "SettingName")%></h5></div>
+                    <div class="account-usage-amount"><h4><span class="under"><%# DataBinder.Eval(Container.DataItem, "UsageCount")%></span>&nbsp;of&nbsp;<%# DataBinder.Eval(Container.DataItem, "UsageCountLimit")%></h4></div>
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="bar" style='<%# "width:" +  DataBinder.Eval(Container.DataItem, "UsagePersent") + "%;"%>'></div>
+                    </div>
                 </td>
             </tr>
         </AlternatingItemTemplate>

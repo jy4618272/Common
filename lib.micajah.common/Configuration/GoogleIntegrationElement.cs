@@ -88,7 +88,7 @@ namespace Micajah.Common.Configuration
             get
             {
                 string value = (string)this["scope"];
-                return (string.IsNullOrEmpty(value) ? "https://apps-apis.google.com/a/feeds/user/" : value);
+                return (string.IsNullOrEmpty(value) ? "https://apps-apis.google.com/a/feeds/user/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" : value);
             }
             set { this["scope"] = value; }
         }

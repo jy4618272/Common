@@ -102,6 +102,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=3.1.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Google.GData.Apps, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e6feebfe441b89cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\Google.GData.Apps.dll</HintPath>
@@ -135,18 +139,26 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Design, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+    <Reference Include="Telerik.Web.Design, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\Telerik.Web.Design.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Web.UI, Version=2011.1.413.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+    <Reference Include="Telerik.Web.UI, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\Telerik.Web.UI.Skins.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -680,6 +692,11 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\OAuth.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
+    <Content Include="Runtime\System.Net.Http.dll" />
+    <Content Include="Runtime\Telerik.Web.Design.dll" />
+    <Content Include="Runtime\Telerik.Web.UI.dll" />
+    <Content Include="Runtime\Telerik.Web.UI.Skins.dll" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientRed.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemLeft.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemRight.gif" />
@@ -2058,14 +2075,15 @@
     <Content Include="Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll" />
+    <Content Include="Runtime\EPPlus.dll" />
+    <Content Include="Runtime\EPPlus.pdb" />
+    <Content Include="Runtime\EPPlus.XML" />
     <Content Include="Runtime\Google.GData.Apps.dll" />
     <Content Include="Runtime\Google.GData.Client.dll" />
     <Content Include="Runtime\Google.GData.Extensions.dll" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.dll" />
     <Content Include="Runtime\Micajah.Common.LdapAdapter.pdb" />
     <Content Include="Runtime\Newtonsoft.Json.dll" />
-    <Content Include="Runtime\Telerik.Web.Design.dll" />
-    <Content Include="Runtime\Telerik.Web.UI.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

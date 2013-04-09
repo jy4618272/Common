@@ -105,7 +105,7 @@ IF @@TRANCOUNT = 1
 		@State nvarchar(255), 
 		@PostalCode nvarchar(20), 
 		@Country nvarchar(255), 
-		@Currency  char(3)
+		@Currency char(3)
 	)
 	AS
 	BEGIN
@@ -161,7 +161,7 @@ IF @@TRANCOUNT = 1
 		@State nvarchar(255), 
 		@PostalCode nvarchar(20), 
 		@Country nvarchar(255), 
-		@Currency  char(3)
+		@Currency char(3)
 	)
 	AS
 	BEGIN
@@ -172,7 +172,7 @@ IF @@TRANCOUNT = 1
 			, FiscalYearStartMonth = @FiscalYearStartMonth, FiscalYearStartDay = @FiscalYearStartDay, WeekStartsDay = @WeekStartsDay
 			, LdapServerAddress = @LdapServerAddress, LdapServerPort = @LdapServerPort, LdapDomain = @LdapDomain, LdapUserName = @LdapUserName, LdapPassword = @LdapPassword, LdapDomains = @LdapDomains
 			, ExpirationTime = @ExpirationTime, GraceDays = @GraceDays, Active = @Active, CanceledTime = @CanceledTime, Trial = @Trial, Beta = @Beta, Deleted = @Deleted
-			, @Street = Street, @Street2 = Street2, @City = City, @State = [State], @PostalCode = PostalCode, @Country = Country, @Currency = Currency
+			, Street = @Street, Street2 = @Street2, City = @City, [State] = @State, PostalCode = @PostalCode, Country = @Country, Currency = @Currency
 		WHERE (OrganizationId = @OrganizationId);
 
 		SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId

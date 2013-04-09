@@ -2576,16 +2576,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>The account "{0}" is not found. Please try to log in using another account.</value>
   </data>
   <data name="GoogleProvider_ImportFailed" xml:space="preserve">
-    <value>Import users from Google failed with error "{0}".</value>
-  </data>
-  <data name="SignupOrganizationControl_ContinueLabel_Text" xml:space="preserve">
-    <value>Please press button below to proceed.</value>
-  </data>
-  <data name="SignupOrganizationControl_Step4Link_Text" xml:space="preserve">
-    <value>Continue &gt;</value>
-  </data>
-  <data name="SignupOrganizationControl_Step4TitleLiteral_Text" xml:space="preserve">
-    <value>Import users</value>
+    <value>Configuration cannot be completed due error "{0}" from Google.</value>
   </data>
   <data name="GoogleIntegrationControl_AdminColumn_HeaderText" xml:space="preserve">
     <value>Admin</value>
@@ -2658,5 +2649,14 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="GoogleIntegrationControl_ImportUsers_Result_Text" xml:space="preserve">
     <value>Import/update was successfull for {0} users. &lt;br/&gt; Import/update was failed for {1} users.</value>
+  </data>
+  <data name="SignupOrganizationControl_HowYouHearAboutUs_Text" xml:space="preserve">
+    <value>Google Apps Marketplace</value>
+  </data>
+  <data name="SignupOrganizationControl_ErrorContinueLabel_Text" xml:space="preserve">
+    <value>Please press button below to proceed.</value>
+  </data>
+  <data name="SignupOrganizationControl_ErrorContinueLink_Text" xml:space="preserve">
+    <value>Continue</value>
   </data>
 </root>

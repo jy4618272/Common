@@ -21,7 +21,8 @@
 		@State nvarchar(255), 
 		@PostalCode nvarchar(20), 
 		@Country nvarchar(255), 
-		@Currency  char(3)
+		@Currency char(3),
+		@HowYouHearAboutUs nvarchar(255)
 	)
 	AS
 	BEGIN
@@ -29,15 +30,15 @@
 
 		INSERT INTO dbo.Mc_Organization (OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
 			, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, ExpirationTime, GraceDays, Active, CanceledTime, Trial, Deleted, CreatedTime
-			, Street, Street2, City, [State], PostalCode, Country, Currency) 
+			, Street, Street2, City, [State], PostalCode, Country, Currency, HowYouHearAboutUs) 
 		VALUES (@OrganizationId, @PseudoId, @Name, @Description, @WebsiteUrl, @DatabaseId
 			, @FiscalYearStartMonth, @FiscalYearStartDay, @WeekStartsDay, @ExpirationTime, @GraceDays, @Active, @CanceledTime, @Trial, @Deleted, GETUTCDATE()
-			, @Street, @Street2, @City, @State, @PostalCode, @Country, @Currency);
+			, @Street, @Street2, @City, @State, @PostalCode, @Country, @Currency, @HowYouHearAboutUs);
 		
 		SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
 			, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, LdapServerAddress, LdapServerPort, LdapDomain, LdapUserName, LdapPassword
 			, ExpirationTime, GraceDays, ExternalId, Active, CanceledTime, Trial, Deleted, CreatedTime 
-			, Street, Street2, City, [State], PostalCode, Country, Currency
+			, Street, Street2, City, [State], PostalCode, Country, Currency, HowYouHearAboutUs
 		FROM dbo.Mc_Organization 
 		WHERE (OrganizationId = @OrganizationId);
 	END

@@ -4,7 +4,6 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Web;
-using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
@@ -95,7 +94,7 @@ namespace Micajah.Common.Bll.Providers
         private static Guid InsertOrganization(string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
             , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial
-            , string street, string street2, string city, string state, string postalCode, string country, string currency
+            , string street, string street2, string city, string state, string postalCode, string country, string currency, string howYouHearAboutUs
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
             , string partialCustomUrl, HttpRequest request
@@ -138,6 +137,7 @@ namespace Micajah.Common.Bll.Providers
             if (postalCode != null) row.PostalCode = postalCode;
             if (country != null) row.Country = country;
             if (currency != null) row.Currency = currency;
+            if (howYouHearAboutUs != null) row.HowYouHearAboutUs = howYouHearAboutUs;
 
             try
             {
@@ -157,7 +157,13 @@ namespace Micajah.Common.Bll.Providers
             if (GoogleProvider.IsGoogleProviderRequest(request))
                 domain = GoogleProvider.GetDomain(request);
 
-            if (domain != null)
+            if (string.IsNullOrEmpty(domain))
+            {
+                string returnUrl = null;
+                GoogleProvider.ParseOAuth2AuthorizationRequestState(request, ref domain, ref returnUrl);
+            }
+
+            if (!string.IsNullOrEmpty(domain))
             {
                 EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref domain);
 
@@ -700,7 +706,7 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
                 , null, 0, true, null, false
-                , null, null, null, null, null, null, null
+                , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, null, null, null, null, null, null, null, null
                 , true, true);
@@ -726,7 +732,7 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
                 , null, 0, true, null, false
-                , null, null, null, null, null, null, null
+                , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null
                 , sendNotificationEmail, true);
@@ -751,7 +757,7 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
                 , expirationTime, graceDays, active, canceledTime, trial
-                , null, null, null, null, null, null, null
+                , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, null, null, null, null, null, null, null, null
                 , true, true);
@@ -782,7 +788,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="sendNotificationEmail">true to send notification email to administrator; otherwise, false.</param>
         /// <returns>The unique identifier of the newly created organization.</returns>
         public static Guid InsertOrganization(string name, string description, string websiteUrl
-            , string street, string street2, string city, string state, string postalCode, string country, string currency
+            , string street, string street2, string city, string state, string postalCode, string country, string currency, string howYouHearAboutUs
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string title, string phone, string mobilePhone
             , string partialCustomUrl, HttpRequest request
@@ -791,7 +797,7 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
                 , null, null, null
                 , null, 0, true, null, true
-                , street, street2, city, state, postalCode, country, currency
+                , street, street2, city, state, postalCode, country, currency, howYouHearAboutUs
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
                 , partialCustomUrl, request

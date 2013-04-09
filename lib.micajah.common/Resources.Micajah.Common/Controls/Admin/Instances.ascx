@@ -37,9 +37,14 @@
                 <mits:TextBoxField DataField="Description" MaxLength="1024" Columns="65" ControlStyle-Width="350px" Rows="3" TextMode="MultiLine" />                
                 <mits:CheckBoxField DataField="Beta" />
                 <mits:CheckBoxField DataField="Active" DefaultChecked="True" />
-                <mits:TemplateField PaddingLeft="false" HeaderText="Billing Plan">
+                <mits:TemplateField PaddingLeft="false" HeaderText="Custom Billing">
                     <ItemTemplate>                    
-                        <mits:ComboBox ID="cmbBillingPlan" runat="server" DataValueField="BillingPlan" Required="false" />
+                        <mits:ComboBox ID="cmbBillingPlan" runat="server" Required="false">
+                            <Items>
+                                <telerik:RadComboBoxItem runat="server" Text="Enabled" Value="1" />
+                                <telerik:RadComboBoxItem runat="server" Text="Disabled" Value="0" />
+                            </Items>
+                        </mits:ComboBox>
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:TemplateField>

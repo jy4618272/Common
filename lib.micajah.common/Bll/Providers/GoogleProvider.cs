@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
+using System.Net.Http;
 using System.Web;
-using System.Data;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.RelyingParty;
@@ -10,6 +11,7 @@ using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
+using Newtonsoft.Json.Linq;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -170,16 +172,7 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        public static void ProcessOAuth2AuthorizationRequest(HttpContext context)
-        {
-            if (string.IsNullOrEmpty(GetOAuth2AccessCode(context.Request)))
-            {
-                context.Response.Redirect(CreateOAuth2AuthorizationUrl(CreateGoogleProvderRequestUrl(context.Request.Url.ToString())
-                    , CreateOAuth2AuthorizationRequestState(GetDomain(context.Request), GetReturnUrl(context.Request))));
-            }
-        }
-
-        public static void ProcessOAuth2AuthorizationResponse(HttpContext context, ref string returnUrl)
+        public static void ProcessOAuth2Authorization(HttpContext context, ref OAuth2Parameters parameters, ref string returnUrl)
         {
             string domain = GetDomain(context.Request);
             string accessCode = GetOAuth2AccessCode(context.Request);
@@ -195,26 +188,38 @@ namespace Micajah.Common.Bll.Providers
                 string error = GetError(context.Request);
                 if (string.IsNullOrEmpty(error))
                 {
-                    if (organizationId != Guid.Empty) // It means the organization is already registered.
-                        context.Response.Redirect(GetLoginUrl(domain));
+                    if (organizationId == Guid.Empty)
+                    {
+                        // OAuth2 authorization request.
+                        context.Response.Redirect(CreateOAuth2AuthorizationUrl(CreateGoogleProvderRequestUrl(context.Request.Url.ToString())
+                            , CreateOAuth2AuthorizationRequestState(GetDomain(context.Request), GetReturnUrl(context.Request))));
+                    }
+                    else // It means the organization is already registered.
+                    {
+                        if (string.IsNullOrEmpty(returnUrl))
+                            returnUrl = GetLoginUrl(domain);
+
+                        context.Response.Redirect(returnUrl);
+                    }
                 }
                 else
                 {
                     if (string.IsNullOrEmpty(returnUrl))
-                        returnUrl = GetLoginUrl(domain);
+                        returnUrl = "javascript:window.history.back();";
 
                     throw new System.Security.Authentication.AuthenticationException(GetErrorMessage(error));
                 }
             }
             else
             {
+                if (parameters == null)
+                    parameters = CreateOAuth2Parameters(CreateGoogleProvderRequestUrl(context.Request.Url.ToString()), accessCode);
+
                 if (organizationId != Guid.Empty)
                 {
-                    OAuth2Parameters parameters = CreateOAuth2Parameters(CreateGoogleProvderRequestUrl(context.Request.Url.ToString()), accessCode);
+                    UpdateOAuth2RefreshToken(organizationId, parameters.RefreshToken);
 
-                    GoogleProvider.UpdateOAuth2RefreshToken(organizationId, parameters.RefreshToken);
-
-                    GoogleProvider.ImportUsers(organizationId, domain, parameters);
+                    ImportUsers(organizationId, domain, parameters);
 
                     if (string.IsNullOrEmpty(returnUrl))
                         returnUrl = GetLoginUrl(domain);
@@ -252,6 +257,31 @@ namespace Micajah.Common.Bll.Providers
         public static string GetOAuth2AccessCode(HttpRequest request)
         {
             return GetRequestValue(request, "code");
+        }
+
+        public static void GetUserProfile(string accessToken, out string email, out string firstName, out string lastName, out string timeZone)
+        {
+            email = null;
+            firstName = null;
+            lastName = null;
+            timeZone = null;
+
+            HttpClient client = new HttpClient();
+            try
+            {
+                string json = client.GetStringAsync("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + accessToken).Result;
+
+                JObject obj = JObject.Parse(json);
+                email = obj["email"].ToString();
+                firstName = obj["given_name"].ToString();
+                lastName = obj["family_name"].ToString();
+            }
+            catch (WebException) { } // 401 (Unauthorized).
+            catch (HttpRequestException) { } // 401 (Unauthorized).
+            finally
+            {
+                if (client != null) client.Dispose();
+            }
         }
 
         public static OAuth2Parameters CreateOAuth2Parameters()

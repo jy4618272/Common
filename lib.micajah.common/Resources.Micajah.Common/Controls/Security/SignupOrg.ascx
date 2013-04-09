@@ -113,7 +113,7 @@
                         <asp:Label ID="HowYouHearAboutUsLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
                     <td>
-                        <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" Width="350px" />
+                        <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" MaxLength="255" Width="350px" />
                     </td>
                 </tr>
                 <tr class="Group">
@@ -164,13 +164,13 @@
                         </asp:DropDownList>
                     </td>
                 </tr>
-                <tr class="Group">
+                <tr id="EmailAndPasswordGroupRow" runat="server" class="Group">
                     <td colspan="2">
                         <div>
                             <asp:Literal ID="EmailAndPasswordLabel" runat="server"></asp:Literal></div>
                     </td>
                 </tr>
-                <tr>
+                <tr id="Email2Row" runat="server">
                     <td>
                         <asp:Label ID="EmailLabel2" runat="server" CssClass="Large"></asp:Label>
                     </td>
@@ -182,7 +182,7 @@
                         <asp:Image ID="EmailTick2" runat="server" Visible="false" ImageAlign="AbsMiddle" />
                     </td>
                 </tr>
-                <tr>
+                <tr id="PasswordRow" runat="server">
                     <td>
                         <asp:Label ID="PasswordLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
@@ -193,7 +193,7 @@
                                 OnServerValidate="PasswordValidator_ServerValidate" />
                     </td>
                 </tr>
-                <tr>
+                <tr id="ConfirmPasswordRow" runat="server">
                     <td>
                         <asp:Label ID="ConfirmPasswordLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
@@ -277,34 +277,28 @@
         </tr>
     </table>
 </div>
-<div id="Step4Panel" runat="server">
-    <div class="Mp_Dm">
-        <table align="center" style="width: 575px;">
-            <tr>
-                <td style="padding-top: 20px;">
-                    <h1>
-                        <asp:Literal ID="Step4TitleLiteral" runat="server"></asp:Literal></h1>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top: 20px;">
-                    <asp:Label ID="ErrorLabel" runat="server" CssClass="Error Block"></asp:Label>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top: 10px;">
-                    <p>
-                        <asp:Label ID="ContinueLabel" runat="server"></asp:Label></p>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top: 20px;">
-                    <asp:HyperLink ID="Step4Link" runat="server" CssClass="Button Green Large">
-                    </asp:HyperLink>
-                </td>
-            </tr>
-        </table>
-    </div>
+<div id="ErrorPanel" runat="server">
+    <div class="Logo">
+        <asp:Image ID="LogoImage3" runat="server" /></div>
+    <table align="center">
+        <tr>
+            <td style="padding-top: 20px;">
+                <asp:Label ID="ErrorLabel" runat="server" CssClass="Error Block"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px; text-align: center;" class="Agree">
+                <p>
+                    <asp:Label ID="ErrorContinueLabel" runat="server"></asp:Label></p>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                <asp:HyperLink ID="ErrorContinueLink" runat="server" CssClass="Button Green Large">
+                </asp:HyperLink>
+            </td>
+        </tr>
+    </table>
 </div>
 <asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountriesView"
     TypeName="Micajah.Common.Bll.Providers.CountryProvider"></asp:ObjectDataSource>
