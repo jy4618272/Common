@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.SessionState;
+using DotNetOpenAuth.OAuth.Messages;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -52,6 +53,7 @@ namespace Micajah.Common.Security
         private const string UserContextKey = "mc.UserContext";
         private const string UserIdKey = "mc.UserId";
         private const string VanityUrlKey = "mc.VanityUrl";
+        private const string OAuthPendingUserAuthorizationRequestKey = "mc.OAuthPendingUserAuth";
 
         private static ArrayList s_ReservedKeys;
 
@@ -607,6 +609,40 @@ namespace Micajah.Common.Security
                             session.Remove(VanityUrlKey);
                         else
                             session[VanityUrlKey] = value;
+                    }
+                }
+            }
+        }
+
+        public static UserAuthorizationRequest OAuthPendingUserAuthorizationRequest
+        {
+            get
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        object obj = session[OAuthPendingUserAuthorizationRequestKey];
+                        if (obj != null)
+                            return (UserAuthorizationRequest)obj;
+                    }
+                }
+                return null;
+            }
+            internal set
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        if (value == null)
+                            session.Remove(OAuthPendingUserAuthorizationRequestKey);
+                        else
+                            session[OAuthPendingUserAuthorizationRequestKey] = value;
                     }
                 }
             }
