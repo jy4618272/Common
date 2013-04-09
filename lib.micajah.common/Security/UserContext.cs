@@ -218,7 +218,6 @@ namespace Micajah.Common.Security
                             {
                                 if (string.IsNullOrEmpty(http.User.Identity.Name)) // Checks if the user is logged out from another URL, but the session was not cleaned up.
                                 {
-                                    string loginUrl = WebApplication.LoginProvider.GetLoginUrl(false);
                                     if (!LoginProvider.IsLoginUrl(http.Request.Url.ToString())) // Checks if current page is not login page.
                                     {
                                         http.Session.Clear();
@@ -842,7 +841,7 @@ namespace Micajah.Common.Security
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                if (!CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
+                if (!CustomUrlProvider.IsDefaultVanityUrl(http))
                     return;
             }
 
