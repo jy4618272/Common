@@ -11,6 +11,7 @@ using Micajah.Common.Dal;
 using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System.Web;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -635,9 +636,15 @@ namespace Micajah.Common.Bll.Providers
                 return false;
 
             string modifiedByEmail = null;
-            UserContext user = UserContext.Current;
-            if (user != null)
-                modifiedByEmail = user.Email;
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+            {
+                if (!CustomUrlProvider.IsDefaultVanityUrl(HttpContext.Current))
+                {
+                    UserContext user = UserContext.Current;
+                    if (user != null)
+                        modifiedByEmail = user.Email;
+                }
+            }
 
             string subject = string.Empty;
             string bcc = null;
