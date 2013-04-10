@@ -367,7 +367,7 @@ namespace Micajah.Common.Bll.Providers
                                 , null, null, null, null, null
                                 , null, null, null, null, null, null
                                 , groups, organizationId
-                                , "12345", false, false);
+                                , Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(), false, true);
 
                                 UserProvider.RaiseUserInserted(loginId, organizationId, null, Bll.Support.ConvertStringToGuidList(groups));
                             }

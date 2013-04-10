@@ -205,7 +205,7 @@ namespace Micajah.Common.WebControls.AdminControls
                             , null, null, null, null, null
                             , null, null, null, null, null, null
                             , groups, UserContext.Current.SelectedOrganizationId
-                            , "12345", false, false);
+                            , Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(), false, true);
 
                             UserProvider.RaiseUserInserted(loginId, UserContext.Current.SelectedOrganizationId, null, Bll.Support.ConvertStringToGuidList(groups));
                         }
