@@ -255,8 +255,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                     {
                         if (string.IsNullOrEmpty(redirectUrl))
                             redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery);
-                        else
-                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery) + ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl);
+                        else if (Request.QueryString["returnurl"] == null)
+                        {
+                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
+                                + ((Request.QueryString["returnurl"] == null)
+                                    ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl)
+                                    : string.Empty);
+                        }
 
                         Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, vanityUrl, redirectUrl));
                     }
