@@ -658,7 +658,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (!string.IsNullOrEmpty(this.EmailToLink))
                     {
-                        LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, this.EmailToLink);
+                        LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, LoginTextBox.Text, this.EmailToLink);
 
                         LinkEmailPanel.Visible = true;
                         FormTable.Visible = false;

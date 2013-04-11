@@ -69,9 +69,9 @@
     </table>
     <div id="LinkEmailPanel" runat="server" style="text-align: center;">
         <p>
-            <asp:Label ID="LinkEmailLabel" runat="server" Font-Bold="true" /></p>
-        <asp:LinkButton ID="LinkEmailButton" runat="server" CssClass="Large" />&nbsp;&nbsp;&nbsp;
-        <asp:LinkButton ID="CancelLinkEmailButton" runat="server" CssClass="Large" />
+            <asp:Label ID="LinkEmailLabel" runat="server" Font-Bold="true" style="white-space: pre;" /></p>
+        <asp:LinkButton ID="LinkEmailButton" runat="server" CssClass="Large" Font-Bold="true" />&nbsp;&nbsp;&nbsp;
+        <asp:LinkButton ID="CancelLinkEmailButton" runat="server" CssClass="Large" Font-Bold="true" />
         <br />
         <br />
         <p>

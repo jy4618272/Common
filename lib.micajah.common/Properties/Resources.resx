@@ -2564,7 +2564,9 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Yes</value>
   </data>
   <data name="LogOnControl_LinkEmailLabel_Text" xml:space="preserve">
-    <value>Do you want to link email "{0}" to the account that you already logged in?</value>
+    <value>You are logged in currently as "{0}".
+
+Do you want to link email "{1}" to this account?</value>
   </data>
   <data name="LogOnControl_LogOffLink_Text" xml:space="preserve">
     <value>Click here to log out.</value>
@@ -2658,5 +2660,8 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="SignupOrganizationControl_ErrorContinueLink_Text" xml:space="preserve">
     <value>Continue</value>
+  </data>
+  <data name="StartControl_WatchLink_Text" xml:space="preserve">
+    <value>Watch</value>
   </data>
 </root>
