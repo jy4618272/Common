@@ -2661,4 +2661,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="SignupOrganizationControl_ErrorContinueLink_Text" xml:space="preserve">
     <value>Continue</value>
   </data>
+  <data name="StartControl_WatchLink_Text" xml:space="preserve">
+    <value>Watch</value>
+  </data>
 </root>

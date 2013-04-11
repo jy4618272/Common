@@ -6691,6 +6691,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Watch.
+        /// </summary>
+        internal static string StartControl_WatchLink_Text {
+            get {
+                return ResourceManager.GetString("StartControl_WatchLink_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The E-mail supplied is invalid..
         /// </summary>
         internal static string Support_InvalidEmail {
