@@ -3678,7 +3678,9 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to link email &quot;{0}&quot; to the account that you already logged in?.
+        ///   Looks up a localized string similar to You are logged in currently as &quot;{0}&quot;.
+        ///
+        ///Do you want to link email &quot;{1}&quot; to this account?.
         /// </summary>
         internal static string LogOnControl_LinkEmailLabel_Text {
             get {
