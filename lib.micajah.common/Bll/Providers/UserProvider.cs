@@ -5,13 +5,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Text;
+using System.Web;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
-using System.Web;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -255,6 +255,7 @@ namespace Micajah.Common.Bll.Providers
             if (row != null)
             {
                 WebApplication.LoginProvider.ChangeLoginName(userId, email, sendEmailNotification);
+                WebApplication.LoginProvider.UpdateLogin(userId, null, null, firstName, lastName);
 
                 adapters.UserTableAdapter.Update(userId, email, firstName, lastName, middleName, phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country, null, false, timeZoneId, timeFormat, dateFormat);
 
@@ -347,6 +348,8 @@ namespace Micajah.Common.Bll.Providers
                 }
                 else
                 {
+                    WebApplication.LoginProvider.UpdateLogin(loginId, null, null, firstName, lastName);
+
                     InsertUserIntoOrganization(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department
                         , street, street2, city, state, postalCode, country
@@ -1204,7 +1207,7 @@ namespace Micajah.Common.Bll.Providers
             if (validatePassword) WebApplication.LoginProvider.ValidatePassword(password);
 
             Guid loginId = Guid.Empty;
-            DataRow dr = WebApplication.LoginProvider.CreateLogin(loginName, password);
+            DataRow dr = WebApplication.LoginProvider.CreateLogin(loginName, password, firstName, lastName);
             if (dr != null)
             {
                 loginId = (Guid)dr["LoginId"];
@@ -1295,7 +1298,7 @@ namespace Micajah.Common.Bll.Providers
                 password = WebApplication.LoginProvider.GeneratePassword();
 
             Guid loginId = Guid.Empty;
-            DataRow dr = WebApplication.LoginProvider.CreateLogin(email, password);
+            DataRow dr = WebApplication.LoginProvider.CreateLogin(email, password, firstName, lastName);
             if (dr != null)
             {
                 loginId = (Guid)dr["LoginId"];
@@ -2342,7 +2345,6 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
     }
-
 
     /// <summary>
     /// The class containing the data for the Micajah.Common.Bll.Providers.UserProvider.UserUpdated event.

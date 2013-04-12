@@ -679,6 +679,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v107.sql" />
     <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />
