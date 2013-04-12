@@ -255,7 +255,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     {
                         if (string.IsNullOrEmpty(redirectUrl))
                             redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery);
-                        else if (Request.QueryString["returnurl"] == null)
+                        else
                         {
                             redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
                                 + ((Request.QueryString["returnurl"] == null)
