@@ -68,7 +68,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label CurrencyLabel;
         protected DropDownList CurrencyList;
 
+        protected HtmlTableRow EmailAndPasswordGroupRow;
         protected Literal EmailAndPasswordLabel;
+        protected HtmlTableRow Email2Row;
         protected Label EmailLabel2;
         protected TextBox Email2;
         protected CustomValidator EmailValidator2;
@@ -339,7 +341,11 @@ function InstanceRequiredValidation(source, arguments) {{
 
                     ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SelectItemClientScript", this.SelectItemClientScript, true);
 
-                    string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
+                    string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
+                    if (!string.IsNullOrEmpty(code))
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
+
+                    code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
                     if (!string.IsNullOrEmpty(code))
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
                 }
@@ -437,8 +443,8 @@ function InstanceRequiredValidation(source, arguments) {{
 
                     HowYouHearAboutUs.Text = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
 
-                    PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
-                    PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
+                    EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
+                    EmailAndPasswordGroupRow.Visible = Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
                 }
 
                 // Use this hack for CustomValidator for Modern theme.

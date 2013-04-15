@@ -200,6 +200,30 @@ namespace Micajah.Common.WebControls.AdminControls
                     else
                         li.Attributes["class"] = "Cb";
                 }
+                else if (!string.IsNullOrEmpty(action.NavigateUrl))
+                {
+                    li.Attributes["class"] = "G";
+                    if (string.Compare(action.NavigateUrl, action.VideoUrl, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        if (li.Controls.Count > 0)
+                        {
+                            HyperLink link = (HyperLink)li.Controls[0];
+                            link.NavigateUrl = string.Empty;
+
+                            if (li.Controls.Count > 1)
+                            {
+                                HtmlGenericControl span = (HtmlGenericControl)li.Controls[1];
+                                if (span.HasControls())
+                                {
+                                    link = (HyperLink)span.Controls[0];
+                                    link.Text = Resources.StartControl_WatchLink_Text;
+                                }
+                            }
+                        }
+
+                        return;
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(action.VideoUrl))
                 {

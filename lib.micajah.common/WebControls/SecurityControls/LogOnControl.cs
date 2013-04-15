@@ -256,7 +256,12 @@ namespace Micajah.Common.WebControls.SecurityControls
                         if (string.IsNullOrEmpty(redirectUrl))
                             redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery);
                         else
-                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery) + ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl);
+                        {
+                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
+                                + ((Request.QueryString["returnurl"] == null)
+                                    ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl)
+                                    : string.Empty);
+                        }
 
                         Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, vanityUrl, redirectUrl));
                     }
@@ -658,7 +663,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (!string.IsNullOrEmpty(this.EmailToLink))
                     {
-                        LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, this.EmailToLink);
+                        LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, LoginTextBox.Text, this.EmailToLink);
 
                         LinkEmailPanel.Visible = true;
                         FormTable.Visible = false;

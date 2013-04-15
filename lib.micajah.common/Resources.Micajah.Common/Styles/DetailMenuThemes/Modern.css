@@ -114,6 +114,12 @@
     border: 1px solid #fff;
 }
 
+.Mp_Dm li.G h2
+{
+    color: #555;
+    font-size: 20px;
+}
+
 /* ------------ Detail menu checkbox item ------------ */
 .Mp_Dm li.Cb
 {
