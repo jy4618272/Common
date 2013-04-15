@@ -135,6 +135,8 @@ namespace Micajah.Common.WebControls.Reports
                     }
                     i++;
                 }
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
                 return package.GetAsByteArray();
             }
         }

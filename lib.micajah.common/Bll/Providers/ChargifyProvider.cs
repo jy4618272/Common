@@ -66,36 +66,34 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst)
         {
             decimal _TotalSum = 0;
-            SettingCollection PaidSettings = SettingProvider.GetPaidSettings(inst.OrganizationId, inst.InstanceId);
-
-            foreach (Setting setting in PaidSettings)
-            {
-                if (string.IsNullOrEmpty(setting.ExternalId)) continue;
-
-                int _cid = 0;
-                bool _checked = false;
-                if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || setting.DefaultValue=="-1" || !bool.TryParse(setting.Value, out _checked)) continue;
-                if (SubscriptionId!=0) chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _checked ? 1 : 0);
-                _TotalSum += setting.Price;
-            }
 
             SettingCollection CounterSettings = SettingProvider.GetCounterSettings(inst.OrganizationId, inst.InstanceId);
 
             foreach (Setting setting in CounterSettings)
             {
-                if (string.IsNullOrEmpty(setting.ExternalId) || setting.Paid) continue;
-
-                int _cid = 0;
-                string _val = setting.Value;
-                int _count = 0;
-
-                if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || string.IsNullOrEmpty(_val) || !int.TryParse(_val, out _count)) continue;
-
-                if (SubscriptionId!=0) chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
-
-                int _paidQty = _count - setting.UsageCountLimit;
-                decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
-                _TotalSum += _priceMonth;
+                if (setting.Paid)
+                {
+                    bool isChecked;
+                    if (!Boolean.TryParse(setting.Value, out isChecked))
+                    {
+                        if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
+                    }
+                    if (isChecked) _TotalSum += setting.Price;
+                    int _cid = 0;
+                    if (SubscriptionId == 0 || string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out _cid)) continue;
+                    chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, isChecked ? 1 : 0);
+                }
+                else
+                {
+                    int usageCount;
+                    int.TryParse(setting.Value, out usageCount);
+                    int _paidQty = usageCount - setting.UsageCountLimit;
+                    decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
+                    if (_priceMonth > 0) _TotalSum += _priceMonth;
+                    int _cid = 0;
+                    if (SubscriptionId == 0 || string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out _cid)) continue;
+                    chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, usageCount < 0 ? 0 : usageCount);
+                }
             }
 
             if (_TotalSum>0 && inst.BillingPlan!=BillingPlan.Paid) InstanceProvider.UpdateInstance(inst, BillingPlan.Paid);

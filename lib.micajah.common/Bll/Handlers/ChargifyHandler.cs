@@ -38,8 +38,10 @@ namespace Micajah.Common.Bll.Handlers
                         ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, _org.OrganizationId, _inst.InstanceId);
                         ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _inst);
                         if (_custSubscr!=null) updatedCount++;
-                        if (_custSubscr == null && _inst.CreditCardStatus == CreditCardStatus.Registered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.NotRegistered);
-                        else if (_custSubscr != null && _custSubscr.State != SubscriptionState.Active && _inst.CreditCardStatus == CreditCardStatus.Registered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Declined);
+                        if (_custSubscr == null && _inst.CreditCardStatus != CreditCardStatus.NotRegistered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.NotRegistered);
+                        else if (_custSubscr != null && _custSubscr.State == SubscriptionState.Expired && _inst.CreditCardStatus != CreditCardStatus.Expired) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Expired);
+                        else if (_custSubscr != null && _custSubscr.State == SubscriptionState.Active && _inst.CreditCardStatus != CreditCardStatus.Registered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Registered);
+                        else if (_custSubscr != null && _custSubscr.State != SubscriptionState.Active && _custSubscr.State != SubscriptionState.Expired && _inst.CreditCardStatus != CreditCardStatus.Declined) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Declined);
                     }
                 }
             }
