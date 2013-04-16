@@ -37,6 +37,14 @@ namespace Micajah.Common.Bll
         Custom = 3
     }
 
+    [Serializable]
+    public enum CreditCardStatus
+    {
+        NotRegistered = 0,
+        Registered = 1,
+        Expired = 2,
+        Declined=3
+    }
     /// <summary>
     /// Represents the different types of settings.
     /// </summary>
@@ -66,7 +74,12 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// On/Off switch.
         /// </summary>
-        OnOffSwitch = 4
+        OnOffSwitch = 4,
+
+        /// <summary>
+        /// The counter value.
+        /// </summary>
+        Counter = 5
     }
 
     /// <summary>

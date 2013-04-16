@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActionsControl_EditForm_DescriptionField_HeaderText" xml:space="preserve">
     <value>Description</value>
@@ -1631,7 +1631,7 @@
     <value>URL is reserved</value>
   </data>
   <data name="UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated" xml:space="preserve">
-    <value>Your account in the Organization "{0}" is inactivated.</value>
+    <value>Your account in the Organization "{0}" is inactivated or doesn't exist.&lt;br /&gt;&lt;a href="{1}"&gt;Click here&lt;/a&gt; if you are trying log in to another organization.</value>
   </data>
   <data name="OrganizationLdapSettingsControl_EditForm_LdapConfirmNewPasswordField_HeaderText" xml:space="preserve">
     <value>Confirm New Password</value>
@@ -2194,9 +2194,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="OrganizationLdapSettingsControl_CheckPortResultLabel_Text_Open" xml:space="preserve">
     <value>Port {0} is &lt;b&gt;Open&lt;/b&gt;&lt;br/&gt;</value>
   </data>
-  <data name="OrganizationsControl_EditForm_BillingPlan_HeaderText" xml:space="preserve">
-    <value>Billing Plan</value>
-  </data>
   <data name="OrganizationLdapSettingsControl_CheckLdapServerAddress_ErrorText" xml:space="preserve">
     <value>Please use a valid external WAN IP Address</value>
   </data>
@@ -2517,5 +2514,154 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="ProfileControl_EditForm_DateFormatField_HeaderText" xml:space="preserve">
     <value>Date Format</value>
+  </data>
+  <data name="TokenControl_ResetTokenButton_Text" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ProfileControl_EditForm_TokenField_HeaderText" xml:space="preserve">
+    <value>API Token</value>
+  </data>
+  <data name="UsersControl_EditForm_TokenField_HeaderText" xml:space="preserve">
+    <value>API Token</value>
+  </data>
+  <data name="TokenControl_ResetTokenButton_ConfirmText" xml:space="preserve">
+    <value>Are you sure you want to reset your API Token?\r\nThis will cause any previously setup mobile applications or other integrated applications to stop working until the API token is updated in those applications.</value>
+  </data>
+  <data name="InstancesControl_EditForm_TemplateField_HeaderText" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="InstancesControl_EditForm_VanityUrlField_HeaderText" xml:space="preserve">
+    <value>Vanity Url</value>
+  </data>
+  <data name="BaseEditFormControl_SuccessMessage" xml:space="preserve">
+    <value>Your changes have been saved.</value>
+  </data>
+  <data name="SignupOrganizationControl_OrganizationUrlValidator_ErrorMessage" xml:space="preserve">
+    <value>Invalid URL</value>
+  </data>
+  <data name="CustomUrlProvider_InvalidUrl" xml:space="preserve">
+    <value>Invalid URL</value>
+  </data>
+  <data name="LogOnAsUserControl_InjectButton_Text" xml:space="preserve">
+    <value>Inject Me as Organization Administrator</value>
+  </data>
+  <data name="GoogleProvider_AuthenticationCancelled" xml:space="preserve">
+    <value>Authentication via Google was cancelled by user.</value>
+  </data>
+  <data name="GoogleProvider_AuthenticationFailed" xml:space="preserve">
+    <value>Authentication via Google failed.</value>
+  </data>
+  <data name="GoogleProvider_AuthenticationFailedWithStatus" xml:space="preserve">
+    <value>Authentication via Google failed with status "{0}".</value>
+  </data>
+  <data name="LogOnControl_LogOnViaGoogleLink_Text" xml:space="preserve">
+    <value>Google</value>
+  </data>
+  <data name="LogOnControl_CancelLinkEmailButton_Text" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="LogOnControl_LinkEmailButton_Text" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="LogOnControl_LinkEmailLabel_Text" xml:space="preserve">
+    <value>You are logged in currently as "{0}".
+
+Do you want to link email "{1}" to this account?</value>
+  </data>
+  <data name="LogOnControl_LogOffLink_Text" xml:space="preserve">
+    <value>Click here to log out.</value>
+  </data>
+  <data name="LogOnControl_OrLabel1_Text" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="UserContext_ErrorMessage_YourAccountIsNotFound" xml:space="preserve">
+    <value>The account "{0}" is not found. Please try to log in using another account.</value>
+  </data>
+  <data name="GoogleProvider_ImportFailed" xml:space="preserve">
+    <value>Configuration cannot be completed due error "{0}" from Google.</value>
+  </data>
+  <data name="GoogleIntegrationControl_AdminColumn_HeaderText" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="GoogleIntegrationControl_AdminColumn_Value" xml:space="preserve">
+    <value>yes</value>
+  </data>
+  <data name="GoogleIntegrationControl_DescriptionColumn_HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="GoogleIntegrationControl_Description_Text" xml:space="preserve">
+    <value>To set up your system to replicate user data from Google please review the follow articles: &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#creating_an_administrator_account" target="_blank"&gt;Creating an Administrator account&lt;/a&gt; and &lt;a style="font-size: medium;" href="https://developers.google.com/google-apps/provisioning/#enabling_the_provisioning_api" target="_blank"&gt;Enabling the Provisioning API&lt;/a&gt;</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_GoogleDomain_HeaderText" xml:space="preserve">
+    <value>Google Domain</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_GoogleEmail_HeaderText" xml:space="preserve">
+    <value>Google Email</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_GooglePassword_HeaderText" xml:space="preserve">
+    <value>Google Password</value>
+  </data>
+  <data name="GoogleIntegrationControl_EditForm_ObjectName" xml:space="preserve">
+    <value>Google connect details</value>
+  </data>
+  <data name="GoogleIntegrationControl_FirstNameColumn_HeaderText" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="GoogleIntegrationControl_GoogleAppsError_Text" xml:space="preserve">
+    <value>A Google Apps error occurred.&lt;br&gt;Error code: {0}&lt;br&gt;Invalid input: {1}&lt;br&gt;Reason: {2}&lt;br&gt;</value>
+  </data>
+  <data name="GoogleIntegrationControl_GoogleSetup_Text" xml:space="preserve">
+    <value>Google Setup Check</value>
+  </data>
+  <data name="GoogleIntegrationControl_IdColumn_HeaderText" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="GoogleIntegrationControl_LastNameColumn_HeaderText" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="GoogleIntegrationControl_MembersColumn_AllUsersValue" xml:space="preserve">
+    <value>Group contains all users</value>
+  </data>
+  <data name="GoogleIntegrationControl_MembersColumn_HeaderText" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="GoogleIntegrationControl_NameColumn_HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step1_LinkButton_Text" xml:space="preserve">
+    <value>Retrieve all Users in a Domain</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step1_Text" xml:space="preserve">
+    <value>Step 1</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step2_LinkButton_Text" xml:space="preserve">
+    <value>Retrieve all Groups in a Domain</value>
+  </data>
+  <data name="GoogleIntegrationControl_Step2_Text" xml:space="preserve">
+    <value>Step 2</value>
+  </data>
+  <data name="GoogleIntegrationControl_UpdateProgress_Text" xml:space="preserve">
+    <value>Please wait, processing your request...&lt;br/&gt;</value>
+  </data>
+  <data name="GoogleIntegrationControl_UsernameColumn_HeaderText" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="GoogleIntegrationControl_ImportUsers_LinkButton_Text" xml:space="preserve">
+    <value>Import/update these users</value>
+  </data>
+  <data name="GoogleIntegrationControl_ImportUsers_Result_Text" xml:space="preserve">
+    <value>Import/update was successfull for {0} users. &lt;br/&gt; Import/update was failed for {1} users.</value>
+  </data>
+  <data name="SignupOrganizationControl_HowYouHearAboutUs_Text" xml:space="preserve">
+    <value>Google Apps Marketplace</value>
+  </data>
+  <data name="SignupOrganizationControl_ErrorContinueLabel_Text" xml:space="preserve">
+    <value>Please press button below to proceed.</value>
+  </data>
+  <data name="SignupOrganizationControl_ErrorContinueLink_Text" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="StartControl_WatchLink_Text" xml:space="preserve">
+    <value>Watch</value>
   </data>
 </root>

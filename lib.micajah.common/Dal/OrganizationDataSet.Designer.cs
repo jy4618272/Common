@@ -983,7 +983,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class InstanceDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class InstanceDataTable : global::System.Data.TypedTableBase<InstanceRow> {
             
             private global::System.Data.DataColumn columnInstanceId;
             
@@ -1018,6 +1018,10 @@ namespace Micajah.Common.Dal {
             private global::System.Data.DataColumn columnTimeFormat;
             
             private global::System.Data.DataColumn columnDateFormat;
+            
+            private global::System.Data.DataColumn columnBillingPlan;
+            
+            private global::System.Data.DataColumn columnCreditCardStatus;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -1190,6 +1194,22 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn BillingPlanColumn {
+                get {
+                    return this.columnBillingPlan;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CreditCardStatusColumn {
+                get {
+                    return this.columnCreditCardStatus;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1242,7 +1262,9 @@ namespace Micajah.Common.Dal {
                         System.DateTime CreatedTime, 
                         string TimeZoneId, 
                         int TimeFormat, 
-                        int DateFormat) {
+                        int DateFormat, 
+                        byte BillingPlan, 
+                        byte CreditCardStatus) {
                 InstanceRow rowInstanceRow = ((InstanceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         InstanceId,
@@ -1261,7 +1283,9 @@ namespace Micajah.Common.Dal {
                         CreatedTime,
                         TimeZoneId,
                         TimeFormat,
-                        DateFormat};
+                        DateFormat,
+                        BillingPlan,
+                        CreditCardStatus};
                 rowInstanceRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowInstanceRow);
                 return rowInstanceRow;
@@ -1272,12 +1296,6 @@ namespace Micajah.Common.Dal {
             public InstanceRow FindByInstanceId(System.Guid InstanceId) {
                 return ((InstanceRow)(this.Rows.Find(new object[] {
                             InstanceId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1314,6 +1332,8 @@ namespace Micajah.Common.Dal {
                 this.columnTimeZoneId = base.Columns["TimeZoneId"];
                 this.columnTimeFormat = base.Columns["TimeFormat"];
                 this.columnDateFormat = base.Columns["DateFormat"];
+                this.columnBillingPlan = base.Columns["BillingPlan"];
+                this.columnCreditCardStatus = base.Columns["CreditCardStatus"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1353,6 +1373,10 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnTimeFormat);
                 this.columnDateFormat = new global::System.Data.DataColumn("DateFormat", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDateFormat);
+                this.columnBillingPlan = new global::System.Data.DataColumn("BillingPlan", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnBillingPlan);
+                this.columnCreditCardStatus = new global::System.Data.DataColumn("CreditCardStatus", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreditCardStatus);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnInstanceId}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
@@ -1387,6 +1411,16 @@ namespace Micajah.Common.Dal {
                 this.columnDeleted.AllowDBNull = false;
                 this.columnDeleted.DefaultValue = ((bool)(false));
                 this.columnCreatedTime.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
+                this.columnTimeZoneId.AllowDBNull = false;
+                this.columnTimeZoneId.DefaultValue = ((string)(""));
+                this.columnTimeFormat.AllowDBNull = false;
+                this.columnTimeFormat.DefaultValue = ((int)(0));
+                this.columnDateFormat.AllowDBNull = false;
+                this.columnDateFormat.DefaultValue = ((int)(0));
+                this.columnBillingPlan.AllowDBNull = false;
+                this.columnBillingPlan.DefaultValue = ((byte)(0));
+                this.columnCreditCardStatus.AllowDBNull = false;
+                this.columnCreditCardStatus.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1518,7 +1552,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class GroupDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class GroupDataTable : global::System.Data.TypedTableBase<GroupRow> {
             
             private global::System.Data.DataColumn columnGroupId;
             
@@ -1669,12 +1703,6 @@ namespace Micajah.Common.Dal {
             public GroupRow FindByGroupId(System.Guid GroupId) {
                 return ((GroupRow)(this.Rows.Find(new object[] {
                             GroupId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1865,7 +1893,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class GroupsInstancesActionsDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class GroupsInstancesActionsDataTable : global::System.Data.TypedTableBase<GroupsInstancesActionsRow> {
             
             private global::System.Data.DataColumn columnGroupId;
             
@@ -2002,12 +2030,6 @@ namespace Micajah.Common.Dal {
                             GroupId,
                             InstanceId,
                             ActionId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2184,7 +2206,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class GroupsInstancesRolesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class GroupsInstancesRolesDataTable : global::System.Data.TypedTableBase<GroupsInstancesRolesRow> {
             
             private global::System.Data.DataColumn columnGroupId;
             
@@ -2309,12 +2331,6 @@ namespace Micajah.Common.Dal {
                 return ((GroupsInstancesRolesRow)(this.Rows.Find(new object[] {
                             GroupId,
                             InstanceId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2485,7 +2501,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class SettingsValuesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class SettingsValuesDataTable : global::System.Data.TypedTableBase<SettingsValuesRow> {
             
             private global::System.Data.DataColumn columnSettingValueId;
             
@@ -2642,12 +2658,6 @@ namespace Micajah.Common.Dal {
             public SettingsValuesRow FindBySettingValueId(System.Guid SettingValueId) {
                 return ((SettingsValuesRow)(this.Rows.Find(new object[] {
                             SettingValueId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2827,7 +2837,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class UserDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class UserDataTable : global::System.Data.TypedTableBase<UserRow> {
             
             private global::System.Data.DataColumn columnUserId;
             
@@ -3325,12 +3335,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 UserDataTable cln = ((UserDataTable)(base.Clone()));
                 cln.InitVars();
@@ -3627,7 +3631,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class UsersGroupsDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class UsersGroupsDataTable : global::System.Data.TypedTableBase<UsersGroupsRow> {
             
             private global::System.Data.DataColumn columnUserId;
             
@@ -3735,12 +3739,6 @@ namespace Micajah.Common.Dal {
                 return ((UsersGroupsRow)(this.Rows.Find(new object[] {
                             UserId,
                             GroupId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3907,7 +3905,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RecurringScheduleDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class RecurringScheduleDataTable : global::System.Data.TypedTableBase<RecurringScheduleRow> {
             
             private global::System.Data.DataColumn columnRecurringScheduleId;
             
@@ -4128,12 +4126,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 RecurringScheduleDataTable cln = ((RecurringScheduleDataTable)(base.Clone()));
                 cln.InitVars();
@@ -4342,7 +4334,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EntityNodeDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EntityNodeDataTable : global::System.Data.TypedTableBase<EntityNodeRow> {
             
             private global::System.Data.DataColumn columnEntityNodeId;
             
@@ -4569,12 +4561,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 EntityNodeDataTable cln = ((EntityNodeDataTable)(base.Clone()));
                 cln.InitVars();
@@ -4776,7 +4762,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RuleParametersDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class RuleParametersDataTable : global::System.Data.TypedTableBase<RuleParametersRow> {
             
             private global::System.Data.DataColumn columnRuleParameterId;
             
@@ -4978,12 +4964,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 RuleParametersDataTable cln = ((RuleParametersDataTable)(base.Clone()));
                 cln.InitVars();
@@ -5180,7 +5160,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RuleDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class RuleDataTable : global::System.Data.TypedTableBase<RuleRow> {
             
             private global::System.Data.DataColumn columnRuleId;
             
@@ -5412,12 +5392,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 RuleDataTable cln = ((RuleDataTable)(base.Clone()));
                 cln.InitVars();
@@ -5625,7 +5599,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EntityNodeTypeDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EntityNodeTypeDataTable : global::System.Data.TypedTableBase<EntityNodeTypeRow> {
             
             private global::System.Data.DataColumn columnEntityNodeTypeId;
             
@@ -5790,12 +5764,6 @@ namespace Micajah.Common.Dal {
             public EntityNodeTypeRow FindByEntityNodeTypeId(System.Guid EntityNodeTypeId) {
                 return ((EntityNodeTypeRow)(this.Rows.Find(new object[] {
                             EntityNodeTypeId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5982,7 +5950,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EntityFieldDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EntityFieldDataTable : global::System.Data.TypedTableBase<EntityFieldRow> {
             
             private global::System.Data.DataColumn columnEntityFieldId;
             
@@ -6278,12 +6246,6 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 EntityFieldDataTable cln = ((EntityFieldDataTable)(base.Clone()));
                 cln.InitVars();
@@ -6512,7 +6474,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EntityFieldListsValuesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EntityFieldListsValuesDataTable : global::System.Data.TypedTableBase<EntityFieldListsValuesRow> {
             
             private global::System.Data.DataColumn columnEntityFieldListValueId;
             
@@ -6666,12 +6628,6 @@ namespace Micajah.Common.Dal {
             public EntityFieldListsValuesRow FindByEntityFieldListValueId(System.Guid EntityFieldListValueId) {
                 return ((EntityFieldListsValuesRow)(this.Rows.Find(new object[] {
                             EntityFieldListValueId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6858,7 +6814,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EntityFieldsValuesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EntityFieldsValuesDataTable : global::System.Data.TypedTableBase<EntityFieldsValuesRow> {
             
             private global::System.Data.DataColumn columnEntityFieldValueId;
             
@@ -6990,12 +6946,6 @@ namespace Micajah.Common.Dal {
             public EntityFieldsValuesRow FindByEntityFieldValueId(System.Guid EntityFieldValueId) {
                 return ((EntityFieldsValuesRow)(this.Rows.Find(new object[] {
                             EntityFieldValueId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7170,7 +7120,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class EntityNodesRelatedEntityNodesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class EntityNodesRelatedEntityNodesDataTable : global::System.Data.TypedTableBase<EntityNodesRelatedEntityNodesRow> {
             
             private global::System.Data.DataColumn columnEntityNodesRelatedEntityNodesId;
             
@@ -7310,12 +7260,6 @@ namespace Micajah.Common.Dal {
             public EntityNodesRelatedEntityNodesRow FindByEntityNodesRelatedEntityNodesId(System.Guid EntityNodesRelatedEntityNodesId) {
                 return ((EntityNodesRelatedEntityNodesRow)(this.Rows.Find(new object[] {
                             EntityNodesRelatedEntityNodesId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7494,7 +7438,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class MessageDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class MessageDataTable : global::System.Data.TypedTableBase<MessageRow> {
             
             private global::System.Data.DataColumn columnMessageId;
             
@@ -7681,12 +7625,6 @@ namespace Micajah.Common.Dal {
             public MessageRow FindByMessageId(System.Guid MessageId) {
                 return ((MessageRow)(this.Rows.Find(new object[] {
                             MessageId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7884,7 +7822,7 @@ namespace Micajah.Common.Dal {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class UsersInstancesDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class UsersInstancesDataTable : global::System.Data.TypedTableBase<UsersInstancesRow> {
             
             private global::System.Data.DataColumn columnUserId;
             
@@ -8003,12 +7941,6 @@ namespace Micajah.Common.Dal {
                 return ((UsersInstancesRow)(this.Rows.Find(new object[] {
                             UserId,
                             InstanceId})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8357,12 +8289,7 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string TimeZoneId {
                 get {
-                    try {
-                        return ((string)(this[this.tableInstance.TimeZoneIdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'TimeZoneId\' in table \'Instance\' is DBNull.", e);
-                    }
+                    return ((string)(this[this.tableInstance.TimeZoneIdColumn]));
                 }
                 set {
                     this[this.tableInstance.TimeZoneIdColumn] = value;
@@ -8373,12 +8300,7 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public int TimeFormat {
                 get {
-                    try {
-                        return ((int)(this[this.tableInstance.TimeFormatColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'TimeFormat\' in table \'Instance\' is DBNull.", e);
-                    }
+                    return ((int)(this[this.tableInstance.TimeFormatColumn]));
                 }
                 set {
                     this[this.tableInstance.TimeFormatColumn] = value;
@@ -8389,15 +8311,32 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public int DateFormat {
                 get {
-                    try {
-                        return ((int)(this[this.tableInstance.DateFormatColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'DateFormat\' in table \'Instance\' is DBNull.", e);
-                    }
+                    return ((int)(this[this.tableInstance.DateFormatColumn]));
                 }
                 set {
                     this[this.tableInstance.DateFormatColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte BillingPlan {
+                get {
+                    return ((byte)(this[this.tableInstance.BillingPlanColumn]));
+                }
+                set {
+                    this[this.tableInstance.BillingPlanColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte CreditCardStatus {
+                get {
+                    return ((byte)(this[this.tableInstance.CreditCardStatusColumn]));
+                }
+                set {
+                    this[this.tableInstance.CreditCardStatusColumn] = value;
                 }
             }
             
@@ -8423,42 +8362,6 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCreatedTimeNull() {
                 this[this.tableInstance.CreatedTimeColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsTimeZoneIdNull() {
-                return this.IsNull(this.tableInstance.TimeZoneIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetTimeZoneIdNull() {
-                this[this.tableInstance.TimeZoneIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsTimeFormatNull() {
-                return this.IsNull(this.tableInstance.TimeFormatColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetTimeFormatNull() {
-                this[this.tableInstance.TimeFormatColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsDateFormatNull() {
-                return this.IsNull(this.tableInstance.DateFormatColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetDateFormatNull() {
-                this[this.tableInstance.DateFormatColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

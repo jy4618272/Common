@@ -20,6 +20,13 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class InstanceProvider
     {
+        #region Members
+
+        internal const string DefaultTimeZoneId = "Eastern Standard Time";
+        internal const string DefaultWorkingDays = "1111100";
+
+        #endregion
+
         #region Events
 
         /// <summary>
@@ -107,8 +114,10 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="configure">true to configure the instance.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         private static Guid InsertInstance(string name, string description, bool enableSignupUser
-            , string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
-            , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg, Guid? templateInstanceId)
+            , string externalId, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
+            , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg
+            , Guid? templateInstanceId
+            , string partialCustomUrl)
         {
             if (refreshOrganizationData) WebApplication.RefreshAllData();
 
@@ -133,34 +142,20 @@ namespace Micajah.Common.Bll.Providers
             row.EnableSignUpUser = (templateInstance == null) ? enableSignupUser : templateInstance.EnableSignupUser;
             row.ExternalId = ((externalId == null) ? string.Empty : externalId);
             if (string.IsNullOrEmpty(timeZoneId))
-                row.SetTimeZoneIdNull();
+                row.TimeZoneId = DefaultTimeZoneId;
             else
                 row.TimeZoneId = timeZoneId;
             if (templateInstance == null)
             {
-                if (timeFormat.HasValue)
-                    row.TimeFormat = timeFormat.Value;
-                else
-                    row.SetTimeFormatNull();
-
-                if (dateFormat.HasValue)
-                    row.DateFormat = dateFormat.Value;
-                else
-                    row.SetDateFormatNull();
+                row.TimeFormat = timeFormat;
+                row.DateFormat = dateFormat;
             }
             else
             {
-                if (templateInstance.TimeFormat.HasValue)
-                    row.TimeFormat = templateInstance.TimeFormat.Value;
-                else
-                    row.SetTimeFormatNull();
-
-                if (templateInstance.DateFormat.HasValue)
-                    row.DateFormat = templateInstance.DateFormat.Value;
-                else
-                    row.SetDateFormatNull();
+                row.TimeFormat = templateInstance.TimeFormat;
+                row.DateFormat = templateInstance.DateFormat;
             }
-            row.WorkingDays = (templateInstance == null) ? string.IsNullOrEmpty(workingDays) ? "1111100" : workingDays : templateInstance.WorkingDays;
+            row.WorkingDays = (templateInstance == null) ? string.IsNullOrEmpty(workingDays) ? DefaultWorkingDays : workingDays : templateInstance.WorkingDays;
             row.Active = active;
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             row.Trial = (templateInstance == null) ? trial : templateInstance.Trial;
@@ -207,16 +202,15 @@ namespace Micajah.Common.Bll.Providers
 
             if (emailSuffixes != null)
             {
-                if (!String.IsNullOrEmpty(emailSuffixes))
-                {
-                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
-                    EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixes);
+                EmailSuffixProvider.InsertEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
 
-                    inst.EmailSuffixes = emailSuffixes;
-                }
+                inst.EmailSuffixes = emailSuffixes;
             }
 
             if (configure) ConfigureInstance(instanceId, organizationId);
+
+            if (!string.IsNullOrEmpty(partialCustomUrl))
+                CustomUrlProvider.InsertCustomUrl(organizationId, instanceId, null, partialCustomUrl);
 
             if (refreshOrganizationData) WebApplication.RefreshOrganizationData(organizationId);
 
@@ -255,11 +249,11 @@ namespace Micajah.Common.Bll.Providers
         #region Internal Methods
 
         internal static Guid InsertFirstInstance(string timeZoneId, Guid? templateInstanceId, Guid organizationId
-            , string adminEmail, string adminPassword
+            , string adminEmail, string adminPassword, string partialCustomUrl
             , bool sendNotificationEmail, bool refreshOrganiationData)
         {
-            return InsertInstance(Resources.InstanceProvider_FirstInstance_Name, null, false, null, timeZoneId, null, null, null, true, null, false, false, null, organizationId
-                , adminEmail, adminPassword, sendNotificationEmail, refreshOrganiationData, false, true, templateInstanceId);
+            return InsertInstance(Resources.InstanceProvider_FirstInstance_Name, null, false, null, timeZoneId, 0, 0, null, true, null, false, false, null, organizationId
+                , adminEmail, adminPassword, sendNotificationEmail, refreshOrganiationData, false, true, templateInstanceId, partialCustomUrl);
         }
 
         /// <summary>
@@ -287,7 +281,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static Instance GetFirstInstance()
         {
-            return GetFirstInstance(UserContext.SelectedOrganizationId);
+            return GetFirstInstance(UserContext.Current.SelectedOrganizationId);
         }
 
         internal static Instance GetFirstInstance(Guid organizationId)
@@ -648,9 +642,12 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="beta">The beta status.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static Guid InsertInstance(string name, string description, bool active, bool beta)
+        public static Guid InsertInstance(string name, string description, bool active, bool beta, string vanityUrl, Guid templateInstanceId)
         {
-            return InsertInstance(name, description, false, null, null, null, null, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, null);
+            Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.Email, null, true, true, false, false, templateInstanceId, null);
+            if (!string.IsNullOrEmpty(vanityUrl))
+                CustomUrlProvider.InsertCustomUrl(UserContext.Current.SelectedOrganizationId, instanceId, null, vanityUrl.ToLowerInvariant());
+            return instanceId;
         }
 
         /// <summary>
@@ -669,9 +666,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="adminEmail">The e-mail address of the instance administrator.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
+        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
         {
-            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null);
+            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganization.OrganizationId, adminEmail, null, true, true, false, false, null, null);
         }
 
         /// <summary>
@@ -693,9 +690,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
-        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
+        public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
         {
-            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null);
+            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null, null);
         }
 
         /// <summary>
@@ -771,7 +768,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
         public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, true);
+            UpdateInstance(instanceId, name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, true, -1, -1);
         }
 
         /// <summary>
@@ -793,7 +790,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixes">The instance email suffixes.</param>
         /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
         /// <param name="raiseEvent">Whether the Micajah.Common.Bll.Providers.InstanceProvider.InstanceUpdated event will be raised.</param>
-        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent)
+        /// <param name="billingPlan"></param>
+        /// <param name="creditCardStatus"></param>
+        public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent, int billingPlan, int creditCardStatus)
         {
             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
             if (ds == null) return;
@@ -819,23 +818,16 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             if (enableSignupUser.HasValue) row.EnableSignUpUser = enableSignupUser.Value;
             if (externalId != null) row.ExternalId = Support.TrimString(externalId, table.ExternalIdColumn.MaxLength);
-            if (string.IsNullOrEmpty(timeZoneId))
-                row.SetTimeZoneIdNull();
-            else
-                row.TimeZoneId = timeZoneId;
-            if (timeFormat.HasValue)
-                row.TimeFormat = timeFormat.Value;
-            else
-                row.SetTimeFormatNull();
-            if (dateFormat.HasValue)
-                row.DateFormat = dateFormat.Value;
-            else
-                row.SetDateFormatNull();
+            if (!string.IsNullOrEmpty(timeZoneId)) row.TimeZoneId = timeZoneId;
+            if (timeFormat.HasValue) row.TimeFormat = timeFormat.Value;
+            if (dateFormat.HasValue) row.DateFormat = dateFormat.Value;
             if (workingDays != null) row.WorkingDays = workingDays;
             if (active.HasValue) row.Active = active.Value;
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
+            if (billingPlan >= 0) row.BillingPlan = (byte)billingPlan;
+            if (creditCardStatus >= 0) row.CreditCardStatus = (byte)creditCardStatus;
             row.Deleted = false;
 
             OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
@@ -849,14 +841,9 @@ namespace Micajah.Common.Bll.Providers
 
             if (emailSuffixes != null)
             {
-                EmailSuffixProvider.DeleteEmailSuffixes(organizationId, instanceId);
-                if (!String.IsNullOrEmpty(emailSuffixes))
-                {
-                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
-                    EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixes);
+                EmailSuffixProvider.UpdateEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
 
-                    inst.EmailSuffixes = emailSuffixes;
-                }
+                inst.EmailSuffixes = emailSuffixes;
             }
 
             UserContext.RefreshCurrent();
@@ -882,7 +869,29 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateInstance(Instance instance, bool raiseEvent)
         {
             if (instance != null)
-                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent);
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent, -1, -1);
+        }
+
+        /// <summary>
+        /// Updates the details of specified instance.
+        /// </summary>
+        /// <param name="instance">The instance to update.</param>
+        /// <param name="billingPlan"></param>
+        public static void UpdateInstance(Instance instance, BillingPlan billingPlan)
+        {
+            if (instance != null)
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, false, (int)billingPlan, -1);
+        }
+
+        /// <summary>
+        /// Updates the details of specified instance.
+        /// </summary>
+        /// <param name="instance">The instance to update.</param>
+        /// <param name="creditCardStatus"></param>
+        public static void UpdateInstance(Instance instance, CreditCardStatus creditCardStatus)
+        {
+            if (instance != null)
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, false, -1, (int)creditCardStatus);
         }
 
         /// <summary>

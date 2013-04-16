@@ -273,9 +273,14 @@ div.Mp_B span.L
     _margin-left: 0 !important;
 }
 
+.Mp_Pc .Notification
+{
+    margin-bottom: 15px;
+}
+
 .Mp_Pm
 {
-    padding: 20px 5% 20px 5%;
+    padding: 5px 5% 20px 5%;
     width: 90%;
     float: left;
 }
@@ -373,6 +378,23 @@ ul.Mp_Sm li a:hover
     background-color: #E9E9E9;
 }
 
+ul.Mp_Sm li a img
+{
+    padding-right: 5px;
+}
+
+/* ------------ Submenu highlighted item ------------ */
+ul.Mp_Sm li.H
+{
+    font-weight: bold;
+}
+
+/* ------------ Submenu selected item ------------ */
+ul.Mp_Sm li.S a
+{
+    background-color: #E9E9E9;
+}
+
 /*------------ Submenu first level item ------------ */
 .Mp_Sm li.F
 {
@@ -462,35 +484,12 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
 /*------------ Footer -----------------------------------------------------------------------------------------------------------------------------------------*/
 .Mp_Ftr
 {
-    height: 100px;
-    background: background-color: #F4F4F4;
+    height: 50px;
     width: 100%;
     min-width: 960px;
-    border-bottom: 1px solid #fff;
-    border-top: 1px solid #CCC;
     color: #777;
     float: left;
-    margin-top: -111px;
-}
-
-.Mp_Ftr a
-{
-    color: #555555;
-    text-decoration: none;
-}
-
-.Mp_Ftr a:hover
-{
-    color: #000;
-    text-decoration: none;
-    border-bottom: 1px dashed;
-}
-
-.Mp_Ftr .Cpy, .Mp_Ftr .Cpy a
-{
-    color: #000;
-    font-size: 12px !important;
-    font-weight: bold;
+    margin-top: -60px;
 }
 
 .Mp_Ftr .L
@@ -501,7 +500,7 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
     margin-left: 5%;
     position: absolute;
     left: 0;
-    padding: 10px 0;
+    padding: 30px 0 0 0;
 }
 
 .Mp_Ftr .L ul li
@@ -518,16 +517,5 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover
     width: auto;
     text-align: right;
     margin-right: 5%;
-    padding: 10px 0;
-}
-
-.Mp_Ftr .R ul
-{
-    display: block;
-}
-
-.Mp_Ftr .R ul li
-{
-    font-size: 10.3px;
-    line-height: 1.5;
+    padding: 15px 0 0 0;
 }

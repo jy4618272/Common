@@ -2,7 +2,7 @@
     CodeFile="DateRange.aspx.cs" Inherits="DateRangeTestPage" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
-    <mits:DateRange ID="DateRange1" runat="server" Required="True" DateRangeSelected="Today" />
+    <mits:DateRange ID="DateRange1" runat="server" Required="True" />
     <br />
     <br />
     <asp:Button ID="Button1" runat="server" Text="Submit" />

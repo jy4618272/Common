@@ -91,7 +91,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false);
 
-            Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
+            Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
 
             this.LoadResources();
 

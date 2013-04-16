@@ -444,7 +444,7 @@ namespace Micajah.Common.WebControls
             {
                 img = new Image();
                 img.ImageAlign = ImageAlign.AbsMiddle;
-                img.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(item.IconUrl);
+                img.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(item.IconUrl);
                 if (iconSize != IconSize.NotSet)
                     img.Height = img.Width = Unit.Pixel((int)iconSize);
                 string descr = item.CustomDescription;

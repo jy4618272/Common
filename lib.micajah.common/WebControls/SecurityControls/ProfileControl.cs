@@ -124,6 +124,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
             BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, false);
             BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, false);
+
+            TokenControl token = (TokenControl)EditForm.FindControl("Token");
+            token.LoginId = UserContext.Current.UserId;
         }
 
         protected void CountryList_ControlInit(object sender, EventArgs e)
@@ -156,12 +159,14 @@ namespace Micajah.Common.WebControls.SecurityControls
             EditForm.Fields[15].HeaderText = Resources.ProfileControl_EditForm_TimeZoneField_HeaderText;
             EditForm.Fields[16].HeaderText = Resources.ProfileControl_EditForm_TimeFormatField_HeaderText;
             EditForm.Fields[17].HeaderText = Resources.ProfileControl_EditForm_DateFormatField_HeaderText;
+            EditForm.Fields[18].HeaderText = Resources.ProfileControl_EditForm_TokenField_HeaderText;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (!IsPostBack)
+
+            if (!this.IsPostBack)
                 UserIdLabel.Text = UserContext.Current.UserId.ToString();
         }
 

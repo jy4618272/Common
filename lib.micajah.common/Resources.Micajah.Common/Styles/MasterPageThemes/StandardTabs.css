@@ -165,6 +165,11 @@ div.Mp_B table tr td span.L
     _margin-left: 0 !important;
 }
 
+.Mp_Pc .Notification
+{
+    margin-bottom: 15px;
+}
+
 .Mp_PcSlgOnFtrOn
 {
     padding-bottom: 167px;
@@ -262,6 +267,11 @@ ul.Mp_Sm li ul
     list-style:none;
     margin-left:0px;
     padding-left:0px;
+}
+
+ul.Mp_Sm li a img
+{
+    padding-right: 5px;
 }
 
 ul.Mp_Sm li, .Mp_Lah

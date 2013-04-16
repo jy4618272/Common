@@ -19,7 +19,7 @@ namespace Micajah.Common.WebControls.SetupControls
             {
                 List.EmptyDataText = string.Format(CultureInfo.CurrentCulture
                     , Resources.DatabaseServersControl_ErrorMessage_NoWebsite
-                    , WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.WebsitesPageVirtualPath));
+                    , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.WebsitesPageVirtualPath));
                 List.ShowAddLink = EditForm.Visible = false;
             }
             base.OnLoad(e);

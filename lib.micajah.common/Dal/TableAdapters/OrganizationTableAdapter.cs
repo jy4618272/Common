@@ -42,7 +42,6 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("Trial", "Trial");
             TableMapping.ColumnMappings.Add("Beta", "Beta");
             TableMapping.ColumnMappings.Add("CreatedTime", "CreatedTime");
-            TableMapping.ColumnMappings.Add("BillingPlan", "BillingPlan");
             TableMapping.ColumnMappings.Add("Street", "Street");
             TableMapping.ColumnMappings.Add("Street2", "Street2");
             TableMapping.ColumnMappings.Add("City", "City");
@@ -50,6 +49,7 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("PostalCode", "PostalCode");
             TableMapping.ColumnMappings.Add("Country", "Country");
             TableMapping.ColumnMappings.Add("Currency", "Currency");
+            TableMapping.ColumnMappings.Add("HowYouHearAboutUs", "HowYouHearAboutUs");
 
             #endregion
 
@@ -72,7 +72,6 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@CanceledTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CanceledTime", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Trial", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Trial", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
-            InsertCommand.Parameters.Add(new SqlParameter("@BillingPlan", SqlDbType.TinyInt, 1, ParameterDirection.Input, 3, 0, "BillingPlan", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Street", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Street", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Street2", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Street2", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@City", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "City", DataRowVersion.Current, false, null, "", "", ""));
@@ -80,6 +79,8 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@PostalCode", SqlDbType.NVarChar, 20, ParameterDirection.Input, 0, 0, "PostalCode", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Country", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Country", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Currency", SqlDbType.Char, 3, ParameterDirection.Input, 0, 0, "Currency", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@HowYouHearAboutUs", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "HowYouHearAboutUs", DataRowVersion.Current, false, null, "", "", ""));
+
 
             #endregion
 
@@ -109,7 +110,6 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@Trial", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Trial", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Beta", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Beta", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Deleted", SqlDbType.Bit, 1, ParameterDirection.Input, 1, 0, "Deleted", DataRowVersion.Current, false, null, "", "", ""));
-            UpdateCommand.Parameters.Add(new SqlParameter("@BillingPlan", SqlDbType.TinyInt, 1, ParameterDirection.Input, 3, 0, "BillingPlan", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Street", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Street", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Street2", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Street2", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@City", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "City", DataRowVersion.Current, false, null, "", "", ""));
@@ -117,6 +117,7 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@PostalCode", SqlDbType.NVarChar, 20, ParameterDirection.Input, 0, 0, "PostalCode", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Country", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Country", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Currency", SqlDbType.Char, 3, ParameterDirection.Input, 0, 0, "Currency", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@HowYouHearAboutUs", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "HowYouHearAboutUs", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 

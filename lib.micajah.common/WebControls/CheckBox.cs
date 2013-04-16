@@ -349,7 +349,7 @@ namespace Micajah.Common.WebControls
 
                 ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "OnOffSwitchScript", ResourceProvider.GetResourceUrl("Scripts.OnOffSwitch.js", true));
 
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "ApplyStyle"
+                ScriptManager.RegisterStartupScript(this, this.GetType(), this.ClientID + "_ApplyStyle"
                     , string.Format(CultureInfo.InvariantCulture, "$(document).ready(function (){{ $('#{0}').iphoneStyle({{ checkedLabel: '{1}', uncheckedLabel: '{2}'{3} }}); }});\r\n"
                     , this.m_CheckBox.ClientID, this.CheckedText, this.UncheckedText, (this.AutoPostBack ? ", onChange : function (){ " + Page.ClientScript.GetPostBackEventReference(m_CheckBox, null) + "; }" : string.Empty))
                     , true);

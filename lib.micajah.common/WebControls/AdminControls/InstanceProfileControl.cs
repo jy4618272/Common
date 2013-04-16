@@ -64,21 +64,12 @@ namespace Micajah.Common.WebControls.AdminControls
 
         #endregion
 
-        #region Private Methods
-
-        private void Redirect()
-        {
-            RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
-        }
-
-        #endregion
-
         #region Protected Methods
 
         protected void InstancesDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void InstanceList_DataBound(object sender, EventArgs e)
@@ -124,18 +115,14 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 workingDays = inst.WorkingDays;
                 timeZoneId = inst.TimeZoneId;
-
-                if (inst.TimeFormat.HasValue)
-                    timeFormat = inst.TimeFormat.Value.ToString(CultureInfo.InvariantCulture);
-
-                if (inst.DateFormat.HasValue)
-                    dateFormat = inst.DateFormat.Value.ToString(CultureInfo.InvariantCulture);
+                timeFormat = inst.TimeFormat.ToString(CultureInfo.InvariantCulture);
+                dateFormat = inst.DateFormat.ToString(CultureInfo.InvariantCulture);
             }
 
             BaseControl.WorkingDaysListDataBind(WorkingDays, workingDays);
-            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, false);
-            BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, false);
-            BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, false);
+            BaseControl.TimeZoneListDataBind(TimeZoneList, timeZoneId, true);
+            BaseControl.TimeFormatListDataBind(TimeFormatList, timeFormat, true);
+            BaseControl.DateFormatListDataBind(DateFormatList, dateFormat, true);
         }
 
         #endregion
@@ -159,7 +146,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             if (e.Exception == null)
-                this.Redirect();
+                this.RedirectToConfigurationPage();
         }
 
         protected override void EditForm_ItemCommand(object sender, CommandEventArgs e)
@@ -167,7 +154,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
-                this.Redirect();
+                this.RedirectToConfigurationPage();
         }
 
         protected override void OnLoad(EventArgs e)

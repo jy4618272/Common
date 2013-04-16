@@ -73,7 +73,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             LogOnPageButton2.Text = LogOnPageButton.Text = Resources.PasswordRecoveryControl_LogOnPageLink_Text;
             LoginLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginLabelText;
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
 
                 LoginTextBox.ValidationExpression = FrameworkConfiguration.Current.WebApplication.Login.LoginValidationExpression;
@@ -97,14 +97,13 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!IsPostBack)
             {
-                Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
+                Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)));
 
                 LoadResources();
 
                 string loginName = Request.QueryString["l"];
-                if (string.IsNullOrEmpty(loginName))
-                    loginName = LogOnControl.LoginNameInCookie;
-                if (!string.IsNullOrEmpty(loginName)) LoginTextBox.Text = loginName;
+                if (!string.IsNullOrEmpty(loginName))
+                    LoginTextBox.Text = loginName;
 
                 LoginTextBox.Focus();
 
@@ -155,10 +154,10 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void LogOnPageButton_Click(object sender, EventArgs e)
         {
             string url = null;
-            if (!string.IsNullOrEmpty(LoginTextBox.Text) && (string.Compare(LoginTextBox.Text, LogOnControl.LoginNameInCookie, StringComparison.OrdinalIgnoreCase) != 0))
-                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text);
+            if (!string.IsNullOrEmpty(LoginTextBox.Text))
+                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
             else
-                url = WebApplication.LoginProvider.GetLoginUrl();
+                url = WebApplication.LoginProvider.GetLoginUrl(false);
             Response.Redirect(url);
         }
 

@@ -78,8 +78,6 @@ namespace Micajah.Common.Bll.Handlers
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances);
                 else if (action.ActionId == ActionProvider.CustomUrlsPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled);
-                else if (action.ActionId == ActionProvider.AccountSettingsPageActionId)
-                    accessDenied = (!UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.StartPageActionId)
                     Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(UserContext.Current, out accessDenied);
                 else if ((action.ActionId == ActionProvider.LdapIntegrationPageActionId)
@@ -87,9 +85,13 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.LdapMappingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapServerSettingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
-                    accessDenied = !(FrameworkConfiguration.Current.WebApplication.EnableLdap && UserContext.Current.SelectedOrganization.Beta);
+                    accessDenied = !(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
                     accessDenied = ((UserContext.Current != null) && (UserContext.Current.SelectedOrganization == null));
+                else if (action.ActionId == ActionProvider.GoogleIntegrationPageActionId)
+                    accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
+                else if (action.ActionId == ActionProvider.ActivityReportActionId)
+                    accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
             }
 
             return accessDenied;
@@ -141,6 +143,13 @@ namespace Micajah.Common.Bll.Handlers
         {
             if (action == null)
                 return null;
+
+            if ((action.ActionId == ActionProvider.ConfigurationPageActionId) || (action.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId))
+            {
+                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                    return CustomUrlProvider.CreateApplicationRelativeUrl(ResourceProvider.AccountSettingsVirtualPath);
+            }
+
             return action.NavigateUrl;
         }
 

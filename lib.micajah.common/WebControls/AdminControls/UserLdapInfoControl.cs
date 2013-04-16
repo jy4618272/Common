@@ -65,15 +65,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         #endregion
 
-        #region Private Methods
-
-        private void Redirect()
-        {
-            RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
-        }
-
-        #endregion
-
         #region Protected Methods
 
         protected void Page_Load(object sender, EventArgs e)
@@ -95,7 +86,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
                 e.InputParameters["loginId"] = this.UserId;
             }
         }
@@ -104,7 +95,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
             e.InputParameters["loginId"] = this.UserId;
             e.InputParameters["firstName"] = (EditForm.Rows[0].Cells[1].Controls[0] as TextBox).Text;
             e.InputParameters["lastName"] = (EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text;
@@ -132,7 +123,7 @@ namespace Micajah.Common.WebControls.AdminControls
             thread.CurrentUICulture = CultureInfo.CurrentUICulture;
             thread.Priority = ThreadPriority.Lowest;
             thread.IsBackground = true;
-            thread.Start(UserContext.SelectedOrganizationId.ToString());
+            thread.Start(UserContext.Current.SelectedOrganizationId.ToString());
 
             GetUserGroupsButton.Enabled = false;
         }
@@ -179,7 +170,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsGetUserGroups()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format("GetUserGroups_{0}_{1}", UserContext.SelectedOrganizationId, this.UserId);
+            string processId = string.Format("GetUserGroups_{0}_{1}", UserContext.Current.SelectedOrganizationId, this.UserId);
             try
             {
                 GetUserGroupsTimer.Enabled = false;
@@ -320,7 +311,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsReconnectUserToLdap()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format("ReconnectUserToLdap_{0}_{1}", UserContext.SelectedOrganizationId, this.UserId);
+            string processId = string.Format("ReconnectUserToLdap_{0}_{1}", UserContext.Current.SelectedOrganizationId, this.UserId);
             try
             {
                 ReconnectUserToLdapTimer.Enabled = false;
@@ -424,7 +415,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (e.Exception == null)
             {
-                this.Redirect();
+                this.RedirectToConfigurationPage();
             }
         }
 
@@ -434,7 +425,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
             {
-                this.Redirect();
+                this.RedirectToConfigurationPage();
             }
         }
 

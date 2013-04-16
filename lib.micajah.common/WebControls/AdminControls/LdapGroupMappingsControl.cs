@@ -67,7 +67,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void OrganizationIdDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void LdapGroupListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
@@ -75,7 +75,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e != null)
             {
                 RadComboBoxItem item = DomainList.SelectedItem;
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
                 if (item != null)
                     e.InputParameters["domainName"] = item.Text;
                 else
@@ -128,9 +128,9 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (new Guid(DomainList.SelectedItem.Value) != new Guid() && new Guid(LdapGroupList.SelectedItem.Value) != new Guid())
             {
-                LdapInfoProvider.InsertGroupMapping(new Guid(AppGroupTreeView.SelectedValue), UserContext.SelectedOrganizationId, AppGroupTreeView.SelectedNode.Text, new Guid(DomainList.SelectedItem.Value), DomainList.SelectedItem.Text, new Guid(LdapGroupList.SelectedItem.Value), LdapGroupList.SelectedItem.Text);
+                LdapInfoProvider.InsertGroupMapping(new Guid(AppGroupTreeView.SelectedValue), UserContext.Current.SelectedOrganizationId, AppGroupTreeView.SelectedNode.Text, new Guid(DomainList.SelectedItem.Value), DomainList.SelectedItem.Text, new Guid(LdapGroupList.SelectedItem.Value), LdapGroupList.SelectedItem.Text);
                 CommonGridView1.DataBind();
-                LdapInfoProvider.UpdateLdapDomains(UserContext.SelectedOrganizationId);
+                LdapInfoProvider.UpdateLdapDomains(UserContext.Current.SelectedOrganizationId);
 
                 AppGroupTreeView.UncheckAllNodes();
                 AppGroupTreeView.UnselectAllNodes();

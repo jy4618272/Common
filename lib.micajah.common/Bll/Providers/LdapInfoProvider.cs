@@ -621,7 +621,7 @@ namespace Micajah.Common.Bll.Providers
 
                 DataRow row = table.NewRow();
                 row["GroupId"] = Guid.Empty;
-                row["OrganizationId"] = UserContext.SelectedOrganizationId;
+                row["OrganizationId"] = UserContext.Current.SelectedOrganizationId;
                 row["Name"] = Resources.GroupProvider_OrganizationAdministratorGroupName;
                 row["Description"] = Resources.GroupProvider_OrganizationAdministratorGroupDescription;
                 row["BuiltIn"] = true;
@@ -652,7 +652,7 @@ namespace Micajah.Common.Bll.Providers
 
                 DataRow row = table.NewRow();
                 row["GroupId"] = Guid.Empty;
-                row["OrganizationId"] = UserContext.SelectedOrganizationId;
+                row["OrganizationId"] = UserContext.Current.SelectedOrganizationId;
                 row["Name"] = Resources.GroupProvider_OrganizationAdministratorGroupName;
                 row["Description"] = Resources.GroupProvider_OrganizationAdministratorGroupDescription;
                 row["BuiltIn"] = true;

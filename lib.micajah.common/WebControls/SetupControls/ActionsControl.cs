@@ -134,7 +134,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     break;
             }
 
-            node.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(imageUrl);
+            node.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(imageUrl);
         }
 
         private void EditForm_SetDetailMenuFieldsVisible(bool visible)

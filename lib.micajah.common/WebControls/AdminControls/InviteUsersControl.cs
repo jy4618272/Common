@@ -60,7 +60,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (!this.IsPostBack)
             {
                 this.LoadResources();
-                CancelLink.NavigateUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.UsersPageVirtualPath);
+                CancelLink.NavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.UsersPageVirtualPath);
                 EmailValidator.ErrorMessage = Resources.TextBox_RegularExpressionValidator_ErrorMessage;
                 
                 EmailValidator.Attributes["controltovalidate2"] = EmailTextBox.ClientID;

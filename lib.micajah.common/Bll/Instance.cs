@@ -37,6 +37,8 @@ namespace Micajah.Common.Bll
         private SettingCollection m_Settings;
         private SortedList m_GroupIdRoleIdList;
         private string m_EmailSuffixes;
+        private BillingPlan m_BillingPlan;
+        private CreditCardStatus m_CreditCardStatus;
         private Collection<string> m_EmailSuffixesList;
 
         // The objects which are used to synchronize access to the cached objects.
@@ -58,9 +60,11 @@ namespace Micajah.Common.Bll
             m_InstanceId = Guid.Empty;
 
             m_ExternalId = string.Empty;
-            m_WorkingDays = "1111100";
+            m_WorkingDays = InstanceProvider.DefaultWorkingDays;
             m_Active = true;
-            this.TimeZoneId = string.Empty;
+            this.TimeZoneId = InstanceProvider.DefaultTimeZoneId;
+            m_BillingPlan = BillingPlan.Free;
+            m_CreditCardStatus = CreditCardStatus.NotRegistered;
         }
 
         #endregion
@@ -200,12 +204,12 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets ot sets the time format.
         /// </summary>
-        public int? TimeFormat { get; set; }
+        public int TimeFormat { get; set; }
 
         /// <summary>
         /// Gets ot sets the date format.
         /// </summary>
-        public int? DateFormat { get; set; }
+        public int DateFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the working days of the instance.
@@ -259,6 +263,24 @@ namespace Micajah.Common.Bll
         {
             get { return m_CreatedTime; }
             set { m_CreatedTime = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the instance BillingPlan (Free, Paid, Custom).
+        /// </summary>
+        public BillingPlan BillingPlan
+        {
+            get { return m_BillingPlan; }
+            set { m_BillingPlan = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the instance CreditCardStatus (Not Registered, Registered, Expired, Declined).
+        /// </summary>
+        public CreditCardStatus CreditCardStatus
+        {
+            get { return m_CreditCardStatus; }
+            set { m_CreditCardStatus = value; }
         }
 
         /// <summary>
@@ -432,9 +454,9 @@ namespace Micajah.Common.Bll
                 m_EnableSignupUser = row.EnableSignUpUser;
 
                 m_ExternalId = row.ExternalId;
-                this.TimeZoneId = (row.IsTimeZoneIdNull() ? null : row.TimeZoneId);
-                this.TimeFormat = (row.IsTimeFormatNull() ? null : new int?(row.TimeFormat));
-                this.DateFormat = (row.IsDateFormatNull() ? null : new int?(row.DateFormat));
+                this.TimeZoneId = row.TimeZoneId;
+                this.TimeFormat = row.TimeFormat;
+                this.DateFormat = row.DateFormat;
                 m_WorkingDays = row.WorkingDays;
                 m_Active = row.Active;
                 m_CanceledTime = (row.IsCanceledTimeNull() ? null : new DateTime?(row.CanceledTime));
@@ -449,6 +471,9 @@ namespace Micajah.Common.Bll
                 m_GroupIdRoleIdList = null;
                 m_EmailSuffixes = null;
                 m_EmailSuffixesList = null;
+
+                m_BillingPlan = (BillingPlan)row.BillingPlan;
+                m_CreditCardStatus = (CreditCardStatus)row.CreditCardStatus;
             }
         }
 

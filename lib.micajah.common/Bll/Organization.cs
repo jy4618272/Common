@@ -55,7 +55,6 @@ namespace Micajah.Common.Bll
         private string m_CustomStyleSheet;
         private bool m_Deleted;
         private bool m_Visible;
-        private BillingPlan m_BillingPlan;
         private string m_Street;
         private string m_Street2;
         private string m_City;
@@ -91,7 +90,6 @@ namespace Micajah.Common.Bll
             m_ExternalId = string.Empty;
             m_Active = true;
             m_Visible = true;
-            m_BillingPlan = BillingPlan.Free;
             m_Street = string.Empty;
             m_Street2 = string.Empty;
             m_City = string.Empty;
@@ -99,6 +97,7 @@ namespace Micajah.Common.Bll
             m_PostalCode = string.Empty;
             m_Country = string.Empty;
             m_Currency = string.Empty;
+            HowYouHearAboutUs = string.Empty;
         }
 
         #endregion
@@ -538,15 +537,6 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets or sets the organization BillingPlan (Free, Paid, Custom).
-        /// </summary>
-        public BillingPlan BillingPlan
-        {
-            get { return m_BillingPlan; }
-            set { m_BillingPlan = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the street of the organization.
         /// </summary>
         public string Street
@@ -608,6 +598,11 @@ namespace Micajah.Common.Bll
             get { return m_Currency; }
             set { m_Currency = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the value for how this organization hear about us.
+        /// </summary>
+        public string HowYouHearAboutUs { get; set; }
 
         #endregion
 
@@ -696,14 +691,17 @@ namespace Micajah.Common.Bll
         /// <returns>true, if the specified organization is found; otherwise, false.</returns>
         internal bool Load(Guid organizationId)
         {
-            CommonDataSet.OrganizationRow orgRow = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
-            if (orgRow != null)
+            if (organizationId != Guid.Empty)
             {
-                Load(orgRow);
+                CommonDataSet.OrganizationRow orgRow = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
+                if (orgRow != null)
+                {
+                    Load(orgRow);
 
-                this.Reset();
+                    this.Reset();
 
-                return true;
+                    return true;
+                }
             }
             return false;
         }
@@ -738,7 +736,6 @@ namespace Micajah.Common.Bll
                 m_Beta = row.Beta;
                 if (!row.IsCreatedTimeNull()) m_CreatedTime = new DateTime?(row.CreatedTime);
                 m_Deleted = row.Deleted;
-                m_BillingPlan = (BillingPlan)row.BillingPlan;
                 m_Street = row.Street;
                 m_Street2 = row.Street2;
                 m_City = row.City;
@@ -746,6 +743,7 @@ namespace Micajah.Common.Bll
                 m_PostalCode = row.PostalCode;
                 m_Country = row.Country;
                 m_Currency = row.Currency;
+                HowYouHearAboutUs = row.HowYouHearAboutUs;
 
                 this.Reset();
             }
@@ -810,7 +808,6 @@ namespace Micajah.Common.Bll
                 }
 
                 m_Deleted = (bool)row["Deleted"];
-                m_BillingPlan = (BillingPlan)((byte)row["BillingPlan"]);
                 m_Street = (string)row["Street"];
                 m_Street2 = (string)row["Street2"];
                 m_City = (string)row["City"];
@@ -818,6 +815,7 @@ namespace Micajah.Common.Bll
                 m_PostalCode = (string)row["PostalCode"];
                 m_Country = (string)row["Country"];
                 m_Currency = (string)row["Currency"];
+                HowYouHearAboutUs = (string)row["HowYouHearAboutUs"];
 
                 this.Reset();
             }

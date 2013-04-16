@@ -1,10 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
 using Micajah.Common.Application;
-using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 
 namespace Micajah.Common.Bll.Providers
@@ -16,27 +13,6 @@ namespace Micajah.Common.Bll.Providers
     public static class EmailSuffixProvider
     {
         #region Public Methods
-
-        /// <summary>
-        /// Check if EmailSuffix table is Exist.
-        /// </summary>
-        public static bool IsEmailSuffixExist()
-        {
-            SqlConnection m_Connection = null;
-            using (m_Connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
-            {
-                if (!Convert.ToBoolean(Support.ExecuteScalar("select case when EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_EmailSuffix]') AND type in (N'U')) then 1 else 0 end as IsExist", m_Connection), CultureInfo.CurrentCulture))
-                    return false;
-
-                if (!Convert.ToBoolean(Support.ExecuteScalar("select case when EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmailSuffixesByOrganizationId]') AND type in (N'P', N'PC')) then 1 else 0 end as IsExist", m_Connection), CultureInfo.CurrentCulture))
-                    return false;
-
-                if (!Convert.ToBoolean(Support.ExecuteScalar("select case when EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Mc_GetEmailSuffixes]') AND type in (N'P', N'PC')) then 1 else 0 end as IsExist", m_Connection), CultureInfo.CurrentCulture))
-                    return false;
-            }
-
-            return true;
-        }
 
         /// <summary>
         /// Gets the list of email suffixes.
@@ -54,7 +30,7 @@ namespace Micajah.Common.Bll.Providers
                 table = new CommonDataSet.EmailSuffixDataTable();
                 WebApplication.CommonDataSetTableAdapters.EmailSuffixTableAdapter.Fill(table, 2, organizationId, instanceId, emailSuffixName);
 
-                table.DefaultView.Sort = "[EmailSuffixName] ASC";
+                table.DefaultView.Sort = table.EmailSuffixNameColumn.ColumnName;
 
                 return table;
             }
@@ -108,6 +84,16 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
+        public static Guid GetOrganizationId(string emailSuffixName)
+        {
+            CommonDataSet.EmailSuffixDataTable table = (CommonDataSet.EmailSuffixDataTable)GetEmailSuffixes(null, null, emailSuffixName);
+
+            if (table.Count > 0)
+                return table[0].OrganizationId;
+
+            return Guid.Empty;
+        }
+
         /// <summary>
         /// Inserts the email suffix.
         /// </summary>
@@ -121,6 +107,28 @@ namespace Micajah.Common.Bll.Providers
             WebApplication.CommonDataSetTableAdapters.EmailSuffixTableAdapter.Insert(emailSuffixId, organizationId, instanceId, emailSuffixName);
         }
 
+        public static void InsertEmailSuffixName(Guid organizationId, Guid? instanceId, ref string emailSuffixName)
+        {
+            if (!String.IsNullOrEmpty(emailSuffixName))
+            {
+                emailSuffixName = emailSuffixName.Replace(" ", string.Empty).Replace("@", string.Empty);
+
+                InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixName);
+            }
+        }
+
+        public static void UpdateEmailSuffixName(Guid organizationId, Guid? instanceId, ref string emailSuffixName)
+        {
+            DeleteEmailSuffixes(organizationId, instanceId);
+
+            if (!String.IsNullOrEmpty(emailSuffixName))
+            {
+                emailSuffixName = emailSuffixName.Replace(" ", string.Empty).Replace("@", string.Empty);
+
+                InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixName);
+            }
+        }
+
         /// <summary>
         /// Deletes the email suffix.
         /// </summary>
@@ -129,6 +137,24 @@ namespace Micajah.Common.Bll.Providers
         public static void DeleteEmailSuffixes(Guid organizationId, Guid? instanceId)
         {
             WebApplication.CommonDataSetTableAdapters.EmailSuffixTableAdapter.Delete(organizationId, instanceId);
+        }
+
+        /// <summary>
+        /// Parses specified email suffix name and returns the identifiers of the organization and instance.
+        /// </summary>
+        /// <param name="emailSuffixName">Email suffix name to parse.</param>
+        /// <param name="organizationId">The unique identifier of the organization.</param>
+        /// <param name="instanceId">The unique identifier of the instance.</param>
+        public static void ParseEmailSuffixName(string emailSuffixName, ref Guid organizationId, ref Guid instanceId)
+        {
+            CommonDataSet.EmailSuffixDataTable table = (CommonDataSet.EmailSuffixDataTable)GetEmailSuffixes(null, null, emailSuffixName);
+
+            if (table.Count > 0)
+            {
+                CommonDataSet.EmailSuffixRow row = table[0];
+                organizationId = row.OrganizationId;
+                instanceId = (row.IsInstanceIdNull() ? Guid.Empty : row.InstanceId);
+            }
         }
 
         #endregion

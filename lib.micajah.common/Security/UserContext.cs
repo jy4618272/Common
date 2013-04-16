@@ -91,9 +91,9 @@ namespace Micajah.Common.Security
             {
                 Instance inst = this.SelectedInstance;
                 if (inst == null)
-                    return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator);
+                    return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator, true);
                 else
-                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, inst.InstanceId, inst.OrganizationId, this.IsOrganizationAdministrator, this.IsInstanceAdministrator());
+                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, inst.InstanceId, inst.OrganizationId, this.IsOrganizationAdministrator);
             }
         }
 
@@ -118,7 +118,7 @@ namespace Micajah.Common.Security
         /// </summary>
         internal bool IsFrameworkAdministrator
         {
-            get { return (((Guid)base[SelectedOrganizationIdKey] == Guid.Empty) && LoginProvider.IsFrameworkAdministrator(this.LoginName)); }
+            get { return (LoginProvider.IsFrameworkAdministrator(this.LoginName)); }
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Micajah.Common.Security
         /// </summary>
         internal bool CanLogOnAsUser
         {
-            get { return (((Guid)base[SelectedOrganizationIdKey] == Guid.Empty) && LoginProvider.CanLogOnAsUser(this.LoginName)); }
+            get { return ((this.SelectedOrganizationId == Guid.Empty) && LoginProvider.CanLogOnAsUser(this.LoginName)); }
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Micajah.Common.Security
         }
 
         /// <summary>
-        /// Gets the list of the keys which are reserved by Micajah.Common.Security.UserContext class for internal using.
+        /// Gets the list of the keys which are reserved by Micajah.Common.UserContext class for internal using.
         /// </summary>
         internal static ArrayList ReservedKeys
         {
@@ -191,10 +191,10 @@ namespace Micajah.Common.Security
             {
                 UserContext user = null;
 
-                HttpContext ctx = HttpContext.Current;
-                if (ctx != null)
+                HttpContext http = HttpContext.Current;
+                if (http != null)
                 {
-                    HttpSessionState session = ctx.Session;
+                    HttpSessionState session = http.Session;
                     if (session != null)
                     {
                         user = session[UserContextKey] as UserContext;
@@ -209,7 +209,21 @@ namespace Micajah.Common.Security
                             {
                                 (new LoginProvider()).SignOut();
                             }
-                        }                        
+                        }
+                        else
+                        {
+                            if ((http.User != null) && (http.User.Identity != null) && http.User.Identity.IsAuthenticated)
+                            {
+                                if (string.IsNullOrEmpty(http.User.Identity.Name)) // Checks if the user is logged out from another URL, but the session was not cleaned up.
+                                {
+                                    if (!LoginProvider.IsLoginUrl(http.Request.Url.ToString())) // Checks if current page is not login page.
+                                    {
+                                        http.Session.Clear();
+                                        user = null;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -384,15 +398,12 @@ namespace Micajah.Common.Security
         {
             get
             {
-                string value = "Eastern Standard Time";
+                string value = InstanceProvider.DefaultTimeZoneId;
                 if (base[TimeZoneIdKey] == null)
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                    {
-                        if (!string.IsNullOrEmpty(inst.TimeZoneId))
-                            value = inst.TimeZoneId;
-                    }
+                        value = inst.TimeZoneId;
                 }
                 else
                     value = (string)base[TimeZoneIdKey];
@@ -413,10 +424,7 @@ namespace Micajah.Common.Security
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                    {
-                        if (inst.TimeFormat.HasValue)
-                            value = inst.TimeFormat.Value;
-                    }
+                        value = inst.TimeFormat;
                 }
                 else
                     value = (int)base[TimeFormatKey];
@@ -437,10 +445,7 @@ namespace Micajah.Common.Security
                 {
                     Instance inst = this.SelectedInstance;
                     if (inst != null)
-                    {
-                        if (inst.DateFormat.HasValue)
-                            value = inst.DateFormat.Value;
-                    }
+                        value = inst.DateFormat;
                 }
                 else
                     value = (int)base[DateFormatKey];
@@ -470,63 +475,15 @@ namespace Micajah.Common.Security
         /// </summary>
         public Organization SelectedOrganization
         {
-            get
-            {
-                Organization org = null;
-                Guid organizationId = Guid.Empty;
-
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    organizationId = GetSelectedOrganizationIdFromSession();
-
-                if (organizationId == Guid.Empty)
-                    organizationId = (Guid)base[SelectedOrganizationIdKey];
-
-                if (organizationId != Guid.Empty)
-                    org = OrganizationProvider.GetOrganization(organizationId);
-                return org;
-            }
+            get { return OrganizationProvider.GetOrganization(this.SelectedOrganizationId); }
         }
 
         /// <summary>
         /// Gets the unique identifier of the selected organization.
         /// </summary>
-        public static Guid SelectedOrganizationId
+        public Guid SelectedOrganizationId
         {
-            get
-            {
-                Guid organizationId = Guid.Empty;
-
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null) && HttpContext.Current.Request.Url.Host.StartsWith(FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, StringComparison.InvariantCultureIgnoreCase))
-                    return organizationId;
-
-                UserContext user = Current;
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    organizationId = GetSelectedOrganizationIdFromSession();
-
-                if (organizationId == Guid.Empty)
-                {
-                    if (user != null)
-                        organizationId = (Guid)user[SelectedOrganizationIdKey];
-                    else
-                        organizationId = GetSelectedOrganizationIdFromSession();
-                }
-                return organizationId;
-            }
-            internal set
-            {
-                HttpContext ctx = HttpContext.Current;
-                if (ctx != null)
-                {
-                    HttpSessionState session = ctx.Session;
-                    if (session != null)
-                    {
-                        if (value == Guid.Empty)
-                            session.Remove(SelectedOrganizationIdKey);
-                        else
-                            session[SelectedOrganizationIdKey] = value;
-                    }
-                }
-            }
+            get { return (Guid)base[SelectedOrganizationIdKey]; }
         }
 
         /// <summary>
@@ -537,104 +494,22 @@ namespace Micajah.Common.Security
             get
             {
                 Instance inst = null;
-                Guid organizationId = Guid.Empty;
-                Guid instanceId = Guid.Empty;
-                bool isCorrectInstance = false;
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                {
-                    organizationId = GetSelectedOrganizationIdFromSession();
-                    instanceId = GetSelectedInstanceIdFromSession();
-                }
-
-                if ((organizationId == Guid.Empty) || (instanceId == Guid.Empty))
-                {
-                    organizationId = (Guid)base[SelectedOrganizationIdKey];
-                    instanceId = (Guid)base[SelectedInstanceIdKey];
-
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    {
-                        if (SelectedOrganization != null && SelectedOrganization.Instances != null)
-                        {
-                            foreach (Instance instance in SelectedOrganization.Instances)
-                            {
-                                if (instanceId == instance.InstanceId)
-                                    isCorrectInstance = true;
-                            }
-                        }
-                        if (!isCorrectInstance)
-                            instanceId = Guid.Empty;
-                    }
-                }
+                Guid organizationId = this.SelectedOrganizationId;
+                Guid instanceId = this.SelectedInstanceId;
 
                 if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
                     inst = InstanceProvider.GetInstance(instanceId, organizationId);
-                return inst;
-            }
-        }
 
-        /// <summary>
-        /// Gets or sets the user's vanity url. The default value is empty string.
-        /// </summary>
-        public static string VanityUrl
-        {
-            get { return GetVanityUrlFromSession(); }
-            internal set
-            {
-                HttpContext ctx = HttpContext.Current;
-                if (ctx != null)
-                {
-                    HttpSessionState session = ctx.Session;
-                    if (session != null)
-                    {
-                        if (string.IsNullOrEmpty(value))
-                            session.Remove(VanityUrlKey);
-                        else
-                            session[VanityUrlKey] = value;
-                    }
-                }
+                return inst;
             }
         }
 
         /// <summary>
         /// Gets the unique identifier of the selected instance.
         /// </summary>
-        public static Guid SelectedInstanceId
+        public Guid SelectedInstanceId
         {
-            get
-            {
-                Guid instanceId = Guid.Empty;
-
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null) && HttpContext.Current.Request.Url.Host.StartsWith(FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, StringComparison.InvariantCultureIgnoreCase))
-                    return instanceId;
-
-                UserContext user = Current;
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    instanceId = GetSelectedInstanceIdFromSession();
-
-                if (instanceId == Guid.Empty)
-                {
-                    if (user != null)
-                        instanceId = (Guid)user[SelectedInstanceIdKey];
-                    else
-                        instanceId = GetSelectedInstanceIdFromSession();
-                }
-                return instanceId;
-            }
-            internal set
-            {
-                HttpContext ctx = HttpContext.Current;
-                if (ctx != null)
-                {
-                    HttpSessionState session = ctx.Session;
-                    if (session != null)
-                    {
-                        if (value == Guid.Empty)
-                            session.Remove(SelectedInstanceIdKey);
-                        else
-                            session[SelectedInstanceIdKey] = value;
-                    }
-                }
-            }
+            get { return (Guid)base[SelectedInstanceIdKey]; }
         }
 
         /// <summary>
@@ -680,15 +555,15 @@ namespace Micajah.Common.Security
             {
                 SettingCollection settings = null;
 
-                Guid organizationId = (Guid)base[SelectedOrganizationIdKey];
-                Guid instanceId = (Guid)base[SelectedInstanceIdKey];
+                Guid organizationId = this.SelectedOrganizationId;
+                Guid instanceId = this.SelectedInstanceId;
 
                 if (instanceId != Guid.Empty)
                 {
                     settings = SettingProvider.GetSettings(SettingLevels.Organization | SettingLevels.Instance | SettingLevels.Group, null);
                     SettingProvider.FillSettingsByGroupValues(ref settings, organizationId, instanceId, this.GroupIdList);
                 }
-                else if ((Guid)base[SelectedOrganizationIdKey] != Guid.Empty)
+                else if (organizationId != Guid.Empty)
                 {
                     settings = SettingProvider.GetSettings(SettingLevels.Organization, null);
                     SettingProvider.FillSettingsByOrganizationValues(ref settings, organizationId);
@@ -696,6 +571,43 @@ namespace Micajah.Common.Security
                 else
                     settings = new SettingCollection();
                 return settings;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the user's vanity url. The default value is empty string.
+        /// </summary>
+        public static string VanityUrl
+        {
+            get
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        object obj = session[VanityUrlKey];
+                        if (obj != null)
+                            return (string)obj;
+                    }
+                }
+                return string.Empty;
+            }
+            internal set
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        if (string.IsNullOrEmpty(value))
+                            session.Remove(VanityUrlKey);
+                        else
+                            session[VanityUrlKey] = value;
+                    }
+                }
             }
         }
 
@@ -727,67 +639,7 @@ namespace Micajah.Common.Security
 
         #region Private Methods
 
-        private static Guid GetSelectedInstanceIdFromSession()
-        {
-            HttpContext ctx = HttpContext.Current;
-            if (ctx != null)
-            {
-                HttpSessionState session = ctx.Session;
-                if (session != null)
-                {
-                    object obj = session[SelectedInstanceIdKey];
-                    if (obj != null)
-                        return (Guid)obj;
-                }
-            }
-            return Guid.Empty;
-        }
-
-        private static Guid GetSelectedOrganizationIdFromSession()
-        {
-            HttpContext ctx = HttpContext.Current;
-            if (ctx != null)
-            {
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null) && HttpContext.Current.Request.Url.Host.StartsWith(FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, StringComparison.InvariantCultureIgnoreCase))
-                    return Guid.Empty;
-
-                HttpSessionState session = ctx.Session;
-                if (session != null)
-                {
-                    object obj = session[SelectedOrganizationIdKey];
-                    if (obj != null)
-                        return (Guid)obj;
-                    else
-                        UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
-
-                    if (obj == null)
-                    {
-                        obj = session[SelectedOrganizationIdKey];
-                        if (obj != null)
-                            return (Guid)obj;
-                    }
-                }
-            }
-            return Guid.Empty;
-        }
-
-        private static string GetVanityUrlFromSession()
-        {
-            HttpContext ctx = HttpContext.Current;
-            if (ctx != null)
-            {
-                HttpSessionState session = ctx.Session;
-                if (session != null)
-                {
-                    object obj = session[VanityUrlKey];
-                    if (obj != null)
-                        return (string)obj;
-                }
-            }
-            return string.Empty;
-        }
-
-        private void SelectedInstanceChange(Instance newInstance, bool? isPersistent)
+        private void SelectedInstanceChange(Instance newInstance, bool setAuthCookie, bool? isPersistent)
         {
             ArrayList groupIdList = new ArrayList();
             ArrayList roleIdList = new ArrayList();
@@ -834,28 +686,25 @@ namespace Micajah.Common.Security
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
-            base[StartPageUrlKey] = WebApplication.CreateApplicationAbsoluteUrl(startUrl);
-            SelectedInstanceId = newInstance.InstanceId;
+            base[StartPageUrlKey] = CustomUrlProvider.CreateApplicationAbsoluteUrl(startUrl);
             base[SelectedInstanceIdKey] = newInstance.InstanceId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
-                LoginProvider.SetAuthCookie(this.UserId, newInstance.OrganizationId, newInstance.InstanceId, isPersistent);
+            {
+                if (setAuthCookie)
+                    LoginProvider.SetAuthCookie(this.UserId, newInstance.OrganizationId, newInstance.InstanceId, isPersistent);
+            }
 
             if (SelectedInstanceChanged != null)
                 SelectedInstanceChanged(this, EventArgs.Empty);
         }
 
-        private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool? isPersistent)
+        private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool setAuthCookie, bool? isPersistent, Guid? instanceId)
         {
-            if ((Guid)base[SelectedOrganizationIdKey] != newOrganization.OrganizationId)
-                CheckWebSite(newOrganization.OrganizationId, null);
+            if (this.SelectedOrganizationId != newOrganization.OrganizationId)
+                CheckWebSite(newOrganization.OrganizationId, instanceId);
 
-            Guid currentInstanceId = Guid.Empty;
-            if (this.SelectedInstance != null)
-            {
-                if (this.SelectedInstance.OrganizationId == newOrganization.OrganizationId)
-                    currentInstanceId = this.SelectedInstance.InstanceId;
-            }
+            Guid currentInstanceId = instanceId.GetValueOrDefault();
 
             Breadcrumbs.Clear();
 
@@ -898,7 +747,6 @@ namespace Micajah.Common.Security
             if (SelectedOrganizationChanging != null)
                 SelectedOrganizationChanging(this, new UserContextSelectedOrganizationChangingEventArgs() { Organization = newOrganization });
 
-            SelectedOrganizationId = newOrganization.OrganizationId;
             base[TimeZoneIdKey] = null;
             base[TimeFormatKey] = null;
             base[DateFormatKey] = null;
@@ -906,10 +754,13 @@ namespace Micajah.Common.Security
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
-            base[StartPageUrlKey] = WebApplication.CreateApplicationAbsoluteUrl(startUrl);
+            base[StartPageUrlKey] = CustomUrlProvider.CreateApplicationAbsoluteUrl(startUrl);
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
-                LoginProvider.SetAuthCookie(this.UserId, newOrganization.OrganizationId, Guid.Empty, isPersistent);
+            {
+                if (setAuthCookie)
+                    LoginProvider.SetAuthCookie(this.UserId, newOrganization.OrganizationId, Guid.Empty, isPersistent);
+            }
 
             if (currentInstanceId != Guid.Empty)
                 this.SelectInstance(currentInstanceId, isPersistent);
@@ -934,7 +785,7 @@ namespace Micajah.Common.Security
             if (userId != Guid.Empty)
             {
                 UserContext user = new UserContext();
-                user.Initialize(userId, organizationId, instanceId, null);
+                user.Initialize(userId, organizationId, instanceId, false, null);
 
                 return user;
             }
@@ -942,66 +793,26 @@ namespace Micajah.Common.Security
             return null;
         }
 
-        /// <summary>
-        /// Initializes the Organization or Instance from custom URL.
-        /// </summary>
-        internal static void InitializeOrganizationOrInstanceFromCustomUrl()
+        internal void CheckWebSite(Guid organizationId, Guid? instanceId)
         {
-            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && (HttpContext.Current != null))
+            string returnUrl = null;
+            HttpContext http = HttpContext.Current;
+            if (http != null)
             {
-                string customUrl = HttpContext.Current.Request.Url.Host.ToLower(CultureInfo.CurrentCulture);
-                customUrl = customUrl.Replace(string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst), string.Empty);
-                if (string.Compare(customUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl) != 0)
-                {
-                    CommonDataSet.CustomUrlRow row = CustomUrlProvider.GetCustomUrl(customUrl.ToLower());
-                    if (row != null)
-                    {
-                        UserContext.SelectedOrganizationId = row.OrganizationId;
-                        UserContext.SelectedInstanceId = (row.IsInstanceIdNull() ? Guid.Empty : row.InstanceId);
-
-                        UserContext user = UserContext.Current;
-                        if (user != null)
-                        {
-                            if (UserContext.SelectedOrganizationId != Guid.Empty && UserContext.SelectedInstanceId == Guid.Empty)
-                            {
-                                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, UserContext.SelectedOrganizationId);
-                                if (coll != null && coll.Count == 1)
-                                    UserContext.SelectedInstanceId = coll[0].InstanceId;
-                            }
-
-                            if (UserContext.SelectedOrganizationId != Guid.Empty)
-                                user.SelectOrganization(UserContext.SelectedOrganizationId);
-
-                            if (UserContext.SelectedInstanceId != Guid.Empty)
-                                user.SelectInstance(UserContext.SelectedInstanceId);
-
-                            Security.UserContext.VanityUrl = System.Web.HttpContext.Current.Request.Url.Host;
-                        }
-                    }
-                    else
-                        CustomUrlProvider.InitializeOrganizationOrInstanceFromCustomUrl();
-                }
+                if (http.Request != null)
+                    returnUrl = http.Request.Url.PathAndQuery;
             }
-        }
 
-        internal void CheckWebSite(Guid? organizationId, string returnUrl)
-        {
-            if (organizationId.HasValue)
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId.Value);
-                if (WebApplication.WebsiteId != webSiteId)
-                {
-                    if (string.IsNullOrEmpty(returnUrl))
-                    {
-                        HttpContext ctx = HttpContext.Current;
-                        if (ctx != null)
-                        {
-                            if (ctx.Request != null)
-                                returnUrl = ctx.Request.QueryString["returnurl"];
-                        }
-                    }
-                    (new LoginProvider()).SignOut(true, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId.Value, returnUrl));
-                }
+                if (!CustomUrlProvider.IsDefaultVanityUrl(http))
+                    return;
+            }
+
+            Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
+            if (WebApplication.WebsiteId != webSiteId)
+            {
+                (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
             }
         }
 
@@ -1046,6 +857,88 @@ namespace Micajah.Common.Security
                 else
                     user.DateFormat = userRow.DateFormat;
             }
+        }
+
+        internal void SelectOrganization(Guid organizationId, bool setAuthCookie, bool? isPersistent, Guid? instanceId)
+        {
+            if (organizationId == Guid.Empty) return;
+
+            Organization newOrganization = new Organization();
+            if (!newOrganization.Load(organizationId))
+                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_NoOrganization, organizationId));
+
+            if (newOrganization.Deleted)
+                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationIsDeleted, newOrganization.Name));
+            else if (!newOrganization.Active)
+                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationIsInactive, newOrganization.Name));
+            else if (newOrganization.Expired && (newOrganization.GraceDaysRemaining == 0))
+                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationHasExpired, newOrganization.Name));
+
+            Guid userId = this.UserId;
+            if (!WebApplication.LoginProvider.LoginIsActiveInOrganization(userId, organizationId))
+            {
+                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated
+                    , newOrganization.Name, CustomUrlProvider.CreateApplicationUri(WebApplication.LoginProvider.GetLoginUrl(false))));
+            }
+
+            bool isOrganizationAdministrator = false;
+            ArrayList userGroupIdList = null;
+
+            OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
+            if (userRow != null)
+            {
+                isOrganizationAdministrator = WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId);
+                userGroupIdList = UserProvider.GetUserGroupIdList(organizationId, userId);
+
+                if (!isOrganizationAdministrator)
+                {
+                    if (userGroupIdList.Count == 0)
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroups, newOrganization.Name));
+                    else if (newOrganization.Instances.Count == 0)
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoActiveInstances, newOrganization.Name));
+                }
+            }
+            else
+                throw new AuthenticationException(FrameworkConfiguration.Current.WebApplication.Login.FailureText);
+
+            this.SelectedOrganizationChange(newOrganization, isOrganizationAdministrator, userGroupIdList, setAuthCookie, isPersistent, instanceId);
+
+            RefreshDetails(this, userRow);
+
+            userRow.LastLoginDate = DateTime.UtcNow;
+            newOrganization.TableAdapters.UserTableAdapter.Update(userRow);
+
+            if (SelectedOrganizationChanged != null)
+                SelectedOrganizationChanged(this, EventArgs.Empty);
+        }
+
+        internal void SelectInstance(Guid instanceId, bool setAuthCookie, bool? isPersistent)
+        {
+            if (instanceId == Guid.Empty) return;
+
+            Guid organizationId = this.SelectedOrganizationId;
+            if (organizationId != Guid.Empty)
+            {
+                Instance instance = InstanceProvider.GetInstance(instanceId, organizationId);
+                if (instance != null)
+                {
+                    if (!instance.Active)
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_InstanceIsInactive, instance.Name));
+                    else if (instance.GroupIdRoleIdList.Count == 0)
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, instance.Name));
+                    else
+                    {
+                        if (UserProvider.UserIsActiveInInstance(this.UserId, instanceId, organizationId))
+                            this.SelectedInstanceChange(instance, setAuthCookie, isPersistent);
+                        else
+                            throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInInstanceIsInactivated, instance.Name));
+                    }
+                }
+                else
+                    throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoInstance, instanceId, this.SelectedOrganization.Name));
+            }
+            else
+                throw new AuthenticationException(Resources.UserContext_ErrorMessage_NoSelectedOrganization);
         }
 
         #endregion
@@ -1112,29 +1005,30 @@ namespace Micajah.Common.Security
 
         #region Public Methods
 
-        public void Initialize(Guid userId, Guid organizationId, Guid instanceId, bool? isPersistent)
+        public void Initialize(Guid userId, Guid organizationId, Guid instanceId, bool setAuthCookie, bool? isPersistent)
         {
             this.UserId = userId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    LoginProvider.SetAuthCookie(userId, organizationId, instanceId, isPersistent);
-                else
-                    LoginProvider.SetAuthCookie(userId, Guid.Empty, Guid.Empty, isPersistent);
+                if (setAuthCookie)
+                {
+                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                        LoginProvider.SetAuthCookie(userId, organizationId, instanceId, isPersistent);
+                    else
+                        LoginProvider.SetAuthCookie(userId, Guid.Empty, Guid.Empty, isPersistent);
+                }
             }
 
             if (organizationId != Guid.Empty)
             {
-                this.SelectOrganization(organizationId, isPersistent);
-
-                if (instanceId != Guid.Empty)
-                    this.SelectInstance(instanceId, isPersistent);
+                this.SelectOrganization(organizationId, setAuthCookie, isPersistent, instanceId);
+                this.SelectInstance(instanceId, setAuthCookie, isPersistent);
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the specified key is reserved by Micajah.Common.Security.UserContext class for internal using.
+        /// Gets a value indicating whether the specified key is reserved by Micajah.Common.UserContext class for internal using.
         /// </summary>
         /// <param name="key">The key of the element to check.</param>
         /// <returns>true, if the specified key is reserved; otherwise, false.</returns>
@@ -1160,52 +1054,7 @@ namespace Micajah.Common.Security
         /// <param name="organizationId">The identifier of the organization.</param>
         public void SelectOrganization(Guid organizationId, bool? isPersistent)
         {
-            if (organizationId == Guid.Empty) return;
-
-            Organization newOrganization = new Organization();
-            if (!newOrganization.Load(organizationId))
-                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_NoOrganization, organizationId));
-
-            if (newOrganization.Deleted)
-                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationIsDeleted, newOrganization.Name));
-            else if (!newOrganization.Active)
-                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationIsInactive, newOrganization.Name));
-            else if (newOrganization.Expired && (newOrganization.GraceDaysRemaining == 0))
-                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationHasExpired, newOrganization.Name));
-
-            Guid userId = this.UserId;
-            if (!WebApplication.LoginProvider.LoginIsActiveInOrganization(userId, organizationId))
-                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated, newOrganization.Name));
-
-            bool isOrganizationAdministrator = false;
-            ArrayList userGroupIdList = null;
-
-            OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
-            if (userRow != null)
-            {
-                isOrganizationAdministrator = WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId);
-                userGroupIdList = UserProvider.GetUserGroupIdList(organizationId, userId);
-
-                if (!isOrganizationAdministrator)
-                {
-                    if (userGroupIdList.Count == 0)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroups, newOrganization.Name));
-                    else if (newOrganization.Instances.Count == 0)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoActiveInstances, newOrganization.Name));
-                }
-            }
-            else
-                throw new AuthenticationException(FrameworkConfiguration.Current.WebApplication.Login.FailureText);
-
-            this.SelectedOrganizationChange(newOrganization, isOrganizationAdministrator, userGroupIdList, isPersistent);
-
-            RefreshDetails(this, userRow);
-
-            userRow.LastLoginDate = DateTime.UtcNow;
-            newOrganization.TableAdapters.UserTableAdapter.Update(userRow);
-
-            if (SelectedOrganizationChanged != null)
-                SelectedOrganizationChanged(this, EventArgs.Empty);
+            SelectOrganization(organizationId, true, isPersistent, null);
         }
 
         /// <summary>
@@ -1225,31 +1074,7 @@ namespace Micajah.Common.Security
         /// <param name="instanceId">The identifier of the instance.</param>
         public void SelectInstance(Guid instanceId, bool? isPersistent)
         {
-            if (instanceId == Guid.Empty) return;
-
-            Guid organizationId = (Guid)base[SelectedOrganizationIdKey];
-            if (organizationId != Guid.Empty)
-            {
-                Instance instance = InstanceProvider.GetInstance(instanceId, organizationId);
-                if (instance != null)
-                {
-                    if (!instance.Active)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_InstanceIsInactive, instance.Name));
-                    else if (instance.GroupIdRoleIdList.Count == 0)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, instance.Name));
-                    else
-                    {
-                        if (UserProvider.UserIsActiveInInstance(this.UserId, instanceId, organizationId))
-                            this.SelectedInstanceChange(instance, isPersistent);
-                        else
-                            throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInInstanceIsInactivated, instance.Name));
-                    }
-                }
-                else
-                    throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoInstance, instanceId, this.SelectedOrganization.Name));
-            }
-            else
-                throw new AuthenticationException(Resources.UserContext_ErrorMessage_NoSelectedOrganization);
+            SelectInstance(instanceId, true, isPersistent);
         }
 
         /// <summary>
@@ -1296,8 +1121,9 @@ namespace Micajah.Common.Security
                     ArrayList roleIdList = RoleProvider.GetRoleIdListByShortNames(shortName);
                     OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = org.DataSet.GroupsInstancesRoles;
 
-                    foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(
-                        string.Concat(gdrTable.InstanceIdColumn.ColumnName, " = '", instanceId.ToString(), "' AND ", gdrTable.GroupIdColumn.ColumnName, " IN (", sb.ToString(), ")")))
+                    foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(string.Concat(
+                        "CONVERT(", gdrTable.InstanceIdColumn.ColumnName, ", 'System.String') = '", instanceId
+                        , "' AND CONVERT(", gdrTable.GroupIdColumn.ColumnName, ", 'System.String') IN (", sb.ToString(), ")")))
                     {
                         if (roleIdList.Contains(gdrRow.RoleId))
                         {
@@ -1326,7 +1152,7 @@ namespace Micajah.Common.Security
         /// <returns>true, if the user is administrator of specified instance in selected organization; otherwise, false.</returns>
         public bool IsInstanceAdministrator(Guid instanceId)
         {
-            Guid organizationId = (Guid)base[SelectedOrganizationIdKey];
+            Guid organizationId = this.SelectedOrganizationId;
             if (organizationId != Guid.Empty)
                 return UserProvider.UserIsInstanceAdministrator(organizationId, instanceId, this.UserId);
             return false;
@@ -1337,7 +1163,7 @@ namespace Micajah.Common.Security
         /// </summary>
         public static void RefreshCurrent()
         {
-            UserContext ctx = UserContext.Current;
+            UserContext ctx = Current;
             if (ctx != null) ctx.Refresh();
         }
 
@@ -1346,9 +1172,9 @@ namespace Micajah.Common.Security
         /// </summary>
         public void Refresh()
         {
-            Guid organizationId = (Guid)base[SelectedOrganizationIdKey];
+            Guid organizationId = this.SelectedOrganizationId;
             if (organizationId != Guid.Empty)
-                this.SelectOrganization(organizationId, null);
+                this.SelectOrganization(organizationId, false, null, this.SelectedInstanceId);
         }
 
         /// <summary>

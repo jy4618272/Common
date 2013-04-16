@@ -31,11 +31,6 @@
                 <mits:TextBoxField DataField="LdapDomains" MaxLength="2048" Columns="65" Rows="3" ControlStyle-Width="350px" 
                     TextMode="MultiLine" />               
                 <mits:CheckBoxField DataField="Beta" DefaultChecked="False" />
-                <mits:TemplateField PaddingLeft="false">
-                    <ItemTemplate>                    
-                        <mits:ComboBox ID="cmbBillingPlan" runat="server" DataValueField="BillingPlan" Required="false" />
-                    </ItemTemplate>
-                </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
                         <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
@@ -57,7 +52,6 @@
                 <asp:Parameter Name="emailSuffixes" Type="String" ConvertEmptyStringToNull="False" />
                 <asp:Parameter Name="ldapDomains" Type="String" ConvertEmptyStringToNull="False" />
                 <asp:Parameter Name="beta" Type="Boolean" />
-                <asp:Parameter Name="BillingPlan" Type="Int32" />
             </UpdateParameters>
             <SelectParameters>
                 <asp:Parameter Name="organizationId" Type="Object" />

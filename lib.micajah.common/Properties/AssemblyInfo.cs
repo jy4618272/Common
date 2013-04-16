@@ -37,6 +37,5 @@ using System.Web.UI;
 [assembly: AssemblyVersion("3.0.*")]
 [assembly: AssemblyFileVersion("3.0.0.0")]
 [assembly: CLSCompliant(true)]
-[assembly: SecurityPermission(SecurityAction.RequestMinimum)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: TagPrefix("Micajah.Common.WebControls", "mits")]

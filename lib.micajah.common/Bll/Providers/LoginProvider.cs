@@ -62,6 +62,35 @@ namespace Micajah.Common.Bll.Providers
 
         #region Private Methods
 
+        private static void ClearAuthCookie()
+        {
+            HttpContext http = HttpContext.Current;
+            if (http != null)
+            {
+                FormsAuthentication.SignOut();
+
+                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                {
+                    // Expire all the cookies so browser visits us as a brand new user.
+                    List<string> cookiesToClear = new List<string>();
+                    foreach (string cookieName in http.Request.Cookies)
+                    {
+                        HttpCookie cookie = http.Request.Cookies[cookieName];
+                        cookiesToClear.Add(cookie.Name);
+                    }
+
+                    foreach (string name in cookiesToClear)
+                    {
+                        HttpCookie cookie = new HttpCookie(name, string.Empty);
+                        cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                        cookie.Expires = DateTime.Today.AddYears(-1);
+
+                        http.Response.Cookies.Set(cookie);
+                    }
+                }
+            }
+        }
+
         private static bool LoginNameIsInList(string loginName, StringCollection logins)
         {
             bool result = false;
@@ -124,19 +153,18 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="details">An System.Object array containing zero or more objects that represents the optional details for authentication.</param>
         /// <param name="usePasswordEncryption">true to use encryption for password before compare login details; otherwise, false.</param>
         /// <returns>DataRowView with the user information</returns>
-        private DataRowView LdapAuthenticate(string loginName, string password, bool usePasswordEncryption, params object[] details)
+        private DataRowView LdapAuthenticate(string loginName, string password, bool usePasswordEncryption, Guid organizationId)
         {
             DataRowView drv = null;
-
             LdapProvider server = null;
-            ApplicationLogger log = new ApplicationLogger();
-            LdapIntegration ldi = new LdapIntegration(log);
-            Guid currentOrganizationId = Guid.Empty;
+            Guid orgId = Guid.Empty;
             Organization org = null;
             Response<AuthenticationStatus> isAuth = null;
-
-            List<IUser> users = FindLocalUsers(loginName);
             User user = null;
+
+            ApplicationLogger log = new ApplicationLogger();
+            LdapIntegration ldi = new LdapIntegration(log);
+            List<IUser> users = FindLocalUsers(loginName);
 
             if (users.Count == 1)
                 user = (User)users[0];
@@ -146,21 +174,21 @@ namespace Micajah.Common.Bll.Providers
             if (user != null)
             {
                 string hashedPassword = password;
-                if (usePasswordEncryption) hashedPassword = WebApplication.LoginProvider.EncryptPassword(password);
+                if (usePasswordEncryption) hashedPassword = EncryptPassword(password);
 
                 if (user.Password == hashedPassword)
                     return GetLogin(user.LocalLoginId);
                 else
                 {
-                    currentOrganizationId = user.OrganizationId;
-                    org = OrganizationProvider.GetOrganization(currentOrganizationId);
+                    orgId = user.OrganizationId;
+                    org = OrganizationProvider.GetOrganization(orgId);
                     if (org != null)
                     {
                         if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true || !org.Beta)
                             return drv;
                         else
                         {
-                            server = new LdapProvider(currentOrganizationId, ldi, log);
+                            server = new LdapProvider(orgId, ldi, log);
                             isAuth = server.CheckUserLDAPPasswordAndActive(user, password);
                             if (isAuth.ResponseValue == AuthenticationStatus.NotAuthenticated)
                             {
@@ -179,53 +207,42 @@ namespace Micajah.Common.Bll.Providers
                     }
                 }
             }
-            //else
-            //throw new AuthenticationException(Resources.LoginProvider_ErrorMessage_FoundMoreThanOneLDAPConnection);
 
             //Get Organization Id from authentication details
-            if (details != null && details.Length > 1)
-                currentOrganizationId = (Guid)details[1];
+            if (organizationId != Guid.Empty)
+                orgId = organizationId;
 
-            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-            {
-                UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
-                currentOrganizationId = UserContext.SelectedOrganizationId;
-            }
-
-            if (currentOrganizationId == Guid.Empty)
+            if (orgId == Guid.Empty)
             {
                 // Get Organization Id by Email Suffix
-                if (!string.IsNullOrEmpty(loginName) && loginName.Contains("@") && EmailSuffixProvider.IsEmailSuffixExist())
+                if (!string.IsNullOrEmpty(loginName) && loginName.Contains("@"))
                 {
                     string[] parts = loginName.Split('@');
-                    DataTable table = EmailSuffixProvider.GetEmailSuffixes(null, null, parts[1]);
 
-                    if (table.Rows.Count > 0)
-                        currentOrganizationId = (Guid)table.Rows[0]["OrganizationId"];
+                    orgId = EmailSuffixProvider.GetOrganizationId(parts[1]);
 
                     // Get Organization Id by Ldap Domain
-                    if (currentOrganizationId == Guid.Empty)
+                    if (orgId == Guid.Empty)
                     {
-                        table = GetOrganizationsByLdapDomain(parts[1]);
+                        DataTable table = GetOrganizationsByLdapDomain(parts[1]);
 
                         if (table.Rows.Count > 0)
-                            currentOrganizationId = (Guid)table.Rows[0]["OrganizationId"];
+                            orgId = (Guid)table.Rows[0]["OrganizationId"];
                     }
                 }
             }
 
-
-            if (currentOrganizationId == Guid.Empty)
+            if (orgId == Guid.Empty)
                 return drv;
 
-            org = OrganizationProvider.GetOrganization(currentOrganizationId);
+            org = OrganizationProvider.GetOrganization(orgId);
             if (org != null)
             {
                 if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true || !org.Beta)
                     return drv;
                 else
                 {
-                    server = new LdapProvider(currentOrganizationId, ldi, log);
+                    server = new LdapProvider(orgId, ldi, log);
                     if (!server.Initialize())
                         throw new AuthenticationException(Resources.LoginProvider_ErrorMessage_LDAPConnectionError);
                 }
@@ -233,7 +250,7 @@ namespace Micajah.Common.Bll.Providers
             else
                 return drv;
 
-            isAuth = server.AuthenticateUser(loginName, password, usePasswordEncryption, currentOrganizationId);
+            isAuth = server.AuthenticateUser(loginName, password, usePasswordEncryption, orgId);
             if (isAuth.ResponseValue == AuthenticationStatus.NotAuthenticated)
             {
                 if (isAuth.ShowResponse && (!string.IsNullOrEmpty(isAuth.ResponseMessage)))
@@ -246,19 +263,6 @@ namespace Micajah.Common.Bll.Providers
                 drv = GetLogin(isAuth.LoginId);
             else
                 drv = GetLogin(loginName);
-
-            //if (isAuth.ChangeGroups && isAuth.OrganizationId != null && isAuth.OrganizationId != Guid.Empty)
-            //{
-            //    string localGroupId = LdapInfoProvider.GetAppGroupsByLdapGroups(isAuth.OrganizationId, isAuth.GroupList);
-
-            //    if (!string.IsNullOrEmpty(localGroupId))
-            //    {
-            //        UserProvider.UsersGroupsAcceptChanges((Guid)drv["LoginId"], (string)drv["LoginName"], localGroupId, false, isAuth.OrganizationId, null, true);
-            //        WebApplication.RefreshOrganizationData(isAuth.OrganizationId);
-            //    }
-            //    else
-            //        throw new AuthenticationException(Resources.UserContext_ErrorMessage_NoGroups);
-            //}
 
             return drv;
         }
@@ -341,12 +345,11 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-
         private IUser GetUserFromUsersList(List<IUser> users, string password, bool usePasswordEncryption)
         {
             IUser user = null;
             string hashedPassword = password;
-            if (usePasswordEncryption) hashedPassword = WebApplication.LoginProvider.EncryptPassword(password);
+            if (usePasswordEncryption) hashedPassword = EncryptPassword(password);
 
             Guid orgID = Guid.Empty;
             string ldapServer = "";
@@ -413,56 +416,7 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl)
-        {
-            string url = null;
-            Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
-            if (webSiteId != Guid.Empty)
-            {
-                url = WebsiteProvider.GetWebsiteUrl(webSiteId);
-                if (url != null)
-                {
-                    StringBuilder sb = new StringBuilder();
-
-                    if (!string.IsNullOrEmpty(loginName))
-                        sb.AppendFormat(CultureInfo.InvariantCulture, "&l={0}", HttpUtility.UrlEncodeUnicode(loginName));
-
-                    if (!string.IsNullOrEmpty(password))
-                    {
-                        sb.AppendFormat(CultureInfo.InvariantCulture, "&p={0}", HttpUtility.UrlEncodeUnicode(Support.Encrypt(password)));
-
-                        bool isPersistent = true;
-                        if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
-                            isPersistent = FormsAuthenticationTicketIsPersistent;
-                        if (isPersistent)
-                            sb.Append("&cp=true");
-                    }
-
-                    if (organizationId != Guid.Empty)
-                        sb.AppendFormat(CultureInfo.InvariantCulture, "&o={0:N}", organizationId);
-
-                    if (instanceId != Guid.Empty)
-                        sb.AppendFormat(CultureInfo.InvariantCulture, "&d={0:N}", instanceId);
-
-                    if (organizationId != Guid.Empty)
-                    {
-                        if (newOrg)
-                            sb.Append("&on=true");
-                    }
-
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        sb.Append("&returnurl=");
-                        sb.Append(HttpUtility.UrlEncodeUnicode(returnUrl));
-                    }
-
-                    url = url.TrimEnd('/') + WebApplication.CreateApplicationAbsoluteUrl(GetLoginUrl()) + ((sb.Length > 0) ? "?" + sb.ToString().TrimStart('&') : string.Empty);
-                }
-            }
-            return url;
-        }
-
-        internal string GetLoginUrl(string url, string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl)
+        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl, string applicationUrl)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -495,11 +449,25 @@ namespace Micajah.Common.Bll.Providers
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 sb.Append("&returnurl=");
-                sb.Append(HttpUtility.UrlEncodeUnicode(returnUrl));
+                sb.Append(HttpUtility.UrlEncodeUnicode(CustomUrlProvider.CreateApplicationAbsoluteUrl(returnUrl)));
             }
 
-            url = url.TrimEnd('/') + WebApplication.CreateApplicationAbsoluteUrl(GetLoginUrl()) + ((sb.Length > 0) ? "?" + sb.ToString().TrimStart('&') : string.Empty);
-            return url;
+            if (applicationUrl == null)
+                applicationUrl = string.Empty;
+
+            return applicationUrl.TrimEnd('/') + CustomUrlProvider.CreateApplicationRelativeUrl(GetLoginUrl(false)) + ((sb.Length > 0) ? "?" + sb.ToString().TrimStart('&') : string.Empty);
+        }
+
+        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl)
+        {
+            CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
+            return GetLoginUrl(loginName, password, (customUrlSettings.Enabled ? Guid.Empty : organizationId), (customUrlSettings.Enabled ? Guid.Empty : instanceId), newOrg, returnUrl, CustomUrlProvider.GetVanityUri(organizationId, instanceId));
+        }
+
+        internal static bool IsLoginUrl(string url)
+        {
+            string loginUrl = WebApplication.LoginProvider.GetLoginUrl(false);
+            return ((loginUrl.IndexOf(url, StringComparison.OrdinalIgnoreCase) > -1) || (url.IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) > -1));
         }
 
         /// <summary>
@@ -563,7 +531,7 @@ namespace Micajah.Common.Bll.Providers
             return result;
         }
 
-        public static void ParseAuthCookie(out Guid userId, out Guid organizationId, out Guid instanceId)
+        internal static void ParseAuthCookie(out Guid userId, out Guid organizationId, out Guid instanceId)
         {
             userId = Guid.Empty;
             organizationId = Guid.Empty;
@@ -594,7 +562,7 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        public static void SetAuthCookie(Guid userId, Guid organizationId, Guid instanceId, bool? isPersistent)
+        internal static void SetAuthCookie(Guid userId, Guid organizationId, Guid instanceId, bool? isPersistent)
         {
             string userName = string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId);
 
@@ -603,11 +571,12 @@ namespace Micajah.Common.Bll.Providers
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                System.Web.HttpCookie authcookie = System.Web.Security.FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
+                HttpCookie authcookie = FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
                 authcookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
-                System.Web.HttpContext.Current.Response.AppendCookie(authcookie);
+                HttpContext.Current.Response.AppendCookie(authcookie);
             }
-            else FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
+            else
+                FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);
         }
 
         #endregion
@@ -655,19 +624,8 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the user is successfully authenticated; otherwise, false.</returns>
         public virtual bool Authenticate(string loginName, string password, bool usePasswordEncryption, params object[] details)
         {
-            DataRowView drv = null;
+            DataRowView drv = GetLogin(loginName, password, usePasswordEncryption);
 
-            drv = GetLogin(loginName, password, usePasswordEncryption);
-
-            if (drv == null && FrameworkConfiguration.Current.WebApplication.EnableLdap)
-                drv = LdapAuthenticate(loginName, password, usePasswordEncryption, details);
-
-            if (drv == null)
-                throw new AuthenticationException(FrameworkConfiguration.Current.WebApplication.Login.FailureText);
-            else if (Convert.ToBoolean(drv.Row["Deleted"], CultureInfo.CurrentCulture))
-                throw new AuthenticationException(Resources.UserContext_ErrorMessage_YourAccountIsDeleted);
-
-            Guid loginId = (Guid)drv["LoginId"];
             Guid organizationId = Guid.Empty;
             Guid instanceId = Guid.Empty;
             bool isPersistent = true;
@@ -697,16 +655,35 @@ namespace Micajah.Common.Bll.Providers
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                if (organizationId == Guid.Empty) organizationId = UserContext.SelectedOrganizationId;
-                if (instanceId == Guid.Empty) instanceId = UserContext.SelectedInstanceId;
+                if (organizationId == Guid.Empty)
+                {
+                    HttpContext http = HttpContext.Current;
+                    if (http != null)
+                    {
+                        string host = http.Request.Url.Host;
+                        if (!CustomUrlProvider.IsDefaultVanityUrl(host))
+                            CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
+                    }
+                }
             }
 
+            if ((drv == null) && FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
+                drv = LdapAuthenticate(loginName, password, usePasswordEncryption, organizationId);
+
+            if (drv == null)
+                throw new AuthenticationException(FrameworkConfiguration.Current.WebApplication.Login.FailureText);
+            else if (Convert.ToBoolean(drv.Row["Deleted"], CultureInfo.CurrentCulture))
+                throw new AuthenticationException(Resources.UserContext_ErrorMessage_YourAccountIsDeleted);
+
+            Guid loginId = (Guid)drv["LoginId"];
+
             UserContext user = new UserContext();
-            user.Initialize(loginId, organizationId, instanceId, isPersistent);
+            user.Initialize(loginId, organizationId, instanceId, true, isPersistent);
 
             UserContext.Current = user;
 
-            if (HttpContext.Current.Session != null) UpdateSession(loginId, HttpContext.Current.Session.SessionID);
+            if (HttpContext.Current.Session != null)
+                UpdateSession(loginId, HttpContext.Current.Session.SessionID);
 
             return true;
         }
@@ -747,15 +724,9 @@ namespace Micajah.Common.Bll.Providers
         public void SignOut(bool removeAuthInfo, bool redirectToLogOnPage, bool sessionIsNotValid)
         {
             if (redirectToLogOnPage)
-            {
-                if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
-                {
-                    SignOut(removeAuthInfo, WebApplication.CreateApplicationAbsoluteUrl(FormsAuthentication.LoginUrl.ToLowerInvariant()) + (sessionIsNotValid ? "?ac=1" : string.Empty));
-                    return;
-                }
-            }
-
-            SignOut(removeAuthInfo, null);
+                SignOut(removeAuthInfo, GetLoginUrl(false) + (sessionIsNotValid ? "?ac=1" : string.Empty));
+            else
+                SignOut(removeAuthInfo, null);
         }
 
         /// <summary>
@@ -774,62 +745,39 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="redirectUrl">The URL to navigate.</param>
         public virtual void SignOut(bool removeAuthInfo, string redirectUrl)
         {
-            HttpContext context = HttpContext.Current;
-            if (context != null && context.Session != null)
-            {
-                context.Session.Clear();
+            HttpContext http = HttpContext.Current;
+            if (http == null) return;
 
-                //UserContext.InitializeOrganizationOrInstanceFromCustomUrl();
-            }
+            if (http.Session != null)
+                http.Session.Clear();
+
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
                 if (removeAuthInfo)
+                    ClearAuthCookie();
+            }
+
+            if (!string.IsNullOrEmpty(redirectUrl))
+            {
+                http.Response.Clear();
+
+                Uri uri = null;
+                if (!Uri.TryCreate(redirectUrl, UriKind.Absolute, out uri))
                 {
-                    FormsAuthentication.SignOut();
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && context != null)
+                    redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(redirectUrl);
+
+                    if ((redirectUrl.IndexOf(http.Request.Url.ToString(), StringComparison.OrdinalIgnoreCase) > -1)
+                        || (http.Request.Url.ToString().IndexOf(redirectUrl, StringComparison.OrdinalIgnoreCase) > -1)) // Checks if the current and redirect URLs are not the same.
                     {
-
-                        // Expire all the cookies so browser visits us as a brand new user
-                        List<string> cookiesToClear = new List<string>();
-                        foreach (string cookieName in context.Request.Cookies)
-                        {
-                            HttpCookie cookie = context.Request.Cookies[cookieName];
-                            cookiesToClear.Add(cookie.Name);
-                        }
-
-                        foreach (string name in cookiesToClear)
-                        {
-                            HttpCookie cookie = new HttpCookie(name, string.Empty);
-                            cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
-                            cookie.Expires = DateTime.Today.AddYears(-1);
-
-                            context.Response.Cookies.Set(cookie);
-                        }
-                    }
-                }
-                if (!string.IsNullOrEmpty(redirectUrl))
-                {
-                    if (context != null)
-                    {
-                        context.Response.Clear();
-                        if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                        {
-                            Uri uri = null;
-                            if (Uri.TryCreate(redirectUrl, UriKind.Absolute, out uri))
-                            {
-                                Regex regEx = new Regex(uri.Host, RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                                redirectUrl = regEx.Replace(redirectUrl, string.Format("{0}.{1}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst));
-                            }
-                            else
-                                redirectUrl = string.Format("{3}{4}{0}.{1}{2}", FrameworkConfiguration.Current.WebApplication.CustomUrl.DefaultPartialCustomUrl, FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst, redirectUrl, context.Request.Url.Scheme, Uri.SchemeDelimiter);
-
-                            context.Response.Redirect(redirectUrl);
-                        }
+                        string loginUrl = GetLoginUrl(false);
+                        if (string.Compare(CustomUrlProvider.CreateApplicationAbsoluteUrl(loginUrl), redirectUrl, StringComparison.OrdinalIgnoreCase) == 0) // Checks if the current page is not login page.
+                            redirectUrl = loginUrl;
                         else
-                            context.Response.Redirect("~/");
+                            redirectUrl = loginUrl + "?returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl);
                     }
                 }
-                //else if (context!=null) context.Response.Redirect(redirectUrl);
+
+                http.Response.Redirect(redirectUrl);
             }
         }
 
@@ -883,7 +831,13 @@ namespace Micajah.Common.Bll.Providers
                 {
                     success = UpdateLogin(loginId, loginName);
                     if (sendEmailNotification)
-                        UserProvider.SendChangeLoginEmail(GetEmail(loginId), UserContext.SelectedOrganizationId);
+                    {
+                        UserContext user = UserContext.Current;
+                        if (user == null)
+                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), Guid.Empty, null);
+                        else
+                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), user.SelectedOrganizationId, user.Email);
+                    }
                 }
             }
             return success;
@@ -930,7 +884,13 @@ namespace Micajah.Common.Bll.Providers
             if (UpdateLogin(loginId, null, EncryptPassword(password)))
             {
                 if (sendEmailNotification && GetEmail(loginId) != "")
-                    UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, UserContext.SelectedOrganizationId);
+                {
+                    UserContext user = UserContext.Current;
+                    if (user == null)
+                        UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, Guid.Empty, null);
+                    else
+                        UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, user.SelectedOrganizationId, user.Email);
+                }
                 return true;
             }
             return false;
@@ -984,6 +944,15 @@ namespace Micajah.Common.Bll.Providers
             SqlConnection connection = null;
             SqlCommand command = null;
 
+            string firstName = null;
+            string lastName = null;
+            if (details.Length > 0)
+            {
+                firstName = (string)details[0];
+                if (details.Length > 1)
+                    lastName = (string)details[1];
+            }
+
             try
             {
                 connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
@@ -993,6 +962,9 @@ namespace Micajah.Common.Bll.Providers
                 command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier, 16).Value = Guid.NewGuid();
                 command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = EncryptPassword(password);
+                command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(firstName) ? string.Empty : firstName);
+                command.Parameters.Add("@LastName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
+                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = Support.GeneratePseudoUnique(32);
 
                 return Support.GetDataRow(command);
             }
@@ -1226,7 +1198,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source based on the unique identifier for the login.
+        /// Gets information from the data source based on the name for the login.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
         /// <returns>An object populated with the specified login's information from the data source.</returns>
@@ -1285,6 +1257,33 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Gets information from the data source based on the token for the login.
+        /// </summary>
+        /// <param name="token">The token for the login to get information for.</param>
+        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        public virtual DataRowView GetLoginByToken(string token)
+        {
+            SqlConnection connection = null;
+            SqlCommand command = null;
+
+            try
+            {
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+
+                command = new SqlCommand("dbo.Mc_GetLoginByToken", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
+
+                return Support.GetDataRowView(command);
+            }
+            finally
+            {
+                if (connection != null) connection.Dispose();
+                if (command != null) command.Dispose();
+            }
+        }
+
+        /// <summary>
         /// Gets the login identifier for the specified login name from the data source.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
@@ -1325,12 +1324,44 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Gets the token of the specified login from the data source.
+        /// </summary>
+        /// <param name="loginId">The unique identifier for the login to get information for.</param>
+        /// <returns>The token of the specified login.</returns>
+        public virtual string GetToken(Guid loginId)
+        {
+            DataRowView drv = GetLogin(loginId);
+            if (drv != null)
+            {
+                if (!Support.IsNullOrDBNull(drv["Token"]))
+                    return (string)drv["Token"];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the token of the specified login from the data source.
+        /// </summary>
+        /// <param name="loginName">The name for the login to get information for.</param>
+        /// <returns>The token of the specified login.</returns>
+        public virtual string GetToken(string loginName)
+        {
+            DataRowView drv = GetLogin(loginName);
+            if (drv != null)
+            {
+                if (!Support.IsNullOrDBNull(drv["Token"]))
+                    return (string)drv["Token"];
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Returns the URL for the login page.
         /// </summary>
         /// <returns>The URL for the login page.</returns>
         public string GetLoginUrl()
         {
-            return GetLoginUrl(false);
+            return GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null);
         }
 
         /// <summary>
@@ -1340,10 +1371,12 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>he URL for the login page.</returns>
         public virtual string GetLoginUrl(bool absoluteUri)
         {
-            string url = ((FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
+            if (absoluteUri)
+                return GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null);
+
+            return ((FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
                 ? FormsAuthentication.LoginUrl.ToLowerInvariant()
                 : ResourceProvider.LogOnPageVirtualPath);
-            return (absoluteUri ? WebApplication.CreateApplicationUri(url) : url);
         }
 
         /// <summary>
@@ -1397,25 +1430,7 @@ namespace Micajah.Common.Bll.Providers
             if (drv != null)
                 return GetLoginUrl(drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, false, returnUrl);
 
-            return GetLoginUrl(true);
-        }
-
-        /// <summary>
-        /// Returns the URL for the automatical authentication the specified login to the vanity url of the specified organization and instance.
-        /// </summary>
-        /// <param name="loginId">The unique identifier for the login to log in.</param>
-        /// <param name="addPassword">The value indicating that the encrypted hash of the password should be added to the result string. It's should be true for auto login.</param>
-        /// <param name="organizationId">The organization identifier.</param>
-        /// <param name="instanceId">The instance identifier.</param>
-        /// <param name="returnUrl">The URL that the autenticated user will redirect to.</param>
-        /// <returns>The URL for the automatical logging the specified login to the web-site of the specified organization.</returns>
-        public string GetLoginUrl(Guid loginId, bool addPassword, Guid organizationId, Guid instanceId, string returnUrl, string vanityUrl)
-        {
-            DataRowView drv = GetLogin(loginId);
-            if (drv != null)
-                return GetLoginUrl(vanityUrl, drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, false, returnUrl);
-
-            return GetLoginUrl(true);
+            return GetLoginUrl(null, null, organizationId, instanceId, false, returnUrl);
         }
 
         /// <summary>
@@ -1425,7 +1440,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The URL for the login page, the text box of which to input login name will be filled by specified value.</returns>
         public string GetLoginUrl(string loginName)
         {
-            return GetLoginUrl(loginName, false);
+            return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, false, null);
         }
 
         /// <summary>
@@ -1436,7 +1451,10 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The URL for the login page, the text box of which to input login name will be filled by specified value.</returns>
         public virtual string GetLoginUrl(string loginName, bool absoluteUri)
         {
-            return string.Concat(GetLoginUrl(absoluteUri), "?l=", HttpUtility.UrlEncodeUnicode(loginName));
+            if (absoluteUri)
+                return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, false, null);
+
+            return GetLoginUrl(false) + "?l=" + HttpUtility.UrlEncodeUnicode(loginName);
         }
 
         /// <summary>
@@ -1472,7 +1490,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The URL for the automatical logging the specified login to the web-site of the specified organization and instance.</returns>
         public string GetLoginUrl(string loginName, Guid organizationId, Guid instanceId, string returnUrl)
         {
-            return GetLoginUrl(loginName, true, organizationId, instanceId, returnUrl);
+            return GetLoginUrl(loginName, false, organizationId, instanceId, returnUrl);
         }
 
         /// <summary>
@@ -1490,7 +1508,7 @@ namespace Micajah.Common.Bll.Providers
             if (drv != null)
                 return GetLoginUrl(drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, false, returnUrl);
 
-            return GetLoginUrl(true);
+            return GetLoginUrl(null, null, organizationId, instanceId, false, returnUrl);
         }
 
         /// <summary>
@@ -1506,12 +1524,16 @@ namespace Micajah.Common.Bll.Providers
 
         public string GetPasswordRecoveryUrl(string loginName)
         {
-            return GetPasswordRecoveryUrl(loginName, false);
+            return GetPasswordRecoveryUrl(loginName, true);
         }
 
         public virtual string GetPasswordRecoveryUrl(string loginName, bool absoluteUri)
         {
-            string url = (absoluteUri ? WebApplication.CreateApplicationUri(ResourceProvider.PasswordRecoveryPageVirtualPath) : WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.PasswordRecoveryPageVirtualPath));
+            string url = string.Empty;
+            if (absoluteUri)
+                url = CustomUrlProvider.CreateApplicationUri(ResourceProvider.PasswordRecoveryPageVirtualPath);
+            else
+                url = ResourceProvider.PasswordRecoveryPageVirtualPath;
             if (!string.IsNullOrEmpty(loginName))
                 url += "?l=" + HttpUtility.UrlEncodeUnicode(loginName);
             return url;
@@ -1689,16 +1711,18 @@ namespace Micajah.Common.Bll.Providers
             emailsList = new List<string>(emails.Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             if (emailsList.Count == 0) return;
 
-            string subject = string.Format(CultureInfo.CurrentCulture, Resources.EmailNotification_InviteUser_Subject, invitedByFullName, FrameworkConfiguration.Current.WebApplication.Name);
+            WebApplicationElement webAppSettings = FrameworkConfiguration.Current.WebApplication;
+
+            string url = CustomUrlProvider.CreateApplicationUri(ResourceProvider.SignupUserPageVirtualPath) + "?i=";
+            string subject = string.Format(CultureInfo.CurrentCulture, Resources.EmailNotification_InviteUser_Subject, invitedByFullName, webAppSettings.Name);
+
             StringBuilder sb = new StringBuilder(Resources.EmailNotification_InviteUser_Body);
-            sb.Replace("{ApplicationName}", FrameworkConfiguration.Current.WebApplication.Name);
-            sb.Replace("{ApplicationUrl}", FrameworkConfiguration.Current.WebApplication.Url);
+            sb.Replace("{ApplicationName}", webAppSettings.Name);
+            sb.Replace("{ApplicationUrl}", CustomUrlProvider.ApplicationUri);
             sb.Replace("{InvitedByFullName}", invitedByFullName);
             sb.Replace("{InvitedByEmail}", invitedByEmail);
             if (!string.IsNullOrEmpty(additionalMessage)) additionalMessage += Environment.NewLine;
             sb.Replace("{AdditionalMessage}", additionalMessage);
-
-            string url = WebApplication.CreateApplicationUri(ResourceProvider.SignupUserPageVirtualPath) + "?i=";
 
             table.Clear();
             table.AcceptChanges();
@@ -1716,7 +1740,7 @@ namespace Micajah.Common.Bll.Providers
                     row.CreatedTime = DateTime.UtcNow;
                     table.AddInvitedLoginRow(row);
 
-                    Support.SendEmail(invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, true, EmailSendingReason.InviteUser);
+                    Support.SendEmail(webAppSettings.Support.Email, invitedByEmail, email, null, subject, sb.ToString().Replace("{SignUpUserPageUrl}", url + row.InvitedLoginId.ToString("N")), false, true, EmailSendingReason.InviteUser);
                 }
             }
 
@@ -1880,10 +1904,56 @@ namespace Micajah.Common.Bll.Providers
             string subject = string.Format(CultureInfo.InvariantCulture, Resources.EmailNotification_ResetPassword_Subject, FrameworkConfiguration.Current.WebApplication.Name);
 
             string body = Resources.EmailNotification_ResetPassword_Body;
-            body = body.Replace("{PasswordResetPageUrl}", WebApplication.CreateApplicationUri(ResourceProvider.ResetPasswordPageVirtualPath) + "?r=" + row.ResetPasswordRequestId.ToString("N"));
-            body = body.Replace("{ApplicationUrl}", FrameworkConfiguration.Current.WebApplication.Url);
+            body = body.Replace("{PasswordResetPageUrl}", CustomUrlProvider.CreateApplicationUri(ResourceProvider.ResetPasswordPageVirtualPath) + "?r=" + row.ResetPasswordRequestId.ToString("N"));
+            body = body.Replace("{ApplicationUrl}", CustomUrlProvider.ApplicationUri);
 
-            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
+            Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, null, GetEmail(loginId), null, subject, body, false, false, EmailSendingReason.ResetPassword);
+        }
+
+        /// <summary>
+        /// Generates a new token for the specified login.
+        /// </summary>
+        /// <param name="loginId">The unique identifier for the login to reset token of.</param>
+        /// <returns>A newly generated token.</returns>
+        public virtual string ResetToken(Guid loginId)
+        {
+            string token = Support.GeneratePseudoUnique(32);
+            SqlConnection connection = null;
+            SqlCommand command = null;
+
+            try
+            {
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+
+                command = new SqlCommand("[dbo].[Mc_UpdateLoginToken]", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
+
+                Support.ExecuteNonQuery(command);
+            }
+            finally
+            {
+                if (connection != null) connection.Dispose();
+                if (command != null) command.Dispose();
+            }
+
+            return token;
+        }
+
+        /// <summary>
+        /// Generates a new token for the specified login.
+        /// </summary>
+        /// <param name="loginName">The name for the login to reset token of.</param>
+        /// <returns>A newly generated token.</returns>
+        public virtual string ResetToken(string loginName)
+        {
+            Guid loginId = Guid.Empty;
+            DataRowView drv = GetLogin(loginName);
+            if (drv != null)
+                loginId = (Guid)drv["LoginId"];
+
+            return ResetToken(loginId);
         }
 
         /// <summary>
@@ -1900,18 +1970,26 @@ namespace Micajah.Common.Bll.Providers
             string loginName = null;
             string password = null;
             bool? deleted = null;
-            bool? isOrganizationAdministrator = null;
 
             if (details != null)
             {
                 if (details.Length > 0)
                 {
-                    loginName = (details[0] as string);
-                    if (details.Length > 1) password = (details[1] as string);
-                    if (details.Length > 2) firstName = (details[2] as string);
-                    if (details.Length > 3) lastName = (details[3] as string);
-                    if (details.Length > 4) deleted = (details[4] as bool?);
-                    if (details.Length > 5) isOrganizationAdministrator = (details[5] as bool?);
+                    loginName = (string)details[0];
+                    if (details.Length > 1)
+                    {
+                        password = (string)details[1];
+                        if (details.Length > 2)
+                        {
+                            firstName = (string)details[2];
+                            if (details.Length > 3)
+                            {
+                                lastName = (string)details[3];
+                                if (details.Length > 4)
+                                    deleted = (bool?)details[4];
+                            }
+                        }
+                    }
 
                     SqlConnection connection = null;
                     SqlCommand command = null;

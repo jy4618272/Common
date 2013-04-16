@@ -1,14 +1,13 @@
 using System;
-using System.Security.Authentication;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
-using Micajah.Common.Configuration;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -73,7 +72,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 UserContext user = UserContext.Current;
 
                 if (user.SelectedOrganization == null)
-                    Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery, false));
+                    Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery));
 
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId));
 
@@ -127,13 +126,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 }
                 else if (!InstanceArea.Visible)
                 {
-                    if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                    {
-                        WebApplication.LoginProvider.SignOut(true, false);
-                        Response.Redirect("~/");
-                    }
-                    else
-                        WebApplication.LoginProvider.SignOut();
+                    WebApplication.LoginProvider.SignOut();
+
                     return;
                 }
 
@@ -162,7 +156,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                ActiveInstanceControl.SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, ErrorDiv);
+                ActiveInstanceControl.SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorDiv);
         }
 
         protected void OrganizationList_ItemDataBound(object sender, DataListItemEventArgs e)
@@ -180,7 +174,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                ActiveOrganizationControl.SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, ErrorDiv);
+                ActiveOrganizationControl.SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorDiv);
         }
 
         #endregion

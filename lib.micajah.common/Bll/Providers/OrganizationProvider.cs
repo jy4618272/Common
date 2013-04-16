@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Text;
+using System.Web;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
@@ -17,13 +18,6 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class OrganizationProvider
     {
-        #region Members
-
-        private const int DefaultExpirationDays = 7;
-        private const int DefaultGraceDays = 7;
-
-        #endregion
-
         #region Events
 
         /// <summary>
@@ -100,9 +94,10 @@ namespace Micajah.Common.Bll.Providers
         private static Guid InsertOrganization(string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
             , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial
-            , string street, string street2, string city, string state, string postalCode, string country, string currency
+            , string street, string street2, string city, string state, string postalCode, string country, string currency, string howYouHearAboutUs
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
+            , string partialCustomUrl, HttpRequest request
             , bool sendNotificationEmail, bool refreshAllData)
         {
             adminEmail = Support.TrimString(adminEmail, UserProvider.EmailMaxLength);
@@ -142,6 +137,7 @@ namespace Micajah.Common.Bll.Providers
             if (postalCode != null) row.PostalCode = postalCode;
             if (country != null) row.Country = country;
             if (currency != null) row.Currency = currency;
+            if (howYouHearAboutUs != null) row.HowYouHearAboutUs = howYouHearAboutUs;
 
             try
             {
@@ -156,6 +152,23 @@ namespace Micajah.Common.Bll.Providers
 
             Organization org = new Organization();
             org.Load(row);
+
+            string domain = null;
+            if (GoogleProvider.IsGoogleProviderRequest(request))
+                domain = GoogleProvider.GetDomain(request);
+
+            if (string.IsNullOrEmpty(domain))
+            {
+                string returnUrl = null;
+                GoogleProvider.ParseOAuth2AuthorizationRequestState(request, ref domain, ref returnUrl);
+            }
+
+            if (!string.IsNullOrEmpty(domain))
+            {
+                EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref domain);
+
+                org.EmailSuffixes = domain;
+            }
 
             RaiseOrganizationInserted(org);
 
@@ -180,11 +193,31 @@ namespace Micajah.Common.Bll.Providers
                       , 0, 0, out password);
             }
 
-            InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
+            Guid instanceId = InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
                 , adminEmail, password
+                , partialCustomUrl
                 , sendNotificationEmail, refreshAllData);
 
-            if (refreshAllData) WebApplication.RefreshAllData();
+            Setting setting = SettingProvider.GetSettingByShortName("StartMenuCheckedItems");
+            if (setting != null)
+            {
+                setting.Value = bool.TrueString;
+                SettingProvider.UpdateSettingValue(setting, organizationId, ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance ? new Guid?(instanceId) : null), null);
+            }
+
+            if (request != null)
+            {
+                string providerName = GoogleProvider.GetProviderName(request);
+                if (!string.IsNullOrEmpty(providerName))
+                {
+                    setting = SettingProvider.GetSettingByShortName("ProviderName");
+                    if (setting != null)
+                    {
+                        setting.Value = providerName;
+                        SettingProvider.UpdateSettingValue(setting, organizationId, null, null);
+                    }
+                }
+            }
 
             return organizationId;
         }
@@ -207,7 +240,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomains">The organization ldap domains.</param>
         private static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
-            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains, int BillingPlan)
+            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains)
         {
             if (!string.IsNullOrEmpty(websiteUrl))
                 Support.ValidateUrl(websiteUrl);
@@ -240,7 +273,7 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             row.WebsiteUrl = websiteUrl;
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
                 if (ldapDomains != null)
                     row.LdapDomains = ldapDomains;
@@ -281,23 +314,17 @@ namespace Micajah.Common.Bll.Providers
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
-            if (BillingPlan >= 0) row.BillingPlan = (byte)BillingPlan;
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
 
             Organization org = new Organization();
             org.Load(row);
 
-            if (FrameworkConfiguration.Current.WebApplication.EnableLdap)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
-                EmailSuffixProvider.DeleteEmailSuffixes(organizationId, null);
-                if (!string.IsNullOrEmpty(emailSuffixes))
-                {
-                    emailSuffixes = emailSuffixes.Replace(" ", string.Empty);
-                    EmailSuffixProvider.InsertEmailSuffix(Guid.NewGuid(), organizationId, null, emailSuffixes);
+                EmailSuffixProvider.UpdateEmailSuffixName(organizationId, null, ref emailSuffixes);
 
-                    org.EmailSuffixes = emailSuffixes;
-                }
+                org.EmailSuffixes = emailSuffixes;
             }
 
             UserContext.RefreshCurrent();
@@ -679,9 +706,9 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
                 , null, 0, true, null, false
-                , null, null, null, null, null, null, null
+                , null, null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -705,9 +732,9 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
                 , null, 0, true, null, false
-                , null, null, null, null, null, null, null
+                , null, null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, firstName, lastName, middleName, null, null, null
+                , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null
                 , sendNotificationEmail, true);
         }
 
@@ -730,9 +757,9 @@ namespace Micajah.Common.Bll.Providers
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
                 , expirationTime, graceDays, active, canceledTime, trial
-                , null, null, null, null, null, null, null
+                , null, null, null, null, null, null, null, null
                 , null, null
-                , adminEmail, null, null, null, null, null, null, null
+                , adminEmail, null, null, null, null, null, null, null, null, null
                 , true, true);
         }
 
@@ -761,18 +788,20 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="sendNotificationEmail">true to send notification email to administrator; otherwise, false.</param>
         /// <returns>The unique identifier of the newly created organization.</returns>
         public static Guid InsertOrganization(string name, string description, string websiteUrl
-            , string street, string street2, string city, string state, string postalCode, string country, string currency
+            , string street, string street2, string city, string state, string postalCode, string country, string currency, string howYouHearAboutUs
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string title, string phone, string mobilePhone
+            , string partialCustomUrl, HttpRequest request
             , bool sendNotificationEmail)
         {
             return InsertOrganization(name, description, websiteUrl, DatabaseProvider.GetRandomPublicDatabaseId()
                 , null, null, null
-                , DateTime.UtcNow.Date.AddDays(DefaultExpirationDays), DefaultGraceDays, true, null, true
-                , street, street2, city, state, postalCode, country, currency
+                , null, 0, true, null, true
+                , street, street2, city, state, postalCode, country, currency, howYouHearAboutUs
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
-                , sendNotificationEmail, true);
+                , partialCustomUrl, request
+                , sendNotificationEmail, false);
         }
 
         /// <summary>
@@ -789,7 +818,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, null, null, null, -1);
+            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, null, null, null);
         }
 
         /// <summary>
@@ -806,9 +835,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomains">The organization ldap domains.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl
-            , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay, string emailSuffixes, string ldapDomains, bool? beta, int billingPlan)
+            , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay, string emailSuffixes, string ldapDomains, bool? beta)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, beta, emailSuffixes, ldapDomains, billingPlan);
+            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, beta, emailSuffixes, ldapDomains);
         }
 
         /// <summary>
@@ -830,7 +859,7 @@ namespace Micajah.Common.Bll.Providers
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
             , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null, -1);
+            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null);
         }
 
         /// <summary>
@@ -922,28 +951,6 @@ namespace Micajah.Common.Bll.Providers
             if (row == null) return;
 
             row.Active = active;
-
-            WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
-            UserContext.RefreshCurrent();
-
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
-        }
-
-        /// <summary>
-        /// Updates the billing plan for the specified organization.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization.</param>
-        /// <param name="billingPlan">The billing plan.</param>
-        public static void UpdateOrganizationBillingPlan(Guid organizationId, BillingPlan billingPlan)
-        {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
-            if (row == null) return;
-
-            row.BillingPlan = (byte)billingPlan;
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();

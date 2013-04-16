@@ -26,12 +26,6 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Label DnsAddressLabel;
         protected ObjectDataSource InstanceListDataSource;
 
-        private ComboBox m_InstanceList;
-        private Label m_NameLabel;
-        private TextBox m_FullCustomUrlTextBox;
-        private TextBox m_PartialCustomUrlTextBox;
-        private ComboBox m_RootAddressesList;
-
         protected MultiView CustomUrlsMultiView;
         protected View SimpleView;
         protected View AdvancedView;
@@ -44,7 +38,19 @@ namespace Micajah.Common.WebControls.AdminControls
         protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorDiv;
         protected CustomValidator SimpleViewCustomValidator;
 
-        public bool ShowSwitchViewButton { get; set; }
+        private ComboBox m_InstanceList;
+        private Label m_NameLabel;
+        private TextBox m_FullCustomUrlTextBox;
+        private TextBox m_PartialCustomUrlTextBox;
+        private ComboBox m_RootAddressesList;
+
+        private UserContext m_UserContext;
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler SaveButtonClick;
 
         #endregion
 
@@ -94,7 +100,6 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-
         private ComboBox InstanceList
         {
             get
@@ -122,7 +127,6 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-
         #endregion
 
         #region Protected Properties
@@ -131,6 +135,13 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get { return Resources.CustomUrlsControl_CustomUrlsValidator_ErrorMessage; }
         }
+
+        #endregion
+
+        #region Public Properties
+
+        public bool ShowSwitchViewButton { get; set; }
+        public bool ShowSavedMessage { get; set; }
 
         #endregion
 
@@ -198,7 +209,7 @@ namespace Micajah.Common.WebControls.AdminControls
             m_InstanceList = sender as ComboBox;
             if (m_InstanceList != null)
             {
-                using (RadComboBoxItem item = new RadComboBoxItem(UserContext.Current.SelectedOrganization.Name, string.Empty))
+                using (RadComboBoxItem item = new RadComboBoxItem(m_UserContext.SelectedOrganization.Name, string.Empty))
                 {
                     m_InstanceList.Items.Insert(0, item);
                 }
@@ -209,20 +220,20 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InstanceListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
         }
 
         protected void EntityListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
         }
 
         protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
 
                 Guid? instanceId = null;
                 if (this.InstanceList != null)
@@ -231,14 +242,14 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (obj != null) instanceId = (Guid)obj;
                 }
                 e.InputParameters["instanceId"] = instanceId;
-                e.InputParameters["partialCustomUrl"] = PartialCustomUrlTextBox.Text.ToLower(CultureInfo.CurrentCulture);
+                e.InputParameters["partialCustomUrl"] = PartialCustomUrlTextBox.Text.ToLowerInvariant();
             }
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(PartialCustomUrlTextBox.Text) ? null : PartialCustomUrlTextBox.Text.ToLower(CultureInfo.CurrentCulture);
+                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(PartialCustomUrlTextBox.Text) ? null : PartialCustomUrlTextBox.Text.ToLowerInvariant();
         }
 
         protected void ChangeViewButton_Click(object sender, EventArgs e)
@@ -258,28 +269,29 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSourceSimpleView_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
         }
 
         protected void EntityDataSourceSimpleView_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                UserContext user = m_UserContext;
+                e.InputParameters["organizationId"] = user.SelectedOrganizationId;
 
-                if (UserContext.SelectedInstanceId != Guid.Empty)
-                    e.InputParameters["instanceId"] = UserContext.SelectedInstanceId;
+                if (user.SelectedInstanceId != Guid.Empty)
+                    e.InputParameters["instanceId"] = user.SelectedInstanceId;
                 else
                     e.InputParameters["instanceId"] = null;
 
-                e.InputParameters["partialCustomUrl"] = VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture);
+                e.InputParameters["partialCustomUrl"] = VanityUrlTextbox.Text.ToLowerInvariant();
             }
         }
 
         protected void EntityDataSourceSimpleView_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(VanityUrlTextbox.Text) ? null : VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture);
+                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(VanityUrlTextbox.Text) ? null : VanityUrlTextbox.Text.ToLowerInvariant();
         }
 
         protected void SimpleViewSaveButton_Click(object sender, EventArgs e)
@@ -288,34 +300,30 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 try
                 {
-                    Guid orgId = UserContext.Current.SelectedOrganization.OrganizationId;
+                    Guid orgId = m_UserContext.SelectedOrganization.OrganizationId;
                     Guid? instId = null;
-                    if (UserContext.Current.SelectedInstance != null)
-                        instId = UserContext.Current.SelectedInstance.InstanceId;
+                    if (m_UserContext.SelectedInstance != null)
+                        instId = m_UserContext.SelectedInstance.InstanceId;
 
                     CommonDataSet.CustomUrlRow row = null;
 
-                    if (UserContext.Current.SelectedInstance != null)
-                        row = CustomUrlProvider.GetCustomUrl(UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.SelectedInstance.InstanceId);
+                    if (instId.HasValue)
+                        row = CustomUrlProvider.GetCustomUrl(orgId, instId.Value);
 
                     if (row == null)
-                        row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
-
-                    if (row == null)
-                    {
-                        System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
-                        if (table != null && table.Table.Rows.Count > 0)
-                            row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                    }
+                        row = CustomUrlProvider.GetCustomUrlByOrganizationId(orgId);
 
                     if (row != null)
-                        CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture));
+                        CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextbox.Text.ToLowerInvariant());
                     else
-                        CustomUrlProvider.InsertCustomUrl(orgId, instId, null, VanityUrlTextbox.Text.ToLower(CultureInfo.CurrentCulture));
+                        CustomUrlProvider.InsertCustomUrl(orgId, instId, null, VanityUrlTextbox.Text.ToLowerInvariant());
 
                     SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewMessageLabel_Text;
 
                     Micajah.Common.Application.WebApplication.RefreshAllData();
+
+                    if (SaveButtonClick != null)
+                        SaveButtonClick(sender, e);
                 }
                 catch (Exception ex)
                 {
@@ -333,43 +341,21 @@ namespace Micajah.Common.WebControls.AdminControls
             base.LoadResources();
 
             DnsAddressCaptionLabel.Text = Resources.CustomUrlsControl_DnsAddressCaptionLabel_Text;
-            DnsAddressLabel.Text = FrameworkConfiguration.Current.WebApplication.DnsAddress;
+            DnsAddressLabel.Text = FrameworkConfiguration.Current.WebApplication.CustomUrl.DnsAddress;
 
             EditForm.Fields[0].HeaderText = Resources.CustomUrlsControl_EditForm_NameField_HeaderText;
             EditForm.Fields[1].HeaderText = Resources.CustomUrlsControl_EditForm_FullCustomUrlField_HeaderText;
             EditForm.Fields[2].HeaderText = Resources.CustomUrlsControl_EditForm_PartialCustomUrlField_HeaderText;
 
-            CustomUrlsMultiView.ActiveViewIndex = 0;
             ChangeViewButton.Text = Resources.CustomUrlsControl_ChangeToAdvancedView_Text;
 
-            SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewTitleLabel_Text;
+            SimpleViewTitleLabel.Text = this.ShowSavedMessage ? Resources.CustomUrlsControl_SimpleViewMessageLabel_Text : Resources.CustomUrlsControl_SimpleViewTitleLabel_Text;
             SimpleViewSaveButton.Text = Resources.CustomUrlsControl_SimpleViewSaveButton_Text;
             SimpleViewCustomValidator.ErrorMessage = Resources.CustomUrlsControl_CustomUrlsSimpleValidator_ErrorMessage;
 
+            VanityUrlDomainLabel.Text = string.Format(CultureInfo.InvariantCulture, ".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
 
-            VanityUrlDomainLabel.Text = string.Format(".{0}", FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst);
             CustomUrlsMultiView.ActiveViewIndex = 0;
-
-            if (!Page.IsPostBack)
-            {
-                CommonDataSet.CustomUrlRow row = null;
-
-                if (UserContext.Current.SelectedInstance != null)
-                    row = CustomUrlProvider.GetCustomUrl(UserContext.Current.SelectedOrganization.OrganizationId, UserContext.Current.SelectedInstance.InstanceId);
-
-                if (row == null)
-                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
-
-                if (row == null)
-                {
-                    System.Data.DataView table = CustomUrlProvider.GetCustomUrls(UserContext.Current.SelectedOrganization.OrganizationId);
-                    if (table != null && table.Table.Rows.Count > 0)
-                        row = table.Table.Rows[0] as CommonDataSet.CustomUrlRow;
-                }
-
-                if (row != null)
-                    VanityUrlTextbox.Text = row.PartialCustomUrl.ToLower(CultureInfo.CurrentCulture);
-            }
 
             ChangeViewButton.Visible = this.ShowSwitchViewButton;
         }
@@ -401,6 +387,7 @@ namespace Micajah.Common.WebControls.AdminControls
             base.EditForm_ItemInserted(sender, e);
             Micajah.Common.Application.WebApplication.RefreshAllData();
         }
+
         protected override void EditForm_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
         {
             base.EditForm_ItemUpdated(sender, e);
@@ -412,6 +399,27 @@ namespace Micajah.Common.WebControls.AdminControls
             string scripts = ClientScripts;
             if (!string.IsNullOrEmpty(scripts)) ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ValidateCustomUrlsScript", scripts, true);
             base.Render(writer);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            m_UserContext = UserContext.Current;
+
+            if (!Page.IsPostBack)
+            {
+                CommonDataSet.CustomUrlRow row = null;
+
+                if (m_UserContext.SelectedInstance != null)
+                    row = CustomUrlProvider.GetCustomUrl(m_UserContext.SelectedOrganization.OrganizationId, m_UserContext.SelectedInstance.InstanceId);
+
+                if (row == null)
+                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(m_UserContext.SelectedOrganization.OrganizationId);
+
+                if (row != null)
+                    VanityUrlTextbox.Text = row.PartialCustomUrl.ToLowerInvariant();
+            }
         }
 
         #endregion

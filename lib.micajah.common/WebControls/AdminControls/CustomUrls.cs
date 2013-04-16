@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll.Providers;
@@ -36,6 +37,9 @@ namespace Micajah.Common.WebControls.AdminControls
         }
 
         public bool ShowSwitchViewButton { get; set; }
+        public bool ShowSavedMessage { get; set; }
+
+        public event EventHandler SaveButtonClick;
 
         #endregion
 
@@ -52,6 +56,9 @@ namespace Micajah.Common.WebControls.AdminControls
             m_InnerControl = this.Page.LoadControl(ResourceProvider.CustomUrlsControlVirtualPath) as CustomUrlsControl;
             m_InnerControl.ID = "CustomUrls";
             m_InnerControl.ShowSwitchViewButton = this.ShowSwitchViewButton;
+            if (SaveButtonClick != null)
+                m_InnerControl.SaveButtonClick += SaveButtonClick;
+            m_InnerControl.ShowSavedMessage = ShowSavedMessage;
             m_Holder.Controls.Add(m_InnerControl);
         }
 

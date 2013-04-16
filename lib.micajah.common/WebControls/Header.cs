@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -28,6 +27,21 @@ namespace Micajah.Common.WebControls
         internal const string SearchButtonId = "SearchButton";
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
+        private bool m_ModernTheme;
+        private MasterPageElement m_MasterPageSettings;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        public Header()
+        {
+            m_MasterPageSettings = FrameworkConfiguration.Current.WebApplication.MasterPage;
+            m_ModernTheme = (m_MasterPageSettings.Theme == MasterPageTheme.Modern);
+        }
 
         #endregion
 
@@ -77,7 +91,7 @@ namespace Micajah.Common.WebControls
                 if (MasterPage.VisibleHeaderLinks)
                     links = CreateGlobalNavigation(false, MasterPage.IsSetupPage, this.Page.Request.IsSecureConnection);
 
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                if (m_ModernTheme)
                 {
                     HtmlGenericControl ul = (HtmlGenericControl)links;
 
@@ -127,10 +141,10 @@ namespace Micajah.Common.WebControls
 
         private Control CreateApplicationLogo()
         {
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+            if (!m_ModernTheme)
                 return null;
 
-            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl))
+            if (string.IsNullOrEmpty(m_MasterPageSettings.Header.LogoImageUrl))
                 return null;
 
             HtmlGenericControl div = null;
@@ -151,7 +165,7 @@ namespace Micajah.Common.WebControls
                 ul.Controls.Add(li);
 
                 link = new HyperLink();
-                link.ImageUrl = FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl;
+                link.ImageUrl = m_MasterPageSettings.Header.LogoImageUrl;
                 if (this.MasterPage.IsSetupPage)
                 {
                     Micajah.Common.Bll.Action action = ActionProvider.FindAction(ActionProvider.SetupPageActionId);
@@ -175,13 +189,13 @@ namespace Micajah.Common.WebControls
 
         private Control CreateLogo()
         {
-            if ((!this.MasterPage.VisibleHeaderLogo) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.Header.LogoImageUrl))
+            if ((!this.MasterPage.VisibleHeaderLogo) || string.IsNullOrEmpty(m_MasterPageSettings.Header.LogoImageUrl))
                 return null;
 
             string text = this.MasterPage.HeaderLogoText;
             string imageUrl = null;
 
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+            if (!m_ModernTheme)
                 imageUrl = this.MasterPage.HeaderLogoImageUrl;
 
             if (string.IsNullOrEmpty(imageUrl) && string.IsNullOrEmpty(text))
@@ -296,7 +310,7 @@ namespace Micajah.Common.WebControls
                 btn.Text = this.MasterPage.SearchButtonText;
                 btn.ToolTip = this.MasterPage.SearchButtonToolTip;
 
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                if (m_ModernTheme)
                 {
                     div.Attributes["class"] = "S";
                     btn.CssClass = "Green";
@@ -392,8 +406,9 @@ namespace Micajah.Common.WebControls
             HtmlGenericControl ul = null;
             HtmlGenericControl ul2 = null;
             HtmlGenericControl li = null;
+            bool modernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
 
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+            if (modernTheme)
             {
                 ul = new HtmlGenericControl("ul");
                 ul.Attributes["class"] = "Mm";
@@ -405,10 +420,10 @@ namespace Micajah.Common.WebControls
             {
                 foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks)
                 {
-                    bool isConfigActionInModerTheme = ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) && (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId));
+                    bool isConfigActionInModernTheme = (modernTheme && (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId));
                     bool accessDenied = ((!item.Visible) || item.AccessDenied());
 
-                    if ((!isConfigActionInModerTheme) && accessDenied)
+                    if ((!isConfigActionInModernTheme) && accessDenied)
                         continue;
 
                     string customAbsoluteNavigateUrl = null;
@@ -419,7 +434,7 @@ namespace Micajah.Common.WebControls
                         if (item.AuthenticationRequired)
                         {
                             accessDenied = (!ShowNonPublicAction(item, isFrameworkAdministrator, canLogOnAsUser, (user.SelectedOrganization != null), builtInOnly, actionIdList, ref customAbsoluteNavigateUrl, ref customDescription));
-                            if (!isConfigActionInModerTheme)
+                            if (!isConfigActionInModernTheme)
                             {
                                 if (accessDenied)
                                     continue;
@@ -428,7 +443,7 @@ namespace Micajah.Common.WebControls
                         else if (item.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
                         {
                             if (user.SelectedOrganization == null)
-                                customAbsoluteNavigateUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
+                                customAbsoluteNavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
                             else
                                 continue;
                         }
@@ -440,14 +455,14 @@ namespace Micajah.Common.WebControls
                     else if (item.AuthenticationRequired)
                         continue;
 
-                    if (!(isConfigActionInModerTheme && accessDenied))
+                    if (!(isConfigActionInModernTheme && accessDenied))
                     {
                         link = new Link(item.CustomName
                             , ((customAbsoluteNavigateUrl == null) ? item.CustomAbsoluteNavigateUrl : customAbsoluteNavigateUrl)
                             , ((customDescription == null) ? item.Description : customDescription));
                     }
 
-                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                    if (modernTheme)
                     {
                         if (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId)
                         {
@@ -494,7 +509,7 @@ namespace Micajah.Common.WebControls
                         links.Add(link);
                 }
 
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                if (modernTheme)
                 {
                     if (ul2 != null)
                     {
@@ -546,7 +561,7 @@ namespace Micajah.Common.WebControls
                 if (ctrl != null)
                     headerContainer.Controls.Add(ctrl);
 
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                if (m_ModernTheme)
                 {
                     if (MasterPage.VisibleSearchControl)
                         headerContainer.Controls.Add(CreateSearchControl(null));

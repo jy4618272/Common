@@ -120,9 +120,9 @@ function Mp_SearchTextBox_OnFocus(searchTextBox) {
     }
 }
 
-function Mp_UpdateBreadCrumbs(htmlContent) {
-    var elem = document.getElementById("Mp_B");
-    if (elem) elem.innerHTML = htmlContent;
+function Mp_Update(id, content, replace) {
+    var elem = document.getElementById(id);
+    if (elem) elem.innerHTML = content;
 }
 
 function Mp_GetPopupPositionX(width) {

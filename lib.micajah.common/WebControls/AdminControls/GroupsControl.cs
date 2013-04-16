@@ -25,7 +25,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (field != null)
             {
                 field.Text = Resources.GroupsControl_List_RolesLinkColumns_Text;
-                field.DataNavigateUrlFormatString = WebApplication.CreateApplicationAbsoluteUrl(string.Concat(ResourceProvider.GroupsInstancesRolesPageVirtualPath, "?GroupId={0:N}"));
+                field.DataNavigateUrlFormatString = CustomUrlProvider.CreateApplicationAbsoluteUrl(string.Concat(ResourceProvider.GroupsInstancesRolesPageVirtualPath, "?GroupId={0:N}"));
             }
         }
 
@@ -36,7 +36,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (UserContext.Current.SelectedOrganization.Instances.Count == 0)
                 {
                     MasterPage.Message = Resources.GroupsControl_NoInstanceError_Message;
-                    MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.GroupsControl_NoInstanceError_Description, WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.InstancePageVirtualPath));
+                    MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.GroupsControl_NoInstanceError_Description, CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.InstancePageVirtualPath));
                     List.Visible = false;
                 }
             }

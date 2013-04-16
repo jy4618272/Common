@@ -3,7 +3,7 @@
 <%@ Register Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" TagPrefix="telerik" %>
 <div id="Step1Panel" runat="server">
     <div class="Logo">
-        <asp:Image ID="LogoImage1" runat="server" Visible="false" /></div>
+        <asp:Image ID="LogoImage1" runat="server" /></div>
     <div style="padding-top: 20px;">
         <table id="Step1Form" runat="server" align="center">
             <tr>
@@ -113,7 +113,7 @@
                         <asp:Label ID="HowYouHearAboutUsLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
                     <td>
-                        <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" Width="350px" />
+                        <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" MaxLength="255" Width="350px" />
                     </td>
                 </tr>
                 <tr class="Group">
@@ -164,13 +164,13 @@
                         </asp:DropDownList>
                     </td>
                 </tr>
-                <tr class="Group">
+                <tr id="EmailAndPasswordGroupRow" runat="server" class="Group">
                     <td colspan="2">
                         <div>
                             <asp:Literal ID="EmailAndPasswordLabel" runat="server"></asp:Literal></div>
                     </td>
                 </tr>
-                <tr>
+                <tr id="Email2Row" runat="server">
                     <td>
                         <asp:Label ID="EmailLabel2" runat="server" CssClass="Large"></asp:Label>
                     </td>
@@ -182,7 +182,7 @@
                         <asp:Image ID="EmailTick2" runat="server" Visible="false" ImageAlign="AbsMiddle" />
                     </td>
                 </tr>
-                <tr>
+                <tr id="PasswordRow" runat="server">
                     <td>
                         <asp:Label ID="PasswordLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
@@ -193,15 +193,14 @@
                                 OnServerValidate="PasswordValidator_ServerValidate" />
                     </td>
                 </tr>
-                <tr>
+                <tr id="ConfirmPasswordRow" runat="server">
                     <td>
                         <asp:Label ID="ConfirmPasswordLabel" runat="server" CssClass="Large"></asp:Label>
                     </td>
                     <td>
                         <mits:TextBox ID="ConfirmPassword" runat="server" Required="true" ValidationGroup="Step2"
                             TextMode="Password" Width="350px" /><asp:CustomValidator ID="PasswordCompareValidator"
-                                runat="server" Display="Dynamic" ValidationGroup="Step2" CssClass="Error"
-                                ClientValidationFunction="PasswordCompareValidation" />
+                                runat="server" Display="Dynamic" ValidationGroup="Step2" CssClass="Error" ClientValidationFunction="PasswordCompareValidation" />
                     </td>
                 </tr>
                 <tr>
@@ -274,6 +273,29 @@
                         </tr>
                     </table>
                 </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="ErrorPanel" runat="server">
+    <div class="Logo">
+        <asp:Image ID="LogoImage3" runat="server" /></div>
+    <table align="center">
+        <tr>
+            <td style="padding-top: 20px;">
+                <asp:Label ID="ErrorLabel" runat="server" CssClass="Error Block"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px; text-align: center;" class="Agree">
+                <p>
+                    <asp:Label ID="ErrorContinueLabel" runat="server"></asp:Label></p>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                <asp:HyperLink ID="ErrorContinueLink" runat="server" CssClass="Button Green Large">
+                </asp:HyperLink>
             </td>
         </tr>
     </table>

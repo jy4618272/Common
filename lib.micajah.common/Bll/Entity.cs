@@ -116,14 +116,15 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                if (m_CustomNodeTypes == null && Micajah.Common.Security.UserContext.Current != null)
+                UserContext user = UserContext.Current;
+                if (m_CustomNodeTypes == null && user != null)
                 {
                     Guid? instanceId = null;
                     if (this.HierarchyStartLevel == EntityLevel.Instance)
-                        instanceId = UserContext.SelectedInstanceId;
+                        instanceId = user.SelectedInstanceId;
                     if (UserContext.Current != null)
                     {
-                        m_CustomNodeTypes = GetCustomNodeTypes(UserContext.SelectedOrganizationId, instanceId);
+                        m_CustomNodeTypes = GetCustomNodeTypes(user.SelectedOrganizationId, instanceId);
                     }
                 }
                 return m_CustomNodeTypes;

@@ -18,7 +18,7 @@ namespace Micajah.Common.Configuration
         /// <summary>
         /// The required schema version of the database.
         /// </summary>
-        internal const int RequiredDatabaseVersion = 100;
+        internal const int RequiredDatabaseVersion = 107;
 
         private string m_ApplicationUrl;
         private object m_AuthenticationMode;
@@ -45,15 +45,6 @@ namespace Micajah.Common.Configuration
         #region Internal Properties
 
         /// <summary>
-        /// Gets the value indicating whether the non-default port should be added to the URL of the application.
-        /// </summary>
-        [ConfigurationProperty("addPort", DefaultValue = true)]
-        internal bool AddPort
-        {
-            get { return (bool)this["addPort"]; }
-        }
-
-        /// <summary>
         /// Gets or sets the current schema version of the database.
         /// </summary>
         internal static int CurrentDatabaseVersion
@@ -65,24 +56,6 @@ namespace Micajah.Common.Configuration
                 return s_CurrentDatabaseVersion;
             }
             set { s_CurrentDatabaseVersion = value; }
-        }
-
-        /// <summary>
-        /// Gets the settings for custom URLs engine.
-        /// </summary>
-        [ConfigurationProperty("customUrl")]
-        public CustomUrlElement CustomUrl
-        {
-            get { return (CustomUrlElement)this["customUrl"]; }
-        }
-
-        /// <summary>
-        /// Gets the DNS domain name.
-        /// </summary>
-        [ConfigurationProperty("dnsAddress")]
-        internal string DnsAddress
-        {
-            get { return (string)this["dnsAddress"]; }
         }
 
         /// <summary>
@@ -108,6 +81,15 @@ namespace Micajah.Common.Configuration
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets the value indicating whether the non-default port should be added to the URL of the application.
+        /// </summary>
+        [ConfigurationProperty("addPort", DefaultValue = true)]
+        public bool AddPort
+        {
+            get { return (bool)this["addPort"]; }
+        }
 
         /// <summary>
         /// Gets or sets the name of the application project.
@@ -214,6 +196,24 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets the settings for custom URLs engine.
+        /// </summary>
+        [ConfigurationProperty("customUrl")]
+        public CustomUrlElement CustomUrl
+        {
+            get
+            {
+                WebsiteConfiguration website = WebsiteConfiguration.Current;
+                if ((website != null) && website.ElementInformation.IsPresent)
+                {
+                    if (website.CustomUrl.ElementInformation.IsPresent)
+                        return website.CustomUrl;
+                }
+                return (CustomUrlElement)this["customUrl"];
+            }
+        }
+
+        /// <summary>
         /// Gets the value indicating whether the application supports the multiple instances per organization.
         /// </summary>
         [ConfigurationProperty("enableMultipleInstances", DefaultValue = true)]
@@ -221,16 +221,6 @@ namespace Micajah.Common.Configuration
         {
             get { return (bool)this["enableMultipleInstances"]; }
             set { this["enableMultipleInstances"] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the value indicating whether the application supports ldap.
-        /// </summary>
-        [ConfigurationProperty("enableLdap")]
-        public bool EnableLdap
-        {
-            get { return (bool)this["enableLdap"]; }
-            set { this["enableLdap"] = value; }
         }
 
         /// <summary>
@@ -292,6 +282,40 @@ namespace Micajah.Common.Configuration
         {
             get { return (MasterPageElement)this["masterPage"]; }
             set { this["masterPage"] = value; }
+        }
+
+        /// <summary>
+        /// Gets the integration settings.
+        /// </summary>
+        [ConfigurationProperty("integration")]
+        public IntegrationElement Integration
+        {
+            get
+            {
+                IntegrationElement elem = new IntegrationElement();
+
+                WebsiteConfiguration website = WebsiteConfiguration.Current;
+                if ((website != null) && website.ElementInformation.IsPresent)
+                {
+                    IntegrationElement value = (IntegrationElement)this["integration"];
+                    elem.Ldap = value.Ldap;
+                    elem.Google = value.Google;
+
+                    if (website.Integration.ElementInformation.IsPresent)
+                    {
+                        if (website.Integration.Ldap.ElementInformation.IsPresent)
+                            elem.Ldap = website.Integration.Ldap;
+
+                        if (website.Integration.Google.ElementInformation.IsPresent)
+                            elem.Google = website.Integration.Google;
+
+                        if (website.Integration.Chargify.ElementInformation.IsPresent)
+                            elem.Chargify = website.Integration.Chargify;
+                    }
+                }
+
+                return elem;
+            }
         }
 
         #endregion

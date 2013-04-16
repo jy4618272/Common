@@ -200,15 +200,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         #endregion
 
-        #region Private Methods
-
-        private void Redirect()
-        {
-            RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
-        }
-
-        #endregion
-
         #region Protected Methods
 
         protected override void EditFormInitialize()
@@ -545,7 +536,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsGetDomains()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", UserContext.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", UserContext.Current.SelectedOrganizationId);
             try
             {
                 GetDomainsTimer.Enabled = false;
@@ -591,7 +582,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsGetGroups()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", UserContext.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", UserContext.Current.SelectedOrganizationId);
             try
             {
                 GetGroupsTimer.Enabled = false;
@@ -636,7 +627,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsTestADReplication()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "TestADReplication_{0}", UserContext.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "TestADReplication_{0}", UserContext.Current.SelectedOrganizationId);
             try
             {
                 TestADReplicationTimer.Enabled = false;
@@ -741,7 +732,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsRealADReplication()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "RealADReplication_{0}", UserContext.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "RealADReplication_{0}", UserContext.Current.SelectedOrganizationId);
             try
             {
                 RealADReplicationTimer.Enabled = false;
@@ -847,7 +838,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
@@ -950,7 +941,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
             {
-                this.Redirect();
+                this.RedirectToConfigurationPage();
             }
         }
 

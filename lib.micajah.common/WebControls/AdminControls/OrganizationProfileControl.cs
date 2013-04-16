@@ -18,20 +18,10 @@ namespace Micajah.Common.WebControls.AdminControls
         private ComboBox m_MonthList;
         private ComboBox m_DayList;
         private ComboBox m_WeekStartsDayList;
-        private ComboBox m_BillingPlan;
 
         #endregion
 
         #region Private Properties
-
-        private ComboBox BillingPlanCombobox
-        {
-            get
-            {
-                if (m_BillingPlan == null) m_BillingPlan = EditForm.FindControl("cmbBillingPlan") as ComboBox;
-                return m_BillingPlan;
-            }
-        }
 
         private ComboBox MonthList
         {
@@ -58,15 +48,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (m_WeekStartsDayList == null) m_WeekStartsDayList = EditForm.FindControl("WeekStartsDayList") as ComboBox;
                 return m_WeekStartsDayList;
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void Redirect()
-        {
-            RedirectToActionOrStartPage(ActionProvider.ConfigurationPageActionId);
         }
 
         #endregion
@@ -98,12 +79,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 DayList.SelectedValue = org.FiscalYearStartDay.Value.ToString(CultureInfo.InvariantCulture);
             if (org.WeekStartsDay.HasValue)
                 WeekStartsDayList.SelectedValue = (org.WeekStartsDay.Value).ToString(CultureInfo.InvariantCulture);
-
-            BillingPlanCombobox.Items.Add(new RadComboBoxItem(BillingPlan.Free.ToString(), ((int)BillingPlan.Free).ToString(CultureInfo.InvariantCulture)));
-            BillingPlanCombobox.Items.Add(new RadComboBoxItem(BillingPlan.Paid.ToString(), ((int)BillingPlan.Paid).ToString(CultureInfo.InvariantCulture)));
-            BillingPlanCombobox.Items.Add(new RadComboBoxItem(BillingPlan.Custom.ToString(), ((int)BillingPlan.Custom).ToString(CultureInfo.InvariantCulture)));
-
-            BillingPlanCombobox.SelectedValue = ((int)((Organization)EditForm.DataItem).BillingPlan).ToString(CultureInfo.InvariantCulture);
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
@@ -129,17 +104,12 @@ namespace Micajah.Common.WebControls.AdminControls
             else
                 e.InputParameters["weekStartsDay"] = null;
 
-            if (int.TryParse(this.BillingPlanCombobox.SelectedValue, out value))
-                e.InputParameters["BillingPlan"] = value;
-            else
-                e.InputParameters["BillingPlan"] = 0;
-
         }
 
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
         }
 
         #endregion
@@ -153,14 +123,13 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_FiscalYearStartMonth_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_FiscalYearStartDay_HeaderText;
             EditForm.Fields[5].HeaderText = Resources.OrganizationsControl_EditForm_WeekStartsDay_HeaderText;
-            EditForm.Fields[9].HeaderText = Resources.OrganizationsControl_EditForm_BillingPlan_HeaderText;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             if (!IsPostBack)
             {
-                if (!FrameworkConfiguration.Current.WebApplication.EnableLdap)
+                if (!FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
                 {
                     EditForm.Fields[6].Visible = false;
                     EditForm.Fields[7].Visible = false;
@@ -176,7 +145,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             if (e.Exception == null)
-                this.Redirect();
+                this.RedirectToConfigurationPage();
         }
 
         protected override void EditForm_ItemCommand(object sender, CommandEventArgs e)
@@ -184,7 +153,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
-                this.Redirect();
+                this.RedirectToConfigurationPage();
         }
 
         #endregion

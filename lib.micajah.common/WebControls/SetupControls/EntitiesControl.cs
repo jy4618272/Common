@@ -20,9 +20,9 @@ namespace Micajah.Common.WebControls.SetupControls
         private void Tree_DataBind()
         {
             Type typeOfThis = typeof(EntitiesControl);
-            string entityImageUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Entity.gif"));
-            string fieldImageUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Field.gif"));
-            string eventImageUrl = WebApplication.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Event.gif"));
+            string entityImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Entity.gif"));
+            string fieldImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Field.gif"));
+            string eventImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Event.gif"));
 
             foreach (Entity entity in WebApplication.Entities)
             {

@@ -58,7 +58,8 @@ namespace Micajah.Common.Pages
         private Footer m_Footer;
         private Control[] m_DefaultPageContent;
         private ContentPlaceHolder m_ContentPlaceHolder;
-        private NoticeMessageBox m_NoticeArea;
+        private NoticeMessageBox m_NoticeMessageBox;
+        private NoticeMessageBox m_HeaderMessageBox;
 
         private string m_PageTitle;
         private string m_CustomName;
@@ -128,7 +129,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         private string ApplicationAbsoluteNavigateUrl
         {
-            get { return WebApplication.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery); }
+            get { return CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery); }
         }
 
         /// <summary>
@@ -176,6 +177,20 @@ namespace Micajah.Common.Pages
             }
         }
 
+        /// <summary>
+        /// Gets a value that indicates whether the current postback is being executed in partial-rendering mode.
+        /// </summary>
+        private bool IsInAsyncPostBack
+        {
+            get
+            {
+                ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
+                if (scriptManager != null)
+                    return scriptManager.IsInAsyncPostBack;
+                return false;
+            }
+        }
+
         #endregion
 
         #region Internal Properties
@@ -195,7 +210,7 @@ namespace Micajah.Common.Pages
                     using (Image img = new Image())
                     {
                         img.ToolTip = FrameworkConfiguration.Current.WebApplication.Name;
-                        img.ImageUrl = WebApplication.CreateApplicationAbsoluteUrl(url);
+                        img.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(url);
                         ctl = img;
                     }
                 }
@@ -390,6 +405,21 @@ namespace Micajah.Common.Pages
             }
             set { m_HeaderLogoTarget = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the message to be shown on the page at the header.
+        /// </summary>
+        public string HeaderMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the message to be shown on the page at the header.
+        /// </summary>
+        public NoticeMessageType HeaderMessageType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message description to be shown on the page at the header.
+        /// </summary>
+        public string HeaderMessageDescription { get; set; }
 
         /// <summary>
         /// The HTML to be shown at the left area below of the submenu.
@@ -668,7 +698,7 @@ namespace Micajah.Common.Pages
                 {
                     if (m_UserContext != null)
                         return this.ActiveAction.AbsoluteNavigateUrl.Equals(m_UserContext.StartPageUrl, StringComparison.OrdinalIgnoreCase);
-                    else if (string.Compare(this.ActiveAction.AbsoluteNavigateUrl, WebApplication.CreateApplicationAbsoluteUrl("/default.aspx"), StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(this.ActiveAction.AbsoluteNavigateUrl, CustomUrlProvider.CreateApplicationAbsoluteUrl("/default.aspx"), StringComparison.OrdinalIgnoreCase) == 0)
                         return (!this.ActiveAction.AuthenticationRequired);
                 }
                 return false;
@@ -726,6 +756,18 @@ namespace Micajah.Common.Pages
                 if (!m_IsSettingPage.HasValue)
                     m_IsSettingPage = ((ActiveAction != null) && ActionProvider.IsSettingPage(m_ActiveAction.ActionId));
                 return m_IsSettingPage.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value that indicates the current page is admin page.
+        /// </summary>
+        public virtual bool IsAdminPage
+        {
+            get
+            {
+                return ((Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1)
+                    && ((this.ActiveAction != null) && (m_ActiveAction.ActionId != ActionProvider.StartPageActionId)));
             }
         }
 
@@ -798,13 +840,13 @@ namespace Micajah.Common.Pages
                 else
                 {
                     Micajah.Common.Bll.Action item = ActiveAction.Clone();
-                    item.NavigateUrl = WebApplication.CreateApplicationRelativeUrl(Request.Url.PathAndQuery);
+                    item.NavigateUrl = CustomUrlProvider.CreateApplicationRelativeUrl(Request.Url.PathAndQuery);
 
                     if (!string.IsNullOrEmpty(CustomName))
                     {
                         item.IsCustom = true;
                         item.Name = CustomName;
-                        if (!string.IsNullOrEmpty(CustomNavigateUrl)) item.NavigateUrl = WebApplication.CreateApplicationRelativeUrl(CustomNavigateUrl);
+                        if (!string.IsNullOrEmpty(CustomNavigateUrl)) item.NavigateUrl = CustomUrlProvider.CreateApplicationRelativeUrl(CustomNavigateUrl);
                         if (!string.IsNullOrEmpty(CustomDescription)) item.Description = CustomDescription;
                     }
 
@@ -824,18 +866,34 @@ namespace Micajah.Common.Pages
             Controls.Add(m_BreadCrumbs);
         }
 
-        private void CreateNoticeArea()
+        private void CreateHeaderMessageBox()
         {
+            if (!string.IsNullOrEmpty(this.HeaderMessage))
+            {
+                m_HeaderMessageBox = new NoticeMessageBox();
+                m_HeaderMessageBox.Width = Unit.Percentage(100);
+                m_HeaderMessageBox.Size = NoticeMessageBoxSize.Small;
+                m_HeaderMessageBox.HorizontalAlign = HorizontalAlign.Center;
+                m_HeaderMessageBox.Visible = false;
+                m_HeaderMessageBox.Message = this.HeaderMessage;
+                m_HeaderMessageBox.MessageType = this.HeaderMessageType;
+                m_HeaderMessageBox.Description = this.HeaderMessageDescription;
+                Controls.Add(m_HeaderMessageBox);
+            }
+        }
+
+        private void CreateNoticeMessageBox()
+        {
+            m_NoticeMessageBox = new NoticeMessageBox();
+            m_NoticeMessageBox.Width = Unit.Percentage(100);
+            m_NoticeMessageBox.Visible = false;
             if (!string.IsNullOrEmpty(this.Message))
             {
-                m_NoticeArea = new NoticeMessageBox();
-                m_NoticeArea.Width = Unit.Percentage(100);
-                m_NoticeArea.Visible = false;
-                m_NoticeArea.Message = this.Message;
-                m_NoticeArea.MessageType = this.MessageType;
-                m_NoticeArea.Description = this.MessageDescription;
-                Controls.Add(m_NoticeArea);
+                m_NoticeMessageBox.Message = this.Message;
+                m_NoticeMessageBox.MessageType = this.MessageType;
+                m_NoticeMessageBox.Description = this.MessageDescription;
             }
+            Controls.Add(m_NoticeMessageBox);
         }
 
         private void CreateMenus()
@@ -844,6 +902,14 @@ namespace Micajah.Common.Pages
             {
                 m_MainMenu = new MainMenu();
                 Controls.Add(m_MainMenu);
+            }
+
+            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) && this.IsAdminPage)
+            {
+                this.SubmenuParentActionId = ActionProvider.ConfigurationPageActionId;
+                this.SubmenuPosition = WebControls.SubmenuPosition.Left;
+                this.VisibleSubmenu = true;
+                this.VisibleLeftArea = true;
             }
 
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)
@@ -1005,6 +1071,31 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
+        /// Renders the notice message box.
+        /// </summary>
+        /// <param name="writer">The HtmlTextWriter to render content to.</param>
+        private void RenderNoticeMessageBox(HtmlTextWriter writer)
+        {
+            if (writer == null) return;
+
+            writer.AddAttribute(HtmlTextWriterAttribute.Id, "Mp_Mbx");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div); // Container
+
+            if (!string.IsNullOrEmpty(this.Message))
+            {
+                m_NoticeMessageBox.Visible = true;
+                if (this.IsInAsyncPostBack)
+                    this.RegisterUpdateScript("Mp_Mbx", m_NoticeMessageBox.RenderControl());
+                else
+                {
+                    RenderControl(writer, m_NoticeMessageBox);
+                }
+            }
+
+            writer.RenderEndTag(); // Container
+        }
+
+        /// <summary>
         /// Renders the page content's cell.
         /// </summary>
         /// <param name="writer">The HtmlTextWriter to render content to.</param>
@@ -1035,7 +1126,10 @@ namespace Micajah.Common.Pages
                 this.RenderHelpLink(writer);
 
             if (m_UpdateBreadcrumbs)
-                this.RegisterUpdateBreadCrumbsScript();
+            {
+                if (this.IsInAsyncPostBack)
+                    this.RegisterUpdateScript("Mp_B", m_BreadCrumbs.RenderContent());
+            }
             else
                 m_BreadCrumbs.RenderControl(writer);
             m_BreadCrumbs.Visible = false;
@@ -1043,11 +1137,7 @@ namespace Micajah.Common.Pages
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_Pmc");
             writer.RenderBeginTag(HtmlTextWriterTag.Div); // Page's main content
 
-            if (m_NoticeArea != null)
-            {
-                m_NoticeArea.Visible = true;
-                RenderControl(writer, m_NoticeArea);
-            }
+            this.RenderNoticeMessageBox(writer);
 
             if ((m_DefaultPageContent != null) && (m_DefaultPageContent.Length > 0))
             {
@@ -1079,6 +1169,12 @@ namespace Micajah.Common.Pages
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                 this.RenderLeftAreaLayer(writer);
+
+            if (m_HeaderMessageBox != null)
+            {
+                m_HeaderMessageBox.Visible = true;
+                RenderControl(writer, m_HeaderMessageBox);
+            }
 
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_NnFtr"); // Non-footer
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
@@ -1146,12 +1242,10 @@ namespace Micajah.Common.Pages
 
                 if (m_UserContext != null)
                 {
-                    m_UserContext.CheckWebSite(null, returnUrl);
-
                     if (m_OrganizationId == Guid.Empty)
-                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl, false);
+                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
                     else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && m_ActiveAction.InstanceRequired && (m_InstanceId == Guid.Empty))
-                        redirectUrl = ResourceProvider.GetActiveInstancePageUrl(returnUrl, false);
+                        redirectUrl = ResourceProvider.GetActiveInstanceUrl(returnUrl);
                     else if (m_ActiveAction.ActionType == ActionType.Page || m_ActiveAction.ActionType == ActionType.GlobalNavigationLink)
                     {
                         accessDenied = m_ActiveAction.AccessDenied();
@@ -1163,7 +1257,12 @@ namespace Micajah.Common.Pages
                     accessDenied = true;
 
                 if (accessDenied)
-                    throw new HttpException(403, Resources.Error_403);
+                {
+                    if (m_UserContext != null)
+                        throw new HttpException(403, Resources.Error_403);
+                    else
+                        redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
+                }
 
                 if (!string.IsNullOrEmpty(redirectUrl))
                     Response.Redirect(redirectUrl);
@@ -1217,17 +1316,17 @@ namespace Micajah.Common.Pages
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
         }
 
-        private void RegisterUpdateBreadCrumbsScript()
+        private void RegisterUpdateScript(string clientId, string content)
         {
-            ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
-            if ((scriptManager != null) && scriptManager.IsInAsyncPostBack)
-            {
-                string str = m_BreadCrumbs.RenderContent().Replace("'", "&#039;").Replace("\r\n", string.Empty);
-                Regex rgx = new Regex(">\\s+<", RegexOptions.Multiline);
-                str = rgx.Replace(str, "><");
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Mp_Update_" + clientId, "Mp_Update('" + clientId + "', '" + PrepareHtml(content) + "');\r\n", true);
+        }
 
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "UpdateBreadCrumbs", "Mp_UpdateBreadCrumbs('" + str + "');\r\n", true);
-            }
+        private static string PrepareHtml(string value)
+        {
+            string str = value.Replace("'", "&#039;").Replace("\r\n", string.Empty);
+            Regex rgx = new Regex(">\\s+<", RegexOptions.Multiline);
+            str = rgx.Replace(str, "><");
+            return str;
         }
 
         #endregion
@@ -1316,7 +1415,7 @@ namespace Micajah.Common.Pages
                     using (Literal fancyBoxScript = new Literal())
                     {
                         fancyBoxScript.ID = "FancyBoxScript";
-                        fancyBoxScript.Text = "<script src=\"" + ResourceProvider.FancyBoxScriptUrl + "\" type=\"text/javascript\"></script>";
+                        fancyBoxScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.FancyBoxScriptUrl);
                         page.Header.Controls.AddAt(0, fancyBoxScript);
                     }
                 }
@@ -1326,7 +1425,7 @@ namespace Micajah.Common.Pages
                     using (Literal jQueryScript = new Literal())
                     {
                         jQueryScript.ID = "JQueryScript";
-                        jQueryScript.Text = "<script src=\"" + ResourceProvider.JQueryScriptUrl + "\" type=\"text/javascript\"></script>";
+                        jQueryScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.JQueryScriptUrl);
                         page.Header.Controls.AddAt(0, jQueryScript);
                     }
                 }
@@ -1412,7 +1511,7 @@ namespace Micajah.Common.Pages
                     if (this.OrganizationId != m_OrganizationId)
                         Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery, true));
                     else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && m_ActiveAction.InstanceRequired && (this.InstanceId != m_InstanceId))
-                        Response.Redirect(ResourceProvider.GetActiveInstancePageUrl(Request.Url.PathAndQuery, true));
+                        Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, true));
                 }
             }
         }
@@ -1466,6 +1565,8 @@ namespace Micajah.Common.Pages
 
             SetPageTitle();
 
+            this.CreateHeaderMessageBox();
+
             if (this.VisibleHeader)
             {
                 m_Header = new Header();
@@ -1474,7 +1575,7 @@ namespace Micajah.Common.Pages
 
             this.CreateMenus();
             this.CreateBreadCrumbs();
-            this.CreateNoticeArea();
+            this.CreateNoticeMessageBox();
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                 this.CreateApplicationLogo();

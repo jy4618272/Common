@@ -69,7 +69,6 @@ namespace Micajah.Common.Configuration
             get { return (StringCollection)this["partialCustomUrlReservedAddresses"]; }
         }
 
-
         /// <summary>
         /// Gets the reserved default address for partial custom URLs used by internal applications.
         /// </summary>
@@ -80,12 +79,21 @@ namespace Micajah.Common.Configuration
         }
         
         /// <summary>
-        /// Gets or the root domain for authentication ticket.
+        /// Gets the root domain for authentication ticket.
         /// </summary>
         [ConfigurationProperty("authenticationTicketDomain")]
         public string AuthenticationTicketDomain
         {
             get { return (string)this["authenticationTicketDomain"]; }
+        }
+
+        /// <summary>
+        /// Gets the DNS domain name.
+        /// </summary>
+        [ConfigurationProperty("dnsAddress")]
+        public string DnsAddress
+        {
+            get { return (string)this["dnsAddress"]; }
         }
 
         #endregion

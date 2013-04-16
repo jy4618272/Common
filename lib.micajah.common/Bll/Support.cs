@@ -1092,12 +1092,22 @@ namespace Micajah.Common.Bll
         /// <returns>An System.String object that represents the pseudo unique identifier.</returns>
         public static string GeneratePseudoUnique()
         {
+            return GeneratePseudoUnique(6);
+        }
+
+        /// <summary>
+        /// Generates the pseudo unique identifier with specified length.
+        /// </summary>
+        /// <param name="length">The length of the identifier.</param>
+        /// <returns>An System.String object that represents the pseudo unique identifier.</returns>
+        public static string GeneratePseudoUnique(int length)
+        {
             //"abcdefghijkmnopqrstuvwxyz0123456789"
             RandomNumberGenerator rng = RandomNumberGenerator.Create();
-            byte[] pass_bytes = new byte[6];
+            byte[] pass_bytes = new byte[length];
             rng.GetBytes(pass_bytes);
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < length; i++)
             {
                 // Convert the random bytes to ascii values 33-126
                 pass_bytes[i] = (byte)(pass_bytes[i] % 93 + 33);
@@ -1424,6 +1434,7 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Sends the message with specified details to an SMTP server for delivery.
         /// </summary>
+        /// <param name="sender">A System.String that contains the sender's address for this e-mail message.</param>
         /// <param name="from">A System.String that contains the address of the sender of the e-mail message.</param>
         /// <param name="to">A System.String that contains the addresses of the recipients of the e-mail message.</param>
         /// <param name="bcc">A System.String that contains the blind carbon copy (BCC) recipients for the e-mail message.</param>
@@ -1433,15 +1444,16 @@ namespace Micajah.Common.Bll
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="reason">A reason for email sending.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
-        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, bool async, EmailSendingReason reason)
+        public static bool SendEmail(string sender, string from, string to, string bcc, string subject, string body, bool isBodyHtml, bool async, EmailSendingReason reason)
         {
             EmailSendingEventArgs args = new EmailSendingEventArgs() { Async = async, Reason = reason };
-            return SendEmail(from, to, bcc, subject, body, isBodyHtml, args);
+            return SendEmail(sender, from, to, bcc, subject, body, isBodyHtml, args);
         }
 
         /// <summary>
         /// Sends the message with specified details to an SMTP server for delivery.
         /// </summary>
+        /// <param name="sender">A System.String that contains the sender's address for this e-mail message.</param>
         /// <param name="from">A System.String that contains the address of the sender of the e-mail message.</param>
         /// <param name="to">A System.String that contains the addresses of the recipients of the e-mail message.</param>
         /// <param name="bcc">A System.String that contains the blind carbon copy (BCC) recipients for the e-mail message.</param>
@@ -1451,41 +1463,45 @@ namespace Micajah.Common.Bll
         /// <param name="async">If it's true this method does not block the calling thread.</param>
         /// <param name="args">An EmailSendingEventArgs that contains the Micajah.Common.Application.WebApplication.EmailSending event data.</param>
         /// <returns>true if the message was sent successfully; otherwise, false.</returns>
-        public static bool SendEmail(string from, string to, string bcc, string subject, string body, bool isBodyHtml, EmailSendingEventArgs args)
+        public static bool SendEmail(string sender, string from, string to, string bcc, string subject, string body, bool isBodyHtml, EmailSendingEventArgs args)
         {
             bool sent = false;
-            MailMessage msg = null;
 
-            try
+            MailMessage msg = new MailMessage();
+            if (!string.IsNullOrEmpty(sender))
+                msg.Sender = new MailAddress(sender);
+            if (!string.IsNullOrEmpty(from))
             {
-                msg = new MailMessage(from, to);
-                msg.Subject = subject;
-                msg.Body = body;
-                msg.IsBodyHtml = isBodyHtml;
-                if (!string.IsNullOrEmpty(bcc))
-                    msg.Bcc.Add(bcc);
-
-                if (args != null)
+                if (string.Compare(from, to, StringComparison.OrdinalIgnoreCase) != 0)
                 {
-                    args.MailMessage = msg;
+                    if (string.Compare(from, sender, StringComparison.OrdinalIgnoreCase) != 0)
+                        msg.From = new MailAddress(from);
+                }
+            }
+            msg.To.Add(to);
+            msg.Subject = subject;
+            msg.Body = body;
+            msg.IsBodyHtml = isBodyHtml;
+            if (!string.IsNullOrEmpty(bcc))
+                msg.Bcc.Add(bcc);
 
-                    WebApplication.RaiseEmailSending(args);
+            if (args != null)
+            {
+                args.MailMessage = msg;
 
-                    if (!args.Cancel)
+                WebApplication.RaiseEmailSending(args);
+
+                if (!args.Cancel)
+                {
+                    using (SmtpClient client = new SmtpClient())
                     {
-                        SmtpClient client = new SmtpClient();
                         if (args.Async)
                             client.SendAsync(args.MailMessage, null);
                         else
                             client.Send(args.MailMessage);
-
-                        sent = true;
                     }
+                    sent = true;
                 }
-            }
-            finally
-            {
-                if (msg != null) msg.Dispose();
             }
 
             return sent;

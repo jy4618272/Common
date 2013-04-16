@@ -12,35 +12,20 @@ namespace Micajah.Common.Bll.Providers
     {
         public static ChargifyConnect CreateChargify()
         {
+            ChargifyAccountRetrieverSection config = ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
+
+            if (config == null) return null;
+
             // new instance
             ChargifyConnect _chargify = new ChargifyConnect();
-            bool azureDeployed = UsefulExtensions.IsRunningAzure();
-            if (!azureDeployed)
-            {
-                ChargifyAccountRetrieverSection config = ConfigurationManager.GetSection("chargify") as ChargifyAccountRetrieverSection;
-                ChargifyAccountElement accountInfo = config.GetDefaultOrFirst();
-                _chargify.apiKey = accountInfo.ApiKey;
-                _chargify.Password = accountInfo.ApiPassword;
-                _chargify.URL = accountInfo.Site;
-                _chargify.SharedKey = accountInfo.SharedKey;
-                _chargify.UseJSON = config.UseJSON;
-            }
-            else
-            {
-                // Is azure deployed
-                _chargify.apiKey = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_API_KEY");
-                _chargify.Password = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_API_PASSWORD");
-                _chargify.URL = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_SITE_URL");
-                _chargify.SharedKey = UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_SHARED_KEY");
-                if (!string.IsNullOrEmpty(UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_USE_JSON")))
-                {
-                    _chargify.UseJSON = bool.Parse(UsefulExtensions.GetLateBoundRoleEnvironmentValue("CHARGIFY_USE_JSON"));
-                }
-                else
-                {
-                    _chargify.UseJSON = false;
-                }
-            }
+
+            ChargifyAccountElement accountInfo = config.GetDefaultOrFirst();
+            _chargify.apiKey = accountInfo.ApiKey;
+            _chargify.Password = accountInfo.ApiPassword;
+            _chargify.URL = accountInfo.Site;
+            _chargify.SharedKey = accountInfo.SharedKey;
+            _chargify.UseJSON = config.UseJSON;
+
             return _chargify;
         }
 
@@ -51,13 +36,25 @@ namespace Micajah.Common.Bll.Providers
             return accountInfo.ProductHandle;
         }
 
-        public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, Guid OrganizationId)
+        public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, Guid OrganizationId, Guid InstanceId)
         {
-            ICustomer _cust = chargify.LoadCustomer(OrganizationId.ToString());
-            
+            ICustomer _cust = chargify.LoadCustomer(OrganizationId.ToString() + "," + InstanceId.ToString());
+
             if (_cust == null) return null;
-            
-            IDictionary<int, ISubscription> _subscrList = chargify.GetSubscriptionListForCustomer(_cust.ChargifyID);
+
+            return GetCustomerSubscription(chargify, _cust.ChargifyID);
+        }
+
+        public static bool DeleteCustomerSubscription(ChargifyConnect chargify, Guid OrganizationId, Guid InstanceId)
+        {
+            ISubscription subscr = GetCustomerSubscription(chargify, OrganizationId, InstanceId);
+            if (subscr==null) return false;
+            return chargify.DeleteSubscription(subscr.SubscriptionID, "Cancel Account Registration");
+        }
+
+        public static ISubscription GetCustomerSubscription(ChargifyConnect chargify, int chargifyCustomerId)
+        {           
+            IDictionary<int, ISubscription> _subscrList = chargify.GetSubscriptionListForCustomer(chargifyCustomerId);
             
             if (_subscrList.Count<= 0) return null;
 
@@ -66,34 +63,41 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Guid OrganizationId)
+        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst)
         {
-            SettingCollection PaidSettings = SettingProvider.GetPaidSettings(OrganizationId);
-            foreach (Setting setting in PaidSettings)
-            {
-                if (string.IsNullOrEmpty(setting.ExternalId)) continue;
+            decimal _TotalSum = 0;
 
-                int _cid = 0;
-                bool _checked = false;
-                if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || !bool.TryParse(setting.Value, out _checked)) continue;
-                chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _checked ? 1 : 0);
-            }
-
-            SettingCollection CounterSettings = SettingProvider.GetCounterSettings(OrganizationId);
+            SettingCollection CounterSettings = SettingProvider.GetCounterSettings(inst.OrganizationId, inst.InstanceId);
 
             foreach (Setting setting in CounterSettings)
             {
-                if (string.IsNullOrEmpty(setting.ExternalId)) continue;
-
-                int _cid = 0;
-                string _val = setting.Value;
-                int _count = 0;
-
-                if (!int.TryParse(setting.ExternalId, out _cid) || _cid == 0 || string.IsNullOrEmpty(_val) || !int.TryParse(_val, out _count)) continue;
-
-                chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, _count);
+                if (setting.Paid)
+                {
+                    bool isChecked;
+                    if (!Boolean.TryParse(setting.Value, out isChecked))
+                    {
+                        if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
+                    }
+                    if (isChecked) _TotalSum += setting.Price;
+                    int _cid = 0;
+                    if (SubscriptionId == 0 || string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out _cid)) continue;
+                    chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, isChecked ? 1 : 0);
+                }
+                else
+                {
+                    int usageCount;
+                    int.TryParse(setting.Value, out usageCount);
+                    int _paidQty = usageCount - setting.UsageCountLimit;
+                    decimal _priceMonth = _paidQty > 0 ? _paidQty * setting.Price : 0;
+                    if (_priceMonth > 0) _TotalSum += _priceMonth;
+                    int _cid = 0;
+                    if (SubscriptionId == 0 || string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out _cid)) continue;
+                    chargify.UpdateComponentAllocationForSubscription(SubscriptionId, _cid, usageCount < 0 ? 0 : usageCount);
+                }
             }
-        }
 
+            if (_TotalSum>0 && inst.BillingPlan!=BillingPlan.Paid) InstanceProvider.UpdateInstance(inst, BillingPlan.Paid);
+            else if (_TotalSum==0 && inst.BillingPlan!=BillingPlan.Free) InstanceProvider.UpdateInstance(inst, BillingPlan.Free);
+        }
     }
 }
