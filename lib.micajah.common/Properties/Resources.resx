@@ -2664,4 +2664,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="StartControl_WatchLink_Text" xml:space="preserve">
     <value>Watch</value>
   </data>
+  <data name="LoginElement_GoogleFailureText" xml:space="preserve">
+    <value>This account appears to be linked to Google. Sign in with Google.</value>
+  </data>
 </root>
