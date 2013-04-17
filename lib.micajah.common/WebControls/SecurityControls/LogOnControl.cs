@@ -678,7 +678,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 string message = ex.Message;
-                if (string.Compare(ex.Message, FrameworkConfiguration.Current.WebApplication.Login.FailureText, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(ex.Message, FrameworkConfiguration.Current.WebApplication.Login.FailureText, StringComparison.OrdinalIgnoreCase) == 0 && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
                 {
                     Organization org = OrganizationProvider.GetOrganization(this.OrganizationId);
 
@@ -695,7 +695,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                         if (setting != null)
                         {
                             setting = SettingProvider.GetOrganizationSetting(org.OrganizationId, setting.SettingId);
-                            if (setting != null && (string.Compare(setting.Value, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                            if (setting != null && (string.Compare(setting.Value, "google", StringComparison.OrdinalIgnoreCase) == 0))
                             {
                                 if (org.EmailSuffixesList != null && org.EmailSuffixesList.Count > 0)
                                 {
