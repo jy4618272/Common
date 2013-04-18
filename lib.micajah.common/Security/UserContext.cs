@@ -180,6 +180,40 @@ namespace Micajah.Common.Security
             }
         }
 
+        internal static UserAuthorizationRequest OAuthPendingUserAuthorizationRequest
+        {
+            get
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        object obj = session[OAuthPendingUserAuthorizationRequestKey];
+                        if (obj != null)
+                            return (UserAuthorizationRequest)obj;
+                    }
+                }
+                return null;
+            }
+            internal set
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        if (value == null)
+                            session.Remove(OAuthPendingUserAuthorizationRequestKey);
+                        else
+                            session[OAuthPendingUserAuthorizationRequestKey] = value;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Public Properties
@@ -608,40 +642,6 @@ namespace Micajah.Common.Security
                             session.Remove(VanityUrlKey);
                         else
                             session[VanityUrlKey] = value;
-                    }
-                }
-            }
-        }
-
-        public static UserAuthorizationRequest OAuthPendingUserAuthorizationRequest
-        {
-            get
-            {
-                HttpContext http = HttpContext.Current;
-                if (http != null)
-                {
-                    HttpSessionState session = http.Session;
-                    if (session != null)
-                    {
-                        object obj = session[OAuthPendingUserAuthorizationRequestKey];
-                        if (obj != null)
-                            return (UserAuthorizationRequest)obj;
-                    }
-                }
-                return null;
-            }
-            internal set
-            {
-                HttpContext http = HttpContext.Current;
-                if (http != null)
-                {
-                    HttpSessionState session = http.Session;
-                    if (session != null)
-                    {
-                        if (value == null)
-                            session.Remove(OAuthPendingUserAuthorizationRequestKey);
-                        else
-                            session[OAuthPendingUserAuthorizationRequestKey] = value;
                     }
                 }
             }

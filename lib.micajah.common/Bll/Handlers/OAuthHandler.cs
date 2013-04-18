@@ -2,8 +2,8 @@
 using System.Web;
 using System.Web.SessionState;
 using DotNetOpenAuth.Messaging;
-using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.Messages;
+using Micajah.Common.Bll.Providers.OAuth;
 using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Handlers
@@ -12,7 +12,7 @@ namespace Micajah.Common.Bll.Handlers
     {
         #region Members
 
-        ServiceProvider m_Provider;
+        private ServiceProvider m_Provider;
 
         #endregion
 
@@ -29,7 +29,7 @@ namespace Micajah.Common.Bll.Handlers
 
         public OAuthHandler()
         {
-            m_Provider = new ServiceProvider(Constants.SelfDescription, Global.TokenManager);//, new CustomOAuthMessageFactory(Global.TokenManager));
+            m_Provider = new ServiceProvider();
         }
 
         #endregion
@@ -49,7 +49,7 @@ namespace Micajah.Common.Bll.Handlers
             else if ((requestAuth = request as UserAuthorizationRequest) != null)
             {
                 UserContext.OAuthPendingUserAuthorizationRequest = requestAuth;
-                HttpContext.Current.Response.Redirect("~/mc/authorize.aspx");
+                context.Response.Redirect("~/mc/oauth.aspx");
             }
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
             {

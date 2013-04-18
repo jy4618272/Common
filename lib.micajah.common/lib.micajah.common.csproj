@@ -174,6 +174,9 @@
     <Compile Include="Bll\Providers\ChargifyProvider.cs" />
     <Compile Include="Bll\Providers\EmailProvider.cs" />
     <Compile Include="Bll\Providers\GoogleProvider.cs" />
+    <Compile Include="Bll\Providers\OAuth\ServiceProvider.cs" />
+    <Compile Include="Bll\Providers\OAuth\NonceProvider.cs" />
+    <Compile Include="Bll\Providers\OAuth\TokenProvider.cs" />
     <Compile Include="Bll\Providers\ViewStateProvider.cs" />
     <Compile Include="Bll\StartThread.cs">
       <SubType>Component</SubType>
@@ -401,6 +404,9 @@
     </Compile>
     <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
     <Compile Include="WebControls\ActivityReportControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\OAuthControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\Token.cs" />
@@ -689,10 +695,13 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
     <None Include="Migrated rules for lib.micajah.common.ruleset" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\OAuth.ashx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />
@@ -2045,7 +2054,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\ActivityReport.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\Authorize.aspx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <Content Include="Runtime\ChargifyNET.dll" />
@@ -2274,9 +2283,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
