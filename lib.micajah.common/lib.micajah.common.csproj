@@ -699,6 +699,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v107.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>

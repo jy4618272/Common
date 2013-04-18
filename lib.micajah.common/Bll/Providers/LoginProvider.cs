@@ -944,6 +944,15 @@ namespace Micajah.Common.Bll.Providers
             SqlConnection connection = null;
             SqlCommand command = null;
 
+            string firstName = null;
+            string lastName = null;
+            if (details.Length > 0)
+            {
+                firstName = (string)details[0];
+                if (details.Length > 1)
+                    lastName = (string)details[1];
+            }
+
             try
             {
                 connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
@@ -953,6 +962,8 @@ namespace Micajah.Common.Bll.Providers
                 command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier, 16).Value = Guid.NewGuid();
                 command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = EncryptPassword(password);
+                command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(firstName) ? string.Empty : firstName);
+                command.Parameters.Add("@LastName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
                 command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = Support.GeneratePseudoUnique(32);
 
                 return Support.GetDataRow(command);
@@ -1959,18 +1970,26 @@ namespace Micajah.Common.Bll.Providers
             string loginName = null;
             string password = null;
             bool? deleted = null;
-            bool? isOrganizationAdministrator = null;
 
             if (details != null)
             {
                 if (details.Length > 0)
                 {
-                    loginName = (details[0] as string);
-                    if (details.Length > 1) password = (details[1] as string);
-                    if (details.Length > 2) firstName = (details[2] as string);
-                    if (details.Length > 3) lastName = (details[3] as string);
-                    if (details.Length > 4) deleted = (details[4] as bool?);
-                    if (details.Length > 5) isOrganizationAdministrator = (details[5] as bool?);
+                    loginName = (string)details[0];
+                    if (details.Length > 1)
+                    {
+                        password = (string)details[1];
+                        if (details.Length > 2)
+                        {
+                            firstName = (string)details[2];
+                            if (details.Length > 3)
+                            {
+                                lastName = (string)details[3];
+                                if (details.Length > 4)
+                                    deleted = (bool?)details[4];
+                            }
+                        }
+                    }
 
                     SqlConnection connection = null;
                     SqlCommand command = null;

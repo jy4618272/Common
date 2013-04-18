@@ -256,7 +256,12 @@ namespace Micajah.Common.WebControls.SecurityControls
                         if (string.IsNullOrEmpty(redirectUrl))
                             redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery);
                         else
-                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery) + ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl);
+                        {
+                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
+                                + ((Request.QueryString["returnurl"] == null)
+                                    ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl)
+                                    : string.Empty);
+                        }
 
                         Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, vanityUrl, redirectUrl));
                     }
@@ -672,7 +677,43 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
             catch (AuthenticationException ex)
             {
-                this.ShowErrorMessage(ex.Message);
+                string message = ex.Message;
+                if (string.Compare(ex.Message, FrameworkConfiguration.Current.WebApplication.Login.FailureText, StringComparison.OrdinalIgnoreCase) == 0 && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                {
+                    Organization org = OrganizationProvider.GetOrganization(this.OrganizationId);
+
+                    if (org == null)
+                    {
+                        OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginName(LoginTextBox.Text);
+                        if (orgs != null && orgs.Count > 0)
+                            org = orgs[0];
+                    }
+
+                    if (org != null)
+                    {
+                        Setting setting = SettingProvider.GetSettingByShortName("ProviderName");
+                        if (setting != null)
+                        {
+                            setting = SettingProvider.GetOrganizationSetting(org.OrganizationId, setting.SettingId);
+                            if (setting != null && (string.Compare(setting.Value, "google", StringComparison.OrdinalIgnoreCase) == 0))
+                            {
+                                if (org.EmailSuffixesList != null && org.EmailSuffixesList.Count > 0)
+                                {
+                                    foreach (string domain in org.EmailSuffixesList)
+                                    {
+                                        if (LoginTextBox.Text.IndexOf(domain) != -1)
+                                        {
+                                            message = Resources.LoginElement_GoogleFailureText;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                this.ShowErrorMessage(message);
             }
         }
 

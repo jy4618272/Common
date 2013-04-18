@@ -3444,6 +3444,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This account appears to be linked to Google. Sign in with Google..
+        /// </summary>
+        internal static string LoginElement_GoogleFailureText {
+            get {
+                return ResourceManager.GetString("LoginElement_GoogleFailureText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login | Email.
         /// </summary>
         internal static string LoginElement_LdapLoginLabelText {
