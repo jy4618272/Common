@@ -20,6 +20,7 @@ namespace Micajah.Common.Configuration
         private bool? m_OriginalInstanceRequired;
         private bool m_IsLoaded;
         private bool m_BuiltIn;
+        private StringCollection m_Roles;
 
         #endregion
 
@@ -245,7 +246,12 @@ namespace Micajah.Common.Configuration
         [TypeConverter(typeof(CommaDelimitedStringCollectionConverter))]
         public StringCollection Roles
         {
-            get { return (StringCollection)this["roles"]; }
+            get
+            {
+                if (m_Roles == null)
+                    m_Roles = (StringCollection)this["roles"];
+                return m_Roles;
+            }
         }
 
         /// <summary>
@@ -345,6 +351,9 @@ namespace Micajah.Common.Configuration
 
             if (!string.IsNullOrEmpty(action.VideoUrl))
                 this.VideoUrl = action.VideoUrl;
+
+            if (action.Roles != null)
+                m_Roles = action.Roles;
 
             foreach (ActionElement actionToAdd in action.Actions)
             {
