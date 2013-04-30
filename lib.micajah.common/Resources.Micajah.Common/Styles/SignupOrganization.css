@@ -1,4 +1,197 @@
-﻿.Logo
+﻿*
+{
+    -webkit-appearance: none;
+}
+body
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+::-webkit-input-placeholder
+{
+    color: #d4d4d4; /* WebKit browsers */
+}
+:-moz-placeholder
+{
+    color: #d4d4d4; /* Mozilla Firefox 4 to 18 */
+}
+::-moz-placeholder
+{
+    color: #d4d4d4; /* Mozilla Firefox 19+ */
+}
+:-ms-input-placeholder
+{
+    color: #d4d4d4; /* Internet Explorer 10+ */
+}
+
+
+.content
+{
+    width: 100%;
+    min-width: 250px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul, li
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/*-- Set form width for Uniform js --*/
+form
+{
+    max-width: 850px;
+    margin: 0 auto; /* Center */
+}
+
+label
+{
+    margin: 15px 0 0;
+    font-size: .85em;
+}
+
+/*------------ Add Ticket View -------------------*/
+
+.content
+{
+    margin: 0;
+    padding: 0 20px 50px;
+}
+.content form
+{
+    margin-bottom: 50px;
+}
+.content input[type=text]
+{
+    -webkit-appearance: none;
+    width: 90%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 0;
+    border: 1px solid #a7a7a7;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.content input[type=password]
+{
+    -webkit-appearance: none;
+    width: 90%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 0;
+    border: 1px solid #a7a7a7;
+    border-radius: 5px 5px 5px 5px;
+}
+
+/*------------ Responsive Elements ---------------*/
+
+/* Large desktop */
+@media (min-width: 1200px)
+{
+
+}
+
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px)
+{
+
+}
+
+@media only screen and (max-device-width: 480px)
+{
+    .Logo img
+    {
+        width: 284px;
+    }
+}
+
+small.left
+{
+    text-align: left;
+    font-size: 11px;
+}
+
+.Error
+{
+    float: left;
+    position: relative;
+}
+
+.content div.LightBlue input[type="text"]
+{
+    width: 90%;
+}
+
+.content select
+{
+    width: 93%;
+}
+
+.Logo
+{
+    width: 90% !important;
+}
+
+.content .row
+{
+    padding: 10px;
+    float: left;
+    width: 100%;
+    text-align: left;
+}
+
+.content .clear
+{
+    float: none;
+    clear: both;
+}
+
+span.Title
+{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+}
+
+div.title
+{
+    background-color: #EBEBEB;
+    border: 0 none;
+    border-radius: 5px 5px 5px 5px;
+    color: #8B8B8B;
+    font-family: Arial,Gadget,sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5;
+    margin: 40px 0 30px;
+    padding: 10px;
+    width: 90%;
+    text-align: left;
+}
+
+#SignupOrg1_Step2Form .row
+{
+    width: 97%;
+}
+
+#SignupOrg1_Step2Form
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#SignupOrg1_Step2FormButton hr
+{
+    width: 93%;
+}
+
+.Logo
 {
     width: 100%;
     padding-top: 50px;
