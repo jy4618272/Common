@@ -123,9 +123,22 @@ small.left
     position: relative;
 }
 
+.content div.LightBlue
+{
+    padding: 10px 0px 15px 0px;
+    width:90%;
+}
+
 .content div.LightBlue input[type="text"]
 {
-    width: 90%;
+    width: 95%;    
+}
+
+.content div.LightBlue div
+{
+    float:left;
+    padding-left:10px;
+    width: 100%;
 }
 
 .content select
