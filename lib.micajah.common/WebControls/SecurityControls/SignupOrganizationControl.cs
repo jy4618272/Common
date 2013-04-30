@@ -22,7 +22,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected HtmlGenericControl Step1Panel;
         protected Image LogoImage1;
-        protected HtmlTable Step1Form;
+        protected HtmlGenericControl Step1Form;
         protected Label OrganizationNameLabel1;
         protected Literal OrganizationNameHelpText1;
         protected TextBox OrganizationName1;
@@ -32,7 +32,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected TextBox Email1;
         protected CustomValidator EmailValidator1;
         protected Image EmailTick1;
-        protected HtmlTableRow OrganizationUrlRow;
+        protected HtmlGenericControl OrganizationUrlRow;
         protected Label OrganizationUrlLabel;
         protected Literal Schema;
         protected TextBox OrganizationUrl;
@@ -43,8 +43,8 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected UpdatePanel UpdatePanelOrganizationUrl;
 
         protected HtmlGenericControl Step2Panel;
-        protected HtmlTable Step2Form;
-        protected HtmlTable Step2FormButton;
+        protected HtmlGenericControl Step2Form;
+        protected HtmlGenericControl Step2FormButton;
         protected Image LogoImage2;
         protected Literal OrganizationAddressLabel;
         protected Label OrganizationNameLabel2;
@@ -68,18 +68,18 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label CurrencyLabel;
         protected DropDownList CurrencyList;
 
-        protected HtmlTableRow EmailAndPasswordGroupRow;
+        protected HtmlGenericControl EmailAndPasswordGroupRow;
         protected Literal EmailAndPasswordLabel;
-        protected HtmlTableRow Email2Row;
+        protected HtmlGenericControl Email2Row;
         protected Label EmailLabel2;
         protected TextBox Email2;
         protected CustomValidator EmailValidator2;
         protected Image EmailTick2;
         protected Label PasswordLabel;
-        protected HtmlTableRow PasswordRow;
+        protected HtmlGenericControl PasswordRow;
         protected TextBox Password;
         protected CustomValidator PasswordValidator;
-        protected HtmlTableRow ConfirmPasswordRow;
+        protected HtmlGenericControl ConfirmPasswordRow;
         protected Label ConfirmPasswordLabel;
         protected TextBox ConfirmPassword;
         protected CustomValidator PasswordCompareValidator;
@@ -95,7 +95,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Repeater InstanceList;
         protected CustomValidator InstanceRequiredValidator;
         protected CustomValidator UniqueDataValidator;
-        protected HtmlTable Step3Form;
+        protected HtmlGenericControl Step3Form;
         protected Button Step3Button;
         protected System.Web.UI.WebControls.TextBox SelectedInstance;
 
@@ -332,7 +332,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step3Panel.Visible)
             {
-                MagicForm.ApplyStyle(Step3Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step3Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
 
                 InstanceList.DataBind();
                 if (InstanceList.Items.Count > 0)
@@ -360,7 +360,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step1Panel.Visible)
             {
-                MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
 
                 this.Page.Form.Target = "_parent";
 
@@ -377,8 +377,8 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step2Panel.Visible)
             {
-                MagicForm.ApplyStyle(Step2Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
-                MagicForm.ApplyStyle(Step2FormButton, ColorScheme.White, false, false, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step2Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step2FormButton, ColorScheme.White, false, true, MasterPageTheme.Modern);
 
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "PasswordCompareValidationClientScript", this.PasswordCompareValidationClientScript, true);
             }
