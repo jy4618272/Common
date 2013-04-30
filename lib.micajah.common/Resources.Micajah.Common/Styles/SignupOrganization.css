@@ -131,7 +131,7 @@ small.left
 
 .content div.LightBlue input[type="text"]
 {
-    width: 95%;    
+    width: 75%;    
 }
 
 .content div.LightBlue div
@@ -284,3 +284,37 @@ small
 {
     display: none;
 }
+
+.container {	
+	width: 90%;
+	max-width: 700px;
+	min-width: 320px;
+	margin: 50px auto 0;
+	}
+.LightBlue {
+	posistion: relative;
+	width: 100%;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+	background-color: #e9eff5;
+	padding: 10px 20px 10px 15px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	}
+
+input {
+	-webkit-appearance: none;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 12px;
+	margin: 0;
+	border: 1px solid #a7a7a7;
+	border-radius: 5px 5px 5px 5px;
+	font-size: 18px;
+	padding: 12px 10px;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box; 
+	}

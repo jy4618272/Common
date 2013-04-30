@@ -35,12 +35,12 @@
                 <asp:Label ID="OrganizationUrlLabel" runat="server" CssClass="Large Title"></asp:Label>
                     <small></small>
                     <asp:UpdatePanel ID="UpdatePanelOrganizationUrl" runat="server" RenderMode="Inline" UpdateMode="Conditional">
-                        <ContentTemplate>
+                        <ContentTemplate>                         
                             <div class="LightBlue">
                                 <div>
-                                    <asp:Literal ID="Schema" runat="server"></asp:Literal>
-                                    <asp:Literal ID="PartialCustomUrlRootAddress" runat="server"></asp:Literal>
+                                    <asp:Literal ID="Schema" runat="server"></asp:Literal>                                    
                                     <mits:TextBox ID="OrganizationUrl" runat="server" ValidationGroup="Step1" MaxLength="1024" CssClass="Large" TabIndex="3" AutoPostBack="true" OnTextChanged="OrganizationUrl_TextChanged" />
+                                    <asp:Literal ID="PartialCustomUrlRootAddress" runat="server"></asp:Literal>
                                 </div>
                             </div>
                             <asp:Image ID="OrganizationUrlTick" runat="server" Visible="false" ImageAlign="AbsMiddle" Style="margin-top: 15px;" />
