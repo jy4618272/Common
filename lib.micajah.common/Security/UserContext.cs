@@ -54,6 +54,7 @@ namespace Micajah.Common.Security
         private const string UserIdKey = "mc.UserId";
         private const string VanityUrlKey = "mc.VanityUrl";
         private const string OAuthPendingUserAuthorizationRequestKey = "mc.OAuthPendingUserAuth";
+        private const string OAuthAuthorizationSecretKey = "mc.OAuthAutSecret";
 
         private static ArrayList s_ReservedKeys;
 
@@ -197,7 +198,7 @@ namespace Micajah.Common.Security
                 }
                 return null;
             }
-            internal set
+            set
             {
                 HttpContext http = HttpContext.Current;
                 if (http != null)
@@ -209,6 +210,40 @@ namespace Micajah.Common.Security
                             session.Remove(OAuthPendingUserAuthorizationRequestKey);
                         else
                             session[OAuthPendingUserAuthorizationRequestKey] = value;
+                    }
+                }
+            }
+        }
+
+        internal static string OAuthAuthorizationSecret
+        {
+            get
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        object obj = session[OAuthAuthorizationSecretKey];
+                        if (obj != null)
+                            return (string)obj;
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        if (value == null)
+                            session.Remove(OAuthAuthorizationSecretKey);
+                        else
+                            session[OAuthAuthorizationSecretKey] = value;
                     }
                 }
             }

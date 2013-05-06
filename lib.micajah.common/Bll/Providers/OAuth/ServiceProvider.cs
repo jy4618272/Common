@@ -26,9 +26,9 @@ namespace Micajah.Common.Bll.Providers.OAuth
 
                     s_Description = new ServiceProviderDescription
                     {
-                        AccessTokenEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest),
-                        RequestTokenEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest),
-                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest),
+                        AccessTokenEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
+                        RequestTokenEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
+                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
                         TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSha1SigningBindingElement(), },
                     };
                 }

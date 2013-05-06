@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.SessionState;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth.Messages;
+using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers.OAuth;
+using Micajah.Common.Dal;
 using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Handlers
@@ -54,6 +57,10 @@ namespace Micajah.Common.Bll.Handlers
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
             {
                 AuthorizedTokenResponse response = m_Provider.PrepareAccessTokenMessage(requestAccessToken);
+
+                OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
+                response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
+
                 m_Provider.Channel.Send(response);
             }
             else

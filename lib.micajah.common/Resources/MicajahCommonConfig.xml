@@ -10,7 +10,10 @@
     <action id="AB6741E3-7D2D-4BB3-9BB7-E2DB26AACA63" type="Page" name="Select Instance" navigateUrl="/mc/activeinstance.aspx" authenticationRequired="true" instanceRequired="false" visible="false">
       <detailMenu show="false" />
     </action>
-    <action id="5900F3EF-F423-4AC8-BAA5-828B746E3F43" type="Page" name="Authorize" navigateUrl="/mc/oauth.aspx" instanceRequired="false" visible="false">
+    <action id="5900F3EF-F423-4AC8-BAA5-828B746E3F43" type="Page" name="OAuth Authorize" navigateUrl="/mc/oauth.aspx" authenticationRequired="true" instanceRequired="false" visible="false">
+      <detailMenu show="false" />
+    </action>
+    <action id="8C761B98-58EF-444F-8BA7-C728EF05E452" type="Page" name="OAuth Handler" navigateUrl="/mc/oauth.ashx" authenticationRequired="true" instanceRequired="false" visible="false">
       <detailMenu show="false" />
     </action>
     <action id="EF1FAD4E-60EF-443F-AE42-FE6BE89283A2" type="Page" name="Reset Password" navigateUrl="/mc/resetpassword.aspx" instanceRequired="false" visible="false">

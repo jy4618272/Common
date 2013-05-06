@@ -279,11 +279,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommonDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Dal\OAuthDataSet.cs">
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dal\OAuthDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Dal\OrganizationDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Dal\TableAdapters\OAuthConsumerTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\OAuthTokenTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\NonceTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\OrganizationsLdapGroupsTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\EmailTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\EmailSuffixTableAdapter.cs" />
@@ -589,6 +601,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dal\OAuthDataSet.xsc">
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\OAuthDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>OAuthDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Dal\OAuthDataSet.xss">
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Dal\OrganizationDataSet.xsc">
       <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
     </None>
@@ -703,6 +726,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v108.sql" />
     <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />

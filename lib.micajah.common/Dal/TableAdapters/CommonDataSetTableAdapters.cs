@@ -40,6 +40,12 @@ namespace Micajah.Common.Dal.TableAdapters
 
         public ITableAdapter WebsiteTableAdapter { get { return this.TableAdapters[TableName.Website]; } }
 
+        public ITableAdapter NonceTableAdapter { get { return this.TableAdapters[TableName.Nonce]; } }
+
+        public ITableAdapter OAuthTokenTableAdapter { get { return this.TableAdapters[TableName.OAuthToken]; } }
+
+        public ITableAdapter OAuthConsumerTableAdapter { get { return this.TableAdapters[TableName.OAuthConsumer]; } }
+
         #endregion
 
         #region Constructors
@@ -76,6 +82,9 @@ namespace Micajah.Common.Dal.TableAdapters
             this.AddAdapter(TableName.UnitsOfMeasure, typeof(UnitsOfMeasureAdapter));
             this.AddAdapter(TableName.UnitsOfMeasureConversion, typeof(UnitsOfMeasureConversionAdapter));
             this.AddAdapter(TableName.Website, typeof(WebsiteTableAdapter));
+            this.AddAdapter(TableName.Nonce, typeof(NonceTableAdapter));
+            this.AddAdapter(TableName.OAuthToken, typeof(OAuthTokenTableAdapter));
+            this.AddAdapter(TableName.OAuthConsumer, typeof(OAuthConsumerTableAdapter));
         }
 
         #endregion
@@ -95,10 +104,9 @@ namespace Micajah.Common.Dal.TableAdapters
             DatabaseServerTableAdapter.Fill(dataSet.DatabaseServer);
             DatabaseTableAdapter.Fill(dataSet.Database);
             OrganizationTableAdapter.Fill(dataSet.Organization);
-            //OrganizationsLdapGroupsTableAdapter.Fill(dataSet.OrganizationsLdapGroups);
             UnitsOfMeasureAdapter.Fill(dataSet.UnitsOfMeasure);
             UnitsOfMeasureConversionAdapter.Fill(dataSet.UnitsOfMeasureConversion);
-            CountryTableAdapter.Fill(dataSet.Country);            
+            CountryTableAdapter.Fill(dataSet.Country);
         }
 
         #endregion
