@@ -11,14 +11,14 @@ IF @@TRANCOUNT = 1
    [Context] [nvarchar] (100) NOT NULL,
    [Code] [nvarchar] (50) NOT NULL,
    [CreatedTime] [datetime] NOT NULL
-) ON [PRIMARY]
+)
 ')
 
 IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
 
 IF @@TRANCOUNT = 1
-   ALTER TABLE [dbo].[Mc_Nonce] ADD CONSTRAINT [PK_Mc_Nonce] PRIMARY KEY CLUSTERED ([Context], [Code], [CreatedTime])  ON [PRIMARY]
+   ALTER TABLE [dbo].[Mc_Nonce] ADD CONSTRAINT [PK_Mc_Nonce] PRIMARY KEY CLUSTERED ([Context], [Code], [CreatedTime]) 
 
 IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
@@ -31,7 +31,7 @@ IF @@TRANCOUNT = 1
    [Callback] [nvarchar] (2048) NOT NULL,
    [VerificationCodeFormat] [int] NOT NULL,
    [VerificationCodeLength] [int] NOT NULL
-) ON [PRIMARY]
+)
 ')
 
 IF @@ERROR <> 0
@@ -56,7 +56,7 @@ IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
 
 IF @@TRANCOUNT = 1
-   ALTER TABLE [dbo].[Mc_OAuthConsumer] ADD CONSTRAINT [PK_Mc_OAuthConsumer] PRIMARY KEY CLUSTERED ([ConsumerId])  ON [PRIMARY]
+   ALTER TABLE [dbo].[Mc_OAuthConsumer] ADD CONSTRAINT [PK_Mc_OAuthConsumer] PRIMARY KEY CLUSTERED ([ConsumerId]) 
 
 IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
@@ -74,14 +74,14 @@ IF @@TRANCOUNT = 1
    [RequestTokenVerifier] [nvarchar] (255) NOT NULL,
    [RequestTokenCallback] [nvarchar] (2048) NOT NULL,
    [CreatedTime] [datetime] NOT NULL
-) ON [PRIMARY]
+)
 ')
 
 IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
 
 IF @@TRANCOUNT = 1
-   ALTER TABLE [dbo].[Mc_OAuthToken] ADD CONSTRAINT [PK_Mc_OAuthToken] PRIMARY KEY CLUSTERED ([TokenId])  ON [PRIMARY]
+   ALTER TABLE [dbo].[Mc_OAuthToken] ADD CONSTRAINT [PK_Mc_OAuthToken] PRIMARY KEY CLUSTERED ([TokenId]) 
 
 IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
