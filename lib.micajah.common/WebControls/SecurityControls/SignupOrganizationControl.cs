@@ -451,7 +451,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 PasswordCompareValidator.Attributes["controltovalidate2"] = ConfirmPassword.ClientID;
                 InstanceRequiredValidator.Attributes["controltovalidate2"] = SelectedInstance.ClientID;
 
-                OrganizationUrlRow.Visible = FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled;
+                //OrganizationUrlRow.Visible = FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled;
 
                 Step1Panel.Visible = true;
 
