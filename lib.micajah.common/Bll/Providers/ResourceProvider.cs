@@ -82,6 +82,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string VirtualRootShortPath = "~/mc/";
         internal const string AdminVirtualRootShortPath = "~/mc/admin/";
         internal const string ResourceHandlerVirtualPath = "~/mc.axd";
+        internal const string OAuthHandlerVirtualPath = "~/mc/oauth.ashx";
 
         internal const string StyleSheetLoader = "Scripts.StyleSheetLoader.js";
         internal const string ComboBoxModernStyleSheet = "Styles.ComboBoxModern.css";

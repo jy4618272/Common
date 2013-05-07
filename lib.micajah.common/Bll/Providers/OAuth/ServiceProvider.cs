@@ -22,13 +22,13 @@ namespace Micajah.Common.Bll.Providers.OAuth
             {
                 if (s_Description == null)
                 {
-                    Uri rootUrl = new Uri(FrameworkConfiguration.Current.WebApplication.Url);
+                    Uri url = new Uri(new Uri(FrameworkConfiguration.Current.WebApplication.Url), ResourceProvider.OAuthHandlerVirtualPath);
 
                     s_Description = new ServiceProviderDescription
                     {
-                        AccessTokenEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
-                        RequestTokenEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
-                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(new Uri(rootUrl, "/mc/oauth.ashx"), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
+                        AccessTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
+                        RequestTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
+                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
                         TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSha1SigningBindingElement(), },
                     };
                 }
