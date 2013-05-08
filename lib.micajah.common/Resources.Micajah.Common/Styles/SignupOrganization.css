@@ -105,10 +105,12 @@ label
 
 @media only screen and (max-device-width: 480px)
 {
+    /*
     .Logo img
     {
         width: 284px;
     }
+    */
 }
 
 small.left
@@ -129,10 +131,12 @@ small.left
     width:90%;
 }
 
+/*
 .content div.LightBlue input[type="text"]
 {
     width: 70%;    
 }
+
 
 .content div.LightBlue div
 {
@@ -140,6 +144,7 @@ small.left
     padding-left:10px;
     width: 100%;
 }
+*/
 
 .content select
 {
@@ -298,7 +303,7 @@ small
 	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	box-sizing: border-box;         /* Opera/IE 8+ */
 	background-color: #e9eff5;
-	padding: 10px 20px 10px 15px;
+	padding: 10px 20px 10px 15px !important;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
