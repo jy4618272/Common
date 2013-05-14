@@ -131,24 +131,9 @@ small.left
     width:90%;
 }
 
-/*
-.content div.LightBlue input[type="text"]
-{
-    width: 70%;    
-}
-
-
-.content div.LightBlue div
-{
-    float:left;
-    padding-left:10px;
-    width: 100%;
-}
-*/
-
 .content select
 {
-    width: 93%;
+    width: 90%;
 }
 
 .Logo

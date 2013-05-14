@@ -46,13 +46,13 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HtmlGenericControl Step2Form;
         protected HtmlGenericControl Step2FormButton;
         protected Image LogoImage2;
-        protected Literal OrganizationAddressLabel;
+        //protected Literal OrganizationAddressLabel;
         protected Label OrganizationNameLabel2;
         protected TextBox OrganizationName2;
         protected CustomValidator OrganizationNameValidator2;
         protected Image OrganizationNameTick2;
-        protected Label WebsiteLabel;
-        protected TextBox Website;
+        //protected Label WebsiteLabel;
+        //protected TextBox Website;
         protected Label HowYouHearAboutUsLabel;
         protected TextBox HowYouHearAboutUs;
 
@@ -202,22 +202,22 @@ function InstanceRequiredValidation(source, arguments) {{
             set { this.ViewState["OAuth2Parameters"] = value; }
         }
 
-        private string WebSiteUrl
-        {
-            get
-            {
-                string websiteUrl = Website.Text;
-                if (!string.IsNullOrEmpty(websiteUrl))
-                {
-                    if (!websiteUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (!websiteUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                            websiteUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + websiteUrl;
-                    }
-                }
-                return websiteUrl;
-            }
-        }
+        //private string WebSiteUrl
+        //{
+        //    get
+        //    {
+        //        string websiteUrl = Website.Text;
+        //        if (!string.IsNullOrEmpty(websiteUrl))
+        //        {
+        //            if (!websiteUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                if (!websiteUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+        //                    websiteUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + websiteUrl;
+        //            }
+        //        }
+        //        return websiteUrl;
+        //    }
+        //}
 
         #endregion
 
@@ -239,10 +239,10 @@ function InstanceRequiredValidation(source, arguments) {{
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
 
-            OrganizationAddressLabel.Text = Resources.SignupOrganizationControl_OrganizationAddressLabel_Text;
+            //OrganizationAddressLabel.Text = Resources.SignupOrganizationControl_OrganizationAddressLabel_Text;
             OrganizationNameLabel2.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
-            Website.ValidationErrorMessage = Resources.SignupOrganizationControl_Website_ValidationErrorMessage;
-            WebsiteLabel.Text = Resources.SignupOrganizationControl_WebsiteLabel_Text;
+            //Website.ValidationErrorMessage = Resources.SignupOrganizationControl_Website_ValidationErrorMessage;
+            //WebsiteLabel.Text = Resources.SignupOrganizationControl_WebsiteLabel_Text;
             HowYouHearAboutUsLabel.Text = Resources.SignupOrganizationControl_HowYouHearAboutUsLabel_Text;
 
             PersonalInformationLabel.Text = Resources.SignupOrganizationControl_PersonalInformationLabel_Text;
@@ -687,7 +687,7 @@ function InstanceRequiredValidation(source, arguments) {{
             Email2.Text = Email1.Text;
             OrganizationName2.Text = OrganizationName1.Text;
 
-            Website.Focus();
+            HowYouHearAboutUs.Focus();
         }
 
         protected void Step2Button_Click(object sender, EventArgs e)
@@ -710,7 +710,7 @@ function InstanceRequiredValidation(source, arguments) {{
             if (!string.IsNullOrEmpty(SelectedInstance.Text))
                 templateInstanceId = new Guid(SelectedInstance.Text);
 
-            Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, this.WebSiteUrl
+            Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, null
                 , null, null, null, null, null, null, CurrencyList.SelectedValue, HowYouHearAboutUs.Text
                 , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
