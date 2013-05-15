@@ -82,6 +82,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\DotNetOpenAuth.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Common, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\DotNetOpenAuth.OAuth.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.ServiceProvider, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.dll</HintPath>
@@ -155,12 +167,16 @@
     <Compile Include="Bll\Handlers\ActionHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyWebhookHandler.cs" />
+    <Compile Include="Bll\Handlers\OAuthHandler.cs" />
     <Compile Include="Bll\Handlers\SettingHandler.cs" />
     <Compile Include="Bll\Handlers\LdapHandler.cs" />
     <Compile Include="Bll\LdapProcess.cs" />
     <Compile Include="Bll\Providers\ChargifyProvider.cs" />
     <Compile Include="Bll\Providers\EmailProvider.cs" />
     <Compile Include="Bll\Providers\GoogleProvider.cs" />
+    <Compile Include="Bll\Providers\OAuth\ServiceProvider.cs" />
+    <Compile Include="Bll\Providers\OAuth\NonceProvider.cs" />
+    <Compile Include="Bll\Providers\OAuth\TokenProvider.cs" />
     <Compile Include="Bll\Providers\ViewStateProvider.cs" />
     <Compile Include="Bll\StartThread.cs">
       <SubType>Component</SubType>
@@ -263,11 +279,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommonDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Dal\OAuthDataSet.cs">
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dal\OAuthDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Dal\OrganizationDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Dal\TableAdapters\OAuthConsumerTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\OAuthTokenTableAdapter.cs" />
+    <Compile Include="Dal\TableAdapters\NonceTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\OrganizationsLdapGroupsTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\EmailTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\EmailSuffixTableAdapter.cs" />
@@ -388,6 +416,9 @@
     </Compile>
     <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
     <Compile Include="WebControls\ActivityReportControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SecurityControls\OAuthControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\Token.cs" />
@@ -570,6 +601,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dal\OAuthDataSet.xsc">
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\OAuthDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>OAuthDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Dal\OAuthDataSet.xss">
+      <DependentUpon>OAuthDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Dal\OrganizationDataSet.xsc">
       <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
     </None>
@@ -676,10 +718,15 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
     <None Include="Migrated rules for lib.micajah.common.ruleset" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v107.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v108.sql" />
     <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />
@@ -2032,6 +2079,9 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\ActivityReport.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <Content Include="Runtime\ChargifyNET.dll" />
     <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
@@ -2054,6 +2104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\Validator.js" />
     <Content Include="Runtime\DotNetOpenAuth.Core.dll" />
+    <Content Include="Runtime\DotNetOpenAuth.OAuth.Common.dll" />
+    <Content Include="Runtime\DotNetOpenAuth.OAuth.dll" />
+    <Content Include="Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.dll" />
     <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll" />
     <Content Include="Runtime\EPPlus.dll" />

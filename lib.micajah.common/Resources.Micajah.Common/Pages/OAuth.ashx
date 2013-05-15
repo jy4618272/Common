@@ -1,0 +1,1 @@
+﻿<%@ WebHandler Language="C#" Class="Micajah.Common.Bll.Handlers.OAuthHandler" %>

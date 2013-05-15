@@ -40,6 +40,9 @@ namespace Micajah.Common.Dal
         UsersInstances,
         User,
         Website,
-        Version
+        Version,
+        Nonce,
+        OAuthToken,
+        OAuthConsumer
     }
 }

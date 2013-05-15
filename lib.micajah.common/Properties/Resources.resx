@@ -2664,4 +2664,45 @@ Do you want to link email "{1}" to this account?</value>
   <data name="StartControl_WatchLink_Text" xml:space="preserve">
     <value>Watch</value>
   </data>
+  <data name="LoginElement_GoogleFailureText" xml:space="preserve">
+    <value>This account appears to be linked to Google. Sign in with Google.</value>
+  </data>
+  <data name="OAuthControl_AllowAccessButton_Text" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="OAuthControl_AllowLabel_Text" xml:space="preserve">
+    <value>Do you want to allow this?</value>
+  </data>
+  <data name="OAuthControl_AuthorizationDeniedLabel_Text" xml:space="preserve">
+    <value>Authorization has been denied. You're free to do whatever now.</value>
+  </data>
+  <data name="OAuthControl_AuthorizationGrantedLabel_Text" xml:space="preserve">
+    <value>Authorization has been granted.</value>
+  </data>
+  <data name="OAuthControl_CloseLabel_Text" xml:space="preserve">
+    <value>You may now close this window and return to the Consumer.</value>
+  </data>
+  <data name="OAuthControl_ConsumerLabel_Text" xml:space="preserve">
+    <value>The client web site or application {0} wants access to your {1}.</value>
+  </data>
+  <data name="OAuthControl_ConsumerWarningLabel_Text" xml:space="preserve">
+    <value>This website is registered with &lt;b&gt;{0}&lt;/b&gt; to make authorization requests, but has not been configured to send requests securely. 
+If you grant access but you did not initiate this request at &lt;b&gt;{1}&lt;/b&gt;, it may be possible for other users of &lt;b&gt;{1}&lt;/b&gt; to access your data. 
+We recommend you deny access unless you are certain that you initiated this request directly &lt;b&gt;{1}&lt;/b&gt;.</value>
+  </data>
+  <data name="OAuthControl_DenyAccessButton_Text" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="OAuthControl_JavascriptDisabledLabel_Text" xml:space="preserve">
+    <value>Javascript appears to be disabled in your browser. This page requires Javascript to be enabled to better protect your security.</value>
+  </data>
+  <data name="OAuthControl_RevokeLabel_Text" xml:space="preserve">
+    <value>If you grant access now, you can revoke it at any time by returning to this page.</value>
+  </data>
+  <data name="OAuthControl_VerificationCodeLabel_Text" xml:space="preserve">
+    <value>You must enter this verification code at the Consumer: {0}</value>
+  </data>
+  <data name="OAuthControl_UnrecognizedConsumerDomain" xml:space="preserve">
+    <value>Unrecognized Consumer Domain</value>
+  </data>
 </root>

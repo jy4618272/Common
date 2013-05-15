@@ -113,8 +113,13 @@ namespace Micajah.Common.WebControls
                     }
                     else
                     {
-                        td.Controls.Add(new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.CustomDescription));
-                        td.Controls.Add(new LiteralControl("&nbsp;&nbsp;&gt;&nbsp;&nbsp;"));
+                        if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern && i == 0)
+                        {}
+                        else
+                        {
+                            td.Controls.Add(new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.CustomDescription));
+                            td.Controls.Add(new LiteralControl("&nbsp;&nbsp;|&nbsp;&nbsp;"));
+                        }
                     }
                     i++;
                 }

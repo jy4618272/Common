@@ -3444,6 +3444,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This account appears to be linked to Google. Sign in with Google..
+        /// </summary>
+        internal static string LoginElement_GoogleFailureText {
+            get {
+                return ResourceManager.GetString("LoginElement_GoogleFailureText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login | Email.
         /// </summary>
         internal static string LoginElement_LdapLoginLabelText {
@@ -4338,6 +4347,116 @@ namespace Micajah.Common.Properties {
         internal static string NoticeMessageBox_WarningTitle {
             get {
                 return ResourceManager.GetString("NoticeMessageBox_WarningTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string OAuthControl_AllowAccessButton_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_AllowAccessButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to allow this?.
+        /// </summary>
+        internal static string OAuthControl_AllowLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_AllowLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorization has been denied. You&apos;re free to do whatever now..
+        /// </summary>
+        internal static string OAuthControl_AuthorizationDeniedLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_AuthorizationDeniedLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorization has been granted..
+        /// </summary>
+        internal static string OAuthControl_AuthorizationGrantedLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_AuthorizationGrantedLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may now close this window and return to the Consumer..
+        /// </summary>
+        internal static string OAuthControl_CloseLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_CloseLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The client web site or application {0} wants access to your {1}..
+        /// </summary>
+        internal static string OAuthControl_ConsumerLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_ConsumerLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website is registered with &lt;b&gt;{0}&lt;/b&gt; to make authorization requests, but has not been configured to send requests securely. 
+        ///If you grant access but you did not initiate this request at &lt;b&gt;{1}&lt;/b&gt;, it may be possible for other users of &lt;b&gt;{1}&lt;/b&gt; to access your data. 
+        ///We recommend you deny access unless you are certain that you initiated this request directly &lt;b&gt;{1}&lt;/b&gt;..
+        /// </summary>
+        internal static string OAuthControl_ConsumerWarningLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_ConsumerWarningLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string OAuthControl_DenyAccessButton_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_DenyAccessButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Javascript appears to be disabled in your browser. This page requires Javascript to be enabled to better protect your security..
+        /// </summary>
+        internal static string OAuthControl_JavascriptDisabledLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_JavascriptDisabledLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you grant access now, you can revoke it at any time by returning to this page..
+        /// </summary>
+        internal static string OAuthControl_RevokeLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_RevokeLabel_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unrecognized Consumer Domain.
+        /// </summary>
+        internal static string OAuthControl_UnrecognizedConsumerDomain {
+            get {
+                return ResourceManager.GetString("OAuthControl_UnrecognizedConsumerDomain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter this verification code at the Consumer: {0}.
+        /// </summary>
+        internal static string OAuthControl_VerificationCodeLabel_Text {
+            get {
+                return ResourceManager.GetString("OAuthControl_VerificationCodeLabel_Text", resourceCulture);
             }
         }
         

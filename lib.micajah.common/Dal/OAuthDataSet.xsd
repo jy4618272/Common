@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="OAuthDataSet" targetNamespace="http://tempuri.org/OAuth.xsd" xmlns:mstns="http://tempuri.org/OAuth.xsd" xmlns="http://tempuri.org/OAuth.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="OAuthDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="OAuthDataSet" msprop:Generator_UserDSName="OAuthDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Nonce" msprop:Generator_TableClassName="NonceDataTable" msprop:Generator_TableVarName="tableNonce" msprop:Generator_RowChangedName="NonceRowChanged" msprop:Generator_TablePropName="Nonce" msprop:Generator_RowDeletingName="NonceRowDeleting" msprop:Generator_RowChangingName="NonceRowChanging" msprop:Generator_RowEvHandlerName="NonceRowChangeEventHandler" msprop:Generator_RowDeletedName="NonceRowDeleted" msprop:Generator_RowClassName="NonceRow" msprop:Generator_UserTableName="Nonce" msprop:Generator_RowEvArgName="NonceRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Context" msprop:Generator_ColumnVarNameInTable="columnContext" msprop:Generator_ColumnPropNameInRow="Context" msprop:Generator_ColumnPropNameInTable="ContextColumn" msprop:Generator_UserColumnName="Context">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Code" msprop:Generator_ColumnVarNameInTable="columnCode" msprop:Generator_ColumnPropNameInRow="Code" msprop:Generator_ColumnPropNameInTable="CodeColumn" msprop:Generator_UserColumnName="Code">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CreatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="OAuthConsumer" msprop:Generator_TableClassName="OAuthConsumerDataTable" msprop:Generator_TableVarName="tableOAuthConsumer" msprop:Generator_RowChangedName="OAuthConsumerRowChanged" msprop:Generator_TablePropName="OAuthConsumer" msprop:Generator_RowDeletingName="OAuthConsumerRowDeleting" msprop:Generator_RowChangingName="OAuthConsumerRowChanging" msprop:Generator_RowEvHandlerName="OAuthConsumerRowChangeEventHandler" msprop:Generator_RowDeletedName="OAuthConsumerRowDeleted" msprop:Generator_RowClassName="OAuthConsumerRow" msprop:Generator_UserTableName="OAuthConsumer" msprop:Generator_RowEvArgName="OAuthConsumerRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ConsumerId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnConsumerId" msprop:Generator_ColumnPropNameInRow="ConsumerId" msprop:Generator_ColumnPropNameInTable="ConsumerIdColumn" msprop:Generator_UserColumnName="ConsumerId" type="xs:string" />
+              <xs:element name="ConsumerKey" msprop:Generator_ColumnVarNameInTable="columnConsumerKey" msprop:Generator_ColumnPropNameInRow="ConsumerKey" msprop:Generator_ColumnPropNameInTable="ConsumerKeyColumn" msprop:Generator_UserColumnName="ConsumerKey">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ConsumerSecret" msprop:Generator_ColumnVarNameInTable="columnConsumerSecret" msprop:Generator_ColumnPropNameInRow="ConsumerSecret" msprop:Generator_ColumnPropNameInTable="ConsumerSecretColumn" msprop:Generator_UserColumnName="ConsumerSecret">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Callback" msprop:Generator_ColumnVarNameInTable="columnCallback" msprop:Generator_ColumnPropNameInRow="Callback" msprop:Generator_ColumnPropNameInTable="CallbackColumn" msprop:Generator_UserColumnName="Callback">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2048" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="VerificationCodeFormat" msprop:Generator_ColumnVarNameInTable="columnVerificationCodeFormat" msprop:Generator_ColumnPropNameInRow="VerificationCodeFormat" msprop:Generator_ColumnPropNameInTable="VerificationCodeFormatColumn" msprop:Generator_UserColumnName="VerificationCodeFormat" type="xs:int" />
+              <xs:element name="VerificationCodeLength" msprop:Generator_ColumnVarNameInTable="columnVerificationCodeLength" msprop:Generator_ColumnPropNameInRow="VerificationCodeLength" msprop:Generator_ColumnPropNameInTable="VerificationCodeLengthColumn" msprop:Generator_UserColumnName="VerificationCodeLength" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="OAuthToken" msprop:Generator_TableClassName="OAuthTokenDataTable" msprop:Generator_TableVarName="tableOAuthToken" msprop:Generator_RowChangedName="OAuthTokenRowChanged" msprop:Generator_TablePropName="OAuthToken" msprop:Generator_RowDeletingName="OAuthTokenRowDeleting" msprop:Generator_RowChangingName="OAuthTokenRowChanging" msprop:Generator_RowEvHandlerName="OAuthTokenRowChangeEventHandler" msprop:Generator_RowDeletedName="OAuthTokenRowDeleted" msprop:Generator_RowClassName="OAuthTokenRow" msprop:Generator_UserTableName="OAuthToken" msprop:Generator_RowEvArgName="OAuthTokenRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TokenId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnTokenId" msprop:Generator_ColumnPropNameInRow="TokenId" msprop:Generator_ColumnPropNameInTable="TokenIdColumn" msprop:Generator_UserColumnName="TokenId" type="xs:string" />
+              <xs:element name="Token" msprop:Generator_ColumnVarNameInTable="columnToken" msprop:Generator_ColumnPropNameInRow="Token" msprop:Generator_ColumnPropNameInTable="TokenColumn" msprop:Generator_UserColumnName="Token">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TokenSecret" msprop:Generator_ColumnVarNameInTable="columnTokenSecret" msprop:Generator_ColumnPropNameInRow="TokenSecret" msprop:Generator_ColumnPropNameInTable="TokenSecretColumn" msprop:Generator_UserColumnName="TokenSecret">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TokenTypeId" msprop:Generator_ColumnVarNameInTable="columnTokenTypeId" msprop:Generator_ColumnPropNameInRow="TokenTypeId" msprop:Generator_ColumnPropNameInTable="TokenTypeIdColumn" msprop:Generator_UserColumnName="TokenTypeId" type="xs:int" />
+              <xs:element name="ConsumerId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnConsumerId" msprop:Generator_ColumnPropNameInRow="ConsumerId" msprop:Generator_ColumnPropNameInTable="ConsumerIdColumn" msprop:Generator_UserColumnName="ConsumerId" type="xs:string" />
+              <xs:element name="ConsumerVersion" msprop:Generator_ColumnVarNameInTable="columnConsumerVersion" msprop:Generator_ColumnPropNameInRow="ConsumerVersion" msprop:Generator_ColumnPropNameInTable="ConsumerVersionColumn" msprop:Generator_UserColumnName="ConsumerVersion">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Scope" msprop:Generator_ColumnVarNameInTable="columnScope" msprop:Generator_ColumnPropNameInRow="Scope" msprop:Generator_ColumnPropNameInTable="ScopeColumn" msprop:Generator_UserColumnName="Scope">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="LoginId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnLoginId" msprop:Generator_ColumnPropNameInRow="LoginId" msprop:Generator_ColumnPropNameInTable="LoginIdColumn" msprop:Generator_UserColumnName="LoginId" type="xs:string" minOccurs="0" />
+              <xs:element name="RequestTokenVerifier" msprop:Generator_ColumnVarNameInTable="columnRequestTokenVerifier" msprop:Generator_ColumnPropNameInRow="RequestTokenVerifier" msprop:Generator_ColumnPropNameInTable="RequestTokenVerifierColumn" msprop:Generator_UserColumnName="RequestTokenVerifier">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="RequestTokenCallback" msprop:Generator_ColumnVarNameInTable="columnRequestTokenCallback" msprop:Generator_ColumnPropNameInRow="RequestTokenCallback" msprop:Generator_ColumnPropNameInTable="RequestTokenCallbackColumn" msprop:Generator_UserColumnName="RequestTokenCallback">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2048" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CreatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Nonce" />
+      <xs:field xpath="mstns:Context" />
+      <xs:field xpath="mstns:Code" />
+      <xs:field xpath="mstns:CreatedTime" />
+    </xs:unique>
+    <xs:unique name="OAuthConsumer_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:OAuthConsumer" />
+      <xs:field xpath="mstns:ConsumerId" />
+    </xs:unique>
+    <xs:unique name="OAuthToken_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:OAuthToken" />
+      <xs:field xpath="mstns:TokenId" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="FK_Mc_OAuthToken_Mc_OAuthConsumer" msdata:parent="OAuthConsumer" msdata:child="OAuthToken" msdata:parentkey="ConsumerId" msdata:childkey="ConsumerId" msprop:Generator_UserChildTable="OAuthToken" msprop:Generator_ChildPropName="GetOAuthTokenRows" msprop:Generator_UserRelationName="FK_Mc_OAuthToken_Mc_OAuthConsumer" msprop:Generator_RelationVarName="relationFK_Mc_OAuthToken_Mc_OAuthConsumer" msprop:Generator_UserParentTable="OAuthConsumer" msprop:Generator_ParentPropName="Mc_OAuthConsumerRow" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

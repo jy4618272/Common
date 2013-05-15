@@ -22,7 +22,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected HtmlGenericControl Step1Panel;
         protected Image LogoImage1;
-        protected HtmlTable Step1Form;
+        protected HtmlGenericControl Step1Form;
         protected Label OrganizationNameLabel1;
         protected Literal OrganizationNameHelpText1;
         protected TextBox OrganizationName1;
@@ -32,7 +32,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected TextBox Email1;
         protected CustomValidator EmailValidator1;
         protected Image EmailTick1;
-        protected HtmlTableRow OrganizationUrlRow;
+        protected HtmlGenericControl OrganizationUrlRow;
         protected Label OrganizationUrlLabel;
         protected Literal Schema;
         protected TextBox OrganizationUrl;
@@ -43,16 +43,16 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected UpdatePanel UpdatePanelOrganizationUrl;
 
         protected HtmlGenericControl Step2Panel;
-        protected HtmlTable Step2Form;
-        protected HtmlTable Step2FormButton;
+        protected HtmlGenericControl Step2Form;
+        protected HtmlGenericControl Step2FormButton;
         protected Image LogoImage2;
-        protected Literal OrganizationAddressLabel;
+        //protected Literal OrganizationAddressLabel;
         protected Label OrganizationNameLabel2;
         protected TextBox OrganizationName2;
         protected CustomValidator OrganizationNameValidator2;
         protected Image OrganizationNameTick2;
-        protected Label WebsiteLabel;
-        protected TextBox Website;
+        //protected Label WebsiteLabel;
+        //protected TextBox Website;
         protected Label HowYouHearAboutUsLabel;
         protected TextBox HowYouHearAboutUs;
 
@@ -68,18 +68,18 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label CurrencyLabel;
         protected DropDownList CurrencyList;
 
-        protected HtmlTableRow EmailAndPasswordGroupRow;
+        protected HtmlGenericControl EmailAndPasswordGroupRow;
         protected Literal EmailAndPasswordLabel;
-        protected HtmlTableRow Email2Row;
+        protected HtmlGenericControl Email2Row;
         protected Label EmailLabel2;
         protected TextBox Email2;
         protected CustomValidator EmailValidator2;
         protected Image EmailTick2;
         protected Label PasswordLabel;
-        protected HtmlTableRow PasswordRow;
+        protected HtmlGenericControl PasswordRow;
         protected TextBox Password;
         protected CustomValidator PasswordValidator;
-        protected HtmlTableRow ConfirmPasswordRow;
+        protected HtmlGenericControl ConfirmPasswordRow;
         protected Label ConfirmPasswordLabel;
         protected TextBox ConfirmPassword;
         protected CustomValidator PasswordCompareValidator;
@@ -95,7 +95,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Repeater InstanceList;
         protected CustomValidator InstanceRequiredValidator;
         protected CustomValidator UniqueDataValidator;
-        protected HtmlTable Step3Form;
+        protected HtmlGenericControl Step3Form;
         protected Button Step3Button;
         protected System.Web.UI.WebControls.TextBox SelectedInstance;
 
@@ -202,22 +202,22 @@ function InstanceRequiredValidation(source, arguments) {{
             set { this.ViewState["OAuth2Parameters"] = value; }
         }
 
-        private string WebSiteUrl
-        {
-            get
-            {
-                string websiteUrl = Website.Text;
-                if (!string.IsNullOrEmpty(websiteUrl))
-                {
-                    if (!websiteUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (!websiteUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                            websiteUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + websiteUrl;
-                    }
-                }
-                return websiteUrl;
-            }
-        }
+        //private string WebSiteUrl
+        //{
+        //    get
+        //    {
+        //        string websiteUrl = Website.Text;
+        //        if (!string.IsNullOrEmpty(websiteUrl))
+        //        {
+        //            if (!websiteUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                if (!websiteUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+        //                    websiteUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + websiteUrl;
+        //            }
+        //        }
+        //        return websiteUrl;
+        //    }
+        //}
 
         #endregion
 
@@ -239,10 +239,10 @@ function InstanceRequiredValidation(source, arguments) {{
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
 
-            OrganizationAddressLabel.Text = Resources.SignupOrganizationControl_OrganizationAddressLabel_Text;
+            //OrganizationAddressLabel.Text = Resources.SignupOrganizationControl_OrganizationAddressLabel_Text;
             OrganizationNameLabel2.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
-            Website.ValidationErrorMessage = Resources.SignupOrganizationControl_Website_ValidationErrorMessage;
-            WebsiteLabel.Text = Resources.SignupOrganizationControl_WebsiteLabel_Text;
+            //Website.ValidationErrorMessage = Resources.SignupOrganizationControl_Website_ValidationErrorMessage;
+            //WebsiteLabel.Text = Resources.SignupOrganizationControl_WebsiteLabel_Text;
             HowYouHearAboutUsLabel.Text = Resources.SignupOrganizationControl_HowYouHearAboutUsLabel_Text;
 
             PersonalInformationLabel.Text = Resources.SignupOrganizationControl_PersonalInformationLabel_Text;
@@ -332,7 +332,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step3Panel.Visible)
             {
-                MagicForm.ApplyStyle(Step3Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step3Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
 
                 InstanceList.DataBind();
                 if (InstanceList.Items.Count > 0)
@@ -360,7 +360,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step1Panel.Visible)
             {
-                MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
 
                 this.Page.Form.Target = "_parent";
 
@@ -377,8 +377,8 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step2Panel.Visible)
             {
-                MagicForm.ApplyStyle(Step2Form, ColorScheme.White, false, false, MasterPageTheme.Modern);
-                MagicForm.ApplyStyle(Step2FormButton, ColorScheme.White, false, false, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step2Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
+                //MagicForm.ApplyStyle(Step2FormButton, ColorScheme.White, false, true, MasterPageTheme.Modern);
 
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "PasswordCompareValidationClientScript", this.PasswordCompareValidationClientScript, true);
             }
@@ -687,7 +687,7 @@ function InstanceRequiredValidation(source, arguments) {{
             Email2.Text = Email1.Text;
             OrganizationName2.Text = OrganizationName1.Text;
 
-            Website.Focus();
+            HowYouHearAboutUs.Focus();
         }
 
         protected void Step2Button_Click(object sender, EventArgs e)
@@ -710,7 +710,7 @@ function InstanceRequiredValidation(source, arguments) {{
             if (!string.IsNullOrEmpty(SelectedInstance.Text))
                 templateInstanceId = new Guid(SelectedInstance.Text);
 
-            Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, this.WebSiteUrl
+            Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, null
                 , null, null, null, null, null, null, CurrencyList.SelectedValue, HowYouHearAboutUs.Text
                 , TimeZoneList.SelectedValue, templateInstanceId
                 , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null

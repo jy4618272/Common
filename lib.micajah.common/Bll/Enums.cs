@@ -43,7 +43,7 @@ namespace Micajah.Common.Bll
         NotRegistered = 0,
         Registered = 1,
         Expired = 2,
-        Declined=3
+        Declined = 3
     }
     /// <summary>
     /// Represents the different types of settings.
@@ -205,5 +205,27 @@ namespace Micajah.Common.Bll
         /// The thread is failed.
         /// </summary>
         Failed = 2
+    }
+
+    /// <summary>
+    /// Represents the different types of OAuth token.
+    /// </summary>
+    [Serializable]
+    public enum OAuthTokenType : int
+    {
+        /// <summary>
+        /// An unauthorized request token.
+        /// </summary>
+        UnauthorizedRequestToken = 0,
+
+        /// <summary>
+        /// An authorized request token.
+        /// </summary>
+        AuthorizedRequestToken = 1,
+
+        /// <summary>
+        /// An authorized access token.
+        /// </summary>
+        AccessToken = 2,
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.SessionState;
+using DotNetOpenAuth.OAuth.Messages;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -52,6 +53,8 @@ namespace Micajah.Common.Security
         private const string UserContextKey = "mc.UserContext";
         private const string UserIdKey = "mc.UserId";
         private const string VanityUrlKey = "mc.VanityUrl";
+        private const string OAuthPendingUserAuthorizationRequestKey = "mc.OAuthPendingUserAuth";
+        private const string OAuthAuthorizationSecretKey = "mc.OAuthAutSecret";
 
         private static ArrayList s_ReservedKeys;
 
@@ -175,6 +178,74 @@ namespace Micajah.Common.Security
                     s_ReservedKeys.Add(LoginNameKey);
                 }
                 return s_ReservedKeys;
+            }
+        }
+
+        internal static UserAuthorizationRequest OAuthPendingUserAuthorizationRequest
+        {
+            get
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        object obj = session[OAuthPendingUserAuthorizationRequestKey];
+                        if (obj != null)
+                            return (UserAuthorizationRequest)obj;
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        if (value == null)
+                            session.Remove(OAuthPendingUserAuthorizationRequestKey);
+                        else
+                            session[OAuthPendingUserAuthorizationRequestKey] = value;
+                    }
+                }
+            }
+        }
+
+        internal static string OAuthAuthorizationSecret
+        {
+            get
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        object obj = session[OAuthAuthorizationSecretKey];
+                        if (obj != null)
+                            return (string)obj;
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                HttpContext http = HttpContext.Current;
+                if (http != null)
+                {
+                    HttpSessionState session = http.Session;
+                    if (session != null)
+                    {
+                        if (value == null)
+                            session.Remove(OAuthAuthorizationSecretKey);
+                        else
+                            session[OAuthAuthorizationSecretKey] = value;
+                    }
+                }
             }
         }
 

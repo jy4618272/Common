@@ -245,15 +245,15 @@ namespace Micajah.Common.Bll.Providers
 
                     foreach (string resourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames())
                     {
-                        bool isAspx = resourceName.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase);
-                        if (isAspx || resourceName.EndsWith(".ascx", StringComparison.OrdinalIgnoreCase))
+                        bool convertPath = resourceName.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase) || resourceName.EndsWith(".ashx", StringComparison.OrdinalIgnoreCase);
+                        if (convertPath || resourceName.EndsWith(".ascx", StringComparison.OrdinalIgnoreCase))
                         {
                             string[] parts1 = resourceName.Replace(ResourceProvider.ManifestResourceNamePrefix, string.Empty).Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                             string[] parts2 = new string[parts1.Length - 2];
                             Array.Copy(parts1, parts2, parts1.Length - 2);
 
                             string path = ResourceProvider.VirtualRootPath + string.Join("/", parts2) + "/" + ResourceProvider.GetResourceFileName(resourceName);
-                            if (isAspx) path = ResourceVirtualPathProvider.ConvertToShortVirtualPath(path);
+                            if (convertPath) path = ResourceVirtualPathProvider.ConvertToShortVirtualPath(path);
 
                             DataRow row = s_ResourceDataTable.NewRow();
                             row["Path"] = path;
