@@ -488,30 +488,40 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
 
             if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
-                LogoImagePanel.Visible = false;
+            {
+                if (LogoImagePanel != null) LogoImagePanel.Visible = false;
+            }
             else
             {
-                LogoImagePanel.Visible = true;
-                LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
-                if (FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight > 0)
-                    m_MainContainerHeight += FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight;
+                if (LogoImagePanel != null)
+                {
+                    LogoImagePanel.Visible = true;
+                    if (LogoImage != null)
+                    {
+                        LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                        if (FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight > 0)
+                            m_MainContainerHeight += FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight;
+                    }
+                }
             }
         }
 
         private void LoadResources()
         {
-            TitleLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.TitleLabelText;
-            PasswordLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.PasswordLabelText;
+            if (TitleLabel != null) TitleLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.TitleLabelText;
+            if (PasswordLabel != null) PasswordLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.PasswordLabelText;
             LogOnButton.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginButtonText;
             LogOnViaGoogleLink.Text = Resources.LogOnControl_LogOnViaGoogleLink_Text;
             PasswordRecoveryButton.Text = Resources.LogOnControl_PasswordRecoveryLink_Text;
             PasswordRecoveryButton.Visible = FrameworkConfiguration.Current.WebApplication.Password.EnablePasswordRetrieval;
 
             if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
-                LoginLabel.Text = Resources.LoginElement_LdapLoginLabelText;
+            {
+                if (LoginLabel != null) LoginLabel.Text = Resources.LoginElement_LdapLoginLabelText;
+            }
             else
             {
-                LoginLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginLabelText;
+                if (LoginLabel != null) LoginLabel.Text = FrameworkConfiguration.Current.WebApplication.Login.LoginLabelText;
                 LoginTextBox.ValidationExpression = FrameworkConfiguration.Current.WebApplication.Login.LoginValidationExpression;
                 LoginTextBox.ValidationType = Micajah.Common.WebControls.CustomValidationDataType.RegularExpression;
             }
@@ -793,7 +803,8 @@ namespace Micajah.Common.WebControls.SecurityControls
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 
-            TitleContainer.Visible = (!string.IsNullOrEmpty(TitleLabel.Text));
+            if (TitleLabel != null)
+                TitleContainer.Visible = (!string.IsNullOrEmpty(TitleLabel.Text));
             ErrorDiv.Visible = (!string.IsNullOrEmpty(ErrorDiv.InnerHtml));
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
