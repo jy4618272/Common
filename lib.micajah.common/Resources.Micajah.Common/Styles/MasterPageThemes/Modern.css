@@ -232,7 +232,7 @@
 /* ------------ Bread crumbs -----------------------------------------------------------------------------------------------------------------------------------*/
 div.Mp_B
 {
-    padding: 15px 0 15px 0;
+    padding: 15px 0 0 0;
     text-align: left;
 }
 
@@ -290,6 +290,11 @@ div.Mp_B span.L
     padding: 5px 5% 20px 5%;
     width: 90%;
     float: left;
+}
+
+.Mp_Pmc
+{
+    padding-top: 15px;
 }
 
 .Mp_PcSlgOnFtrOn
