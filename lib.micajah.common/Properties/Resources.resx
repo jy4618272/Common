@@ -2705,4 +2705,13 @@ We recommend you deny access unless you are certain that you initiated this requ
   <data name="OAuthControl_UnrecognizedConsumerDomain" xml:space="preserve">
     <value>Unrecognized Consumer Domain</value>
   </data>
+  <data name="GoogleIntegrationControl_AddSherpaDesk_Text" xml:space="preserve">
+    <value>Add SherpaDesk to your Google Apps Account</value>
+  </data>
+  <data name="GoogleIntegrationControl_Caption_Text" xml:space="preserve">
+    <value>Manual Replication without full Google App Integration</value>
+  </data>
+  <data name="GoogleIntegrationControl_GoogleAppsForBusiness_Text" xml:space="preserve">
+    <value>Sign Up for Google Apps for Business</value>
+  </data>
 </root>

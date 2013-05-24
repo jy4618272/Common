@@ -54,6 +54,11 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Label lblStep2Error;
         protected CommonGridView gvStep2Results;
 
+        protected Image imgGoogleAppsLogo;
+        protected HyperLink hlGoogleAppsForBusiness;
+        protected HyperLink hlAddSherpaDesk;
+        protected Literal litCaption;
+
         #endregion
 
         #region Protected Methods
@@ -248,6 +253,12 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void LoadResources()
         {
+            imgGoogleAppsLogo.ImageUrl = ResourceProvider.GetImageUrl(typeof(GoogleIntegrationControl), "GoogleApps.jpg", true);
+
+            hlGoogleAppsForBusiness.Text = Resources.GoogleIntegrationControl_GoogleAppsForBusiness_Text;
+            hlAddSherpaDesk.Text = Resources.GoogleIntegrationControl_AddSherpaDesk_Text;
+            litCaption.Text = Resources.GoogleIntegrationControl_Caption_Text;
+
             BaseControl.LoadResources(EditForm, typeof(OrganizationLdapSettingsControl).Name);
             lblGoogleDomain.Text = Resources.GoogleIntegrationControl_EditForm_GoogleDomain_HeaderText;
             lblGoogleEmail.Text = Resources.GoogleIntegrationControl_EditForm_GoogleEmail_HeaderText;

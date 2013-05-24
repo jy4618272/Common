@@ -2148,6 +2148,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add SherpaDesk to your Google Apps Account.
+        /// </summary>
+        internal static string GoogleIntegrationControl_AddSherpaDesk_Text {
+            get {
+                return ResourceManager.GetString("GoogleIntegrationControl_AddSherpaDesk_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin.
         /// </summary>
         internal static string GoogleIntegrationControl_AdminColumn_HeaderText {
@@ -2162,6 +2171,15 @@ namespace Micajah.Common.Properties {
         internal static string GoogleIntegrationControl_AdminColumn_Value {
             get {
                 return ResourceManager.GetString("GoogleIntegrationControl_AdminColumn_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual Replication without full Google App Integration.
+        /// </summary>
+        internal static string GoogleIntegrationControl_Caption_Text {
+            get {
+                return ResourceManager.GetString("GoogleIntegrationControl_Caption_Text", resourceCulture);
             }
         }
         
@@ -2234,6 +2252,15 @@ namespace Micajah.Common.Properties {
         internal static string GoogleIntegrationControl_GoogleAppsError_Text {
             get {
                 return ResourceManager.GetString("GoogleIntegrationControl_GoogleAppsError_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign Up for Google Apps for Business.
+        /// </summary>
+        internal static string GoogleIntegrationControl_GoogleAppsForBusiness_Text {
+            get {
+                return ResourceManager.GetString("GoogleIntegrationControl_GoogleAppsForBusiness_Text", resourceCulture);
             }
         }
         
