@@ -56,10 +56,13 @@ h6
     font-weight: normal;
 }
 
-p, dl, hr, h1, h2, h3, h4, h5, h6, pre, address, fieldset, figure
-{
-    margin-bottom: 20px;
-}
+/*
+* Commented by Jon request Eugene 
+* p, dl, hr, h1, h2, h3, h4, h5, h6, pre, address, fieldset, figure
+* {
+*     margin-bottom: 20px;
+* }
+*/
 
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section
 {
