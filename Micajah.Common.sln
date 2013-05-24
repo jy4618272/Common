@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib.micajah.common", "lib.micajah.common\lib.micajah.common.csproj", "{10D2CA35-30D2-4291-9133-4F675C8B3B29}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "web.micajah.common", "web.micajah.common\", "{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}"

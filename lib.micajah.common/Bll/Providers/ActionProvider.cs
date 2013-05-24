@@ -1,3 +1,8 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Security;
+using Micajah.Common.WebControls;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -5,12 +10,6 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Pages;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -34,8 +33,6 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid UsersPageActionId = new Guid("00000000-0000-0000-0000-000000000012");
         internal readonly static Guid SettingsDiagnosticPageActionId = new Guid("00000000-0000-0000-0000-000000000018");
         internal readonly static Guid MyAccountPageActionId = new Guid("00000000-0000-0000-0000-000000000021");
-        internal readonly static Guid MyNameAndEmailPageActionId = new Guid("00000000-0000-0000-0000-000000000022");
-        internal readonly static Guid MyPasswordPageActionId = new Guid("00000000-0000-0000-0000-000000000023");
         internal readonly static Guid UserNameAndEmailPageActionId = new Guid("00000000-0000-0000-0000-000000000024");
         internal readonly static Guid UserPasswordPageActionId = new Guid("00000000-0000-0000-0000-000000000025");
         internal readonly static Guid UserGroupsPageActionId = new Guid("00000000-0000-0000-0000-000000000026");
@@ -66,6 +63,7 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid StartPageActionId = new Guid("4CB3BB95-A829-4DF7-BAD8-05FB38FF019A");
         internal readonly static Guid GoogleIntegrationPageActionId = new Guid("D79FFA5D-54C2-4EB0-AB47-42DDA41C1380");
         internal readonly static Guid ActivityReportActionId = new Guid("7062A21C-BA40-4A8F-9F33-DA68751E4F0D");
+        internal readonly static Guid MyAccountMenuGlobalNavigationLinkActionId = new Guid("CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE");
 
         // The objects which are used to synchronize access to the cached collections and lists.
         private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
@@ -129,24 +127,7 @@ namespace Micajah.Common.Bll.Providers
                         if (coll == null)
                         {
                             coll = new ActionCollection();
-                            CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action;
-
-                            foreach (CommonDataSet.ActionRow row in table.Select(string.Format(CultureInfo.InvariantCulture
-                                , "({0} = 1) AND ({1} IS NOT NULL) AND ({2} = {3})"
-                                , table.VisibleColumn.ColumnName, table.ParentActionIdColumn.ColumnName, table.ActionTypeIdColumn.ColumnName
-                                , (int)ActionType.GlobalNavigationLink)))
-                            {
-                                if (row.ActionId == LoginGlobalNavigationLinkActionId)
-                                    row.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(false);
-                                else if (row.ActionId == MyAccountGlobalNavigationLinkActionId)
-                                {
-                                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
-                                        row.OrderNumber = -row.OrderNumber;
-                                }
-                                coll.Add(CreateAction(row));
-                            }
-
-                            coll.Sort();
+                            coll.LoadFromCommonDataSet(ActionType.GlobalNavigationLink);
 
                             CacheManager.Current.Add("mc.GlobalNavigationLinks", coll);
                         }
@@ -249,7 +230,7 @@ namespace Micajah.Common.Bll.Providers
                         if (coll == null)
                         {
                             coll = new ActionCollection();
-                            coll.LoadFromCommonDataSet();
+                            coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
 
                             CacheManager.Current.Add("mc.PagesAndControls", coll);
                         }
@@ -408,13 +389,14 @@ namespace Micajah.Common.Bll.Providers
 
         private static void LoadGlobalNavigationLinkAttributes(CommonDataSet.ActionRow row, ActionElement action)
         {
-            LoadControlAttributes(row, action);
-
             row.NavigateUrl = action.NavigateUrl;
             row.OrderNumber = action.OrderNumber;
             row.AuthenticationRequired = action.AuthenticationRequired;
             row.InstanceRequired = action.InstanceRequired;
             row.Visible = action.Visible;
+
+            LoadControlAttributes(row, action);
+            LoadDetailMenuAttributes(row, action.DetailMenu);
         }
 
         private static void LoadPageAttributes(CommonDataSet.ActionRow row, ActionElement action)
@@ -423,7 +405,6 @@ namespace Micajah.Common.Bll.Providers
             row.VideoUrl = action.VideoUrl;
 
             LoadGlobalNavigationLinkAttributes(row, action);
-            LoadDetailMenuAttributes(row, action.DetailMenu);
             LoadSubmenuAttributes(row, action.Submenu);
         }
 
@@ -625,6 +606,15 @@ namespace Micajah.Common.Bll.Providers
                     action.IconSize = (IconSize)row.DetailMenuIconSize;
                 action.BuiltIn = row.BuiltIn;
                 action.Handle = row.Handle;
+
+                if (action.ActionId == LoginGlobalNavigationLinkActionId)
+                    action.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(false);
+                else if (action.ActionId == MyAccountGlobalNavigationLinkActionId)
+                {
+                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Micajah.Common.Pages.MasterPageTheme.Modern)
+                        action.OrderNumber = -action.OrderNumber;
+                }
+
                 return action;
             }
             return null;
@@ -894,17 +884,6 @@ namespace Micajah.Common.Bll.Providers
             return SettingsActionIdList.Contains(actionId);
         }
 
-        internal static bool IsMyAccountBuiltInAction(Guid actionId)
-        {
-            if ((actionId == MyAccountPageActionId)
-                || (actionId == MyNameAndEmailPageActionId)
-                || (actionId == MyPasswordPageActionId))
-            {
-                return true;
-            }
-            return false;
-        }
-
         /// <summary>
         /// Gets a value indicating that the authentication is not required for the specified URL.
         /// </summary>
@@ -1026,18 +1005,30 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal static bool ShowAction(Action action, bool isFrameworkAdmin, bool isAuthenticated, IList actionIdList)
+        internal static bool ShowAction(Action action, UserContext user)
         {
+            IList actionIdList = null;
+            bool isFrameworkAdmin = false;
+            bool isAuthenticated = false;
+            if (user != null)
+            {
+                actionIdList = user.ActionIdList;
+                isAuthenticated = true;
+                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganization == null));
+            }
+
             if (action.AuthenticationRequired)
             {
                 if (isAuthenticated)
                 {
                     if (SetupActionIdList.Contains(action.ActionId))
                     {
-                        if (!isFrameworkAdmin)
+                        if (!(isFrameworkAdmin && (user.SelectedOrganization == null)))
                             return false;
                     }
-                    else if (!(((actionIdList != null) && actionIdList.Contains(action.ActionId)) || IsMyAccountBuiltInAction(action.ActionId)))
+                    else if (!(((actionIdList != null) && actionIdList.Contains(action.ActionId))
+                        || action.ActionId == MyAccountMenuGlobalNavigationLinkActionId
+                        || action.ActionId == LoginAsUserGlobalNavigationLinkActionId))
                         return false;
                 }
                 else return false;

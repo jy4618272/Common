@@ -1,3 +1,6 @@
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
+using Micajah.Common.Security;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -6,9 +9,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls
 {
@@ -113,13 +113,8 @@ namespace Micajah.Common.WebControls
                     }
                     else
                     {
-                        if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern && i == 0)
-                        {}
-                        else
-                        {
-                            td.Controls.Add(new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.CustomDescription));
-                            td.Controls.Add(new LiteralControl("&nbsp;&nbsp;|&nbsp;&nbsp;"));
-                        }
+                        td.Controls.Add(new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.CustomDescription));
+                        td.Controls.Add(new LiteralControl("&nbsp;&nbsp;|&nbsp;&nbsp;"));
                     }
                     i++;
                 }

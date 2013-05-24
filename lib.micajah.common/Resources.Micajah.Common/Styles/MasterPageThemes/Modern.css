@@ -103,8 +103,6 @@
     height: 50px;
     margin: 0;
     float: left;
-    position: relative;
-    z-index: 2999;
     border-left: 1px solid #245d89;
 }
 
@@ -141,24 +139,32 @@
     border-radius: 2px 2px 2px 2px;
     background-color: #ffffff;
     height: 24px;
-    margin: 0 10px 0 0;
     width: 24px;
 }
 
 .Mp_Hdr ul.Mm li.Dm
 {
-    min-width: 150px;
+    padding-right: 5px;
 }
 
 .Mp_Hdr ul.Mm li.Dm img
 {
     vertical-align: middle;
+    margin: 0 10px 0 0;
+}
+
+.Mp_Hdr ul.Mm li.Dm a
+{
+    display: block;
+    background: url($DropMenu.png$) no-repeat right center;
+    padding-right: 20px;
 }
 
 .Mp_Hdr ul.Mm li ul.Sm
 {
     top: 37px;
     position: absolute;
+    z-index: 3000;
     margin: 7px 0 0 4px;
     background-color: #058dc7;
     border-radius: 4px 4px 4px 4px;
@@ -190,7 +196,7 @@
     float: none;
     display: block;
     margin: 0;
-    min-width: 100px;
+    min-width: 150px;
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
@@ -220,12 +226,13 @@
     padding: 12px 20px;
     height: auto;
     line-height: normal;
+    background-image: none;
 }
 
 /* ------------ Bread crumbs -----------------------------------------------------------------------------------------------------------------------------------*/
 div.Mp_B
 {
-    padding: 0 0 15px 0;
+    padding: 15px 0 0 0;
     text-align: left;
 }
 
@@ -249,7 +256,7 @@ div.Mp_B span.L
 .Mp_L
 {
     vertical-align: top;
-    padding: 0 40px 110px 0;
+    padding: 15px 40px 110px 0;
     float: left;
 }
 
@@ -285,6 +292,11 @@ div.Mp_B span.L
     float: left;
 }
 
+.Mp_Pmc
+{
+    padding-top: 15px;
+}
+
 .Mp_PcSlgOnFtrOn
 {
     padding-bottom: 200px;
@@ -297,7 +309,7 @@ div.Mp_B span.L
     border-bottom: 1px solid #E5E5E5;
     border-top: 1px solid #fff;
     height: auto;
-    margin: 0 0 15px;
+    margin: 0;
     overflow: hidden;
     padding: 0 5% 0 5%;
 }

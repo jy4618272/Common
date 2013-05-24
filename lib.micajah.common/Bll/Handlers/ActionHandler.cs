@@ -87,11 +87,24 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
                     accessDenied = !(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta);
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
-                    accessDenied = ((UserContext.Current != null) && (UserContext.Current.SelectedOrganization == null));
+                {
+                    UserContext user = UserContext.Current;
+                    accessDenied = ((user != null) && (user.SelectedOrganization == null));
+                }
                 else if (action.ActionId == ActionProvider.GoogleIntegrationPageActionId)
                     accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
                 else if (action.ActionId == ActionProvider.ActivityReportActionId)
                     accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
+                else if (action.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
+                {
+                    UserContext user = UserContext.Current;
+                    accessDenied = ((user != null) && (user.SelectedOrganization != null));
+                }
+                else if (action.ActionId == ActionProvider.LoginAsUserGlobalNavigationLinkActionId)
+                {
+                    UserContext user = UserContext.Current;
+                    accessDenied = (!((user != null) && user.CanLogOnAsUser && (user.SelectedOrganization == null)));
+                }
             }
 
             return accessDenied;
@@ -148,6 +161,12 @@ namespace Micajah.Common.Bll.Handlers
             {
                 if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
                     return CustomUrlProvider.CreateApplicationRelativeUrl(ResourceProvider.AccountSettingsVirtualPath);
+            }
+            else if (action.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
+            {
+                UserContext user = UserContext.Current;
+                if ((user != null) && (user.SelectedOrganization == null))
+                    return CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
             }
 
             return action.NavigateUrl;
