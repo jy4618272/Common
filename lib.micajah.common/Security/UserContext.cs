@@ -121,7 +121,7 @@ namespace Micajah.Common.Security
         /// </summary>
         internal bool IsFrameworkAdministrator
         {
-            get { return (LoginProvider.IsFrameworkAdministrator(this.LoginName)); }
+            get { return LoginProvider.IsFrameworkAdministrator(this.LoginName); }
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Micajah.Common.Security
         /// </summary>
         internal bool CanLogOnAsUser
         {
-            get { return ((this.SelectedOrganizationId == Guid.Empty) && LoginProvider.CanLogOnAsUser(this.LoginName)); }
+            get { return LoginProvider.CanLogOnAsUser(this.LoginName); }
         }
 
         /// <summary>

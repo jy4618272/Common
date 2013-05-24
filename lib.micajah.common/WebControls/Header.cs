@@ -1,17 +1,16 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Globalization;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls
 {
@@ -89,7 +88,7 @@ namespace Micajah.Common.WebControls
                 rightContainer.Attributes["class"] = "G";
 
                 if (MasterPage.VisibleHeaderLinks)
-                    links = CreateGlobalNavigation(false, MasterPage.IsSetupPage, this.Page.Request.IsSecureConnection);
+                    links = CreateGlobalNavigation(this.Page.Request.IsSecureConnection);
 
                 if (m_ModernTheme)
                 {
@@ -166,14 +165,7 @@ namespace Micajah.Common.WebControls
 
                 link = new HyperLink();
                 link.ImageUrl = m_MasterPageSettings.Header.LogoImageUrl;
-                if (this.MasterPage.IsSetupPage)
-                {
-                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(ActionProvider.SetupPageActionId);
-                    if (action != null)
-                        link.NavigateUrl = action.AbsoluteNavigateUrl;
-                }
-                else
-                    link.NavigateUrl = this.MasterPage.HeaderLogoNavigateUrl;
+                link.NavigateUrl = this.MasterPage.HeaderLogoNavigateUrl;
                 li.Controls.Add(link);
 
                 return div;
@@ -336,76 +328,22 @@ namespace Micajah.Common.WebControls
             }
         }
 
-        private static bool ShowNonPublicAction(Micajah.Common.Bll.Action item, bool isFrameworkAdministrator, bool canLogOnAsUser, bool organizationIsSelected, bool builtInOnly, IList actionIdList
-            , ref string customAbsoluteNavigateUrl, ref  string customDescription)
-        {
-            if (item.ActionId == ActionProvider.SetupGlobalNavigationLinkActionId)
-            {
-                if (!isFrameworkAdministrator)
-                    return false;
-            }
-            else if (item.ActionId == ActionProvider.LoginAsUserGlobalNavigationLinkActionId)
-            {
-                if (!canLogOnAsUser)
-                    return false;
-            }
-            else if (item.ActionId == ActionProvider.LogOffGlobalNavigationLinkActionId)
-            {
-                if (!organizationIsSelected)
-                    return false;
-            }
-            else if (item.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId)
-            {
-                if (!organizationIsSelected)
-                {
-                    if (builtInOnly)
-                        return false;
-
-                    customAbsoluteNavigateUrl = customDescription = string.Empty;
-                }
-            }
-            else
-            {
-                if (builtInOnly)
-                    return false;
-                else
-                {
-                    if (!((actionIdList != null) && actionIdList.Contains(item.ActionId)))
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Creates the global navigation links.
         /// </summary>
-        /// <param name="builtInOnly">The flag specifying that the list contains the built-in global navigation links only.</param>
-        /// <param name="activeActionIsSetupPage">The flag specifying that the active action is setup page.</param>
         /// <param name="isSecureConnection">The flag indicating whether the HTTP connection uses secure sockets.</param>
         /// <returns>The control that represents the global navigation links.</returns>
-        private static Control CreateGlobalNavigation(bool builtInOnly, bool activeActionIsSetupPage, bool isSecureConnection)
+        private static Control CreateGlobalNavigation(bool isSecureConnection)
         {
             UserContext user = UserContext.Current;
-            IList actionIdList = null;
-            bool isFrameworkAdministrator = false;
-            bool isAuthenticated = false;
-            bool canLogOnAsUser = false;
-
-            if (user != null)
-            {
-                isFrameworkAdministrator = user.IsFrameworkAdministrator;
-                canLogOnAsUser = user.CanLogOnAsUser;
-                actionIdList = user.ActionIdList;
-                isAuthenticated = true;
-            }
 
             ControlList links = null;
             Link link = null;
+            Link link2 = null;
             HtmlGenericControl ul = null;
             HtmlGenericControl ul2 = null;
             HtmlGenericControl li = null;
+            HtmlGenericControl li2 = null;
             bool modernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
 
             if (modernTheme)
@@ -418,57 +356,16 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks)
+                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(user))
                 {
-                    bool isConfigActionInModernTheme = (modernTheme && (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId));
-                    bool accessDenied = ((!item.Visible) || item.AccessDenied());
-
-                    if ((!isConfigActionInModernTheme) && accessDenied)
-                        continue;
-
-                    string customAbsoluteNavigateUrl = null;
-                    string customDescription = null;
-
-                    if (isAuthenticated)
-                    {
-                        if (item.AuthenticationRequired)
-                        {
-                            accessDenied = (!ShowNonPublicAction(item, isFrameworkAdministrator, canLogOnAsUser, (user.SelectedOrganization != null), builtInOnly, actionIdList, ref customAbsoluteNavigateUrl, ref customDescription));
-                            if (!isConfigActionInModernTheme)
-                            {
-                                if (accessDenied)
-                                    continue;
-                            }
-                        }
-                        else if (item.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
-                        {
-                            if (user.SelectedOrganization == null)
-                                customAbsoluteNavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
-                            else
-                                continue;
-                        }
-                        else if (builtInOnly)
-                            continue;
-                        else if (activeActionIsSetupPage)
-                            continue;
-                    }
-                    else if (item.AuthenticationRequired)
-                        continue;
-
-                    if (!(isConfigActionInModernTheme && accessDenied))
-                    {
-                        link = new Link(item.CustomName
-                            , ((customAbsoluteNavigateUrl == null) ? item.CustomAbsoluteNavigateUrl : customAbsoluteNavigateUrl)
-                            , ((customDescription == null) ? item.Description : customDescription));
-                    }
+                    link = new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.Description);
 
                     if (modernTheme)
                     {
-                        if (item.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId)
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.Attributes["class"] = "Dm";
+                        li = new HtmlGenericControl("li");
 
+                        if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
+                        {
                             HyperLink usernameLink = new HyperLink();
                             li.Controls.Add(usernameLink);
 
@@ -483,45 +380,52 @@ namespace Micajah.Common.WebControls
                             LiteralControl literal = new LiteralControl();
                             literal.Text = ((name.Trim().Length > 0) ? name : user.LoginName);
                             usernameLink.Controls.Add(literal);
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(item.IconUrl))
+                                link.ImageUrl = item.IconUrl;
+                            li.Controls.Add(link);
+                        }
 
-                            Image dropMenuImg = new Image();
-                            dropMenuImg.ImageUrl = ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorResource(MasterPageTheme.Modern, MasterPageThemeColor.NotSet, "DropMenu.png"), true);
-                            usernameLink.Controls.Add(dropMenuImg);
+                        ul.Controls.Add(li);
 
-                            ul.Controls.Add(li);
+                        ActionCollection childActions = item.GetAvailableChildActions(user);
+                        if (childActions.Count > 0)
+                        {
+                            li.Attributes["class"] = "Dm";
 
                             ul2 = new HtmlGenericControl("ul");
                             ul2.Attributes["class"] = "Sm";
-                        }
 
-                        if (link != null)
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.Controls.Add(link);
+                            foreach (Micajah.Common.Bll.Action item2 in childActions)
+                            {
+                                li2 = new HtmlGenericControl("li");
+                                link2 = new Link(item2.CustomName, item2.CustomAbsoluteNavigateUrl, item2.Description);
+                                li2.Controls.Add(link2);
+                                ul2.Controls.Add(li2);
+                            }
 
-                            if (ul2 != null)
-                                ul2.Controls.Add(li);
-                            else
-                                ul.Controls.Add(li);
-                        }
-                    }
-                    else
-                        links.Add(link);
-                }
-
-                if (modernTheme)
-                {
-                    if (ul2 != null)
-                    {
-                        if (ul2.HasControls() && ul.HasControls())
-                        {
-                            li = (HtmlGenericControl)ul.Controls[ul.Controls.Count - 1];
                             li.Controls.Add(ul2);
                         }
                     }
-
-                    return ul;
+                    else
+                    {
+                        if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
+                        {
+                            foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(user))
+                            {
+                                link2 = new Link(item2.CustomName, item2.CustomAbsoluteNavigateUrl, item2.Description);
+                                links.Add(link2);
+                            }
+                        }
+                        else
+                            links.Add(link);
+                    }
                 }
+
+                if (modernTheme)
+                    return ul;
                 else
                     return ((links.Count > 0) ? links : null);
             }

@@ -1,10 +1,10 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
 using System;
 using System.Collections;
 using System.Data;
 using System.Text;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -347,18 +347,25 @@ namespace Micajah.Common.Bll.Providers
                 StringBuilder sb = new StringBuilder();
                 foreach (string name in shortName)
                 {
+                    if (string.Compare(name, "*", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        if (sb.Length > 0)
+                            sb.Remove(0, sb.Length - 1);
+                        break;
+                    }
                     sb.AppendFormat(",'{0}'", name.Replace("'", "''"));
                 }
+
                 if (sb.Length > 0)
                 {
                     sb.Remove(0, 1);
                     sb.Append(")");
                     sb.Insert(0, string.Concat(table.ShortNameColumn.ColumnName, " IN ("));
+                }
 
-                    foreach (CommonDataSet.RoleRow row in table.Select(sb.ToString()))
-                    {
-                        if (!roleIdList.Contains(row.RoleId)) roleIdList.Add(row.RoleId);
-                    }
+                foreach (CommonDataSet.RoleRow row in table.Select(sb.ToString()))
+                {
+                    if (!roleIdList.Contains(row.RoleId)) roleIdList.Add(row.RoleId);
                 }
             }
 

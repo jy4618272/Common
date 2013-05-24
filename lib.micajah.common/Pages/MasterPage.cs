@@ -1,3 +1,10 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using Micajah.Common.WebControls;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -6,13 +13,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Pages
 {
@@ -71,8 +71,6 @@ namespace Micajah.Common.Pages
         private Guid m_InstanceId;
         private ArrayList m_ActionIdList;
         private bool m_IsFrameworkAdmin;
-        private bool m_IsOrgAdmin;
-        private bool m_IsInstanceAdmin;
         private Guid? m_ActiveActionId;
         private Micajah.Common.Bll.Action m_ActiveAction;
 
@@ -538,7 +536,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleHelpLink
         {
-            get { return ((m_VisibleHelpLink.HasValue ? m_VisibleHelpLink.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.HelpLink.Visible) && (!this.IsSetupPage)); }
+            get { return ((m_VisibleHelpLink.HasValue ? m_VisibleHelpLink.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.HelpLink.Visible)); }
             set { m_VisibleHelpLink = value; }
         }
 
@@ -1250,7 +1248,7 @@ namespace Micajah.Common.Pages
                     {
                         accessDenied = m_ActiveAction.AccessDenied();
                         if (!accessDenied)
-                            accessDenied = (!ActionProvider.ShowAction(ActiveAction, m_IsFrameworkAdmin, (m_UserContext != null), m_ActionIdList));
+                            accessDenied = (!ActionProvider.ShowAction(ActiveAction, m_UserContext));
                     }
                 }
                 else
@@ -1485,9 +1483,7 @@ namespace Micajah.Common.Pages
             if (m_UserContext != null)
             {
                 m_ActionIdList = m_UserContext.ActionIdList;
-                m_IsFrameworkAdmin = m_UserContext.IsFrameworkAdministrator;
-                m_IsOrgAdmin = m_UserContext.IsOrganizationAdministrator;
-                m_IsInstanceAdmin = m_UserContext.IsInstanceAdministrator();
+                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganization == null));
                 if (m_UserContext.SelectedOrganization != null)
                     m_OrganizationId = m_UserContext.SelectedOrganization.OrganizationId;
                 if (m_UserContext.SelectedInstance != null)

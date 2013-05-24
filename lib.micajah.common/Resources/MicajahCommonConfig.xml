@@ -60,11 +60,11 @@
         <action id="7062A21C-BA40-4A8F-9F33-DA68751E4F0D" type="Page" name="Activity Report" description="Build Application Accounts Activity Report" navigateUrl="/mc/activityreport.aspx" orderNumber="11" handle="true" authenticationRequired="true" instanceRequired="false" />
       </actions>
     </action>
-    <action id="00000000-0000-0000-0000-000000000021" type="Page" name="My Account" description="Edit personal settings" navigateUrl="" handle="true" authenticationRequired="true" instanceRequired="false" visible="false">
+    <action id="00000000-0000-0000-0000-000000000021" type="Page" name="My Account" description="Edit personal settings" navigateUrl="" handle="true" authenticationRequired="true" instanceRequired="false" visible="false" roles="*">
       <detailMenu show="false" />
       <actions>
-        <action id="00000000-0000-0000-0000-000000000022" type="Page" name="My Profile" description="Edit my name, email, phone and address information" navigateUrl="/mc/security/profile.aspx" orderNumber="1" authenticationRequired="true" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000023" type="Page" name="My Password" description="Edit my password" navigateUrl="/mc/security/changepassword.aspx" orderNumber="2" authenticationRequired="true" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000022" type="Page" name="My Profile" description="Edit my name, email, phone and address information" navigateUrl="/mc/security/profile.aspx" orderNumber="1" authenticationRequired="true" instanceRequired="false" roles="*" />
+        <action id="00000000-0000-0000-0000-000000000023" type="Page" name="My Password" description="Edit my password" navigateUrl="/mc/security/changepassword.aspx" orderNumber="2" authenticationRequired="true" instanceRequired="false" roles="*" />
       </actions>
     </action>
     <action id="00000000-0000-0000-0000-000000000009" type="Page" name="Configuration" description="Configuration" navigateUrl="" authenticationRequired="true" instanceRequired="false" visible="false" roles="OrgAdmin,InstAdmin" handle="true">
@@ -187,12 +187,16 @@
         <setting id="465D5319-DFCF-45BD-9C6D-49FCB6BE9C78" type="Value" name="Refresh Token" shortName="RefreshToken" />
       </settings>
     </action>
-    <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="10000" authenticationRequired="true" instanceRequired="false" />
-    <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="10001" authenticationRequired="true" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000043" type="GlobalNavigationLink" name="Log In" description="Log In" navigateUrl="/web.micajah.common/mc/login.aspx" orderNumber="10002" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="10000" authenticationRequired="true" instanceRequired="false" handle="true" roles="OrgAdmin,InstAdmin" />
-    <action id="00000000-0000-0000-0000-000000000005" type="GlobalNavigationLink" name="My Profile" description="Edit personal settings" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" handle="true" orderNumber="10010" authenticationRequired="true" instanceRequired="false" />
-    <action id="00000000-0000-0000-0000-000000000006" type="GlobalNavigationLink" name="Log Out" description="Log Out" navigateUrl="/mc/logoff.aspx" orderNumber="10020" authenticationRequired="true" instanceRequired="false" />
+    <action id="00000000-0000-0000-0000-000000000043" type="GlobalNavigationLink" name="Log In" description="Log In" navigateUrl="/web.micajah.common/mc/login.aspx" orderNumber="1000" instanceRequired="false" handle="true" />
+    <action id="CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE" type="GlobalNavigationLink" name="Full Name of User" navigateUrl="" orderNumber="10001" authenticationRequired="true" instanceRequired="false" handle="true">
+      <actions>
+        <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="1" authenticationRequired="true" instanceRequired="false" handle="true" roles="OrgAdmin,InstAdmin" />
+        <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="2" authenticationRequired="true" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000005" type="GlobalNavigationLink" name="My Profile" description="Edit personal settings" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" orderNumber="11000" authenticationRequired="true" instanceRequired="false" handle="true" roles="*" />
+        <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="11001" authenticationRequired="true" instanceRequired="false" handle="true" />
+        <action id="00000000-0000-0000-0000-000000000006" type="GlobalNavigationLink" name="Log Out" description="Log Out" navigateUrl="/mc/logoff.aspx" orderNumber="11002" authenticationRequired="true" instanceRequired="false" roles="*" />
+      </actions>
+    </action>
   </actions>
   <settings>
     <setting id="00000000-0000-0000-0000-000000000066" type="Value" name="The custom style sheet for the master page" shortName="CustomStyleSheet" levels="Organization" defaultValue="" />

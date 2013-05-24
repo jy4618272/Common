@@ -61,21 +61,10 @@ namespace Micajah.Common.WebControls
             {
                 if (m_Items == null)
                 {
-                    IList actionIdList = null;
-                    bool isFrameworkAdmin = false;
-                    bool isAuthenticated = false;
-                    UserContext user = UserContext.Current;
-                    if (user != null)
-                    {
-                        actionIdList = user.ActionIdList;
-                        isAuthenticated = true;
-                        isFrameworkAdmin = user.IsFrameworkAdministrator;
-                    }
-
                     m_Items = new ActionCollection();
                     Micajah.Common.Bll.Action mainItem = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.PagesAndControlsActionId);
                     if (mainItem != null)
-                        m_Items = mainItem.GetAvailableChildActions(isAuthenticated, isFrameworkAdmin, actionIdList);
+                        m_Items = mainItem.GetAvailableChildActions(UserContext.Current);
                 }
                 return m_Items;
             }

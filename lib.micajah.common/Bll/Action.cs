@@ -1,3 +1,8 @@
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Security;
+using Micajah.Common.WebControls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,11 +11,6 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Web;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll
 {
@@ -519,14 +519,14 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets a collection of the visible child actions, also taking into consideration the access rights.
         /// </summary>
-        internal ActionCollection GetAvailableChildActions(bool userIsAuthenticated, bool userIsFrameworkAdmin, IList actionIdList)
+        internal ActionCollection GetAvailableChildActions(UserContext user)
         {
             ActionCollection coll = new ActionCollection();
             foreach (Action item in this.ChildActions)
             {
                 if (item.Visible)
                 {
-                    if (!ActionProvider.ShowAction(item, userIsFrameworkAdmin, userIsAuthenticated, actionIdList))
+                    if (!ActionProvider.ShowAction(item, user))
                         continue;
 
                     if (item.AccessDenied())
@@ -654,19 +654,19 @@ namespace Micajah.Common.Bll
             return result;
         }
 
-        private void ReadFromCommonDataSet(Action parent, DataRow[] actionRows)
+        private void ReadFromCommonDataSet(Action parent, DataRow[] actionRows, List<ActionType> allowedTypes)
         {
             foreach (CommonDataSet.ActionRow row in actionRows)
             {
                 ActionType type = (ActionType)row.ActionTypeId;
-                if (type == ActionType.Page || type == ActionType.Control)
+                if (allowedTypes.Contains(type))
                 {
                     Action item = ActionProvider.CreateAction(row, parent);
 
                     DataRow[] childActionRows = row.GetActionRows();
-                    if (childActionRows.Length > 0) ReadFromCommonDataSet(item, childActionRows);
+                    if (childActionRows.Length > 0) ReadFromCommonDataSet(item, childActionRows, allowedTypes);
 
-                    if (type == ActionType.Page)
+                    if ((type == ActionType.Page) || (type == ActionType.GlobalNavigationLink))
                     {
                         if (parent != null) parent.ChildActions.Add(item);
                         this.Add(item);
@@ -899,11 +899,11 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Loads the collection from CommonDataSet.
         /// </summary>
-        internal void LoadFromCommonDataSet()
+        internal void LoadFromCommonDataSet(params ActionType[] allowedTypes)
         {
             lock (((ICollection)this).SyncRoot)
             {
-                ReadFromCommonDataSet(null, ActionProvider.GetRootActionRows());
+                ReadFromCommonDataSet(null, ActionProvider.GetRootActionRows(), new List<ActionType>(allowedTypes));
             }
         }
 

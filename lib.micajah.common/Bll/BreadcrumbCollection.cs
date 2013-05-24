@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Security;
+using System;
 
 namespace Micajah.Common.Bll
 {
@@ -34,8 +33,19 @@ namespace Micajah.Common.Bll
                 }
             }
 
-            if ((homeItem != null) && (firstItem.ActionId != homeItem.ActionId))
-                base.Insert(0, homeItem.Clone());
+            if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
+            {
+                if (homeItem != null)
+                {
+                    if ((homeItem != null) && (firstItem.ActionId == homeItem.ActionId))
+                        base.Remove(firstItem);
+                }
+            }
+            else
+            {
+                if ((homeItem != null) && (firstItem.ActionId != homeItem.ActionId))
+                    base.Insert(0, homeItem.Clone());
+            }
         }
 
         #endregion
@@ -218,21 +228,10 @@ namespace Micajah.Common.Bll
         {
             this.Clear();
 
-            IList actionIdList = null;
-            bool isFrameworkAdmin = false;
-            bool isAuthenticated = false;
-            UserContext user = UserContext.Current;
-            if (user != null)
-            {
-                actionIdList = user.ActionIdList;
-                isFrameworkAdmin = user.IsFrameworkAdministrator;
-                isAuthenticated = true;
-            }
-
             Action item = action;
             while (item != null && item.ActionId != ActionProvider.PagesAndControlsActionId && item.ActionId != ActionProvider.GlobalNavigationLinksActionId)
             {
-                if ((!item.GroupInDetailMenu) && (ActionProvider.ShowAction(item, isFrameworkAdmin, isAuthenticated, actionIdList)))
+                if ((!item.GroupInDetailMenu) && (ActionProvider.ShowAction(item, UserContext.Current)))
                     Insert(0, item);
                 item = item.ParentAction;
             }
