@@ -269,6 +269,8 @@ div.Mp_B span.L
     width: 100%;
     min-height: 100%;
     _height: 100%;
+    position: relative;
+    z-index: 2999;
 }
 
 .Mp_Pc
