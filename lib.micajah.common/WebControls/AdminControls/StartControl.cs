@@ -185,56 +185,61 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e == null) return;
 
             HtmlGenericControl li = sender as HtmlGenericControl;
-            if (li != null)
+            if (li == null) return;
+
+            Micajah.Common.Bll.Action action = (Micajah.Common.Bll.Action)e.CommandArgument;
+
+            if (string.IsNullOrEmpty(action.Name))
             {
-                Micajah.Common.Bll.Action action = (Micajah.Common.Bll.Action)e.CommandArgument;
+                li.Visible = false;
+                return;
+            }
 
-                if (action.NavigateUrl == null)
+            if (action.NavigateUrl == null)
+            {
+                if ((m_StartMenuCheckedItems != null) && m_StartMenuCheckedItems.Contains(action.ActionId))
                 {
-                    if ((m_StartMenuCheckedItems != null) && m_StartMenuCheckedItems.Contains(action.ActionId))
-                    {
-                        li.Attributes["class"] = "Cbc";
-                        if (li.HasControls())
-                            ((HyperLink)li.Controls[0]).NavigateUrl = (string.IsNullOrEmpty(action.AbsoluteNavigateUrl) ? action.CustomAbsoluteNavigateUrl : null);
-                    }
-                    else
-                        li.Attributes["class"] = "Cb";
+                    li.Attributes["class"] = "Cbc";
+                    if (li.HasControls())
+                        ((HyperLink)li.Controls[0]).NavigateUrl = (string.IsNullOrEmpty(action.AbsoluteNavigateUrl) ? action.CustomAbsoluteNavigateUrl : null);
                 }
-                else if (!string.IsNullOrEmpty(action.NavigateUrl))
+                else
+                    li.Attributes["class"] = "Cb";
+            }
+            else if (!string.IsNullOrEmpty(action.NavigateUrl))
+            {
+                li.Attributes["class"] = "G";
+                if (string.Compare(action.NavigateUrl, action.VideoUrl, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    li.Attributes["class"] = "G";
-                    if (string.Compare(action.NavigateUrl, action.VideoUrl, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (li.Controls.Count > 0)
                     {
-                        if (li.Controls.Count > 0)
-                        {
-                            HyperLink link = (HyperLink)li.Controls[0];
-                            link.NavigateUrl = string.Empty;
+                        HyperLink link = (HyperLink)li.Controls[0];
+                        link.NavigateUrl = string.Empty;
 
-                            if (li.Controls.Count > 1)
+                        if (li.Controls.Count > 1)
+                        {
+                            HtmlGenericControl span = (HtmlGenericControl)li.Controls[1];
+                            if (span.HasControls())
                             {
-                                HtmlGenericControl span = (HtmlGenericControl)li.Controls[1];
-                                if (span.HasControls())
-                                {
-                                    link = (HyperLink)span.Controls[0];
-                                    link.Text = Resources.StartControl_WatchLink_Text;
-                                }
+                                link = (HyperLink)span.Controls[0];
+                                link.Text = Resources.StartControl_WatchLink_Text;
                             }
                         }
-
-                        return;
                     }
-                }
 
-                if (!string.IsNullOrEmpty(action.VideoUrl))
+                    return;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(action.VideoUrl))
+            {
+                if (li.Controls.Count > 1)
                 {
-                    if (li.Controls.Count > 1)
+                    HtmlGenericControl span = (HtmlGenericControl)li.Controls[1];
+                    if (span.HasControls())
                     {
-                        HtmlGenericControl span = (HtmlGenericControl)li.Controls[1];
-                        if (span.HasControls())
-                        {
-                            HyperLink link = (HyperLink)span.Controls[0];
-                            link.Attributes["rel"] = "WatchVideo";
-                        }
+                        HyperLink link = (HyperLink)span.Controls[0];
+                        link.Attributes["rel"] = "WatchVideo";
                     }
                 }
             }
