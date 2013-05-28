@@ -37,7 +37,6 @@ namespace Micajah.Common.Bll.Providers
         internal const string InviteUsersPageVirtualPath = AdminVirtualRootShortPath + "inviteusers.aspx";
         internal const string UsersPageVirtualPath = AdminVirtualRootShortPath + "user.aspx";
         internal const string SettingsPageVirtualPath = AdminVirtualRootShortPath + "settings.aspx";
-        internal const string StartPageVirtualPath = AdminVirtualRootShortPath + "start.aspx";
         internal const string AccountSettingsVirtualPath = AdminVirtualRootShortPath + "accountsettings.aspx";
 
         #endregion

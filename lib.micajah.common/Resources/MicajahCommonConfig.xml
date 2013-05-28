@@ -174,7 +174,7 @@
     </action>
     <action id="4CB3BB95-A829-4DF7-BAD8-05FB38FF019A" type="Page" name="Getting Started" navigateUrl="/mc/admin/start.aspx" orderNumber="-100000" handle="true" authenticationRequired="true" instanceRequired="false" visible="true" roles="OrgAdmin">
       <actions>
-        <action id="DCC90D62-C392-4DE3-9AD7-7BDE90558702" type="Page" name="Get Started" navigateUrl="" orderNumber="1" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
+        <action id="DCC90D62-C392-4DE3-9AD7-7BDE90558702" type="Page" name="" navigateUrl="" orderNumber="1" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
           <detailMenu showDescription="false" group="true" />
         </action>
         <action id="BBFA8C28-1579-496A-8896-6022BD8A1670" type="Page" name="Brand Your System" navigateUrl="" orderNumber="2" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">

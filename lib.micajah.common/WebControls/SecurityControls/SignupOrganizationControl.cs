@@ -729,9 +729,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
             }
 
-            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text
-                , WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true
-                , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.StartPageVirtualPath)));
+            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true, null));
         }
 
         #endregion
