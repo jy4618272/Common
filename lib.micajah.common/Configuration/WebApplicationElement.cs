@@ -300,6 +300,7 @@ namespace Micajah.Common.Configuration
                     IntegrationElement value = (IntegrationElement)this["integration"];
                     elem.Ldap = value.Ldap;
                     elem.Google = value.Google;
+                    elem.Bing = value.Bing;
 
                     if (website.Integration.ElementInformation.IsPresent)
                     {
@@ -308,6 +309,9 @@ namespace Micajah.Common.Configuration
 
                         if (website.Integration.Google.ElementInformation.IsPresent)
                             elem.Google = website.Integration.Google;
+
+                        if (website.Integration.Bing.ElementInformation.IsPresent)
+                            elem.Bing = website.Integration.Bing;
 
                         if (website.Integration.Chargify.ElementInformation.IsPresent)
                             elem.Chargify = website.Integration.Chargify;

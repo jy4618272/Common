@@ -1,10 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using Google.GData.Client;
+﻿using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -13,6 +7,12 @@ using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.WebControls.SetupControls;
 using Newtonsoft.Json;
+using System;
+using System.Data;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -332,8 +332,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step3Panel.Visible)
             {
-                //MagicForm.ApplyStyle(Step3Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
-
                 InstanceList.DataBind();
                 if (InstanceList.Items.Count > 0)
                 {
@@ -348,6 +346,10 @@ function InstanceRequiredValidation(source, arguments) {{
                     code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
                     if (!string.IsNullOrEmpty(code))
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
+
+                    code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
+                    if (!string.IsNullOrEmpty(code))
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "BingConversionClientScript", code, false);
                 }
                 else
                 {
@@ -360,8 +362,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step1Panel.Visible)
             {
-                //MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
-
                 this.Page.Form.Target = "_parent";
 
                 LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
@@ -377,9 +377,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step2Panel.Visible)
             {
-                //MagicForm.ApplyStyle(Step2Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
-                //MagicForm.ApplyStyle(Step2FormButton, ColorScheme.White, false, true, MasterPageTheme.Modern);
-
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "PasswordCompareValidationClientScript", this.PasswordCompareValidationClientScript, true);
             }
 
