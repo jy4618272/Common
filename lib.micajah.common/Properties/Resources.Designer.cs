@@ -2148,7 +2148,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add SherpaDesk to your Google Apps Account.
+        ///   Looks up a localized string similar to Add Sherpadesk to your existing Google Apps Account.
         /// </summary>
         internal static string GoogleIntegrationControl_AddSherpaDesk_Text {
             get {
@@ -2175,7 +2175,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manual Replication without full Google App Integration.
+        ///   Looks up a localized string similar to Manual Replication without full Google Apps Integration.
         /// </summary>
         internal static string GoogleIntegrationControl_Caption_Text {
             get {
@@ -2229,7 +2229,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google connect details.
+        ///   Looks up a localized string similar to Google Connection Settings.
         /// </summary>
         internal static string GoogleIntegrationControl_EditForm_ObjectName {
             get {
@@ -2256,7 +2256,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign Up for Google Apps for Business.
+        ///   Looks up a localized string similar to Sign up for a new Google Apps for Business Account.
         /// </summary>
         internal static string GoogleIntegrationControl_GoogleAppsForBusiness_Text {
             get {

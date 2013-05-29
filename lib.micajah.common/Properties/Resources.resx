@@ -2602,7 +2602,7 @@ Do you want to link email "{1}" to this account?</value>
     <value>Google Password</value>
   </data>
   <data name="GoogleIntegrationControl_EditForm_ObjectName" xml:space="preserve">
-    <value>Google connect details</value>
+    <value>Google Connection Settings</value>
   </data>
   <data name="GoogleIntegrationControl_FirstNameColumn_HeaderText" xml:space="preserve">
     <value>First Name</value>
@@ -2706,12 +2706,12 @@ We recommend you deny access unless you are certain that you initiated this requ
     <value>Unrecognized Consumer Domain</value>
   </data>
   <data name="GoogleIntegrationControl_AddSherpaDesk_Text" xml:space="preserve">
-    <value>Add SherpaDesk to your Google Apps Account</value>
+    <value>Add Sherpadesk to your existing Google Apps Account</value>
   </data>
   <data name="GoogleIntegrationControl_Caption_Text" xml:space="preserve">
-    <value>Manual Replication without full Google App Integration</value>
+    <value>Manual Replication without full Google Apps Integration</value>
   </data>
   <data name="GoogleIntegrationControl_GoogleAppsForBusiness_Text" xml:space="preserve">
-    <value>Sign Up for Google Apps for Business</value>
+    <value>Sign up for a new Google Apps for Business Account</value>
   </data>
 </root>

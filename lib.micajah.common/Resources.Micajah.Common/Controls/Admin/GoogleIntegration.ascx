@@ -33,8 +33,8 @@
 <asp:HyperLink ID="hlGoogleAppsForBusiness" runat="server" NavigateUrl="https://www.google.com/enterprise/apps/business/" Font-Size="Medium" />
 <br /><br />
 <asp:HyperLink ID="hlAddSherpaDesk" runat="server" NavigateUrl="https://www.google.com/enterprise/marketplace/viewListing?productListingId=23437+1149902435229588599" Font-Size="Medium"/>
-<br /><br />
-<h1><asp:Literal ID="litCaption" runat="server" /></h1>
+<br /><br /><br />
+<h1 style="text-decoration:underline;"><asp:Literal ID="litCaption" runat="server" /></h1>
 <asp:Label ID="lblDescription" runat="server" Font-Size="Medium" />
 <br /><br /><br />
 <mits:MagicForm ID="EditForm" runat="server" />
