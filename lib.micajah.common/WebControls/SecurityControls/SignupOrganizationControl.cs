@@ -693,7 +693,11 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void Step1Button_Click(object sender, EventArgs e)
         {
             Page.Validate("Step1");
-            if (!Page.IsValid) return;
+            if (!Page.IsValid)
+            {
+                if (!EmailTick1.Visible)
+                    return;
+            }
 
             Step1Panel.Visible = false;
             Step2Panel.Visible = true;
@@ -707,7 +711,11 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void Step2Button_Click(object sender, EventArgs e)
         {
             Page.Validate("Step2");
-            if (!Page.IsValid) return;
+            if (!Page.IsValid)
+            {
+                if (!EmailTick2.Visible)
+                    return;
+            }
 
             Step2Panel.Visible = false;
             Step3Panel.Visible = true;
