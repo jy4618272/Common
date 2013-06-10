@@ -32,6 +32,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected TextBox Email1;
         protected CustomValidator EmailValidator1;
         protected Image EmailTick1;
+        protected Label EmailInUseLabel;
         protected HtmlGenericControl OrganizationUrlRow;
         protected Label OrganizationUrlLabel;
         protected Literal Schema;
@@ -302,15 +303,17 @@ function InstanceRequiredValidation(source, arguments) {{
             return isValid;
         }
 
-        private static bool ValidateEmail(string email, out string errorMessage)
+        private static bool ValidateEmail(string email, out string errorMessage, out bool emailInUse)
         {
             errorMessage = null;
+            emailInUse = false;
             bool isValid = Support.ValidateEmail(email, false);
             if (isValid)
             {
                 isValid = (!WebApplication.LoginProvider.ValidateLogin(email, null));
                 if (!isValid)
                 {
+                    emailInUse = true;
                     errorMessage = Resources.SignupOrganizationControl_EmailValidator1_ErrorMessage + "<br />"
                         + BaseControl.GetHyperlink(WebApplication.LoginProvider.GetLoginUrl(email, false), Resources.SignupOrganizationControl_LoginLink_Text, null, "_parent");
                 }
@@ -539,6 +542,7 @@ function InstanceRequiredValidation(source, arguments) {{
             TextBox textBox = null;
             Image tickImage = null;
             string errorMessage = null;
+            bool emailInUse = false;
 
             if (val.ID == EmailValidator1.ID)
             {
@@ -551,7 +555,19 @@ function InstanceRequiredValidation(source, arguments) {{
                 tickImage = EmailTick2;
             }
 
-            tickImage.Visible = textBox.IsValid = args.IsValid = ValidateEmail(textBox.Text, out errorMessage);
+            bool isValid = ValidateEmail(textBox.Text, out errorMessage, out emailInUse);
+            args.IsValid = isValid;
+            tickImage.Visible = textBox.IsValid = isValid || emailInUse;
+            if (emailInUse)
+            {
+                val.Style["background"] = "none !important";
+                val.Style[HtmlTextWriterStyle.PaddingLeft] = "0 !important";
+            }
+            else
+            {
+                val.Style.Remove("background");
+                val.Style.Remove("padding-left");
+            }
 
             if (!args.IsValid)
             {
@@ -608,10 +624,11 @@ function InstanceRequiredValidation(source, arguments) {{
             if (args == null) return;
 
             string errorMessage = null;
+            bool emailInUse = false;
 
             args.IsValid = ValidateOrganizationName(OrganizationName2.Text, out errorMessage);
             if (args.IsValid)
-                args.IsValid = ValidateEmail(Email2.Text, out errorMessage);
+                args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
             if (args.IsValid)
                 try
                 {

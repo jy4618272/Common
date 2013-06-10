@@ -2098,9 +2098,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Start.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\SignupOrg.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\SignupOrg.ascx" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\SignupOrg.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>

@@ -2384,7 +2384,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Password confirmation is required</value>
   </data>
   <data name="SignupOrganizationControl_EmailValidator1_ErrorMessage" xml:space="preserve">
-    <value>Email is already in use</value>
+    <value>Trying to log in instead?</value>
   </data>
   <data name="SignupOrganizationControl_LoginLink_Text" xml:space="preserve">
     <value>Login Here</value>
