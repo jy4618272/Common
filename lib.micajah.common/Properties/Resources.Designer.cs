@@ -6216,7 +6216,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a Setup Preference.
+        ///   Looks up a localized string similar to Select best initial setup. Easily modified later..
         /// </summary>
         internal static string SignupOrganizationControl_CustomizeLiteral_Text {
             get {
