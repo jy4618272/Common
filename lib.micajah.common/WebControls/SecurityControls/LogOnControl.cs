@@ -815,7 +815,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             base.OnPreRender(e);
 
             if (this.EnableEmbeddedStyleSheets)
-                Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, this.EnableClientCaching);
+                Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, this.EnableClientCaching, true, false, false, true);
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 

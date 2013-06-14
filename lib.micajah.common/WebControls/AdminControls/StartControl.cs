@@ -160,7 +160,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.AddGlobalStyleSheet(this.Page);
+            Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page);
 
             this.MasterPage.VisibleSubmenu = false;
             this.MasterPage.VisibleLeftArea = false;

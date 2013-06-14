@@ -949,7 +949,7 @@ namespace Micajah.Common.Pages
 
         private void CreatePageHeader()
         {
-            CreatePageHeader(this.Page, this.EnableClientCaching, this.EnableGlobalStyleSheet, this.EnableJQuery, this.EnableFancyBox);
+            CreatePageHeader(this.Page, this.EnableClientCaching, this.EnableGlobalStyleSheet, this.EnableJQuery, this.EnableFancyBox, this.EnableClientEncoding);
 
             if (this.Page.Header != null)
             {
@@ -1308,8 +1308,6 @@ namespace Micajah.Common.Pages
 
         private void RegisterClientScripts()
         {
-            ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "MasterPageScripts", ResourceProvider.GetResourceUrl("Scripts.MasterPage.js", true));
-
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
         }
@@ -1331,7 +1329,7 @@ namespace Micajah.Common.Pages
 
         #region Internal Methods
 
-        internal static void AddGlobalStyleSheet(Page page, MasterPageTheme theme)
+        internal static void RegisterGlobalStyleSheet(Page page, MasterPageTheme theme)
         {
             if (page != null)
             {
@@ -1393,7 +1391,7 @@ namespace Micajah.Common.Pages
         /// <param name="enableClientCaching">The value indicating whether the client caching of the page should be enabled or not.</param>
         internal static void CreatePageHeader(Page page, bool enableClientCaching)
         {
-            CreatePageHeader(page, enableClientCaching, true, false, false);
+            CreatePageHeader(page, enableClientCaching, true, false, false, false);
         }
 
         /// <summary>
@@ -1404,7 +1402,8 @@ namespace Micajah.Common.Pages
         /// <param name="enableGlobalStyleSheet">The value indicating whether the embedded global stylesheet should be added into page's header.</param>
         /// <param name="enableJQuery">The value indicating whether the jQuery JavaScript Library should be added into page's header.</param>
         /// <param name="enableFancyBox">The value indicating whether the FancyBox jQuery Plugin should be added into page's header.</param>
-        internal static void CreatePageHeader(Page page, bool enableClientCaching, bool enableGlobalStyleSheet, bool enableJQuery, bool enableFancyBox)
+        /// <param name="enableFancyBox">The value indicating whether the encoding for the text inputs should be enabled or not on client.</param>
+        internal static void CreatePageHeader(Page page, bool enableClientCaching, bool enableGlobalStyleSheet, bool enableJQuery, bool enableFancyBox, bool enableClientEncoding)
         {
             if (page != null && page.Header != null)
             {
@@ -1438,9 +1437,12 @@ namespace Micajah.Common.Pages
                     page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorStyleSheet(theme, themeColor), true)));
                 page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeBaseStyleSheet(theme), true)));
 
-                if (enableGlobalStyleSheet) AddGlobalStyleSheet(page);
+                if (enableGlobalStyleSheet) RegisterGlobalStyleSheet(page);
 
                 if (!enableClientCaching) DisableClientCaching(page);
+
+                if (enableClientEncoding)
+                    RegisterClientEncodingScript(page);
             }
         }
 
@@ -1598,13 +1600,9 @@ namespace Micajah.Common.Pages
             this.CreatePageHeader();
             this.RegisterClientScripts();
 
-            string onSubmit = string.Empty;
-            if (this.EnableClientEncoding)
-                onSubmit += " Mp_EncodeTextBoxes();";
-
             if (this.EnableOverlay)
             {
-                onSubmit += " Mp_ShowOverlay();";
+                this.Page.Form.Attributes["onsubmit"] += " Mp_ShowOverlay();";
                 using (HtmlGenericControl div = new HtmlGenericControl("div"))
                 {
                     div.Attributes["style"] = string.Format(CultureInfo.InvariantCulture, "position: fixed; display: none; left: 0; top: 0; width: 100%; height: 100%; background: url({0}) repeat; z-index: 999998;", ResourceProvider.GetImageUrl(typeof(MasterPage), "Overlay.gif", true));
@@ -1613,7 +1611,8 @@ namespace Micajah.Common.Pages
                 }
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "AttachEscapeEvents", "Mp_AttachEscapeEvents();\r\n", true);
             }
-            this.Page.Form.Attributes["onsubmit"] += onSubmit + " return true;";
+
+            this.Page.Form.Attributes["onsubmit"] += " return true;";
 
             base.Render(writer);
         }
@@ -1623,12 +1622,28 @@ namespace Micajah.Common.Pages
         #region Public Methods
 
         /// <summary>
-        /// Adds the common stylesheet into page's header.
+        /// Registers the common stylesheet on the page.
         /// </summary>
-        /// <param name="page">The System.Web.UI.Page object to add the stylesheet.</param>
-        public static void AddGlobalStyleSheet(Page page)
+        /// <param name="page">The System.Web.UI.Page object to register the stylesheet.</param>
+        public static void RegisterGlobalStyleSheet(Page page)
         {
-            AddGlobalStyleSheet(page, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme);
+            RegisterGlobalStyleSheet(page, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme);
+        }
+
+        /// <summary>
+        /// Registers the encoding client script ont the page.
+        /// </summary>
+        /// <param name="page">The System.Web.UI.Page object to register the encoding client script.</param>
+        public static void RegisterClientEncodingScript(Page page)
+        {
+            string script = page.Form.Attributes["onsubmit"];
+            if (string.IsNullOrEmpty(script))
+                script = string.Empty;
+
+            if (script.IndexOf("Mp_EncodeTextBoxes", StringComparison.OrdinalIgnoreCase) == -1)
+                page.Form.Attributes["onsubmit"] += " Mp_EncodeTextBoxes();";
+
+            ScriptManager.RegisterClientScriptInclude(page, page.GetType(), "MasterPageScripts", ResourceProvider.GetResourceUrl("Scripts.MasterPage.js", true));
         }
 
         public void UpdateBreadcrumbs()

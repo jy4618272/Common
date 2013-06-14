@@ -331,7 +331,11 @@ function InstanceRequiredValidation(source, arguments) {{
         {
             base.OnPreRender(e);
 
-            Micajah.Common.Pages.MasterPage.AddGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
+            Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
+            Micajah.Common.Pages.MasterPage.RegisterClientEncodingScript(this.Page);
+
+            if (!this.IsPostBack)
+                this.Page.Form.Attributes["onsubmit"] += " return true;";
 
             if (Step3Panel.Visible)
             {
