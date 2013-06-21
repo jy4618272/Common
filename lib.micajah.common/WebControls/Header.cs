@@ -384,7 +384,7 @@ namespace Micajah.Common.WebControls
                         else
                         {
                             if (!string.IsNullOrEmpty(item.IconUrl))
-                                link.ImageUrl = item.IconUrl;
+                                link.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(item.IconUrl);
                             li.Controls.Add(link);
                         }
 
