@@ -58,7 +58,6 @@
     <asp:UpdatePanel ID="UpdatePanel3" runat="server" RenderMode="Inline" UpdateMode="Always">
         <ContentTemplate>
             <div id="Step2Form" runat="server">
-                <%--<div class="title"><asp:Literal ID="OrganizationAddressLabel" runat="server"></asp:Literal></div>--%>
                 <div class="row">
                     <asp:Label ID="OrganizationNameLabel2" runat="server" CssClass="Large Title"></asp:Label>
                     <small></small>
@@ -68,12 +67,6 @@
                         EnableClientScript="false" ValidationGroup="Step2" CssClass="Error" OnServerValidate="OrganizationNameValidator1_ServerValidate" />
                     <asp:Image ID="OrganizationNameTick2" runat="server" Visible="false" ImageAlign="AbsMiddle" />
                 </div>
-                <%--<div class="row">
-                    <asp:Label ID="WebsiteLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <small></small>
-                    <mits:TextBox ID="Website" runat="server" MaxLength="2048" ValidationType="RegularExpression"
-                        ValidationExpression="(http(s)?://)?([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?" ValidationGroup="Step2"/>
-                </div>--%>
                 <div class="row">
                     <asp:Label ID="HowYouHearAboutUsLabel" runat="server" CssClass="Large Title"></asp:Label>
                     <small></small>
@@ -88,7 +81,7 @@
                         MaxLength="255" />
                 </div>
                 <div class="row">
-                    <asp:Label ID="LastNameLabel" runat="server" CssClass="Large"></asp:Label>
+                    <asp:Label ID="LastNameLabel" runat="server" CssClass="Large Title"></asp:Label>
                     <small></small>
                     <mits:TextBox ID="LastName" runat="server" Required="true" ValidationGroup="Step2" MaxLength="255" />
                 </div>            
@@ -143,9 +136,8 @@
         </ContentTemplate>
     </asp:UpdatePanel>
     <div id="Step2FormButton" runat="server">
-       <%-- <hr />--%>
         <asp:ValidationSummary ID="Step2ValidationSummary" runat="server" CssClass="Error Block Summary" DisplayMode="BulletList" ShowSummary="true" ValidationGroup="Step2" />
-        <div style="padding-top: 50px; width: 93%;" align="center">
+        <div style="padding-top: 15px; width: 93%; clear: both;" align="center">
             <asp:Button ID="Step2Button" runat="server" CssClass="Green X-Large" ValidationGroup="Step2" OnClick="Step2Button_Click"></asp:Button>
         </div>
     </div>

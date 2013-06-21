@@ -611,7 +611,8 @@ function InstanceRequiredValidation(source, arguments) {{
             if (args.IsValid)
             {
                 args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
-                if (emailInUse) args.IsValid = true;
+                if ((!args.IsValid) && emailInUse)
+                    args.IsValid = true;
             }
             if (args.IsValid)
                 try
@@ -679,7 +680,16 @@ function InstanceRequiredValidation(source, arguments) {{
             Page.Validate("Step1");
             if (!Page.IsValid)
             {
-                if (!EmailTick1.Visible)
+                if (Email1.IsValid && (!EmailValidator1.IsValid))
+                {
+                    EmailValidator1.Enabled = false;
+                    Page.Validate("Step1");
+                    EmailValidator1.Enabled = true;
+
+                    if (!Page.IsValid)
+                        return;
+                }
+                else
                     return;
             }
 
@@ -697,7 +707,16 @@ function InstanceRequiredValidation(source, arguments) {{
             Page.Validate("Step2");
             if (!Page.IsValid)
             {
-                if (!EmailTick2.Visible)
+                if (Email2.IsValid && (!EmailValidator2.IsValid))
+                {
+                    EmailValidator2.Enabled = false;
+                    Page.Validate("Step2");
+                    EmailValidator2.Enabled = true;
+
+                    if (!Page.IsValid)
+                        return;
+                }
+                else
                     return;
             }
 
