@@ -117,14 +117,6 @@ namespace Micajah.Common.Security
         }
 
         /// <summary>
-        /// Gets a value indicating whether the user is administrator of the framework.
-        /// </summary>
-        internal bool IsFrameworkAdministrator
-        {
-            get { return LoginProvider.IsFrameworkAdministrator(this.LoginName); }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether the user has the access to the Log On As Another User feature.
         /// </summary>
         internal bool CanLogOnAsUser
@@ -531,6 +523,14 @@ namespace Micajah.Common.Security
         public TimeZoneInfo TimeZone
         {
             get { return TimeZoneInfo.FindSystemTimeZoneById(this.TimeZoneId); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the user is administrator of the framework.
+        /// </summary>
+        public bool IsFrameworkAdministrator
+        {
+            get { return LoginProvider.IsFrameworkAdministrator(this.LoginName); }
         }
 
         /// <summary>
