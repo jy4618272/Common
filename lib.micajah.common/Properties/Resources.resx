@@ -2236,9 +2236,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="SignupOrganizationControl_LocalSettingsLabel_Text" xml:space="preserve">
     <value>Local Settings</value>
   </data>
-  <data name="SignupOrganizationControl_OrganizationAddressLabel_Text" xml:space="preserve">
-    <value>Company Address</value>
-  </data>
   <data name="SignupOrganizationControl_OrganizationNameHelpText1_Text" xml:space="preserve">
     <value>Acme Inc. or Your Name</value>
   </data>
@@ -2274,9 +2271,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="SignupOrganizationControl_TimeZoneLabel_Text" xml:space="preserve">
     <value>Time Zone</value>
-  </data>
-  <data name="SignupOrganizationControl_WebsiteLabel_Text" xml:space="preserve">
-    <value>Website</value>
   </data>
   <data name="DatabasesControl_EditForm_PrivateField_Text" xml:space="preserve">
     <value>Private</value>
@@ -2376,9 +2370,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="SignupOrganizationControl_Password_ErrorMessage" xml:space="preserve">
     <value>Password is required</value>
-  </data>
-  <data name="SignupOrganizationControl_Website_ValidationErrorMessage" xml:space="preserve">
-    <value>Invalid website URL</value>
   </data>
   <data name="SignupOrganizationControl_ConfirmPassword_ErrorMessage" xml:space="preserve">
     <value>Password confirmation is required</value>

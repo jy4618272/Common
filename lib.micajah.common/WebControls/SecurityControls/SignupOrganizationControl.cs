@@ -47,13 +47,10 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HtmlGenericControl Step2Form;
         protected HtmlGenericControl Step2FormButton;
         protected Image LogoImage2;
-        //protected Literal OrganizationAddressLabel;
         protected Label OrganizationNameLabel2;
         protected TextBox OrganizationName2;
         protected CustomValidator OrganizationNameValidator2;
         protected Image OrganizationNameTick2;
-        //protected Label WebsiteLabel;
-        //protected TextBox Website;
         protected Label HowYouHearAboutUsLabel;
         protected TextBox HowYouHearAboutUs;
 
@@ -203,23 +200,6 @@ function InstanceRequiredValidation(source, arguments) {{
             set { this.ViewState["OAuth2Parameters"] = value; }
         }
 
-        //private string WebSiteUrl
-        //{
-        //    get
-        //    {
-        //        string websiteUrl = Website.Text;
-        //        if (!string.IsNullOrEmpty(websiteUrl))
-        //        {
-        //            if (!websiteUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-        //            {
-        //                if (!websiteUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-        //                    websiteUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + websiteUrl;
-        //            }
-        //        }
-        //        return websiteUrl;
-        //    }
-        //}
-
         #endregion
 
         #region Private Methods
@@ -240,10 +220,7 @@ function InstanceRequiredValidation(source, arguments) {{
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
 
-            //OrganizationAddressLabel.Text = Resources.SignupOrganizationControl_OrganizationAddressLabel_Text;
             OrganizationNameLabel2.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
-            //Website.ValidationErrorMessage = Resources.SignupOrganizationControl_Website_ValidationErrorMessage;
-            //WebsiteLabel.Text = Resources.SignupOrganizationControl_WebsiteLabel_Text;
             HowYouHearAboutUsLabel.Text = Resources.SignupOrganizationControl_HowYouHearAboutUsLabel_Text;
 
             PersonalInformationLabel.Text = Resources.SignupOrganizationControl_PersonalInformationLabel_Text;
@@ -632,7 +609,10 @@ function InstanceRequiredValidation(source, arguments) {{
 
             args.IsValid = ValidateOrganizationName(OrganizationName2.Text, out errorMessage);
             if (args.IsValid)
+            {
                 args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
+                if (emailInUse) args.IsValid = true;
+            }
             if (args.IsValid)
                 try
                 {

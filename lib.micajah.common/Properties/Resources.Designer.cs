@@ -6360,15 +6360,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company Address.
-        /// </summary>
-        internal static string SignupOrganizationControl_OrganizationAddressLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_OrganizationAddressLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Company name is required.
         /// </summary>
         internal static string SignupOrganizationControl_OrganizationName1_ErrorMessage {
@@ -6509,24 +6500,6 @@ namespace Micajah.Common.Properties {
         internal static string SignupOrganizationControl_TimeZoneLabel_Text {
             get {
                 return ResourceManager.GetString("SignupOrganizationControl_TimeZoneLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid website URL.
-        /// </summary>
-        internal static string SignupOrganizationControl_Website_ValidationErrorMessage {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_Website_ValidationErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Website.
-        /// </summary>
-        internal static string SignupOrganizationControl_WebsiteLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_WebsiteLabel_Text", resourceCulture);
             }
         }
         
