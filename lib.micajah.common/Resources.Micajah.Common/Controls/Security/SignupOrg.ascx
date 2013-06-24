@@ -1,4 +1,5 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.SignupOrganizationControl" %>
+﻿
+<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.SignupOrganizationControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" TagPrefix="telerik" %>
 
@@ -14,7 +15,6 @@
                     <ContentTemplate>
                         <mits:TextBox ID="OrganizationName1" runat="server" Required="true" ValidationGroup="Step1" CssClass="Large" TabIndex="1" AutoPostBack="true" OnTextChanged="OrganizationName1_TextChanged" />
                         <asp:Image ID="OrganizationNameTick1" runat="server" Visible="false" ImageAlign="AbsMiddle" />
-                        <asp:CustomValidator ID="OrganizationNameValidator1" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="Step1" CssClass="Error" OnServerValidate="OrganizationNameValidator1_ServerValidate" /> 
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
@@ -63,8 +63,6 @@
                     <small></small>
                     <mits:TextBox ID="OrganizationName2" runat="server" Required="true" ValidationGroup="Step2"
                         AutoPostBack="true" OnTextChanged="OrganizationName1_TextChanged" />
-                    <asp:CustomValidator ID="OrganizationNameValidator2" runat="server" Display="Dynamic"
-                        EnableClientScript="false" ValidationGroup="Step2" CssClass="Error" OnServerValidate="OrganizationNameValidator1_ServerValidate" />
                     <asp:Image ID="OrganizationNameTick2" runat="server" Visible="false" ImageAlign="AbsMiddle" />
                 </div>
                 <div class="row">

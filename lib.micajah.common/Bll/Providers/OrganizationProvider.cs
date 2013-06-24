@@ -139,14 +139,7 @@ namespace Micajah.Common.Bll.Providers
             if (currency != null) row.Currency = currency;
             if (howYouHearAboutUs != null) row.HowYouHearAboutUs = howYouHearAboutUs;
 
-            try
-            {
-                table.AddOrganizationRow(row);
-            }
-            catch (ConstraintException ex)
-            {
-                throw new ConstraintException(string.Format(CultureInfo.CurrentCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationAlreadyExists, name), ex);
-            }
+            table.AddOrganizationRow(row);
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
 
@@ -255,14 +248,7 @@ namespace Micajah.Common.Bll.Providers
             description = Support.TrimString(description, table.DescriptionColumn.MaxLength);
             websiteUrl = Support.TrimString(websiteUrl, table.WebsiteUrlColumn.MaxLength);
 
-            try
-            {
-                row.Name = name;
-            }
-            catch (ConstraintException ex)
-            {
-                throw new ConstraintException(string.Format(CultureInfo.CurrentCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationAlreadyExists, name), ex);
-            }
+            row.Name = name;
 
             if (!row.Deleted)
             {

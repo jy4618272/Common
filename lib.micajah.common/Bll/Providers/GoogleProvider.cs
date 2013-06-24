@@ -34,9 +34,13 @@ namespace Micajah.Common.Bll.Providers
 
         private static string GetRequestValue(HttpRequest request, string name)
         {
-            string value = request.QueryString[name];
-            if (value == null)
-                value = request.Form[name];
+            string value = null;
+            if (request != null)
+            {
+                value = request.QueryString[name];
+                if (value == null)
+                    value = request.Form[name];
+            }
             return value;
         }
 

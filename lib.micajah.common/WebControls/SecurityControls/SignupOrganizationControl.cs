@@ -26,7 +26,6 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label OrganizationNameLabel1;
         protected Literal OrganizationNameHelpText1;
         protected TextBox OrganizationName1;
-        protected CustomValidator OrganizationNameValidator1;
         protected Image OrganizationNameTick1;
         protected Label EmailLabel1;
         protected TextBox Email1;
@@ -49,7 +48,6 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Image LogoImage2;
         protected Label OrganizationNameLabel2;
         protected TextBox OrganizationName2;
-        protected CustomValidator OrganizationNameValidator2;
         protected Image OrganizationNameTick2;
         protected Label HowYouHearAboutUsLabel;
         protected TextBox HowYouHearAboutUs;
@@ -271,15 +269,6 @@ function InstanceRequiredValidation(source, arguments) {{
             }
         }
 
-        private static bool ValidateOrganizationName(string organizationName, out string errorMessage)
-        {
-            errorMessage = null;
-            bool isValid = (OrganizationProvider.GetOrganizationIdByName(organizationName) == Guid.Empty);
-            if (!isValid)
-                errorMessage = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationAlreadyExists, organizationName).TrimEnd('.');
-            return isValid;
-        }
-
         private static bool ValidateEmail(string email, out string errorMessage, out bool emailInUse)
         {
             errorMessage = null;
@@ -452,53 +441,14 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void OrganizationName1_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-            if (string.IsNullOrEmpty(textBox.Text))
-            {
-                textBox.IsValid = true;
+            textBox.IsValid = true;
 
-                if (textBox.ID == OrganizationName1.ID)
-                    OrganizationNameTick1.Visible = false;
-                else if (textBox.ID == OrganizationName2.ID)
-                    OrganizationNameTick2.Visible = false;
-            }
-            else
-            {
-                if (textBox.ID == OrganizationName1.ID)
-                    OrganizationNameValidator1.Validate();
-                else if (textBox.ID == OrganizationName2.ID)
-                    OrganizationNameValidator2.Validate();
-            }
-        }
+            bool isEmpty = string.IsNullOrEmpty(textBox.Text);
 
-        protected void OrganizationNameValidator1_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (args == null) return;
-
-            CustomValidator val = (CustomValidator)source;
-            TextBox textBox = null;
-            Image tickImage = null;
-            string errorMessage = null;
-
-            if (val.ID == OrganizationNameValidator1.ID)
-            {
-                textBox = OrganizationName1;
-                tickImage = OrganizationNameTick1;
-            }
-            else if (val.ID == OrganizationNameValidator2.ID)
-            {
-                textBox = OrganizationName2;
-                tickImage = OrganizationNameTick2;
-            }
-
-            tickImage.Visible = textBox.IsValid = args.IsValid = ValidateOrganizationName(textBox.Text, out errorMessage);
-
-            if (!args.IsValid)
-            {
-                val.ErrorMessage = errorMessage;
-
-                textBox.Attributes["validatorId"] = val.ClientID;
-                textBox.Focus();
-            }
+            if (textBox.ID == OrganizationName1.ID)
+                OrganizationNameTick1.Visible = (!isEmpty);
+            else if (textBox.ID == OrganizationName2.ID)
+                OrganizationNameTick2.Visible = (!isEmpty);
         }
 
         protected void Email1_TextChanged(object sender, EventArgs e)
@@ -607,13 +557,10 @@ function InstanceRequiredValidation(source, arguments) {{
             string errorMessage = null;
             bool emailInUse = false;
 
-            args.IsValid = ValidateOrganizationName(OrganizationName2.Text, out errorMessage);
-            if (args.IsValid)
-            {
-                args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
-                if ((!args.IsValid) && emailInUse)
-                    args.IsValid = true;
-            }
+            args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
+            if ((!args.IsValid) && emailInUse)
+                args.IsValid = true;
+
             if (args.IsValid)
                 try
                 {

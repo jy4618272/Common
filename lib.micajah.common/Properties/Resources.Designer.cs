@@ -4848,15 +4848,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Organization &quot;{0}&quot; already exists..
-        /// </summary>
-        internal static string OrganizationProvider_ErrorMessage_OrganizationAlreadyExists {
-            get {
-                return ResourceManager.GetString("OrganizationProvider_ErrorMessage_OrganizationAlreadyExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The account of the Organization &quot;{0}&quot; has expired..
         /// </summary>
         internal static string OrganizationProvider_ErrorMessage_OrganizationHasExpired {

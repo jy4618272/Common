@@ -744,9 +744,6 @@
   <data name="GroupProvider_ErrorMessage_GroupAlreadyExists" xml:space="preserve">
     <value>The Group "{0}" already exists</value>
   </data>
-  <data name="OrganizationProvider_ErrorMessage_OrganizationAlreadyExists" xml:space="preserve">
-    <value>The Organization "{0}" already exists.</value>
-  </data>
   <data name="Support_InvalidEmail" xml:space="preserve">
     <value>The E-mail supplied is invalid.</value>
   </data>
