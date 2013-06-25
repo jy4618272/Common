@@ -185,15 +185,17 @@ function Mp_AttachEscapeEvents() {
     document.onkeyup = Mp_EscapePressHandler;
 }
 
-function Mp_EscapePressHandler(evt)
-{
-   evt = (evt) ? evt : window.event
-   var charCode = (evt.which) ? evt.which : evt.keyCode
-   if (charCode == 27) {       
-       Mp_HideOverlay();
-   }
+function Mp_EscapePressHandler(evt) {
+    evt = (evt) ? evt : window.event
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode == 27) {
+        Mp_HideOverlay();
+    }
 }
 
-if (Sys.WebForms)
-    if (Sys.WebForms.PageRequestManager)
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(Mp_EndRequestHandler);
+if (typeof (Sys) !== "undefined") {
+    if (Sys.WebForms) {
+        if (Sys.WebForms.PageRequestManager)
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(Mp_EndRequestHandler);
+    }
+}
