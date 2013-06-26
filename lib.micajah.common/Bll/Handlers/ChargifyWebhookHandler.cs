@@ -77,7 +77,7 @@ namespace Micajah.Common.Bll.Handlers
                     string _appName = FrameworkConfiguration.Current.WebApplication.Name;
                     string _salesEmail = FrameworkConfiguration.Current.WebApplication.Email.SalesTeam;
                     string _subject = _org.Name+" "+_inst.Name + " Chargify payment attempt failded.";
-                    string _body = _appName +" Chargify service can't process payment operation for \"" + _org.Name + " "+_inst.Name+"\" organization instance.\r\n. Operation status is " + _event+"\r\n\r\nContact User Email: "+_uEmail+" "+_uFirstName+" "+_uLastName;
+                    string _body = _appName +" Chargify service can't process payment operation for \"" + _org.Name + " "+_inst.Name+"\" organization instance.\r\n Operation status is " + _event+"\r\n\r\nContact User Email: "+_uEmail+" "+_uFirstName+" "+_uLastName;
                     if (!string.IsNullOrEmpty(_salesEmail))
                     {
                         try
