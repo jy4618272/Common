@@ -46,6 +46,16 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets or sets the settings of the Bing integration.
+        /// </summary>
+        [ConfigurationProperty("bing")]
+        public BingIntegrationElement Bing
+        {
+            get { return (BingIntegrationElement)this["bing"]; }
+            set { this["bing"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the settings of the Chargify integration.
         /// </summary>
         [ConfigurationProperty("chargify")]

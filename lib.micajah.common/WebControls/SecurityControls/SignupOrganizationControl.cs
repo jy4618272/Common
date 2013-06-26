@@ -1,10 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using Google.GData.Client;
+﻿using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -13,6 +7,12 @@ using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.WebControls.SetupControls;
 using Newtonsoft.Json;
+using System;
+using System.Data;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -26,12 +26,12 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label OrganizationNameLabel1;
         protected Literal OrganizationNameHelpText1;
         protected TextBox OrganizationName1;
-        protected CustomValidator OrganizationNameValidator1;
         protected Image OrganizationNameTick1;
         protected Label EmailLabel1;
         protected TextBox Email1;
         protected CustomValidator EmailValidator1;
         protected Image EmailTick1;
+        protected Label EmailInUseLabel;
         protected HtmlGenericControl OrganizationUrlRow;
         protected Label OrganizationUrlLabel;
         protected Literal Schema;
@@ -46,13 +46,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HtmlGenericControl Step2Form;
         protected HtmlGenericControl Step2FormButton;
         protected Image LogoImage2;
-        //protected Literal OrganizationAddressLabel;
         protected Label OrganizationNameLabel2;
         protected TextBox OrganizationName2;
-        protected CustomValidator OrganizationNameValidator2;
         protected Image OrganizationNameTick2;
-        //protected Label WebsiteLabel;
-        //protected TextBox Website;
         protected Label HowYouHearAboutUsLabel;
         protected TextBox HowYouHearAboutUs;
 
@@ -202,23 +198,6 @@ function InstanceRequiredValidation(source, arguments) {{
             set { this.ViewState["OAuth2Parameters"] = value; }
         }
 
-        //private string WebSiteUrl
-        //{
-        //    get
-        //    {
-        //        string websiteUrl = Website.Text;
-        //        if (!string.IsNullOrEmpty(websiteUrl))
-        //        {
-        //            if (!websiteUrl.StartsWith(Uri.UriSchemeHttp + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-        //            {
-        //                if (!websiteUrl.StartsWith(Uri.UriSchemeHttps + Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-        //                    websiteUrl = Uri.UriSchemeHttp + Uri.SchemeDelimiter + websiteUrl;
-        //            }
-        //        }
-        //        return websiteUrl;
-        //    }
-        //}
-
         #endregion
 
         #region Private Methods
@@ -239,10 +218,7 @@ function InstanceRequiredValidation(source, arguments) {{
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
 
-            //OrganizationAddressLabel.Text = Resources.SignupOrganizationControl_OrganizationAddressLabel_Text;
             OrganizationNameLabel2.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
-            //Website.ValidationErrorMessage = Resources.SignupOrganizationControl_Website_ValidationErrorMessage;
-            //WebsiteLabel.Text = Resources.SignupOrganizationControl_WebsiteLabel_Text;
             HowYouHearAboutUsLabel.Text = Resources.SignupOrganizationControl_HowYouHearAboutUsLabel_Text;
 
             PersonalInformationLabel.Text = Resources.SignupOrganizationControl_PersonalInformationLabel_Text;
@@ -293,24 +269,17 @@ function InstanceRequiredValidation(source, arguments) {{
             }
         }
 
-        private static bool ValidateOrganizationName(string organizationName, out string errorMessage)
+        private static bool ValidateEmail(string email, out string errorMessage, out bool emailInUse)
         {
             errorMessage = null;
-            bool isValid = (OrganizationProvider.GetOrganizationIdByName(organizationName) == Guid.Empty);
-            if (!isValid)
-                errorMessage = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationAlreadyExists, organizationName).TrimEnd('.');
-            return isValid;
-        }
-
-        private static bool ValidateEmail(string email, out string errorMessage)
-        {
-            errorMessage = null;
+            emailInUse = false;
             bool isValid = Support.ValidateEmail(email, false);
             if (isValid)
             {
                 isValid = (!WebApplication.LoginProvider.ValidateLogin(email, null));
                 if (!isValid)
                 {
+                    emailInUse = true;
                     errorMessage = Resources.SignupOrganizationControl_EmailValidator1_ErrorMessage + "<br />"
                         + BaseControl.GetHyperlink(WebApplication.LoginProvider.GetLoginUrl(email, false), Resources.SignupOrganizationControl_LoginLink_Text, null, "_parent");
                 }
@@ -328,12 +297,14 @@ function InstanceRequiredValidation(source, arguments) {{
         {
             base.OnPreRender(e);
 
-            Micajah.Common.Pages.MasterPage.AddGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
+            Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
+            Micajah.Common.Pages.MasterPage.RegisterClientEncodingScript(this.Page);
+
+            if (!this.IsPostBack)
+                this.Page.Form.Attributes["onsubmit"] += " return true;";
 
             if (Step3Panel.Visible)
             {
-                //MagicForm.ApplyStyle(Step3Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
-
                 InstanceList.DataBind();
                 if (InstanceList.Items.Count > 0)
                 {
@@ -348,6 +319,10 @@ function InstanceRequiredValidation(source, arguments) {{
                     code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
                     if (!string.IsNullOrEmpty(code))
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
+
+                    code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
+                    if (!string.IsNullOrEmpty(code))
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "BingConversionClientScript", code, false);
                 }
                 else
                 {
@@ -360,8 +335,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step1Panel.Visible)
             {
-                //MagicForm.ApplyStyle(Step1Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
-
                 this.Page.Form.Target = "_parent";
 
                 LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
@@ -377,9 +350,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step2Panel.Visible)
             {
-                //MagicForm.ApplyStyle(Step2Form, ColorScheme.White, false, true, MasterPageTheme.Modern);
-                //MagicForm.ApplyStyle(Step2FormButton, ColorScheme.White, false, true, MasterPageTheme.Modern);
-
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "PasswordCompareValidationClientScript", this.PasswordCompareValidationClientScript, true);
             }
 
@@ -471,53 +441,14 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void OrganizationName1_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-            if (string.IsNullOrEmpty(textBox.Text))
-            {
-                textBox.IsValid = true;
+            textBox.IsValid = true;
 
-                if (textBox.ID == OrganizationName1.ID)
-                    OrganizationNameTick1.Visible = false;
-                else if (textBox.ID == OrganizationName2.ID)
-                    OrganizationNameTick2.Visible = false;
-            }
-            else
-            {
-                if (textBox.ID == OrganizationName1.ID)
-                    OrganizationNameValidator1.Validate();
-                else if (textBox.ID == OrganizationName2.ID)
-                    OrganizationNameValidator2.Validate();
-            }
-        }
+            bool isEmpty = string.IsNullOrEmpty(textBox.Text);
 
-        protected void OrganizationNameValidator1_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (args == null) return;
-
-            CustomValidator val = (CustomValidator)source;
-            TextBox textBox = null;
-            Image tickImage = null;
-            string errorMessage = null;
-
-            if (val.ID == OrganizationNameValidator1.ID)
-            {
-                textBox = OrganizationName1;
-                tickImage = OrganizationNameTick1;
-            }
-            else if (val.ID == OrganizationNameValidator2.ID)
-            {
-                textBox = OrganizationName2;
-                tickImage = OrganizationNameTick2;
-            }
-
-            tickImage.Visible = textBox.IsValid = args.IsValid = ValidateOrganizationName(textBox.Text, out errorMessage);
-
-            if (!args.IsValid)
-            {
-                val.ErrorMessage = errorMessage;
-
-                textBox.Attributes["validatorId"] = val.ClientID;
-                textBox.Focus();
-            }
+            if (textBox.ID == OrganizationName1.ID)
+                OrganizationNameTick1.Visible = (!isEmpty);
+            else if (textBox.ID == OrganizationName2.ID)
+                OrganizationNameTick2.Visible = (!isEmpty);
         }
 
         protected void Email1_TextChanged(object sender, EventArgs e)
@@ -542,6 +473,7 @@ function InstanceRequiredValidation(source, arguments) {{
             TextBox textBox = null;
             Image tickImage = null;
             string errorMessage = null;
+            bool emailInUse = false;
 
             if (val.ID == EmailValidator1.ID)
             {
@@ -554,7 +486,19 @@ function InstanceRequiredValidation(source, arguments) {{
                 tickImage = EmailTick2;
             }
 
-            tickImage.Visible = textBox.IsValid = args.IsValid = ValidateEmail(textBox.Text, out errorMessage);
+            bool isValid = ValidateEmail(textBox.Text, out errorMessage, out emailInUse);
+            args.IsValid = isValid;
+            tickImage.Visible = textBox.IsValid = isValid || emailInUse;
+            if (emailInUse)
+            {
+                val.Style["background"] = "none !important";
+                val.Style[HtmlTextWriterStyle.PaddingLeft] = "0 !important";
+            }
+            else
+            {
+                val.Style.Remove("background");
+                val.Style.Remove("padding-left");
+            }
 
             if (!args.IsValid)
             {
@@ -611,10 +555,12 @@ function InstanceRequiredValidation(source, arguments) {{
             if (args == null) return;
 
             string errorMessage = null;
+            bool emailInUse = false;
 
-            args.IsValid = ValidateOrganizationName(OrganizationName2.Text, out errorMessage);
-            if (args.IsValid)
-                args.IsValid = ValidateEmail(Email2.Text, out errorMessage);
+            args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
+            if ((!args.IsValid) && emailInUse)
+                args.IsValid = true;
+
             if (args.IsValid)
                 try
                 {
@@ -679,7 +625,20 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void Step1Button_Click(object sender, EventArgs e)
         {
             Page.Validate("Step1");
-            if (!Page.IsValid) return;
+            if (!Page.IsValid)
+            {
+                if (Email1.IsValid && (!EmailValidator1.IsValid))
+                {
+                    EmailValidator1.Enabled = false;
+                    Page.Validate("Step1");
+                    EmailValidator1.Enabled = true;
+
+                    if (!Page.IsValid)
+                        return;
+                }
+                else
+                    return;
+            }
 
             Step1Panel.Visible = false;
             Step2Panel.Visible = true;
@@ -693,7 +652,20 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void Step2Button_Click(object sender, EventArgs e)
         {
             Page.Validate("Step2");
-            if (!Page.IsValid) return;
+            if (!Page.IsValid)
+            {
+                if (Email2.IsValid && (!EmailValidator2.IsValid))
+                {
+                    EmailValidator2.Enabled = false;
+                    Page.Validate("Step2");
+                    EmailValidator2.Enabled = true;
+
+                    if (!Page.IsValid)
+                        return;
+                }
+                else
+                    return;
+            }
 
             Step2Panel.Visible = false;
             Step3Panel.Visible = true;

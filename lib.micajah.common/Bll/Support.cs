@@ -1,3 +1,6 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,9 +18,6 @@ using System.Web.Compilation;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.Bll
 {
@@ -1482,6 +1482,7 @@ namespace Micajah.Common.Bll
             msg.Subject = subject;
             msg.Body = body;
             msg.IsBodyHtml = isBodyHtml;
+            msg.BodyEncoding = System.Text.Encoding.UTF8;
             if (!string.IsNullOrEmpty(bcc))
                 msg.Bcc.Add(bcc);
 

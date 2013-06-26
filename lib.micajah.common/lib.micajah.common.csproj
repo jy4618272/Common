@@ -236,6 +236,7 @@
     <Compile Include="Configuration\BaseConfigurationSection.cs" />
     <Compile Include="Configuration\BreadcrumbsElement.cs" />
     <Compile Include="Configuration\ChargifyIntegrationElement.cs" />
+    <Compile Include="Configuration\BingIntegrationElement.cs" />
     <Compile Include="Configuration\CurrencyElement.cs" />
     <Compile Include="Configuration\EntityEventElement.cs" />
     <Compile Include="Configuration\EntityHierarchyElement.cs" />

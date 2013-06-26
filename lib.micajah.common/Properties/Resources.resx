@@ -744,9 +744,6 @@
   <data name="GroupProvider_ErrorMessage_GroupAlreadyExists" xml:space="preserve">
     <value>The Group "{0}" already exists</value>
   </data>
-  <data name="OrganizationProvider_ErrorMessage_OrganizationAlreadyExists" xml:space="preserve">
-    <value>The Organization "{0}" already exists.</value>
-  </data>
   <data name="Support_InvalidEmail" xml:space="preserve">
     <value>The E-mail supplied is invalid.</value>
   </data>
@@ -2216,7 +2213,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Currency</value>
   </data>
   <data name="SignupOrganizationControl_CustomizeLiteral_Text" xml:space="preserve">
-    <value>Select a Setup Preference</value>
+    <value>Select best initial setup. Easily modified later.</value>
   </data>
   <data name="SignupOrganizationControl_EmailAndPasswordLabel_Text" xml:space="preserve">
     <value>Email and Password</value>
@@ -2235,9 +2232,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="SignupOrganizationControl_LocalSettingsLabel_Text" xml:space="preserve">
     <value>Local Settings</value>
-  </data>
-  <data name="SignupOrganizationControl_OrganizationAddressLabel_Text" xml:space="preserve">
-    <value>Company Address</value>
   </data>
   <data name="SignupOrganizationControl_OrganizationNameHelpText1_Text" xml:space="preserve">
     <value>Acme Inc. or Your Name</value>
@@ -2274,9 +2268,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="SignupOrganizationControl_TimeZoneLabel_Text" xml:space="preserve">
     <value>Time Zone</value>
-  </data>
-  <data name="SignupOrganizationControl_WebsiteLabel_Text" xml:space="preserve">
-    <value>Website</value>
   </data>
   <data name="DatabasesControl_EditForm_PrivateField_Text" xml:space="preserve">
     <value>Private</value>
@@ -2377,14 +2368,11 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="SignupOrganizationControl_Password_ErrorMessage" xml:space="preserve">
     <value>Password is required</value>
   </data>
-  <data name="SignupOrganizationControl_Website_ValidationErrorMessage" xml:space="preserve">
-    <value>Invalid website URL</value>
-  </data>
   <data name="SignupOrganizationControl_ConfirmPassword_ErrorMessage" xml:space="preserve">
     <value>Password confirmation is required</value>
   </data>
   <data name="SignupOrganizationControl_EmailValidator1_ErrorMessage" xml:space="preserve">
-    <value>Email is already in use</value>
+    <value>Trying to log in instead?</value>
   </data>
   <data name="SignupOrganizationControl_LoginLink_Text" xml:space="preserve">
     <value>Login Here</value>
@@ -2602,7 +2590,7 @@ Do you want to link email "{1}" to this account?</value>
     <value>Google Password</value>
   </data>
   <data name="GoogleIntegrationControl_EditForm_ObjectName" xml:space="preserve">
-    <value>Google connect details</value>
+    <value>Google Connection Settings</value>
   </data>
   <data name="GoogleIntegrationControl_FirstNameColumn_HeaderText" xml:space="preserve">
     <value>First Name</value>
@@ -2706,12 +2694,12 @@ We recommend you deny access unless you are certain that you initiated this requ
     <value>Unrecognized Consumer Domain</value>
   </data>
   <data name="GoogleIntegrationControl_AddSherpaDesk_Text" xml:space="preserve">
-    <value>Add SherpaDesk to your Google Apps Account</value>
+    <value>Add Sherpadesk to your existing Google Apps Account</value>
   </data>
   <data name="GoogleIntegrationControl_Caption_Text" xml:space="preserve">
-    <value>Manual Replication without full Google App Integration</value>
+    <value>Manual Replication without full Google Apps Integration</value>
   </data>
   <data name="GoogleIntegrationControl_GoogleAppsForBusiness_Text" xml:space="preserve">
-    <value>Sign Up for Google Apps for Business</value>
+    <value>Sign up for a new Google Apps for Business Account</value>
   </data>
 </root>

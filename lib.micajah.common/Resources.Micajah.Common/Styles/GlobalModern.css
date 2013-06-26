@@ -712,11 +712,6 @@ a.Pill.LightGray:hover
 }
 
 /* DateTimePicker */
-.DatePicker_Modern .rcCalPopup, .DatePicker_Modern .rcTimePopup
-{
-    left: 22px !important;
-}
-
 .DatePicker_Modern input[type=text].rdfd_
 {
     padding: 0 !important;

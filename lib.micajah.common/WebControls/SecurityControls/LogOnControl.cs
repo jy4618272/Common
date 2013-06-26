@@ -1,3 +1,8 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
 using System;
 using System.Globalization;
 using System.Security.Authentication;
@@ -5,11 +10,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -248,24 +248,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                         CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
                 }
                 else
-                {
-                    string vanityUrl = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
-
-                    if (!string.IsNullOrEmpty(vanityUrl) && (string.Compare(Request.Url.Host, vanityUrl, StringComparison.OrdinalIgnoreCase) != 0))
-                    {
-                        if (string.IsNullOrEmpty(redirectUrl))
-                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery);
-                        else
-                        {
-                            redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
-                                + ((Request.QueryString["returnurl"] == null)
-                                    ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl)
-                                    : string.Empty);
-                        }
-
-                        Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, vanityUrl, redirectUrl));
-                    }
-                }
+                    this.VerifyVanityUrl();
             }
 
             if (!(string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(password) || (organizationId == Guid.Empty)))
@@ -387,6 +370,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (this.InitParameters != null)
                 this.InitParameters(this, EventArgs.Empty);
+
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                this.VerifyVanityUrl();
         }
 
         private void CheckSignupUser()
@@ -656,6 +642,35 @@ namespace Micajah.Common.WebControls.SecurityControls
             this.RedirectAfterLogOn();
         }
 
+        private void VerifyVanityUrl()
+        {
+            Guid organizationId = this.OrganizationId;
+
+            if (organizationId != Guid.Empty)
+            {
+                Guid instanceId = this.InstanceId;
+
+                string vanityUrl = CustomUrlProvider.GetVanityUrl(organizationId, instanceId);
+
+                if (!string.IsNullOrEmpty(vanityUrl) && (string.Compare(Request.Url.Host, vanityUrl, StringComparison.OrdinalIgnoreCase) != 0))
+                {
+                    string redirectUrl = this.ReturnUrl;
+
+                    if (string.IsNullOrEmpty(redirectUrl))
+                        redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery);
+                    else
+                    {
+                        redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
+                            + ((Request.QueryString["returnurl"] == null)
+                                ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl)
+                                : string.Empty);
+                    }
+
+                    Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}", Request.Url.Scheme, Uri.SchemeDelimiter, vanityUrl, redirectUrl));
+                }
+            }
+        }
+
         #endregion
 
         #region Protected Methods
@@ -677,7 +692,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                         LinkEmailPanel.Visible = true;
                         FormTable.Visible = false;
-                        LogoImagePanel.Visible = false;
+                        if (LogoImagePanel != null)
+                            LogoImagePanel.Visible = false;
 
                         m_MainContainerHeight = 150;
                     }
@@ -799,7 +815,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             base.OnPreRender(e);
 
             if (this.EnableEmbeddedStyleSheets)
-                Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, this.EnableClientCaching);
+                Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, this.EnableClientCaching, true, false, false, true);
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 
