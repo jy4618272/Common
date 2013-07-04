@@ -3815,6 +3815,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to logo.
+        /// </summary>
+        internal static string LogosControl_EditForm_ObjectName {
+            get {
+                return ResourceManager.GetString("LogosControl_EditForm_ObjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instance logo.
         /// </summary>
         internal static string LogosControl_EditForm_ObjectName_Instance {
