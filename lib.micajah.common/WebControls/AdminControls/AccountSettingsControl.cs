@@ -738,6 +738,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     msgStatus.Message = "Can't create Chargify Subscription!";
                     _subscr = Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                    Chargify.UpdateBillingDateForSubscription(_subscr.SubscriptionID, DateTime.UtcNow.AddDays(1));
                 }
                 else
                 {
