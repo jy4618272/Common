@@ -2702,4 +2702,7 @@ We recommend you deny access unless you are certain that you initiated this requ
   <data name="GoogleIntegrationControl_GoogleAppsForBusiness_Text" xml:space="preserve">
     <value>Sign up for a new Google Apps for Business Account</value>
   </data>
+  <data name="LogosControl_EditForm_ObjectName" xml:space="preserve">
+    <value>logo</value>
+  </data>
 </root>
