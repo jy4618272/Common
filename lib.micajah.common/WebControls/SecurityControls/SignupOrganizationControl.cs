@@ -624,11 +624,15 @@ function InstanceRequiredValidation(source, arguments) {{
 
         protected void Step1Button_Click(object sender, EventArgs e)
         {
+            bool emailInUse = false;
+
             Page.Validate("Step1");
             if (!Page.IsValid)
             {
                 if (Email1.IsValid && (!EmailValidator1.IsValid))
                 {
+                    emailInUse = true;
+
                     EmailValidator1.Enabled = false;
                     Page.Validate("Step1");
                     EmailValidator1.Enabled = true;
@@ -644,6 +648,12 @@ function InstanceRequiredValidation(source, arguments) {{
             Step2Panel.Visible = true;
 
             Email2.Text = Email1.Text;
+            if (emailInUse)
+            {
+                EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
+                EmailAndPasswordGroupRow.Visible = Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
+            }
+
             OrganizationName2.Text = OrganizationName1.Text;
 
             HowYouHearAboutUs.Focus();
