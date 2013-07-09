@@ -1,8 +1,10 @@
-﻿using System;
-using DotNetOpenAuth.OAuth;
+﻿using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
 using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers.OAuth;
+using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Micajah.Common.Dal
 {
@@ -17,9 +19,19 @@ namespace Micajah.Common.Dal
                 get { return string.IsNullOrEmpty(this.Callback) ? null : new Uri(this.Callback); }
             }
 
-            System.Security.Cryptography.X509Certificates.X509Certificate2 IConsumerDescription.Certificate
+            X509Certificate2 IConsumerDescription.Certificate
             {
-                get { return null; }
+                get
+                {
+                    if (!this.IsConsumerCertificateNull())
+                    {
+                        if (!string.IsNullOrEmpty(this.ConsumerCertificate))
+                        {
+                            return new X509Certificate2(Encoding.UTF8.GetBytes(this.ConsumerCertificate));
+                        }
+                    }
+                    return null;
+                }
             }
 
             string IConsumerDescription.Key

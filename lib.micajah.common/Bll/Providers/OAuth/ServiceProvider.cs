@@ -29,7 +29,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
                         AccessTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
                         RequestTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
                         UserAuthorizationEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest),
-                        TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSha1SigningBindingElement(), },
+                        TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSha1SigningBindingElement(), new RsaSha1ServiceProviderSigningBindingElement(TokenProvider.Current) },
                     };
                 }
                 return s_Description;
