@@ -58,8 +58,8 @@ namespace Micajah.Common.Bll.Handlers
             {
                 AuthorizedTokenResponse response = m_Provider.PrepareAccessTokenMessage(requestAccessToken);
 
-                //OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
-                //response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
+                OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
+                response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
                 m_Provider.Channel.Send(response);
             }
