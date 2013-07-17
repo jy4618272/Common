@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Micajah.Common.Bll;
+using Micajah.Common.Dal;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -24,6 +25,7 @@ namespace Micajah.Common.WebControls.SetupControls
         protected ComboBox ActiveValueList;
 
         private ComboBox m_DatabaseList;
+        private ComboBox m_ParentOrgsList;
         private ImageUpload m_LogoImageUpload;
         private DatePicker m_ExpirationTime;
         private DatePicker m_CanceledTime;
@@ -39,6 +41,15 @@ namespace Micajah.Common.WebControls.SetupControls
             {
                 if (m_DatabaseList == null) m_DatabaseList = EditForm.FindControl("DatabaseList") as ComboBox;
                 return m_DatabaseList;
+            }
+        }
+
+        private ComboBox ParentOrgsList
+        {
+            get
+            {
+                if (m_ParentOrgsList == null) m_ParentOrgsList = EditForm.FindControl("ParentOrgsList") as ComboBox;
+                return m_ParentOrgsList;
             }
         }
 
@@ -142,6 +153,9 @@ namespace Micajah.Common.WebControls.SetupControls
             else
                 e.InputParameters["canceledTime"] = TimeZoneInfo.ConvertTimeToUtc(this.CanceledTime.SelectedDate, m_UserContext.TimeZone);
 
+            obj = Support.ConvertStringToType(this.ParentOrgsList.SelectedValue, typeof(Guid));
+            e.InputParameters["parentorgid"] = ((obj == null) ? null : new Guid?((Guid)obj));
+
             EntityDataSource.Selected += new ObjectDataSourceStatusEventHandler(EntityDataSource_Selected);
         }
 
@@ -208,6 +222,34 @@ namespace Micajah.Common.WebControls.SetupControls
                 RadComboBoxItem item1 = this.DatabaseList.FindItemByValue(obj.ToString());
                 if (item1 != null)
                     this.DatabaseList.SelectedValue = obj.ToString();
+            }
+
+            if (this.ParentOrgsList != null)
+            {
+                using (RadComboBoxItem item = new RadComboBoxItem(string.Empty, string.Empty))
+                {
+                    this.ParentOrgsList.Items.Add(item);
+                }
+
+                CommonDataSet.OrganizationDataTable tbOrgs = Micajah.Common.Application.WebApplication.CommonDataSet.Organization.Copy() as CommonDataSet.OrganizationDataTable;
+                if (EditForm.CurrentMode == DetailsViewMode.Insert)
+                {
+                    if (DatabaseList.Items.Count > 2) obj = DatabaseList.Items[2].Value;
+                    else obj = Guid.Empty.ToString();
+                    tbOrgs.DefaultView.RowFilter = string.Format("{0} = 0 AND {1}='{2}' AND {3} IS NULL", tbOrgs.DeletedColumn.ColumnName, tbOrgs.DatabaseIdColumn.ColumnName, obj, tbOrgs.ParentOrganizationIdColumn.ColumnName);
+                }
+                else
+                    tbOrgs.DefaultView.RowFilter = string.Format("{0} = 0 AND {1}='{2}' AND {3}<>'{4}' AND {5} IS NULL", tbOrgs.DeletedColumn.ColumnName, tbOrgs.DatabaseIdColumn.ColumnName, obj, tbOrgs.OrganizationIdColumn.ColumnName, (Guid)EditForm.DataKey[0], tbOrgs.ParentOrganizationIdColumn.ColumnName);
+
+                this.ParentOrgsList.DataSource = tbOrgs.DefaultView;
+                this.ParentOrgsList.DataBind();
+
+                obj = DataBinder.Eval(EditForm.DataItem, "ParentOrganizationId");
+                if (Support.IsNullOrDBNull(obj)) obj = string.Empty;
+
+                RadComboBoxItem item1 = this.ParentOrgsList.FindItemByValue(obj.ToString());
+                if (item1 != null)
+                    this.ParentOrgsList.SelectedValue = obj.ToString();
             }
 
             obj = DataBinder.Eval(EditForm.DataItem, "CreatedTime");
@@ -307,6 +349,7 @@ namespace Micajah.Common.WebControls.SetupControls
             EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_LogoImageField_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_DatabaseIdField_HeaderText;
             EditForm.Fields[11].HeaderText = Resources.OrganizationsControl_EditForm_CreatedTimeField_HeaderText;
+            EditForm.Fields[12].HeaderText = "Parent Organization";
         }
 
         protected override void ListInitialize()

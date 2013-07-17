@@ -79,6 +79,12 @@
                         <asp:Literal ID="CreatedTimeLiteral" runat="server"></asp:Literal>
                     </ItemTemplate>
                 </mits:TemplateField>
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <mits:ComboBox ID="ParentOrgsList" runat="server" DataTextField="Name" DataValueField="OrganizationId" AppendDataBoundItems="true" Width="350px">
+                        </mits:ComboBox>
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
                         <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
@@ -117,6 +123,7 @@
                 <asp:Parameter Name="active" Type="Boolean" />
                 <asp:Parameter Name="canceledTime" Type="DateTime" />
                 <asp:Parameter Name="trial" Type="Boolean" />
+                <asp:Parameter Name="parentorgid" Type="Object" />
             </UpdateParameters>
             <SelectParameters>
                 <asp:ControlParameter ControlID="List" PropertyName="SelectedValue" Name="organizationId"

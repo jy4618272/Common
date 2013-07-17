@@ -2,6 +2,7 @@
 	(
 		@OrganizationId uniqueidentifier,
 		@PseudoId varchar(6),
+		@ParentOrganizationId uniqueidentifier,
 		@Name nvarchar(255),
 		@Description nvarchar(255),
 		@WebsiteUrl nvarchar(2048),
@@ -28,14 +29,14 @@
 	BEGIN
 		SET NOCOUNT OFF;
 
-		INSERT INTO dbo.Mc_Organization (OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
+		INSERT INTO dbo.Mc_Organization (OrganizationId, PseudoId, ParentOrganizationId, [Name], [Description], WebsiteUrl, DatabaseId
 			, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, ExpirationTime, GraceDays, Active, CanceledTime, Trial, Deleted, CreatedTime
 			, Street, Street2, City, [State], PostalCode, Country, Currency, HowYouHearAboutUs) 
-		VALUES (@OrganizationId, @PseudoId, @Name, @Description, @WebsiteUrl, @DatabaseId
+		VALUES (@OrganizationId, @PseudoId, @ParentOrganizationId, @Name, @Description, @WebsiteUrl, @DatabaseId
 			, @FiscalYearStartMonth, @FiscalYearStartDay, @WeekStartsDay, @ExpirationTime, @GraceDays, @Active, @CanceledTime, @Trial, @Deleted, GETUTCDATE()
 			, @Street, @Street2, @City, @State, @PostalCode, @Country, @Currency, @HowYouHearAboutUs);
 		
-		SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
+		SELECT OrganizationId, PseudoId, ParentOrganizationId, [Name], [Description], WebsiteUrl, DatabaseId
 			, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, LdapServerAddress, LdapServerPort, LdapDomain, LdapUserName, LdapPassword
 			, ExpirationTime, GraceDays, ExternalId, Active, CanceledTime, Trial, Deleted, CreatedTime 
 			, Street, Street2, City, [State], PostalCode, Country, Currency, HowYouHearAboutUs

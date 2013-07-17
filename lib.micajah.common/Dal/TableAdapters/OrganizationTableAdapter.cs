@@ -20,6 +20,7 @@ namespace Micajah.Common.Dal.TableAdapters
             TableName = TableName.Organization;
             TableMapping.ColumnMappings.Add("OrganizationId", "OrganizationId");
             TableMapping.ColumnMappings.Add("PseudoId", "PseudoId");
+            TableMapping.ColumnMappings.Add("ParentOrganizationId", "ParentOrganizationId");
             TableMapping.ColumnMappings.Add("Name", "Name");
             TableMapping.ColumnMappings.Add("Description", "Description");
             TableMapping.ColumnMappings.Add("WebsiteUrl", "WebsiteUrl");
@@ -59,6 +60,7 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@PseudoId", SqlDbType.VarChar, 6, ParameterDirection.Input, 0, 0, "PseudoId", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@ParentOrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "ParentOrganizationId", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Name", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@Description", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Description", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@WebSiteUrl", SqlDbType.NVarChar, 2048, ParameterDirection.Input, 0, 0, "WebSiteUrl", DataRowVersion.Current, false, null, "", "", ""));
@@ -90,6 +92,7 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@PseudoId", SqlDbType.VarChar, 6, ParameterDirection.Input, 0, 0, "PseudoId", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@ParentOrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "ParentOrganizationId", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Name", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@Description", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Description", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@WebsiteUrl", SqlDbType.NVarChar, 2048, ParameterDirection.Input, 0, 0, "WebSiteUrl", DataRowVersion.Current, false, null, "", "", ""));

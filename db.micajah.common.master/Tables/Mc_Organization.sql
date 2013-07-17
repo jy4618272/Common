@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[Mc_Organization] (
     [OrganizationId]       UNIQUEIDENTIFIER CONSTRAINT [DF_Mc_Organization_OrganizationId] DEFAULT (newid()) NOT NULL,
     [PseudoId]             VARCHAR (6)      CONSTRAINT [DF_Mc_Organization_PseudoId] DEFAULT ('') NOT NULL,
+    [ParentOrganizationId] UNIQUEIDENTIFIER NULL,
     [Name]                 NVARCHAR (255)   NOT NULL,
     [Description]          NVARCHAR (255)   CONSTRAINT [DF_Mc_Organization_Description] DEFAULT (N'') NOT NULL,
     [WebsiteUrl]           NVARCHAR (2048)  CONSTRAINT [DF_Mc_Organization_WebsiteUrl] DEFAULT (N'') NOT NULL,
@@ -30,13 +31,21 @@
     [PostalCode]           NVARCHAR (20)    CONSTRAINT [DF_Mc_Organization_PostalCode] DEFAULT (N'') NOT NULL,
     [Country]              NVARCHAR (255)   CONSTRAINT [DF_Mc_Organization_Country] DEFAULT (N'') NOT NULL,
     [Currency]             CHAR (3)         CONSTRAINT [DF_Mc_Organization_Currency] DEFAULT ('') NOT NULL,
-    [HowYouHearAboutUs]    NVARCHAR(255)	CONSTRAINT [DF_Mc_Organization_HowYouHearAboutUs] DEFAULT ('') NOT NULL, 
+    [HowYouHearAboutUs]    NVARCHAR (255)   CONSTRAINT [DF_Mc_Organization_HowYouHearAboutUs] DEFAULT ('') NOT NULL,
     CONSTRAINT [PK_Mc_Organization] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
-    CONSTRAINT [FK_Mc_Organization_Mc_Database] FOREIGN KEY ([DatabaseId]) REFERENCES [dbo].[Mc_Database] ([DatabaseId])
+    CONSTRAINT [FK_Mc_Organization_Mc_Database] FOREIGN KEY ([DatabaseId]) REFERENCES [dbo].[Mc_Database] ([DatabaseId]),
+    CONSTRAINT [FK_Mc_Organization_Mc_Organization] FOREIGN KEY ([ParentOrganizationId]) REFERENCES [dbo].[Mc_Organization] ([OrganizationId])
 );
+
+
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Mc_Organization_PseudoId]
     ON [dbo].[Mc_Organization]([PseudoId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Mc_Organization_ParentOrganizationId]
+    ON [dbo].[Mc_Organization]([ParentOrganizationId] ASC);
 

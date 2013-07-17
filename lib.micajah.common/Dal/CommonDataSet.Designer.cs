@@ -6632,6 +6632,8 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnPseudoId;
             
+            private global::System.Data.DataColumn columnParentOrganizationId;
+            
             private global::System.Data.DataColumn columnName;
             
             private global::System.Data.DataColumn columnDescription;
@@ -6738,6 +6740,14 @@ namespace Micajah.Common.Dal {
             public global::System.Data.DataColumn PseudoIdColumn {
                 get {
                     return this.columnPseudoId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ParentOrganizationIdColumn {
+                get {
+                    return this.columnParentOrganizationId;
                 }
             }
             
@@ -7021,6 +7031,7 @@ namespace Micajah.Common.Dal {
             public OrganizationRow AddOrganizationRow(
                         System.Guid OrganizationId, 
                         string PseudoId, 
+                        System.Guid ParentOrganizationId, 
                         string Name, 
                         string Description, 
                         string WebsiteUrl, 
@@ -7055,6 +7066,7 @@ namespace Micajah.Common.Dal {
                 object[] columnValuesArray = new object[] {
                         OrganizationId,
                         PseudoId,
+                        ParentOrganizationId,
                         Name,
                         Description,
                         WebsiteUrl,
@@ -7086,7 +7098,7 @@ namespace Micajah.Common.Dal {
                         Currency,
                         HowYouHearAboutUs};
                 if ((parentDatabaseRowByFK_Mc_Organization_Mc_Database != null)) {
-                    columnValuesArray[5] = parentDatabaseRowByFK_Mc_Organization_Mc_Database[0];
+                    columnValuesArray[6] = parentDatabaseRowByFK_Mc_Organization_Mc_Database[0];
                 }
                 rowOrganizationRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowOrganizationRow);
@@ -7119,6 +7131,7 @@ namespace Micajah.Common.Dal {
             internal void InitVars() {
                 this.columnOrganizationId = base.Columns["OrganizationId"];
                 this.columnPseudoId = base.Columns["PseudoId"];
+                this.columnParentOrganizationId = base.Columns["ParentOrganizationId"];
                 this.columnName = base.Columns["Name"];
                 this.columnDescription = base.Columns["Description"];
                 this.columnWebsiteUrl = base.Columns["WebsiteUrl"];
@@ -7158,6 +7171,8 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnOrganizationId);
                 this.columnPseudoId = new global::System.Data.DataColumn("PseudoId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPseudoId);
+                this.columnParentOrganizationId = new global::System.Data.DataColumn("ParentOrganizationId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnParentOrganizationId);
                 this.columnName = new global::System.Data.DataColumn("Name", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnName);
                 this.columnDescription = new global::System.Data.DataColumn("Description", typeof(string), null, global::System.Data.MappingType.Element);
@@ -11558,6 +11573,22 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid ParentOrganizationId {
+                get {
+                    try {
+                        return ((global::System.Guid)(this[this.tableOrganization.ParentOrganizationIdColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ParentOrganizationId\' in table \'Organization\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableOrganization.ParentOrganizationIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string Name {
                 get {
                     return ((string)(this[this.tableOrganization.NameColumn]));
@@ -11935,6 +11966,18 @@ namespace Micajah.Common.Dal {
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_Mc_Organization_Mc_Database"]);
                 }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsParentOrganizationIdNull() {
+                return this.IsNull(this.tableOrganization.ParentOrganizationIdColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetParentOrganizationIdNull() {
+                this[this.tableOrganization.ParentOrganizationIdColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

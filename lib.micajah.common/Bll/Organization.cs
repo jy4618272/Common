@@ -23,6 +23,7 @@ namespace Micajah.Common.Bll
 
         private Guid m_OrganizationId;
         private string m_PseudoId;
+        private Guid? m_ParentOrganizationId;
         private string m_Name;
         private string m_Description;
         private string m_WebsiteUrl;
@@ -168,6 +169,15 @@ namespace Micajah.Common.Bll
         {
             get { return m_PseudoId; }
             set { m_PseudoId = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the identifier of the parent organization.
+        /// </summary>
+        public Guid? ParentOrganizationId
+        {
+            get { return m_ParentOrganizationId; }
+            set { m_ParentOrganizationId = value; }
         }
 
         /// <summary>
@@ -712,6 +722,7 @@ namespace Micajah.Common.Bll
             {
                 m_OrganizationId = row.OrganizationId;
                 m_PseudoId = row.PseudoId;
+                m_ParentOrganizationId = !row.IsParentOrganizationIdNull() ? new Guid?(row.ParentOrganizationId) : null;
                 m_Name = row.Name;
                 m_Description = row.Description;
                 m_WebsiteUrl = row.WebsiteUrl;
@@ -760,6 +771,8 @@ namespace Micajah.Common.Bll
                 m_OrganizationId = (Guid)row["OrganizationId"];
 
                 if (row.Table.Columns.Contains("PseudoId")) m_PseudoId = (string)row["PseudoId"];
+
+                m_ParentOrganizationId = !row.IsNull("ParentOrganizationId") ? new Guid?((Guid)row["ParentOrganizationId"]) : null;
 
                 m_Name = (string)row["Name"];
                 m_Description = (string)row["Description"];

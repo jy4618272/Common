@@ -730,6 +730,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v108.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.GoogleIntegrationControl\GoogleApps.jpg" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v109.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v110.sql" />
     <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />

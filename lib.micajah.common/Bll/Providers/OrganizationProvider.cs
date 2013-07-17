@@ -98,7 +98,7 @@ namespace Micajah.Common.Bll.Providers
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
             , string partialCustomUrl, HttpRequest request
-            , bool sendNotificationEmail, bool refreshAllData)
+            , bool sendNotificationEmail, bool refreshAllData, Guid? parentorgId)
         {
             adminEmail = Support.TrimString(adminEmail, UserProvider.EmailMaxLength);
             Support.ValidateEmail(adminEmail);
@@ -138,6 +138,7 @@ namespace Micajah.Common.Bll.Providers
             if (country != null) row.Country = country;
             if (currency != null) row.Currency = currency;
             if (howYouHearAboutUs != null) row.HowYouHearAboutUs = howYouHearAboutUs;
+            if (parentorgId.HasValue) row.ParentOrganizationId = parentorgId.Value;
 
             table.AddOrganizationRow(row);
 
@@ -233,7 +234,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomains">The organization ldap domains.</param>
         private static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
-            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains)
+            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains, Guid? parentorgid)
         {
             if (!string.IsNullOrEmpty(websiteUrl))
                 Support.ValidateUrl(websiteUrl);
@@ -300,6 +301,13 @@ namespace Micajah.Common.Bll.Providers
             if (canceledTime.HasValue) row.CanceledTime = canceledTime.Value;
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
+
+            if (parentorgid.HasValue)
+            {
+                if (parentorgid.Value != Guid.Empty) row.ParentOrganizationId = parentorgid.Value;
+            }
+            else
+                row.SetParentOrganizationIdNull();
 
             WebApplication.CommonDataSetTableAdapters.OrganizationTableAdapter.Update(row);
 
@@ -515,6 +523,27 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Returns the child organizations collection for the specific organization.
+        /// Generates an System.Data.DataException exception if error occured.
+        /// </summary>
+        /// <param name="organizationId">The identifier of the organization to get child organizations.</param>
+        /// <returns>The organizations collection.</returns>
+        public static OrganizationCollection GetChildOrganizations(Guid organizationId)
+        {
+            OrganizationCollection coll = new OrganizationCollection();
+            DataTable dt = GetOrganizations();
+            dt.DefaultView.RowFilter = "ParentOrganizationId='" + organizationId.ToString() + "'";
+            foreach (DataRowView rv in dt.DefaultView)
+            {
+                Organization org = new Organization();
+                org.Load(rv.Row);
+                coll.Add(org);
+            }
+            coll.Sort();
+            return coll;
+        }
+
+        /// <summary>
         /// Returns the connection string to organization database.
         /// Generates an System.Data.DataException exception if error occured.
         /// </summary>
@@ -695,7 +724,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, null, null, null, null, null, null, null, null
-                , true, true);
+                , true, true, null);
         }
 
         /// <summary>
@@ -721,7 +750,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null
-                , sendNotificationEmail, true);
+                , sendNotificationEmail, true, null);
         }
 
         /// <summary>
@@ -738,7 +767,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the newly created organization.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertOrganization(string name, string description, string websiteUrl, Guid? databaseId, string adminEmail
-            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial)
+            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial, Guid? parentorgId)
         {
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
@@ -746,7 +775,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, null, null, null, null, null, null, null, null
-                , true, true);
+                , true, true, parentorgId);
         }
 
         /// <summary>
@@ -787,7 +816,7 @@ namespace Micajah.Common.Bll.Providers
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
                 , partialCustomUrl, request
-                , sendNotificationEmail, false);
+                , sendNotificationEmail, false, null);
         }
 
         /// <summary>
@@ -804,7 +833,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, null, null, null);
+            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, null, null, null, null);
         }
 
         /// <summary>
@@ -823,7 +852,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay, string emailSuffixes, string ldapDomains, bool? beta)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, beta, emailSuffixes, ldapDomains);
+            UpdateOrganization(organizationId, name, description, websiteUrl, Guid.Empty, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, DateTime.MinValue, null, null, null, null, beta, emailSuffixes, ldapDomains, null);
         }
 
         /// <summary>
@@ -843,9 +872,9 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
-            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial)
+            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial, Guid? parentorgid)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null);
+            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null, parentorgid);
         }
 
         /// <summary>

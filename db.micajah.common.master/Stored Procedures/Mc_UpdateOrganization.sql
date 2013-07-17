@@ -2,6 +2,7 @@
 	(
 		@OrganizationId uniqueidentifier,
 		@PseudoId varchar(6),
+		@ParentOrganizationId uniqueidentifier,
 		@Name nvarchar(255),
 		@Description nvarchar(255),
 		@WebsiteUrl nvarchar(2048),
@@ -36,14 +37,14 @@
 		SET NOCOUNT OFF;
 
 		UPDATE dbo.Mc_Organization
-		SET PseudoId  = @PseudoId, [Name] = @Name, [Description] = @Description, WebsiteUrl = @WebsiteUrl, DatabaseId = @DatabaseId
+		SET PseudoId  = @PseudoId, ParentOrganizationId=@ParentOrganizationId, [Name] = @Name, [Description] = @Description, WebsiteUrl = @WebsiteUrl, DatabaseId = @DatabaseId
 			, FiscalYearStartMonth = @FiscalYearStartMonth, FiscalYearStartDay = @FiscalYearStartDay, WeekStartsDay = @WeekStartsDay
 			, LdapServerAddress = @LdapServerAddress, LdapServerPort = @LdapServerPort, LdapDomain = @LdapDomain, LdapUserName = @LdapUserName, LdapPassword = @LdapPassword, LdapDomains = @LdapDomains
 			, ExpirationTime = @ExpirationTime, GraceDays = @GraceDays, Active = @Active, CanceledTime = @CanceledTime, Trial = @Trial, Beta = @Beta, Deleted = @Deleted
 			, Street = @Street, Street2 = @Street2, City = @City, [State] = @State, PostalCode = @PostalCode, Country = @Country, Currency = @Currency, HowYouHearAboutUs = @HowYouHearAboutUs
 		WHERE (OrganizationId = @OrganizationId);
 
-		SELECT OrganizationId, PseudoId, [Name], [Description], WebsiteUrl, DatabaseId
+		SELECT OrganizationId, PseudoId, ParentOrganizationId, [Name], [Description], WebsiteUrl, DatabaseId
 			, FiscalYearStartMonth, FiscalYearStartDay, WeekStartsDay, LdapServerAddress, LdapServerPort, LdapDomain, LdapUserName, LdapPassword, LdapDomains
 			, ExpirationTime, GraceDays, ExternalId, Active, CanceledTime, Trial, Beta, Deleted, CreatedTime
 			, Street, Street2, City, [State], PostalCode, Country, Currency, HowYouHearAboutUs
