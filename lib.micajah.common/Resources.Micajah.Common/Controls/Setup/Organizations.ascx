@@ -27,16 +27,12 @@
                         <%# GetHyperlink(Eval("WebSiteUrl").ToString(), Eval("Name").ToString(), Eval("Description").ToString())%>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField SortExpression="DatabaseServerFullName" ItemStyle-Width="20%">
+                <asp:TemplateField SortExpression="ParentOrganizationName" ItemStyle-Width="20%">
                     <ItemTemplate>
-                        <%# GetValidatedValue(Eval("DatabaseServerFullName"), Eval("DatabaseId")) %>
+                        <%# GetValidatedValue(Eval("ParentOrganizationName"), Eval("ParentOrganizationId")) %>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField SortExpression="DatabaseName" ItemStyle-Width="20%">
-                    <ItemTemplate>
-                        <%# GetValidatedValue(Eval("DatabaseName"), Eval("DatabaseId")) %>
-                    </ItemTemplate>
-                </asp:TemplateField>
+                <asp:BoundField DataField="ExpirationTime" HeaderText="Expiration" DataFormatString="{0:d-MMM-yyyy}" SortExpression="ExpirationTime"></asp:BoundField>
                 <mits:CheckBoxField DataField="Active" SortExpression="Active" HeaderStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                 <mits:TemplateField HeaderStyle-Width="50px" ItemStyle-HorizontalAlign="Center">
                     <ItemTemplate>
@@ -67,6 +63,12 @@
                         </mits:ComboBox>
                     </ItemTemplate>
                 </mits:TemplateField>
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <mits:ComboBox ID="ParentOrgsList" runat="server" DataTextField="Name" DataValueField="OrganizationId" AppendDataBoundItems="true" Width="350px">
+                        </mits:ComboBox>
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TextBoxField DataField="AdminEmail" MaxLength="255" Columns="65" ControlStyle-Width="350px" Required="True"
                     ValidationType="RegularExpression" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
                 <mits:DatePickerField DataField="ExpirationTime" />
@@ -77,12 +79,6 @@
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
                         <asp:Literal ID="CreatedTimeLiteral" runat="server"></asp:Literal>
-                    </ItemTemplate>
-                </mits:TemplateField>
-                <mits:TemplateField PaddingLeft="false">
-                    <ItemTemplate>
-                        <mits:ComboBox ID="ParentOrgsList" runat="server" DataTextField="Name" DataValueField="OrganizationId" AppendDataBoundItems="true" Width="350px">
-                        </mits:ComboBox>
                     </ItemTemplate>
                 </mits:TemplateField>
                 <mits:TemplateField>

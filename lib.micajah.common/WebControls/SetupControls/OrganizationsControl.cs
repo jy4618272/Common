@@ -66,7 +66,7 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             get
             {
-                if (m_ExpirationTime == null) m_ExpirationTime = EditForm.Rows[6].Cells[1].Controls[0] as DatePicker;
+                if (m_ExpirationTime == null) m_ExpirationTime = EditForm.Rows[7].Cells[1].Controls[0] as DatePicker;
                 return m_ExpirationTime;
             }
         }
@@ -75,7 +75,7 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             get
             {
-                if (m_CanceledTime == null) m_CanceledTime = EditForm.Rows[8].Cells[1].Controls[0] as DatePicker;
+                if (m_CanceledTime == null) m_CanceledTime = EditForm.Rows[9].Cells[1].Controls[0] as DatePicker;
                 return m_CanceledTime;
             }
         }
@@ -344,12 +344,12 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             base.LoadResources();
             List.Columns[0].HeaderText = Resources.OrganizationsControl_List_NameColumn_HeaderText;
-            List.Columns[1].HeaderText = Resources.OrganizationsControl_List_DatabaseServerFullNameColumn_HeaderText;
-            List.Columns[2].HeaderText = Resources.OrganizationsControl_List_DatabaseNameColumn_HeaderText;
+            List.Columns[1].HeaderText = "Parent";
+            List.Columns[2].HeaderText = "Expiration";
             EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_LogoImageField_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_DatabaseIdField_HeaderText;
-            EditForm.Fields[11].HeaderText = Resources.OrganizationsControl_EditForm_CreatedTimeField_HeaderText;
-            EditForm.Fields[12].HeaderText = "Parent Organization";
+            EditForm.Fields[5].HeaderText = "Parent Organization";
+            EditForm.Fields[12].HeaderText = Resources.OrganizationsControl_EditForm_CreatedTimeField_HeaderText;
         }
 
         protected override void ListInitialize()
@@ -406,7 +406,7 @@ namespace Micajah.Common.WebControls.SetupControls
         protected override void EditFormReset()
         {
             base.EditFormReset();
-            EditForm.Fields[5].Visible = true;
+            EditForm.Fields[6].Visible = true;
         }
 
         protected override void List_Action(object sender, CommonGridViewActionEventArgs e)
@@ -418,7 +418,7 @@ namespace Micajah.Common.WebControls.SetupControls
             switch (e.Action)
             {
                 case CommandActions.Edit:
-                    EditForm.Fields[5].Visible = false;
+                    EditForm.Fields[6].Visible = false;
                     break;
             }
         }

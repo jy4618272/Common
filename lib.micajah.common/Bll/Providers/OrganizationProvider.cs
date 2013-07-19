@@ -443,6 +443,9 @@ namespace Micajah.Common.Bll.Providers
             {
                 table.Columns.Add("DatabaseServerFullName", typeof(string));
                 table.Columns.Add("DatabaseName", typeof(string));
+                table.Columns.Add("ParentOrganizationName", typeof(string));
+
+                CommonDataSet.OrganizationDataTable tbOrgs = Micajah.Common.Application.WebApplication.CommonDataSet.Organization.Copy() as CommonDataSet.OrganizationDataTable;
 
                 Guid databaseId = Guid.Empty;
                 foreach (DataRowView drv in table.DefaultView)
@@ -462,6 +465,12 @@ namespace Micajah.Common.Bll.Providers
                             drv["DatabaseServerFullName"] = DatabaseProvider.GetDatabaseServerFullName(databaseId);
                             drv["DatabaseName"] = DatabaseProvider.GetDatabaseName(databaseId);
                         }
+                    }
+                    if (drv.Row.IsNull("ParentOrganizationId")) drv["ParentOrganizationName"] = string.Empty;
+                    else
+                    {
+                        tbOrgs.DefaultView.RowFilter = string.Format("{0}='{1}'", tbOrgs.OrganizationIdColumn.ColumnName, drv["ParentOrganizationId"]);
+                        if (tbOrgs.DefaultView.Count > 0) drv["ParentOrganizationName"] = tbOrgs.DefaultView[0]["Name"];
                     }
                 }
             }
