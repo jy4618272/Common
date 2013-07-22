@@ -800,6 +800,12 @@ namespace Micajah.Common.Bll.Providers
                 return GetUsers(organizationId, instanceId, new bool?(), true, roleId.ToString(), Support.ConvertListToString(RoleProvider.GetLowerNonBuiltInRoleIdList(roleId)));
         }
 
+        [DataObjectMethod(DataObjectMethodType.Select)]
+        public static DataView GetUsersDataView(Guid organizationId, Guid instanceId, Guid roleId)
+        {
+            return GetUsers(organizationId, instanceId, roleId).DefaultView;
+        }
+
         /// <summary>
         /// Returns the list of the groups wich have the specified user in the specified instance.
         /// </summary>

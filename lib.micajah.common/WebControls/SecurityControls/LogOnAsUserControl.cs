@@ -77,6 +77,8 @@ namespace Micajah.Common.WebControls.SecurityControls
             List.SelectedIndex = -1;
             List.Visible = true;
             List.DataBind();
+            if (string.IsNullOrEmpty(List.SortExpression))
+                List.Sort("Name", SortDirection.Ascending);
         }
 
         private void ParseParams()

@@ -64,7 +64,7 @@
         </asp:Table>
         <br />
         <mits:CommonGridView ID="List" runat="server" DataKeyNames="UserId" Width="700px"
-            Visible="False" EnableSelect="True" OnAction="List_Action" AutoGenerateColumns="False"
+            Visible="False" EnableSelect="True" OnAction="List_Action" AutoGenerateColumns="False" AllowSorting="True"
             DataSourceID="EntityListDataSource" PageSize="50" OnRowDataBound="List_RowDataBound">
             <CaptionControls>
                 <asp:LinkButton ID="InjectButton" runat="server" Visible="false" OnClick="InjectButton_Click"></asp:LinkButton>
@@ -102,7 +102,7 @@
                 <asp:Parameter Name="includeOrganizationAdministratorRole" Type="Boolean" DefaultValue="true" />
             </SelectParameters>
         </asp:ObjectDataSource>
-        <asp:ObjectDataSource ID="EntityListDataSource" runat="server" SelectMethod="GetUsers"
+        <asp:ObjectDataSource ID="EntityListDataSource" runat="server" SelectMethod="GetUsersDataView"
             TypeName="Micajah.Common.Bll.Providers.UserProvider" OnSelecting="EntityListDataSource_Selecting"
             OnSelected="EntityListDataSource_Selected">
             <SelectParameters>
