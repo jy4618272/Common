@@ -18,8 +18,9 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Micajah.Common.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -57,7 +58,7 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DocumentationFile>
     </DocumentationFile>
-    <CodeAnalysisRuleSet>Migrated rules for lib.micajah.common.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -78,27 +79,27 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\ChargifyNET.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core">
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth">
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth.Common">
+    <Reference Include="DotNetOpenAuth.OAuth.Common, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OAuth.Common.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth.ServiceProvider">
+    <Reference Include="DotNetOpenAuth.OAuth.ServiceProvider, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId">
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty">
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
@@ -635,7 +636,6 @@
     <None Include="Dal\CommonDataSet.xss">
       <DependentUpon>CommonDataSet.xsd</DependentUpon>
     </None>
-    <None Include="Micajah.Common.snk" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v65.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v66.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v67.sql" />
@@ -718,7 +718,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\pre.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
-    <None Include="Migrated rules for lib.micajah.common.ruleset" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
   </ItemGroup>
   <ItemGroup>
@@ -731,6 +730,12 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.GoogleIntegrationControl\GoogleApps.jpg" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v109.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v110.sql" />
+    <Content Include="Runtime\DotNetOpenAuth.Core.pdb" />
+    <Content Include="Runtime\DotNetOpenAuth.OAuth.Common.pdb" />
+    <Content Include="Runtime\DotNetOpenAuth.OAuth.pdb" />
+    <Content Include="Runtime\DotNetOpenAuth.OAuth.ServiceProvider.pdb" />
+    <Content Include="Runtime\DotNetOpenAuth.OpenId.pdb" />
+    <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.pdb" />
     <Content Include="Runtime\System.Net.Http.dll" />
     <Content Include="Runtime\Telerik.Web.Design.dll" />
     <Content Include="Runtime\Telerik.Web.UI.dll" />
