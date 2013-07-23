@@ -241,6 +241,7 @@ namespace Micajah.Common.WebControls.SetupControls
                 else
                     tbOrgs.DefaultView.RowFilter = string.Format("{0} = 0 AND {1}='{2}' AND {3}<>'{4}' AND {5} IS NULL", tbOrgs.DeletedColumn.ColumnName, tbOrgs.DatabaseIdColumn.ColumnName, obj, tbOrgs.OrganizationIdColumn.ColumnName, (Guid)EditForm.DataKey[0], tbOrgs.ParentOrganizationIdColumn.ColumnName);
 
+                tbOrgs.DefaultView.Sort="Name";
                 this.ParentOrgsList.DataSource = tbOrgs.DefaultView;
                 this.ParentOrgsList.DataBind();
 
