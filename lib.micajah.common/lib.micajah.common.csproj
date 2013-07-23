@@ -72,34 +72,33 @@
     </CodeAnalysisRules>
     <DocumentationFile>
     </DocumentationFile>
-    <CodeAnalysisRuleSet>Migrated rules for lib.micajah.common.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChargifyNET">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\ChargifyNET.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth.Common, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetOpenAuth.OAuth.Common, Version=4.3.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OAuth.Common.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth.ServiceProvider, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetOpenAuth.OAuth.ServiceProvider, Version=4.3.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
