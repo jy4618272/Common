@@ -63,6 +63,26 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         #endregion
 
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the Return URL.
+        /// </summary>
+        public string ReturnUrl
+        {
+            get
+            {
+                if (ViewState["ReturnUrl"] != null)
+                {
+                    return ViewState["ReturnUrl"].ToString();
+                }
+                return "";
+            }
+            set { ViewState["ReturnUrl"] = value; }
+        }
+
+        #endregion
+
         #region Private Methods
 
         private void LoadResources()
@@ -154,10 +174,17 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void LogOnPageButton_Click(object sender, EventArgs e)
         {
             string url = null;
-            if (!string.IsNullOrEmpty(LoginTextBox.Text))
-                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
+            if (ReturnUrl != "")
+            {
+                url = ReturnUrl;
+            }
             else
-                url = WebApplication.LoginProvider.GetLoginUrl(false);
+            {
+                if (!string.IsNullOrEmpty(LoginTextBox.Text))
+                    url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
+                else
+                    url = WebApplication.LoginProvider.GetLoginUrl(false);
+            }
             Response.Redirect(url);
         }
 

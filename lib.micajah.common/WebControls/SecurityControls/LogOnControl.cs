@@ -206,6 +206,38 @@ namespace Micajah.Common.WebControls.SecurityControls
         }
 
         /// <summary>
+        /// Gets or sets the password recovery URL
+        /// </summary>
+        public string PasswordRecoveryUrl
+        {
+            get
+            {
+                if (ViewState["PasswordRecoveryUrl"] != null)
+                {
+                    return ViewState["PasswordRecoveryUrl"].ToString();
+                }
+                return "";
+            }
+            set { ViewState["PasswordRecoveryUrl"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Register New User Account URL
+        /// </summary>
+        public string SignupUserUrl
+        {
+            get
+            {
+                if (ViewState["SignupUserUrl"] != null)
+                {
+                    return ViewState["SignupUserUrl"].ToString();
+                }
+                return "";
+            }
+            set { ViewState["SignupUserUrl"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets a value that indicates whether the custom handling is enabled on the page that contains this control.
         /// </summary>
         public bool EnableCustomHandling { get; set; }
@@ -627,6 +659,11 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void PasswordRecoveryButton_Click(object sender, EventArgs e)
         {
+            if (PasswordRecoveryUrl != "")
+            {
+                Response.Redirect(PasswordRecoveryUrl);
+                return;
+            }
             Response.Redirect(WebApplication.LoginProvider.GetPasswordRecoveryUrl(((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null), false));
         }
 
@@ -750,7 +787,22 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void SignupUserButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect(string.Format(CultureInfo.InvariantCulture, "{0}?o={1:N}&d={2:N}", ResourceProvider.SignupUserPageVirtualPath, this.OrganizationId, this.InstanceId));
+            string signupUserUrl = ResourceProvider.SignupUserPageVirtualPath;
+            if (SignupUserUrl != "")
+            {
+                signupUserUrl = SignupUserUrl;
+            }
+            string format = "{0}";
+            if (SignupUserUrl.IndexOf("?") == -1)
+            {
+                format += "?";
+            }
+            else
+            {
+                format += "&";
+            }
+            format += "o={1:N}&d={2:N}";
+            Response.Redirect(string.Format(CultureInfo.InvariantCulture, format, signupUserUrl, this.OrganizationId, this.InstanceId));
         }
 
         protected void LogOffLink_Click(object sender, EventArgs e)
