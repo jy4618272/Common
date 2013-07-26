@@ -6,7 +6,7 @@
             <asp:Label ID="JavascriptDisabledLabel" runat="server" />
         </div>
         <asp:Panel ID="ConsumerWarningPanel" runat="server" Visible="true" Style="padding-bottom: 5px;">
-            <asp:Label ID="ConsumerWarningLabel" runat="server" Style="white-space: pre;" />
+            <asp:Label ID="ConsumerWarningLabel" runat="server" />
         </asp:Panel>
     </div>
     <asp:MultiView ID="MainMultiView" runat="server" ActiveViewIndex="0">
