@@ -720,6 +720,26 @@ namespace Micajah.Common.Bll.Providers
             return settings;
         }
 
+        internal static SettingCollection GetAllPricedSettings(Guid organizationId, Guid instanceId)
+        {
+            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+            string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
+            SettingCollection settings = new SettingCollection();
+            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
+            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+            for (int i = 0; i < settings.Count; i++)
+            {
+                Setting setting = settings[i];
+                if (!setting.Paid)
+                {
+                    int _cval = setting.GetCounterValue(organizationId, instanceId);
+                    setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            settings.Sort();
+            return settings;
+        }
+        
         /// <summary>
         /// Returns a collection of the organization level settings.
         /// </summary>
