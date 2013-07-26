@@ -19,7 +19,7 @@ namespace Micajah.Common.Application
         #region Public Properties
 
         /// <summary>
-        /// Gets the current instance of the cache manager.
+        /// Gets or sets the current instance of the cache manager.
         /// </summary>
         public static CacheManager Current
         {
@@ -28,6 +28,10 @@ namespace Micajah.Common.Application
                 if (s_Current == null)
                     s_Current = new CacheManager();
                 return s_Current;
+            }
+            set
+            {
+                s_Current = value;
             }
         }
 
