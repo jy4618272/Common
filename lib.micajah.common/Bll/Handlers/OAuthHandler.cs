@@ -62,7 +62,7 @@ namespace Micajah.Common.Bll.Handlers
             else if ((requestAuth = request as UserAuthorizationRequest) != null)
             {
                 UserContext.OAuthPendingUserAuthorizationRequest = requestAuth;
-                context.Response.Redirect("~/mc/oauth.aspx");
+                context.Response.Redirect("~/mc/oauth/grantaccess.aspx");
             }
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
             {

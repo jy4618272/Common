@@ -24,9 +24,9 @@ namespace Micajah.Common.Bll.Providers.OAuth
                     Uri baseUri = new Uri(CustomUrlProvider.CreateApplicationUri(null));
                     s_Description = new ServiceProviderDescription
                     {
-                        RequestTokenEndpoint = new MessageReceivingEndpoint(new Uri(baseUri, CustomUrlProvider.CreateApplicationAbsoluteUrl("~/mc/oauthreq.ashx")), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
-                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(new Uri(baseUri, CustomUrlProvider.CreateApplicationAbsoluteUrl("~/mc/oauth.ashx")), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
-                        AccessTokenEndpoint = new MessageReceivingEndpoint(new Uri(baseUri, CustomUrlProvider.CreateApplicationAbsoluteUrl("~/mc/oauth.ashx")), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
+                        RequestTokenEndpoint = new MessageReceivingEndpoint(new Uri(baseUri, CustomUrlProvider.CreateApplicationAbsoluteUrl("~/mc/oauth/request.ashx")), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
+                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(new Uri(baseUri, CustomUrlProvider.CreateApplicationAbsoluteUrl("~/mc/oauth/authorize.ashx")), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
+                        AccessTokenEndpoint = new MessageReceivingEndpoint(new Uri(baseUri, CustomUrlProvider.CreateApplicationAbsoluteUrl("~/mc/oauth/access.ashx")), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
                         TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSigningBindingElement(), new RsaSigningBindingElement(TokenProvider.Current) },
                     };
                 }

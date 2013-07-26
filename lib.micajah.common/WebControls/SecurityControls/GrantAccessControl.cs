@@ -15,7 +15,7 @@ using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
-    public class OAuthControl : UserControl
+    public class GrantAccessControl : UserControl
     {
         #region Members
 
