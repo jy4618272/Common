@@ -1,3 +1,10 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,13 +18,6 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Security;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Application
 {
@@ -698,7 +698,8 @@ namespace Micajah.Common.Application
 
             if (http == null) return;
             if (http.Session == null) return;
-            if (string.Compare(http.Request.AppRelativeCurrentExecutionFilePath, ResourceProvider.OAuthHandlerVirtualPath, StringComparison.OrdinalIgnoreCase) == 0) return;
+            if (ResourceProvider.IsOAuthUrl(http.Request.AppRelativeCurrentExecutionFilePath))
+                return;
 
             UserContext user = null;
             Micajah.Common.Bll.Action action = null;

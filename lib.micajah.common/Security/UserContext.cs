@@ -876,7 +876,7 @@ namespace Micajah.Common.Security
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                if (!CustomUrlProvider.IsDefaultVanityUrl(http))
+                if ((!CustomUrlProvider.IsDefaultVanityUrl(http)) || ResourceProvider.IsOAuthUrl(http.Request.AppRelativeCurrentExecutionFilePath))
                     return;
             }
 

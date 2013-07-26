@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Pages;
+using Micajah.Common.WebControls;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -12,12 +18,6 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.Pages;
-using Micajah.Common.WebControls;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -50,6 +50,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string PasswordRecoveryPageVirtualPath = VirtualRootShortPath + "passwordrecovery.aspx";
         internal const string ResetPasswordPageVirtualPath = VirtualRootShortPath + "resetpassword.aspx";
         internal const string SignupUserPageVirtualPath = VirtualRootShortPath + "signupuser.aspx";
+        internal const string OAuthPageVirtualPath = "~/mc/oauth.aspx";
 
         #endregion
 
@@ -564,6 +565,12 @@ namespace Micajah.Common.Bll.Providers
         internal static bool IsResourceUrl(string virtualPath)
         {
             return (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(virtualPath), ResourceHandlerVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
+        }
+
+        internal static bool IsOAuthUrl(string virtualPath)
+        {
+            return ((string.Compare(virtualPath, ResourceProvider.OAuthHandlerVirtualPath, StringComparison.OrdinalIgnoreCase) == 0)
+                || (string.Compare(virtualPath, ResourceProvider.OAuthPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
         }
 
         internal static bool IsIconImageResource(string resourceName, IconSize iconSize)

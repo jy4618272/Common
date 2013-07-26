@@ -111,12 +111,13 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (UserContext.OAuthAuthorizationSecret != OAuthAuthorizationSecToken.Value)
                 throw new ArgumentException(); // Probably someone trying to hack in.
-            UserContext.OAuthAuthorizationSecret = null; // Clear one time use secret.
 
             UserAuthorizationRequest pendingRequest = UserContext.OAuthPendingUserAuthorizationRequest;
             string token = ((ITokenContainingMessage)pendingRequest).Token;
 
             TokenProvider.Current.AuthorizeRequestToken(token, UserContext.Current.UserId);
+
+            UserContext.OAuthAuthorizationSecret = null; // Clear one time use secret.
             UserContext.OAuthPendingUserAuthorizationRequest = null;
 
             MainMultiView.ActiveViewIndex = 1;

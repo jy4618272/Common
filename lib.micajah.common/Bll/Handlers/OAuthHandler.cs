@@ -61,6 +61,17 @@ namespace Micajah.Common.Bll.Handlers
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
+                UserContext user = UserContext.Current;
+                if (user != null)
+                {
+                    if (user.SelectedOrganization != null)
+                    {
+                        response.ExtraData.Add(new KeyValuePair<string, string>("org", user.SelectedOrganization.PseudoId));
+                        if (user.SelectedInstance != null)
+                            response.ExtraData.Add(new KeyValuePair<string, string>("dept", user.SelectedInstance.PseudoId));
+                    }
+                }
+
                 m_Provider.Channel.Send(response);
             }
             else
