@@ -1211,60 +1211,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         private void CheckAccessToPage()
         {
-            if (this.IsSetupPage)
-            {
-                if ((string.Compare(Request.AppRelativeCurrentExecutionFilePath, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) != 0)
-                    && (!m_IsFrameworkAdmin))
-                    throw new HttpException(404, Resources.Error_404);
-            }
-            else
-            {
-                if (ActiveAction != null)
-                {
-                    if (m_ActiveAction.GroupInDetailMenu)
-                        throw new HttpException(404, Resources.Error_404);
-                    else if (!m_ActiveAction.AuthenticationRequired)
-                        return;
-                }
-                else
-                {
-                    if (Context.SkipAuthorization)
-                        return;
-                    else
-                        throw new HttpException(404, Resources.Error_404_ActionNotFound);
-                }
-
-                bool accessDenied = false;
-                string redirectUrl = null;
-                string returnUrl = Request.Url.PathAndQuery;
-
-                if (m_UserContext != null)
-                {
-                    if (m_OrganizationId == Guid.Empty)
-                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
-                    else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && m_ActiveAction.InstanceRequired && (m_InstanceId == Guid.Empty))
-                        redirectUrl = ResourceProvider.GetActiveInstanceUrl(returnUrl);
-                    else if (m_ActiveAction.ActionType == ActionType.Page || m_ActiveAction.ActionType == ActionType.GlobalNavigationLink)
-                    {
-                        accessDenied = m_ActiveAction.AccessDenied();
-                        if (!accessDenied)
-                            accessDenied = (!ActionProvider.ShowAction(ActiveAction, m_UserContext));
-                    }
-                }
-                else
-                    accessDenied = true;
-
-                if (accessDenied)
-                {
-                    if (m_UserContext != null)
-                        throw new HttpException(403, Resources.Error_403);
-                    else
-                        redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
-                }
-
-                if (!string.IsNullOrEmpty(redirectUrl))
-                    Response.Redirect(redirectUrl);
-            }
+            CheckAccessToPage(Context, m_UserContext, m_OrganizationId, m_InstanceId, this.ActiveAction, this.IsSetupPage);
         }
 
         private void SetAccessToControls(Micajah.Common.Bll.Action item, Control control)
@@ -1328,6 +1275,64 @@ namespace Micajah.Common.Pages
         #endregion
 
         #region Internal Methods
+
+        internal static void CheckAccessToPage(HttpContext http, UserContext user, Guid organizationId, Guid instanceId, Micajah.Common.Bll.Action action, bool isSetupPage)
+        {
+            if (isSetupPage)
+            {
+                if ((string.Compare(http.Request.AppRelativeCurrentExecutionFilePath, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) != 0)
+                    && (!user.IsFrameworkAdministrator))
+                    throw new HttpException(404, Resources.Error_404);
+            }
+            else
+            {
+                if (action != null)
+                {
+                    if (action.GroupInDetailMenu)
+                        throw new HttpException(404, Resources.Error_404);
+                    else if (!action.AuthenticationRequired)
+                        return;
+                }
+                else
+                {
+                    if (http.SkipAuthorization)
+                        return;
+                    else
+                        throw new HttpException(404, Resources.Error_404_ActionNotFound);
+                }
+
+                bool accessDenied = false;
+                string redirectUrl = null;
+                string returnUrl = http.Request.Url.PathAndQuery;
+
+                if (user != null)
+                {
+                    if (organizationId == Guid.Empty)
+                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
+                    else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && action.InstanceRequired && (instanceId == Guid.Empty))
+                        redirectUrl = ResourceProvider.GetActiveInstanceUrl(returnUrl);
+                    else if (action.ActionType == ActionType.Page || action.ActionType == ActionType.GlobalNavigationLink)
+                    {
+                        accessDenied = action.AccessDenied();
+                        if (!accessDenied)
+                            accessDenied = (!ActionProvider.ShowAction(action, user));
+                    }
+                }
+                else
+                    accessDenied = true;
+
+                if (accessDenied)
+                {
+                    if (user != null)
+                        throw new HttpException(403, Resources.Error_403);
+                    else
+                        redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
+                }
+
+                if (!string.IsNullOrEmpty(redirectUrl))
+                    http.Response.Redirect(redirectUrl);
+            }
+        }
 
         internal static void RegisterGlobalStyleSheet(Page page, MasterPageTheme theme)
         {

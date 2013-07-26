@@ -698,8 +698,6 @@ namespace Micajah.Common.Application
 
             if (http == null) return;
             if (http.Session == null) return;
-            if (ResourceProvider.IsOAuthUrl(http.Request.AppRelativeCurrentExecutionFilePath))
-                return;
 
             UserContext user = null;
             Micajah.Common.Bll.Action action = null;

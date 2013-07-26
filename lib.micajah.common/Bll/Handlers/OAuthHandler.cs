@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.SessionState;
-using DotNetOpenAuth.Messaging;
+﻿using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth.Messages;
 using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
 using Micajah.Common.Bll.Providers.OAuth;
 using Micajah.Common.Dal;
 using Micajah.Common.Security;
+using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.SessionState;
 
 namespace Micajah.Common.Bll.Handlers
 {
@@ -39,6 +40,10 @@ namespace Micajah.Common.Bll.Handlers
 
         public void ProcessRequest(HttpContext context)
         {
+            UserContext user = UserContext.Current;
+
+            Micajah.Common.Pages.MasterPage.CheckAccessToPage(context, user, user.SelectedOrganizationId, user.SelectedInstanceId, ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(context.Request.Url.PathAndQuery)), false);
+
             IProtocolMessage request = m_Provider.ReadRequest();
             UnauthorizedTokenRequest requestToken = null;
             UserAuthorizationRequest requestAuth = null;
@@ -61,7 +66,6 @@ namespace Micajah.Common.Bll.Handlers
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
-                UserContext user = UserContext.Current;
                 if (user != null)
                 {
                     if (user.SelectedOrganization != null)

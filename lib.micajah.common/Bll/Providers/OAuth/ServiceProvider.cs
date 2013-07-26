@@ -1,8 +1,7 @@
-﻿using System;
-using DotNetOpenAuth.Messaging;
+﻿using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
-using Micajah.Common.Configuration;
+using System;
 
 namespace Micajah.Common.Bll.Providers.OAuth
 {
@@ -22,14 +21,14 @@ namespace Micajah.Common.Bll.Providers.OAuth
             {
                 if (s_Description == null)
                 {
-                    Uri url = new Uri(new Uri(FrameworkConfiguration.Current.WebApplication.Url), ResourceProvider.OAuthHandlerVirtualPath);
+                    Uri url = new Uri(new Uri(CustomUrlProvider.CreateApplicationUri(null)), CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.OAuthHandlerVirtualPath));
 
                     s_Description = new ServiceProviderDescription
                     {
-                        AccessTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest | HttpDeliveryMethods.HeadRequest),
-                        RequestTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest | HttpDeliveryMethods.HeadRequest),
-                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest | HttpDeliveryMethods.HeadRequest),
-                        TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSha1SigningBindingElement(), new RsaSha1ServiceProviderSigningBindingElement(TokenProvider.Current) },
+                        AccessTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
+                        RequestTokenEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
+                        UserAuthorizationEndpoint = new MessageReceivingEndpoint(url, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest),
+                        TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSigningBindingElement(), new RsaSigningBindingElement(TokenProvider.Current) },
                     };
                 }
                 return s_Description;

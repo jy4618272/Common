@@ -567,12 +567,6 @@ namespace Micajah.Common.Bll.Providers
             return (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(virtualPath), ResourceHandlerVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
         }
 
-        internal static bool IsOAuthUrl(string virtualPath)
-        {
-            return ((string.Compare(virtualPath, ResourceProvider.OAuthHandlerVirtualPath, StringComparison.OrdinalIgnoreCase) == 0)
-                || (string.Compare(virtualPath, ResourceProvider.OAuthPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
-        }
-
         internal static bool IsIconImageResource(string resourceName, IconSize iconSize)
         {
             return resourceName.Contains(string.Format(CultureInfo.InvariantCulture, ".Images.Icons._{0}x{0}.", (int)iconSize));
