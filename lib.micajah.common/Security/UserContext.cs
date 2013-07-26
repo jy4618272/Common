@@ -173,40 +173,6 @@ namespace Micajah.Common.Security
             }
         }
 
-        internal static UserAuthorizationRequest OAuthPendingUserAuthorizationRequest
-        {
-            get
-            {
-                HttpContext http = HttpContext.Current;
-                if (http != null)
-                {
-                    HttpSessionState session = http.Session;
-                    if (session != null)
-                    {
-                        object obj = session[OAuthPendingUserAuthorizationRequestKey];
-                        if (obj != null)
-                            return (UserAuthorizationRequest)obj;
-                    }
-                }
-                return null;
-            }
-            set
-            {
-                HttpContext http = HttpContext.Current;
-                if (http != null)
-                {
-                    HttpSessionState session = http.Session;
-                    if (session != null)
-                    {
-                        if (value == null)
-                            session.Remove(OAuthPendingUserAuthorizationRequestKey);
-                        else
-                            session[OAuthPendingUserAuthorizationRequestKey] = value;
-                    }
-                }
-            }
-        }
-
         internal static string OAuthAuthorizationSecret
         {
             get

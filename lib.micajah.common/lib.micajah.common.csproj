@@ -421,7 +421,7 @@
     <Compile Include="WebControls\ActivityReportControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\SecurityControls\GrantAccessControl.cs">
+    <Compile Include="WebControls\SecurityControls\OAuthControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\Token.cs" />
@@ -719,14 +719,12 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\pre.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\Request.ashx" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\Access.ashx" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\Authorize.ashx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v107.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\GrantAccess.ascx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v108.sql" />
@@ -2091,7 +2089,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\ActivityReport.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth\GrantAccess.aspx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <Content Include="Runtime\ChargifyNET.dll" />

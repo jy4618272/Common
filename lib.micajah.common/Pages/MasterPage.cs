@@ -84,6 +84,18 @@ namespace Micajah.Common.Pages
 
         #endregion
 
+        #region Constructors
+
+        public MasterPage()
+        {
+            m_GenerateBreadcrumbs = true;
+            m_OrganizationId = Guid.Empty;
+            m_InstanceId = Guid.Empty;
+            this.VisibleHeaderMessage = true;
+        }
+
+        #endregion
+
         #region Private Properties
 
         private bool ShowLeftArea
@@ -627,6 +639,11 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
+        /// Gets or sets a value that indicates whether the message at the header of the page is visible and rendered.
+        /// </summary>
+        public bool VisibleHeaderMessage { get; set; }
+
+        /// <summary>
         /// Gets or sets custom title of the page to use it in bread crumbs as name.
         /// </summary>
         public string CustomName
@@ -866,17 +883,20 @@ namespace Micajah.Common.Pages
 
         private void CreateHeaderMessageBox()
         {
-            if (!string.IsNullOrEmpty(this.HeaderMessage))
+            if (this.VisibleHeaderMessage)
             {
-                m_HeaderMessageBox = new NoticeMessageBox();
-                m_HeaderMessageBox.Width = Unit.Percentage(100);
-                m_HeaderMessageBox.Size = NoticeMessageBoxSize.Small;
-                m_HeaderMessageBox.HorizontalAlign = HorizontalAlign.Center;
-                m_HeaderMessageBox.Visible = false;
-                m_HeaderMessageBox.Message = this.HeaderMessage;
-                m_HeaderMessageBox.MessageType = this.HeaderMessageType;
-                m_HeaderMessageBox.Description = this.HeaderMessageDescription;
-                Controls.Add(m_HeaderMessageBox);
+                if (!string.IsNullOrEmpty(this.HeaderMessage))
+                {
+                    m_HeaderMessageBox = new NoticeMessageBox();
+                    m_HeaderMessageBox.Width = Unit.Percentage(100);
+                    m_HeaderMessageBox.Size = NoticeMessageBoxSize.Small;
+                    m_HeaderMessageBox.HorizontalAlign = HorizontalAlign.Center;
+                    m_HeaderMessageBox.Visible = false;
+                    m_HeaderMessageBox.Message = this.HeaderMessage;
+                    m_HeaderMessageBox.MessageType = this.HeaderMessageType;
+                    m_HeaderMessageBox.Description = this.HeaderMessageDescription;
+                    Controls.Add(m_HeaderMessageBox);
+                }
             }
         }
 
@@ -1481,11 +1501,6 @@ namespace Micajah.Common.Pages
         /// <param name="e">The System.EventArgs object that contains the event data.</param>
         protected override void OnInit(EventArgs e)
         {
-            m_GenerateBreadcrumbs = true;
-
-            m_OrganizationId = Guid.Empty;
-            m_InstanceId = Guid.Empty;
-
             m_UserContext = UserContext.Current;
             if (m_UserContext != null)
             {

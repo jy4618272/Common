@@ -1,7 +1,7 @@
 <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.master" %>
 
-<%@ Register Src="~/Resources.Micajah.Common/Controls/Security/GrantAccess.ascx" TagName="GrantAccess"
+<%@ Register Src="~/Resources.Micajah.Common/Controls/Security/OAuth.ascx" TagName="OAuth"
     TagPrefix="uc" %>
 <asp:Content ID="Ch" ContentPlaceHolderID="PageBody" runat="Server">
-    <uc:GrantAccess id="GrantAccess1" runat="server" />
+    <uc:OAuth id="OAuth1" runat="server" />
 </asp:Content>

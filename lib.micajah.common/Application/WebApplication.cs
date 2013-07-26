@@ -698,6 +698,8 @@ namespace Micajah.Common.Application
 
             if (http == null) return;
             if (http.Session == null) return;
+            if (string.Compare(http.Request.AppRelativeCurrentExecutionFilePath, ResourceProvider.OAuthHandlerVirtualPath, StringComparison.OrdinalIgnoreCase) == 0)
+                return;
 
             UserContext user = null;
             Micajah.Common.Bll.Action action = null;

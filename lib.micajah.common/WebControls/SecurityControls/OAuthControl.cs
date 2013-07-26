@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using DotNetOpenAuth.OAuth.ChannelElements;
+﻿using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -12,10 +7,15 @@ using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
-    public class GrantAccessControl : UserControl
+    public class OAuthControl : UserControl
     {
         #region Members
 
@@ -37,6 +37,8 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label AuthorizationDeniedLabel;
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
+        private UserAuthorizationRequest m_PendingRequest;
+        private Guid m_UserId;
 
         #endregion
 
@@ -82,6 +84,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 = this.MasterPage.VisibleSubmenu
                 = this.MasterPage.VisibleBreadcrumbs
                 = this.MasterPage.VisibleFooter
+                = this.MasterPage.VisibleHeaderMessage
                 = this.MasterPage.EnableOverlay
                 = false;
 
@@ -90,6 +93,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             else
                 this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.LogOnStyleSheet, true)));
 
+            m_UserId = UserContext.Current.UserId;
+            m_PendingRequest = ServiceProvider.GetOAuthPendingUserAuthorizationRequest(m_UserId);
+
             if (!IsPostBack)
             {
                 this.LoadResources();
@@ -97,8 +103,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 MainMultiView.ActiveViewIndex = 2;
                 ConsumerWarningPanel.Visible = false;
 
-                UserAuthorizationRequest pendingRequest = UserContext.OAuthPendingUserAuthorizationRequest;
-                if (pendingRequest == null)
+
+                if (m_PendingRequest == null)
                 {
                     //Response.Redirect("~/Members/AuthorizedConsumers.aspx"); // TODO: Need to redirect to user's start page?
                 }
@@ -106,14 +112,14 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     MainMultiView.ActiveViewIndex = 0;
 
-                    string token = ((ITokenContainingMessage)pendingRequest).Token;
+                    string token = ((ITokenContainingMessage)m_PendingRequest).Token;
                     IServiceProviderRequestToken requestToken = TokenProvider.Current.GetRequestToken(token);
                     OAuthDataSet.OAuthTokenRow requestTokenRow = (OAuthDataSet.OAuthTokenRow)requestToken;
 
                     ConsumerLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.OAuthControl_ConsumerLabel_Text, TokenProvider.Current.GetConsumer(requestTokenRow.ConsumerId).Key, requestTokenRow.Scope);
 
-                    ConsumerWarningPanel.Visible = pendingRequest.IsUnsafeRequest;
-                    if (pendingRequest.IsUnsafeRequest)
+                    ConsumerWarningPanel.Visible = m_PendingRequest.IsUnsafeRequest;
+                    if (m_PendingRequest.IsUnsafeRequest)
                     {
                         Uri rootUrl = new Uri(FrameworkConfiguration.Current.WebApplication.Url);
 
@@ -134,25 +140,25 @@ namespace Micajah.Common.WebControls.SecurityControls
             if (UserContext.OAuthAuthorizationSecret != OAuthAuthorizationSecToken.Value)
                 throw new ArgumentException(); // Probably someone trying to hack in.
 
-            UserAuthorizationRequest pendingRequest = UserContext.OAuthPendingUserAuthorizationRequest;
-            string token = ((ITokenContainingMessage)pendingRequest).Token;
+            string token = ((ITokenContainingMessage)m_PendingRequest).Token;
 
-            TokenProvider.Current.AuthorizeRequestToken(token, UserContext.Current.UserId);
+            TokenProvider.Current.AuthorizeRequestToken(token, m_UserId);
 
             UserContext.OAuthAuthorizationSecret = null; // Clear one time use secret.
-            UserContext.OAuthPendingUserAuthorizationRequest = null;
+
+            ServiceProvider.SetOAuthPendingUserAuthorizationRequest(null, m_UserId);
 
             MainMultiView.ActiveViewIndex = 1;
 
             ServiceProvider provider = new ServiceProvider();
-            UserAuthorizationResponse response = provider.PrepareAuthorizationResponse(pendingRequest);
+            UserAuthorizationResponse response = provider.PrepareAuthorizationResponse(m_PendingRequest);
             if (response != null)
             {
                 provider.Channel.Send(response);
             }
             else
             {
-                if (pendingRequest.IsUnsafeRequest)
+                if (m_PendingRequest.IsUnsafeRequest)
                     VerifierMultiView.ActiveViewIndex = 1;
                 else
                     VerificationCodeLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.OAuthControl_VerificationCodeLabel_Text, TokenProvider.Current.UpdateRequestTokenVerifier(token));
@@ -163,8 +169,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             MainMultiView.ActiveViewIndex = 2;
 
-            UserAuthorizationRequest pendingRequest = UserContext.OAuthPendingUserAuthorizationRequest;
-            string token = ((ITokenContainingMessage)pendingRequest).Token;
+            ServiceProvider.SetOAuthPendingUserAuthorizationRequest(null, m_UserId);
+
+            string token = ((ITokenContainingMessage)m_PendingRequest).Token;
 
             TokenProvider.Current.DeleteToken(token);
         }

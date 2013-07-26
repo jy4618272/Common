@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.GrantAccessControl" %>
+<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.OAuthControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <div style="position: absolute; top: 50%; height: 220px; margin-top: -125px; width: 90%; text-align: center;">
     <div id="ErrorDiv" runat="server" class="ErrorMessage" style="text-align: center;">

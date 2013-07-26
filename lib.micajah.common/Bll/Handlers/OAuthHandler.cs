@@ -4,7 +4,6 @@ using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Bll.Providers.OAuth;
 using Micajah.Common.Dal;
-using Micajah.Common.Security;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -38,21 +37,19 @@ namespace Micajah.Common.Bll.Handlers
 
         #endregion
 
+        #region Public Methods
+
         public void ProcessRequest(HttpContext context)
         {
-            Action action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(context.Request.Url.PathAndQuery));
-
-            UserContext user = null;
-            if (action.AuthenticationRequired)
-            {
-                user = UserContext.Current;
-                Micajah.Common.Pages.MasterPage.CheckAccessToPage(context, user, user.SelectedOrganizationId, user.SelectedInstanceId, action, false);
-            }
-
             IProtocolMessage request = m_Provider.ReadRequest();
             UnauthorizedTokenRequest requestToken = null;
             UserAuthorizationRequest requestAuth = null;
             AuthorizedTokenRequest requestAccessToken;
+
+            Guid userId = Guid.Empty;
+            Guid organizationId = Guid.Empty;
+            Guid instanceId = Guid.Empty;
+            LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
 
             if ((requestToken = request as UnauthorizedTokenRequest) != null)
             {
@@ -61,8 +58,9 @@ namespace Micajah.Common.Bll.Handlers
             }
             else if ((requestAuth = request as UserAuthorizationRequest) != null)
             {
-                UserContext.OAuthPendingUserAuthorizationRequest = requestAuth;
-                context.Response.Redirect("~/mc/oauth/grantaccess.aspx");
+                ServiceProvider.SetOAuthPendingUserAuthorizationRequest(requestAuth, userId);
+
+                context.Response.Redirect(ResourceProvider.OAuthPageVirtualPath);
             }
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
             {
@@ -71,15 +69,11 @@ namespace Micajah.Common.Bll.Handlers
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
-                if (user == null) user = UserContext.Current;
-                if (user != null)
+                if (organizationId != Guid.Empty)
                 {
-                    if (user.SelectedOrganization != null)
-                    {
-                        response.ExtraData.Add(new KeyValuePair<string, string>("org", user.SelectedOrganization.PseudoId));
-                        if (user.SelectedInstance != null)
-                            response.ExtraData.Add(new KeyValuePair<string, string>("dept", user.SelectedInstance.PseudoId));
-                    }
+                    response.ExtraData.Add(new KeyValuePair<string, string>("org", OrganizationProvider.GetOrganization(organizationId).PseudoId));
+                    if (instanceId != Guid.Empty)
+                        response.ExtraData.Add(new KeyValuePair<string, string>("dept", InstanceProvider.GetInstance(instanceId, organizationId).PseudoId));
                 }
 
                 m_Provider.Channel.Send(response);
@@ -89,5 +83,7 @@ namespace Micajah.Common.Bll.Handlers
                 throw new InvalidOperationException();
             }
         }
+
+        #endregion
     }
 }
