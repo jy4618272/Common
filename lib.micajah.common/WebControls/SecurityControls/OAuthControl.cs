@@ -36,6 +36,21 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label CloseLabel;
         protected Label AuthorizationDeniedLabel;
 
+        private Micajah.Common.Pages.MasterPage m_MasterPage;
+
+        #endregion
+
+        #region Private Properties
+
+        protected Micajah.Common.Pages.MasterPage MasterPage
+        {
+            get
+            {
+                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
+                return m_MasterPage;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -61,7 +76,14 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false);
+            this.MasterPage.VisibleHeader
+                = this.MasterPage.VisibleMainMenu
+                = this.MasterPage.VisibleLeftArea
+                = this.MasterPage.VisibleSubmenu
+                = this.MasterPage.VisibleBreadcrumbs
+                = this.MasterPage.VisibleFooter
+                = this.MasterPage.EnableOverlay
+                = false;
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
                 this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.LogOnModernStyleSheet, true)));

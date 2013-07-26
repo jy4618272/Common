@@ -1,6 +1,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SecurityControls.OAuthControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
-<div style="width: 100%; text-align: center; margin-top: 35px; position: absolute;">
+<div style="position: absolute; top: 50%; height: 220px; margin-top: -125px; width: 90%; text-align: center;">
     <div id="ErrorDiv" runat="server" class="ErrorMessage" style="text-align: center;">
         <div id="JavascriptDisabled" style="padding-bottom: 5px;">
             <asp:Label ID="JavascriptDisabledLabel" runat="server" />
@@ -54,13 +54,13 @@
         </asp:View>
     </asp:MultiView>
     <script type="text/javascript">
-		//<![CDATA[
+        //<![CDATA[
         var elem = document.getElementById('ResponseButtonsDiv')
         if (elem) elem.style.display = 'block';
         elem = document.getElementById('JavascriptDisabled')
         if (elem) elem.style.display = 'none';
         if (document.location !== window.top.location)
             window.top.location = document.location;
-		//]]>
+        //]]>
     </script>
 </div>
