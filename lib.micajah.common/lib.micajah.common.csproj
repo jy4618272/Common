@@ -720,6 +720,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuthReq.ashx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />

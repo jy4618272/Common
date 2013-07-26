@@ -40,9 +40,14 @@ namespace Micajah.Common.Bll.Handlers
 
         public void ProcessRequest(HttpContext context)
         {
-            UserContext user = UserContext.Current;
+            Action action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(context.Request.Url.PathAndQuery));
 
-            Micajah.Common.Pages.MasterPage.CheckAccessToPage(context, user, user.SelectedOrganizationId, user.SelectedInstanceId, ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(context.Request.Url.PathAndQuery)), false);
+            UserContext user = null;
+            if (action.AuthenticationRequired)
+            {
+                user = UserContext.Current;
+                Micajah.Common.Pages.MasterPage.CheckAccessToPage(context, user, user.SelectedOrganizationId, user.SelectedInstanceId, action, false);
+            }
 
             IProtocolMessage request = m_Provider.ReadRequest();
             UnauthorizedTokenRequest requestToken = null;
@@ -66,6 +71,7 @@ namespace Micajah.Common.Bll.Handlers
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
+                if (user == null) user = UserContext.Current;
                 if (user != null)
                 {
                     if (user.SelectedOrganization != null)
