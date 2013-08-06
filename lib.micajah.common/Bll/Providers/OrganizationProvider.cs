@@ -536,8 +536,9 @@ namespace Micajah.Common.Bll.Providers
         /// Generates an System.Data.DataException exception if error occured.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization to get child organizations.</param>
+        /// <param name="includeInactive">The flag indicating that the inacive organizations are included in result.</param>
         /// <returns>The organizations collection.</returns>
-        public static OrganizationCollection GetChildOrganizations(Guid organizationId)
+        public static OrganizationCollection GetChildOrganizations(Guid organizationId, bool includeInactive)
         {
             OrganizationCollection coll = new OrganizationCollection();
             DataTable dt = GetOrganizations();
@@ -546,6 +547,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 Organization org = new Organization();
                 org.Load(rv.Row);
+                if (!includeInactive && !org.Active) continue;
                 coll.Add(org);
             }
             coll.Sort();
