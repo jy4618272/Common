@@ -362,6 +362,10 @@ namespace Micajah.Common.Pages
                     m_ActiveAction = ActionProvider.FindAction(ActiveActionId, ApplicationAbsoluteNavigateUrl);
                 return m_ActiveAction;
             }
+            set
+            {
+                m_ActiveAction = value;
+            }
         }
 
         /// <summary>
