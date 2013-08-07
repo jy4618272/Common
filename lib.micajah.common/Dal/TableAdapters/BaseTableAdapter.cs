@@ -204,60 +204,47 @@ namespace Micajah.Common.Dal.TableAdapters
 
         private int ExecuteNonQuery(SqlCommand originalÑommand, params object[] parametersValues)
         {
-            SqlCommand command = null;
-            SqlConnection connection = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
-                connection = new SqlConnection(this.ConnectionString);
 
-                command = originalÑommand.Clone();
-                SetParametersValues(command, parametersValues);
-                command.Connection = connection;
+                using (SqlCommand command = originalÑommand.Clone())
+                {
+                    SetParametersValues(command, parametersValues);
+                    command.Connection = connection;
 
-                return Support.ExecuteNonQuery(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.ExecuteNonQuery(command);
+                }
             }
         }
 
         private int ExecuteUpdate(object obj)
         {
-            SqlDataAdapter adapter = null;
-            SqlConnection connection = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
-                connection = new SqlConnection(this.ConnectionString);
-
-                adapter = new SqlDataAdapter();
-                adapter.TableMappings.Add(this.CloneTableMapping());
-                adapter.DeleteCommand = this.DeleteCommand.Clone();
-                adapter.InsertCommand = this.InsertCommand.Clone();
-                adapter.SelectCommand = this.SelectCommand.Clone();
-                adapter.UpdateCommand = this.UpdateCommand.Clone();
-                adapter.DeleteCommand.Connection = connection;
-                adapter.InsertCommand.Connection = connection;
-                adapter.SelectCommand.Connection = connection;
-                adapter.UpdateCommand.Connection = connection;
-
-                DataRow[] rows = obj as DataRow[];
-                if (rows != null)
-                    return adapter.Update(rows);
-                else
+                using (SqlDataAdapter adapter = new SqlDataAdapter())
                 {
-                    DataTable table = obj as DataTable;
-                    if (table != null)
-                        return adapter.Update(table);
-                }
+                    adapter.TableMappings.Add(this.CloneTableMapping());
+                    adapter.DeleteCommand = this.DeleteCommand.Clone();
+                    adapter.InsertCommand = this.InsertCommand.Clone();
+                    adapter.SelectCommand = this.SelectCommand.Clone();
+                    adapter.UpdateCommand = this.UpdateCommand.Clone();
+                    adapter.DeleteCommand.Connection = connection;
+                    adapter.InsertCommand.Connection = connection;
+                    adapter.SelectCommand.Connection = connection;
+                    adapter.UpdateCommand.Connection = connection;
 
-                return 0;
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (adapter != null) adapter.Dispose();
+                    DataRow[] rows = obj as DataRow[];
+                    if (rows != null)
+                        return adapter.Update(rows);
+                    else
+                    {
+                        DataTable table = obj as DataTable;
+                        if (table != null)
+                            return adapter.Update(table);
+                    }
+                    if (connection.State == ConnectionState.Open) connection.Close();
+                    return 0;
+                }
             }
         }
 
@@ -361,25 +348,20 @@ namespace Micajah.Common.Dal.TableAdapters
 
                 if (this.SelectCommands.Count > selectCommandIndex)
                 {
-                    SqlDataAdapter adapter = null;
-                    SqlConnection connection = null;
-                    try
+                    using (SqlConnection connection = new SqlConnection(this.ConnectionString))
                     {
-                        connection = new SqlConnection(this.ConnectionString);
 
-                        adapter = new SqlDataAdapter();
-                        adapter.TableMappings.Add(this.CloneTableMapping());
+                        using (SqlDataAdapter adapter = new SqlDataAdapter())
+                        {
+                            adapter.TableMappings.Add(this.CloneTableMapping());
 
-                        adapter.SelectCommand = this.SelectCommands[selectCommandIndex].Clone();
-                        SetParametersValues(adapter.SelectCommand, parametersValues);
-                        adapter.SelectCommand.Connection = connection;
+                            adapter.SelectCommand = this.SelectCommands[selectCommandIndex].Clone();
+                            SetParametersValues(adapter.SelectCommand, parametersValues);
+                            adapter.SelectCommand.Connection = connection;
 
-                        returnValue = adapter.Fill(dataTable);
-                    }
-                    finally
-                    {
-                        if (connection != null) connection.Dispose();
-                        if (adapter != null) adapter.Dispose();
+                            returnValue = adapter.Fill(dataTable);
+                            if (connection.State == ConnectionState.Open) connection.Close();
+                        }
                     }
                 }
             }
@@ -405,18 +387,11 @@ namespace Micajah.Common.Dal.TableAdapters
         {
             SetParametersValues(this.UpdateCommand, parametersValues);
 
-            SqlConnection connection = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
-                connection = new SqlConnection(this.ConnectionString);
-
                 this.UpdateCommand.Connection = connection;
 
                 return Support.ExecuteNonQuery(this.UpdateCommand);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
             }
         }
 

@@ -81,24 +81,17 @@ namespace Micajah.Common.Dal.TableAdapters
 
         public int OverrideUnit(Guid unitsOfMeasureId, Guid organizationId)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
-                connection = new SqlConnection(this.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_UpdateUnitsOfMeasureOverride", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@UnitsOfMeasureId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "RuleId", DataRowVersion.Current, false, unitsOfMeasureId, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, organizationId, "", "", ""));
 
-                command = new SqlCommand("dbo.Mc_UpdateUnitsOfMeasureOverride", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@UnitsOfMeasureId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "RuleId", DataRowVersion.Current, false, unitsOfMeasureId, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, organizationId, "", "", ""));
-
-                return Support.ExecuteNonQuery(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.ExecuteNonQuery(command);
+                }
             }
         }
 

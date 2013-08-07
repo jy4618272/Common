@@ -173,13 +173,9 @@ namespace Micajah.Common.WebControls.SetupControls
             string preUpgradeSqlScript = ResourceProvider.GetSqlScript("pre", "Common");
             string postUpgradeSqlScript = ResourceProvider.GetSqlScript("post", "Common");
             string versionUpgradeSqlScriptOriginal = ResourceProvider.GetSqlScript("v", "Common");
-            SqlConnection masterConnection = null;
-            SqlConnection clientConnection = null;
 
-            try
+            using (SqlConnection masterConnection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                masterConnection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
-
                 // Upgrades the databases.
                 for (int v = (WebApplicationElement.CurrentDatabaseVersion + 1); v <= WebApplicationElement.RequiredDatabaseVersion; v++)
                 {
@@ -217,14 +213,16 @@ namespace Micajah.Common.WebControls.SetupControls
 
                     foreach (string connStr in connectionStrings)
                     {
-                        clientConnection = new SqlConnection(connStr);
-                        if (!string.IsNullOrEmpty(sqlScript))
+                        using (SqlConnection clientConnection = new SqlConnection(connStr))
                         {
-                            Support.ExecuteNonQuery(preUpgradeSqlScript, clientConnection);
-                            Support.ExecuteNonQuery(sqlScript, clientConnection);
-                            Support.ExecuteNonQuery(postUpgradeSqlScript, clientConnection);
+                            if (!string.IsNullOrEmpty(sqlScript))
+                            {
+                                Support.ExecuteNonQuery(preUpgradeSqlScript, clientConnection);
+                                Support.ExecuteNonQuery(sqlScript, clientConnection);
+                                Support.ExecuteNonQuery(postUpgradeSqlScript, clientConnection);
+                            }
+                            Support.ExecuteNonQuery(versionUpgradeSqlScript, clientConnection);
                         }
-                        Support.ExecuteNonQuery(versionUpgradeSqlScript, clientConnection);
                     }
 
                     WebApplicationElement.CurrentDatabaseVersion = 0;
@@ -234,12 +232,6 @@ namespace Micajah.Common.WebControls.SetupControls
                         OrganizationProvider.UpdateOrganizationsPseudoId();
                 }
             }
-            finally
-            {
-                if (masterConnection != null) masterConnection.Dispose();
-                if (clientConnection != null) clientConnection.Dispose();
-            }
-
             WebApplication.RefreshAllData();
         }
 

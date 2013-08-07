@@ -19,23 +19,16 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         public static void DeleteExpiredViewState()
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
-                connection.Open();
-
-                command = new SqlCommand("[dbo].[Mc_DeleteViewState]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@Now", SqlDbType.DateTime).Value = DateTime.UtcNow;
-                command.ExecuteNonQuery();
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_DeleteViewState]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@Now", SqlDbType.DateTime).Value = DateTime.UtcNow;
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
         }
 
@@ -49,44 +42,34 @@ namespace Micajah.Common.Bll.Providers
         {
             if (stateFormatter == null) return null;
 
-            Pair statePair = null;
-            SqlConnection connection = null;
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            StreamReader sr = null;
-            MemoryStream stream = null;
+            if (viewStateId == Guid.Empty) return null;
 
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                if (viewStateId != Guid.Empty)
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_GetViewState]", connection))
                 {
-
-                    connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
-                    connection.Open();
-
-                    command = new SqlCommand("[dbo].[Mc_GetViewState]", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
 
-                    reader = command.ExecuteReader();
-                    if (reader.Read()) stream = new MemoryStream(reader[0] as byte[]);
-
-                    if (stream != null)
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        sr = new StreamReader(stream);
-                        statePair = (stateFormatter.Deserialize(sr.ReadToEnd()) as Pair);
+                        Pair statePair = null;
+                        StreamReader sr = null;
+                        MemoryStream stream = null;
+
+                        if (reader.Read()) stream = new MemoryStream(reader[0] as byte[]);
+
+                        if (stream != null)
+                        {
+                            sr = new StreamReader(stream);
+                            statePair = (stateFormatter.Deserialize(sr.ReadToEnd()) as Pair);
+                        }
+                        connection.Close();
+                        return statePair;
                     }
                 }
             }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
-                if (stream != null) stream.Dispose();
-                if (reader != null) reader.Dispose();
-            }
-
-            return statePair;
         }
 
         /// <summary>
@@ -99,27 +82,20 @@ namespace Micajah.Common.Bll.Providers
         {
             if (stateFormatter == null) return;
 
-            SqlConnection connection = null;
-            SqlCommand command = null;
+            byte[] bytes = Support.GetBytes(stateFormatter.Serialize(statePair));
 
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                byte[] bytes = Support.GetBytes(stateFormatter.Serialize(statePair));
-
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
-                connection.Open();
-
-                command = new SqlCommand("[dbo].[Mc_InsertViewState]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
-                command.Parameters.Add("@ViewState", SqlDbType.VarBinary).Value = bytes;
-                command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewStateExpirationTimeout);
-                command.ExecuteNonQuery();
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_InsertViewState]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
+                    command.Parameters.Add("@ViewState", SqlDbType.VarBinary).Value = bytes;
+                    command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewStateExpirationTimeout);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
         }
 

@@ -833,17 +833,9 @@ namespace Micajah.Common.Bll
             int returnValue = 0;
             if (command != null)
             {
-                ConnectionState previousConnectionState = command.Connection.State;
-
-                try
-                {
-                    command.Connection.Open();
-                    returnValue = command.ExecuteNonQuery();
-                }
-                finally
-                {
-                    if (previousConnectionState == ConnectionState.Closed) command.Connection.Close();
-                }
+                command.Connection.Open();
+                returnValue = command.ExecuteNonQuery();
+                command.Connection.Close();
             }
             return returnValue;
         }
@@ -1158,25 +1150,17 @@ namespace Micajah.Common.Bll
         {
             if (command == null) return null;
 
-            ConnectionState previousConnectionState = command.Connection.State;
-            DataTable table = null;
-            SqlDataAdapter adapter = null;
-
-            try
+            using (SqlDataAdapter adapter = new SqlDataAdapter(command))
             {
-                table = new DataTable();
+
+                DataTable table = new DataTable();
                 table.Locale = CultureInfo.CurrentCulture;
 
-                adapter = new SqlDataAdapter(command);
                 adapter.Fill(table);
 
+                if (command.Connection!=null && command.Connection.State == ConnectionState.Open) command.Connection.Close();
+
                 return table;
-            }
-            finally
-            {
-                if (previousConnectionState == ConnectionState.Closed) command.Connection.Close();
-                if (adapter != null) adapter.Dispose();
-                if (table != null) table.Dispose();
             }
         }
 
