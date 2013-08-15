@@ -731,6 +731,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.GoogleIntegrationControl\GoogleApps.jpg" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v109.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v110.sql" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v111.sql" />
     <Content Include="Runtime\DotNetOpenAuth.Core.pdb" />
     <Content Include="Runtime\DotNetOpenAuth.OAuth.Common.pdb" />
     <Content Include="Runtime\DotNetOpenAuth.OAuth.pdb" />

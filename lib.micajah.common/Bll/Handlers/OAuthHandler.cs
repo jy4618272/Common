@@ -58,7 +58,11 @@ namespace Micajah.Common.Bll.Handlers
             }
             else if ((requestAuth = request as UserAuthorizationRequest) != null)
             {
-                ServiceProvider.SetOAuthPendingUserAuthorizationRequest(requestAuth, userId);
+                string token = ((ITokenContainingMessage)requestAuth).Token;
+
+                ((TokenProvider)m_Provider.TokenManager).UpdatePendingUserAuthorizationRequest(token, requestAuth);
+
+                TokenProvider.SetTokenCookie(token);
 
                 context.Response.Redirect(ResourceProvider.OAuthPageVirtualPath);
             }

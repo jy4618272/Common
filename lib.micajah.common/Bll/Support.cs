@@ -179,8 +179,7 @@ namespace Micajah.Common.Bll
         {
             if ((obj == null) || string.IsNullOrEmpty(value)) return;
 
-            LosFormatter formatter = new LosFormatter();
-            Hashtable table = formatter.Deserialize(value) as Hashtable;
+            Hashtable table = Deserialize(value) as Hashtable;
 
             if (table != null)
             {
@@ -194,13 +193,7 @@ namespace Micajah.Common.Bll
 
         internal static string SaveProperties(Hashtable table)
         {
-            StringBuilder sb = new StringBuilder();
-            using (StringWriter writer = new StringWriter(sb, CultureInfo.InvariantCulture))
-            {
-                LosFormatter formatter = new LosFormatter();
-                formatter.Serialize(writer, table);
-            }
-            return sb.ToString();
+            return Serialize(table);
         }
 
         internal static void SetPropertyValueSafe(PropertyInfo p, object obj, object value, object[] index)
@@ -600,6 +593,29 @@ namespace Micajah.Common.Bll
         public static string ToLongDateTimeString(DateTime utcDateTime, TimeZoneInfo timeZone, int timeFormat, int dateFormat, bool omitUtc)
         {
             return ToLongDateTimeString(utcDateTime, timeZone, timeFormat, new int?(dateFormat), omitUtc);
+        }
+
+        #endregion
+
+        #region Serialization
+
+        public static string Serialize(object value)
+        {
+            StringBuilder sb = new StringBuilder();
+            using (StringWriter writer = new StringWriter(sb, CultureInfo.InvariantCulture))
+            {
+                LosFormatter formatter = new LosFormatter();
+                formatter.Serialize(writer, value);
+            }
+            return sb.ToString();
+        }
+
+        internal static object Deserialize(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return null;
+
+            LosFormatter formatter = new LosFormatter();
+            return formatter.Deserialize(value);
         }
 
         #endregion

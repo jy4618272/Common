@@ -94,7 +94,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.LogOnStyleSheet, true)));
 
             m_UserId = UserContext.Current.UserId;
-            m_PendingRequest = ServiceProvider.GetOAuthPendingUserAuthorizationRequest(m_UserId);
+            m_PendingRequest = TokenProvider.Current.GetPendingUserAuthorizationRequest();
 
             if (!IsPostBack)
             {
@@ -143,10 +143,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             string token = ((ITokenContainingMessage)m_PendingRequest).Token;
 
             TokenProvider.Current.AuthorizeRequestToken(token, m_UserId);
+            TokenProvider.SetTokenCookie(null);
 
             UserContext.OAuthAuthorizationSecret = null; // Clear one time use secret.
-
-            ServiceProvider.SetOAuthPendingUserAuthorizationRequest(null, m_UserId);
 
             MainMultiView.ActiveViewIndex = 1;
 
@@ -169,11 +168,10 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             MainMultiView.ActiveViewIndex = 2;
 
-            ServiceProvider.SetOAuthPendingUserAuthorizationRequest(null, m_UserId);
-
             string token = ((ITokenContainingMessage)m_PendingRequest).Token;
 
             TokenProvider.Current.DeleteToken(token);
+            TokenProvider.SetTokenCookie(null);
         }
 
         #endregion

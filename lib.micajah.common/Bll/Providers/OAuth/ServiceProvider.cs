@@ -1,18 +1,13 @@
 ﻿using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
-using DotNetOpenAuth.OAuth.Messages;
-using Micajah.Common.Application;
 using System;
-using System.Web;
 
 namespace Micajah.Common.Bll.Providers.OAuth
 {
     public class ServiceProvider : DotNetOpenAuth.OAuth.ServiceProvider
     {
         #region Memebers
-
-        private const string OAuthPendingUserAuthorizationRequestKey = "OAuthPendingUserAuthorizationRequest";
 
         private static ServiceProviderDescription s_Description;
 
@@ -46,23 +41,6 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public ServiceProvider()
             : base(Description, TokenProvider.Current, NonceProvider.Current, new OAuthServiceProviderMessageFactory(TokenProvider.Current))
         {
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal static void SetOAuthPendingUserAuthorizationRequest(UserAuthorizationRequest requestAuth, Guid userId)
-        {
-            if (requestAuth == null)
-                CacheManager.Current.Remove(OAuthPendingUserAuthorizationRequestKey + userId.ToString("N"));
-            else
-                CacheManager.Current.Add(OAuthPendingUserAuthorizationRequestKey + userId.ToString("N"), requestAuth, null, DateTime.UtcNow.AddMinutes(2), TimeSpan.Zero, System.Web.Caching.CacheItemPriority.Normal, null);
-        }
-
-        internal static UserAuthorizationRequest GetOAuthPendingUserAuthorizationRequest(Guid userId)
-        {
-            return CacheManager.Current[OAuthPendingUserAuthorizationRequestKey + userId.ToString("N")] as UserAuthorizationRequest;
         }
 
         #endregion

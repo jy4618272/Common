@@ -10,7 +10,8 @@
 	@LoginId uniqueidentifier,
 	@RequestTokenVerifier nvarchar(255),
 	@RequestTokenCallback nvarchar(2048),
-	@CreatedTime datetime
+	@CreatedTime datetime,
+	@PendingUserAuthorizationRequest nvarchar(max)
 )
 AS
 BEGIN
@@ -18,10 +19,10 @@ BEGIN
 
 	UPDATE dbo.Mc_OAuthToken
 	SET TokenId = @TokenId, Token = @Token, TokenSecret = @TokenSecret, TokenTypeId = @TokenTypeId, ConsumerId = @ConsumerId, ConsumerVersion = @ConsumerVersion, Scope = @Scope
-		, LoginId = @LoginId, RequestTokenVerifier = @RequestTokenVerifier, RequestTokenCallback = @RequestTokenCallback, CreatedTime = @CreatedTime
+		, LoginId = @LoginId, RequestTokenVerifier = @RequestTokenVerifier, RequestTokenCallback = @RequestTokenCallback, CreatedTime = @CreatedTime, PendingUserAuthorizationRequest = @PendingUserAuthorizationRequest
 	WHERE (TokenId = @TokenId);
 
-	SELECT TokenId, Token, TokenSecret, TokenTypeId, ConsumerId, ConsumerVersion, Scope, LoginId, RequestTokenVerifier, RequestTokenCallback, CreatedTime
+	SELECT TokenId, Token, TokenSecret, TokenTypeId, ConsumerId, ConsumerVersion, Scope, LoginId, RequestTokenVerifier, RequestTokenCallback, CreatedTime, PendingUserAuthorizationRequest
 	FROM dbo.Mc_OAuthToken
 	WHERE (TokenId = @TokenId);
 END

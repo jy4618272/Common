@@ -29,6 +29,7 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("RequestTokenVerifier", "RequestTokenVerifier");
             TableMapping.ColumnMappings.Add("RequestTokenCallback", "RequestTokenCallback");
             TableMapping.ColumnMappings.Add("CreatedTime", "CreatedTime");
+            TableMapping.ColumnMappings.Add("PendingUserAuthorizationRequest", "PendingUserAuthorizationRequest");
 
             #endregion
 
@@ -50,11 +51,12 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@TokenTypeId", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TokenTypeId", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@ConsumerId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "ConsumerId", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@ConsumerVersion", SqlDbType.NVarChar, 50, ParameterDirection.Input, 0, 0, "ConsumerVersion", DataRowVersion.Current, false, null, "", "", ""));
-            InsertCommand.Parameters.Add(new SqlParameter("@Scope", SqlDbType.NVarChar, 50, ParameterDirection.Input, 0, 0, "Scope", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@Scope", SqlDbType.NVarChar, 0, ParameterDirection.Input, 0, 0, "Scope", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@LoginId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "LoginId", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@RequestTokenVerifier", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "RequestTokenVerifier", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@RequestTokenCallback", SqlDbType.NVarChar, 2048, ParameterDirection.Input, 0, 0, "RequestTokenCallback", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@CreatedTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CreatedTime", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@PendingUserAuthorizationRequest", SqlDbType.NVarChar, 0, ParameterDirection.Input, 0, 0, "PendingUserAuthorizationRequest", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 
@@ -76,11 +78,12 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@TokenTypeId", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "TokenTypeId", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@ConsumerId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "ConsumerId", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@ConsumerVersion", SqlDbType.NVarChar, 50, ParameterDirection.Input, 0, 0, "ConsumerVersion", DataRowVersion.Current, false, null, "", "", ""));
-            UpdateCommand.Parameters.Add(new SqlParameter("@Scope", SqlDbType.NVarChar, 50, ParameterDirection.Input, 0, 0, "Scope", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@Scope", SqlDbType.NVarChar, 0, ParameterDirection.Input, 0, 0, "Scope", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@LoginId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "LoginId", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@RequestTokenVerifier", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "RequestTokenVerifier", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@RequestTokenCallback", SqlDbType.NVarChar, 2048, ParameterDirection.Input, 0, 0, "RequestTokenCallback", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@CreatedTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CreatedTime", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@PendingUserAuthorizationRequest", SqlDbType.NVarChar, 0, ParameterDirection.Input, 0, 0, "PendingUserAuthorizationRequest", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
         }

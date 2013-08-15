@@ -1,17 +1,21 @@
-﻿using System;
-using System.Security.Cryptography;
-using DotNetOpenAuth.Messaging;
+﻿using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
 using Micajah.Common.Application;
+using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
+using System;
+using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 
 namespace Micajah.Common.Bll.Providers.OAuth
 {
     public class TokenProvider : IServiceProviderTokenManager
     {
         #region Members
+
+        private const string OAuthPendingUserAuthorizationRequestTokenKey = "OAuthPendingUserAuthorizationRequestToken";
 
         private static TokenProvider s_Instance;
         private static TokenProvider s_Current;
@@ -53,6 +57,33 @@ namespace Micajah.Common.Bll.Providers.OAuth
         private Guid GetConsumerId(string consumerKey)
         {
             return ((OAuthDataSet.OAuthConsumerRow)GetConsumer(consumerKey)).ConsumerId;
+        }
+
+        #endregion
+
+
+        #region Internal Methods
+
+        internal static void SetTokenCookie(string token)
+        {
+            HttpCookie cookie = new HttpCookie(OAuthPendingUserAuthorizationRequestTokenKey, token);
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
+                cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+
+            if (string.IsNullOrEmpty(token))
+                cookie.Expires = DateTime.UtcNow.AddYears(-1);
+            else
+                cookie.Expires = DateTime.UtcNow.AddMinutes(2);
+
+            HttpContext.Current.Response.Cookies.Add(cookie);
+        }
+
+        internal static string GetTokenFromCookie()
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[OAuthPendingUserAuthorizationRequestTokenKey];
+            if (cookie != null)
+                return cookie.Value;
+            return null;
         }
 
         #endregion
@@ -139,7 +170,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
                 callback = request.Callback.AbsoluteUri;
 
             WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Insert(Guid.NewGuid(), response.Token, response.TokenSecret, (int)OAuthTokenType.UnauthorizedRequestToken
-                , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), scope, null, string.Empty, callback, DateTime.UtcNow);
+                , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), scope, null, string.Empty, callback, DateTime.UtcNow, null);
         }
 
         public void ExpireRequestTokenAndStoreNewAccessToken(string consumerKey, string requestToken, string accessToken, string accessTokenSecret)
@@ -200,6 +231,39 @@ namespace Micajah.Common.Bll.Providers.OAuth
             return null;
         }
 
+        public UserAuthorizationRequest GetPendingUserAuthorizationRequest()
+        {
+            string token = GetTokenFromCookie();
+            if (!string.IsNullOrEmpty(token))
+            {
+                OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
+                WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+                if (table.Count > 0)
+                {
+                    OAuthDataSet.OAuthTokenRow row = table[0];
+                    if (row.TokenTypeId == (int)OAuthTokenType.UnauthorizedRequestToken)
+                    {
+                        if (!row.IsPendingUserAuthorizationRequestNull())
+                            return Support.Deserialize(row.PendingUserAuthorizationRequest) as UserAuthorizationRequest;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void UpdatePendingUserAuthorizationRequest(string token, UserAuthorizationRequest pendingUserAuthorizationRequest)
+        {
+            OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
+            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            if (table.Count > 0)
+            {
+                OAuthDataSet.OAuthTokenRow row = table[0];
+                row.PendingUserAuthorizationRequest = Support.Serialize(pendingUserAuthorizationRequest);
+
+                WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
+            }
+        }
+
         public void AuthorizeRequestToken(string requestToken, Guid loginId)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
@@ -209,6 +273,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
                 OAuthDataSet.OAuthTokenRow row = table[0];
                 row.TokenTypeId = (int)OAuthTokenType.AuthorizedRequestToken;
                 row.LoginId = loginId;
+                row.SetPendingUserAuthorizationRequestNull();
 
                 WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
             }

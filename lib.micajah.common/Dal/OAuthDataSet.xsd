@@ -114,6 +114,7 @@
                 </xs:simpleType>
               </xs:element>
               <xs:element name="CreatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" />
+              <xs:element name="PendingUserAuthorizationRequest" msprop:Generator_ColumnVarNameInTable="columnPendingUserAuthorizationRequest" msprop:Generator_ColumnPropNameInRow="PendingUserAuthorizationRequest" msprop:Generator_ColumnPropNameInTable="PendingUserAuthorizationRequestColumn" msprop:Generator_UserColumnName="PendingUserAuthorizationRequest" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
