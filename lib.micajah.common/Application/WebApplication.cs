@@ -765,7 +765,7 @@ namespace Micajah.Common.Application
                 if (organizationId == Guid.Empty)
                 {
                     Guid userId = Guid.Empty;
-                    LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
+                    LoginProvider.ParseUserIdentityName(out userId, out organizationId, out instanceId);
 
                     if (userId != Guid.Empty)
                     {

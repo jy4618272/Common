@@ -46,11 +46,6 @@ namespace Micajah.Common.Bll.Handlers
             UserAuthorizationRequest requestAuth = null;
             AuthorizedTokenRequest requestAccessToken;
 
-            Guid userId = Guid.Empty;
-            Guid organizationId = Guid.Empty;
-            Guid instanceId = Guid.Empty;
-            LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
-
             if ((requestToken = request as UnauthorizedTokenRequest) != null)
             {
                 UnauthorizedTokenResponse response = m_Provider.PrepareUnauthorizedTokenMessage(requestToken);
@@ -72,6 +67,11 @@ namespace Micajah.Common.Bll.Handlers
 
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
+
+                Guid userId = Guid.Empty;
+                Guid organizationId = Guid.Empty;
+                Guid instanceId = Guid.Empty;
+                LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
 
                 if (organizationId != Guid.Empty)
                 {
