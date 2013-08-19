@@ -12,7 +12,7 @@
   <xs:element name="OAuthDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="OAuthDataSet" msprop:Generator_UserDSName="OAuthDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Nonce" msprop:Generator_TableClassName="NonceDataTable" msprop:Generator_TableVarName="tableNonce" msprop:Generator_TablePropName="Nonce" msprop:Generator_RowDeletingName="NonceRowDeleting" msprop:Generator_RowChangingName="NonceRowChanging" msprop:Generator_RowEvHandlerName="NonceRowChangeEventHandler" msprop:Generator_RowDeletedName="NonceRowDeleted" msprop:Generator_UserTableName="Nonce" msprop:Generator_RowChangedName="NonceRowChanged" msprop:Generator_RowEvArgName="NonceRowChangeEvent" msprop:Generator_RowClassName="NonceRow">
+        <xs:element name="Nonce" msprop:Generator_TableClassName="NonceDataTable" msprop:Generator_TableVarName="tableNonce" msprop:Generator_RowChangedName="NonceRowChanged" msprop:Generator_TablePropName="Nonce" msprop:Generator_RowDeletingName="NonceRowDeleting" msprop:Generator_RowChangingName="NonceRowChanging" msprop:Generator_RowEvHandlerName="NonceRowChangeEventHandler" msprop:Generator_RowDeletedName="NonceRowDeleted" msprop:Generator_RowClassName="NonceRow" msprop:Generator_UserTableName="Nonce" msprop:Generator_RowEvArgName="NonceRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Context" msprop:Generator_ColumnVarNameInTable="columnContext" msprop:Generator_ColumnPropNameInRow="Context" msprop:Generator_ColumnPropNameInTable="ContextColumn" msprop:Generator_UserColumnName="Context">
@@ -33,7 +33,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="OAuthConsumer" msprop:Generator_TableClassName="OAuthConsumerDataTable" msprop:Generator_TableVarName="tableOAuthConsumer" msprop:Generator_TablePropName="OAuthConsumer" msprop:Generator_RowDeletingName="OAuthConsumerRowDeleting" msprop:Generator_RowChangingName="OAuthConsumerRowChanging" msprop:Generator_RowEvHandlerName="OAuthConsumerRowChangeEventHandler" msprop:Generator_RowDeletedName="OAuthConsumerRowDeleted" msprop:Generator_UserTableName="OAuthConsumer" msprop:Generator_RowChangedName="OAuthConsumerRowChanged" msprop:Generator_RowEvArgName="OAuthConsumerRowChangeEvent" msprop:Generator_RowClassName="OAuthConsumerRow">
+        <xs:element name="OAuthConsumer" msprop:Generator_TableClassName="OAuthConsumerDataTable" msprop:Generator_TableVarName="tableOAuthConsumer" msprop:Generator_RowChangedName="OAuthConsumerRowChanged" msprop:Generator_TablePropName="OAuthConsumer" msprop:Generator_RowDeletingName="OAuthConsumerRowDeleting" msprop:Generator_RowChangingName="OAuthConsumerRowChanging" msprop:Generator_RowEvHandlerName="OAuthConsumerRowChangeEventHandler" msprop:Generator_RowDeletedName="OAuthConsumerRowDeleted" msprop:Generator_RowClassName="OAuthConsumerRow" msprop:Generator_UserTableName="OAuthConsumer" msprop:Generator_RowEvArgName="OAuthConsumerRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ConsumerId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnConsumerId" msprop:Generator_ColumnPropNameInRow="ConsumerId" msprop:Generator_ColumnPropNameInTable="ConsumerIdColumn" msprop:Generator_UserColumnName="ConsumerId" type="xs:string" />
@@ -64,7 +64,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="OAuthToken" msprop:Generator_TableClassName="OAuthTokenDataTable" msprop:Generator_TableVarName="tableOAuthToken" msprop:Generator_TablePropName="OAuthToken" msprop:Generator_RowDeletingName="OAuthTokenRowDeleting" msprop:Generator_RowChangingName="OAuthTokenRowChanging" msprop:Generator_RowEvHandlerName="OAuthTokenRowChangeEventHandler" msprop:Generator_RowDeletedName="OAuthTokenRowDeleted" msprop:Generator_UserTableName="OAuthToken" msprop:Generator_RowChangedName="OAuthTokenRowChanged" msprop:Generator_RowEvArgName="OAuthTokenRowChangeEvent" msprop:Generator_RowClassName="OAuthTokenRow">
+        <xs:element name="OAuthToken" msprop:Generator_TableClassName="OAuthTokenDataTable" msprop:Generator_TableVarName="tableOAuthToken" msprop:Generator_RowChangedName="OAuthTokenRowChanged" msprop:Generator_TablePropName="OAuthToken" msprop:Generator_RowDeletingName="OAuthTokenRowDeleting" msprop:Generator_RowChangingName="OAuthTokenRowChanging" msprop:Generator_RowEvHandlerName="OAuthTokenRowChangeEventHandler" msprop:Generator_RowDeletedName="OAuthTokenRowDeleted" msprop:Generator_RowClassName="OAuthTokenRow" msprop:Generator_UserTableName="OAuthToken" msprop:Generator_RowEvArgName="OAuthTokenRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="TokenId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnTokenId" msprop:Generator_ColumnPropNameInRow="TokenId" msprop:Generator_ColumnPropNameInTable="TokenIdColumn" msprop:Generator_UserColumnName="TokenId" type="xs:string" />
@@ -115,6 +115,8 @@
               </xs:element>
               <xs:element name="CreatedTime" msdata:DateTimeMode="Utc" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" msprop:Generator_UserColumnName="CreatedTime" type="xs:dateTime" />
               <xs:element name="PendingUserAuthorizationRequest" msprop:Generator_ColumnVarNameInTable="columnPendingUserAuthorizationRequest" msprop:Generator_ColumnPropNameInRow="PendingUserAuthorizationRequest" msprop:Generator_ColumnPropNameInTable="PendingUserAuthorizationRequestColumn" msprop:Generator_UserColumnName="PendingUserAuthorizationRequest" type="xs:string" minOccurs="0" />
+              <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" minOccurs="0" />
+              <xs:element name="InstanceId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnInstanceId" msprop:Generator_ColumnPropNameInRow="InstanceId" msprop:Generator_ColumnPropNameInTable="InstanceIdColumn" msprop:Generator_UserColumnName="InstanceId" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -137,7 +139,7 @@
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="FK_Mc_OAuthToken_Mc_OAuthConsumer" msdata:parent="OAuthConsumer" msdata:child="OAuthToken" msdata:parentkey="ConsumerId" msdata:childkey="ConsumerId" msprop:Generator_UserChildTable="OAuthToken" msprop:Generator_ChildPropName="GetOAuthTokenRows" msprop:Generator_UserRelationName="FK_Mc_OAuthToken_Mc_OAuthConsumer" msprop:Generator_ParentPropName="Mc_OAuthConsumerRow" msprop:Generator_RelationVarName="relationFK_Mc_OAuthToken_Mc_OAuthConsumer" msprop:Generator_UserParentTable="OAuthConsumer" />
+      <msdata:Relationship name="FK_Mc_OAuthToken_Mc_OAuthConsumer" msdata:parent="OAuthConsumer" msdata:child="OAuthToken" msdata:parentkey="ConsumerId" msdata:childkey="ConsumerId" msprop:Generator_UserChildTable="OAuthToken" msprop:Generator_ChildPropName="GetOAuthTokenRows" msprop:Generator_UserRelationName="FK_Mc_OAuthToken_Mc_OAuthConsumer" msprop:Generator_RelationVarName="relationFK_Mc_OAuthToken_Mc_OAuthConsumer" msprop:Generator_UserParentTable="OAuthConsumer" msprop:Generator_ParentPropName="Mc_OAuthConsumerRow" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

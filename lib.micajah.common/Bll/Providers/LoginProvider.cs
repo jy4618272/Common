@@ -572,24 +572,6 @@ namespace Micajah.Common.Bll.Providers
                 ParseUserName(ctx.User.Identity.Name, out userId, out organizationId, out instanceId);
         }
 
-        internal static void ParseAuthCookie(out Guid userId, out Guid organizationId, out Guid instanceId)
-        {
-            userId = Guid.Empty;
-            organizationId = Guid.Empty;
-            instanceId = Guid.Empty;
-
-            HttpContext ctx = HttpContext.Current;
-            if (ctx != null)
-            {
-                HttpCookie cookie = ctx.Request.Cookies[FormsAuthentication.FormsCookieName];
-                if (cookie != null)
-                {
-                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-                    ParseUserName(ticket.Name, out userId, out organizationId, out instanceId);
-                }
-            }
-        }
-
         internal static void SetAuthCookie(Guid userId, Guid organizationId, Guid instanceId, bool? isPersistent)
         {
             string userName = string.Format(CultureInfo.InvariantCulture, "{0:N},{1:N},{2:N}", userId, organizationId, instanceId);

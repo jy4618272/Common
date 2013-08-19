@@ -7,11 +7,10 @@ using Micajah.Common.Dal;
 using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.SessionState;
 
 namespace Micajah.Common.Bll.Handlers
 {
-    public class OAuthHandler : IHttpHandler, IRequiresSessionState
+    public class OAuthHandler : IHttpHandler
     {
         #region Members
 
@@ -68,16 +67,11 @@ namespace Micajah.Common.Bll.Handlers
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
-                Guid userId = Guid.Empty;
-                Guid organizationId = Guid.Empty;
-                Guid instanceId = Guid.Empty;
-                LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
-
-                if (organizationId != Guid.Empty)
+                if (!row.IsOrganizationIdNull())
                 {
-                    response.ExtraData.Add(new KeyValuePair<string, string>("org", OrganizationProvider.GetOrganization(organizationId).PseudoId));
-                    if (instanceId != Guid.Empty)
-                        response.ExtraData.Add(new KeyValuePair<string, string>("dept", InstanceProvider.GetInstance(instanceId, organizationId).PseudoId));
+                    response.ExtraData.Add(new KeyValuePair<string, string>("org", OrganizationProvider.GetOrganization(row.OrganizationId).PseudoId));
+                    if (!row.IsInstanceIdNull())
+                        response.ExtraData.Add(new KeyValuePair<string, string>("dept", InstanceProvider.GetInstance(row.InstanceId, row.OrganizationId).PseudoId));
                 }
 
                 m_Provider.Channel.Send(response);

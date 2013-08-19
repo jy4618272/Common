@@ -38,7 +38,6 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
         private UserAuthorizationRequest m_PendingRequest;
-        private Guid m_UserId;
 
         #endregion
 
@@ -93,7 +92,6 @@ namespace Micajah.Common.WebControls.SecurityControls
             else
                 this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.LogOnStyleSheet, true)));
 
-            m_UserId = UserContext.Current.UserId;
             m_PendingRequest = TokenProvider.Current.GetPendingUserAuthorizationRequest();
 
             if (!IsPostBack)
@@ -142,7 +140,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             string token = ((ITokenContainingMessage)m_PendingRequest).Token;
 
-            TokenProvider.Current.AuthorizeRequestToken(token, m_UserId);
+            TokenProvider.Current.AuthorizeRequestToken(token);
             TokenProvider.SetTokenCookie(null);
 
             UserContext.OAuthAuthorizationSecret = null; // Clear one time use secret.

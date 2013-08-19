@@ -1024,6 +1024,10 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnPendingUserAuthorizationRequest;
             
+            private global::System.Data.DataColumn columnOrganizationId;
+            
+            private global::System.Data.DataColumn columnInstanceId;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public OAuthTokenDataTable() {
@@ -1155,6 +1159,22 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OrganizationIdColumn {
+                get {
+                    return this.columnOrganizationId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn InstanceIdColumn {
+                get {
+                    return this.columnInstanceId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1190,7 +1210,7 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public OAuthTokenRow AddOAuthTokenRow(System.Guid TokenId, string Token, string TokenSecret, int TokenTypeId, OAuthConsumerRow parentOAuthConsumerRowByFK_Mc_OAuthToken_Mc_OAuthConsumer, string ConsumerVersion, string Scope, System.Guid LoginId, string RequestTokenVerifier, string RequestTokenCallback, System.DateTime CreatedTime, string PendingUserAuthorizationRequest) {
+            public OAuthTokenRow AddOAuthTokenRow(System.Guid TokenId, string Token, string TokenSecret, int TokenTypeId, OAuthConsumerRow parentOAuthConsumerRowByFK_Mc_OAuthToken_Mc_OAuthConsumer, string ConsumerVersion, string Scope, System.Guid LoginId, string RequestTokenVerifier, string RequestTokenCallback, System.DateTime CreatedTime, string PendingUserAuthorizationRequest, System.Guid OrganizationId, System.Guid InstanceId) {
                 OAuthTokenRow rowOAuthTokenRow = ((OAuthTokenRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         TokenId,
@@ -1204,7 +1224,9 @@ namespace Micajah.Common.Dal {
                         RequestTokenVerifier,
                         RequestTokenCallback,
                         CreatedTime,
-                        PendingUserAuthorizationRequest};
+                        PendingUserAuthorizationRequest,
+                        OrganizationId,
+                        InstanceId};
                 if ((parentOAuthConsumerRowByFK_Mc_OAuthToken_Mc_OAuthConsumer != null)) {
                     columnValuesArray[4] = parentOAuthConsumerRowByFK_Mc_OAuthToken_Mc_OAuthConsumer[0];
                 }
@@ -1249,6 +1271,8 @@ namespace Micajah.Common.Dal {
                 this.columnRequestTokenCallback = base.Columns["RequestTokenCallback"];
                 this.columnCreatedTime = base.Columns["CreatedTime"];
                 this.columnPendingUserAuthorizationRequest = base.Columns["PendingUserAuthorizationRequest"];
+                this.columnOrganizationId = base.Columns["OrganizationId"];
+                this.columnInstanceId = base.Columns["InstanceId"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1278,6 +1302,10 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnCreatedTime);
                 this.columnPendingUserAuthorizationRequest = new global::System.Data.DataColumn("PendingUserAuthorizationRequest", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPendingUserAuthorizationRequest);
+                this.columnOrganizationId = new global::System.Data.DataColumn("OrganizationId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOrganizationId);
+                this.columnInstanceId = new global::System.Data.DataColumn("InstanceId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnInstanceId);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnTokenId}, true));
                 this.columnTokenId.AllowDBNull = false;
@@ -1751,6 +1779,38 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid OrganizationId {
+                get {
+                    try {
+                        return ((global::System.Guid)(this[this.tableOAuthToken.OrganizationIdColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'OrganizationId\' in table \'OAuthToken\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableOAuthToken.OrganizationIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid InstanceId {
+                get {
+                    try {
+                        return ((global::System.Guid)(this[this.tableOAuthToken.InstanceIdColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'InstanceId\' in table \'OAuthToken\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableOAuthToken.InstanceIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public OAuthConsumerRow Mc_OAuthConsumerRow {
                 get {
                     return ((OAuthConsumerRow)(this.GetParentRow(this.Table.ParentRelations["FK_Mc_OAuthToken_Mc_OAuthConsumer"])));
@@ -1782,6 +1842,30 @@ namespace Micajah.Common.Dal {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetPendingUserAuthorizationRequestNull() {
                 this[this.tableOAuthToken.PendingUserAuthorizationRequestColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsOrganizationIdNull() {
+                return this.IsNull(this.tableOAuthToken.OrganizationIdColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetOrganizationIdNull() {
+                this[this.tableOAuthToken.OrganizationIdColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsInstanceIdNull() {
+                return this.IsNull(this.tableOAuthToken.InstanceIdColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetInstanceIdNull() {
+                this[this.tableOAuthToken.InstanceIdColumn] = global::System.Convert.DBNull;
             }
         }
         

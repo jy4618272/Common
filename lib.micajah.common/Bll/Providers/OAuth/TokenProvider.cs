@@ -4,6 +4,7 @@ using DotNetOpenAuth.OAuth.Messages;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
+using Micajah.Common.Security;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -170,7 +171,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
                 callback = request.Callback.AbsoluteUri;
 
             WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Insert(Guid.NewGuid(), response.Token, response.TokenSecret, (int)OAuthTokenType.UnauthorizedRequestToken
-                , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), scope, null, string.Empty, callback, DateTime.UtcNow, null);
+                , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), scope, null, string.Empty, callback, DateTime.UtcNow, null, null, null);
         }
 
         public void ExpireRequestTokenAndStoreNewAccessToken(string consumerKey, string requestToken, string accessToken, string accessTokenSecret)
@@ -264,7 +265,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
             }
         }
 
-        public void AuthorizeRequestToken(string requestToken, Guid loginId)
+        public void AuthorizeRequestToken(string requestToken)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
             WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
@@ -272,8 +273,19 @@ namespace Micajah.Common.Bll.Providers.OAuth
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
                 row.TokenTypeId = (int)OAuthTokenType.AuthorizedRequestToken;
-                row.LoginId = loginId;
                 row.SetPendingUserAuthorizationRequestNull();
+
+                UserContext user = UserContext.Current;
+                if (user != null)
+                {
+                    row.LoginId = user.UserId;
+                    if (user.SelectedOrganizationId != Guid.Empty)
+                    {
+                        row.OrganizationId = user.SelectedOrganizationId;
+                        if (user.SelectedInstanceId != Guid.Empty)
+                            row.InstanceId = user.SelectedInstanceId;
+                    }
+                }
 
                 WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
             }

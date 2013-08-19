@@ -6,7 +6,7 @@ AS
 BEGIN
 	SET NOCOUNT OFF;
 
-	SELECT TokenId, Token, TokenSecret, TokenTypeId, ConsumerId, ConsumerVersion, Scope, LoginId, RequestTokenVerifier, RequestTokenCallback, CreatedTime, PendingUserAuthorizationRequest
+	SELECT TokenId, Token, TokenSecret, TokenTypeId, ConsumerId, ConsumerVersion, Scope, LoginId, RequestTokenVerifier, RequestTokenCallback, CreatedTime, PendingUserAuthorizationRequest, OrganizationId, InstanceId
 	FROM dbo.Mc_OAuthToken
 	WHERE (Token = @Token);
 END

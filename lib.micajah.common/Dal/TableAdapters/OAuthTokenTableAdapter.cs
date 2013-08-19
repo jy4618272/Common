@@ -30,6 +30,8 @@ namespace Micajah.Common.Dal.TableAdapters
             TableMapping.ColumnMappings.Add("RequestTokenCallback", "RequestTokenCallback");
             TableMapping.ColumnMappings.Add("CreatedTime", "CreatedTime");
             TableMapping.ColumnMappings.Add("PendingUserAuthorizationRequest", "PendingUserAuthorizationRequest");
+            TableMapping.ColumnMappings.Add("OrganizationId", "OrganizationId");
+            TableMapping.ColumnMappings.Add("InstanceId", "InstanceId");
 
             #endregion
 
@@ -57,6 +59,8 @@ namespace Micajah.Common.Dal.TableAdapters
             InsertCommand.Parameters.Add(new SqlParameter("@RequestTokenCallback", SqlDbType.NVarChar, 2048, ParameterDirection.Input, 0, 0, "RequestTokenCallback", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@CreatedTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CreatedTime", DataRowVersion.Current, false, null, "", "", ""));
             InsertCommand.Parameters.Add(new SqlParameter("@PendingUserAuthorizationRequest", SqlDbType.NVarChar, 0, ParameterDirection.Input, 0, 0, "PendingUserAuthorizationRequest", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+            InsertCommand.Parameters.Add(new SqlParameter("@InstanceId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "InstanceId", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 
@@ -84,6 +88,8 @@ namespace Micajah.Common.Dal.TableAdapters
             UpdateCommand.Parameters.Add(new SqlParameter("@RequestTokenCallback", SqlDbType.NVarChar, 2048, ParameterDirection.Input, 0, 0, "RequestTokenCallback", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@CreatedTime", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "CreatedTime", DataRowVersion.Current, false, null, "", "", ""));
             UpdateCommand.Parameters.Add(new SqlParameter("@PendingUserAuthorizationRequest", SqlDbType.NVarChar, 0, ParameterDirection.Input, 0, 0, "PendingUserAuthorizationRequest", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+            UpdateCommand.Parameters.Add(new SqlParameter("@InstanceId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "InstanceId", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
         }
