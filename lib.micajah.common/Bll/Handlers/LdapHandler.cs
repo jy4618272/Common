@@ -557,6 +557,11 @@ namespace Micajah.Common.Bll.Handlers
                                                 }
                                             }
 
+                                            if (EmailProvider.IsEmailExists((string)dr["LoginName"]))
+                                            {
+                                                EmailProvider.DeleteEmails(Guid.Empty, (string)dr["LoginName"]);
+                                            }
+
                                             ldapGroupIds = (sb.Length > 0) ? sb.Remove(0, 1).ToString() : string.Empty;
                                             localGroupIds = LdapInfoProvider.GetAppGroupsByLdapGroups(organizationId, ldapGroupIds);
                                             password = "12345";

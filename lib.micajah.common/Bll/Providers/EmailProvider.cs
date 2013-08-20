@@ -83,13 +83,13 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Deletes all emails for login id.
+        /// Deletes all emails for login id or by email if login id is Guid.Empty
         /// </summary>
         /// <param name="loginId">Login Id</param>
         [DataObjectMethod(DataObjectMethodType.Delete)]
-        public static void DeleteEmails(Guid loginId)
+        public static void DeleteEmails(Guid loginId, String email)
         {
-            WebApplication.CommonDataSetTableAdapters.EmailTableAdapter.Delete(loginId);
+            WebApplication.CommonDataSetTableAdapters.EmailTableAdapter.Delete(loginId, email);
         }
 
         #endregion

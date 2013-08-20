@@ -1949,7 +1949,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="secondaryEmails">Specifies the user's secondary Emails.</param>
         public static void UpdateUserSecondaryEmails(Guid userId, string secondaryEmails)
         {
-            EmailProvider.DeleteEmails(userId);
+            EmailProvider.DeleteEmails(userId, string.Empty);
 
             if (!string.IsNullOrEmpty(secondaryEmails))
             {

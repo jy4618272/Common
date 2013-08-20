@@ -220,7 +220,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (user != null)
             {
                 WebApplication.LoginProvider.UpdateUserLdapInfo(user.SelectedOrganization.OrganizationId, this.UserId, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Guid.Empty, string.Empty);
-                EmailProvider.DeleteEmails(this.UserId);
+                EmailProvider.DeleteEmails(this.UserId, string.Empty);
                 EditForm.DataBind();
             }
         }
