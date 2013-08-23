@@ -58,7 +58,7 @@ namespace Micajah.Common.Bll.Handlers
 
                 TokenProvider.SetTokenCookie(token);
 
-                context.Response.Redirect(ResourceProvider.OAuthPageVirtualPath);
+                context.Response.Redirect(ActionProvider.FindAction(ActionProvider.OAuthPageActionId).AbsoluteNavigateUrl);
             }
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
             {

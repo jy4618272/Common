@@ -50,7 +50,6 @@ namespace Micajah.Common.Bll.Providers
         internal const string PasswordRecoveryPageVirtualPath = VirtualRootShortPath + "passwordrecovery.aspx";
         internal const string ResetPasswordPageVirtualPath = VirtualRootShortPath + "resetpassword.aspx";
         internal const string SignupUserPageVirtualPath = VirtualRootShortPath + "signupuser.aspx";
-        internal const string OAuthPageVirtualPath = "~/mc/oauth.aspx";
         internal const string OAuthHandlerVirtualPath = "~/mc/oauth.ashx";
 
         #endregion
