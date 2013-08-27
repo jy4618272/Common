@@ -122,6 +122,16 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets or sets the URL of the small application logo's image.
+        /// </summary>
+        [ConfigurationProperty("smallLogoImageUrl")]
+        public string SmallLogoImageUrl
+        {
+            get { return (string)this["smallLogoImageUrl"]; }
+            set { this["smallLogoImageUrl"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the height of the big application logo's image.
         /// </summary>
         [ConfigurationProperty("bigLogoImageHeight", DefaultValue = 100)]

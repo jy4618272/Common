@@ -1,33 +1,31 @@
-﻿*
-{
+﻿* {
     -webkit-appearance: none;
 }
-body
-{
+
+body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-::-webkit-input-placeholder
-{
+
+::-webkit-input-placeholder {
     color: #d4d4d4; /* WebKit browsers */
 }
-:-moz-placeholder
-{
+
+:-moz-placeholder {
     color: #d4d4d4; /* Mozilla Firefox 4 to 18 */
 }
-::-moz-placeholder
-{
+
+::-moz-placeholder {
     color: #d4d4d4; /* Mozilla Firefox 19+ */
 }
-:-ms-input-placeholder
-{
+
+:-ms-input-placeholder {
     color: #d4d4d4; /* Internet Explorer 10+ */
 }
 
 
-.content
-{
+.content {
     width: 100%;
     min-width: 250px;
     margin: 0;
@@ -35,135 +33,93 @@ body
     box-sizing: border-box;
 }
 
-ul, li
-{
+ul, li {
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-/*-- Set form width for Uniform js --*/
-form
-{
+form {
     max-width: 850px;
-    margin: 0 auto; /* Center */
+    margin: 0 auto;
 }
 
-label
-{
+label {
     margin: 15px 0 0;
     font-size: .85em;
 }
 
-/*------------ Add Ticket View -------------------*/
-
-.content
-{
+.content {
     margin: 0;
     padding: 0 20px 50px;
 }
-.content form
-{
-    margin-bottom: 50px;
-}
-.content input[type=text]
-{
-    -webkit-appearance: none;
-    width: 90%;
-    box-sizing: border-box;
-    padding: 12px;
-    margin: 0;
-    border: 1px solid #a7a7a7;
-    border-radius: 5px 5px 5px 5px;
-}
 
-.content input[type=password]
-{
-    -webkit-appearance: none;
-    width: 90%;
-    box-sizing: border-box;
-    padding: 12px;
-    margin: 0;
-    border: 1px solid #a7a7a7;
-    border-radius: 5px 5px 5px 5px;
-}
-
-/*------------ Responsive Elements ---------------*/
-
-/* Large desktop */
-@media (min-width: 1200px)
-{
-
-}
-
-
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px)
-{
-
-}
-
-@media only screen and (max-device-width: 480px)
-{
-    /*
-    .Logo img
-    {
-        width: 284px;
+    .content form {
+        margin-bottom: 50px;
     }
-    */
-}
 
-small.left
-{
+    .content input[type=text] {
+        -webkit-appearance: none;
+        width: 90%;
+        box-sizing: border-box;
+        padding: 12px;
+        margin: 0;
+        border: 1px solid #a7a7a7;
+        border-radius: 5px 5px 5px 5px;
+    }
+
+    .content input[type=password] {
+        -webkit-appearance: none;
+        width: 90%;
+        box-sizing: border-box;
+        padding: 12px;
+        margin: 0;
+        border: 1px solid #a7a7a7;
+        border-radius: 5px 5px 5px 5px;
+    }
+
+small.left {
     text-align: left;
     font-size: 11px;
 }
 
-.Error
-{
+.Error {
     float: left;
     position: relative;
 }
 
-.content div.LightBlue
-{
+.content div.LightBlue {
     padding: 10px 0px 15px 0px;
-    width:90%;
-}
-
-.content select
-{
     width: 90%;
 }
 
-.Logo
-{
+.content select {
+    width: 90%;
+}
+
+.Logo {
     width: 90% !important;
 }
 
-.content .row
-{
+.content .row {
     padding: 10px;
     float: left;
     width: 100%;
     text-align: left;
 }
 
-.content .clear
-{
+.content .clear {
     float: none;
     clear: both;
 }
 
-span.Title
-{
+span.Title {
     font-size: 14px;
     font-weight: bold;
     text-align: left;
 }
 
-div.title
-{
+div.title {
     background-color: #EBEBEB;
     border: 0 none;
     border-radius: 5px 5px 5px 5px;
@@ -178,31 +134,26 @@ div.title
     text-align: left;
 }
 
-#SignupOrg1_Step2Form .row
-{
+#SignupOrg1_Step2Form .row {
     width: 97%;
 }
 
-#SignupOrg1_Step2Form
-{
+#SignupOrg1_Step2Form {
     margin-left: auto;
     margin-right: auto;
 }
 
-#SignupOrg1_Step2FormButton hr
-{
+#SignupOrg1_Step2FormButton hr {
     width: 93%;
 }
 
-.Logo
-{
+.Logo {
     width: 100%;
     padding-top: 50px;
     text-align: center;
 }
 
-.LightBlue
-{
+.LightBlue {
     background-color: #e9eff5;
     padding: 10px 20px 10px 15px;
     overflow: hidden;
@@ -213,8 +164,7 @@ div.title
     width: 372px;
 }
 
-.Agree
-{
+.Agree {
     padding: 40px 0 50px 0;
     font-family: Calibri, Arial, Sans-Serif;
     font-size: 14px;
@@ -222,89 +172,117 @@ div.title
     text-align: center;
 }
 
-.Agree a
-{
-    text-decoration: none;
-    font-family: Calibri, Arial, Sans-Serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: #999999;
-}
+    .Agree a {
+        text-decoration: none;
+        font-family: Calibri, Arial, Sans-Serif;
+        font-size: 14px;
+        font-weight: bold;
+        color: #999999;
+    }
 
-.Agree a:hover
-{
-    text-decoration: underline;
-}
+        .Agree a:hover {
+            text-decoration: underline;
+        }
 
-span.ErrorMessage.Step3Val
-{
+span.ErrorMessage.Step3Val {
     padding-top: 15px !important;
     background-position: left 15px !important;
 }
 
-small
-{
+small {
     font-size: 10px;
     color: #777;
     display: block;
     text-align: right;
 }
 
-.RadCaptcha_Default p
-{
+.RadCaptcha_Default p {
     display: inline;
 }
-.RadCaptcha_Default, .RadCaptcha_Default div
-{
+
+.RadCaptcha_Default, .RadCaptcha_Default div {
     display: inline;
 }
-.RadCaptcha_Default img
-{
-    margin-bottom: 20px;
-}
-.Summary
-{
+
+    .RadCaptcha_Default img {
+        margin-bottom: 20px;
+    }
+
+.Summary {
     text-align: left;
     position: inherit;
     margin-left: auto !important;
     margin-right: auto !important;
     width: 250px;
 }
-.Summary ul
-{
-    display: none;
+
+    .Summary ul {
+        display: none;
+    }
+
+.container {
+    width: 90%;
+    max-width: 700px;
+    min-width: 320px;
+    margin: 50px auto 0;
 }
 
-.container {	
-	width: 90%;
-	max-width: 700px;
-	min-width: 320px;
-	margin: 50px auto 0;
-	}
 .LightBlue {
-	posistion: relative;
-	width: 100%;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box;         /* Opera/IE 8+ */
-	background-color: #e9eff5;
-	padding: 10px 20px 10px 15px !important;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	}
+    position: relative;
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+    background-color: #e9eff5;
+    padding: 10px 20px 10px 15px !important;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
 
 input {
-	-webkit-appearance: none;
-	width: 100%;
-	box-sizing: border-box;
-	padding: 12px;
-	margin: 0;
-	border: 1px solid #a7a7a7;
-	border-radius: 5px 5px 5px 5px;
-	font-size: 18px;
-	padding: 12px 10px;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box; 
-	}
+    -webkit-appearance: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 0;
+    border: 1px solid #a7a7a7;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 18px;
+    padding: 12px 10px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box;
+}
+
+.modal-window {
+    background-color: #ffffff;
+    color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+    .modal-window .header {
+        border-radius: 10px 10px 0 0;
+        margin: -20px -20px 10px;
+        padding: 25px 20px 20px 20px;
+        color: #fff;
+        text-shadow: -1px -1px 1px rgba(0,0,0,0.3);
+        background-color: #39f;
+    }
+
+        .modal-window .header.bg {
+            background-repeat: no-repeat;
+            background-position: 10px bottom;
+            padding-left: 100px;
+        }
+
+    .modal-window h2 {
+        margin: 0;
+    }
+
+    .modal-window p {
+        margin: 0 0 10px;
+        font-size: 18px;
+    }

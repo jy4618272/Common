@@ -6232,15 +6232,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trying to log in instead?.
-        /// </summary>
-        internal static string SignupOrganizationControl_EmailValidator1_ErrorMessage {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_EmailValidator1_ErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please press button below to proceed..
         /// </summary>
         internal static string SignupOrganizationControl_ErrorContinueLabel_Text {
@@ -6322,11 +6313,56 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login Here.
+        ///   Looks up a localized string similar to Log In.
         /// </summary>
-        internal static string SignupOrganizationControl_LoginLink_Text {
+        internal static string SignupOrganizationControl_ModalLoginLink_Text {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_LoginLink_Text", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_ModalLoginLink_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This email is already in use..
+        /// </summary>
+        internal static string SignupOrganizationControl_ModalMessageLiteral_Text {
+            get {
+                return ResourceManager.GetString("SignupOrganizationControl_ModalMessageLiteral_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to.
+        /// </summary>
+        internal static string SignupOrganizationControl_ModalSelectActionLiteral_Text {
+            get {
+                return ResourceManager.GetString("SignupOrganizationControl_ModalSelectActionLiteral_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or.
+        /// </summary>
+        internal static string SignupOrganizationControl_ModalSelectActionSeparatorLiteral_Text {
+            get {
+                return ResourceManager.GetString("SignupOrganizationControl_ModalSelectActionSeparatorLiteral_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new Organization.
+        /// </summary>
+        internal static string SignupOrganizationControl_ModalStep1Button_Text {
+            get {
+                return ResourceManager.GetString("SignupOrganizationControl_ModalStep1Button_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wait. Haven&apos;t I seen you?.
+        /// </summary>
+        internal static string SignupOrganizationControl_ModalTitleLiteral_Text {
+            get {
+                return ResourceManager.GetString("SignupOrganizationControl_ModalTitleLiteral_Text", resourceCulture);
             }
         }
         
