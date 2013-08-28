@@ -20,6 +20,8 @@ namespace Micajah.Common.Configuration
         /// </summary>
         internal const int RequiredDatabaseVersion = 114;
 
+        internal const string MasterConnectionStringName = "Micajah.Common.ConnectionString";
+
         private string m_ApplicationUrl;
         private object m_AuthenticationMode;
         private string m_ConnectionString;
@@ -189,7 +191,7 @@ namespace Micajah.Common.Configuration
             get
             {
                 if (string.IsNullOrEmpty(m_ConnectionString))
-                    m_ConnectionString = ConfigurationManager.ConnectionStrings["Micajah.Common.ConnectionString"].ConnectionString;
+                    m_ConnectionString = ConfigurationManager.ConnectionStrings[MasterConnectionStringName].ConnectionString;
                 return m_ConnectionString;
             }
             set { m_ConnectionString = value; }
@@ -231,17 +233,6 @@ namespace Micajah.Common.Configuration
         {
             get { return (bool)this["enableMultipleInstances"]; }
             set { this["enableMultipleInstances"] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the expiration time-out for viewstate in minutes. It's 8 days by default.
-        /// </summary>
-        [ConfigurationProperty("viewStateExpirationTimeout", DefaultValue = 11520)]
-        [IntegerValidator()]
-        public int ViewStateExpirationTimeout
-        {
-            get { return (int)this["viewStateExpirationTimeout"]; }
-            set { this["viewStateExpirationTimeout"] = value; }
         }
 
         /// <summary>
@@ -330,6 +321,16 @@ namespace Micajah.Common.Configuration
 
                 return elem;
             }
+        }
+
+        /// <summary>
+        /// Gets the viewstate settings.
+        /// </summary>
+        [ConfigurationProperty("viewState")]
+        public ViewStateElement ViewState
+        {
+            get { return (ViewStateElement)this["viewState"]; }
+            set { this["viewState"] = value; }
         }
 
         #endregion

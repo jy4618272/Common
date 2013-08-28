@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Micajah.Common.Configuration;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web.UI;
-using Micajah.Common.Configuration;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -24,7 +24,7 @@ namespace Micajah.Common.Bll.Providers
 
             try
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ViewState.ConnectionString);
                 connection.Open();
 
                 command = new SqlCommand("[dbo].[Mc_DeleteViewState]", connection);
@@ -61,7 +61,7 @@ namespace Micajah.Common.Bll.Providers
                 if (viewStateId != Guid.Empty)
                 {
 
-                    connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                    connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ViewState.ConnectionString);
                     connection.Open();
 
                     command = new SqlCommand("[dbo].[Mc_GetViewState]", connection);
@@ -106,14 +106,14 @@ namespace Micajah.Common.Bll.Providers
             {
                 byte[] bytes = Support.GetBytes(stateFormatter.Serialize(statePair));
 
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ViewState.ConnectionString);
                 connection.Open();
 
                 command = new SqlCommand("[dbo].[Mc_InsertViewState]", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
                 command.Parameters.Add("@ViewState", SqlDbType.VarBinary).Value = bytes;
-                command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewStateExpirationTimeout);
+                command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewState.ExpirationTimeout);
                 command.ExecuteNonQuery();
             }
             finally
