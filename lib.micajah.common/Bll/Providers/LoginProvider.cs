@@ -112,24 +112,17 @@ namespace Micajah.Common.Bll.Providers
         {
             if ((loginId != Guid.Empty) && (organizationId != Guid.Empty))
             {
-                SqlConnection connection = null;
-                SqlCommand command = null;
-
-                try
+                using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
                 {
-                    connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
 
-                    command = new SqlCommand("dbo.Mc_GetOrganizationLogin", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
-                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    using (SqlCommand command = new SqlCommand("dbo.Mc_GetOrganizationLogin", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
+                        command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
 
-                    return Support.GetDataTable(command);
-                }
-                finally
-                {
-                    if (connection != null) connection.Dispose();
-                    if (command != null) command.Dispose();
+                        return Support.GetDataTable(command);
+                    }
                 }
             }
             return null;
@@ -601,26 +594,19 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationAdministrator">true, if the user is organization administrator; otherwise, false.</param>
         public virtual void AddLoginToOrganization(Guid loginId, Guid organizationId, bool organizationAdministrator)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
 
-                command = new SqlCommand("dbo.Mc_InsertOrganizationLogin", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-                command.Parameters.Add("@OrganizationAdministrator", SqlDbType.Bit).Value = organizationAdministrator;
-                command.Parameters.Add("@Active", SqlDbType.Bit).Value = true;
+                using (SqlCommand command = new SqlCommand("dbo.Mc_InsertOrganizationLogin", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    command.Parameters.Add("@OrganizationAdministrator", SqlDbType.Bit).Value = organizationAdministrator;
+                    command.Parameters.Add("@Active", SqlDbType.Bit).Value = true;
 
-                Support.ExecuteNonQuery(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    Support.ExecuteNonQuery(command);
+                }
             }
         }
 
@@ -951,9 +937,6 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>An object populated with the information for the newly created login.</returns>
         public virtual DataRow CreateLogin(string loginName, string password, params object[] details)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
             string firstName = null;
             string lastName = null;
             if (details.Length > 0)
@@ -963,25 +946,20 @@ namespace Micajah.Common.Bll.Providers
                     lastName = (string)details[1];
             }
 
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_InsertLogin]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier, 16).Value = Guid.NewGuid();
+                    command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
+                    command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = EncryptPassword(password);
+                    command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(firstName) ? string.Empty : firstName);
+                    command.Parameters.Add("@LastName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
+                    command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = Support.GeneratePseudoUnique(32);
 
-                command = new SqlCommand("[dbo].[Mc_InsertLogin]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier, 16).Value = Guid.NewGuid();
-                command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
-                command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = EncryptPassword(password);
-                command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(firstName) ? string.Empty : firstName);
-                command.Parameters.Add("@LastName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
-                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = Support.GeneratePseudoUnique(32);
-
-                return Support.GetDataRow(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.GetDataRow(command);
+                }
             }
         }
 
@@ -1079,23 +1057,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>A Micajah.Common.Bll.OrganizationCollection object that contains the login's organizations.</returns>
         public virtual OrganizationCollection GetOrganizationsByLoginId(Guid loginId)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_GetOrganizationsByLoginId", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
 
-                command = new SqlCommand("dbo.Mc_GetOrganizationsByLoginId", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-
-                return OrganizationProvider.CreateOrganizationCollection(Support.GetDataTable(command));
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return OrganizationProvider.CreateOrganizationCollection(Support.GetDataTable(command));
+                }
             }
         }
 
@@ -1122,23 +1092,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>A list that contains the ldap domain's organizations.</returns>
         public virtual DataTable GetOrganizationsByLdapDomain(string ldapDomain)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_GetOrganizationsByLdapDomain", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LdapDomain", SqlDbType.NVarChar).Value = ldapDomain;
 
-                command = new SqlCommand("dbo.Mc_GetOrganizationsByLdapDomain", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LdapDomain", SqlDbType.NVarChar).Value = ldapDomain;
-
-                return Support.GetDataTable(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.GetDataTable(command);
+                }
             }
         }
 
@@ -1149,23 +1111,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>A list of the logins that belong to specified organization.</returns>
         public virtual DataTable GetLoginsByOrganizationId(Guid organizationId)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_GetLoginsByOrganizationId", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
 
-                command = new SqlCommand("dbo.Mc_GetLoginsByOrganizationId", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
-
-                return Support.GetDataTable(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.GetDataTable(command);
+                }
             }
         }
 
@@ -1187,23 +1141,15 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public virtual DataRowView GetLogin(Guid loginId)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_GetLogin", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
 
-                command = new SqlCommand("dbo.Mc_GetLogin", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-
-                return Support.GetDataRowView(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.GetDataRowView(command);
+                }
             }
         }
 
@@ -1214,23 +1160,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>An object populated with the specified login's information from the data source.</returns>
         public virtual DataRowView GetLogin(string loginName)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_GetLoginByLoginName", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
 
-                command = new SqlCommand("dbo.Mc_GetLoginByLoginName", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = loginName;
-
-                return Support.GetDataRowView(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.GetDataRowView(command);
+                }
             }
         }
 
@@ -1273,23 +1211,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>An object populated with the specified login's information from the data source.</returns>
         public virtual DataRowView GetLoginByToken(string token)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_GetLoginByToken", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
 
-                command = new SqlCommand("dbo.Mc_GetLoginByToken", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
-
-                return Support.GetDataRowView(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.GetDataRowView(command);
+                }
             }
         }
 
@@ -1624,35 +1554,35 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapUserId">User ldap GUID.</param>
         public virtual void UpdateUserLdapInfo(Guid organizationId, Guid loginId, string firstName, string lastName, string ldapDomain, string ldapDomainFull, string ldapUserAlias, string ldapUpn, string ldapSecurityId, Guid ldapUserId, string ldapOUPath)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-            SqlCommand command2 = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
 
-                command = new SqlCommand("dbo.Mc_UpdateLoginLdapInfo", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-                command.Parameters.Add("@LdapDomain", SqlDbType.NVarChar).Value = ldapDomain;
-                command.Parameters.Add("@LdapDomainFull", SqlDbType.NVarChar).Value = ldapDomainFull;
-                command.Parameters.Add("@LdapUserAlias", SqlDbType.NVarChar).Value = ldapUserAlias;
-                command.Parameters.Add("@LdapUPN", SqlDbType.NVarChar).Value = ldapUpn ?? string.Empty;
-                command.Parameters.Add("@LdapSecurityId", SqlDbType.NVarChar).Value = ldapSecurityId;
-                command.Parameters.Add("@LdapUserId", SqlDbType.UniqueIdentifier).Value = ldapUserId;
-                command.Parameters.Add("@LdapOUPath", SqlDbType.NVarChar).Value = ldapOUPath;
+                using (SqlCommand command = new SqlCommand("dbo.Mc_UpdateLoginLdapInfo", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    command.Parameters.Add("@LdapDomain", SqlDbType.NVarChar).Value = ldapDomain;
+                    command.Parameters.Add("@LdapDomainFull", SqlDbType.NVarChar).Value = ldapDomainFull;
+                    command.Parameters.Add("@LdapUserAlias", SqlDbType.NVarChar).Value = ldapUserAlias;
+                    command.Parameters.Add("@LdapUPN", SqlDbType.NVarChar).Value = ldapUpn ?? string.Empty;
+                    command.Parameters.Add("@LdapSecurityId", SqlDbType.NVarChar).Value = ldapSecurityId;
+                    command.Parameters.Add("@LdapUserId", SqlDbType.UniqueIdentifier).Value = ldapUserId;
+                    command.Parameters.Add("@LdapOUPath", SqlDbType.NVarChar).Value = ldapOUPath;
 
-                Support.ExecuteNonQuery(command);
-
+                    Support.ExecuteNonQuery(command);
+                }
                 if ((string.IsNullOrEmpty(firstName) == false) && (string.IsNullOrEmpty(lastName) == false))
                 {
-                    command2 = new SqlCommand("dbo.Mc_GetOrganizationsByLoginId", connection);
-                    command2.CommandType = CommandType.StoredProcedure;
-                    command2.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    DataTable organizationsTable = null;
 
-                    DataTable organizationsTable = Support.GetDataTable(command2);
+                    using (SqlCommand command2 = new SqlCommand("dbo.Mc_GetOrganizationsByLoginId", connection))
+                    {
+                        command2.CommandType = CommandType.StoredProcedure;
+                        command2.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+
+                        organizationsTable = Support.GetDataTable(command2);
+                    }
 
                     if (organizationsTable.Rows.Count == 1)
                     {
@@ -1669,12 +1599,6 @@ namespace Micajah.Common.Bll.Providers
                         UserProvider.RaiseUserUpdated(loginId, organizationId, new List<Guid>());
                     }
                 }
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
-                if (command2 != null) command2.Dispose();
             }
         }
 
@@ -1861,24 +1785,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The organization identifier to remove from.</param>
         public virtual void RemoveLoginFromOrganization(Guid loginId, Guid organizationId)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_DeleteOrganizationLogin]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
 
-                command = new SqlCommand("[dbo].[Mc_DeleteOrganizationLogin]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-
-                Support.ExecuteNonQuery(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    Support.ExecuteNonQuery(command);
+                }
             }
         }
 
@@ -1928,26 +1844,17 @@ namespace Micajah.Common.Bll.Providers
         public virtual string ResetToken(Guid loginId)
         {
             string token = Support.GeneratePseudoUnique(32);
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_UpdateLoginToken]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
 
-                command = new SqlCommand("[dbo].[Mc_UpdateLoginToken]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-                command.Parameters.Add("@Token", SqlDbType.VarChar, 50).Value = token;
-
-                Support.ExecuteNonQuery(command);
+                    Support.ExecuteNonQuery(command);
+                }
             }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
-            }
-
             return token;
         }
 
@@ -2001,28 +1908,20 @@ namespace Micajah.Common.Bll.Providers
                         }
                     }
 
-                    SqlConnection connection = null;
-                    SqlCommand command = null;
-
-                    try
+                    using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
                     {
-                        connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                        using (SqlCommand command = new SqlCommand("[dbo].[Mc_UpdateLogin]", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                            command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(loginName) ? (object)DBNull.Value : loginName);
+                            command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = (string.IsNullOrEmpty(password) ? (object)DBNull.Value : password);
+                            command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(firstName) ? (object)DBNull.Value : firstName);
+                            command.Parameters.Add("@LastName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(lastName) ? (object)DBNull.Value : lastName);
+                            command.Parameters.Add("@Deleted", SqlDbType.Bit).Value = (deleted.HasValue ? deleted.Value : (object)DBNull.Value);
 
-                        command = new SqlCommand("[dbo].[Mc_UpdateLogin]", connection);
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-                        command.Parameters.Add("@LoginName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(loginName) ? (object)DBNull.Value : loginName);
-                        command.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = (string.IsNullOrEmpty(password) ? (object)DBNull.Value : password);
-                        command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(firstName) ? (object)DBNull.Value : firstName);
-                        command.Parameters.Add("@LastName", SqlDbType.NVarChar, 255).Value = (string.IsNullOrEmpty(lastName) ? (object)DBNull.Value : lastName);
-                        command.Parameters.Add("@Deleted", SqlDbType.Bit).Value = (deleted.HasValue ? deleted.Value : (object)DBNull.Value);
-
-                        rowAffected = Support.ExecuteNonQuery(command);
-                    }
-                    finally
-                    {
-                        if (connection != null) connection.Dispose();
-                        if (command != null) command.Dispose();
+                            rowAffected = Support.ExecuteNonQuery(command);
+                        }
                     }
                 }
             }
@@ -2040,27 +1939,19 @@ namespace Micajah.Common.Bll.Providers
         {
             int rowAffected = -1;
 
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_UpdateLoginSession]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    command.Parameters.Add("@SessionId", SqlDbType.VarChar, 50).Value = (string.IsNullOrEmpty(sessionId) ? (object)DBNull.Value : sessionId);
 
-                command = new SqlCommand("[dbo].[Mc_UpdateLoginSession]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-                command.Parameters.Add("@SessionId", SqlDbType.VarChar, 50).Value = (string.IsNullOrEmpty(sessionId) ? (object)DBNull.Value : sessionId);
+                    rowAffected = Support.ExecuteNonQuery(command);
 
-                rowAffected = Support.ExecuteNonQuery(command);
+                    return (rowAffected > 0);
+                }
             }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
-            }
-
-            return (rowAffected > 0);
         }
 
         /// <summary>
@@ -2073,27 +1964,19 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the user was successfully updated; otherwise, false.</returns>
         public virtual bool UpdateLoginInOrganization(Guid loginId, Guid organizationId, bool? organizationAdministrator, bool? active)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-
-            try
+            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
 
-                command = new SqlCommand("[dbo].[Mc_UpdateOrganizationLogin]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
-                command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
-                command.Parameters.Add("@OrganizationAdministrator", SqlDbType.Bit).Value = (organizationAdministrator.HasValue ? organizationAdministrator.Value : (object)DBNull.Value);
-                command.Parameters.Add("@Active", SqlDbType.Bit).Value = (active.HasValue ? active.Value : (object)DBNull.Value);
+                using (SqlCommand command = new SqlCommand("[dbo].[Mc_UpdateOrganizationLogin]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = organizationId;
+                    command.Parameters.Add("@LoginId", SqlDbType.UniqueIdentifier).Value = loginId;
+                    command.Parameters.Add("@OrganizationAdministrator", SqlDbType.Bit).Value = (organizationAdministrator.HasValue ? organizationAdministrator.Value : (object)DBNull.Value);
+                    command.Parameters.Add("@Active", SqlDbType.Bit).Value = (active.HasValue ? active.Value : (object)DBNull.Value);
 
-                return (Support.ExecuteNonQuery(command) > 0);
-
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return (Support.ExecuteNonQuery(command) > 0);
+                }
             }
         }
 

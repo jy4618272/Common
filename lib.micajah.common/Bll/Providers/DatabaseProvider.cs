@@ -140,20 +140,18 @@ namespace Micajah.Common.Bll.Providers
             if (row != null)
             {
                 string connectionString = CreateConnectionString(name, userName, password, row.Name, row.InstanceName, row.Port);
-                SqlConnection connection = null;
-                try
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection = new SqlConnection(connectionString);
-                    connection.Open();
-                    success = true;
-                }
-                catch (SqlException ex)
-                {
-                    errorMessage = ex.Message;
-                }
-                finally
-                {
-                    if (connection != null) connection.Dispose();
+                    try
+                    {
+                        connection.Open();
+                        success = true;
+                        connection.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        errorMessage = ex.Message;
+                    }
                 }
             }
             return success;

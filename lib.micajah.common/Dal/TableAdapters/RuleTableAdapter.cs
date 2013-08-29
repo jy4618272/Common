@@ -114,48 +114,34 @@ namespace Micajah.Common.Dal.TableAdapters
 
         public int UpdateRuleUses(Guid ruleId, Guid lastUsedUser, DateTime lastUsedDate)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
-                connection = new SqlConnection(this.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_UpdateRuleUses", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@RuleId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "RuleId", DataRowVersion.Current, false, ruleId, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@LastUsedUser", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "LastUsedUser", DataRowVersion.Current, false, lastUsedUser, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@LastUsedDate", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "LastUsedDate", DataRowVersion.Current, false, lastUsedDate, "", "", ""));
 
-                command = new SqlCommand("dbo.Mc_UpdateRuleUses", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@RuleId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "RuleId", DataRowVersion.Current, false, ruleId, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@LastUsedUser", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "LastUsedUser", DataRowVersion.Current, false, lastUsedUser, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@LastUsedDate", SqlDbType.DateTime, 8, ParameterDirection.Input, 23, 3, "LastUsedDate", DataRowVersion.Current, false, lastUsedDate, "", "", ""));
-
-                return Support.ExecuteNonQuery(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.ExecuteNonQuery(command);
+                }
             }
         }
 
         public int UpdateOrderNumber(Guid ruleId, int orderNumber)
         {
-            SqlConnection connection = null;
-            SqlCommand command = null;
-            try
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
-                connection = new SqlConnection(this.ConnectionString);
+                using (SqlCommand command = new SqlCommand("dbo.Mc_UpdateRuleOrder", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@RuleId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "RuleId", DataRowVersion.Current, false, ruleId, "", "", ""));
+                    command.Parameters.Add(new SqlParameter("@OrderNumber", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "OrderNumber", DataRowVersion.Current, false, orderNumber, "", "", ""));
 
-                command = new SqlCommand("dbo.Mc_UpdateRuleOrder", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@RuleId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "RuleId", DataRowVersion.Current, false, ruleId, "", "", ""));
-                command.Parameters.Add(new SqlParameter("@OrderNumber", SqlDbType.Int, 4, ParameterDirection.Input, 10, 0, "OrderNumber", DataRowVersion.Current, false, orderNumber, "", "", ""));
-
-                return Support.ExecuteNonQuery(command);
-            }
-            finally
-            {
-                if (connection != null) connection.Dispose();
-                if (command != null) command.Dispose();
+                    return Support.ExecuteNonQuery(command);
+                }
             }
         }
 
