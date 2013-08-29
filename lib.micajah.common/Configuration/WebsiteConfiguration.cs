@@ -1,7 +1,5 @@
 ﻿using System.Configuration;
-using System.Web.Caching;
 using System.Xml.XPath;
-using Micajah.Common.Application;
 
 namespace Micajah.Common.Configuration
 {
@@ -16,9 +14,6 @@ namespace Micajah.Common.Configuration
         /// The name of the section in configuration file.
         /// </summary>
         private const string SectionName = "micajah.common.website";
-
-        // The objects which are used to synchronize access to the cached objects.
-        private static object s_CurrentSyncRoot = new object();
 
         #endregion
 
@@ -44,25 +39,7 @@ namespace Micajah.Common.Configuration
         /// </summary>
         internal static WebsiteConfiguration Current
         {
-            get
-            {
-                WebsiteConfiguration section = CacheManager.Current.Get("mc.WebsiteConfiguration") as WebsiteConfiguration;
-                if (section == null)
-                {
-                    lock (s_CurrentSyncRoot)
-                    {
-                        section = CacheManager.Current.Get("mc.WebsiteConfiguration") as WebsiteConfiguration;
-                        if (section == null)
-                        {
-                            section = ConfigurationManager.GetSection(SectionName) as WebsiteConfiguration;
-
-                            if (section != null)
-                                CacheManager.Current.Add("mc.WebsiteConfiguration", section, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
-                        }
-                    }
-                }
-                return section;
-            }
+            get { return ConfigurationManager.GetSection(SectionName) as WebsiteConfiguration; }
         }
 
         #endregion

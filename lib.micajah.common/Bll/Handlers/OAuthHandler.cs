@@ -7,11 +7,10 @@ using Micajah.Common.Dal;
 using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.SessionState;
 
 namespace Micajah.Common.Bll.Handlers
 {
-    public class OAuthHandler : IHttpHandler, IRequiresSessionState
+    public class OAuthHandler : IHttpHandler
     {
         #region Members
 
@@ -46,11 +45,6 @@ namespace Micajah.Common.Bll.Handlers
             UserAuthorizationRequest requestAuth = null;
             AuthorizedTokenRequest requestAccessToken;
 
-            Guid userId = Guid.Empty;
-            Guid organizationId = Guid.Empty;
-            Guid instanceId = Guid.Empty;
-            LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
-
             if ((requestToken = request as UnauthorizedTokenRequest) != null)
             {
                 UnauthorizedTokenResponse response = m_Provider.PrepareUnauthorizedTokenMessage(requestToken);
@@ -58,9 +52,13 @@ namespace Micajah.Common.Bll.Handlers
             }
             else if ((requestAuth = request as UserAuthorizationRequest) != null)
             {
-                ServiceProvider.SetOAuthPendingUserAuthorizationRequest(requestAuth, userId);
+                string token = ((ITokenContainingMessage)requestAuth).Token;
 
-                context.Response.Redirect(ResourceProvider.OAuthPageVirtualPath);
+                ((TokenProvider)m_Provider.TokenManager).UpdatePendingUserAuthorizationRequest(token, requestAuth);
+
+                TokenProvider.SetTokenCookie(token);
+
+                context.Response.Redirect(ActionProvider.FindAction(ActionProvider.OAuthPageActionId).AbsoluteNavigateUrl);
             }
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
             {
@@ -69,11 +67,11 @@ namespace Micajah.Common.Bll.Handlers
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
                 response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
 
-                if (organizationId != Guid.Empty)
+                if (!row.IsOrganizationIdNull())
                 {
-                    response.ExtraData.Add(new KeyValuePair<string, string>("org", OrganizationProvider.GetOrganization(organizationId).PseudoId));
-                    if (instanceId != Guid.Empty)
-                        response.ExtraData.Add(new KeyValuePair<string, string>("dept", InstanceProvider.GetInstance(instanceId, organizationId).PseudoId));
+                    response.ExtraData.Add(new KeyValuePair<string, string>("org", OrganizationProvider.GetOrganization(row.OrganizationId).PseudoId));
+                    if (!row.IsInstanceIdNull())
+                        response.ExtraData.Add(new KeyValuePair<string, string>("dept", InstanceProvider.GetInstance(row.InstanceId, row.OrganizationId).PseudoId));
                 }
 
                 m_Provider.Channel.Send(response);

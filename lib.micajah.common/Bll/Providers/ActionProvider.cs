@@ -64,6 +64,7 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid GoogleIntegrationPageActionId = new Guid("D79FFA5D-54C2-4EB0-AB47-42DDA41C1380");
         internal readonly static Guid ActivityReportActionId = new Guid("7062A21C-BA40-4A8F-9F33-DA68751E4F0D");
         internal readonly static Guid MyAccountMenuGlobalNavigationLinkActionId = new Guid("CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE");
+        internal readonly static Guid OAuthPageActionId = new Guid("5900F3EF-F423-4AC8-BAA5-828B746E3F43");
 
         // The objects which are used to synchronize access to the cached collections and lists.
         private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
@@ -99,7 +100,7 @@ namespace Micajah.Common.Bll.Providers
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(SetupPageActionId), list);
                             list.Add(SetupGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.Add("mc.SetupActionIdList", list);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.SetupActionIdList", list);
                         }
                     }
                 }
@@ -129,7 +130,7 @@ namespace Micajah.Common.Bll.Providers
                             coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.GlobalNavigationLink);
 
-                            CacheManager.Current.Add("mc.GlobalNavigationLinks", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.GlobalNavigationLinks", coll);
                         }
                     }
                 }
@@ -156,7 +157,7 @@ namespace Micajah.Common.Bll.Providers
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(MyAccountPageActionId), list);
                             list.Add(MyAccountGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.Add("mc.MyAccountActionIdList", list);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.MyAccountActionIdList", list);
                         }
                     }
                 }
@@ -195,7 +196,7 @@ namespace Micajah.Common.Bll.Providers
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(ConfigurationPageActionId), list);
                             list.Add(ConfigurationGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.Add("mc.SettingsActionIdList", list);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.SettingsActionIdList", list);
                         }
                     }
                 }
@@ -232,7 +233,7 @@ namespace Micajah.Common.Bll.Providers
                             coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
 
-                            CacheManager.Current.Add("mc.PagesAndControls", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.PagesAndControls", coll);
                         }
                     }
                 }
@@ -265,7 +266,7 @@ namespace Micajah.Common.Bll.Providers
                             action.NavigateUrl = ResourceProvider.ResourceHandlerVirtualPath;
                             coll.Add(action);
 
-                            CacheManager.Current.Add("mc.PublicActions", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.PublicActions", coll);
                         }
                     }
                 }
@@ -495,7 +496,7 @@ namespace Micajah.Common.Bll.Providers
                                 list.Add(actionRow.ActionId, actionRow.Enabled);
                         }
 
-                        CacheManager.Current.Add(key, list);
+                        CacheManager.Current.AddWithDefaultExpiration(key, list);
                     }
                 }
             }
@@ -538,7 +539,7 @@ namespace Micajah.Common.Bll.Providers
                             }
                         }
 
-                        CacheManager.Current.Add(key, list);
+                        CacheManager.Current.AddWithDefaultExpiration(key, list);
                     }
                 }
             }
@@ -688,7 +689,7 @@ namespace Micajah.Common.Bll.Providers
                             actionIdList.Add(row.ActionId);
                         }
 
-                        CacheManager.Current.Add(key, actionIdList);
+                        CacheManager.Current.AddWithDefaultExpiration(key, actionIdList);
                     }
                 }
             }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Xml.XPath;
-using Micajah.Common.Bll;
 
 namespace Micajah.Common.Configuration
 {
@@ -342,6 +342,9 @@ namespace Micajah.Common.Configuration
 
             if (action.m_OriginalInstanceRequired.HasValue)
                 this.InstanceRequired = action.InstanceRequired;
+
+            if (!string.IsNullOrEmpty(action.NavigateUrl))
+                this.NavigateUrl = action.NavigateUrl;
 
             if (action.DetailMenu.Theme.HasValue)
                 this.DetailMenu.Theme = action.DetailMenu.Theme;

@@ -385,6 +385,36 @@ namespace Micajah.Common.Bll.Providers
             return user;
         }
 
+        private static void ParseUserName(string userName, out Guid userId, out Guid organizationId, out Guid instanceId)
+        {
+            userId = Guid.Empty;
+            organizationId = Guid.Empty;
+            instanceId = Guid.Empty;
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                string[] parts = userName.Split(',');
+                object obj = Support.ConvertStringToType(parts[0], typeof(Guid));
+
+                if (obj != null)
+                    userId = (Guid)obj;
+
+                if (parts.Length > 1)
+                {
+                    obj = Support.ConvertStringToType(parts[1], typeof(Guid));
+                    if (obj != null)
+                        organizationId = (Guid)obj;
+
+                    if (parts.Length > 2)
+                    {
+                        obj = Support.ConvertStringToType(parts[2], typeof(Guid));
+                        if (obj != null)
+                            instanceId = (Guid)obj;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Internal Methods
@@ -524,7 +554,7 @@ namespace Micajah.Common.Bll.Providers
             return result;
         }
 
-        internal static void ParseAuthCookie(out Guid userId, out Guid organizationId, out Guid instanceId)
+        internal static void ParseUserIdentityName(out Guid userId, out Guid organizationId, out Guid instanceId)
         {
             userId = Guid.Empty;
             organizationId = Guid.Empty;
@@ -532,27 +562,7 @@ namespace Micajah.Common.Bll.Providers
 
             HttpContext ctx = HttpContext.Current;
             if (ctx != null)
-            {
-                string[] parts = ctx.User.Identity.Name.Split(',');
-                object obj = Support.ConvertStringToType(parts[0], typeof(Guid));
-
-                if (obj != null)
-                    userId = (Guid)obj;
-
-                if (parts.Length > 1)
-                {
-                    obj = Support.ConvertStringToType(parts[1], typeof(Guid));
-                    if (obj != null)
-                        organizationId = (Guid)obj;
-
-                    if (parts.Length > 2)
-                    {
-                        obj = Support.ConvertStringToType(parts[2], typeof(Guid));
-                        if (obj != null)
-                            instanceId = (Guid)obj;
-                    }
-                }
-            }
+                ParseUserName(ctx.User.Identity.Name, out userId, out organizationId, out instanceId);
         }
 
         internal static void SetAuthCookie(Guid userId, Guid organizationId, Guid instanceId, bool? isPersistent)
@@ -564,9 +574,9 @@ namespace Micajah.Common.Bll.Providers
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                HttpCookie authcookie = FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
-                authcookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
-                HttpContext.Current.Response.AppendCookie(authcookie);
+                HttpCookie cookie = FormsAuthentication.GetAuthCookie(userName, isPersistent.Value);
+                cookie.Domain = FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain;
+                HttpContext.Current.Response.AppendCookie(cookie);
             }
             else
                 FormsAuthentication.SetAuthCookie(userName, isPersistent.Value);

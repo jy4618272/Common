@@ -1,3 +1,7 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -5,10 +9,6 @@ using System.Data;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -52,7 +52,7 @@ namespace Micajah.Common.Bll.Providers
                         {
                             coll = SettingProvider.GetSettings(SettingLevels.Global, null);
 
-                            CacheManager.Current.Add("mc.GlobalSettings", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.GlobalSettings", coll);
                         }
                     }
                 }

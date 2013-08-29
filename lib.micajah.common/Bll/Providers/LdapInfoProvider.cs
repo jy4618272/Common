@@ -1,18 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
-using System.Globalization;
-using System.Text;
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
 using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
 using System.DirectoryServices.Protocols;
-using System.Net;
-using System.Net.Sockets;
+using System.Globalization;
+using System.Text;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -48,7 +46,7 @@ namespace Micajah.Common.Bll.Providers
                             if (list == null)
                             {
                                 list = new List<LdapProcess>();
-                                CacheManager.Current.Add("mc.LdapProcesses", list);
+                                CacheManager.Current.AddWithDefaultExpiration("mc.LdapProcesses", list);
                             }
                         }
                     }

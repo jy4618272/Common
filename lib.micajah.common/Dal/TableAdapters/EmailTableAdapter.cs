@@ -37,6 +37,7 @@ namespace Micajah.Common.Dal.TableAdapters
             DeleteCommand.CommandText = "dbo.Mc_DeleteEmail";
             DeleteCommand.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
             DeleteCommand.Parameters.Add(new SqlParameter("@LoginId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "LoginId", DataRowVersion.Current, false, null, "", "", ""));
+            DeleteCommand.Parameters.Add(new SqlParameter("@Email", SqlDbType.NVarChar, 255, ParameterDirection.Input, 0, 0, "Email", DataRowVersion.Current, false, null, "", "", ""));
 
             #endregion
 

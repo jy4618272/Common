@@ -817,7 +817,7 @@ namespace Micajah.Common.Security
             Guid organizationId = Guid.Empty;
             Guid instanceId = Guid.Empty;
 
-            LoginProvider.ParseAuthCookie(out userId, out organizationId, out instanceId);
+            LoginProvider.ParseUserIdentityName(out userId, out organizationId, out instanceId);
 
             if (userId != Guid.Empty)
             {

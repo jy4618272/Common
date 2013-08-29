@@ -41,6 +41,13 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected CustomValidator OrganizationUrlValidator;
         protected Image OrganizationUrlTick;
         protected UpdatePanel UpdatePanelOrganizationUrl;
+        protected HtmlGenericControl ModalWindowHeader;
+        protected Literal ModalTitleLiteral;
+        protected Literal ModalMessageLiteral;
+        protected Literal ModalSelectActionLiteral;
+        protected HyperLink ModalLoginLink;
+        protected Literal ModalSelectActionSeparatorLiteral;
+        protected Button ModalStep1Button;
 
         protected HtmlGenericControl Step2Panel;
         protected HtmlGenericControl Step2Form;
@@ -218,6 +225,19 @@ function InstanceRequiredValidation(source, arguments) {{
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
 
+            ModalTitleLiteral.Text = Resources.SignupOrganizationControl_ModalTitleLiteral_Text;
+            ModalMessageLiteral.Text = Resources.SignupOrganizationControl_ModalMessageLiteral_Text;
+            ModalSelectActionLiteral.Text = Resources.SignupOrganizationControl_ModalSelectActionLiteral_Text;
+            ModalLoginLink.Text = Resources.SignupOrganizationControl_ModalLoginLink_Text;
+            ModalSelectActionSeparatorLiteral.Text = Resources.SignupOrganizationControl_ModalSelectActionSeparatorLiteral_Text;
+            ModalStep1Button.Text = Resources.SignupOrganizationControl_ModalStep1Button_Text;
+
+            if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.SmallLogoImageUrl))
+            {
+                ModalWindowHeader.Attributes["class"] += " bg";
+                ModalWindowHeader.Style[HtmlTextWriterStyle.BackgroundImage] = "url(" + CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.SmallLogoImageUrl) + ")";
+            }
+
             OrganizationNameLabel2.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
             HowYouHearAboutUsLabel.Text = Resources.SignupOrganizationControl_HowYouHearAboutUsLabel_Text;
 
@@ -269,22 +289,23 @@ function InstanceRequiredValidation(source, arguments) {{
             }
         }
 
-        private static bool ValidateEmail(string email, out string errorMessage, out bool emailInUse)
+        private void ShowStep2()
+        {
+            Step1Panel.Visible = false;
+            Step2Panel.Visible = true;
+
+            Email2.Text = Email1.Text;
+
+            OrganizationName2.Text = OrganizationName1.Text;
+
+            HowYouHearAboutUs.Focus();
+        }
+
+        private static bool ValidateEmail(string email, out string errorMessage)
         {
             errorMessage = null;
-            emailInUse = false;
             bool isValid = Support.ValidateEmail(email, false);
-            if (isValid)
-            {
-                isValid = (!WebApplication.LoginProvider.ValidateLogin(email, null));
-                if (!isValid)
-                {
-                    emailInUse = true;
-                    errorMessage = Resources.SignupOrganizationControl_EmailValidator1_ErrorMessage + "<br />"
-                        + BaseControl.GetHyperlink(WebApplication.LoginProvider.GetLoginUrl(email, false), Resources.SignupOrganizationControl_LoginLink_Text, null, "_parent");
-                }
-            }
-            else
+            if (!isValid)
                 errorMessage = Resources.SignupOrganizationControl_Email1_ValidationErrorMessage;
             return isValid;
         }
@@ -473,7 +494,6 @@ function InstanceRequiredValidation(source, arguments) {{
             TextBox textBox = null;
             Image tickImage = null;
             string errorMessage = null;
-            bool emailInUse = false;
 
             if (val.ID == EmailValidator1.ID)
             {
@@ -486,19 +506,8 @@ function InstanceRequiredValidation(source, arguments) {{
                 tickImage = EmailTick2;
             }
 
-            bool isValid = ValidateEmail(textBox.Text, out errorMessage, out emailInUse);
-            args.IsValid = isValid;
-            tickImage.Visible = textBox.IsValid = isValid || emailInUse;
-            if (emailInUse)
-            {
-                val.Style["background"] = "none !important";
-                val.Style[HtmlTextWriterStyle.PaddingLeft] = "0 !important";
-            }
-            else
-            {
-                val.Style.Remove("background");
-                val.Style.Remove("padding-left");
-            }
+            bool isValid = ValidateEmail(textBox.Text, out errorMessage);
+            tickImage.Visible = textBox.IsValid = args.IsValid = isValid;
 
             if (!args.IsValid)
             {
@@ -555,13 +564,11 @@ function InstanceRequiredValidation(source, arguments) {{
             if (args == null) return;
 
             string errorMessage = null;
-            bool emailInUse = false;
 
-            args.IsValid = ValidateEmail(Email2.Text, out errorMessage, out emailInUse);
-            if ((!args.IsValid) && emailInUse)
-                args.IsValid = true;
+            args.IsValid = ValidateEmail(Email2.Text, out errorMessage);
 
             if (args.IsValid)
+            {
                 try
                 {
                     if (!string.IsNullOrEmpty(OrganizationUrl.Text))
@@ -571,6 +578,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     }
                 }
                 catch (Exception ex) { errorMessage = ex.Message; }
+            }
 
             SelectedInstance.CssClass = SelectedInstance.CssClass.Replace(" Invalid", string.Empty);
 
@@ -624,39 +632,42 @@ function InstanceRequiredValidation(source, arguments) {{
 
         protected void Step1Button_Click(object sender, EventArgs e)
         {
-            bool emailInUse = false;
-
             Page.Validate("Step1");
-            if (!Page.IsValid)
+            if (!Page.IsValid) return;
+
+            if (WebApplication.LoginProvider.ValidateLogin(Email1.Text, null))
             {
-                if (Email1.IsValid && (!EmailValidator1.IsValid))
-                {
-                    emailInUse = true;
+                ModalLoginLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(Email1.Text, false);
 
-                    EmailValidator1.Enabled = false;
-                    Page.Validate("Step1");
-                    EmailValidator1.Enabled = true;
+                ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryScript", ResourceProvider.JQueryScriptUrl);
+                ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryEasyModalScript", ResourceProvider.GetResourceUrl("Scripts.jquery.easyModal.js", true));
 
-                    if (!Page.IsValid)
-                        return;
-                }
-                else
-                    return;
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ModalWindowScript", @"Sys.Application.add_load(function() {
+    $('#ModalWindow').easyModal({
+        top: 40,
+        overlay: 0.2,
+        overlayClose: false,
+        closeOnEscape: false
+    });
+
+    $('#ModalWindow').trigger('openModal');
+});
+
+"
+                    , true);
             }
-
-            Step1Panel.Visible = false;
-            Step2Panel.Visible = true;
-
-            Email2.Text = Email1.Text;
-            if (emailInUse)
+            else
             {
-                EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
-                EmailAndPasswordGroupRow.Visible = Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
+                this.ShowStep2();
             }
+        }
 
-            OrganizationName2.Text = OrganizationName1.Text;
+        protected void ModalStep1Button_Click(object sender, EventArgs e)
+        {
+            EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
+            EmailAndPasswordGroupRow.Visible = Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
 
-            HowYouHearAboutUs.Focus();
+            this.ShowStep2();
         }
 
         protected void Step2Button_Click(object sender, EventArgs e)

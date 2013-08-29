@@ -503,91 +503,111 @@ namespace Micajah.Common.Bll.Handlers
 
                 foreach (DataRow dr in ldapUsers.Rows)
                 {
-                    if ((bool)dr["Processed"]) continue;
-
-                    drm = localUsers.Select(string.Format(CultureInfo.InvariantCulture, "(LdapUserId='{0}') OR (LoginName='{1}')", dr["LdapUserId"].ToString().Replace("'", "''"), dr["LoginName"].ToString().Replace("'", "''")));
-                    if (drm.Length == 0)
+                    try
                     {
-                        drm2 = null;
-                        sb = new StringBuilder();
-                        altEmails = new Collection<string>();
-                        for (int i = 0; i < users.Count; i++)
+                        if ((bool)dr["Processed"]) continue;
+
+                        drm = localUsers.Select(string.Format(CultureInfo.InvariantCulture, "(LdapUserId='{0}') OR (LoginName='{1}')", dr["LdapUserId"].ToString().Replace("'", "''"), dr["LoginName"].ToString().Replace("'", "''")));
+                        if (drm.Length == 0)
                         {
-                            ldapUser = users[i];
-                            if (ldapUser.ObjectGuid == (Guid)dr["LdapUserId"])
+                            drm2 = null;
+                            sb = new StringBuilder();
+                            altEmails = new Collection<string>();
+                            for (int i = 0; i < users.Count; i++)
                             {
-                                if (ldapUser.AltEmails != null)
+                                ldapUser = users[i];
+                                if (ldapUser.ObjectGuid == (Guid)dr["LdapUserId"])
                                 {
-                                    foreach (string altEmail in ldapUser.AltEmails)
+                                    if (ldapUser.AltEmails != null)
                                     {
-                                        if (altEmail.Contains("@"))
+                                        foreach (string altEmail in ldapUser.AltEmails)
                                         {
-                                            email = (altEmail.ToUpper(CultureInfo.InvariantCulture).Contains("SMTP")) ? altEmail.Remove(0, 5).ToString() : altEmail;
-                                            if (string.Compare(ldapUser.EmailAddress, email, StringComparison.InvariantCultureIgnoreCase) != 0)
+                                            if (altEmail.Contains("@"))
                                             {
-                                                altEmails.Add(email);
-                                                sb.AppendFormat(CultureInfo.InvariantCulture, " OR (LoginName='{0}')", (altEmail.ToUpper(CultureInfo.InvariantCulture).Contains("SMTP")) ? altEmail.Remove(0, 5).ToString().Replace("'", "''") : altEmail.Replace("'", "''"));
+                                                email = (altEmail.ToUpper(CultureInfo.InvariantCulture).Contains("SMTP")) ? altEmail.Remove(0, 5).ToString() : altEmail;
+                                                if (string.Compare(ldapUser.EmailAddress, email, StringComparison.InvariantCultureIgnoreCase) != 0)
+                                                {
+                                                    altEmails.Add(email);
+                                                    sb.AppendFormat(CultureInfo.InvariantCulture, " OR (LoginName='{0}')", (altEmail.ToUpper(CultureInfo.InvariantCulture).Contains("SMTP")) ? altEmail.Remove(0, 5).ToString().Replace("'", "''") : altEmail.Replace("'", "''"));
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                if (sb.Length > 0)
-                                {
-                                    sb.Remove(0, 4);
-                                    drm2 = localUsers.Select(sb.ToString());
-                                }
-
-                                if (drm2 == null || drm2.Length == 0)
-                                {
-                                    if (isRealReplication)
+                                    if (sb.Length > 0)
                                     {
-                                        sb = new StringBuilder();
+                                        sb.Remove(0, 4);
+                                        drm2 = localUsers.Select(sb.ToString());
+                                    }
 
-                                        foreach (string groupDN in ldapUser.MemberOfGroups)
+                                    if (drm2 == null || drm2.Length == 0)
+                                    {
+                                        if (isRealReplication)
                                         {
-                                            for (int j = 0; j < orgTable.Rows.Count; j++)
+                                            sb = new StringBuilder();
+
+                                            foreach (string groupDN in ldapUser.MemberOfGroups)
                                             {
-                                                if (groupDN == orgTable.Rows[j]["DistinguishedName"].ToString())
+                                                for (int j = 0; j < orgTable.Rows.Count; j++)
                                                 {
-                                                    sb.AppendFormat(CultureInfo.InvariantCulture, ",{0}", orgTable.Rows[j]["ObjectGUID"]);
+                                                    if (groupDN == orgTable.Rows[j]["DistinguishedName"].ToString())
+                                                    {
+                                                        sb.AppendFormat(CultureInfo.InvariantCulture, ",{0}", orgTable.Rows[j]["ObjectGUID"]);
+                                                    }
+                                                }
+                                            }
+
+                                            if (EmailProvider.IsEmailExists((string)dr["LoginName"]))
+                                            {
+                                                EmailProvider.DeleteEmails(Guid.Empty, (string)dr["LoginName"]);
+                                            }
+
+                                            ldapGroupIds = (sb.Length > 0) ? sb.Remove(0, 1).ToString() : string.Empty;
+                                            localGroupIds = LdapInfoProvider.GetAppGroupsByLdapGroups(organizationId, ldapGroupIds);
+                                            password = "12345";
+                                            loginId = UserProvider.AddUserToOrganization((string)dr["LoginName"], ((dr["Email"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["Email"], ((dr["FirstName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["FirstName"], ((dr["LastName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["LastName"], string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, localGroupIds, organizationId, password, false, false);
+                                            UserProvider.RaiseUserInserted(loginId, organizationId, null, Bll.Support.ConvertStringToGuidList(localGroupIds));
+
+                                            user = LdapInfoProvider.GetLdapUser(organizationId, ldapUser);
+                                            if (user != null)
+                                            {
+                                                WebApplication.LoginProvider.UpdateUserLdapInfo(organizationId, loginId, user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
+                                                foreach (string altEmail in altEmails)
+                                                {
+                                                    if (!EmailProvider.IsEmailExists(altEmail))
+                                                        EmailProvider.InsertEmail(altEmail, loginId);
                                                 }
                                             }
                                         }
 
-                                        ldapGroupIds = (sb.Length > 0) ? sb.Remove(0, 1).ToString() : string.Empty;
-                                        localGroupIds = LdapInfoProvider.GetAppGroupsByLdapGroups(organizationId, ldapGroupIds);
-                                        password = "12345";
-                                        loginId = UserProvider.AddUserToOrganization((string)dr["LoginName"], ((dr["Email"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["Email"], ((dr["FirstName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["FirstName"], ((dr["LastName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["LastName"], string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, localGroupIds, organizationId, password, false, false);
-                                        UserProvider.RaiseUserInserted(loginId, organizationId, null, Bll.Support.ConvertStringToGuidList(localGroupIds));
+                                        dr["Processed"] = true;
 
-                                        user = LdapInfoProvider.GetLdapUser(organizationId, ldapUser);
-                                        if (user != null)
-                                        {
-                                            WebApplication.LoginProvider.UpdateUserLdapInfo(organizationId, loginId, user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
-                                            foreach (string altEmail in altEmails)
-                                            {
-                                                if (!EmailProvider.IsEmailExists(altEmail))
-                                                    EmailProvider.InsertEmail(altEmail, loginId);
-                                            }
-                                        }
+                                        newRow = newTable.NewRow();
+                                        newRow.ItemArray = dr.ItemArray;
+                                        newTable.Rows.Add(newRow);
+                                        count++;
+
+                                        ldapProcess.MessageCreatedLogins = string.Format(CultureInfo.InvariantCulture, isRealReplication ? Resources.OrganizationLdapSettingsControl_RealCreatedLogins_Text : Resources.OrganizationLdapSettingsControl_TestCreatedLogins_Text, count);
                                     }
-
-                                    dr["Processed"] = true;
-
-                                    newRow = newTable.NewRow();
-                                    newRow.ItemArray = dr.ItemArray;
-                                    newTable.Rows.Add(newRow);
-                                    count++;
-
-                                    ldapProcess.MessageCreatedLogins = string.Format(CultureInfo.InvariantCulture, isRealReplication ? Resources.OrganizationLdapSettingsControl_RealCreatedLogins_Text : Resources.OrganizationLdapSettingsControl_TestCreatedLogins_Text, count);
+                                    break;
                                 }
-                                break;
                             }
                         }
+                        else
+                            dr["Processed"] = true;
                     }
-                    else
-                        dr["Processed"] = true;
+                    catch (Exception ex)
+                    {
+                        try
+                        {
+                            dr["Processed"] = true;
+
+                            if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
+                                EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
+                            EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method LocalUsersCreate() Error: {0} [{1}]", ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
+                        }
+                        catch { }
+                    }
                 }
 
                 ldapProcess.MessageCreatedLogins = string.Format(CultureInfo.InvariantCulture, isRealReplication ? Resources.OrganizationLdapSettingsControl_RealCreatedLogins_Text : Resources.OrganizationLdapSettingsControl_TestCreatedLogins_Text, count);

@@ -12,6 +12,11 @@ namespace Micajah.Common.Application
     {
         #region Members
 
+        /// <summary>
+        /// Default absolute expiration time in hours.
+        /// </summary>
+        private const double DefaultAbsoluteExpiration = 23.5;
+
         private static CacheManager s_Current;
 
         #endregion
@@ -55,9 +60,9 @@ namespace Micajah.Common.Application
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        public void Add(string key, object value)
+        public virtual void Add(string key, object value)
         {
-            this.Add(key, value, null, DateTime.UtcNow.AddHours(23.5), TimeSpan.Zero, CacheItemPriority.Normal, null);
+            this.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>
@@ -73,6 +78,16 @@ namespace Micajah.Common.Application
         public virtual void Add(string key, object value, CacheDependency dependencies, DateTime absoluteExpiration, TimeSpan slidingExpiration, CacheItemPriority priority, CacheItemRemovedCallback onRemoveCallback)
         {
             HttpRuntime.Cache.Add(key, value, dependencies, absoluteExpiration, slidingExpiration, priority, onRemoveCallback);
+        }
+
+        /// <summary>
+        /// Adds the specified item to the cache with default absolute expiration (23.5 hours).
+        /// </summary>
+        /// <param name="key">The cache key used to reference the item.</param>
+        /// <param name="value">The item to be added to the cache.</param>
+        public virtual void AddWithDefaultExpiration(string key, object value)
+        {
+            this.Add(key, value, null, DateTime.UtcNow.AddHours(DefaultAbsoluteExpiration), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>

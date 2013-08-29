@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Micajah.Common.Configuration;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web.UI;
-using Micajah.Common.Configuration;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -23,6 +23,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 using (SqlCommand command = new SqlCommand("[dbo].[Mc_DeleteViewState]", connection))
                 {
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ViewState.ConnectionString);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add("@Now", SqlDbType.DateTime).Value = DateTime.UtcNow;
                     connection.Open();
@@ -48,6 +49,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 using (SqlCommand command = new SqlCommand("[dbo].[Mc_GetViewState]", connection))
                 {
+                    connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ViewState.ConnectionString);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
 
@@ -84,14 +86,14 @@ namespace Micajah.Common.Bll.Providers
 
             byte[] bytes = Support.GetBytes(stateFormatter.Serialize(statePair));
 
-            using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
+                connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ViewState.ConnectionString);
             {
                 using (SqlCommand command = new SqlCommand("[dbo].[Mc_InsertViewState]", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add("@ViewStateId", SqlDbType.UniqueIdentifier).Value = viewStateId;
                     command.Parameters.Add("@ViewState", SqlDbType.VarBinary).Value = bytes;
-                    command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewStateExpirationTimeout);
+                command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewState.ExpirationTimeout);
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
