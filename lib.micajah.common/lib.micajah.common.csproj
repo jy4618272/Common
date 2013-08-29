@@ -737,6 +737,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v113.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v114.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.easyModal.js" />
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v115.sql" />
     <Content Include="Runtime\DotNetOpenAuth.Core.pdb" />
     <Content Include="Runtime\DotNetOpenAuth.OAuth.Common.pdb" />
     <Content Include="Runtime\DotNetOpenAuth.OAuth.pdb" />
