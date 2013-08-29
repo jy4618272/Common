@@ -1,3 +1,9 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.LdapAdapter;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,12 +18,6 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Security;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.LdapAdapter;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -114,7 +114,6 @@ namespace Micajah.Common.Bll.Providers
             {
                 using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
                 {
-
                     using (SqlCommand command = new SqlCommand("dbo.Mc_GetOrganizationLogin", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
@@ -596,7 +595,6 @@ namespace Micajah.Common.Bll.Providers
         {
             using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-
                 using (SqlCommand command = new SqlCommand("dbo.Mc_InsertOrganizationLogin", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -1556,7 +1554,6 @@ namespace Micajah.Common.Bll.Providers
         {
             using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-
                 using (SqlCommand command = new SqlCommand("dbo.Mc_UpdateLoginLdapInfo", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -1966,7 +1963,6 @@ namespace Micajah.Common.Bll.Providers
         {
             using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
-
                 using (SqlCommand command = new SqlCommand("[dbo].[Mc_UpdateOrganizationLogin]", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
