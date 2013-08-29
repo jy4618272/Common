@@ -76,7 +76,7 @@ namespace Micajah.Common.Application
                                 ds = new CommonDataSet();
                                 CommonDataSetTableAdapters.Fill(ds);
 
-                                CacheManager.Current.Add("mc.CommonDataSet", ds);
+                                CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
                             }
                         }
                     }
@@ -198,7 +198,7 @@ namespace Micajah.Common.Application
                         if (coll == null)
                         {
                             coll = EntityCollection.Load();
-                            CacheManager.Current.Add("mc.Entities", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.Entities", coll);
                         }
                     }
                 }
@@ -219,7 +219,7 @@ namespace Micajah.Common.Application
                         if (coll == null)
                         {
                             coll = RulesEngineCollection.Load();
-                            CacheManager.Current.Add("mc.RulesEngines", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.RulesEngines", coll);
                         }
                     }
                 }
@@ -240,7 +240,7 @@ namespace Micajah.Common.Application
                         if (coll == null)
                         {
                             coll = StartThreadCollection.Load();
-                            CacheManager.Current.Add("mc.StartThreads", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.StartThreads", coll);
                         }
                     }
                 }
@@ -316,7 +316,7 @@ namespace Micajah.Common.Application
                     {
                         CommonDataSetTableAdapters.OrganizationTableAdapter.Fill(ds.Organization);
 
-                        CacheManager.Current.Add("mc.CommonDataSet", ds);
+                        CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
                     }
                 }
             }
@@ -453,7 +453,7 @@ namespace Micajah.Common.Application
                             OrganizationDataSetTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                             adapters.Fill(ds, organizationId);
 
-                            CacheManager.Current.Add(key, ds);
+                            CacheManager.Current.AddWithDefaultExpiration(key, ds);
                         }
                     }
                 }

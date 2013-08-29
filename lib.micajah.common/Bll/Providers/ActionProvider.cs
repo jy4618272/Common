@@ -100,7 +100,7 @@ namespace Micajah.Common.Bll.Providers
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(SetupPageActionId), list);
                             list.Add(SetupGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.Add("mc.SetupActionIdList", list);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.SetupActionIdList", list);
                         }
                     }
                 }
@@ -130,7 +130,7 @@ namespace Micajah.Common.Bll.Providers
                             coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.GlobalNavigationLink);
 
-                            CacheManager.Current.Add("mc.GlobalNavigationLinks", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.GlobalNavigationLinks", coll);
                         }
                     }
                 }
@@ -157,7 +157,7 @@ namespace Micajah.Common.Bll.Providers
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(MyAccountPageActionId), list);
                             list.Add(MyAccountGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.Add("mc.MyAccountActionIdList", list);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.MyAccountActionIdList", list);
                         }
                     }
                 }
@@ -196,7 +196,7 @@ namespace Micajah.Common.Bll.Providers
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(ConfigurationPageActionId), list);
                             list.Add(ConfigurationGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.Add("mc.SettingsActionIdList", list);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.SettingsActionIdList", list);
                         }
                     }
                 }
@@ -233,7 +233,7 @@ namespace Micajah.Common.Bll.Providers
                             coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
 
-                            CacheManager.Current.Add("mc.PagesAndControls", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.PagesAndControls", coll);
                         }
                     }
                 }
@@ -266,7 +266,7 @@ namespace Micajah.Common.Bll.Providers
                             action.NavigateUrl = ResourceProvider.ResourceHandlerVirtualPath;
                             coll.Add(action);
 
-                            CacheManager.Current.Add("mc.PublicActions", coll);
+                            CacheManager.Current.AddWithDefaultExpiration("mc.PublicActions", coll);
                         }
                     }
                 }
@@ -496,7 +496,7 @@ namespace Micajah.Common.Bll.Providers
                                 list.Add(actionRow.ActionId, actionRow.Enabled);
                         }
 
-                        CacheManager.Current.Add(key, list);
+                        CacheManager.Current.AddWithDefaultExpiration(key, list);
                     }
                 }
             }
@@ -539,7 +539,7 @@ namespace Micajah.Common.Bll.Providers
                             }
                         }
 
-                        CacheManager.Current.Add(key, list);
+                        CacheManager.Current.AddWithDefaultExpiration(key, list);
                     }
                 }
             }
@@ -689,7 +689,7 @@ namespace Micajah.Common.Bll.Providers
                             actionIdList.Add(row.ActionId);
                         }
 
-                        CacheManager.Current.Add(key, actionIdList);
+                        CacheManager.Current.AddWithDefaultExpiration(key, actionIdList);
                     }
                 }
             }

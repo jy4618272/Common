@@ -1,8 +1,7 @@
-﻿using System.Configuration;
-using System.Web.Caching;
+﻿using Micajah.Common.Application;
+using System.Configuration;
 using System.Xml;
 using System.Xml.XPath;
-using Micajah.Common.Application;
 
 namespace Micajah.Common.Configuration
 {
@@ -63,7 +62,7 @@ namespace Micajah.Common.Configuration
                             section.SetBuiltIn(true);
                             section.Merge(ConfigurationManager.GetSection(SectionName) as FrameworkConfiguration);
 
-                            CacheManager.Current.Add("mc.FrameworkConfiguration", section, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                            CacheManager.Current.Add("mc.FrameworkConfiguration", section);
                         }
                     }
                 }
