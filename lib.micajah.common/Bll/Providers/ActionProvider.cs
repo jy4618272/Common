@@ -539,7 +539,7 @@ namespace Micajah.Common.Bll.Providers
                             }
                         }
 
-                        CacheManager.Current.AddWithDefaultExpiration(key, list);
+                        CacheManager.Current.AddWithDefaultExpiration(key, list, "mc.GroupsInstanceActionIdList.");
                     }
                 }
             }
@@ -966,27 +966,21 @@ namespace Micajah.Common.Bll.Providers
         {
             lock (s_GroupsInstanceActionIdListSyncRoot)
             {
-                string key = string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId);
-                CacheManager.Current.Remove(key);
+                CacheManager.Current.Remove(string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId));
 
                 string g = groupId.ToString("N");
-                IDictionaryEnumerator enumerator = CacheManager.Current.GetEnumerator();
-                while (enumerator.MoveNext())
+                foreach (string key in CacheManager.Current.GetAllKeysByTag("mc.GroupsInstanceActionIdList."))
                 {
-                    key = enumerator.Key.ToString();
-                    if (key.StartsWith("mc.GroupsInstanceActionIdList.", StringComparison.OrdinalIgnoreCase))
+                    string[] parts = key.Split('[');
+                    if (parts.Length > 0)
                     {
-                        string[] parts = key.Split('[');
-                        if (parts.Length > 0)
+                        parts = parts[1].Split(']')[0].Split(',');
+                        foreach (string p in parts)
                         {
-                            parts = parts[1].Split(']')[0].Split(',');
-                            foreach (string p in parts)
+                            if (string.Compare(p, g, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                if (string.Compare(p, g, StringComparison.OrdinalIgnoreCase) == 0)
-                                {
-                                    CacheManager.Current.Remove(key);
-                                    break;
-                                }
+                                CacheManager.Current.Remove(key);
+                                break;
                             }
                         }
                     }

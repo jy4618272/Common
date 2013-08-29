@@ -380,19 +380,7 @@ namespace Micajah.Common.Application
         {
             lock (s_OrganizationDataSetSyncRoot)
             {
-                ArrayList list = new ArrayList();
-                IDictionaryEnumerator cacheEnum = CacheManager.Current.GetEnumerator() as IDictionaryEnumerator;
-                if (cacheEnum != null)
-                {
-                    while (cacheEnum.MoveNext())
-                    {
-                        string key = cacheEnum.Key.ToString();
-                        if (key.StartsWith("mc.OrganizationDataSet.", StringComparison.Ordinal))
-                            list.Add(key);
-                    }
-                }
-
-                foreach (string key in list)
+                foreach (string key in CacheManager.Current.GetAllKeysByTag("mc.OrganizationDataSet."))
                 {
                     CacheManager.Current.Remove(key);
                 }
@@ -453,7 +441,7 @@ namespace Micajah.Common.Application
                             OrganizationDataSetTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                             adapters.Fill(ds, organizationId);
 
-                            CacheManager.Current.AddWithDefaultExpiration(key, ds);
+                            CacheManager.Current.AddWithDefaultExpiration(key, ds, "mc.OrganizationDataSet.");
                         }
                     }
                 }

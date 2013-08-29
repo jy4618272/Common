@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
 
@@ -8,14 +9,9 @@ namespace Micajah.Common.Application
     /// <summary>
     /// Implements the cache manager.
     /// </summary>
-    public class CacheManager : IEnumerable
+    public class CacheManager
     {
         #region Members
-
-        /// <summary>
-        /// Default absolute expiration time in hours.
-        /// </summary>
-        private const double DefaultAbsoluteExpiration = 23.5;
 
         private static CacheManager s_Current;
 
@@ -51,6 +47,14 @@ namespace Micajah.Common.Application
             set { this.Add(key, value); }
         }
 
+        /// <summary>
+        /// Gets the instance of the cache object for the current application.
+        /// </summary>
+        public virtual object Cache
+        {
+            get { return HttpRuntime.Cache; }
+        }
+
         #endregion
 
         #region Public Methods
@@ -62,7 +66,18 @@ namespace Micajah.Common.Application
         /// <param name="value">The item to be added to the cache.</param>
         public virtual void Add(string key, object value)
         {
-            this.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            this.Add(key, value, TimeSpan.MaxValue, null);
+        }
+
+        /// <summary>
+        /// Adds the specified item to the cache.
+        /// </summary>
+        /// <param name="key">The cache key used to reference the item.</param>
+        /// <param name="value">The item to be added to the cache.</param>
+        /// <param name="tag">An optional string-based identifier that you can associate with a cached object.</param>
+        public virtual void Add(string key, object value, string tag)
+        {
+            this.Add(key, value, TimeSpan.MaxValue, tag);
         }
 
         /// <summary>
@@ -70,24 +85,32 @@ namespace Micajah.Common.Application
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        /// <param name="dependencies">The file or cache key dependencies for the item. When any dependency changes, the object becomes invalid and is removed from the cache. If there are no dependencies, this parameter contains null.</param>
-        /// <param name="absoluteExpiration">The time at which the added object expires and is removed from the cache.</param>
-        /// <param name="slidingExpiration">The interval between the time the added object was last accessed and the time at which that object expires. If this value is the equivalent of 20 minutes, the object expires and is removed from the cache 20 minutes after it is last accessed.</param>
-        /// <param name="priority">The relative cost of the object, as expressed by the System.Web.Caching.CacheItemPriority enumeration. The cache uses this value when it evicts objects; objects with a lower cost are removed from the cache before objects with a higher cost.</param>
-        /// <param name="onRemoveCallback">A delegate that, if provided, is called when an object is removed from the cache. You can use this to notify applications when their objects are deleted from the cache.</param>
-        public virtual void Add(string key, object value, CacheDependency dependencies, DateTime absoluteExpiration, TimeSpan slidingExpiration, CacheItemPriority priority, CacheItemRemovedCallback onRemoveCallback)
+        /// <param name="timeout">The interval between the time the object was added and the time at which that object expires.</param>
+        /// <param name="tag">An optional string-based identifier that you can associate with a cached object.</param>
+        public virtual void Add(string key, object value, TimeSpan timeout, string tag)
         {
-            HttpRuntime.Cache.Add(key, value, dependencies, absoluteExpiration, slidingExpiration, priority, onRemoveCallback);
+            HttpRuntime.Cache.Add(key, value, null, ((timeout == TimeSpan.MaxValue) ? System.Web.Caching.Cache.NoAbsoluteExpiration : DateTime.UtcNow.Add(timeout)), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>
-        /// Adds the specified item to the cache with default absolute expiration (23.5 hours).
+        /// Adds the specified item to the cache with default timeout (23.5 hours).
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
         public virtual void AddWithDefaultExpiration(string key, object value)
         {
-            this.Add(key, value, null, DateTime.UtcNow.AddHours(DefaultAbsoluteExpiration), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            AddWithDefaultExpiration(key, value, null);
+        }
+
+        /// <summary>
+        /// Adds the specified item to the cache with default timeout (23.5 hours).
+        /// </summary>
+        /// <param name="key">The cache key used to reference the item.</param>
+        /// <param name="value">The item to be added to the cache.</param>
+        /// <param name="tag">An optional string-based identifier that you can associate with a cached object.</param>
+        public virtual void AddWithDefaultExpiration(string key, object value, string tag)
+        {
+            this.Add(key, value, new TimeSpan(23, 5, 0), tag);
         }
 
         /// <summary>
@@ -101,21 +124,26 @@ namespace Micajah.Common.Application
         }
 
         /// <summary>
-        /// Retrieves an enumerator used to iterate through the key settings and their values contained in the cache.
+        /// 
         /// </summary>
-        /// <returns>An enumerator to iterate through the cache.</returns>
-        public virtual IDictionaryEnumerator GetEnumerator()
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public virtual string[] GetAllKeysByTag(string tag)
         {
-            return HttpRuntime.Cache.GetEnumerator();
-        }
+            List<string> list = new List<string>();
 
-        /// <summary>
-        /// Retrieves an enumerator used to iterate through the key settings and their values contained in the cache.
-        /// </summary>
-        /// <returns>An enumerator to iterate through the cache.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
+            IDictionaryEnumerator cacheEnum = HttpRuntime.Cache.GetEnumerator() as IDictionaryEnumerator;
+            if (cacheEnum != null)
+            {
+                while (cacheEnum.MoveNext())
+                {
+                    string key = cacheEnum.Key.ToString();
+                    if (key.StartsWith(tag, StringComparison.Ordinal))
+                        list.Add(key);
+                }
+            }
+
+            return list.ToArray();
         }
 
         /// <summary>
