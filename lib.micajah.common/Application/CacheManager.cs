@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
 
@@ -66,18 +64,7 @@ namespace Micajah.Common.Application
         /// <param name="value">The item to be added to the cache.</param>
         public virtual void Add(string key, object value)
         {
-            this.Add(key, value, TimeSpan.MaxValue, null);
-        }
-
-        /// <summary>
-        /// Adds the specified item to the cache.
-        /// </summary>
-        /// <param name="key">The cache key used to reference the item.</param>
-        /// <param name="value">The item to be added to the cache.</param>
-        /// <param name="tag">An optional string-based identifier that you can associate with a cached object.</param>
-        public virtual void Add(string key, object value, string tag)
-        {
-            this.Add(key, value, TimeSpan.MaxValue, tag);
+            this.Add(key, value, TimeSpan.MaxValue);
         }
 
         /// <summary>
@@ -86,8 +73,7 @@ namespace Micajah.Common.Application
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
         /// <param name="timeout">The interval between the time the object was added and the time at which that object expires.</param>
-        /// <param name="tag">An optional string-based identifier that you can associate with a cached object.</param>
-        public virtual void Add(string key, object value, TimeSpan timeout, string tag)
+        public virtual void Add(string key, object value, TimeSpan timeout)
         {
             HttpRuntime.Cache.Add(key, value, null, ((timeout == TimeSpan.MaxValue) ? System.Web.Caching.Cache.NoAbsoluteExpiration : DateTime.UtcNow.Add(timeout)), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
@@ -99,18 +85,7 @@ namespace Micajah.Common.Application
         /// <param name="value">The item to be added to the cache.</param>
         public virtual void AddWithDefaultExpiration(string key, object value)
         {
-            AddWithDefaultExpiration(key, value, null);
-        }
-
-        /// <summary>
-        /// Adds the specified item to the cache with default timeout (23.5 hours).
-        /// </summary>
-        /// <param name="key">The cache key used to reference the item.</param>
-        /// <param name="value">The item to be added to the cache.</param>
-        /// <param name="tag">An optional string-based identifier that you can associate with a cached object.</param>
-        public virtual void AddWithDefaultExpiration(string key, object value, string tag)
-        {
-            this.Add(key, value, new TimeSpan(23, 5, 0), tag);
+            this.Add(key, value, new TimeSpan(23, 5, 0));
         }
 
         /// <summary>
@@ -121,29 +96,6 @@ namespace Micajah.Common.Application
         public virtual object Get(string key)
         {
             return HttpRuntime.Cache.Get(key);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tag"></param>
-        /// <returns></returns>
-        public virtual string[] GetAllKeysByTag(string tag)
-        {
-            List<string> list = new List<string>();
-
-            IDictionaryEnumerator cacheEnum = HttpRuntime.Cache.GetEnumerator() as IDictionaryEnumerator;
-            if (cacheEnum != null)
-            {
-                while (cacheEnum.MoveNext())
-                {
-                    string key = cacheEnum.Key.ToString();
-                    if (key.StartsWith(tag, StringComparison.Ordinal))
-                        list.Add(key);
-                }
-            }
-
-            return list.ToArray();
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Micajah.Common.Security;
 using Micajah.Common.WebControls;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -103,6 +104,20 @@ namespace Micajah.Common.Bll.Providers
                             CacheManager.Current.AddWithDefaultExpiration("mc.SetupActionIdList", list);
                         }
                     }
+                }
+                return list;
+            }
+        }
+
+        private static List<string> GroupsInstanceActionIdListKeys
+        {
+            get
+            {
+                List<string> list = CacheManager.Current.Get("mc.GroupsInstanceActionIdListKeys") as List<string>;
+                if (list == null)
+                {
+                    list = new List<string>();
+                    CacheManager.Current.AddWithDefaultExpiration("mc.GroupsInstanceActionIdListKeys", list);
                 }
                 return list;
             }
@@ -539,7 +554,9 @@ namespace Micajah.Common.Bll.Providers
                             }
                         }
 
-                        CacheManager.Current.AddWithDefaultExpiration(key, list, "mc.GroupsInstanceActionIdList.");
+                        CacheManager.Current.AddWithDefaultExpiration(key, list);
+
+                        GroupsInstanceActionIdListKeys.Add(key);
                     }
                 }
             }
@@ -968,8 +985,9 @@ namespace Micajah.Common.Bll.Providers
             {
                 CacheManager.Current.Remove(string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId));
 
+                string keyToRemove = null;
                 string g = groupId.ToString("N");
-                foreach (string key in CacheManager.Current.GetAllKeysByTag("mc.GroupsInstanceActionIdList."))
+                foreach (string key in GroupsInstanceActionIdListKeys)
                 {
                     string[] parts = key.Split('[');
                     if (parts.Length > 0)
@@ -980,11 +998,15 @@ namespace Micajah.Common.Bll.Providers
                             if (string.Compare(p, g, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 CacheManager.Current.Remove(key);
+                                keyToRemove = key;
                                 break;
                             }
                         }
                     }
                 }
+
+                if (!string.IsNullOrEmpty(keyToRemove))
+                    GroupsInstanceActionIdListKeys.Remove(keyToRemove);
             }
         }
 

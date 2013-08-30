@@ -53,6 +53,24 @@ namespace Micajah.Common.Application
 
         #endregion
 
+        #region Private Properties
+
+        private static List<string> OrganizationDataSetsKeys
+        {
+            get
+            {
+                List<string> list = CacheManager.Current.Get("mc.OrganizationDataSetsKeys") as List<string>;
+                if (list == null)
+                {
+                    list = new List<string>();
+                    CacheManager.Current.AddWithDefaultExpiration("mc.OrganizationDataSetsKeys", list);
+                }
+                return list;
+            }
+        }
+
+        #endregion
+
         #region Internal Properties
 
         /// <summary>
@@ -380,10 +398,12 @@ namespace Micajah.Common.Application
         {
             lock (s_OrganizationDataSetSyncRoot)
             {
-                foreach (string key in CacheManager.Current.GetAllKeysByTag("mc.OrganizationDataSet."))
+                foreach (string key in OrganizationDataSetsKeys)
                 {
                     CacheManager.Current.Remove(key);
                 }
+
+                OrganizationDataSetsKeys.Clear();
             }
         }
 
@@ -405,7 +425,11 @@ namespace Micajah.Common.Application
         {
             lock (s_OrganizationDataSetSyncRoot)
             {
-                CacheManager.Current.Remove("mc.OrganizationDataSet." + organizationId.ToString("N"));
+                string key = "mc.OrganizationDataSet." + organizationId.ToString("N");
+
+                CacheManager.Current.Remove(key);
+
+                OrganizationDataSetsKeys.Remove(key);
             }
         }
 
@@ -441,7 +465,9 @@ namespace Micajah.Common.Application
                             OrganizationDataSetTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                             adapters.Fill(ds, organizationId);
 
-                            CacheManager.Current.AddWithDefaultExpiration(key, ds, "mc.OrganizationDataSet.");
+                            CacheManager.Current.AddWithDefaultExpiration(key, ds);
+
+                            OrganizationDataSetsKeys.Add(key);
                         }
                     }
                 }
