@@ -107,5 +107,23 @@ namespace Micajah.Common.Configuration
         }
 
         #endregion
+
+        #region Internal Methods
+
+        internal void Merge(ActionDetailMenuElement detailMenu)
+        {
+            this.Show = detailMenu.Show;
+            this.ShowChildren = detailMenu.ShowChildren;
+            this.ShowDescription = detailMenu.ShowDescription;
+            this.Group = detailMenu.Group;
+            this.Highlight = detailMenu.Highlight;
+            this.IconUrl = detailMenu.IconUrl;
+            if (!this.IconSize.HasValue)
+                this.IconSize = detailMenu.IconSize;
+            if (!this.Theme.HasValue)
+                this.Theme = detailMenu.Theme;
+        }
+
+        #endregion
     }
 }

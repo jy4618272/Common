@@ -262,6 +262,7 @@ namespace Micajah.Common.Configuration
         public StringCollection AlternativeParents
         {
             get { return (StringCollection)this["alternativeParents"]; }
+            private set { this["alternativeParents"] = value; }
         }
 
         /// <summary>
@@ -335,28 +336,38 @@ namespace Micajah.Common.Configuration
 
         internal void Merge(ActionElement action)
         {
-            action.EnsureIsLoaded();
+            this.EnsureIsLoaded();
 
-            if (action.m_OriginalVisible.HasValue)
-                this.Visible = action.Visible;
-
-            if (action.m_OriginalInstanceRequired.HasValue)
-                this.InstanceRequired = action.InstanceRequired;
-
-            if (!string.IsNullOrEmpty(action.NavigateUrl))
+            this.ActionType = action.ActionType;
+            this.Name = action.Name;
+            this.Description = action.Description;
+            if (string.IsNullOrEmpty(this.NavigateUrl))
                 this.NavigateUrl = action.NavigateUrl;
-
-            if (action.DetailMenu.Theme.HasValue)
-                this.DetailMenu.Theme = action.DetailMenu.Theme;
-
-            if (action.DetailMenu.IconSize.HasValue)
-                this.DetailMenu.IconSize = action.DetailMenu.IconSize;
-
-            if (!string.IsNullOrEmpty(action.VideoUrl))
+            this.OrderNumber = action.OrderNumber;
+            this.AuthenticationRequired = action.AuthenticationRequired;
+            if (!m_OriginalInstanceRequired.HasValue)
+                this.InstanceRequired = action.InstanceRequired;
+            if (!m_OriginalVisible.HasValue)
+                this.Visible = action.Visible;
+            this.LearnMoreUrl = action.LearnMoreUrl;
+            if (string.IsNullOrEmpty(this.VideoUrl))
                 this.VideoUrl = action.VideoUrl;
+            this.Handle = action.Handle;
+            this.DetailMenu.Merge(action.DetailMenu);
+            this.Submenu = action.Submenu;
 
-            if (action.Roles != null)
+            if (this.Roles == null)
                 m_Roles = action.Roles;
+
+            if (action.AlternativeParents != null)
+            {
+                if (this.AlternativeParents == null)
+                    this.AlternativeParents = new StringCollection();
+                foreach (string actionIdToAdd in action.AlternativeParents)
+                {
+                    this.AlternativeParents.Add(actionIdToAdd);
+                }
+            }
 
             foreach (ActionElement actionToAdd in action.Actions)
             {
@@ -397,11 +408,13 @@ namespace Micajah.Common.Configuration
         {
             if (item == null) return;
 
-            ActionElement existingItem = base.BaseGet(item.Key) as ActionElement;
-            if (existingItem != null)
+            if (item.BuiltIn)
             {
-                if (existingItem.BuiltIn)
+                ActionElement existingItem = base.BaseGet(item.Key) as ActionElement;
+                if (existingItem != null)
                     existingItem.Merge(item);
+                else
+                    base.Add(item);
             }
             else
                 base.Add(item);

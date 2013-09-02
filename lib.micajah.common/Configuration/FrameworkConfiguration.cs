@@ -1,5 +1,4 @@
-﻿using Micajah.Common.Application;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -46,24 +45,18 @@ namespace Micajah.Common.Configuration
         {
             get
             {
-                FrameworkConfiguration section = CacheManager.Current.Get("mc.FrameworkConfiguration") as FrameworkConfiguration;
-                if (section == null)
+                FrameworkConfiguration section = ConfigurationManager.GetSection(SectionName) as FrameworkConfiguration;
+                if (!section.IsModified())
                 {
                     lock (s_CurrentSyncRoot)
                     {
-                        section = CacheManager.Current.Get("mc.FrameworkConfiguration") as FrameworkConfiguration;
-                        if (section == null)
-                        {
-                            XmlDocument doc = new XmlDocument();
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(Micajah.Common.Properties.Resources.MicajahCommonConfig);
 
-                            doc.LoadXml(Micajah.Common.Properties.Resources.MicajahCommonConfig);
+                        FrameworkConfiguration sectionBuiltIn = new FrameworkConfiguration(doc.SelectSingleNode(SectionName));
+                        sectionBuiltIn.SetBuiltIn(true);
 
-                            section = new FrameworkConfiguration(doc.SelectSingleNode(SectionName));
-                            section.SetBuiltIn(true);
-                            section.Merge(ConfigurationManager.GetSection(SectionName) as FrameworkConfiguration);
-
-                            CacheManager.Current.Add("mc.FrameworkConfiguration", section);
-                        }
+                        section.Merge(sectionBuiltIn);
                     }
                 }
                 return section;
@@ -162,14 +155,13 @@ namespace Micajah.Common.Configuration
             if (section == null) return;
 
             this.Currencies.AddRange(section.Currencies);
-            this.WebApplication = section.WebApplication;
             this.Roles.AddRange(section.Roles);
             this.Actions.AddRange(section.Actions);
             this.Settings.AddRange(section.Settings);
             this.Entities.AddRange(section.Entities);
             this.RulesEngines.AddRange(section.RulesEngines);
             this.StartThreads.AddRange(section.StartThreads);
-            if (!string.IsNullOrEmpty(section.Security.PrivateKey))
+            if (string.IsNullOrEmpty(section.Security.PrivateKey))
                 this.Security.PrivateKey = section.Security.PrivateKey;
         }
 
