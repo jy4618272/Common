@@ -603,8 +603,7 @@ namespace Micajah.Common.Bll.Providers
                 action.SubmenuItemImageUrl = row.SubmenuItemImageUrl;
                 action.SubmenuItemType = (SubmenuItemType)row.SubmenuItemTypeId;
                 action.SubmenuItemHorizontalAlign = (HorizontalAlign)row.SubmenuItemHorizontalAlignId;
-                if (row.SubmenuItemWidth > 0)
-                    action.SubmenuItemWidth = Unit.Pixel(row.SubmenuItemWidth);
+                action.SubmenuItemWidth = row.SubmenuItemWidth;
                 action.HighlightInSubmenu = row.HighlightInSubmenu;
                 action.NavigateUrl = (row.IsNavigateUrlNull() ? null : row.NavigateUrl);
                 action.LearnMoreUrl = row.LearnMoreUrl;

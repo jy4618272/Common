@@ -30,7 +30,7 @@ namespace Micajah.Common.Bll
         private string m_IconUrl;
         private SubmenuItemType m_SubmenuItemType;
         private string m_SubmenuItemImageUrl;
-        private Unit m_SubmenuItemWidth;
+        private int m_SubmenuItemWidth;
         private HorizontalAlign m_SubmenuItemHorizontalAlign;
         private string m_NavigateUrl;
         private string m_LearnMoreUrl;
@@ -178,7 +178,7 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets or sets the width for the action that is rendered in the submenu.
         /// </summary>
-        public Unit SubmenuItemWidth
+        public int SubmenuItemWidth
         {
             get { return m_SubmenuItemWidth; }
             set { m_SubmenuItemWidth = value; }

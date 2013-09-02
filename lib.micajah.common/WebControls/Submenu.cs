@@ -418,8 +418,8 @@ namespace Micajah.Common.WebControls
                     string descr = action.CustomDescription;
                     if (!string.IsNullOrEmpty(descr))
                         btn.Attributes["title"] = descr;
-                    if (!action.SubmenuItemWidth.IsEmpty)
-                        btn.Style[HtmlTextWriterStyle.Width] = action.SubmenuItemWidth.ToString();
+                    if (action.SubmenuItemWidth > 0)
+                        btn.Style[HtmlTextWriterStyle.Width] = action.SubmenuItemWidth.ToString() + "px";
                     btn.Attributes["onclick"] = string.Format(CultureInfo.InvariantCulture, "location.href=\"{0}\";return false;", action.CustomAbsoluteNavigateUrl);
                     return btn;
                 }
