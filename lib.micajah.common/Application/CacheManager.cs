@@ -85,7 +85,7 @@ namespace Micajah.Common.Application
         /// <param name="value">The item to be added to the cache.</param>
         public virtual void AddWithDefaultExpiration(string key, object value)
         {
-            this.Add(key, value, new TimeSpan(23, 5, 0));
+            this.Add(key, value, new TimeSpan(23, 30, 0));
         }
 
         /// <summary>
