@@ -504,7 +504,6 @@ namespace Micajah.Common.Bll.Providers
 
             if (!string.IsNullOrEmpty(name))
             {
-                WebApplication.RefreshCommonData();
                 CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role.Copy() as CommonDataSet.RoleDataTable;
                 CommonDataSet.RoleRow[] rows = table.Select(string.Concat(table.NameColumn.ColumnName, " = '", name.Replace("'", "''"), "'")) as CommonDataSet.RoleRow[];
                 if (rows.Length > 0) roleId = rows[0].RoleId;

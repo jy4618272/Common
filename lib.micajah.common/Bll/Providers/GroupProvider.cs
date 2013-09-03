@@ -806,7 +806,6 @@ namespace Micajah.Common.Bll.Providers
             Guid groupId = Guid.Empty;
             if (!string.IsNullOrEmpty(name))
             {
-                WebApplication.RefreshCommonData();
                 OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
                 if (ds != null)
                 {

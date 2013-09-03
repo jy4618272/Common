@@ -330,8 +330,6 @@ namespace Micajah.Common.Bll.Providers
         {
             string connectionString = string.Empty;
 
-            WebApplication.RefreshCommonData();
-
             CommonDataSet ds = WebApplication.CommonDataSet;
             CommonDataSet.DatabaseRow db = ds.Database.FindByDatabaseId(databaseId);
             if (db != null)

@@ -1,14 +1,14 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Web;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -637,7 +637,6 @@ namespace Micajah.Common.Bll.Providers
         public static Guid GetOrganizationIdByName(string name)
         {
             Guid organizationId = Guid.Empty;
-            WebApplication.RefreshCommonData();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -670,10 +669,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 CommonDataSet.OrganizationRow row = GetOrganizationRowByPseudoId(pseudoId);
                 if (row == null)
-                {
-                    WebApplication.RefreshCommonData();
                     row = GetOrganizationRowByPseudoId(pseudoId);
-                }
 
                 if (row != null)
                 {
@@ -702,7 +698,6 @@ namespace Micajah.Common.Bll.Providers
         public static Guid GetOrganizationDatabaseId(string name)
         {
             Guid databaseId = Guid.Empty;
-            WebApplication.RefreshCommonData();
 
             if (!string.IsNullOrEmpty(name))
             {
