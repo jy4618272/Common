@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="CustomFieldsForm.aspx.cs" Inherits="CustomFieldsFormTestPage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="CustomFieldsFormTestPage" Codebehind="CustomFieldsForm.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     Manage the CustomFieldsForm control

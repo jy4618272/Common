@@ -28,4 +28,4 @@ _ReSharper*/
 /PrecompiledWeb
 /[Pp]ublish
 *.dbmdl
-!/lib.micajah.common/Runtime/*
+!/bin Shared/*

@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D782F7DD-A397-4846-B1D4-D5543C86AFE6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Micajah.Common.TestSite</RootNamespace>
+    <AssemblyName>web.micajah.common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Web.Design, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin Shared\Telerik.Web.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin Shared\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin Shared\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BwdTime.aspx" />
+    <Content Include="BwdUserSide.aspx" />
+    <Content Include="Controls\EmbeddedIcons.ascx" />
+    <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Help.aspx" />
+    <Content Include="Images\144x144blue.jpg" />
+    <Content Include="Images\459_micajahdevelopment_45px1.png" />
+    <Content Include="Images\account.png" />
+    <Content Include="Images\account_small.png" />
+    <Content Include="Images\assets.png" />
+    <Content Include="Images\assets_small.png" />
+    <Content Include="Images\auditor.png" />
+    <Content Include="Images\btn-login.gif" />
+    <Content Include="Images\btn-new-account.gif" />
+    <Content Include="Images\bul.gif" />
+    <Content Include="Images\category_accessories_amended.jpg" />
+    <Content Include="Images\category_headsets_amended.jpg" />
+    <Content Include="Images\category_phones_amended.jpg" />
+    <Content Include="Images\category_smallbusiness_amended.jpg" />
+    <Content Include="Images\category_webcams_amended.jpg" />
+    <Content Include="Images\Christmas Skype.png" />
+    <Content Include="Images\Clearance.jpg" />
+    <Content Include="Images\companylogos\bigWebApps.gif" />
+    <Content Include="Images\companylogos\bwd_poweredby_57px.jpg" />
+    <Content Include="Images\companylogos\helpdesk_poweredby_123x35.png" />
+    <Content Include="Images\companylogos\helpdesk_poweredby_156x45.png" />
+    <Content Include="Images\companylogos\helpdesk_poweredby_205x59.png" />
+    <Content Include="Images\companylogos\mountain.png" />
+    <Content Include="Images\companylogos\sherpadesk_384x287.png" />
+    <Content Include="Images\companylogos\yeti-head-sm.png" />
+    <Content Include="Images\hqv_bundle_144x144.jpg" />
+    <Content Include="Images\i_closed.gif" />
+    <Content Include="Images\i_newt.gif" />
+    <Content Include="Images\i_oakb.gif" />
+    <Content Include="Images\i_open.gif" />
+    <Content Include="Images\i_profile.gif" />
+    <Content Include="Images\knowledgebase.png" />
+    <Content Include="Images\knowledgebase_small.png" />
+    <Content Include="Images\location.png" />
+    <Content Include="Images\login-box-bottom.gif" />
+    <Content Include="Images\login-box-left-bottom.gif" />
+    <Content Include="Images\login-box-left-top.gif" />
+    <Content Include="Images\login-box-left.gif" />
+    <Content Include="Images\login-box-right-bottom.gif" />
+    <Content Include="Images\login-box-right-top.gif" />
+    <Content Include="Images\login-box-right.gif" />
+    <Content Include="Images\login-box-top.gif" />
+    <Content Include="Images\logins.png" />
+    <Content Include="Images\logotype_big.gif" />
+    <Content Include="Images\notices-bottom-left.gif" />
+    <Content Include="Images\notices-bottom-right.gif" />
+    <Content Include="Images\notices-bottom.gif" />
+    <Content Include="Images\notices-left.gif" />
+    <Content Include="Images\notices-right.gif" />
+    <Content Include="Images\notices-top-left.gif" />
+    <Content Include="Images\notices-top-right.gif" />
+    <Content Include="Images\notices-top.gif" />
+    <Content Include="Images\OrganizationSignUp\helpdesk_400.png" />
+    <Content Include="Images\OrganizationSignUp\logo.png" />
+    <Content Include="Images\overlay.gif" />
+    <Content Include="Images\parts.png" />
+    <Content Include="Images\parts_small.png" />
+    <Content Include="Images\phones_philips841_c_144.jpg" />
+    <Content Include="Images\Plantronics.jpg" />
+    <Content Include="Images\plus.png" />
+    <Content Include="Images\projects.png" />
+    <Content Include="Images\projects_small.png" />
+    <Content Include="Images\reports.png" />
+    <Content Include="Images\reports_small.png" />
+    <Content Include="Images\tickets.png" />
+    <Content Include="Images\tickets_small.png" />
+    <Content Include="LogOn.aspx" />
+    <Content Include="LogOn2.aspx" />
+    <Content Include="Pages1\CheckBoxList.aspx" />
+    <Content Include="Pages1\CommonGridView.aspx" />
+    <Content Include="Pages1\CustomFieldsForm.aspx" />
+    <Content Include="Pages1\DateRange.aspx" />
+    <Content Include="Pages1\MagicForm.aspx" />
+    <Content Include="Pages1\MessageList.aspx" />
+    <Content Include="Pages1\NoticeMessageBox.aspx" />
+    <Content Include="Pages1\RadioButtonList.aspx" />
+    <Content Include="Pages1\Schedule.aspx" />
+    <Content Include="Pages1\SmallerIcons.aspx" />
+    <Content Include="Pages1\UpdateProgress.aspx" />
+    <Content Include="Pages2\AdvancedGridView.aspx" />
+    <Content Include="Pages2\CommonStyles.aspx" />
+    <Content Include="Pages2\HtmlEditor.aspx" />
+    <Content Include="Pages2\TreeViewExtended.aspx" />
+    <Content Include="Pages2\ValidatedComboBox.aspx" />
+    <Content Include="Pages2\ValidatedDatePicker.aspx" />
+    <Content Include="Styles\LogOn.css" />
+    <Content Include="Tickets.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BwdTime.aspx.designer.cs">
+      <DependentUpon>BwdTime.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BwdUserSide.aspx.designer.cs">
+      <DependentUpon>BwdUserSide.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EmbeddedIcons.ascx.designer.cs">
+      <DependentUpon>EmbeddedIcons.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Help.aspx.designer.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LogOn.aspx.designer.cs">
+      <DependentUpon>LogOn.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LogOn2.aspx.designer.cs">
+      <DependentUpon>LogOn2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage.master.designer.cs">
+      <DependentUpon>MasterPage.master</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\ActionCustomHandler.cs" />
+    <Compile Include="App_Code\CustomLoginProvider.cs" />
+    <Compile Include="App_Code\SettingCustomHandler.cs" />
+    <Compile Include="App_Code\TestThread1CustomHandler.cs" />
+    <Compile Include="App_Code\TestThread2CustomHandler.cs" />
+    <Compile Include="BwdTime.aspx.cs">
+      <DependentUpon>BwdTime.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BwdUserSide.aspx.cs">
+      <DependentUpon>BwdUserSide.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\EmbeddedIcons.ascx.cs">
+      <DependentUpon>EmbeddedIcons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Help.aspx.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogOn.aspx.cs">
+      <DependentUpon>LogOn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogOn2.aspx.cs">
+      <DependentUpon>LogOn2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage.master.cs">
+      <DependentUpon>MasterPage.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\CheckBoxList.aspx.cs">
+      <DependentUpon>CheckBoxList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\CheckBoxList.aspx.designer.cs">
+      <DependentUpon>CheckBoxList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\CommonGridView.aspx.cs">
+      <DependentUpon>CommonGridView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\CommonGridView.aspx.designer.cs">
+      <DependentUpon>CommonGridView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\CustomFieldsForm.aspx.cs">
+      <DependentUpon>CustomFieldsForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\CustomFieldsForm.aspx.designer.cs">
+      <DependentUpon>CustomFieldsForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\DateRange.aspx.cs">
+      <DependentUpon>DateRange.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\DateRange.aspx.designer.cs">
+      <DependentUpon>DateRange.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\MagicForm.aspx.cs">
+      <DependentUpon>MagicForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\MagicForm.aspx.designer.cs">
+      <DependentUpon>MagicForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\MessageList.aspx.cs">
+      <DependentUpon>MessageList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\MessageList.aspx.designer.cs">
+      <DependentUpon>MessageList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\NoticeMessageBox.aspx.cs">
+      <DependentUpon>NoticeMessageBox.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\NoticeMessageBox.aspx.designer.cs">
+      <DependentUpon>NoticeMessageBox.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\RadioButtonList.aspx.cs">
+      <DependentUpon>RadioButtonList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\RadioButtonList.aspx.designer.cs">
+      <DependentUpon>RadioButtonList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\Schedule.aspx.cs">
+      <DependentUpon>Schedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\Schedule.aspx.designer.cs">
+      <DependentUpon>Schedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\SmallerIcons.aspx.cs">
+      <DependentUpon>SmallerIcons.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\SmallerIcons.aspx.designer.cs">
+      <DependentUpon>SmallerIcons.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages1\UpdateProgress.aspx.cs">
+      <DependentUpon>UpdateProgress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages1\UpdateProgress.aspx.designer.cs">
+      <DependentUpon>UpdateProgress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages2\AdvancedGridView.aspx.cs">
+      <DependentUpon>AdvancedGridView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages2\AdvancedGridView.aspx.designer.cs">
+      <DependentUpon>AdvancedGridView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages2\CommonStyles.aspx.cs">
+      <DependentUpon>CommonStyles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages2\CommonStyles.aspx.designer.cs">
+      <DependentUpon>CommonStyles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages2\HtmlEditor.aspx.cs">
+      <DependentUpon>HtmlEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages2\HtmlEditor.aspx.designer.cs">
+      <DependentUpon>HtmlEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages2\TreeViewExtended.aspx.cs">
+      <DependentUpon>TreeViewExtended.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages2\TreeViewExtended.aspx.designer.cs">
+      <DependentUpon>TreeViewExtended.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages2\ValidatedComboBox.aspx.cs">
+      <DependentUpon>ValidatedComboBox.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages2\ValidatedComboBox.aspx.designer.cs">
+      <DependentUpon>ValidatedComboBox.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages2\ValidatedDatePicker.aspx.cs">
+      <DependentUpon>ValidatedDatePicker.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages2\ValidatedDatePicker.aspx.designer.cs">
+      <DependentUpon>ValidatedDatePicker.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tickets.aspx.cs">
+      <DependentUpon>Tickets.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tickets.aspx.designer.cs">
+      <DependentUpon>Tickets.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Browsers\Default.browser" />
+    <Content Include="MasterPage.master" />
+    <Content Include="Micajah.Common.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lib.micajah.common\lib.micajah.common.csproj">
+      <Project>{10d2ca35-30d2-4291-9133-4f675c8b3b29}</Project>
+      <Name>lib.micajah.common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>22006</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:21772/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://app.localhost.com</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

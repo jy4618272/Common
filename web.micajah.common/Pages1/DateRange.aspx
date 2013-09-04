@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="DateRange.aspx.cs" Inherits="DateRangeTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="DateRangeTestPage" Codebehind="DateRange.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <mits:DateRange ID="DateRange1" runat="server" Required="True" />

@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="ValidatedComboBox.aspx.cs" Inherits="ValidatedComboBoxTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="ValidatedComboBoxTestPage" Codebehind="ValidatedComboBox.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <h1>

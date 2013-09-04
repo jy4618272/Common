@@ -1,5 +1,5 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Schedule.aspx.cs" Inherits="Pages1_Schedule"
-    MasterPageFile="~/MasterPage.master" %>
+<%@ Page Language="C#" AutoEventWireup="true" Inherits="Pages1_Schedule"
+    MasterPageFile="~/MasterPage.master" Codebehind="Schedule.aspx.cs" %>
 
 <%@ MasterType TypeName="Micajah.Common.Pages.MasterPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">

@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="MessageList.aspx.cs" Inherits="MessageListTestPage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="MessageListTestPage" Codebehind="MessageList.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <style type="text/css">

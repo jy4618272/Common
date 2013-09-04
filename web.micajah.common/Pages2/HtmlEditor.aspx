@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="HtmlEditor.aspx.cs" Inherits="HtmlEditorTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="HtmlEditorTestPage" Codebehind="HtmlEditor.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <p>

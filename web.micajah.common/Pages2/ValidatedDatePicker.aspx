@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="ValidatedDatePicker.aspx.cs" Inherits="DatePickerTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="DatePickerTestPage" Codebehind="ValidatedDatePicker.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <mits:DatePicker ID="ValidatedDatePicker1" runat="server" Required="True" Type="DateTimePicker" />

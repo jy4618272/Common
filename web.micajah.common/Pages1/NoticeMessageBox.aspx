@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="NoticeMessageBox.aspx.cs" Inherits="NoticeMessageBoxTestPage" ValidateRequest="false" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="NoticeMessageBoxTestPage" ValidateRequest="false" Codebehind="NoticeMessageBox.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <mits:NoticeMessageBox ID="NoticeMessageBox1" runat="server" Size="Small">
