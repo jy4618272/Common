@@ -143,9 +143,11 @@ function Mp_EncodeTextBoxes() {
         input = inputs[i];
         if (input.type == "text") {
             input.disabled = true;
+            input.value = input.value.replace(new RegExp('&', 'g'), '&amp;');
             input.value = input.value.replace(new RegExp('&(?!\#?[a-z0-9]+;)', 'g'), '&amp;');
             input.value = input.value.replace(new RegExp('<', 'g'), '&lt;');
             input.value = input.value.replace(new RegExp('>', 'g'), '&gt;');
+            input.value = input.value.replace(new RegExp('"', 'g'), '&quot');
             input.disabled = false;
         }
     }
@@ -153,9 +155,11 @@ function Mp_EncodeTextBoxes() {
     inputs = document.body.getElementsByTagName("textarea");
     for (i = 0; i < inputs.length; i++) {
         input = inputs[i];
+        input.value = input.value.replace(new RegExp('&', 'g'), '&amp;');
         input.value = input.value.replace(new RegExp('&(?!\#?[a-z0-9]+;)', 'g'), '&amp;');
         input.value = input.value.replace(new RegExp('<', 'g'), '&lt;');
         input.value = input.value.replace(new RegExp('>', 'g'), '&gt;');
+        input.value = input.value.replace(new RegExp('"', 'g'), '&quot');
     }
 }
 
