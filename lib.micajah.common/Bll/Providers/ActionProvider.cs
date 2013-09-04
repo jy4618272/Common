@@ -73,7 +73,6 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_PagesAndControlsSyncRoot = new object();
         private static readonly object s_SettingsActionIdListSyncRoot = new object();
         private static readonly object s_SetupActionIdListSyncRoot = new object();
-        private static readonly object s_RoleActionIdListSyncRoot = new object();
         private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
         private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
 
@@ -653,30 +652,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Collections.ArrayList that contains identifiers of actions associated with specified role.</returns>
         internal static ArrayList GetActionIdListByRoleId(Guid roleId)
         {
-            string key = string.Format(CultureInfo.InvariantCulture, "mc.RoleActionIdList.{0:N}", roleId);
+            ArrayList actionIdList = new ArrayList();
 
-            ArrayList actionIdList = CacheManager.Current.Get(key) as ArrayList;
-            if (actionIdList == null)
+            CommonDataSet.RolesActionsDataTable table = WebApplication.CommonDataSet.RolesActions;
+            foreach (CommonDataSet.RolesActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.RoleIdColumn.ColumnName, roleId.ToString())))
             {
-                lock (s_RoleActionIdListSyncRoot)
-                {
-                    actionIdList = CacheManager.Current.Get(key) as ArrayList;
-                    if (actionIdList == null)
-                    {
-                        actionIdList = new ArrayList();
-
-                        CommonDataSet.RolesActionsDataTable table = WebApplication.CommonDataSet.RolesActions;
-                        foreach (CommonDataSet.RolesActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.RoleIdColumn.ColumnName, roleId.ToString())))
-                        {
-                            actionIdList.Add(row.ActionId);
-                        }
-
-                        CacheManager.Current.AddWithDefaultExpiration(key, actionIdList);
-                    }
-                }
+                actionIdList.Add(row.ActionId);
             }
 
-            return (ArrayList)actionIdList.Clone();
+            return actionIdList;
         }
 
         internal static ArrayList GetActionIdList(ArrayList roleIdList, bool isOrgAdmin, bool removeDuplicates)
