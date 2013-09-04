@@ -56,10 +56,7 @@ namespace Micajah.Common.Bll.Providers
 
         #region Setup pages
 
-        internal const string ActionsPageVirtualPath = VirtualRootShortPath + "setup/actions.aspx";
-        internal const string DatabasesPageVirtualPath = VirtualRootShortPath + "setup/databases.aspx";
         internal const string FrameworkPageVirtualPath = VirtualRootShortPath + "setup/framework.aspx";
-        internal const string OrganizationsPageVirtualPath = VirtualRootShortPath + "setup/organizations.aspx";
         internal const string RolesPageVirtualPath = VirtualRootShortPath + "setup/roles.aspx";
         internal const string RoleEditPageVirtualPath = VirtualRootShortPath + "setup/roleedit.aspx";
         internal const string DatabaseServersPageVirtualPath = VirtualRootShortPath + "setup/databaseservers.aspx";

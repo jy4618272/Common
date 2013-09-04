@@ -71,7 +71,6 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
         private static readonly object s_MyAccountActionIdListSyncRoot = new object();
         private static readonly object s_PagesAndControlsSyncRoot = new object();
-        private static readonly object s_PublicActionsSyncRoot = new object();
         private static readonly object s_SettingsActionIdListSyncRoot = new object();
         private static readonly object s_SetupActionIdListSyncRoot = new object();
         private static readonly object s_RoleActionIdListSyncRoot = new object();
@@ -249,39 +248,6 @@ namespace Micajah.Common.Bll.Providers
                             coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
 
                             CacheManager.Current.AddWithDefaultExpiration("mc.PagesAndControls", coll);
-                        }
-                    }
-                }
-                return coll;
-            }
-        }
-
-        /// <summary>
-        /// Gets the collection of the actions for which the authentication is not required.
-        /// </summary>
-        internal static ActionCollection PublicActions
-        {
-            get
-            {
-                ActionCollection coll = CacheManager.Current.Get("mc.PublicActions") as ActionCollection;
-                if (coll == null)
-                {
-                    lock (s_PublicActionsSyncRoot)
-                    {
-                        coll = CacheManager.Current.Get("mc.PublicActions") as ActionCollection;
-                        if (coll == null)
-                        {
-                            coll = new ActionCollection();
-                            coll.AddRange(PagesAndControls.FindAllPublic());
-                            coll.AddRange(GlobalNavigationLinks.FindAllPublic());
-
-                            Action action = new Action();
-                            action.ActionId = Guid.NewGuid();
-                            action.ActionType = ActionType.Page;
-                            action.NavigateUrl = ResourceProvider.ResourceHandlerVirtualPath;
-                            coll.Add(action);
-
-                            CacheManager.Current.AddWithDefaultExpiration("mc.PublicActions", coll);
                         }
                     }
                 }
@@ -908,9 +874,12 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the authentication is not required for the specified URL; otherwise, false.</returns>
         internal static bool IsPublicPage(string navigateUrl)
         {
-            Action action = FindAction(Guid.Empty, CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl), PublicActions);
+            Action action = FindAction(Guid.Empty, CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl));
             if (action != null)
-                return ((!SetupActionIdList.Contains(action.ActionId)) || (string.Compare(navigateUrl, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
+            {
+                if (!action.AuthenticationRequired)
+                    return ((!SetupActionIdList.Contains(action.ActionId)) || (string.Compare(navigateUrl, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
+            }
             return false;
         }
 
@@ -970,11 +939,6 @@ namespace Micajah.Common.Bll.Providers
             lock (s_PagesAndControlsSyncRoot)
             {
                 CacheManager.Current.Remove("mc.PagesAndControls");
-            }
-
-            lock (s_PublicActionsSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.PublicActions");
             }
         }
 

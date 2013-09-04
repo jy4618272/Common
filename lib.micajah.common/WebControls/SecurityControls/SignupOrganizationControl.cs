@@ -383,7 +383,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.PublicActions.FindByActionId(ActionProvider.SignUpOrganizationPageActionId));
+            Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.PagesAndControls.FindByActionId(ActionProvider.SignUpOrganizationPageActionId));
 
             if (!this.Page.IsPostBack)
             {
