@@ -4,6 +4,7 @@ using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -40,6 +41,9 @@ namespace Micajah.Common.WebControls
         private int m_RepeatColumnsInternal;
         private Micajah.Common.Pages.MasterPage m_MasterPage;
         private UserContext m_UserContext;
+        private IList m_ActionIdList;
+        private bool m_IsFrameworkAdmin;
+        private bool m_IsAuthenticated;
         private bool? m_ShowDescriptionAsToolTip;
 
         #endregion
@@ -54,6 +58,25 @@ namespace Micajah.Common.WebControls
             m_PrimaryMenuItems = new ActionCollection();
             m_OtherMenuItems = new ActionCollection();
             m_UserContext = UserContext.Current;
+            if (m_UserContext != null)
+            {
+                m_ActionIdList = m_UserContext.ActionIdList;
+                m_IsAuthenticated = true;
+                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganization == null));
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DetailMenu class.
+        /// </summary>
+        public DetailMenu(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
+        {
+            m_PrimaryMenuItems = new ActionCollection();
+            m_OtherMenuItems = new ActionCollection();
+            m_MasterPage = masterPage;
+            m_ActionIdList = actionIdList;
+            m_IsFrameworkAdmin = isFrameworkAdmin;
+            m_IsAuthenticated = isAuthenticated;
         }
 
         #endregion
@@ -106,7 +129,7 @@ namespace Micajah.Common.WebControls
                                 {
                                     if (item.GroupInDetailMenu)
                                     {
-                                        realItemsCount += item.GetAvailableChildActions(m_UserContext).Count;
+                                        realItemsCount += item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated).Count;
                                         if (realItemsCount > MaxItemsInColumn)
                                         {
                                             m_RepeatColumnsInternal = 2;
@@ -326,7 +349,7 @@ namespace Micajah.Common.WebControls
             {
                 if ((this.ParentAction == null) || (this.ParentAction.ActionType != ActionType.Page)) return;
 
-                allItems = this.ParentAction.GetAvailableChildActions(m_UserContext);
+                allItems = this.ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
 
                 bool flag = false;
                 if (MasterPage != null)
@@ -337,7 +360,7 @@ namespace Micajah.Common.WebControls
                     ActionCollection siblingActions = new ActionCollection();
                     foreach (Micajah.Common.Bll.Action item in ActionProvider.PagesAndControls.GetAvailableSiblingActions(this.ParentAction))
                     {
-                        if (ActionProvider.ShowAction(item, m_UserContext))
+                        if (ActionProvider.ShowAction(item, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
                         {
                             siblingActions.Add(item);
                         }
@@ -466,7 +489,7 @@ namespace Micajah.Common.WebControls
             HtmlGenericControl div = null;
             if (item.ShowChildrenInDetailMenu)
             {
-                ActionCollection availableChildActions = item.GetAvailableChildActions(m_UserContext);
+                ActionCollection availableChildActions = item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 if (availableChildActions.Count > 0)
                 {
                     ControlList list = null;
@@ -727,7 +750,7 @@ namespace Micajah.Common.WebControls
                     if (rootAndGroup)
                     {
                         if (this.RepeatColumnsInternal > 1) td.ColumnSpan = this.RepeatColumnsInternal;
-                        list.AddRange(CreateDetailMenuRows(item.GetAvailableChildActions(m_UserContext), false));
+                        list.AddRange(CreateDetailMenuRows(item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated), false));
                     }
                     else
                     {
@@ -814,7 +837,7 @@ namespace Micajah.Common.WebControls
                     list.Add(li);
 
                     if (root && action.GroupInDetailMenu)
-                        list.AddRange(this.CreateDetailMenuItems(action.GetAvailableChildActions(m_UserContext), false));
+                        list.AddRange(this.CreateDetailMenuItems(action.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated), false));
 
                     if (!string.IsNullOrEmpty(action.VideoUrl))
                     {

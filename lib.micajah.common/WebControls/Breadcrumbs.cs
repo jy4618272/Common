@@ -24,7 +24,7 @@ namespace Micajah.Common.WebControls
         private Table m_Table;
         private Unit m_ColumnWidth;
         private bool m_ShowBreadCrumbs;
-        private Micajah.Common.Pages.MasterPage m_MicajahMasterPage;
+        private Micajah.Common.Pages.MasterPage m_MasterPage;
 
         #endregion
 
@@ -33,8 +33,9 @@ namespace Micajah.Common.WebControls
         /// <summary>
         /// Initializes a new instance of the BreadCrumbs class.
         /// </summary>
-        public Breadcrumbs()
+        public Breadcrumbs(Micajah.Common.Pages.MasterPage masterPage)
         {
+            m_MasterPage = masterPage;
             m_ColumnWidth = new Unit(-1);
             m_ShowBreadCrumbs = true;
         }
@@ -59,27 +60,6 @@ namespace Micajah.Common.WebControls
                     m_ColumnWidth = ((columnCount > 1) ? Unit.Percentage(Convert.ToInt32(100 / columnCount)) : Unit.Empty);
                 }
                 return m_ColumnWidth;
-            }
-        }
-
-        private Micajah.Common.Pages.MasterPage MicajahMasterPage
-        {
-            get
-            {
-                if (m_MicajahMasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MicajahMasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MicajahMasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
-                return m_MicajahMasterPage;
             }
         }
 
@@ -155,25 +135,25 @@ namespace Micajah.Common.WebControls
                     }
 
                     // Creates the center cell.
-                    if (!string.IsNullOrEmpty(this.MicajahMasterPage.BreadcrumbsCenterHtml))
+                    if (!string.IsNullOrEmpty(m_MasterPage.BreadcrumbsCenterHtml))
                     {
                         using (TableCell td = new TableCell())
                         {
                             td.Width = ColumnWidth;
                             td.HorizontalAlign = HorizontalAlign.Center;
-                            td.Controls.Add(new LiteralControl(this.MicajahMasterPage.BreadcrumbsCenterHtml));
+                            td.Controls.Add(new LiteralControl(m_MasterPage.BreadcrumbsCenterHtml));
                             tr.Cells.Add(td);
                         }
                     }
 
                     // Creates the right cell.
-                    if (!string.IsNullOrEmpty(this.MicajahMasterPage.BreadcrumbsRightHtml))
+                    if (!string.IsNullOrEmpty(m_MasterPage.BreadcrumbsRightHtml))
                     {
                         using (TableCell td = new TableCell())
                         {
                             td.Width = ColumnWidth;
                             td.HorizontalAlign = HorizontalAlign.Right;
-                            td.Controls.Add(new LiteralControl(this.MicajahMasterPage.BreadcrumbsRightHtml));
+                            td.Controls.Add(new LiteralControl(m_MasterPage.BreadcrumbsRightHtml));
                             tr.Cells.Add(td);
                         }
                     }
@@ -183,7 +163,7 @@ namespace Micajah.Common.WebControls
 
                     if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
                     {
-                        if (this.MicajahMasterPage.VisibleHelpLink)
+                        if (m_MasterPage.VisibleHelpLink)
                             m_Table.Rows[0].Cells[m_Table.Rows[0].Cells.Count - 1].Style[HtmlTextWriterStyle.PaddingRight] = "85px";
                     }
                 }

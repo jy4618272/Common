@@ -5,6 +5,7 @@ using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Web;
@@ -26,6 +27,10 @@ namespace Micajah.Common.WebControls
         internal const string SearchButtonId = "SearchButton";
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
+        private UserContext m_UserContext;
+        private IList m_ActionIdList;
+        private bool m_IsFrameworkAdmin;
+        private bool m_IsAuthenticated;
         private bool m_ModernTheme;
         private MasterPageElement m_MasterPageSettings;
 
@@ -36,35 +41,14 @@ namespace Micajah.Common.WebControls
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        public Header()
+        public Header(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
+            m_MasterPage = masterPage;
+            m_ActionIdList = actionIdList;
+            m_IsFrameworkAdmin = isFrameworkAdmin;
+            m_IsAuthenticated = isAuthenticated;
             m_MasterPageSettings = FrameworkConfiguration.Current.WebApplication.MasterPage;
             m_ModernTheme = (m_MasterPageSettings.Theme == MasterPageTheme.Modern);
-        }
-
-        #endregion
-
-        #region Private Properties
-
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
-                return m_MasterPage;
-            }
         }
 
         #endregion
@@ -73,7 +57,7 @@ namespace Micajah.Common.WebControls
 
         private Control CreateHeaderLinks()
         {
-            if (!(this.MasterPage.VisibleHeaderLinks || this.MasterPage.VisibleSearchControl))
+            if (!(m_MasterPage.VisibleHeaderLinks || m_MasterPage.VisibleSearchControl))
                 return null;
 
             HtmlGenericControl rightContainer = null;
@@ -87,19 +71,19 @@ namespace Micajah.Common.WebControls
                 rightContainer = new HtmlGenericControl("div");
                 rightContainer.Attributes["class"] = "G";
 
-                if (MasterPage.VisibleHeaderLinks)
+                if (m_MasterPage.VisibleHeaderLinks)
                     links = CreateGlobalNavigation(this.Page.Request.IsSecureConnection);
 
                 if (m_ModernTheme)
                 {
                     HtmlGenericControl ul = (HtmlGenericControl)links;
 
-                    if (this.MasterPage.VisibleHelpLink)
+                    if (m_MasterPage.VisibleHelpLink)
                     {
                         link = new HyperLink();
                         link.ToolTip = Resources.MasterPage_HelpLink_Text2;
                         link.ImageUrl = ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorResource(MasterPageTheme.Modern, MasterPageThemeColor.NotSet, "Help.png"), true);
-                        link.Attributes["onclick"] = this.MasterPage.HelpLinkOnClick;
+                        link.Attributes["onclick"] = m_MasterPage.HelpLinkOnClick;
 
                         li = new HtmlGenericControl("li");
                         li.Controls.Add(link);
@@ -122,7 +106,7 @@ namespace Micajah.Common.WebControls
                         paddindTop = "8px";
                     }
 
-                    if (MasterPage.VisibleSearchControl)
+                    if (m_MasterPage.VisibleSearchControl)
                         rightContainer.Controls.Add(CreateSearchControl(paddindTop));
                 }
 
@@ -165,7 +149,7 @@ namespace Micajah.Common.WebControls
 
                 link = new HyperLink();
                 link.ImageUrl = m_MasterPageSettings.Header.LogoImageUrl;
-                link.NavigateUrl = this.MasterPage.HeaderLogoNavigateUrl;
+                link.NavigateUrl = m_MasterPage.HeaderLogoNavigateUrl;
                 li.Controls.Add(link);
 
                 return div;
@@ -181,14 +165,14 @@ namespace Micajah.Common.WebControls
 
         private Control CreateLogo()
         {
-            if ((!this.MasterPage.VisibleHeaderLogo) || string.IsNullOrEmpty(m_MasterPageSettings.Header.LogoImageUrl))
+            if ((!m_MasterPage.VisibleHeaderLogo) || string.IsNullOrEmpty(m_MasterPageSettings.Header.LogoImageUrl))
                 return null;
 
-            string text = this.MasterPage.HeaderLogoText;
+            string text = m_MasterPage.HeaderLogoText;
             string imageUrl = null;
 
             if (!m_ModernTheme)
-                imageUrl = this.MasterPage.HeaderLogoImageUrl;
+                imageUrl = m_MasterPage.HeaderLogoImageUrl;
 
             if (string.IsNullOrEmpty(imageUrl) && string.IsNullOrEmpty(text))
                 return null;
@@ -199,7 +183,7 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                string navigateUrl = this.MasterPage.HeaderLogoNavigateUrl;
+                string navigateUrl = m_MasterPage.HeaderLogoNavigateUrl;
                 logoContainer = new HtmlGenericControl("div");
                 logoContainer.Attributes["class"] = "A";
 
@@ -208,8 +192,8 @@ namespace Micajah.Common.WebControls
                     if (!string.IsNullOrEmpty(navigateUrl))
                     {
                         link = new HyperLink();
-                        if (!string.IsNullOrEmpty(this.MasterPage.HeaderLogoTarget))
-                            link.Target = this.MasterPage.HeaderLogoTarget;
+                        if (!string.IsNullOrEmpty(m_MasterPage.HeaderLogoTarget))
+                            link.Target = m_MasterPage.HeaderLogoTarget;
                         link.NavigateUrl = navigateUrl;
                         link.ImageUrl = imageUrl;
                         link.ToolTip = text;
@@ -229,8 +213,8 @@ namespace Micajah.Common.WebControls
                     if (!string.IsNullOrEmpty(navigateUrl))
                     {
                         link = new HyperLink();
-                        if (!string.IsNullOrEmpty(this.MasterPage.HeaderLogoTarget))
-                            link.Target = this.MasterPage.HeaderLogoTarget;
+                        if (!string.IsNullOrEmpty(m_MasterPage.HeaderLogoTarget))
+                            link.Target = m_MasterPage.HeaderLogoTarget;
                         link.NavigateUrl = navigateUrl;
                         link.ToolTip = text;
                         link.Text = text;
@@ -264,25 +248,25 @@ namespace Micajah.Common.WebControls
 
                 string searchButtonOnClientClick = string.Format(CultureInfo.InvariantCulture
                     , "if (Mp_Search('{0}{1}{2}')) {3}; return false;"
-                    , this.MasterPage.ClientID, this.ClientIDSeparator, SearchTextBoxId
-                    , this.Page.ClientScript.GetPostBackEventReference(new PostBackOptions(MasterPage, SearchButtonId, string.Empty, false, false, false, true, false, "Mp_Search")));
+                    , m_MasterPage.ClientID, this.ClientIDSeparator, SearchTextBoxId
+                    , this.Page.ClientScript.GetPostBackEventReference(new PostBackOptions(m_MasterPage, SearchButtonId, string.Empty, false, false, false, true, false, "Mp_Search")));
 
                 txt = new System.Web.UI.WebControls.TextBox();
                 txt.ID = SearchTextBoxId;
-                txt.Columns = this.MasterPage.SearchTextBoxColumns;
-                if (this.MasterPage.SearchTextBoxMaxLength > 0) txt.MaxLength = this.MasterPage.SearchTextBoxMaxLength;
+                txt.Columns = m_MasterPage.SearchTextBoxColumns;
+                if (m_MasterPage.SearchTextBoxMaxLength > 0) txt.MaxLength = m_MasterPage.SearchTextBoxMaxLength;
                 txt.Style[HtmlTextWriterStyle.VerticalAlign] = "middle";
                 txt.CausesValidation = false;
                 txt.ValidationGroup = "Mp_Search";
                 txt.Attributes["onfocus"] = "Mp_SearchTextBox_OnFocus(this);";
                 txt.Attributes["onblur"] = "Mp_SearchTextBox_OnBlur(this);";
                 txt.Attributes["onkeypress"] = "if (event.keyCode == 13) {" + searchButtonOnClientClick + "}";
-                txt.Attributes["EmptyText"] = HttpUtility.HtmlAttributeEncode(this.MasterPage.SearchTextBoxEmptyText);
+                txt.Attributes["EmptyText"] = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
 
-                string searchText = this.MasterPage.SearchText;
+                string searchText = m_MasterPage.SearchText;
                 if (searchText == null)
                 {
-                    txt.Text = HttpUtility.HtmlAttributeEncode(this.MasterPage.SearchTextBoxEmptyText);
+                    txt.Text = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
                     txt.Style[HtmlTextWriterStyle.Color] = "Gray";
                 }
                 else
@@ -299,8 +283,8 @@ namespace Micajah.Common.WebControls
                 btn.OnClientClick = searchButtonOnClientClick;
                 btn.CausesValidation = false;
                 btn.ValidationGroup = "Mp_Search";
-                btn.Text = this.MasterPage.SearchButtonText;
-                btn.ToolTip = this.MasterPage.SearchButtonToolTip;
+                btn.Text = m_MasterPage.SearchButtonText;
+                btn.ToolTip = m_MasterPage.SearchButtonToolTip;
 
                 if (m_ModernTheme)
                 {
@@ -336,6 +320,15 @@ namespace Micajah.Common.WebControls
         private static Control CreateGlobalNavigation(bool isSecureConnection)
         {
             UserContext user = UserContext.Current;
+            IList actionIdList = null;
+            bool isFrameworkAdmin = false;
+            bool isAuthenticated = false;
+            if (user != null)
+            {
+                actionIdList = user.ActionIdList;
+                isAuthenticated = true;
+                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganization == null));
+            }
 
             ControlList links = null;
             Link link = null;
@@ -356,7 +349,7 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(user))
+                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(actionIdList, isFrameworkAdmin, isAuthenticated))
                 {
                     link = new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.Description);
 
@@ -390,7 +383,7 @@ namespace Micajah.Common.WebControls
 
                         ul.Controls.Add(li);
 
-                        ActionCollection childActions = item.GetAvailableChildActions(user);
+                        ActionCollection childActions = item.GetAvailableChildActions(actionIdList, isFrameworkAdmin, isAuthenticated);
                         if (childActions.Count > 0)
                         {
                             li.Attributes["class"] = "Dm";
@@ -413,7 +406,7 @@ namespace Micajah.Common.WebControls
                     {
                         if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
                         {
-                            foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(user))
+                            foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(actionIdList, isFrameworkAdmin, isAuthenticated))
                             {
                                 link2 = new Link(item2.CustomName, item2.CustomAbsoluteNavigateUrl, item2.Description);
                                 links.Add(link2);
@@ -467,7 +460,7 @@ namespace Micajah.Common.WebControls
 
                 if (m_ModernTheme)
                 {
-                    if (MasterPage.VisibleSearchControl)
+                    if (m_MasterPage.VisibleSearchControl)
                         headerContainer.Controls.Add(CreateSearchControl(null));
                 }
 

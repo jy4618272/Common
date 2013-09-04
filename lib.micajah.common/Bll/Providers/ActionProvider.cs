@@ -1021,25 +1021,15 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal static bool ShowAction(Action action, UserContext user)
+        internal static bool ShowAction(Action action, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
-            IList actionIdList = null;
-            bool isFrameworkAdmin = false;
-            bool isAuthenticated = false;
-            if (user != null)
-            {
-                actionIdList = user.ActionIdList;
-                isAuthenticated = true;
-                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganization == null));
-            }
-
             if (action.AuthenticationRequired)
             {
                 if (isAuthenticated)
                 {
                     if (SetupActionIdList.Contains(action.ActionId))
                     {
-                        if (!(isFrameworkAdmin && (user.SelectedOrganization == null)))
+                        if (!isFrameworkAdmin)
                             return false;
                     }
                     else if (!(((actionIdList != null) && actionIdList.Contains(action.ActionId))

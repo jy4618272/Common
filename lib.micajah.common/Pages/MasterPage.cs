@@ -67,10 +67,11 @@ namespace Micajah.Common.Pages
         private string m_CustomDescription;
 
         private UserContext m_UserContext;
+        private IList m_ActionIdList;
+        private bool m_IsFrameworkAdmin;
+        private bool m_IsAuthenticated;
         private Guid m_OrganizationId;
         private Guid m_InstanceId;
-        private ArrayList m_ActionIdList;
-        private bool m_IsFrameworkAdmin;
         private Guid? m_ActiveActionId;
         private Micajah.Common.Bll.Action m_ActiveAction;
 
@@ -880,7 +881,7 @@ namespace Micajah.Common.Pages
                 if (m_VisibleBreadcrumbs.HasValue && m_VisibleBreadcrumbs.Value)
                     showBreadCrumbs = true;
             }
-            m_BreadCrumbs = new Breadcrumbs();
+            m_BreadCrumbs = new Breadcrumbs(this);
             m_BreadCrumbs.ShowBreadcrumbs = showBreadCrumbs;
             Controls.Add(m_BreadCrumbs);
         }
@@ -922,7 +923,7 @@ namespace Micajah.Common.Pages
         {
             if (VisibleMainMenu)
             {
-                m_MainMenu = new MainMenu();
+                m_MainMenu = new MainMenu(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 Controls.Add(m_MainMenu);
             }
 
@@ -936,13 +937,13 @@ namespace Micajah.Common.Pages
 
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)
             {
-                m_TopSubmenu = new Submenu(SubmenuPosition.Top);
+                m_TopSubmenu = new Submenu(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated, SubmenuPosition.Top);
                 m_TopSubmenu.ParentActionId = this.SubmenuParentActionId;
                 Controls.Add(m_TopSubmenu);
             }
             else if ((this.SubmenuPosition == SubmenuPosition.Left) && VisibleLeftArea && VisibleSubmenu)
             {
-                m_LeftSubmenu = new Submenu();
+                m_LeftSubmenu = new Submenu(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 m_LeftSubmenu.ParentActionId = this.SubmenuParentActionId;
                 Controls.Add(m_LeftSubmenu);
             }
@@ -952,7 +953,7 @@ namespace Micajah.Common.Pages
         {
             if ((this.ActiveActionId != Guid.Empty) || this.IsEmpty)
             {
-                m_DetailMenu = new DetailMenu();
+                m_DetailMenu = new DetailMenu(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 m_DefaultPageContent = new Control[] { m_DetailMenu };
             }
 
@@ -1235,7 +1236,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         private void CheckAccessToPage()
         {
-            CheckAccessToPage(Context, m_UserContext, m_OrganizationId, m_InstanceId, this.ActiveAction, this.IsSetupPage);
+            CheckAccessToPage(Context, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated, m_OrganizationId, m_InstanceId, this.ActiveAction, this.IsSetupPage);
         }
 
         private void SetAccessToControls(Micajah.Common.Bll.Action item, Control control)
@@ -1300,12 +1301,12 @@ namespace Micajah.Common.Pages
 
         #region Internal Methods
 
-        internal static void CheckAccessToPage(HttpContext http, UserContext user, Guid organizationId, Guid instanceId, Micajah.Common.Bll.Action action, bool isSetupPage)
+        internal static void CheckAccessToPage(HttpContext http, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated, Guid organizationId, Guid instanceId, Micajah.Common.Bll.Action action, bool isSetupPage)
         {
             if (isSetupPage)
             {
                 if ((string.Compare(http.Request.AppRelativeCurrentExecutionFilePath, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) != 0)
-                    && (!user.IsFrameworkAdministrator))
+                    && (!isFrameworkAdmin))
                     throw new HttpException(404, Resources.Error_404);
             }
             else
@@ -1329,7 +1330,7 @@ namespace Micajah.Common.Pages
                 string redirectUrl = null;
                 string returnUrl = http.Request.Url.PathAndQuery;
 
-                if (user != null)
+                if (isAuthenticated)
                 {
                     if (organizationId == Guid.Empty)
                         redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
@@ -1339,7 +1340,7 @@ namespace Micajah.Common.Pages
                     {
                         accessDenied = action.AccessDenied();
                         if (!accessDenied)
-                            accessDenied = (!ActionProvider.ShowAction(action, user));
+                            accessDenied = (!ActionProvider.ShowAction(action, actionIdList, isFrameworkAdmin, isAuthenticated));
                     }
                 }
                 else
@@ -1347,7 +1348,7 @@ namespace Micajah.Common.Pages
 
                 if (accessDenied)
                 {
-                    if (user != null)
+                    if (isAuthenticated)
                         throw new HttpException(403, Resources.Error_403);
                     else
                         redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
@@ -1509,6 +1510,7 @@ namespace Micajah.Common.Pages
             if (m_UserContext != null)
             {
                 m_ActionIdList = m_UserContext.ActionIdList;
+                m_IsAuthenticated = true;
                 m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganization == null));
                 if (m_UserContext.SelectedOrganization != null)
                     m_OrganizationId = m_UserContext.SelectedOrganization.OrganizationId;
@@ -1591,7 +1593,7 @@ namespace Micajah.Common.Pages
 
             if (this.VisibleHeader)
             {
-                m_Header = new Header();
+                m_Header = new Header(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 Controls.Add(m_Header);
             }
 
@@ -1604,7 +1606,7 @@ namespace Micajah.Common.Pages
 
             if (this.VisibleFooter)
             {
-                m_Footer = new Footer();
+                m_Footer = new Footer(this, m_UserContext);
                 Controls.Add(m_Footer);
             }
 
