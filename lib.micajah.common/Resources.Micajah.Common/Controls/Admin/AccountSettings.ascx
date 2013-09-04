@@ -101,7 +101,12 @@
             </table>
         </FooterTemplate>
     </asp:Repeater>
-    <div class="account-heading" id="divFreeUsageHeader" runat="server" Visible="False"><h2>Free Usage</h2></div>
+    <div class="account-heading" id="divFreeUsageHeader" runat="server" Visible="False">
+        <h2>Free Usage
+            <a id="aBtnCCUpdate2" class="buttons" style="margin-left: 10px; font-size: 12px" rel="facebox" href="#credit_card_form">Upgrade</a>
+            <a id="aPriceList" href='<%= Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Copyright.CompanyWebsiteUrl %>pricing' target="_blank" style="float: right; font-size: 15px; margin-top: 10px">Price List</a>
+        </h2>
+    </div>
     <asp:Repeater ID="Repeater4" runat="server" Visible="False">
         <HeaderTemplate>
             <table class="account-usage">
