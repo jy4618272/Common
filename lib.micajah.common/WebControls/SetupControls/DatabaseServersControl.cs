@@ -15,6 +15,8 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected override void OnLoad(EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             if (WebApplication.CommonDataSet.Website.Rows.Count == 0)
             {
                 List.EmptyDataText = string.Format(CultureInfo.CurrentCulture
@@ -22,6 +24,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     , CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.WebsitesPageVirtualPath));
                 List.ShowAddLink = EditForm.Visible = false;
             }
+
             base.OnLoad(e);
         }
 

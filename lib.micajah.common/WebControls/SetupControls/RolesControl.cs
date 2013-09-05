@@ -1,10 +1,9 @@
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Properties;
 using System;
 using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls.SetupControls
 {
@@ -34,6 +33,8 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             if (!IsPostBack)
             {
                 this.LoadResources();

@@ -1,11 +1,11 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Properties;
 using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls
 {
@@ -243,18 +243,7 @@ namespace Micajah.Common.WebControls
             get
             {
                 if (m_MasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
+                    m_MasterPage = Micajah.Common.Pages.MasterPage.GetMasterPage(Page);
                 return m_MasterPage;
             }
         }

@@ -1,12 +1,12 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Dal;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.SetupControls
@@ -334,6 +334,8 @@ namespace Micajah.Common.WebControls.SetupControls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
 
             m_UserContext = UserContext.Current;
 

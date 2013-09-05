@@ -1,7 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.AdminControls.AccountSettingsControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
-<%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
-<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4" %>
+
 <asp:PlaceHolder ID="PageContent" runat="server">
 <script type="text/javascript">
 

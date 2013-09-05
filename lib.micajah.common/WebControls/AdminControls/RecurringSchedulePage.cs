@@ -1,9 +1,9 @@
-﻿using System;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
+﻿using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Security;
+using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -26,7 +26,8 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
+                if (m_MasterPage == null)
+                    m_MasterPage = Micajah.Common.Pages.MasterPage.GetMasterPage(Page);
                 return m_MasterPage;
             }
         }

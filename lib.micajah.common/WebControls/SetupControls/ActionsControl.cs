@@ -228,11 +228,14 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             if (!IsPostBack)
             {
                 LoadResources();
                 Tree_DataBind();
             }
+
             MagicForm.ApplyStyle(CommandTable, EditForm.ColorScheme);
         }
 

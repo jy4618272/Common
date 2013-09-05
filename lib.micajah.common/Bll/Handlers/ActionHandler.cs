@@ -3,6 +3,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Security;
+using System;
 
 namespace Micajah.Common.Bll.Handlers
 {
@@ -85,25 +86,27 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.LdapMappingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapServerSettingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
-                    accessDenied = !(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta);
+                {
+                    accessDenied = (!(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta));
+                }
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
                 {
                     UserContext user = UserContext.Current;
-                    accessDenied = ((user != null) && (user.SelectedOrganization == null));
+                    accessDenied = ((user != null) && (user.SelectedOrganizationId == Guid.Empty));
                 }
                 else if (action.ActionId == ActionProvider.GoogleIntegrationPageActionId)
-                    accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled;
+                    accessDenied = (!FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled);
                 else if (action.ActionId == ActionProvider.ActivityReportActionId)
-                    accessDenied = !FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
+                    accessDenied = (!FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled);
                 else if (action.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
                 {
                     UserContext user = UserContext.Current;
-                    accessDenied = ((user != null) && (user.SelectedOrganization != null));
+                    accessDenied = ((user != null) && (user.SelectedOrganizationId != Guid.Empty));
                 }
                 else if (action.ActionId == ActionProvider.LoginAsUserGlobalNavigationLinkActionId)
                 {
                     UserContext user = UserContext.Current;
-                    accessDenied = (!((user != null) && user.CanLogOnAsUser && (user.SelectedOrganization == null)));
+                    accessDenied = (!((user != null) && user.CanLogOnAsUser && (user.SelectedOrganizationId == Guid.Empty)));
                 }
             }
 
@@ -165,7 +168,7 @@ namespace Micajah.Common.Bll.Handlers
             else if (action.ActionId == ActionProvider.LoginGlobalNavigationLinkActionId)
             {
                 UserContext user = UserContext.Current;
-                if ((user != null) && (user.SelectedOrganization == null))
+                if ((user != null) && (user.SelectedOrganizationId == Guid.Empty))
                     return CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
             }
 

@@ -1,11 +1,3 @@
-using System;
-using System.Collections;
-using System.Data;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -13,6 +5,13 @@ using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Collections;
+using System.Data;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -20,7 +19,7 @@ namespace Micajah.Common.WebControls.AdminControls
     /// <summary>
     /// The control to manage the group roles and actions in instances.
     /// </summary>
-    public class GroupsInstancesRolesControl : UserControl
+    public class GroupsInstancesRolesControl : MasterControl
     {
         #region Members
 
@@ -35,7 +34,6 @@ namespace Micajah.Common.WebControls.AdminControls
         protected ObjectDataSource EntityListDataSource;
         protected ObjectDataSource EntityDataSource;
 
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private Guid m_StartActionId;
         private ArrayList m_ActionIdList;
         private HtmlGenericControl m_ErrorDiv;
@@ -56,15 +54,6 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (obj != null) list.Add(obj);
                 }
                 return list;
-            }
-        }
-
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
             }
         }
 

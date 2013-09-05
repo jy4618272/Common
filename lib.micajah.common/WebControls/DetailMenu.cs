@@ -95,18 +95,7 @@ namespace Micajah.Common.WebControls
             get
             {
                 if (m_MasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
+                    m_MasterPage = Micajah.Common.Pages.MasterPage.GetMasterPage(Page);
                 return m_MasterPage;
             }
         }
@@ -347,9 +336,10 @@ namespace Micajah.Common.WebControls
             ActionCollection allItems = (this.DataSource as ActionCollection);
             if (allItems == null)
             {
-                if ((this.ParentAction == null) || (this.ParentAction.ActionType != ActionType.Page)) return;
+                if ((this.ParentAction == null) || (this.ParentAction.ActionType != ActionType.Page))
+                    return;
 
-                allItems = this.ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+                allItems = m_ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
 
                 bool flag = false;
                 if (MasterPage != null)
@@ -358,7 +348,7 @@ namespace Micajah.Common.WebControls
                 if (flag || (this.VisibleSiblingItems.HasValue && this.VisibleSiblingItems.Value))
                 {
                     ActionCollection siblingActions = new ActionCollection();
-                    foreach (Micajah.Common.Bll.Action item in ActionProvider.PagesAndControls.GetAvailableSiblingActions(this.ParentAction))
+                    foreach (Micajah.Common.Bll.Action item in ActionProvider.PagesAndControls.GetAvailableSiblingActions(m_ParentAction))
                     {
                         if (ActionProvider.ShowAction(item, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
                         {
@@ -1013,6 +1003,13 @@ namespace Micajah.Common.WebControls
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            if (this.ParentAction != null)
+            {
+                if (m_ParentAction.ActionId == ActionProvider.SetupPageActionId)
+                    Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+            }
+
             ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(this.Theme), this.Theme.ToString());
         }
 

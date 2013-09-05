@@ -441,7 +441,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public string LeftAreaHtml
         {
-            get { return (this.IsSetupPage ? null : (string.IsNullOrEmpty(m_LeftAreaHtml) ? FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Html : m_LeftAreaHtml)); }
+            get { return (string.IsNullOrEmpty(m_LeftAreaHtml) ? FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Html : m_LeftAreaHtml); }
             set { m_LeftAreaHtml = value; }
         }
 
@@ -450,7 +450,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public string BreadcrumbsCenterHtml
         {
-            get { return (this.IsSetupPage ? null : (string.IsNullOrEmpty(m_BreadcrumbsCenterHtml) ? FrameworkConfiguration.Current.WebApplication.MasterPage.Breadcrumbs.CenterHtml : m_BreadcrumbsCenterHtml)); }
+            get { return (string.IsNullOrEmpty(m_BreadcrumbsCenterHtml) ? FrameworkConfiguration.Current.WebApplication.MasterPage.Breadcrumbs.CenterHtml : m_BreadcrumbsCenterHtml); }
             set { m_BreadcrumbsCenterHtml = value; }
         }
 
@@ -459,7 +459,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public string BreadcrumbsRightHtml
         {
-            get { return (this.IsSetupPage ? null : (string.IsNullOrEmpty(m_BreadcrumbsRightHtml) ? FrameworkConfiguration.Current.WebApplication.MasterPage.Breadcrumbs.RightHtml : m_BreadcrumbsRightHtml)); }
+            get { return (string.IsNullOrEmpty(m_BreadcrumbsRightHtml) ? FrameworkConfiguration.Current.WebApplication.MasterPage.Breadcrumbs.RightHtml : m_BreadcrumbsRightHtml); }
             set { m_BreadcrumbsRightHtml = value; }
         }
 
@@ -535,7 +535,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleHeader
         {
-            get { return ((m_VisibleHeader.HasValue ? m_VisibleHeader.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Header.Visible) || (this.IsSetupPage && m_IsFrameworkAdmin)); }
+            get { return (m_VisibleHeader.HasValue ? m_VisibleHeader.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Header.Visible); }
             set { m_VisibleHeader = value; }
         }
 
@@ -544,7 +544,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleHeaderLinks
         {
-            get { return ((m_VisibleHeaderLinks.HasValue ? m_VisibleHeaderLinks.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Header.VisibleLinks) || (this.IsSetupPage && m_IsFrameworkAdmin)); }
+            get { return (m_VisibleHeaderLinks.HasValue ? m_VisibleHeaderLinks.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Header.VisibleLinks); }
             set { m_VisibleHeaderLinks = value; }
         }
 
@@ -562,7 +562,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleSearchControl
         {
-            get { return ((m_VisibleSearchControl.HasValue ? m_VisibleSearchControl.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Header.VisibleSearch) && (!this.IsSetupPage)); }
+            get { return (m_VisibleSearchControl.HasValue ? m_VisibleSearchControl.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Header.VisibleSearch); }
             set { m_VisibleSearchControl = value; }
         }
 
@@ -571,7 +571,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleMainMenu
         {
-            get { return ((m_VisibleMainMenu.HasValue ? m_VisibleMainMenu.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.MainMenu.Visible) && (!this.IsSetupPage)); }
+            get { return (m_VisibleMainMenu.HasValue ? m_VisibleMainMenu.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.MainMenu.Visible); }
             set { m_VisibleMainMenu = value; }
         }
 
@@ -580,11 +580,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleBreadcrumbs
         {
-            get
-            {
-                return ((m_VisibleBreadcrumbs.HasValue ? m_VisibleBreadcrumbs.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Breadcrumbs.Visible)
-                    || (this.IsSetupPage && m_IsFrameworkAdmin));
-            }
+            get { return (m_VisibleBreadcrumbs.HasValue ? m_VisibleBreadcrumbs.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Breadcrumbs.Visible); }
             set { m_VisibleBreadcrumbs = value; }
         }
 
@@ -597,7 +593,7 @@ namespace Micajah.Common.Pages
             {
                 return (m_VisibleLeftArea.HasValue
                     ? m_VisibleLeftArea.Value
-                    : (FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Visible && (!this.IsSetupPage) && (!this.IsSettingPage)));
+                    : (FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Visible && (!this.IsSettingPage)));
             }
             set { m_VisibleLeftArea = value; }
         }
@@ -611,7 +607,7 @@ namespace Micajah.Common.Pages
             {
                 return (m_VisibleSubmenu.HasValue
                     ? m_VisibleSubmenu.Value
-                    : (FrameworkConfiguration.Current.WebApplication.MasterPage.Submenu.Visible && (!this.IsSetupPage) && (!this.IsSettingPage)));
+                    : (FrameworkConfiguration.Current.WebApplication.MasterPage.Submenu.Visible && (!this.IsSettingPage)));
             }
             set { m_VisibleSubmenu = value; }
         }
@@ -639,7 +635,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleFooter
         {
-            get { return (m_VisibleFooter.HasValue ? m_VisibleFooter.Value : (FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.Visible || this.IsSetupPage)); }
+            get { return (m_VisibleFooter.HasValue ? m_VisibleFooter.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.Visible); }
             set { m_VisibleFooter = value; }
         }
 
@@ -1068,7 +1064,7 @@ namespace Micajah.Common.Pages
         /// <param name="writer">The HtmlTextWriter to render content to.</param>
         private void RenderTopSubmenu(HtmlTextWriter writer)
         {
-            if (writer == null || m_TopSubmenu == null || this.IsSetupPage) return;
+            if (writer == null || m_TopSubmenu == null) return;
             if ((m_TopSubmenu != null) && (m_TopSubmenu.Items != null) && (m_TopSubmenu.Items.Count == 0)) return;
 
             RenderControl(writer, m_TopSubmenu);
@@ -1263,12 +1259,6 @@ namespace Micajah.Common.Pages
 
         private void SetPageTitle()
         {
-            if (!this.IsSetupPage)
-            {
-                if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.Name))
-                    throw new ArgumentNullException(FrameworkConfiguration.Current.WebApplication.Name, Resources.ExceptionMessage_ApplicationNameIsEmpty);
-            }
-
             if (!string.IsNullOrEmpty(CustomName))
                 PageTitle = CustomName;
 
@@ -1354,6 +1344,20 @@ namespace Micajah.Common.Pages
                 if (!string.IsNullOrEmpty(redirectUrl))
                     http.Response.Redirect(redirectUrl);
             }
+        }
+
+        internal static Micajah.Common.Pages.MasterPage GetMasterPage(Page page)
+        {
+            Micajah.Common.Pages.MasterPage masterPage = null;
+            System.Web.UI.MasterPage m = page.Master;
+            while (m != null)
+            {
+                masterPage = (m as Micajah.Common.Pages.MasterPage);
+                if (masterPage != null)
+                    break;
+                m = m.Master;
+            }
+            return masterPage;
         }
 
         internal static void RegisterGlobalStyleSheet(Page page, MasterPageTheme theme)
@@ -1473,6 +1477,29 @@ namespace Micajah.Common.Pages
             }
         }
 
+        internal static void InitializeSetupPage(Page page)
+        {
+            MasterPage master = GetMasterPage(page);
+            if (master != null)
+            {
+                master.LeftAreaHtml = null;
+                master.BreadcrumbsCenterHtml = null;
+                master.BreadcrumbsRightHtml = null;
+
+                master.VisibleHeader
+                    = master.VisibleHeaderLinks
+                    = master.VisibleBreadcrumbs
+                    = master.VisibleFooter
+                    = true;
+
+                master.VisibleSearchControl
+                    = master.VisibleMainMenu
+                    = master.VisibleLeftArea
+                    = master.VisibleSubmenu
+                    = false;
+            }
+        }
+
         internal static void SetPageTitle(Page page, Micajah.Common.Bll.Action action)
         {
             SetPageTitle(page, ((action == null) ? null : action.Name));
@@ -1508,11 +1535,11 @@ namespace Micajah.Common.Pages
             {
                 m_ActionIdList = m_UserContext.ActionIdList;
                 m_IsAuthenticated = true;
-                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganization == null));
-                if (m_UserContext.SelectedOrganization != null)
-                    m_OrganizationId = m_UserContext.SelectedOrganization.OrganizationId;
-                if (m_UserContext.SelectedInstance != null)
-                    m_InstanceId = m_UserContext.SelectedInstance.InstanceId;
+                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganizationId == Guid.Empty));
+                if (m_UserContext.SelectedOrganizationId != Guid.Empty)
+                    m_OrganizationId = m_UserContext.SelectedOrganizationId;
+                if (m_UserContext.SelectedInstanceId != Guid.Empty)
+                    m_InstanceId = m_UserContext.SelectedInstanceId;
             }
 
             if (!IsPostBack)

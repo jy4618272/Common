@@ -34,6 +34,8 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             base.OnLoad(e);
 
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             hlExcelFile.NavigateUrl = Request.Url.ToString() + "?file=excel";
             CommonDataSet.SettingDataTable table = Micajah.Common.Application.WebApplication.CommonDataSet.Setting;
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} = " + ((int)SettingType.Counter).ToString(), table.SettingTypeIdColumn.ColumnName);
@@ -49,7 +51,6 @@ namespace Micajah.Common.WebControls.SetupControls
             InitDataGridColumns();
             cgvList.DataSource = BuildReport();
             cgvList.DataBind();
-
         }
 
         protected override void Render(HtmlTextWriter writer)

@@ -1,26 +1,23 @@
-﻿using System;
-using System.Data;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using ChargifyNET;
+﻿using ChargifyNET;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
-    public class AccountSettingsControl : UserControl
+    public class AccountSettingsControl : Micajah.Common.WebControls.SetupControls.MasterControl
     {
-        #region Overriden Methods
-        protected const string ControlIdPrefix = "v";
-        private Guid m_OrgId = Guid.Empty;
-        private Guid m_InstId = Guid.Empty;
+        #region Members
 
         protected HtmlControl divCCInfo;
         protected Button btnUpdateBillingPlan;
@@ -63,10 +60,6 @@ namespace Micajah.Common.WebControls.AdminControls
         protected HtmlContainerControl divTrainingHeader;
         protected HtmlContainerControl divTraining;
 
-        private SettingCollection m_PaidSettings;
-        private SettingCollection m_CounterSettings;
-        private decimal m_TotalSum = 0;
-
         protected TextBox txtCCNumber;
         protected TextBox txtCCExpMonth;
         protected TextBox txtCCExpYear;
@@ -76,20 +69,18 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected RadToolTip RadToolTip1;
 
-        protected ChargifyConnect mChargify = null;
+        private SettingCollection m_PaidSettings;
+        private SettingCollection m_CounterSettings;
+        private decimal m_TotalSum = 0;
+        private Guid m_OrgId = Guid.Empty;
+        private Guid m_InstId = Guid.Empty;
+
+        protected ChargifyConnect m_Chargify = null;
         protected bool ChargifyEnabled = FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
 
-        protected decimal TotalAmount
-        {
-            get { return ViewState["TotalAmount"] == null ? 0 : (decimal)ViewState["TotalAmount"]; }
-            set { ViewState["TotalAmount"] = value; }
-        }
+        #endregion
 
-        protected int SubscriptionId
-        {
-            get { return ViewState["SubscriptionId"] == null ? 0 : (int)ViewState["SubscriptionId"]; }
-            set { ViewState["SubscriptionId"] = value; }
-        }
+        #region Private Properties
 
         private Guid OrganizationId
         {
@@ -135,15 +126,86 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
+        #endregion
+
+        #region Protected Properties
+
+        protected decimal TotalAmount
+        {
+            get { return ViewState["TotalAmount"] == null ? 0 : (decimal)ViewState["TotalAmount"]; }
+            set { ViewState["TotalAmount"] = value; }
+        }
+
+        protected int SubscriptionId
+        {
+            get { return ViewState["SubscriptionId"] == null ? 0 : (int)ViewState["SubscriptionId"]; }
+            set { ViewState["SubscriptionId"] = value; }
+        }
+
         protected ChargifyConnect Chargify
         {
-            get { if (mChargify == null) mChargify = ChargifyProvider.CreateChargify(); return mChargify; }
+            get { if (m_Chargify == null) m_Chargify = ChargifyProvider.CreateChargify(); return m_Chargify; }
         }
 
         protected bool IsNewSubscription
         {
             get { return ViewState["IsNewSubscription"] == null ? true : (bool)ViewState["IsNewSubscription"]; }
             set { ViewState["IsNewSubscription"] = value; }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void DisablePurchaseButtons()
+        {
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxPurchaseInitScript", @"$(""input[value=Purchase]"").fancybox({
+                    'type': 'inline',
+                    'href': '#credit_card_form',
+                    'width': '400',
+                    'height': 'auto',
+                    'showNavArrows': false,
+                    'titlePosition': 'inside',
+                    'transitionIn': 'none',
+                    'transitionOut': 'none'
+                });", true);
+
+            btnPurchase1Hour.OnClientClick = "$(\"#" + btnPurchase1Hour.ClientID + "\").value=\"1\"; return false;";
+            btnPurchase3Hours.OnClientClick = "$(\"#" + btnPurchase3Hours.ClientID + "\").value=\"3\"; return false;";
+            btnPurchase8Hours.OnClientClick = "$(\"#" + btnPurchase8Hours.ClientID + "\").value=\"8\"; return false;";
+        }
+
+        private void EnsureActiveInstance()
+        {
+            if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
+            {
+                UserContext user = UserContext.Current;
+                if (user != null)
+                {
+                    if (user.SelectedInstance == null)
+                        Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, false));
+                }
+            }
+        }
+
+        private void InitPhoneSupport()
+        {
+            SettingCollection settings = this.PaidSettings;
+            Setting setting = settings["PhoneSupport"];
+            if (setting == null)
+            {
+                divPhoneSupport.Visible = false;
+                return;
+            }
+
+            lPhoneSupport.Text = FrameworkConfiguration.Current.WebApplication.Support.Phone;
+            bool isChecked = false;
+            if (!Boolean.TryParse(setting.Value, out isChecked))
+            {
+                if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
+            }
+            if (isChecked && setting.Paid && setting.Price > 0) m_TotalSum += setting.Price;
+            if (!IsPostBack) chkPhoneSupport.Checked = isChecked;
         }
 
         private void List_DataBind()
@@ -169,7 +231,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 DataTable dt = new DataTable();
                 dt.Columns.Add(new DataColumn("SettingName", Type.GetType("System.String")));
                 dt.Columns.Add(new DataColumn("UsageCount", Type.GetType("System.Int32")));
-                foreach(Setting setting in this.CounterSettings)
+                foreach (Setting setting in this.CounterSettings)
                 {
                     if (setting.Paid)
                     {
@@ -259,11 +321,11 @@ namespace Micajah.Common.WebControls.AdminControls
                             row["UsageCount"] = usageCount;
                             row["UsageCountLimit"] = setting.UsageCountLimit;
                             row["UsagePersent"] = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * usageCount);
-                            dtFree.Rows.Add(row);                            
+                            dtFree.Rows.Add(row);
                         }
                     }
                 }
-                if (dtPaid.Rows.Count>0)
+                if (dtPaid.Rows.Count > 0)
                 {
                     lAccountUsage.Text = "Paid Usage";
                     Repeater3.DataSource = dtPaid;
@@ -274,7 +336,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     divPaidUsageHeader.Visible = false;
                     Repeater3.Visible = false;
                 }
-                if (dtFree.Rows.Count>0)
+                if (dtFree.Rows.Count > 0)
                 {
                     divFreeUsageHeader.Visible = true;
                     Repeater4.Visible = true;
@@ -300,75 +362,141 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-        protected override void OnLoad(EventArgs e)
+        private void InitBillingControls(bool updateUsage)
         {
-            base.OnLoad(e);
-            EnsureActiveInstance();
-            Repeater1.DataSource = this.PaidSettings;
-            Repeater1.DataBind();
+            DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
 
-            Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-
-            masterPage.VisibleBreadcrumbs = false;
-            
-            if (ChargifyEnabled && CurrentBillingPlan != BillingPlan.Custom)
+            ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
+            if (_custSubscr != null && _custSubscr.CreditCard != null)
             {
-                masterPage.EnableFancyBox = true;
-                this.RegisterFancyBoxInitScript();
-            }
-
-            if (IsPostBack) return;
-
-            this.List_DataBind();
-
-            if (CurrentBillingPlan == BillingPlan.Custom || !ChargifyEnabled) return;
-
-            lblTraining1HourPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
-            lblTraining3HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
-            lblTraining8HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
-
-            if (Request.QueryString["st"] == "ok")
-            {
-                masterPage.MessageType = NoticeMessageType.Success;
-                masterPage.Message = "Thank You. Your Credit Card Registered Successfully!";
-                if (!string.IsNullOrEmpty(Request.QueryString["msg"])) masterPage.Message += Request.QueryString["msg"];
-            }
-            else if (Request.QueryString["st"] == "cancel")
-            {
-                masterPage.MessageType = NoticeMessageType.Success;
-                masterPage.Message = "Your Credit Card registration was Removed Successfully!";
-            }
-            else if (Request.QueryString["st"] == "reactivated")
-            {
-                masterPage.MessageType = NoticeMessageType.Success;
-                masterPage.Message = "Your Credit Card registration was Reactivated Successfully!";
-            }
-
-            SettingCollection settings = this.PaidSettings;
-            if (settings["Training1Hour"] != null)
-                lblTraining1HourPrice.Text = settings["Training1Hour"].Price.ToString("$0.00");
-            if (settings["Training3Hours"] != null)
-                lblTraining3HoursPrice.Text = settings["Training3Hours"].Price.ToString("$0.00");
-            if (settings["Training8Hours"] != null)
-                lblTraining8HoursPrice.Text = settings["Training8Hours"].Price.ToString("$0.00");
-
-            ISubscription _subscription = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
-            if (_subscription != null)
-            {
-                ICreditCardView _cc = _subscription.CreditCard;
-                if (_cc != null)
+                _expDate = _custSubscr.CurrentPeriodEndsAt;
+                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.SelectedInstance);
+                TotalAmount = m_TotalSum;
+                SubscriptionId = _custSubscr.SubscriptionID;
+                lCCStatus.Text = "Credit Card Registered and " + _custSubscr.State.ToString() + ".";
+                TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
+                if (_expDate.HasValue)
                 {
-                    txtCCNumber.Text = _cc.FullNumber;
-                    txtCCExpMonth.Text = _cc.ExpirationMonth.ToString();
-                    txtCCExpYear.Text = _cc.ExpirationYear.ToString().Length > 2
-                                            ? _cc.ExpirationYear.ToString().Substring(2)
-                                            : _cc.ExpirationYear.ToString();
-                    IsNewSubscription = false;
+                    smallNextBillDate.Visible = true;
+                    smallNextBillDate.InnerText = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
                 }
-                divCancelAccountHeader.Visible = _cc != null && _subscription.State != SubscriptionState.Canceled;
-                divCancelAccount.Visible = divCancelAccountHeader.Visible;
             }
-            else IsNewSubscription = true;
+            else
+            {
+                lCCStatus.Text = "No Credit Card on File.";
+                if (!IsPostBack) DisablePurchaseButtons();
+            }
+            if (_custSubscr != null && _custSubscr.CreditCard != null)
+            {
+                System.Collections.Generic.List<TransactionType> transTypes = new List<TransactionType>();
+                transTypes.Add(TransactionType.Payment);
+                System.Collections.Generic.IDictionary<int, ITransaction> trans = Chargify.GetTransactionsForSubscription(_custSubscr.SubscriptionID, 1, 25, transTypes);
+                if (trans != null && trans.Count > 0)
+                {
+                    divPaymentHistoryHeader.Visible = true;
+                    cgvTransactList.Visible = true;
+                    cgvTransactList.DataSource = trans.Values;
+                    cgvTransactList.DataBind();
+                }
+            }
+        }
+
+        private void PurchaseTrainingHours(string buttonID)
+        {
+            this.MasterPage.MessageType = NoticeMessageType.Error;
+
+            Setting setting = null;
+            string trainingName = string.Empty;
+
+            switch (buttonID)
+            {
+                case "btnPurchase1Hour":
+                    setting = PaidSettings["Training1Hour"];
+                    trainingName = "Purchase Training 1 Hour";
+                    break;
+                case "btnPurchase3Hours":
+                    setting = PaidSettings["Training3Hours"];
+                    trainingName = "Purchase Training 3 Hours";
+                    break;
+                case "btnPurchase8Hours":
+                    setting = PaidSettings["Training8Hours"];
+                    trainingName = "Purchase Training 8 Hours";
+                    break;
+            }
+
+            if (setting == null)
+            {
+                this.MasterPage.Message = trainingName + ": Component definition is not found.";
+                this.List_DataBind();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(setting.ExternalId))
+            {
+                this.MasterPage.Message = trainingName + ": Component External Id is not defined.";
+                this.List_DataBind();
+                return;
+            }
+
+            int _cid = 0;
+            int _count = 1;
+
+            if (!int.TryParse(setting.ExternalId, out _cid))
+            {
+                this.MasterPage.Message = trainingName + ": Component External Id is invalid.";
+                this.List_DataBind();
+                return;
+            }
+
+            try
+            {
+                Chargify.AddUsage(SubscriptionId, _cid, _count, "Purchase Training");
+            }
+            catch (ChargifyException cex)
+            {
+                if ((int)cex.StatusCode == 422)
+                {
+                    this.MasterPage.Message = trainingName + ": Credit Card Transaction Failed!";
+                }
+                else this.MasterPage.Message = cex.Message;
+                this.List_DataBind();
+                return;
+            }
+            catch (Exception ex)
+            {
+                this.MasterPage.Message = ex.Message;
+                this.List_DataBind();
+                return;
+            }
+            this.MasterPage.MessageType = NoticeMessageType.Success;
+            this.MasterPage.Message = "Your " + trainingName +
+                                 " proccessed successfully! You will receive confirmation email.";
+            UserContext usr = UserContext.Current;
+            string _usrFullName = usr.FirstName + " " + usr.LastName;
+            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) + _usrFullName + " from " + usr.SelectedOrganization.Name + " " + usr.SelectedInstance.Name + " purchased " + trainingName + ".";
+            string _body1 = "Hi, " + _usrFullName + "\r\n\r\nYou purchased " +
+                            FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName +
+                            ".\r\nOur support team will contact with you ASAP to schedule a time when we can do a training for you.\r\n\r\nThanks.";
+            string _body2 = "Please, contact me via Email " + usr.Email +
+                           (!string.IsNullOrEmpty(usr.Phone) ? " or by phone " + usr.Phone : string.Empty) +
+                           (!string.IsNullOrEmpty(usr.MobilePhone) ? " or by mobile " + usr.MobilePhone : string.Empty) +
+                           " to schedule a time when we can do a training.";
+            try
+            {
+
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Email.SalesTeam, FrameworkConfiguration.Current.WebApplication.Email.SalesTeam, usr.Email,
+                                  string.Empty, "Thank You for purchase " + FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName, _body1, false, false, EmailSendingReason.Undefined);
+                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Email.SalesTeam,
+                                  string.Empty, _subject, _body2, false, false, EmailSendingReason.Undefined);
+            }
+            catch (Exception ex)
+            {
+                this.MasterPage.MessageType = NoticeMessageType.Warning;
+                this.MasterPage.Message = "Your " + trainingName +
+                                     " proccessed successfully! But Confirmation emails was not sent.";
+                this.MasterPage.MessageDescription = ex.ToString();
+            }
+            this.List_DataBind();
         }
 
         private void RegisterFancyBoxInitScript()
@@ -386,65 +514,9 @@ namespace Micajah.Common.WebControls.AdminControls
                 , true);
         }
 
-        protected override void OnPreRender(EventArgs e)
-        {
-            base.OnPreRender(e);
+        #endregion
 
-            ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.AccountSettingsStyleSheet, "AccountSettingsStyleSheet", false);
-
-        }
-
-        protected void EnsureActiveInstance()
-        {
-            if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
-            {
-                UserContext user = UserContext.Current;
-                if (user != null)
-                {
-                    if (user.SelectedInstance == null)
-                        Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, false));
-                }
-            }
-        }
-
-        private void InitBillingControls(bool updateUsage)
-        {
-            DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
-            
-            ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
-            if (_custSubscr != null && _custSubscr.CreditCard != null)
-            {
-                _expDate = _custSubscr.CurrentPeriodEndsAt;
-                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.SelectedInstance);
-                TotalAmount = m_TotalSum;
-                SubscriptionId = _custSubscr.SubscriptionID;
-                lCCStatus.Text = "Credit Card Registered and "+_custSubscr.State.ToString()+".";
-                TimeSpan _dateDiff = (TimeSpan)(_expDate - DateTime.UtcNow);
-                if (_expDate.HasValue)
-                {
-                    smallNextBillDate.Visible = true;
-                    smallNextBillDate.InnerText = "Next billed on " + _expDate.Value.ToString("dd-MMM-yyyy");
-                }
-            }
-            else
-            {
-                lCCStatus.Text = "No Credit Card on File.";
-                if (!IsPostBack) DisablePurchaseButtons();
-            }
-            if (_custSubscr!=null && _custSubscr.CreditCard!=null)
-            {
-                System.Collections.Generic.List<TransactionType> transTypes=new List<TransactionType>();
-                transTypes.Add(TransactionType.Payment);
-                System.Collections.Generic.IDictionary<int, ITransaction> trans = Chargify.GetTransactionsForSubscription(_custSubscr.SubscriptionID, 1, 25, transTypes);
-                if (trans != null && trans.Count > 0)
-                {
-                    divPaymentHistoryHeader.Visible = true;
-                    cgvTransactList.Visible = true;
-                    cgvTransactList.DataSource = trans.Values;
-                    cgvTransactList.DataBind();
-                }
-            }
-        }
+        #region Protected Methods
 
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -487,147 +559,10 @@ namespace Micajah.Common.WebControls.AdminControls
             e.Item.Controls.Add(div0);
         }
 
-        private void DisablePurchaseButtons()
-        {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxPurchaseInitScript", @"$(""input[value=Purchase]"").fancybox({
-                    'type': 'inline',
-                    'href': '#credit_card_form',
-                    'width': '400',
-                    'height': 'auto',
-                    'showNavArrows': false,
-                    'titlePosition': 'inside',
-                    'transitionIn': 'none',
-                    'transitionOut': 'none'
-                });", true);
-
-            btnPurchase1Hour.OnClientClick = "$(\"#" + btnPurchase1Hour.ClientID + "\").value=\"1\"; return false;";
-            btnPurchase3Hours.OnClientClick = "$(\"#" + btnPurchase3Hours.ClientID + "\").value=\"3\"; return false;";
-            btnPurchase8Hours.OnClientClick = "$(\"#" + btnPurchase8Hours.ClientID + "\").value=\"8\"; return false;";
-        }
-
         protected void btnPurchaseHours_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             PurchaseTrainingHours(btn.ID);
-        }
-
-        protected void PurchaseTrainingHours(string buttonID)
-        {
-            Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-            masterPage.MessageType = NoticeMessageType.Error;
-
-            Setting setting = null;
-            string trainingName = string.Empty;
-
-            switch (buttonID)
-            {
-                case "btnPurchase1Hour":
-                    setting = PaidSettings["Training1Hour"];
-                    trainingName = "Purchase Training 1 Hour";
-                    break;
-                case "btnPurchase3Hours":
-                    setting = PaidSettings["Training3Hours"];
-                    trainingName = "Purchase Training 3 Hours";
-                    break;
-                case "btnPurchase8Hours":
-                    setting = PaidSettings["Training8Hours"];
-                    trainingName = "Purchase Training 8 Hours";
-                    break;
-            }
-
-            if (setting == null)
-            {
-                masterPage.Message = trainingName + ": Component definition is not found.";
-                this.List_DataBind();
-                return;
-            }
-
-            if (string.IsNullOrEmpty(setting.ExternalId))
-            {
-                masterPage.Message = trainingName + ": Component External Id is not defined.";
-                this.List_DataBind();
-                return;
-            }
-
-            int _cid = 0;
-            int _count = 1;
-
-            if (!int.TryParse(setting.ExternalId, out _cid))
-            {
-                masterPage.Message = trainingName + ": Component External Id is invalid.";
-                this.List_DataBind();
-                return;
-            }
-
-            try
-            {
-                Chargify.AddUsage(SubscriptionId, _cid, _count, "Purchase Training");
-            }
-            catch (ChargifyException cex)
-            {
-                if ((int)cex.StatusCode == 422)
-                {
-                    masterPage.Message = trainingName + ": Credit Card Transaction Failed!";
-                }
-                else masterPage.Message = cex.Message;
-                this.List_DataBind();
-                return;
-            }
-            catch (Exception ex)
-            {
-                masterPage.Message = ex.Message;
-                this.List_DataBind();
-                return;
-            }
-            masterPage.MessageType = NoticeMessageType.Success;
-            masterPage.Message = "Your " + trainingName +
-                                 " proccessed successfully! You will receive confirmation email.";
-            UserContext usr = UserContext.Current;
-            string _usrFullName = usr.FirstName + " " + usr.LastName;
-            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) +  _usrFullName + " from " + usr.SelectedOrganization.Name+ " "+usr.SelectedInstance.Name + " purchased " + trainingName+".";
-            string _body1 = "Hi, " + _usrFullName + "\r\n\r\nYou purchased " +
-                            FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName +
-                            ".\r\nOur support team will contact with you ASAP to schedule a time when we can do a training for you.\r\n\r\nThanks.";
-            string _body2 = "Please, contact me via Email " + usr.Email +
-                           (!string.IsNullOrEmpty(usr.Phone) ? " or by phone " + usr.Phone : string.Empty) +
-                           (!string.IsNullOrEmpty(usr.MobilePhone) ? " or by mobile " + usr.MobilePhone : string.Empty) +
-                           " to schedule a time when we can do a training.";
-            try
-            {
-
-                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Email.SalesTeam, FrameworkConfiguration.Current.WebApplication.Email.SalesTeam, usr.Email,
-                                  string.Empty, "Thank You for purchase " + FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName, _body1, false, false, EmailSendingReason.Undefined);
-                Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Support.Email, FrameworkConfiguration.Current.WebApplication.Email.SalesTeam,
-                                  string.Empty, _subject, _body2, false, false, EmailSendingReason.Undefined);
-            }
-            catch (Exception ex)
-            {
-                masterPage.MessageType = NoticeMessageType.Warning;
-                masterPage.Message = "Your " + trainingName +
-                                     " proccessed successfully! But Confirmation emails was not sent.";
-                masterPage.MessageDescription = ex.ToString();
-            }
-            this.List_DataBind();
-        }
-
-        protected void InitPhoneSupport()
-        {
-            SettingCollection settings = this.PaidSettings;
-            Setting setting = settings["PhoneSupport"];
-            if (setting == null)
-            {
-                divPhoneSupport.Visible = false;
-                return;
-            }
-
-            lPhoneSupport.Text = FrameworkConfiguration.Current.WebApplication.Support.Phone;
-            bool isChecked = false;
-            if (!Boolean.TryParse(setting.Value, out isChecked))
-            {
-                if (!Boolean.TryParse(setting.DefaultValue, out isChecked)) isChecked = false;
-            }
-            if (isChecked && setting.Paid && setting.Price > 0) m_TotalSum += setting.Price;
-            if (!IsPostBack) chkPhoneSupport.Checked = isChecked;
         }
 
         protected void checkBox_CheckedChanged(object sender, EventArgs e)
@@ -657,9 +592,8 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             else
             {
-                Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-                masterPage.MessageType = NoticeMessageType.Error;
-                masterPage.Message = "Your Credit Card Registration was not deleted!";
+                this.MasterPage.MessageType = NoticeMessageType.Error;
+                this.MasterPage.Message = "Your Credit Card Registration was not deleted!";
             }
         }
 
@@ -717,7 +651,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (txtCCNumber.Text.Contains("XXXX"))
             {
-                if (_subscr != null && _subscr.CreditCard!=null && _subscr.State != SubscriptionState.Active)
+                if (_subscr != null && _subscr.CreditCard != null && _subscr.State != SubscriptionState.Active)
                 {
                     Chargify.ReactivateSubscription(_subscr.SubscriptionID);
                     Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=reactivated");
@@ -776,9 +710,90 @@ namespace Micajah.Common.WebControls.AdminControls
                         break;
                 }
             }
-            Micajah.Common.Pages.MasterPage masterPage = (Micajah.Common.Pages.MasterPage)Page.Master;
-            Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=ok" + (!string.IsNullOrEmpty(masterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(masterPage.Message) : string.Empty));
+            Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=ok" + (!string.IsNullOrEmpty(this.MasterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(this.MasterPage.Message) : string.Empty));
         }
+
+        #endregion
+
+        #region Overriden Methods
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            EnsureActiveInstance();
+            Repeater1.DataSource = this.PaidSettings;
+            Repeater1.DataBind();
+
+            this.MasterPage.VisibleBreadcrumbs = false;
+
+            if (ChargifyEnabled && CurrentBillingPlan != BillingPlan.Custom)
+            {
+                this.MasterPage.EnableFancyBox = true;
+                this.RegisterFancyBoxInitScript();
+            }
+
+            if (IsPostBack) return;
+
+            this.List_DataBind();
+
+            if (CurrentBillingPlan == BillingPlan.Custom || !ChargifyEnabled) return;
+
+            lblTraining1HourPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
+            lblTraining3HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
+            lblTraining8HoursPrice.Style.Add(HtmlTextWriterStyle.TextAlign, "right");
+
+            if (Request.QueryString["st"] == "ok")
+            {
+                this.MasterPage.MessageType = NoticeMessageType.Success;
+                this.MasterPage.Message = "Thank You. Your Credit Card Registered Successfully!";
+                if (!string.IsNullOrEmpty(Request.QueryString["msg"])) this.MasterPage.Message += Request.QueryString["msg"];
+            }
+            else if (Request.QueryString["st"] == "cancel")
+            {
+                this.MasterPage.MessageType = NoticeMessageType.Success;
+                this.MasterPage.Message = "Your Credit Card registration was Removed Successfully!";
+            }
+            else if (Request.QueryString["st"] == "reactivated")
+            {
+                this.MasterPage.MessageType = NoticeMessageType.Success;
+                this.MasterPage.Message = "Your Credit Card registration was Reactivated Successfully!";
+            }
+
+            SettingCollection settings = this.PaidSettings;
+            if (settings["Training1Hour"] != null)
+                lblTraining1HourPrice.Text = settings["Training1Hour"].Price.ToString("$0.00");
+            if (settings["Training3Hours"] != null)
+                lblTraining3HoursPrice.Text = settings["Training3Hours"].Price.ToString("$0.00");
+            if (settings["Training8Hours"] != null)
+                lblTraining8HoursPrice.Text = settings["Training8Hours"].Price.ToString("$0.00");
+
+            ISubscription _subscription = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
+            if (_subscription != null)
+            {
+                ICreditCardView _cc = _subscription.CreditCard;
+                if (_cc != null)
+                {
+                    txtCCNumber.Text = _cc.FullNumber;
+                    txtCCExpMonth.Text = _cc.ExpirationMonth.ToString();
+                    txtCCExpYear.Text = _cc.ExpirationYear.ToString().Length > 2
+                                            ? _cc.ExpirationYear.ToString().Substring(2)
+                                            : _cc.ExpirationYear.ToString();
+                    IsNewSubscription = false;
+                }
+                divCancelAccountHeader.Visible = _cc != null && _subscription.State != SubscriptionState.Canceled;
+                divCancelAccount.Visible = divCancelAccountHeader.Visible;
+            }
+            else IsNewSubscription = true;
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+
+            ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.AccountSettingsStyleSheet, "AccountSettingsStyleSheet", false);
+
+        }
+
         #endregion
     }
 }

@@ -1,16 +1,15 @@
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.Web;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
-    public class CustomStyleSheetEditControl : UserControl
+    public class CustomStyleSheetEditControl : Micajah.Common.WebControls.SetupControls.MasterControl
     {
         #region Members
 
@@ -22,20 +21,6 @@ namespace Micajah.Common.WebControls.AdminControls
         protected HyperLink CancelLink;
 
         private bool m_IsModernTheme;
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
-
-        #endregion
-
-        #region Protected Properties
-
-        protected Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
-            }
-        }
 
         #endregion
 
@@ -97,8 +82,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     {
                         if (this.MasterPage != null)
                         {
-                            m_MasterPage.MessageType = NoticeMessageType.Success;
-                            m_MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
+                            this.MasterPage.MessageType = NoticeMessageType.Success;
+                            this.MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
                         }
                     }
                 }

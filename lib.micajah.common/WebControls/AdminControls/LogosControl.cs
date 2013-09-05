@@ -1,12 +1,12 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using Micajah.Common.WebControls.SetupControls;
 using System;
 using System.Data;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -18,20 +18,10 @@ namespace Micajah.Common.WebControls.AdminControls
         #region Members
 
         protected UpdatePanel UpdatePanelLogos;
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
 
         #endregion
 
         #region Private Properties
-
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
-            }
-        }
 
         private Guid SelectedObjectId
         {
@@ -225,8 +215,8 @@ namespace Micajah.Common.WebControls.AdminControls
                         {
                             if (this.MasterPage != null)
                             {
-                                m_MasterPage.MessageType = NoticeMessageType.Success;
-                                m_MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
+                                this.MasterPage.MessageType = NoticeMessageType.Success;
+                                this.MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
                             }
                         }
                     }

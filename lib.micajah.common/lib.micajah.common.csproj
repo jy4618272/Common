@@ -388,7 +388,7 @@
     <Compile Include="WebControls\AdminControls\OrganizationProfileControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\AdminControls\RecurringScheduleControl.cs">
+    <Compile Include="WebControls\AdminControls\RecurringSchedulePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\RuleParametersControl.cs">
@@ -423,6 +423,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\SecurityControls\OAuthControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\MasterControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\Token.cs" />
@@ -770,7 +773,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\CommonGridView.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ComboBox.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\DateRange.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\HtmlEditor.js" />

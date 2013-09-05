@@ -1,6 +1,6 @@
+using Micajah.Common.Properties;
 using System.Text;
 using System.Web.UI;
-using Micajah.Common.Properties;
 using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SetupControls
@@ -68,6 +68,13 @@ namespace Micajah.Common.WebControls.SetupControls
         #endregion
 
         #region Overriden Methods
+
+        protected override void OnLoad(System.EventArgs e)
+        {
+            base.OnLoad(e);
+
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+        }
 
         protected override void LoadResources()
         {

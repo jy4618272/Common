@@ -23,7 +23,6 @@ namespace Micajah.Common.WebControls
         private Action m_ParentAction;
         private Micajah.Common.Pages.MasterPage m_MasterPage;
         private SubmenuPosition m_Position;
-        private UserContext m_UserContext;
         private IList m_ActionIdList;
         private bool m_IsFrameworkAdmin;
         private bool m_IsAuthenticated;
