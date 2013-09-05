@@ -1,9 +1,3 @@
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -12,6 +6,13 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.SessionState;
+using DotNetOpenAuth.OAuth.Messages;
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
 
 namespace Micajah.Common.Security
 {
@@ -56,12 +57,6 @@ namespace Micajah.Common.Security
         private const string OAuthAuthorizationSecretKey = "mc.OAuthAutSecret";
 
         private static ArrayList s_ReservedKeys;
-
-        [NonSerialized]
-        private Organization m_SelectedOrganization;
-
-        [NonSerialized]
-        private Instance m_SelectedInstance;
 
         #endregion
 
@@ -517,12 +512,7 @@ namespace Micajah.Common.Security
         /// </summary>
         public Organization SelectedOrganization
         {
-            get
-            {
-                if (m_SelectedOrganization == null)
-                    m_SelectedOrganization = OrganizationProvider.GetOrganization(this.SelectedOrganizationId);
-                return m_SelectedOrganization;
-            }
+            get { return OrganizationProvider.GetOrganization(this.SelectedOrganizationId); }
         }
 
         /// <summary>
@@ -540,15 +530,14 @@ namespace Micajah.Common.Security
         {
             get
             {
-                if (m_SelectedInstance == null)
-                {
-                    Guid organizationId = this.SelectedOrganizationId;
-                    Guid instanceId = this.SelectedInstanceId;
+                Instance inst = null;
+                Guid organizationId = this.SelectedOrganizationId;
+                Guid instanceId = this.SelectedInstanceId;
 
-                    if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
-                        m_SelectedInstance = InstanceProvider.GetInstance(instanceId, organizationId);
-                }
-                return m_SelectedInstance;
+                if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
+                    inst = InstanceProvider.GetInstance(instanceId, organizationId);
+
+                return inst;
             }
         }
 
@@ -736,7 +725,6 @@ namespace Micajah.Common.Security
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = CustomUrlProvider.CreateApplicationAbsoluteUrl(startUrl);
             base[SelectedInstanceIdKey] = newInstance.InstanceId;
-            m_SelectedInstance = newInstance;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
@@ -757,7 +745,6 @@ namespace Micajah.Common.Security
 
             Breadcrumbs.Clear();
 
-            m_SelectedInstance = null;
             base[SelectedInstanceIdKey] = Guid.Empty;
 
             ArrayList groupIdList = new ArrayList();
@@ -805,7 +792,6 @@ namespace Micajah.Common.Security
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = CustomUrlProvider.CreateApplicationAbsoluteUrl(startUrl);
-            m_SelectedOrganization = newOrganization;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
