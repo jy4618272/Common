@@ -1,9 +1,8 @@
-<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.Reports.ActivityReportControl" %>
+<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.SetupControls.ActivityReportControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
-<%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
-        <asp:HyperLink runat="server" ID="hlExcelFile" NavigateUrl="ActivityReport.aspx?file=excel" Text="Download Report in Excel file"></asp:HyperLink><br/>
+        <asp:HyperLink runat="server" ID="hlExcelFile" Text="Download Report in Excel file"></asp:HyperLink><br />
         <mits:CommonGridView ID="cgvList" runat="server" AutoGenerateColumns="False">
             <columns>
                 <asp:BoundField DataField="InstanceName" SortExpression="1" HeaderText="Instance Name"></asp:BoundField>

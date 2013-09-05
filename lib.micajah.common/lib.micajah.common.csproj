@@ -419,7 +419,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
-    <Compile Include="WebControls\ActivityReportControl.cs">
+    <Compile Include="WebControls\SetupControls\ActivityReportControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\SecurityControls\OAuthControl.cs">
@@ -2080,10 +2080,10 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\GoogleIntegration.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ActivityReport.aspx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\ActivityReport.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\ActivityReport.ascx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\ActivityReport.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.aspx">
