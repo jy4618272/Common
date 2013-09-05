@@ -1593,7 +1593,7 @@ namespace Micajah.Common.Pages
 
             if (this.VisibleHeader)
             {
-                m_Header = new Header(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+                m_Header = new Header(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated, m_UserContext);
                 Controls.Add(m_Header);
             }
 

@@ -41,12 +41,13 @@ namespace Micajah.Common.WebControls
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        public Header(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
+        public Header(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated, UserContext user)
         {
             m_MasterPage = masterPage;
             m_ActionIdList = actionIdList;
             m_IsFrameworkAdmin = isFrameworkAdmin;
             m_IsAuthenticated = isAuthenticated;
+            m_UserContext = user;
             m_MasterPageSettings = FrameworkConfiguration.Current.WebApplication.MasterPage;
             m_ModernTheme = (m_MasterPageSettings.Theme == MasterPageTheme.Modern);
         }
@@ -317,19 +318,8 @@ namespace Micajah.Common.WebControls
         /// </summary>
         /// <param name="isSecureConnection">The flag indicating whether the HTTP connection uses secure sockets.</param>
         /// <returns>The control that represents the global navigation links.</returns>
-        private static Control CreateGlobalNavigation(bool isSecureConnection)
+        private Control CreateGlobalNavigation(bool isSecureConnection)
         {
-            UserContext user = UserContext.Current;
-            IList actionIdList = null;
-            bool isFrameworkAdmin = false;
-            bool isAuthenticated = false;
-            if (user != null)
-            {
-                actionIdList = user.ActionIdList;
-                isAuthenticated = true;
-                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganization == null));
-            }
-
             ControlList links = null;
             Link link = null;
             Link link2 = null;
@@ -349,7 +339,7 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(actionIdList, isFrameworkAdmin, isAuthenticated))
+                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
                 {
                     link = new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.Description);
 
@@ -365,13 +355,13 @@ namespace Micajah.Common.WebControls
                             Image avatarImg = new Image();
                             avatarImg.CssClass = "Avtr";
                             avatarImg.ImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}www.gravatar.com/avatar/{2}?s=24"
-                                , (isSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp), Uri.SchemeDelimiter, Support.CalculateMD5Hash(user.Email.ToLowerInvariant()));
+                                , (isSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp), Uri.SchemeDelimiter, Support.CalculateMD5Hash(m_UserContext.Email.ToLowerInvariant()));
                             usernameLink.Controls.Add(avatarImg);
 
-                            string name = user.FirstName + Html32TextWriter.SpaceChar + user.LastName;
+                            string name = m_UserContext.FirstName + Html32TextWriter.SpaceChar + m_UserContext.LastName;
 
                             LiteralControl literal = new LiteralControl();
-                            literal.Text = ((name.Trim().Length > 0) ? name : user.LoginName);
+                            literal.Text = ((name.Trim().Length > 0) ? name : m_UserContext.LoginName);
                             usernameLink.Controls.Add(literal);
                         }
                         else
@@ -383,7 +373,7 @@ namespace Micajah.Common.WebControls
 
                         ul.Controls.Add(li);
 
-                        ActionCollection childActions = item.GetAvailableChildActions(actionIdList, isFrameworkAdmin, isAuthenticated);
+                        ActionCollection childActions = item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                         if (childActions.Count > 0)
                         {
                             li.Attributes["class"] = "Dm";
@@ -406,7 +396,7 @@ namespace Micajah.Common.WebControls
                     {
                         if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
                         {
-                            foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(actionIdList, isFrameworkAdmin, isAuthenticated))
+                            foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
                             {
                                 link2 = new Link(item2.CustomName, item2.CustomAbsoluteNavigateUrl, item2.Description);
                                 links.Add(link2);
