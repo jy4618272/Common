@@ -857,8 +857,7 @@ namespace Micajah.Common.Bll.Providers
             Action action = FindAction(Guid.Empty, CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl));
             if (action != null)
             {
-                if (!action.AuthenticationRequired)
-                    return ((!SetupActionIdList.Contains(action.ActionId)) || (string.Compare(navigateUrl, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
+                return (!action.AuthenticationRequired);
             }
             return false;
         }
