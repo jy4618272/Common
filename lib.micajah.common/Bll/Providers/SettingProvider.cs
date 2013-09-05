@@ -29,6 +29,7 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_GlobalSettingsSyncRoot = new object();
         private static readonly object s_GroupSettingsExistSyncRoot = new object();
 
+        private static SettingCollection s_GlobalSettings;
         private static bool? s_GroupSettingsExist;
 
         #endregion
@@ -42,21 +43,17 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                SettingCollection coll = CacheManager.Current.Get("mc.GlobalSettings") as SettingCollection;
-                if (coll == null)
+                if (s_GlobalSettings == null)
                 {
                     lock (s_GlobalSettingsSyncRoot)
                     {
-                        coll = CacheManager.Current.Get("mc.GlobalSettings") as SettingCollection;
-                        if (coll == null)
+                        if (s_GlobalSettings == null)
                         {
-                            coll = SettingProvider.GetSettings(SettingLevels.Global, null);
-
-                            CacheManager.Current.AddWithDefaultExpiration("mc.GlobalSettings", coll);
+                            s_GlobalSettings = SettingProvider.GetSettings(SettingLevels.Global, null);
                         }
                     }
                 }
-                return coll;
+                return s_GlobalSettings;
             }
         }
 
@@ -739,7 +736,7 @@ namespace Micajah.Common.Bll.Providers
             settings.Sort();
             return settings;
         }
-        
+
         /// <summary>
         /// Returns a collection of the organization level settings.
         /// </summary>
@@ -808,11 +805,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void Refresh()
         {
-            lock (s_GlobalSettingsSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.GlobalSettings");
-            }
-
+            s_GlobalSettings = null;
             s_GroupSettingsExist = null;
         }
 

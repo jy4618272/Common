@@ -76,6 +76,12 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
         private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
 
+        private static ActionCollection s_GlobalNavigationLinks;
+        private static ActionCollection s_PagesAndControls;
+        private static ArrayList s_SetupActionIdList;
+        private static ArrayList s_MyAccountActionIdList;
+        private static ArrayList s_SettingsActionIdList;
+
         #endregion
 
         #region Private Properties
@@ -87,23 +93,21 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ArrayList list = CacheManager.Current.Get("mc.SetupActionIdList") as ArrayList;
-                if (list == null)
+                if (s_SetupActionIdList == null)
                 {
                     lock (s_SetupActionIdListSyncRoot)
                     {
-                        list = CacheManager.Current.Get("mc.SetupActionIdList") as ArrayList;
-                        if (list == null)
+                        if (s_SetupActionIdList == null)
                         {
-                            list = new ArrayList();
+                            ArrayList list = new ArrayList();
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(SetupPageActionId), list);
                             list.Add(SetupGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.SetupActionIdList", list);
+                            s_SetupActionIdList = list;
                         }
                     }
                 }
-                return list;
+                return s_SetupActionIdList;
             }
         }
 
@@ -132,22 +136,20 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ActionCollection coll = CacheManager.Current.Get("mc.GlobalNavigationLinks") as ActionCollection;
-                if (coll == null)
+                if (s_GlobalNavigationLinks == null)
                 {
                     lock (s_GlobalNavigationLinksSyncRoot)
                     {
-                        coll = CacheManager.Current.Get("mc.GlobalNavigationLinks") as ActionCollection;
-                        if (coll == null)
+                        if (s_GlobalNavigationLinks == null)
                         {
-                            coll = new ActionCollection();
+                            ActionCollection coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.GlobalNavigationLink);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.GlobalNavigationLinks", coll);
+                            s_GlobalNavigationLinks = coll;
                         }
                     }
                 }
-                return coll;
+                return s_GlobalNavigationLinks;
             }
         }
 
@@ -158,23 +160,21 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ArrayList list = CacheManager.Current.Get("mc.MyAccountActionIdList") as ArrayList;
-                if (list == null)
+                if (s_MyAccountActionIdList == null)
                 {
                     lock (s_MyAccountActionIdListSyncRoot)
                     {
-                        list = CacheManager.Current.Get("mc.MyAccountActionIdList") as ArrayList;
-                        if (list == null)
+                        if (s_MyAccountActionIdList == null)
                         {
-                            list = new ArrayList();
+                            ArrayList list = new ArrayList();
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(MyAccountPageActionId), list);
                             list.Add(MyAccountGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.MyAccountActionIdList", list);
+                            s_MyAccountActionIdList = list;
                         }
                     }
                 }
-                return list;
+                return s_MyAccountActionIdList;
             }
         }
 
@@ -197,23 +197,21 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ArrayList list = CacheManager.Current.Get("mc.SettingsActionIdList") as ArrayList;
-                if (list == null)
+                if (s_SettingsActionIdList == null)
                 {
                     lock (s_SettingsActionIdListSyncRoot)
                     {
-                        list = CacheManager.Current.Get("mc.SettingsActionIdList") as ArrayList;
-                        if (list == null)
+                        if (s_SettingsActionIdList == null)
                         {
-                            list = new ArrayList();
+                            ArrayList list = new ArrayList();
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(ConfigurationPageActionId), list);
                             list.Add(ConfigurationGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.SettingsActionIdList", list);
+                            s_SettingsActionIdList = list;
                         }
                     }
                 }
-                return list;
+                return s_SettingsActionIdList;
             }
         }
 
@@ -235,22 +233,20 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ActionCollection coll = CacheManager.Current.Get("mc.PagesAndControls") as ActionCollection;
-                if (coll == null)
+                if (s_PagesAndControls == null)
                 {
                     lock (s_PagesAndControlsSyncRoot)
                     {
-                        coll = CacheManager.Current.Get("mc.PagesAndControls") as ActionCollection;
-                        if (coll == null)
+                        if (s_PagesAndControls == null)
                         {
-                            coll = new ActionCollection();
+                            ActionCollection coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.PagesAndControls", coll);
+                            s_PagesAndControls = coll;
                         }
                     }
                 }
-                return coll;
+                return s_PagesAndControls;
             }
         }
 
@@ -900,38 +896,22 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void Refresh()
         {
-            lock (s_SetupActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.SetupActionIdList");
-            }
-
-            lock (s_GlobalNavigationLinksSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.GlobalNavigationLinks");
-            }
-
-            lock (s_MyAccountActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.MyAccountActionIdList");
-            }
-
-            lock (s_SettingsActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.SettingsActionIdList");
-            }
-
-            lock (s_PagesAndControlsSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.PagesAndControls");
-            }
+            s_SetupActionIdList = null;
+            s_GlobalNavigationLinks = null;
+            s_MyAccountActionIdList = null;
+            s_SettingsActionIdList = null;
+            s_PagesAndControls = null;
         }
 
         internal static void Refresh(Guid groupId, Guid instanceId)
         {
-            lock (s_GroupsInstanceActionIdListSyncRoot)
+            lock (s_GroupInstanceActionIdListSyncRoot)
             {
                 CacheManager.Current.Remove(string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId));
+            }
 
+            lock (s_GroupsInstanceActionIdListSyncRoot)
+            {
                 string keyToRemove = null;
                 string g = groupId.ToString("N");
                 foreach (string key in GroupsInstanceActionIdListKeys)
