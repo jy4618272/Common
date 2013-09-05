@@ -758,10 +758,7 @@ namespace Micajah.Common.Pages
             get
             {
                 if (!m_IsSetupPage.HasValue)
-                {
-                    m_IsSetupPage = (((this.ActiveActionId == Guid.Empty) ? ActionProvider.IsSetupPage(this.ApplicationAbsoluteNavigateUrl) : ActionProvider.IsSetupPage(this.ActiveActionId))
-                        || ((ActiveAction != null) && (m_ActiveAction.ActionId == ActionProvider.LoginAsUserPageActionId)));
-                }
+                    m_IsSetupPage = ((this.ActiveAction != null) && (ActionProvider.IsSetupPage(m_ActiveAction) || (m_ActiveAction.ActionId == ActionProvider.LoginAsUserPageActionId)));
                 return m_IsSetupPage.Value;
             }
         }
@@ -774,7 +771,7 @@ namespace Micajah.Common.Pages
             get
             {
                 if (!m_IsSettingPage.HasValue)
-                    m_IsSettingPage = ((ActiveAction != null) && ActionProvider.IsSettingPage(m_ActiveAction.ActionId));
+                    m_IsSettingPage = ((this.ActiveAction != null) && ActionProvider.IsSettingPage(m_ActiveAction.ActionId));
                 return m_IsSettingPage.Value;
             }
         }

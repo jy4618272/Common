@@ -72,44 +72,17 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_MyAccountActionIdListSyncRoot = new object();
         private static readonly object s_PagesAndControlsSyncRoot = new object();
         private static readonly object s_SettingsActionIdListSyncRoot = new object();
-        private static readonly object s_SetupActionIdListSyncRoot = new object();
         private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
         private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
 
         private static ActionCollection s_GlobalNavigationLinks;
         private static ActionCollection s_PagesAndControls;
-        private static ArrayList s_SetupActionIdList;
         private static ArrayList s_MyAccountActionIdList;
         private static ArrayList s_SettingsActionIdList;
 
         #endregion
 
         #region Private Properties
-
-        /// <summary>
-        /// Gets a collection of the pages that are available only in development mode.
-        /// </summary>
-        private static ArrayList SetupActionIdList
-        {
-            get
-            {
-                if (s_SetupActionIdList == null)
-                {
-                    lock (s_SetupActionIdListSyncRoot)
-                    {
-                        if (s_SetupActionIdList == null)
-                        {
-                            ArrayList list = new ArrayList();
-                            GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(SetupPageActionId), list);
-                            list.Add(SetupGlobalNavigationLinkActionId);
-
-                            s_SetupActionIdList = list;
-                        }
-                    }
-                }
-                return s_SetupActionIdList;
-            }
-        }
 
         private static List<string> GroupsInstanceActionIdListKeys
         {
@@ -757,7 +730,17 @@ namespace Micajah.Common.Bll.Providers
             actionRow = table.FindByActionId(LoginAsUserPageActionId);
             if (actionRow != null) actionRow.Delete();
 
-            foreach (Guid actionId in SetupActionIdList)
+            table.AcceptChanges();
+
+            ArrayList setupActionIdList = new ArrayList();
+
+            foreach (CommonDataSet.ActionRow row in table)
+            {
+                if (IsSetupPage(row))
+                    setupActionIdList.Add(row.ActionId);
+            }
+
+            foreach (Guid actionId in setupActionIdList)
             {
                 actionRow = table.FindByActionId(actionId);
                 if (actionRow != null) actionRow.Delete();
@@ -865,37 +848,39 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets a value indicating that the specified action is setup page.
         /// </summary>
-        /// <param name="actionId">The identifier of the action to check.</param>
+        /// <param name="action">The action to check.</param>
         /// <returns>true, if the specified action is setup page; otherwise, false.</returns>
-        internal static bool IsSetupPage(Guid actionId)
+        internal static bool IsSetupPage(Action action)
         {
-            Action action = FindAction(actionId);
-            if (action != null)
-                return SetupActionIdList.Contains(action.ActionId);
+            if (action.ActionType == ActionType.Page)
+            {
+                if ((action.ActionId == SetupPageActionId) || (action.ActionId == SetupGlobalNavigationLinkActionId))
+                    return true;
+                else
+                    return ResourceProvider.IsSetupPageUrl(action.NavigateUrl);
+            }
             return false;
         }
 
         /// <summary>
-        /// Gets a value indicating that the specified URL is setup page's URL.
+        /// Gets a value indicating that the specified action is setup page.
         /// </summary>
-        /// <param name="navigateUrl">The string that contains the URL to check.</param>
-        /// <returns>true, if the specified URL is setup page's URL; otherwise, false.</returns>
-        internal static bool IsSetupPage(string navigateUrl)
+        /// <param name="action">The action to check.</param>
+        /// <returns>true, if the specified action is setup page; otherwise, false.</returns>
+        internal static bool IsSetupPage(CommonDataSet.ActionRow action)
         {
-            if (!string.IsNullOrEmpty(navigateUrl))
-                navigateUrl = navigateUrl.Split('?')[0];
-            bool result = (string.Compare(CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl), CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.FrameworkPageVirtualPath), StringComparison.OrdinalIgnoreCase) == 0);
-            if (!result)
+            if ((ActionType)action.ActionTypeId == ActionType.Page)
             {
-                Action action = FindAction(navigateUrl);
-                if (action != null) result = SetupActionIdList.Contains(action.ActionId);
+                if ((action.ActionId == SetupPageActionId) || (action.ActionId == SetupGlobalNavigationLinkActionId))
+                    return true;
+                else if (!action.IsNavigateUrlNull())
+                    return ResourceProvider.IsSetupPageUrl(action.NavigateUrl);
             }
-            return result;
+            return false;
         }
 
         internal static void Refresh()
         {
-            s_SetupActionIdList = null;
             s_GlobalNavigationLinks = null;
             s_MyAccountActionIdList = null;
             s_SettingsActionIdList = null;
@@ -954,7 +939,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (isAuthenticated)
                 {
-                    if (SetupActionIdList.Contains(action.ActionId))
+                    if (IsSetupPage(action))
                     {
                         if (!isFrameworkAdmin)
                             return false;

@@ -78,6 +78,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string VirtualRootPath = "~/Resources.Micajah.Common/";
         internal const string VirtualRootShortPath = "~/mc/";
         internal const string AdminVirtualRootShortPath = "~/mc/admin/";
+        internal const string SetupVirtualRootShortPath = "~/mc/setup/";
         internal const string ResourceHandlerVirtualPath = "~/mc.axd";
 
         internal const string StyleSheetLoader = "Scripts.StyleSheetLoader.js";
@@ -523,6 +524,13 @@ namespace Micajah.Common.Bll.Providers
         internal static bool IsDetailMenuPageUrl(string virtualPath)
         {
             return (string.Compare(CustomUrlProvider.CreateApplicationRelativeUrl(virtualPath), DetailMenuPageVirtualPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) == 0);
+        }
+
+        internal static bool IsSetupPageUrl(string virtualPath)
+        {
+            if (string.IsNullOrEmpty(virtualPath))
+                return false;
+            return (virtualPath.IndexOf(SetupVirtualRootShortPath.Remove(0, 1), StringComparison.OrdinalIgnoreCase) > -1);
         }
 
         internal static bool IsMasterPageThemeColorStyleSheet(string resourceName, out MasterPageTheme masterPageTheme, out MasterPageThemeColor masterPageThemeColor)
