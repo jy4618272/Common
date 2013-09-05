@@ -16,9 +16,6 @@
     <action id="90B6CA7C-A042-406F-8D3B-1F3BB40191D5" type="Page" name="Detail Menu" navigateUrl="/mc/detailmenu.aspx" instanceRequired="false" visible="false" />
     <action id="DE48276A-8CBB-41FC-96C9-88F9809D416F" type="Page" name="Image Upload" navigateUrl="/mc/imageupload.aspx" instanceRequired="false" visible="false" />
     <action id="D230A5A8-CE26-4251-B51B-3135E033A06F" type="Page" name="Support" navigateUrl="/mc/support.aspx" instanceRequired="false" visible="false" />
-    <action id="00000000-0000-0000-0000-000000000041" type="Page" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" authenticationRequired="true" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
     <action id="00000000-0000-0000-0000-000000000027" type="Page" name="MC Setup" description="Micajah.Common Setup" navigateUrl="" authenticationRequired="true" instanceRequired="false" visible="false">
       <detailMenu show="false" />
       <actions>

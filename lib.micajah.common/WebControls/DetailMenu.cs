@@ -1007,7 +1007,10 @@ namespace Micajah.Common.WebControls
             if (this.ParentAction != null)
             {
                 if (m_ParentAction.ActionId == ActionProvider.SetupPageActionId)
+                {
                     Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+                    this.MasterPage.VisibleBreadcrumbs = false;
+                }
             }
 
             ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(this.Theme), this.Theme.ToString());

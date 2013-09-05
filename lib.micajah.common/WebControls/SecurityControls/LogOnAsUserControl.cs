@@ -1,3 +1,10 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using Micajah.Common.WebControls.SetupControls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,13 +15,6 @@ using System.Security.Authentication;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.SecurityControls
@@ -22,7 +22,7 @@ namespace Micajah.Common.WebControls.SecurityControls
     /// <summary>
     /// Provides user interface (UI) elements for logging in to a Web site without typing login credentials.
     /// </summary>
-    public class LogOnAsUserControl : UserControl
+    public class LogOnAsUserControl : MasterControl
     {
         #region Members
 
@@ -122,6 +122,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+            this.MasterPage.VisibleBreadcrumbs = false;
+
             m_UserContext = UserContext.Current;
 
             this.LoadResources();

@@ -754,7 +754,7 @@ namespace Micajah.Common.Pages
             get
             {
                 if (!m_IsSetupPage.HasValue)
-                    m_IsSetupPage = ((this.ActiveAction != null) && (ActionProvider.IsSetupPage(m_ActiveAction) || (m_ActiveAction.ActionId == ActionProvider.LoginAsUserPageActionId)));
+                    m_IsSetupPage = ((this.ActiveAction != null) && (ActionProvider.IsSetupPage(m_ActiveAction) || (m_ActiveAction.ActionId == ActionProvider.LoginAsUserGlobalNavigationLinkActionId)));
                 return m_IsSetupPage.Value;
             }
         }

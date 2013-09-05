@@ -43,7 +43,6 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid LoginAsUserGlobalNavigationLinkActionId = new Guid("709A6B39-36A2-43FC-AF18-24C2E3332D7A");
         internal readonly static Guid OrganizationsPageActionId = new Guid("00000000-0000-0000-0000-000000000040");
         internal readonly static Guid TreesPageActionId = new Guid("B3CCC73F-7194-4F0A-AABB-77AE91E31CE9");
-        internal readonly static Guid LoginAsUserPageActionId = new Guid("00000000-0000-0000-0000-000000000041");
         internal readonly static Guid SetupGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000042");
         internal readonly static Guid LoginGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000043");
         internal readonly static Guid TreePageActionId = new Guid("7D20C2C0-09DC-4399-89D0-FE16757FF169");
@@ -727,9 +726,6 @@ namespace Micajah.Common.Bll.Providers
             actionRow = table.FindByActionId(LoginAsUserGlobalNavigationLinkActionId);
             if (actionRow != null) actionRow.Delete();
 
-            actionRow = table.FindByActionId(LoginAsUserPageActionId);
-            if (actionRow != null) actionRow.Delete();
-
             table.AcceptChanges();
 
             ArrayList setupActionIdList = new ArrayList();
@@ -852,11 +848,11 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the specified action is setup page; otherwise, false.</returns>
         internal static bool IsSetupPage(Action action)
         {
-            if (action.ActionType == ActionType.Page)
+            if ((action.ActionId == SetupPageActionId) || (action.ActionId == SetupGlobalNavigationLinkActionId))
+                return true;
+            else
             {
-                if ((action.ActionId == SetupPageActionId) || (action.ActionId == SetupGlobalNavigationLinkActionId))
-                    return true;
-                else
+                if (action.ActionType == ActionType.Page)
                     return ResourceProvider.IsSetupPageUrl(action.NavigateUrl);
             }
             return false;
@@ -947,7 +943,9 @@ namespace Micajah.Common.Bll.Providers
                     else if (!(((actionIdList != null) && actionIdList.Contains(action.ActionId))
                         || action.ActionId == MyAccountMenuGlobalNavigationLinkActionId
                         || action.ActionId == LoginAsUserGlobalNavigationLinkActionId))
+                    {
                         return false;
+                    }
                 }
                 else return false;
             }
