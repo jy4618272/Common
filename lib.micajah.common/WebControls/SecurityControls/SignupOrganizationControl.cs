@@ -185,8 +185,20 @@ namespace Micajah.Common.WebControls.SecurityControls
 }}
 
 function InstanceRequiredValidation(source, arguments) {{
-    var elem = document.getElementById('{0}');
-    arguments.IsValid = (elem.value.replace(/^\s+$/gm, '').length > 0);
+    arguments.IsValid = false;
+    var itemSelected = false;
+    var elem = document.getElementById('InstanceList');
+    var items = elem.getElementsByTagName('li');
+    for (var y = 0; y < items.length; y++) {{
+        if (items[y].className == 'Cbc') {{
+            itemSelected = true;
+            break;
+        }}
+    }}
+    if (itemSelected) {{
+        elem = document.getElementById('{0}');
+        arguments.IsValid = (elem.value.replace(/^\s+$/gm, '').length > 0);
+    }}
 }}
 "
                     , SelectedInstance.ClientID);
@@ -589,6 +601,11 @@ function InstanceRequiredValidation(source, arguments) {{
                 SelectedInstance.CssClass += " Invalid";
                 SelectedInstance.Attributes["validatorId"] = UniqueDataValidator.ClientID;
             }
+        }
+
+        protected void InstanceRequiredValidator_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = (!string.IsNullOrEmpty(SelectedInstance.Text));
         }
 
         protected void OrganizationUrlValidator_ServerValidate(object source, ServerValidateEventArgs args)
