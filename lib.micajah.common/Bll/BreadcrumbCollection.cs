@@ -1,6 +1,7 @@
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Security;
 using System;
+using System.Collections;
 
 namespace Micajah.Common.Bll
 {
@@ -228,10 +229,21 @@ namespace Micajah.Common.Bll
         {
             this.Clear();
 
+            UserContext user = UserContext.Current;
+            IList actionIdList = null;
+            bool isFrameworkAdmin = false;
+            bool isAuthenticated = false;
+            if (user != null)
+            {
+                actionIdList = user.ActionIdList;
+                isAuthenticated = true;
+                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganization == null));
+            }
+
             Action item = action;
             while (item != null && item.ActionId != ActionProvider.PagesAndControlsActionId && item.ActionId != ActionProvider.GlobalNavigationLinksActionId)
             {
-                if ((!item.GroupInDetailMenu) && (ActionProvider.ShowAction(item, UserContext.Current)))
+                if ((!item.GroupInDetailMenu) && (ActionProvider.ShowAction(item, actionIdList, isFrameworkAdmin, isAuthenticated)))
                     Insert(0, item);
                 item = item.ParentAction;
             }

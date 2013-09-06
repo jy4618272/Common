@@ -81,7 +81,10 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!this.Page.IsPostBack) this.Tree_DataBind();
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
+            if (!this.Page.IsPostBack)
+                this.Tree_DataBind();
         }
 
         #endregion

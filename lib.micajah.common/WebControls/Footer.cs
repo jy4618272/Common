@@ -1,14 +1,14 @@
-using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Text;
-using System.Web.UI.HtmlControls;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
+using System.Web.UI.HtmlControls;
 
 namespace Micajah.Common.WebControls
 {
@@ -21,30 +21,16 @@ namespace Micajah.Common.WebControls
         #region Members
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
+        private UserContext m_UserContext;
 
         #endregion
 
-        #region Private Properties
+        #region Constructors
 
-        private Micajah.Common.Pages.MasterPage MasterPage
+        public Footer(Micajah.Common.Pages.MasterPage masterPage, UserContext user)
         {
-            get
-            {
-                if (m_MasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
-                return m_MasterPage;
-            }
+            m_MasterPage = masterPage;
+            m_UserContext = user;
         }
 
         #endregion
@@ -91,31 +77,30 @@ namespace Micajah.Common.WebControls
 
                 if (webAppSettings.MasterPage.Theme == MasterPageTheme.Modern)
                 {
-                    UserContext user = UserContext.Current;
-                    if (user != null)
+                    if (m_UserContext != null)
                     {
                         leftDiv = new HtmlGenericControl("div");
                         ul1 = new HtmlGenericControl("ul");
 
-                        if (user.SelectedOrganization != null)
+                        if (m_UserContext.SelectedOrganization != null)
                         {
                             li = new HtmlGenericControl("li");
-                            li.InnerHtml = user.SelectedOrganization.Name;
+                            li.InnerHtml = m_UserContext.SelectedOrganization.Name;
                             ul1.Controls.Add(li);
                         }
 
-                        if (webAppSettings.EnableMultipleInstances && (user.SelectedInstance != null))
+                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstance != null))
                         {
                             li = new HtmlGenericControl("li");
                             li.InnerHtml = "|";
                             ul1.Controls.Add(li);
 
                             li = new HtmlGenericControl("li");
-                            li.InnerHtml = user.SelectedInstance.Name;
+                            li.InnerHtml = m_UserContext.SelectedInstance.Name;
                             ul1.Controls.Add(li);
                         }
 
-                        string roleName = RoleProvider.GetRoleName(user.RoleId);
+                        string roleName = RoleProvider.GetRoleName(m_UserContext.RoleId);
                         if (!string.IsNullOrEmpty(roleName))
                         {
                             li = new HtmlGenericControl("li");
@@ -135,14 +120,14 @@ namespace Micajah.Common.WebControls
 
                     if (webAppSettings.MasterPage.Theme == MasterPageTheme.Modern)
                     {
-                        if (this.MasterPage.VisibleApplicationLogo)
+                        if (m_MasterPage.VisibleApplicationLogo)
                             copyrightDiv.Controls.Add(MasterPage.ApplicationLogo);
                     }
                     else
                     {
                         ul2 = new HtmlGenericControl("ul");
 
-                        if (this.MasterPage.VisibleApplicationLogo)
+                        if (m_MasterPage.VisibleApplicationLogo)
                         {
                             li = new HtmlGenericControl("li");
                             li.Controls.Add(MasterPage.ApplicationLogo);
@@ -169,22 +154,21 @@ namespace Micajah.Common.WebControls
                 }
                 else
                 {
-                    UserContext user = UserContext.Current;
-                    if (user != null)
+                    if (m_UserContext != null)
                     {
                         leftDiv = new HtmlGenericControl("div");
                         StringBuilder sb = new StringBuilder();
 
-                        if (user.SelectedOrganization != null)
-                            sb.Append(user.SelectedOrganization.Name);
+                        if (m_UserContext.SelectedOrganization != null)
+                            sb.Append(m_UserContext.SelectedOrganization.Name);
 
-                        if (webAppSettings.EnableMultipleInstances && (user.SelectedInstance != null))
+                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstance != null))
                         {
                             if (sb.Length > 0) sb.Append("<br />");
-                            sb.Append(user.SelectedInstance.Name);
+                            sb.Append(m_UserContext.SelectedInstance.Name);
                         }
 
-                        string roleName = RoleProvider.GetRoleName(user.RoleId);
+                        string roleName = RoleProvider.GetRoleName(m_UserContext.RoleId);
                         if (!string.IsNullOrEmpty(roleName))
                         {
                             if (sb.Length > 0) sb.Append("<br />");

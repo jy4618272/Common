@@ -4,42 +4,18 @@
     <role id="00000000-0000-0000-0000-000000000002" name="Instance Administrator" description="Built-in Role for administering the Instance" shortName="InstAdmin" rank="2" startPageId="00000000-0000-0000-0000-000000000015" />
   </roles>
   <actions>
-    <action id="48D41DA0-AFB4-46CC-AE22-10BA269D1304" type="Page" name="Select Organization" navigateUrl="/mc/activeorganization.aspx" authenticationRequired="true" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="AB6741E3-7D2D-4BB3-9BB7-E2DB26AACA63" type="Page" name="Select Instance" navigateUrl="/mc/activeinstance.aspx" authenticationRequired="true" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="5900F3EF-F423-4AC8-BAA5-828B746E3F43" type="Page" name="Permissions" navigateUrl="/mc/oauth.aspx" authenticationRequired="true" visible="false" roles="*">
-      <detailMenu show="false" />
-    </action>
-    <action id="13303E59-B780-421E-BF76-DF83D4DB24FE" type="Page" name="OAuth Handler" navigateUrl="/mc/oauth.ashx" authenticationRequired="false" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="EF1FAD4E-60EF-443F-AE42-FE6BE89283A2" type="Page" name="Reset Password" navigateUrl="/mc/resetpassword.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="9851FE58-B27B-408E-9D33-60419B300D5B" type="Page" name="Password Recovery" navigateUrl="/mc/passwordrecovery.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="1896F722-B3D8-49C7-A531-57597E2BF5DC" type="Page" name="Sign Up User" navigateUrl="/mc/signupuser.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="3E9E3609-7F2A-4DF2-92DF-DFFBD6978E84" type="Page" name="Sign Up Organization" navigateUrl="/mc/signuporg.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="90B6CA7C-A042-406F-8D3B-1F3BB40191D5" type="Page" name="Detail Menu" navigateUrl="/mc/detailmenu.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="DE48276A-8CBB-41FC-96C9-88F9809D416F" type="Page" name="Image Upload" navigateUrl="/mc/imageupload.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="D230A5A8-CE26-4251-B51B-3135E033A06F" type="Page" name="Support" navigateUrl="/mc/support.aspx" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
-    <action id="00000000-0000-0000-0000-000000000041" type="Page" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" authenticationRequired="true" instanceRequired="false" visible="false">
-      <detailMenu show="false" />
-    </action>
+    <action id="D576595D-3F88-42D8-B76B-36907653CDE6" type="Page" name="Resource Handler" navigateUrl="/mc.axd" authenticationRequired="false" instanceRequired="false" visible="false" />
+    <action id="48D41DA0-AFB4-46CC-AE22-10BA269D1304" type="Page" name="Select Organization" navigateUrl="/mc/activeorganization.aspx" authenticationRequired="true" instanceRequired="false" visible="false" />
+    <action id="AB6741E3-7D2D-4BB3-9BB7-E2DB26AACA63" type="Page" name="Select Instance" navigateUrl="/mc/activeinstance.aspx" authenticationRequired="true" instanceRequired="false" visible="false" />
+    <action id="5900F3EF-F423-4AC8-BAA5-828B746E3F43" type="Page" name="Permissions" navigateUrl="/mc/oauth.aspx" authenticationRequired="true" visible="false" roles="*" />
+    <action id="13303E59-B780-421E-BF76-DF83D4DB24FE" type="Page" name="OAuth Handler" navigateUrl="/mc/oauth.ashx" authenticationRequired="false" instanceRequired="false" visible="false" />
+    <action id="EF1FAD4E-60EF-443F-AE42-FE6BE89283A2" type="Page" name="Reset Password" navigateUrl="/mc/resetpassword.aspx" instanceRequired="false" visible="false" />
+    <action id="9851FE58-B27B-408E-9D33-60419B300D5B" type="Page" name="Password Recovery" navigateUrl="/mc/passwordrecovery.aspx" instanceRequired="false" visible="false" />
+    <action id="1896F722-B3D8-49C7-A531-57597E2BF5DC" type="Page" name="Sign Up User" navigateUrl="/mc/signupuser.aspx" instanceRequired="false" visible="false" />
+    <action id="3E9E3609-7F2A-4DF2-92DF-DFFBD6978E84" type="Page" name="Sign Up Organization" navigateUrl="/mc/signuporg.aspx" instanceRequired="false" visible="false" />
+    <action id="90B6CA7C-A042-406F-8D3B-1F3BB40191D5" type="Page" name="Detail Menu" navigateUrl="/mc/detailmenu.aspx" instanceRequired="false" visible="false" />
+    <action id="DE48276A-8CBB-41FC-96C9-88F9809D416F" type="Page" name="Image Upload" navigateUrl="/mc/imageupload.aspx" instanceRequired="false" visible="false" />
+    <action id="D230A5A8-CE26-4251-B51B-3135E033A06F" type="Page" name="Support" navigateUrl="/mc/support.aspx" instanceRequired="false" visible="false" />
     <action id="00000000-0000-0000-0000-000000000027" type="Page" name="MC Setup" description="Micajah.Common Setup" navigateUrl="" authenticationRequired="true" instanceRequired="false" visible="false">
       <detailMenu show="false" />
       <actions>
@@ -57,7 +33,7 @@
         <action id="00000000-0000-0000-0000-000000000038" type="Page" name="Database Servers" description="Manage the Database Servers" navigateUrl="/mc/setup/databaseservers.aspx" orderNumber="8" authenticationRequired="true" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000039" type="Page" name="Databases" description="Manage the Databases" navigateUrl="/mc/setup/databases.aspx" orderNumber="9" authenticationRequired="true" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000040" type="Page" name="Organizations" description="Manage the Organizations" navigateUrl="/mc/setup/organizations.aspx" orderNumber="10" authenticationRequired="true" instanceRequired="false" />
-        <action id="7062A21C-BA40-4A8F-9F33-DA68751E4F0D" type="Page" name="Activity Report" description="Build Application Accounts Activity Report" navigateUrl="/mc/activityreport.aspx" orderNumber="11" handle="true" authenticationRequired="true" instanceRequired="false" />
+        <action id="7062A21C-BA40-4A8F-9F33-DA68751E4F0D" type="Page" name="Activity Report" description="Build Application Accounts Activity Report" navigateUrl="/mc/setup/activityreport.aspx" orderNumber="11" handle="true" authenticationRequired="true" instanceRequired="false" />
       </actions>
     </action>
     <action id="00000000-0000-0000-0000-000000000021" type="Page" name="My Account" description="Edit personal settings" navigateUrl="" handle="true" authenticationRequired="true" instanceRequired="false" visible="false" roles="*">

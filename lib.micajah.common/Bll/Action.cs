@@ -1,7 +1,6 @@
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Security;
 using Micajah.Common.WebControls;
 using System;
 using System.Collections;
@@ -519,14 +518,14 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets a collection of the visible child actions, also taking into consideration the access rights.
         /// </summary>
-        internal ActionCollection GetAvailableChildActions(UserContext user)
+        internal ActionCollection GetAvailableChildActions(IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
             ActionCollection coll = new ActionCollection();
             foreach (Action item in this.ChildActions)
             {
                 if (item.Visible)
                 {
-                    if (!ActionProvider.ShowAction(item, user))
+                    if (!ActionProvider.ShowAction(item, actionIdList, isFrameworkAdmin, isAuthenticated))
                         continue;
 
                     if (item.AccessDenied())

@@ -188,7 +188,7 @@
                 <asp:Literal ID="CustomizeLiteral" runat="server"></asp:Literal></h1>
             <asp:Repeater ID="InstanceList" runat="server" DataSourceID="InstanceListDataSource">
                 <HeaderTemplate>
-                    <ul>
+                    <ul id="InstanceList">
                 </HeaderTemplate>
                 <ItemTemplate>
                     <li onclick="SelectItem(this, '<%# Eval("InstanceId") %>');" class='<%# Convert.ToString(Eval("InstanceId")) == SelectedInstance.Text ? "Cbc" : "Cb" %>'
@@ -208,8 +208,8 @@
             <div id="Step3Form" runat="server">
                 <asp:Button ID="Step3Button" runat="server" CssClass="Green Large" ValidationGroup="Step3"
                     Style="float: left;" OnClick="Step3Button_Click"></asp:Button>
-                <asp:CustomValidator ID="InstanceRequiredValidator" runat="server" Display="Dynamic"
-                    ValidationGroup="Step3" CssClass="Error Step3Val" ClientValidationFunction="InstanceRequiredValidation" /><asp:CustomValidator
+                <asp:CustomValidator ID="InstanceRequiredValidator" runat="server" Display="Dynamic" ValidationGroup="Step3"
+                    CssClass="Error Step3Val" ClientValidationFunction="InstanceRequiredValidation" OnServerValidate="InstanceRequiredValidator_ServerValidate" /><asp:CustomValidator
                         ID="UniqueDataValidator" runat="server" Display="Dynamic" EnableClientScript="false"
                         ValidationGroup="Step3" CssClass="Error Step3Val" OnServerValidate="UniqueDataValidator_ServerValidate" /><asp:TextBox
                             ID="SelectedInstance" runat="server" ValidationGroup="Step3" Style="display: none;"></asp:TextBox>

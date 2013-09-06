@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="RadioButtonList.aspx.cs" Inherits="RadioButtonListTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="RadioButtonListTestPage" Codebehind="RadioButtonList.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <mits:RadioButtonList ID="ValidatedRadioButtonList1" runat="server" Required="True"

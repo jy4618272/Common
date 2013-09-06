@@ -1,14 +1,13 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls
 {
@@ -21,31 +20,21 @@ namespace Micajah.Common.WebControls
         #region Members
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
+        private IList m_ActionIdList;
+        private bool m_IsFrameworkAdmin;
+        private bool m_IsAuthenticated;
         private ActionCollection m_Items;
 
         #endregion
 
-        #region Private Properties
+        #region Constructors
 
-        private Micajah.Common.Pages.MasterPage MasterPage
+        public MainMenu(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
-            get
-            {
-                if (m_MasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
-                return m_MasterPage;
-            }
+            m_MasterPage = masterPage;
+            m_ActionIdList = actionIdList;
+            m_IsFrameworkAdmin = isFrameworkAdmin;
+            m_IsAuthenticated = isAuthenticated;
         }
 
         #endregion
@@ -64,7 +53,7 @@ namespace Micajah.Common.WebControls
                     m_Items = new ActionCollection();
                     Micajah.Common.Bll.Action mainItem = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.PagesAndControlsActionId);
                     if (mainItem != null)
-                        m_Items = mainItem.GetAvailableChildActions(UserContext.Current);
+                        m_Items = mainItem.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 }
                 return m_Items;
             }
@@ -107,7 +96,7 @@ namespace Micajah.Common.WebControls
             Control itemCtl = null;
             Guid mainMenuItemId = Guid.Empty;
 
-            if (this.MasterPage != null)
+            if (m_MasterPage != null)
             {
                 if (m_MasterPage.ActiveAction != null)
                 {

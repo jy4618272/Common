@@ -3,34 +3,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib.micajah.common", "lib.micajah.common\lib.micajah.common.csproj", "{10D2CA35-30D2-4291-9133-4F675C8B3B29}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "web.micajah.common", "web.micajah.common\", "{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}"
-	ProjectSection(WebsiteProperties) = preProject
-		SccProjectName = ""
-		SccAuxPath = ""
-		SccLocalPath = ""
-		SccProvider = ""
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		ProjectReferences = "{10D2CA35-30D2-4291-9133-4F675C8B3B29}|Micajah.Common3.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/web.micajah.common"
-		Debug.AspNetCompiler.PhysicalPath = "web.micajah.common\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\web.micajah.common\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "true"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/web.micajah.common"
-		Release.AspNetCompiler.PhysicalPath = "web.micajah.common\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\web.micajah.common\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "true"
-		Release.AspNetCompiler.Debug = "False"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "db.micajah.common.master", "db.micajah.common.master\db.micajah.common.master.sqlproj", "{E8220301-5D09-4198-A343-D7A806700558}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "db.micajah.common.client", "db.micajah.common.client\db.micajah.common.client.sqlproj", "{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web.micajah.common", "web.micajah.common\web.micajah.common.csproj", "{D782F7DD-A397-4846-B1D4-D5543C86AFE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin Shared", "bin Shared", "{5E6DC827-8607-4285-800A-200447C2A8C6}"
+	ProjectSection(SolutionItems) = preProject
+		bin Shared\ChargifyNET.dll = bin Shared\ChargifyNET.dll
+		bin Shared\ChargifyNET.pdb = bin Shared\ChargifyNET.pdb
+		bin Shared\DotNetOpenAuth.Core.dll = bin Shared\DotNetOpenAuth.Core.dll
+		bin Shared\DotNetOpenAuth.Core.pdb = bin Shared\DotNetOpenAuth.Core.pdb
+		bin Shared\DotNetOpenAuth.OAuth.Common.dll = bin Shared\DotNetOpenAuth.OAuth.Common.dll
+		bin Shared\DotNetOpenAuth.OAuth.Common.pdb = bin Shared\DotNetOpenAuth.OAuth.Common.pdb
+		bin Shared\DotNetOpenAuth.OAuth.dll = bin Shared\DotNetOpenAuth.OAuth.dll
+		bin Shared\DotNetOpenAuth.OAuth.pdb = bin Shared\DotNetOpenAuth.OAuth.pdb
+		bin Shared\DotNetOpenAuth.OAuth.ServiceProvider.dll = bin Shared\DotNetOpenAuth.OAuth.ServiceProvider.dll
+		bin Shared\DotNetOpenAuth.OAuth.ServiceProvider.pdb = bin Shared\DotNetOpenAuth.OAuth.ServiceProvider.pdb
+		bin Shared\DotNetOpenAuth.OpenId.dll = bin Shared\DotNetOpenAuth.OpenId.dll
+		bin Shared\DotNetOpenAuth.OpenId.pdb = bin Shared\DotNetOpenAuth.OpenId.pdb
+		bin Shared\DotNetOpenAuth.OpenId.RelyingParty.dll = bin Shared\DotNetOpenAuth.OpenId.RelyingParty.dll
+		bin Shared\DotNetOpenAuth.OpenId.RelyingParty.pdb = bin Shared\DotNetOpenAuth.OpenId.RelyingParty.pdb
+		bin Shared\EPPlus.dll = bin Shared\EPPlus.dll
+		bin Shared\EPPlus.pdb = bin Shared\EPPlus.pdb
+		bin Shared\EPPlus.XML = bin Shared\EPPlus.XML
+		bin Shared\Google.GData.Apps.dll = bin Shared\Google.GData.Apps.dll
+		bin Shared\Google.GData.Client.dll = bin Shared\Google.GData.Client.dll
+		bin Shared\Google.GData.Extensions.dll = bin Shared\Google.GData.Extensions.dll
+		bin Shared\Micajah.Common.LdapAdapter.dll = bin Shared\Micajah.Common.LdapAdapter.dll
+		bin Shared\Micajah.Common.LdapAdapter.pdb = bin Shared\Micajah.Common.LdapAdapter.pdb
+		bin Shared\Newtonsoft.Json.dll = bin Shared\Newtonsoft.Json.dll
+		bin Shared\Telerik.Web.Design.dll = bin Shared\Telerik.Web.Design.dll
+		bin Shared\Telerik.Web.UI.dll = bin Shared\Telerik.Web.UI.dll
+		bin Shared\Telerik.Web.UI.Skins.dll = bin Shared\Telerik.Web.UI.Skins.dll
+	EndProjectSection
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "azure.micajah.common", "azure.micajah.common\azure.micajah.common.ccproj", "{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +51,6 @@ Global
 		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{13C2CB54-2B42-4DFE-A0F4-20C2CE0E5C5F}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{E8220301-5D09-4198-A343-D7A806700558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E8220301-5D09-4198-A343-D7A806700558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8220301-5D09-4198-A343-D7A806700558}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,6 +61,14 @@ Global
 		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

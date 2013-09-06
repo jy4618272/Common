@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="CommonGridView.aspx.cs" Inherits="CommonGridViewTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="CommonGridViewTestPage" Codebehind="CommonGridView.aspx.cs" %>
 
 <%@ MasterType TypeName="Micajah.Common.Pages.MasterPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">

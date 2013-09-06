@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="AdvancedGridView.aspx.cs" Inherits="AdvancedGridViewTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="AdvancedGridViewTestPage" Codebehind="AdvancedGridView.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <mits:AdvancedGridView ID="AdvancedGrid1" runat="server" AllowFilteringByColumn="True"

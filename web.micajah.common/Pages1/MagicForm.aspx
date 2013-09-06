@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="MagicForm.aspx.cs" Inherits="MagicFormTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="MagicFormTestPage" Codebehind="MagicForm.aspx.cs" %>
 
 <%@ MasterType TypeName="Micajah.Common.Pages.MasterPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">

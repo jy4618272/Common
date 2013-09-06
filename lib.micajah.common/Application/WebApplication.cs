@@ -210,7 +210,7 @@ namespace Micajah.Common.Application
                 EntityCollection coll = CacheManager.Current.Get("mc.Entities") as EntityCollection;
                 if (coll == null)
                 {
-                    lock (s_CommonDataSetSyncRoot)
+                    lock (s_EntitiesSyncRoot)
                     {
                         coll = CacheManager.Current.Get("mc.Entities") as EntityCollection;
                         if (coll == null)
@@ -231,7 +231,7 @@ namespace Micajah.Common.Application
                 RulesEngineCollection coll = CacheManager.Current.Get("mc.RulesEngines") as RulesEngineCollection;
                 if (coll == null)
                 {
-                    lock (s_CommonDataSetSyncRoot)
+                    lock (s_RulesEnginesSyncRoot)
                     {
                         coll = CacheManager.Current.Get("mc.RulesEngines") as RulesEngineCollection;
                         if (coll == null)
@@ -252,7 +252,7 @@ namespace Micajah.Common.Application
                 StartThreadCollection coll = CacheManager.Current.Get("mc.StartThreads") as StartThreadCollection;
                 if (coll == null)
                 {
-                    lock (s_CommonDataSetSyncRoot)
+                    lock (s_StartThreadsSyncRoot)
                     {
                         coll = CacheManager.Current.Get("mc.StartThreads") as StartThreadCollection;
                         if (coll == null)

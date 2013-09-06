@@ -1,24 +1,23 @@
-using System;
-using System.Collections;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.Reflection;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.Collections;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Reflection;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SetupControls
 {
     /// <summary>
     /// Provides user interface (UI) elements for the managing and shows the information of the Micajah.Common framework.
     /// </summary>
-    public class FrameworkControl : UserControl
+    public class FrameworkControl : MasterControl
     {
         #region Members
 
@@ -34,21 +33,7 @@ namespace Micajah.Common.WebControls.SetupControls
         protected Label TitleLabel2;
         protected CommonGridView AssemblyList;
 
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private bool m_IsFrameworkAdministrator;
-
-        #endregion
-
-        #region Private Properties
-
-        protected Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
-            }
-        }
 
         #endregion
 
@@ -143,6 +128,8 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             LoadResources();
             AssemblyListDataBind();
 

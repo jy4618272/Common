@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
-    public class EntityControl : UserControl
+    public class EntityControl : Micajah.Common.WebControls.SetupControls.MasterControl
     {
         #region Members
 
@@ -32,7 +32,6 @@ namespace Micajah.Common.WebControls.AdminControls
         private Entity m_Entity;
         private EntityNodeTypeCollection m_EntityCustomNodeTypes;
         private Dictionary<Guid, RadTreeViewContextMenu> m_ContextMenus;
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
 
         #endregion
 
@@ -47,15 +46,6 @@ namespace Micajah.Common.WebControls.AdminControls
                     return isRefresh;
                 else
                     return false;
-            }
-        }
-
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
             }
         }
 

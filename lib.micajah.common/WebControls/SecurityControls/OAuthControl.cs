@@ -9,12 +9,11 @@ using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
 using System.Globalization;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
-    public class OAuthControl : UserControl
+    public class OAuthControl : Micajah.Common.WebControls.SetupControls.MasterControl
     {
         #region Members
 
@@ -31,21 +30,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Literal CloseLiteral;
         protected Literal AuthorizationDeniedLiteral;
 
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private UserAuthorizationRequest m_PendingRequest;
-
-        #endregion
-
-        #region Private Properties
-
-        protected Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
-            }
-        }
 
         #endregion
 

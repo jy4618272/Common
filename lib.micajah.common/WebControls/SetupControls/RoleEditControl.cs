@@ -1,3 +1,7 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -5,10 +9,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.SetupControls
@@ -116,6 +116,8 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             if (!IsPostBack)
             {
                 bool editMode = (this.RoleId != Guid.Empty);
@@ -125,6 +127,7 @@ namespace Micajah.Common.WebControls.SetupControls
                 LoadResources();
                 Atv_DataBind();
             }
+
             MagicForm.ApplyStyle(CommandTable, EditForm.ColorScheme);
         }
 

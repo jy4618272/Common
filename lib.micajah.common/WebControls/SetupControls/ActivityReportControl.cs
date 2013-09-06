@@ -1,19 +1,17 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
-using System.Collections;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
-using Micajah.Common.Security;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
 
-namespace Micajah.Common.WebControls.Reports
+namespace Micajah.Common.WebControls.SetupControls
 {
     /// <summary>
     /// The control to manage organizations.
@@ -36,9 +34,11 @@ namespace Micajah.Common.WebControls.Reports
         {
             base.OnLoad(e);
 
+            Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
+
             hlExcelFile.NavigateUrl = Request.Url.ToString() + "?file=excel";
             CommonDataSet.SettingDataTable table = Micajah.Common.Application.WebApplication.CommonDataSet.Setting;
-            string filter = string.Format(CultureInfo.InvariantCulture, "{0} = "+ ((int)SettingType.Counter).ToString(), table.SettingTypeIdColumn.ColumnName);
+            string filter = string.Format(CultureInfo.InvariantCulture, "{0} = " + ((int)SettingType.Counter).ToString(), table.SettingTypeIdColumn.ColumnName);
             counterSettings = new SettingCollection();
             foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) counterSettings.Add(SettingProvider.CreateSetting(_srow));
 
@@ -51,12 +51,11 @@ namespace Micajah.Common.WebControls.Reports
             InitDataGridColumns();
             cgvList.DataSource = BuildReport();
             cgvList.DataBind();
-
         }
 
         protected override void Render(HtmlTextWriter writer)
         {
-            if (string.IsNullOrEmpty(Request.QueryString["file"]) || Request.QueryString["file"]!="excel")
+            if (string.IsNullOrEmpty(Request.QueryString["file"]) || Request.QueryString["file"] != "excel")
             {
                 base.Render(writer);
                 return;
@@ -72,6 +71,8 @@ namespace Micajah.Common.WebControls.Reports
         }
 
         #endregion
+
+        #region Private Methods
 
         private byte[] ExportDataToExcelOpenXML()
         {
@@ -304,5 +305,7 @@ namespace Micajah.Common.WebControls.Reports
 
             return dt;
         }
+
+        #endregion
     }
 }

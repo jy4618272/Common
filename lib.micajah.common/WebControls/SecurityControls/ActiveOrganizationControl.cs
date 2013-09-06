@@ -194,7 +194,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     OrLabel2.Text = Resources.ActiveOrganizationControl_OrText;
                     LogOnAsAnotherUserLinkContainer.Visible = true;
                     LogOnAsAnotherUserLink.Text = Resources.ActiveOrganizationControl_LogOnAsAnotherUserLink_Text;
-                    action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.LoginAsUserPageActionId);
+                    action = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LoginAsUserGlobalNavigationLinkActionId);
                     if (action != null) LogOnAsAnotherUserLink.NavigateUrl = action.AbsoluteNavigateUrl;
                 }
 

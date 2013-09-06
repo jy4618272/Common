@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
-    public partial class StartControl : System.Web.UI.UserControl
+    public partial class StartControl : Micajah.Common.WebControls.SetupControls.MasterControl
     {
         #region Members
 
@@ -20,21 +20,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected DetailMenu StartMenu;
         protected LinkButton HideLink;
 
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private List<Guid> m_StartMenuCheckedItems;
-
-        #endregion
-
-        #region Private Properties
-
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = (this.Page.Master as Micajah.Common.Pages.MasterPage);
-                return m_MasterPage;
-            }
-        }
 
         #endregion
 

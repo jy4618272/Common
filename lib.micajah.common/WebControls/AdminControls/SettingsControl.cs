@@ -1,3 +1,8 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -6,18 +11,13 @@ using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
     /// <summary>
     /// The control to manage settings by organization and/or instance administrators.
     /// </summary>
-    public class SettingsControl : UserControl, IPostBackEventHandler
+    public class SettingsControl : Micajah.Common.WebControls.SetupControls.MasterControl, IPostBackEventHandler
     {
         #region Members
 
@@ -36,7 +36,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private SettingCollection m_Settings;
         private Micajah.Common.Bll.Action m_Action;
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private UserContext m_UserContext;
         private ArrayList m_GroupIdList;
         private bool m_IsModernTheme;
@@ -88,15 +87,6 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 object obj = Support.ConvertStringToType(Request.QueryString["groupid"], typeof(Guid));
                 return ((obj == null) ? Guid.Empty : (Guid)obj);
-            }
-        }
-
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
             }
         }
 
@@ -747,9 +737,9 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (this.MasterPage != null)
                 {
                     if (this.ActionId != Guid.Empty)
-                        m_MasterPage.CustomName = this.Action.CustomName;
+                        this.MasterPage.CustomName = this.Action.CustomName;
 
-                    Micajah.Common.Bll.Action action = m_MasterPage.ActiveAction;
+                    Micajah.Common.Bll.Action action = this.MasterPage.ActiveAction;
                     while ((action != null) && (action.ActionId != ActionProvider.ConfigurationPageActionId))
                     {
                         action = action.ParentAction;
@@ -834,8 +824,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     if (this.MasterPage != null)
                     {
-                        m_MasterPage.MessageType = NoticeMessageType.Success;
-                        m_MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
+                        this.MasterPage.MessageType = NoticeMessageType.Success;
+                        this.MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
                     }
                 }
             }

@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="CheckBoxList.aspx.cs" Inherits="CheckBoxListTestPage" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="CheckBoxListTestPage" Codebehind="CheckBoxList.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     <mits:CheckBoxList ID="ValidatedCheckBoxList1" runat="server" ErrorMessage="You must select an item"

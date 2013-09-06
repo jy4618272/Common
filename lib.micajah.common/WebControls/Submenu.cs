@@ -3,6 +3,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Security;
+using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Web.UI;
@@ -22,7 +23,9 @@ namespace Micajah.Common.WebControls
         private Action m_ParentAction;
         private Micajah.Common.Pages.MasterPage m_MasterPage;
         private SubmenuPosition m_Position;
-        private UserContext m_UserContext;
+        private IList m_ActionIdList;
+        private bool m_IsFrameworkAdmin;
+        private bool m_IsAuthenticated;
         private ActionCollection m_Items;
         private bool m_ItemsIsLoaded;
         private HtmlGenericControl m_Container;
@@ -36,10 +39,13 @@ namespace Micajah.Common.WebControls
         /// <summary>
         /// Initializes a new instance of the Submenu control as left submenu.
         /// </summary>
-        public Submenu()
+        public Submenu(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
+            m_MasterPage = masterPage;
+            m_ActionIdList = actionIdList;
+            m_IsFrameworkAdmin = isFrameworkAdmin;
+            m_IsAuthenticated = isAuthenticated;
             m_Position = SubmenuPosition.Left;
-            m_UserContext = UserContext.Current;
             m_ModernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
         }
 
@@ -47,8 +53,8 @@ namespace Micajah.Common.WebControls
         /// Initializes a new instance of the Submenu control with specified type.
         /// </summary>
         /// <param name="position">Specifies the position of the submenu on the page. One of the SubmenuPosition enumerations.</param>
-        public Submenu(SubmenuPosition position)
-            : this()
+        public Submenu(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated, SubmenuPosition position)
+            : this(masterPage, actionIdList, isFrameworkAdmin, isAuthenticated)
         {
             m_Position = position;
         }
@@ -57,27 +63,6 @@ namespace Micajah.Common.WebControls
 
         #region Private Properties
 
-        private Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null)
-                {
-                    System.Web.UI.MasterPage master = this.Page.Master;
-                    while (master != null)
-                    {
-                        if (master is Micajah.Common.Pages.MasterPage)
-                        {
-                            m_MasterPage = (master as Micajah.Common.Pages.MasterPage);
-                            return m_MasterPage;
-                        }
-                        master = master.Master;
-                    }
-                }
-                return m_MasterPage;
-            }
-        }
-
         private System.Guid SelectedItemId
         {
             get
@@ -85,7 +70,7 @@ namespace Micajah.Common.WebControls
                 if (!m_SelectedItemId.HasValue)
                 {
                     System.Guid itemId = System.Guid.Empty;
-                    if (this.MasterPage != null)
+                    if (m_MasterPage != null)
                     {
                         if (m_MasterPage.ActiveAction != null)
                         {
@@ -123,7 +108,7 @@ namespace Micajah.Common.WebControls
                 {
                     if (this.ParentAction != null)
                     {
-                        m_Items = m_ParentAction.GetAvailableChildActions(m_UserContext);
+                        m_Items = m_ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                         m_ItemsIsLoaded = true;
                     }
                 }
@@ -163,7 +148,7 @@ namespace Micajah.Common.WebControls
                 {
                     if (this.ParentActionId != System.Guid.Empty)
                         m_ParentAction = ActionProvider.PagesAndControls.FindByActionId(this.ParentActionId);
-                    else if (this.MasterPage != null)
+                    else if (m_MasterPage != null)
                     {
                         if (m_MasterPage.ActiveAction != null)
                         {
@@ -236,7 +221,7 @@ namespace Micajah.Common.WebControls
 
                     if (item.IsDetailMenuPage)
                     {
-                        ActionCollection availableChildActions = item.GetAvailableChildActions(m_UserContext);
+                        ActionCollection availableChildActions = item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                         if (availableChildActions.Count > 0)
                         {
                             if (!m_ModernTheme)
@@ -344,7 +329,7 @@ namespace Micajah.Common.WebControls
 
                         if (item.IsDetailMenuPage)
                         {
-                            ActionCollection availableChildActions = item.GetAvailableChildActions(m_UserContext);
+                            ActionCollection availableChildActions = item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                             if (availableChildActions.Count > 0)
                             {
                                 foreach (Action item2 in availableChildActions)

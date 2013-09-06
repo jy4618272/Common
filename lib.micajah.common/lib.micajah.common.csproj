@@ -74,57 +74,57 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChargifyNET">
+    <Reference Include="ChargifyNET, Version=1.0.7.1, Culture=neutral, PublicKeyToken=a614d333e4502959, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\ChargifyNET.dll</HintPath>
+      <HintPath>..\bin Shared\ChargifyNET.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\DotNetOpenAuth.Core.dll</HintPath>
+      <HintPath>..\bin Shared\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\DotNetOpenAuth.OAuth.dll</HintPath>
+      <HintPath>..\bin Shared\DotNetOpenAuth.OAuth.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OAuth.Common, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\DotNetOpenAuth.OAuth.Common.dll</HintPath>
+      <HintPath>..\bin Shared\DotNetOpenAuth.OAuth.Common.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OAuth.ServiceProvider, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll</HintPath>
+      <HintPath>..\bin Shared\DotNetOpenAuth.OAuth.ServiceProvider.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\DotNetOpenAuth.OpenId.dll</HintPath>
+      <HintPath>..\bin Shared\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+      <HintPath>..\bin Shared\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus">
+    <Reference Include="EPPlus, Version=3.1.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\EPPlus.dll</HintPath>
+      <HintPath>..\bin Shared\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Google.GData.Apps">
+    <Reference Include="Google.GData.Apps, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e6feebfe441b89cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Google.GData.Apps.dll</HintPath>
+      <HintPath>..\bin Shared\Google.GData.Apps.dll</HintPath>
     </Reference>
-    <Reference Include="Google.GData.Client">
+    <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Google.GData.Client.dll</HintPath>
+      <HintPath>..\bin Shared\Google.GData.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Google.GData.Extensions">
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Google.GData.Extensions.dll</HintPath>
+      <HintPath>..\bin Shared\Google.GData.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Micajah.Common.LdapAdapter">
+    <Reference Include="Micajah.Common.LdapAdapter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5584840979da6ebb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Micajah.Common.LdapAdapter.dll</HintPath>
+      <HintPath>..\bin Shared\Micajah.Common.LdapAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\bin Shared\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -148,17 +148,17 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Design">
+    <Reference Include="Telerik.Web.Design, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Telerik.Web.Design.dll</HintPath>
+      <HintPath>..\bin Shared\Telerik.Web.Design.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Web.UI">
+    <Reference Include="Telerik.Web.UI, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Telerik.Web.UI.dll</HintPath>
+      <HintPath>..\bin Shared\Telerik.Web.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Web.UI.Skins">
+    <Reference Include="Telerik.Web.UI.Skins, Version=2012.2.912.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Runtime\Telerik.Web.UI.Skins.dll</HintPath>
+      <HintPath>..\bin Shared\Telerik.Web.UI.Skins.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -388,7 +388,7 @@
     <Compile Include="WebControls\AdminControls\OrganizationProfileControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\AdminControls\RecurringScheduleControl.cs">
+    <Compile Include="WebControls\AdminControls\RecurringSchedulePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\RuleParametersControl.cs">
@@ -419,10 +419,13 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\AdminControls\CustomUrls.cs" />
-    <Compile Include="WebControls\ActivityReportControl.cs">
+    <Compile Include="WebControls\SetupControls\ActivityReportControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\SecurityControls\OAuthControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebControls\SetupControls\MasterControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\Token.cs" />
@@ -738,16 +741,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v114.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.easyModal.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v115.sql" />
-    <Content Include="Runtime\DotNetOpenAuth.Core.pdb" />
-    <Content Include="Runtime\DotNetOpenAuth.OAuth.Common.pdb" />
-    <Content Include="Runtime\DotNetOpenAuth.OAuth.pdb" />
-    <Content Include="Runtime\DotNetOpenAuth.OAuth.ServiceProvider.pdb" />
-    <Content Include="Runtime\DotNetOpenAuth.OpenId.pdb" />
-    <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.pdb" />
-    <Content Include="Runtime\System.Net.Http.dll" />
-    <Content Include="Runtime\Telerik.Web.Design.dll" />
-    <Content Include="Runtime\Telerik.Web.UI.dll" />
-    <Content Include="Runtime\Telerik.Web.UI.Skins.dll" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientRed.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemLeft.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemRight.gif" />
@@ -780,7 +773,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\CommonGridView.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\DetailMenu.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ComboBox.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\DateRange.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\HtmlEditor.js" />
@@ -2090,17 +2085,15 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\GoogleIntegration.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ActivityReport.aspx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\ActivityReport.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\ActivityReport.ascx">
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\ActivityReport.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <Content Include="Runtime\ChargifyNET.dll" />
-    <Content Include="Runtime\ChargifyNET.pdb" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\Help.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Modern.css" />
@@ -2120,21 +2113,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\Validator.js" />
-    <Content Include="Runtime\DotNetOpenAuth.Core.dll" />
-    <Content Include="Runtime\DotNetOpenAuth.OAuth.Common.dll" />
-    <Content Include="Runtime\DotNetOpenAuth.OAuth.dll" />
-    <Content Include="Runtime\DotNetOpenAuth.OAuth.ServiceProvider.dll" />
-    <Content Include="Runtime\DotNetOpenAuth.OpenId.dll" />
-    <Content Include="Runtime\DotNetOpenAuth.OpenId.RelyingParty.dll" />
-    <Content Include="Runtime\EPPlus.dll" />
-    <Content Include="Runtime\EPPlus.pdb" />
-    <Content Include="Runtime\EPPlus.XML" />
-    <Content Include="Runtime\Google.GData.Apps.dll" />
-    <Content Include="Runtime\Google.GData.Client.dll" />
-    <Content Include="Runtime\Google.GData.Extensions.dll" />
-    <Content Include="Runtime\Micajah.Common.LdapAdapter.dll" />
-    <Content Include="Runtime\Micajah.Common.LdapAdapter.pdb" />
-    <Content Include="Runtime\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -1,5 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="SmallerIcons.aspx.cs" Inherits="SmallerIconsTestPage" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="SmallerIconsTestPage" Codebehind="SmallerIcons.aspx.cs" %>
 
 <%@ Register Src="~/Controls/EmbeddedIcons.ascx" TagName="EmbeddedIcons" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">

@@ -43,7 +43,6 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid LoginAsUserGlobalNavigationLinkActionId = new Guid("709A6B39-36A2-43FC-AF18-24C2E3332D7A");
         internal readonly static Guid OrganizationsPageActionId = new Guid("00000000-0000-0000-0000-000000000040");
         internal readonly static Guid TreesPageActionId = new Guid("B3CCC73F-7194-4F0A-AABB-77AE91E31CE9");
-        internal readonly static Guid LoginAsUserPageActionId = new Guid("00000000-0000-0000-0000-000000000041");
         internal readonly static Guid SetupGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000042");
         internal readonly static Guid LoginGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000043");
         internal readonly static Guid TreePageActionId = new Guid("7D20C2C0-09DC-4399-89D0-FE16757FF169");
@@ -71,43 +70,18 @@ namespace Micajah.Common.Bll.Providers
         private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
         private static readonly object s_MyAccountActionIdListSyncRoot = new object();
         private static readonly object s_PagesAndControlsSyncRoot = new object();
-        private static readonly object s_PublicActionsSyncRoot = new object();
         private static readonly object s_SettingsActionIdListSyncRoot = new object();
-        private static readonly object s_SetupActionIdListSyncRoot = new object();
-        private static readonly object s_RoleActionIdListSyncRoot = new object();
         private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
         private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
+
+        private static ActionCollection s_GlobalNavigationLinks;
+        private static ActionCollection s_PagesAndControls;
+        private static ArrayList s_MyAccountActionIdList;
+        private static ArrayList s_SettingsActionIdList;
 
         #endregion
 
         #region Private Properties
-
-        /// <summary>
-        /// Gets a collection of the pages that are available only in development mode.
-        /// </summary>
-        private static ArrayList SetupActionIdList
-        {
-            get
-            {
-                ArrayList list = CacheManager.Current.Get("mc.SetupActionIdList") as ArrayList;
-                if (list == null)
-                {
-                    lock (s_SetupActionIdListSyncRoot)
-                    {
-                        list = CacheManager.Current.Get("mc.SetupActionIdList") as ArrayList;
-                        if (list == null)
-                        {
-                            list = new ArrayList();
-                            GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(SetupPageActionId), list);
-                            list.Add(SetupGlobalNavigationLinkActionId);
-
-                            CacheManager.Current.AddWithDefaultExpiration("mc.SetupActionIdList", list);
-                        }
-                    }
-                }
-                return list;
-            }
-        }
 
         private static List<string> GroupsInstanceActionIdListKeys
         {
@@ -134,22 +108,20 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ActionCollection coll = CacheManager.Current.Get("mc.GlobalNavigationLinks") as ActionCollection;
-                if (coll == null)
+                if (s_GlobalNavigationLinks == null)
                 {
                     lock (s_GlobalNavigationLinksSyncRoot)
                     {
-                        coll = CacheManager.Current.Get("mc.GlobalNavigationLinks") as ActionCollection;
-                        if (coll == null)
+                        if (s_GlobalNavigationLinks == null)
                         {
-                            coll = new ActionCollection();
+                            ActionCollection coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.GlobalNavigationLink);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.GlobalNavigationLinks", coll);
+                            s_GlobalNavigationLinks = coll;
                         }
                     }
                 }
-                return coll;
+                return s_GlobalNavigationLinks;
             }
         }
 
@@ -160,23 +132,21 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ArrayList list = CacheManager.Current.Get("mc.MyAccountActionIdList") as ArrayList;
-                if (list == null)
+                if (s_MyAccountActionIdList == null)
                 {
                     lock (s_MyAccountActionIdListSyncRoot)
                     {
-                        list = CacheManager.Current.Get("mc.MyAccountActionIdList") as ArrayList;
-                        if (list == null)
+                        if (s_MyAccountActionIdList == null)
                         {
-                            list = new ArrayList();
+                            ArrayList list = new ArrayList();
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(MyAccountPageActionId), list);
                             list.Add(MyAccountGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.MyAccountActionIdList", list);
+                            s_MyAccountActionIdList = list;
                         }
                     }
                 }
-                return list;
+                return s_MyAccountActionIdList;
             }
         }
 
@@ -199,23 +169,21 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ArrayList list = CacheManager.Current.Get("mc.SettingsActionIdList") as ArrayList;
-                if (list == null)
+                if (s_SettingsActionIdList == null)
                 {
                     lock (s_SettingsActionIdListSyncRoot)
                     {
-                        list = CacheManager.Current.Get("mc.SettingsActionIdList") as ArrayList;
-                        if (list == null)
+                        if (s_SettingsActionIdList == null)
                         {
-                            list = new ArrayList();
+                            ArrayList list = new ArrayList();
                             GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(ConfigurationPageActionId), list);
                             list.Add(ConfigurationGlobalNavigationLinkActionId);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.SettingsActionIdList", list);
+                            s_SettingsActionIdList = list;
                         }
                     }
                 }
-                return list;
+                return s_SettingsActionIdList;
             }
         }
 
@@ -237,55 +205,20 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                ActionCollection coll = CacheManager.Current.Get("mc.PagesAndControls") as ActionCollection;
-                if (coll == null)
+                if (s_PagesAndControls == null)
                 {
                     lock (s_PagesAndControlsSyncRoot)
                     {
-                        coll = CacheManager.Current.Get("mc.PagesAndControls") as ActionCollection;
-                        if (coll == null)
+                        if (s_PagesAndControls == null)
                         {
-                            coll = new ActionCollection();
+                            ActionCollection coll = new ActionCollection();
                             coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
 
-                            CacheManager.Current.AddWithDefaultExpiration("mc.PagesAndControls", coll);
+                            s_PagesAndControls = coll;
                         }
                     }
                 }
-                return coll;
-            }
-        }
-
-        /// <summary>
-        /// Gets the collection of the actions for which the authentication is not required.
-        /// </summary>
-        internal static ActionCollection PublicActions
-        {
-            get
-            {
-                ActionCollection coll = CacheManager.Current.Get("mc.PublicActions") as ActionCollection;
-                if (coll == null)
-                {
-                    lock (s_PublicActionsSyncRoot)
-                    {
-                        coll = CacheManager.Current.Get("mc.PublicActions") as ActionCollection;
-                        if (coll == null)
-                        {
-                            coll = new ActionCollection();
-                            coll.AddRange(PagesAndControls.FindAllPublic());
-                            coll.AddRange(GlobalNavigationLinks.FindAllPublic());
-
-                            Action action = new Action();
-                            action.ActionId = Guid.NewGuid();
-                            action.ActionType = ActionType.Page;
-                            action.NavigateUrl = ResourceProvider.ResourceHandlerVirtualPath;
-                            coll.Add(action);
-
-                            CacheManager.Current.AddWithDefaultExpiration("mc.PublicActions", coll);
-                        }
-                    }
-                }
-                return coll;
+                return s_PagesAndControls;
             }
         }
 
@@ -687,30 +620,15 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Collections.ArrayList that contains identifiers of actions associated with specified role.</returns>
         internal static ArrayList GetActionIdListByRoleId(Guid roleId)
         {
-            string key = string.Format(CultureInfo.InvariantCulture, "mc.RoleActionIdList.{0:N}", roleId);
+            ArrayList actionIdList = new ArrayList();
 
-            ArrayList actionIdList = CacheManager.Current.Get(key) as ArrayList;
-            if (actionIdList == null)
+            CommonDataSet.RolesActionsDataTable table = WebApplication.CommonDataSet.RolesActions;
+            foreach (CommonDataSet.RolesActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.RoleIdColumn.ColumnName, roleId.ToString())))
             {
-                lock (s_RoleActionIdListSyncRoot)
-                {
-                    actionIdList = CacheManager.Current.Get(key) as ArrayList;
-                    if (actionIdList == null)
-                    {
-                        actionIdList = new ArrayList();
-
-                        CommonDataSet.RolesActionsDataTable table = WebApplication.CommonDataSet.RolesActions;
-                        foreach (CommonDataSet.RolesActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.RoleIdColumn.ColumnName, roleId.ToString())))
-                        {
-                            actionIdList.Add(row.ActionId);
-                        }
-
-                        CacheManager.Current.AddWithDefaultExpiration(key, actionIdList);
-                    }
-                }
+                actionIdList.Add(row.ActionId);
             }
 
-            return (ArrayList)actionIdList.Clone();
+            return actionIdList;
         }
 
         internal static ArrayList GetActionIdList(ArrayList roleIdList, bool isOrgAdmin, bool removeDuplicates)
@@ -808,10 +726,17 @@ namespace Micajah.Common.Bll.Providers
             actionRow = table.FindByActionId(LoginAsUserGlobalNavigationLinkActionId);
             if (actionRow != null) actionRow.Delete();
 
-            actionRow = table.FindByActionId(LoginAsUserPageActionId);
-            if (actionRow != null) actionRow.Delete();
+            table.AcceptChanges();
 
-            foreach (Guid actionId in SetupActionIdList)
+            ArrayList setupActionIdList = new ArrayList();
+
+            foreach (CommonDataSet.ActionRow row in table)
+            {
+                if (IsSetupPage(row))
+                    setupActionIdList.Add(row.ActionId);
+            }
+
+            foreach (Guid actionId in setupActionIdList)
             {
                 actionRow = table.FindByActionId(actionId);
                 if (actionRow != null) actionRow.Delete();
@@ -908,82 +833,65 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the authentication is not required for the specified URL; otherwise, false.</returns>
         internal static bool IsPublicPage(string navigateUrl)
         {
-            Action action = FindAction(Guid.Empty, CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl), PublicActions);
+            Action action = FindAction(Guid.Empty, CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl));
             if (action != null)
-                return ((!SetupActionIdList.Contains(action.ActionId)) || (string.Compare(navigateUrl, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) == 0));
+            {
+                return (!action.AuthenticationRequired);
+            }
             return false;
         }
 
         /// <summary>
         /// Gets a value indicating that the specified action is setup page.
         /// </summary>
-        /// <param name="actionId">The identifier of the action to check.</param>
+        /// <param name="action">The action to check.</param>
         /// <returns>true, if the specified action is setup page; otherwise, false.</returns>
-        internal static bool IsSetupPage(Guid actionId)
+        internal static bool IsSetupPage(Action action)
         {
-            Action action = FindAction(actionId);
-            if (action != null)
-                return SetupActionIdList.Contains(action.ActionId);
+            if ((action.ActionId == SetupPageActionId) || (action.ActionId == SetupGlobalNavigationLinkActionId))
+                return true;
+            else
+            {
+                if (action.ActionType == ActionType.Page)
+                    return ResourceProvider.IsSetupPageUrl(action.NavigateUrl);
+            }
             return false;
         }
 
         /// <summary>
-        /// Gets a value indicating that the specified URL is setup page's URL.
+        /// Gets a value indicating that the specified action is setup page.
         /// </summary>
-        /// <param name="navigateUrl">The string that contains the URL to check.</param>
-        /// <returns>true, if the specified URL is setup page's URL; otherwise, false.</returns>
-        internal static bool IsSetupPage(string navigateUrl)
+        /// <param name="action">The action to check.</param>
+        /// <returns>true, if the specified action is setup page; otherwise, false.</returns>
+        internal static bool IsSetupPage(CommonDataSet.ActionRow action)
         {
-            if (!string.IsNullOrEmpty(navigateUrl))
-                navigateUrl = navigateUrl.Split('?')[0];
-            bool result = (string.Compare(CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl), CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.FrameworkPageVirtualPath), StringComparison.OrdinalIgnoreCase) == 0);
-            if (!result)
+            if ((ActionType)action.ActionTypeId == ActionType.Page)
             {
-                Action action = FindAction(navigateUrl);
-                if (action != null) result = SetupActionIdList.Contains(action.ActionId);
+                if ((action.ActionId == SetupPageActionId) || (action.ActionId == SetupGlobalNavigationLinkActionId))
+                    return true;
+                else if (!action.IsNavigateUrlNull())
+                    return ResourceProvider.IsSetupPageUrl(action.NavigateUrl);
             }
-            return result;
+            return false;
         }
 
         internal static void Refresh()
         {
-            lock (s_SetupActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.SetupActionIdList");
-            }
-
-            lock (s_GlobalNavigationLinksSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.GlobalNavigationLinks");
-            }
-
-            lock (s_MyAccountActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.MyAccountActionIdList");
-            }
-
-            lock (s_SettingsActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.SettingsActionIdList");
-            }
-
-            lock (s_PagesAndControlsSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.PagesAndControls");
-            }
-
-            lock (s_PublicActionsSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.PublicActions");
-            }
+            s_GlobalNavigationLinks = null;
+            s_MyAccountActionIdList = null;
+            s_SettingsActionIdList = null;
+            s_PagesAndControls = null;
         }
 
         internal static void Refresh(Guid groupId, Guid instanceId)
         {
-            lock (s_GroupsInstanceActionIdListSyncRoot)
+            lock (s_GroupInstanceActionIdListSyncRoot)
             {
                 CacheManager.Current.Remove(string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId));
+            }
 
+            lock (s_GroupsInstanceActionIdListSyncRoot)
+            {
                 string keyToRemove = null;
                 string g = groupId.ToString("N");
                 foreach (string key in GroupsInstanceActionIdListKeys)
@@ -1021,31 +929,23 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal static bool ShowAction(Action action, UserContext user)
+        internal static bool ShowAction(Action action, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
-            IList actionIdList = null;
-            bool isFrameworkAdmin = false;
-            bool isAuthenticated = false;
-            if (user != null)
-            {
-                actionIdList = user.ActionIdList;
-                isAuthenticated = true;
-                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganization == null));
-            }
-
             if (action.AuthenticationRequired)
             {
                 if (isAuthenticated)
                 {
-                    if (SetupActionIdList.Contains(action.ActionId))
+                    if (IsSetupPage(action))
                     {
-                        if (!(isFrameworkAdmin && (user.SelectedOrganization == null)))
+                        if (!isFrameworkAdmin)
                             return false;
                     }
                     else if (!(((actionIdList != null) && actionIdList.Contains(action.ActionId))
                         || action.ActionId == MyAccountMenuGlobalNavigationLinkActionId
                         || action.ActionId == LoginAsUserGlobalNavigationLinkActionId))
+                    {
                         return false;
+                    }
                 }
                 else return false;
             }

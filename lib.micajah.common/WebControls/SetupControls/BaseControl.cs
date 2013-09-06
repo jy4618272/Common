@@ -1,3 +1,5 @@
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -7,12 +9,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.SetupControls
 {
-    public abstract class BaseControl : UserControl
+    public abstract class BaseControl : MasterControl
     {
         #region Members
 
@@ -21,7 +21,6 @@ namespace Micajah.Common.WebControls.SetupControls
         protected ObjectDataSource EntityListDataSource;
         protected ObjectDataSource EntityDataSource;
         private HtmlGenericControl m_ErrorDiv;
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private bool m_AddBreadcrumbs;
 
         #endregion
@@ -34,15 +33,6 @@ namespace Micajah.Common.WebControls.SetupControls
             {
                 if (m_ErrorDiv == null) m_ErrorDiv = EditForm.FindControl("ErrorDiv") as HtmlGenericControl;
                 return m_ErrorDiv;
-            }
-        }
-
-        protected Micajah.Common.Pages.MasterPage MasterPage
-        {
-            get
-            {
-                if (m_MasterPage == null) m_MasterPage = Page.Master as Micajah.Common.Pages.MasterPage;
-                return m_MasterPage;
             }
         }
 

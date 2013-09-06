@@ -5,6 +5,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
 using Newtonsoft.Json;
 using System;
@@ -185,8 +186,20 @@ namespace Micajah.Common.WebControls.SecurityControls
 }}
 
 function InstanceRequiredValidation(source, arguments) {{
-    var elem = document.getElementById('{0}');
-    arguments.IsValid = (elem.value.replace(/^\s+$/gm, '').length > 0);
+    arguments.IsValid = false;
+    var itemSelected = false;
+    var elem = document.getElementById('InstanceList');
+    var items = elem.getElementsByTagName('li');
+    for (var y = 0; y < items.length; y++) {{
+        if (items[y].className == 'Cbc') {{
+            itemSelected = true;
+            break;
+        }}
+    }}
+    if (itemSelected) {{
+        elem = document.getElementById('{0}');
+        arguments.IsValid = (elem.value.replace(/^\s+$/gm, '').length > 0);
+    }}
 }}
 "
                     , SelectedInstance.ClientID);
@@ -383,7 +396,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.PublicActions.FindByActionId(ActionProvider.SignUpOrganizationPageActionId));
+            Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.PagesAndControls.FindByActionId(ActionProvider.SignUpOrganizationPageActionId));
 
             if (!this.Page.IsPostBack)
             {
@@ -591,6 +604,11 @@ function InstanceRequiredValidation(source, arguments) {{
             }
         }
 
+        protected void InstanceRequiredValidator_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = (!string.IsNullOrEmpty(SelectedInstance.Text));
+        }
+
         protected void OrganizationUrlValidator_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (args == null) return;
@@ -633,7 +651,8 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void Step1Button_Click(object sender, EventArgs e)
         {
             Page.Validate("Step1");
-            if (!Page.IsValid) return;
+            if (!Page.IsValid)
+                return;
 
             if (WebApplication.LoginProvider.ValidateLogin(Email1.Text, null))
             {
@@ -697,32 +716,49 @@ function InstanceRequiredValidation(source, arguments) {{
         protected void Step3Button_Click(object sender, EventArgs e)
         {
             Page.Validate("Step3");
-            if (!Page.IsValid) return;
+            if (!Page.IsValid)
+                return;
 
-            Guid? templateInstanceId = null;
-            if (!string.IsNullOrEmpty(SelectedInstance.Text))
-                templateInstanceId = new Guid(SelectedInstance.Text);
-
-            Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, null
-                , null, null, null, null, null, null, CurrencyList.SelectedValue, HowYouHearAboutUs.Text
-                , TimeZoneList.SelectedValue, templateInstanceId
-                , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
-                , OrganizationUrl.Text, this.Request
-                , true);
-
-            Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
-
-            WebApplication.RefreshAllData(false);
-
-            if (GoogleProvider.IsGoogleProviderRequest(this.Request))
+            if (string.Compare((string)Session["NewOrg"], "1", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                string returnUrl = null;
-                OAuth2Parameters parameters = JsonConvert.DeserializeObject<OAuth2Parameters>(this.OAuth2Parameters);
+                UserContext user = UserContext.Current;
+                if (user != null)
+                {
+                    if (string.Compare(user.Email, Email2.Text, StringComparison.OrdinalIgnoreCase) == 0)
+                        Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), user.SelectedOrganizationId, user.SelectedInstanceId, false, null));
+                }
 
-                GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
+                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl());
             }
+            else
+            {
+                Guid? templateInstanceId = null;
+                if (!string.IsNullOrEmpty(SelectedInstance.Text))
+                    templateInstanceId = new Guid(SelectedInstance.Text);
 
-            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true, null));
+                Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, null
+                    , null, null, null, null, null, null, CurrencyList.SelectedValue, HowYouHearAboutUs.Text
+                    , TimeZoneList.SelectedValue, templateInstanceId
+                    , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
+                    , OrganizationUrl.Text, this.Request
+                    , true);
+
+                Session["NewOrg"] = "1";
+
+                Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
+
+                WebApplication.RefreshAllData(false);
+
+                if (GoogleProvider.IsGoogleProviderRequest(this.Request))
+                {
+                    string returnUrl = null;
+                    OAuth2Parameters parameters = JsonConvert.DeserializeObject<OAuth2Parameters>(this.OAuth2Parameters);
+
+                    GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
+                }
+
+                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true, null));
+            }
         }
 
         #endregion
