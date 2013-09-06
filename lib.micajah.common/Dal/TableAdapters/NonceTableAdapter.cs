@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_Nonce table.
+    /// The adapter for the Mc_Nonce table2.
     /// </summary>
     internal class NonceTableAdapter : BaseTableAdapter
     {

@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_EntityNode table.
+    /// The adapter for the Mc_EntityNode table2.
     /// </summary>
     internal class EntityNodeTableAdapter : BaseTableAdapter
     {
@@ -82,6 +82,32 @@ namespace Micajah.Common.Dal.TableAdapters
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
                 command.Parameters.Add(new SqlParameter("@EntityNodeTypeId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "EntityNodeTypeId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetEntityNodesByEntityId"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@EntityId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "EntityId", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@InstanceId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "InstanceId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetEntityNode"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@EntityNodeId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "EntityNodeId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetEntityNodesByParentEntityNodeId"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@ParentEntityNodeId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "ParentEntityNodeId", DataRowVersion.Current, false, null, "", "", ""));
                 SelectCommands.Add(command);
             }
 

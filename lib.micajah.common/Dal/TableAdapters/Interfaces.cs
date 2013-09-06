@@ -7,15 +7,15 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// Represents a set of command-related properties and methods that are used to fill the data table and 
-    /// update a data source, and is implemented by .NET Framework data providers that access relational databases.
+    /// Represents a set of command-related properties and methods that are used to fill the data table2 and 
+    /// update a data sourceRow, and is implemented by .NET Framework data providers that access relational databases.
     /// </summary>
     public interface ITableAdapter : IDisposable, ICloneable
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets the name of the table which the adapter relate to.
+        /// Gets or sets the name of the table2 which the adapter relate to.
         /// </summary>
         TableName TableName { get; set; }
 
@@ -25,29 +25,29 @@ namespace Micajah.Common.Dal.TableAdapters
         string ConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets an SQL statement used to select records in the data source.
+        /// Gets or sets an SQL statement used to select records in the data sourceRow.
         /// </summary>
         SqlCommand SelectCommand { get; set; }
 
         IList<SqlCommand> SelectCommands { get; }
 
         /// <summary>
-        /// Gets or sets an SQL statement used to insert new records into the data source.
+        /// Gets or sets an SQL statement used to insert new records into the data sourceRow.
         /// </summary>
         SqlCommand InsertCommand { get; set; }
 
         /// <summary>
-        /// Gets or sets an SQL statement used to update records in the data source.
+        /// Gets or sets an SQL statement used to update records in the data sourceRow.
         /// </summary>
         SqlCommand UpdateCommand { get; set; }
 
         /// <summary>
-        /// Gets or sets an SQL statement for deleting records from the data source.
+        /// Gets or sets an SQL statement for deleting records from the data sourceRow.
         /// </summary>
         SqlCommand DeleteCommand { get; set; }
 
         /// <summary>
-        /// Gets or sets the master mapping between a source table and a table which the adapter relate to.
+        /// Gets or sets the master mapping between a sourceRow table2 and a table2 which the adapter relate to.
         /// </summary>
         DataTableMapping TableMapping { get; set; }
 
@@ -89,21 +89,21 @@ namespace Micajah.Common.Dal.TableAdapters
         /// <summary>
         /// Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row in the specified System.Data.DataTable object.
         /// </summary>
-        /// <param name="dataTable">The System.Data.DataTable object used to update the data source.</param>
+        /// <param name="dataTable">The System.Data.DataTable object used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         int Update(DataTable dataTable);
 
         /// <summary>
         /// Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row in the specified System.Data.DataSet object.
         /// </summary>
-        /// <param name="dataSet">The System.Data.DataSet object used to update the data source.</param>
+        /// <param name="dataSet">The System.Data.DataSet object used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         int Update(DataSet dataSet);
 
         /// <summary>
         /// Calls the respective INSERT, UPDATE, or DELETE statements for specified System.Data.DataRow object.
         /// </summary>
-        /// <param name="dataRow">An System.Data.DataRow object used to update the data source.</param>
+        /// <param name="dataRow">An System.Data.DataRow object used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         int Update(DataRow dataRow);
 
@@ -111,7 +111,7 @@ namespace Micajah.Common.Dal.TableAdapters
         /// Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row 
         /// in the specified array of System.Data.DataRow objects.
         /// </summary>
-        /// <param name="dataRows">An array of System.Data.DataRow objects used to update the data source.</param>
+        /// <param name="dataRows">An array of System.Data.DataRow objects used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         int Update(DataRow[] dataRows);
 

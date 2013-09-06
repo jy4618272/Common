@@ -1,15 +1,15 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
+﻿using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Globalization;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -173,7 +173,7 @@ namespace Micajah.Common.WebControls.AdminControls
             string partialCustomUrl = string.Empty;
             if (EditForm.CurrentMode == DetailsViewMode.Edit)
             {
-                CommonDataSet.CustomUrlRow row = EditForm.DataItem as CommonDataSet.CustomUrlRow;
+                MasterDataSet.CustomUrlRow row = EditForm.DataItem as MasterDataSet.CustomUrlRow;
                 if (row != null)
                 {
                     if (!row.IsInstanceIdNull()) instanceId = row.InstanceId;
@@ -300,12 +300,12 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 try
                 {
-                    Guid orgId = m_UserContext.SelectedOrganization.OrganizationId;
+                    Guid orgId = m_UserContext.SelectedOrganizationId;
                     Guid? instId = null;
-                    if (m_UserContext.SelectedInstance != null)
-                        instId = m_UserContext.SelectedInstance.InstanceId;
+                    if (m_UserContext.SelectedInstanceId != Guid.Empty)
+                        instId = m_UserContext.SelectedInstanceId;
 
-                    CommonDataSet.CustomUrlRow row = null;
+                    MasterDataSet.CustomUrlRow row = null;
 
                     if (instId.HasValue)
                         row = CustomUrlProvider.GetCustomUrl(orgId, instId.Value);
@@ -409,13 +409,13 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!Page.IsPostBack)
             {
-                CommonDataSet.CustomUrlRow row = null;
+                MasterDataSet.CustomUrlRow row = null;
 
-                if (m_UserContext.SelectedInstance != null)
-                    row = CustomUrlProvider.GetCustomUrl(m_UserContext.SelectedOrganization.OrganizationId, m_UserContext.SelectedInstance.InstanceId);
+                if (m_UserContext.SelectedInstanceId != Guid.Empty)
+                    row = CustomUrlProvider.GetCustomUrl(m_UserContext.SelectedOrganizationId, m_UserContext.SelectedInstanceId);
 
                 if (row == null)
-                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(m_UserContext.SelectedOrganization.OrganizationId);
+                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(m_UserContext.SelectedOrganizationId);
 
                 if (row != null)
                     VanityUrlTextbox.Text = row.PartialCustomUrl.ToLowerInvariant();

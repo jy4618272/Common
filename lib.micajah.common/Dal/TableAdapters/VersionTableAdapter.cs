@@ -4,7 +4,7 @@ using System.Globalization;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_Version table.
+    /// The adapter for the Mc_Version table2.
     /// </summary>
     internal class VersionTableAdapter : BaseTableAdapter
     {

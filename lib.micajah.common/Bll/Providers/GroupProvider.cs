@@ -1,3 +1,9 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,12 +11,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Text;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -20,6 +20,28 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class GroupProvider
     {
+        #region Internal Properties
+
+        internal static bool GroupsExist
+        {
+            get
+            {
+                bool groupsExist = false;
+                UserContext user = UserContext.Current;
+                if (user != null)
+                {
+                    if (user.SelectedOrganizationId != Guid.Empty)
+                    {
+                        OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(user.SelectedOrganizationId);
+                        groupsExist = (ds.Group.Count > 0);
+                    }
+                }
+                return groupsExist;
+            }
+        }
+
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -73,7 +95,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Returns the object populated with information of the built-in group that is associated to the specified instance.
         /// </summary>
-        /// <param name="ds">The data source to get data from.</param>
+        /// <param name="ds">The data sourceRow to get data from.</param>
         /// <param name="instanceId">The unique identifier of the instance.</param>
         /// <returns>The object populated with information of the group. If the group is not found, the method returns null reference.</returns>
         private static OrganizationDataSet.GroupRow GetInstanceAdministratorGroupRow(OrganizationDataSet ds, Guid instanceId)
@@ -129,7 +151,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupId">The group's identifier.</param>
         /// <param name="instanceId">The instance's identifier.</param>
         /// <param name="roleId">The group's role identifier in specified instance.</param>
-        /// <param name="table">The data source to get data from.</param>
+        /// <param name="table2">The data sourceRow to get data from.</param>
         /// <returns>The System.Collections.ArrayList that contains identifiers of actions associated with specified group role in specified instance.</returns>
         internal static ArrayList GetActionIdList(Guid groupId, Guid instanceId, Guid roleId, OrganizationDataSet.GroupsInstancesActionsDataTable table)
         {
@@ -156,7 +178,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Collections.ArrayList that contains identifiers of actions associated with specified group role in specified instance.</returns>
         internal static ArrayList GetActionIdList(Guid groupId, Guid instanceId, Guid roleId)
         {
-            return GetActionIdList(groupId, instanceId, roleId, UserContext.Current.SelectedOrganization.DataSet.GroupsInstancesActions);
+            return GetActionIdList(groupId, instanceId, roleId, WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId).GroupsInstancesActions);
         }
 
         internal static List<Guid> GetGroupsInstances(string groupId, Guid organizationId)
@@ -223,7 +245,7 @@ namespace Micajah.Common.Bll.Providers
         {
             UserContext ctx = UserContext.Current;
             Guid roleId = Guid.Empty;
-            OrganizationDataSet ds = ctx.SelectedOrganization.DataSet;
+            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(ctx.SelectedOrganizationId);
             OrganizationDataSet.GroupsInstancesActionsDataTable table = ds.GroupsInstancesActions;
             OrganizationDataSet.GroupsInstancesRolesRow roleRow = ds.GroupsInstancesRoles.FindByGroupIdInstanceId(groupId, instanceId);
 
@@ -295,7 +317,7 @@ namespace Micajah.Common.Bll.Providers
                     }
                 }
 
-                ctx.SelectedOrganization.TableAdapters.GroupsInstancesActionsTableAdapter.Update(table);
+                WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(ctx.SelectedOrganizationId).GroupsInstancesActionsTableAdapter.Update(table);
 
                 ActionProvider.Refresh(groupId, instanceId);
             }
@@ -333,7 +355,7 @@ namespace Micajah.Common.Bll.Providers
                 throw new ConstraintException(string.Format(CultureInfo.CurrentCulture, Resources.GroupProvider_ErrorMessage_GroupAlreadyExists, name), ex);
             }
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.GroupTableAdapter.Update(row);
 
             Guid groupId = row.GroupId;
@@ -365,19 +387,20 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddGroupsInstancesRolesRow(row);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.GroupsInstancesRolesTableAdapter.Update(row);
 
             if (refreshOrganizationData) WebApplication.RefreshOrganizationData(organizationId);
         }
 
         /// <summary>
-        /// Removes the specified rows collection from GroupsInstancesRoles data table.
+        /// Removes the specified rows collection from GroupsInstancesRoles data table2.
         /// </summary>
         /// <param name="rows">The rows collection to remove.</param>
         internal static void RemoveGroupsInstancesRolesRows(OrganizationDataSet.GroupsInstancesRolesRow[] rows)
         {
-            OrganizationDataSet.GroupsInstancesRolesDataTable table = UserContext.Current.SelectedOrganization.DataSet.GroupsInstancesRoles;
+            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            OrganizationDataSet.GroupsInstancesRolesDataTable table = ds.GroupsInstancesRoles;
             foreach (OrganizationDataSet.GroupsInstancesRolesRow row in rows)
             {
                 table.RemoveGroupsInstancesRolesRow(row);
@@ -387,7 +410,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Updates the name of the built-in group that is associated to the specified instance.
         /// </summary>
-        /// <param name="ds">The data source.</param>
+        /// <param name="ds">The data sourceRow.</param>
         /// <param name="instanceId">The unique identifier of the instance.</param>
         /// <param name="name">The name of the instance.</param>
         internal static void UpdateInstanceAdministratorGroup(OrganizationDataSet ds, Guid organizationid, Guid instanceId, string name)
@@ -408,11 +431,12 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetGroups()
         {
+            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
-                return UserContext.Current.SelectedOrganization.DataSet.Group.Copy();
+                return ds.Group.Copy();
             else
             {
-                OrganizationDataSet.GroupDataTable table = UserContext.Current.SelectedOrganization.DataSet.Group;
+                OrganizationDataSet.GroupDataTable table = ds.Group;
                 OrganizationDataSet.GroupDataTable newTable = table.Copy() as OrganizationDataSet.GroupDataTable;
                 Instance firstInstance = InstanceProvider.GetFirstInstance();
 
@@ -524,7 +548,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static OrganizationDataSet.GroupRow GetGroupRow(Guid groupId)
         {
-            return UserContext.Current.SelectedOrganization.DataSet.Group.FindByGroupId(groupId);
+            return WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId).Group.FindByGroupId(groupId);
         }
 
         /// <summary>
@@ -586,14 +610,14 @@ namespace Micajah.Common.Bll.Providers
         public static void DeleteGroup(Guid groupId)
         {
             UserContext ctx = UserContext.Current;
-            OrganizationDataSet ds = ctx.SelectedOrganization.DataSet;
+            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(ctx.SelectedOrganizationId);
             OrganizationDataSet.GroupDataTable groupTable = ds.Group;
             OrganizationDataSet.GroupRow row = groupTable.FindByGroupId(groupId);
             if (row == null) return;
 
             row.Deleted = true;
 
-            ctx.SelectedOrganization.TableAdapters.GroupTableAdapter.Update(row);
+            WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(ctx.SelectedOrganizationId).GroupTableAdapter.Update(row);
 
             OrganizationDataSet.GroupsInstancesActionsDataTable actionTable = ds.GroupsInstancesActions;
             foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in row.GetGroupsInstancesActionsRows())
@@ -626,7 +650,7 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("RoleId", typeof(Guid));
                 table.Columns.Add("RoleName", typeof(string));
 
-                OrganizationDataSet ds = UserContext.Current.SelectedOrganization.DataSet;
+                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
                 OrganizationDataSet.GroupRow row = ds.Group.FindByGroupId(groupId);
 
                 if (row != null)
@@ -692,7 +716,7 @@ namespace Micajah.Common.Bll.Providers
                     table.Columns.Add("Name", typeof(string));
                     table.Columns.Add("InstancesRoles", typeof(string));
 
-                    OrganizationDataSet ds = UserContext.Current.SelectedOrganization.DataSet;
+                    OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
                     OrganizationDataSet.InstanceDataTable instanceTable = ds.Instance;
                     CommonDataSet.RoleDataTable roleTable = WebApplication.CommonDataSet.Role;
                     Instance firstInstance = InstanceProvider.GetFirstInstance();
@@ -761,7 +785,7 @@ namespace Micajah.Common.Bll.Providers
         public static void InsertGroupInstanceRole(Guid groupId, Guid instanceId, Guid roleId)
         {
             UserContext user = UserContext.Current;
-            InsertGroupInstanceRole(groupId, instanceId, roleId, user.SelectedOrganization.OrganizationId, false);
+            InsertGroupInstanceRole(groupId, instanceId, roleId, user.SelectedOrganizationId, false);
             user.Refresh();
         }
 
@@ -774,7 +798,7 @@ namespace Micajah.Common.Bll.Providers
         public static void DeleteGroupInstanceRoles(Guid groupId, Guid instanceId)
         {
             UserContext ctx = UserContext.Current;
-            OrganizationDataSet ds = ctx.SelectedOrganization.DataSet;
+            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(ctx.SelectedOrganizationId);
             OrganizationDataSet.GroupsInstancesRolesRow row = ds.GroupsInstancesRoles.FindByGroupIdInstanceId(groupId, instanceId);
 
             if (row != null)
@@ -787,7 +811,7 @@ namespace Micajah.Common.Bll.Providers
                     actionRow.Delete();
                 }
 
-                OrganizationDataSetTableAdapters adapters = ctx.SelectedOrganization.TableAdapters;
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(ctx.SelectedOrganizationId);
                 adapters.GroupsInstancesActionsTableAdapter.Update(table);
                 adapters.GroupsInstancesRolesTableAdapter.Update(row);
 

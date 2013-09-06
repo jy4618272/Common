@@ -88,7 +88,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the data source of the list that is being bound. The default value is a null reference.
+        /// Gets or sets the data sourceRow of the list that is being bound. The default value is a null reference.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -404,7 +404,7 @@ namespace Micajah.Common.WebControls
         public event RadComboBoxSelectedIndexChangedEventHandler SelectedIndexChanged;
 
         /// <summary>
-        /// Occurs after the server control binds to a data source.
+        /// Occurs after the server control binds to a data sourceRow.
         /// </summary>
         [Category("Data")]
         [Description("Occurs after the server control binds to a data source.")]

@@ -1181,7 +1181,7 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets a DataRow object populated with current values from the data source.
+        /// Gets a DataRow object populated with current values from the data sourceRow.
         /// </summary>
         /// <param name="command">Specifies the SqlCommand.</param>
         /// <returns>a DataRow object populated with current values.</returns>
@@ -1196,7 +1196,7 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets a DataRowView object populated with current values from the data source.
+        /// Gets a DataRowView object populated with current values from the data sourceRow.
         /// </summary>
         /// <param name="command">Specifies the SqlCommand.</param>
         /// <returns>a DataRowView object populated with current values.</returns>

@@ -109,7 +109,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (EditForm.DataItem != null)
             {
-                OrganizationDataSet.UserRow row = (OrganizationDataSet.UserRow)EditForm.DataItem;
+                ClientDataSet.UserRow row = (ClientDataSet.UserRow)EditForm.DataItem;
 
                 if (!row.IsTimeZoneIdNull())
                     timeZoneId = row.TimeZoneId;

@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Data;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
@@ -13,6 +6,13 @@ using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SecurityControls;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Collections;
+using System.Data;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -236,7 +236,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (WebApplication.LoginProvider.LoginNameExists(loginName))
                 {
-                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.SelectedOrganization.OrganizationId))
+                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.SelectedOrganizationId))
                     {
                         ErrorDiv.InnerHtml = Resources.UsersControl_ErrorMessage_UserInOrganizationExists;
                         ErrorDiv.Visible = true;
@@ -244,7 +244,7 @@ namespace Micajah.Common.WebControls.AdminControls
                         return;
                     }
 
-                    OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(loginName);
+                    ClientDataSet.UserRow userRow = UserProvider.GetUserRow(loginName);
                     if (userRow != null)
                     {
                         firstName = userRow.FirstName;
@@ -297,7 +297,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (EditForm.DataItem != null)
             {
-                OrganizationDataSet.UserRow row = (OrganizationDataSet.UserRow)EditForm.DataItem;
+                ClientDataSet.UserRow row = (ClientDataSet.UserRow)EditForm.DataItem;
 
                 if (!row.IsTimeZoneIdNull())
                     timeZoneId = row.TimeZoneId;
@@ -407,7 +407,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     e.Node.ToolTip = dataSourceRow["InstancesRoles"].ToString();
 
-                    string[] groupIds = ((Micajah.Common.Dal.OrganizationDataSet.UserRow)((MagicForm)((Micajah.Common.WebControls.TreeView)sender).Parent.Parent.Parent.Parent).DataItem)["GroupId"].ToString().Split(',');
+                    string[] groupIds = ((Micajah.Common.Dal.ClientDataSet.UserRow)((MagicForm)((Micajah.Common.WebControls.TreeView)sender).Parent.Parent.Parent.Parent).DataItem)["GroupId"].ToString().Split(',');
                     if (groupIds.Length > 0)
                     {
                         foreach (string groupId in groupIds)
@@ -426,7 +426,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void AppGroupDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
-            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganization.OrganizationId;
+            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
         }
 
         protected void InvitedUsersListDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
@@ -438,7 +438,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InvitedUsersListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
-            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganization.OrganizationId;
+            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
         }
 
         protected virtual void InvitedUsersListDataSource_Selected(object sender, ObjectDataSourceStatusEventArgs e)
@@ -594,11 +594,9 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void OnLoad(EventArgs e)
         {
-            m_UserContext = UserContext.Current;
-
             if (!IsPostBack)
             {
-                if (m_UserContext.SelectedOrganization.DataSet.Group.Rows.Count == 0)
+                if (!GroupProvider.GroupsExist)
                 {
                     MasterPage.Message = Resources.UsersControl_NoGroupError_Message;
                     MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.UsersControl_NoGroupError_Description, CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsPageVirtualPath));
@@ -606,6 +604,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     return;
                 }
             }
+
+            m_UserContext = UserContext.Current;
 
             base.OnLoad(e);
         }

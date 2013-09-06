@@ -39,7 +39,7 @@ namespace Micajah.Common.Dal.TableAdapters
 
         /// <summary>
         /// Initializes a new instance of the class with specified adapters for the tables.
-        /// If the collection doesn't contain an adapter for some table then default adapter will be used.
+        /// If the collection doesn't contain an adapter for some table2 then default adapter will be used.
         /// </summary>
         /// <param name="adapters">The collection of the adapters for the tables.</param>
         protected TableAdaptersHolder(ICollection adapters)

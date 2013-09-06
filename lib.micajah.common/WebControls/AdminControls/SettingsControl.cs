@@ -161,8 +161,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (obj == null)
                     {
 
-                        if ((m_UserContext != null) && (m_UserContext.SelectedInstance != null))
-                            obj = m_UserContext.SelectedInstance.InstanceId;
+                        if ((m_UserContext != null) && (m_UserContext.SelectedInstanceId != Guid.Empty))
+                            obj = m_UserContext.SelectedInstanceId;
                     }
                 }
 
@@ -228,17 +228,17 @@ namespace Micajah.Common.WebControls.AdminControls
                     switch (this.DisplayedSettingLevel)
                     {
                         case SettingLevels.Organization:
-                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.SelectedOrganization.OrganizationId, null, true);
+                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.SelectedOrganizationId, null, true);
                             break;
                         case SettingLevels.Instance:
-                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.SelectedOrganization.OrganizationId, this.InstanceId, true);
+                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.SelectedOrganizationId, this.InstanceId, true);
                             break;
                         case SettingLevels.Group:
                             SettingCollection settings = null;
                             if (this.DiagnoseConflictingSettings)
-                                settings = SettingProvider.GetGroupSettings(m_UserContext.SelectedOrganization.OrganizationId, this.InstanceId, this.GroupIdList);
+                                settings = SettingProvider.GetGroupSettings(m_UserContext.SelectedOrganizationId, this.InstanceId, this.GroupIdList);
                             else if (this.GroupId != Guid.Empty)
-                                settings = SettingProvider.GetGroupSettings(m_UserContext.SelectedOrganization.OrganizationId, this.InstanceId, this.GroupId, true);
+                                settings = SettingProvider.GetGroupSettings(m_UserContext.SelectedOrganizationId, this.InstanceId, this.GroupId, true);
 
                             if (settings.Count > 0)
                             {
@@ -631,7 +631,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     UserContext user = UserContext.Current;
                     if (user != null)
                     {
-                        if (user.SelectedInstance == null)
+                        if (user.SelectedInstanceId == Guid.Empty)
                             Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery));
                     }
                 }
@@ -888,7 +888,7 @@ namespace Micajah.Common.WebControls.AdminControls
         }
 
         /// <summary>
-        /// Binds a data source to the invoked server control and all its child controls.
+        /// Binds a data sourceRow to the invoked server control and all its child controls.
         /// </summary>
         public override void DataBind()
         {

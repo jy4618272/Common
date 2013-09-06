@@ -1,11 +1,11 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
-using Micajah.Common.Bll;
-using Micajah.Common.Configuration;
 
 namespace Micajah.Common.Dal.TableAdapters
 {
@@ -31,7 +31,7 @@ namespace Micajah.Common.Dal.TableAdapters
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the name of the table which the adapter relate to.
+        /// Gets or sets the name of the table2 which the adapter relate to.
         /// </summary>
         public TableName TableName
         {
@@ -63,7 +63,7 @@ namespace Micajah.Common.Dal.TableAdapters
         }
 
         /// <summary>
-        /// Gets or sets an SQL statement used to select records in the data source.
+        /// Gets or sets an SQL statement used to select records in the data sourceRow.
         /// </summary>
         public SqlCommand SelectCommand
         {
@@ -97,7 +97,7 @@ namespace Micajah.Common.Dal.TableAdapters
         }
 
         /// <summary>
-        /// Gets or sets an SQL statement used to insert new records into the data source.
+        /// Gets or sets an SQL statement used to insert new records into the data sourceRow.
         /// </summary>
         public SqlCommand InsertCommand
         {
@@ -114,7 +114,7 @@ namespace Micajah.Common.Dal.TableAdapters
         }
 
         /// <summary>
-        /// Gets or sets an SQL statement used to update records in the data source.
+        /// Gets or sets an SQL statement used to update records in the data sourceRow.
         /// </summary>
         public SqlCommand UpdateCommand
         {
@@ -131,7 +131,7 @@ namespace Micajah.Common.Dal.TableAdapters
         }
 
         /// <summary>
-        /// Gets or sets an SQL statement for deleting records from the data source.
+        /// Gets or sets an SQL statement for deleting records from the data sourceRow.
         /// </summary>
         public SqlCommand DeleteCommand
         {
@@ -148,7 +148,7 @@ namespace Micajah.Common.Dal.TableAdapters
         }
 
         /// <summary>
-        /// Gets or sets the master mapping between a source table and a table which the adapter relate to.
+        /// Gets or sets the master mapping between a sourceRow table2 and a table2 which the adapter relate to.
         /// </summary>
         public DataTableMapping TableMapping
         {
@@ -398,7 +398,7 @@ namespace Micajah.Common.Dal.TableAdapters
         /// <summary>
         /// Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row in the specified System.Data.DataTable object.
         /// </summary>
-        /// <param name="dataTable">The System.Data.DataTable object used to update the data source.</param>
+        /// <param name="dataTable">The System.Data.DataTable object used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         public virtual int Update(DataTable dataTable)
         {
@@ -408,7 +408,7 @@ namespace Micajah.Common.Dal.TableAdapters
         /// <summary>
         /// Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row in the specified System.Data.DataSet object.
         /// </summary>
-        /// <param name="dataSet">The System.Data.DataSet object used to update the data source.</param>
+        /// <param name="dataSet">The System.Data.DataSet object used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         public virtual int Update(DataSet dataSet)
         {
@@ -419,7 +419,7 @@ namespace Micajah.Common.Dal.TableAdapters
         /// <summary>
         /// Calls the respective INSERT, UPDATE, or DELETE statements for specified System.Data.DataRow object.
         /// </summary>
-        /// <param name="dataRow">An System.Data.DataRow object used to update the data source.</param>
+        /// <param name="dataRow">An System.Data.DataRow object used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         public virtual int Update(DataRow dataRow)
         {
@@ -430,7 +430,7 @@ namespace Micajah.Common.Dal.TableAdapters
         /// Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row 
         /// in the specified array of System.Data.DataRow objects.
         /// </summary>
-        /// <param name="dataRows">An array of System.Data.DataRow objects used to update the data source.</param>
+        /// <param name="dataRows">An array of System.Data.DataRow objects used to update the data sourceRow.</param>
         /// <returns>The number of rows successfully updated.</returns>
         public virtual int Update(DataRow[] dataRows)
         {

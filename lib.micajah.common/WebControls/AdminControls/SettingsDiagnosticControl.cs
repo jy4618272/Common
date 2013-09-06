@@ -1,3 +1,10 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -5,12 +12,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -73,12 +74,12 @@ namespace Micajah.Common.WebControls.AdminControls
             StringBuilder sb2 = new StringBuilder();
 
             UserContext user = UserContext.Current;
-            if ((user != null) && (user.SelectedOrganization != null))
+            if ((user != null) && (user.SelectedOrganizationId != Guid.Empty))
             {
                 if (!user.IsOrganizationAdministrator)
                 {
-                    OrganizationDataSet dataSet = user.SelectedOrganization.DataSet;
-                    OrganizationDataSet.UserRow userRow = dataSet.User.FindByUserId(user.UserId);
+                    OrganizationDataSet dataSet = WebApplication.GetOrganizationDataSetByOrganizationId(user.SelectedOrganizationId);
+                    ClientDataSet.UserRow userRow = UserProvider.GetUserRow(user.UserId, user.SelectedOrganizationId);
 
                     if (userRow != null)
                     {
@@ -208,7 +209,7 @@ namespace Micajah.Common.WebControls.AdminControls
             else if (UserListRow.Visible)
             {
                 obj = Support.ConvertStringToType(UserList.SelectedValue, typeof(Guid));
-                list = UserProvider.GetUserGroupIdList(UserContext.Current.SelectedOrganization.OrganizationId, ((obj == null) ? Guid.Empty : (Guid)obj));
+                list = UserProvider.GetUserGroupIdList(UserContext.Current.SelectedOrganizationId, ((obj == null) ? Guid.Empty : (Guid)obj));
             }
 
             Settings.GroupIdList.Clear();

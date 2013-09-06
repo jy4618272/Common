@@ -1,4 +1,4 @@
-﻿INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (115)
+﻿INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (116)
 GO
 
 INSERT INTO [dbo].[Mc_Country] ([CountryId], [Name]) VALUES ('{00A20781-E4F4-4D01-9BD7-0063C9322D84}', N'Barbados')

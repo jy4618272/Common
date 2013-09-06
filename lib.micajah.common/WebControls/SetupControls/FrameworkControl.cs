@@ -2,6 +2,7 @@ using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
+using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
@@ -184,8 +185,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     {
                         sqlScript = sqlScript.Replace("$Input$", outputSqlScript);
 
-                        WebApplication.RefreshCommonDataSetTableAdapters();
-                        WebApplication.RefreshCommonData();
+                        MasterDataSetTableAdapters.Current = null;
                     }
 
                     // Gets the unique connection strings to the databases.
@@ -213,7 +213,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     }
 
                     WebApplicationElement.CurrentDatabaseVersion = 0;
-                    WebApplication.RefreshOrganizationDataSetTableAdapters();
+                    ClientDataSetTableAdapters.RefreshCurrent();
 
                     if (v == 77 || v == 78)
                         OrganizationProvider.UpdateOrganizationsPseudoId();

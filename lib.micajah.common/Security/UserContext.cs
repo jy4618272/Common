@@ -1,3 +1,9 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -6,13 +12,6 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.SessionState;
-using DotNetOpenAuth.OAuth.Messages;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.Security
 {
@@ -92,11 +91,10 @@ namespace Micajah.Common.Security
         {
             get
             {
-                Instance inst = this.SelectedInstance;
-                if (inst == null)
+                if (this.SelectedInstanceId == Guid.Empty)
                     return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator, true);
                 else
-                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, inst.InstanceId, inst.OrganizationId, this.IsOrganizationAdministrator);
+                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, this.SelectedInstanceId, this.SelectedOrganizationId, this.IsOrganizationAdministrator);
             }
         }
 
@@ -687,7 +685,7 @@ namespace Micajah.Common.Security
             OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
 
             // Gets the actions that the user have access to.
-            foreach (OrganizationDataSet.UsersGroupsRow ugRow in UserProvider.GetUserGroups(this.UserId, newInstance.OrganizationId))
+            foreach (ClientDataSet.UsersGroupsRow ugRow in UserProvider.GetUserGroups(this.UserId, newInstance.OrganizationId))
             {
                 Guid groupId = ugRow.GroupId;
                 OrganizationDataSet.GroupsInstancesRolesRow gdrRow = gdrTable.FindByGroupIdInstanceId(groupId, newInstance.InstanceId);
@@ -713,7 +711,7 @@ namespace Micajah.Common.Security
             {
                 if (string.IsNullOrEmpty(this.Email))
                 {
-                    OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(this.UserId, newInstance.OrganizationId);
+                    ClientDataSet.UserRow userRow = UserProvider.GetUserRow(this.UserId, newInstance.OrganizationId);
                     if (userRow != null)
                         RefreshDetails(this, userRow);
                 }
@@ -853,12 +851,12 @@ namespace Micajah.Common.Security
             }
         }
 
-        internal void RefreshDetails(OrganizationDataSet.UserRow userRow)
+        internal void RefreshDetails(ClientDataSet.UserRow userRow)
         {
             RefreshDetails(this, userRow);
         }
 
-        internal static void RefreshDetails(UserContext user, OrganizationDataSet.UserRow userRow)
+        internal static void RefreshDetails(UserContext user, ClientDataSet.UserRow userRow)
         {
             if ((user != null) && (userRow != null))
             {
@@ -921,7 +919,7 @@ namespace Micajah.Common.Security
             bool isOrganizationAdministrator = false;
             ArrayList userGroupIdList = null;
 
-            OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
+            ClientDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
             if (userRow != null)
             {
                 isOrganizationAdministrator = WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId);
@@ -943,7 +941,8 @@ namespace Micajah.Common.Security
             RefreshDetails(this, userRow);
 
             userRow.LastLoginDate = DateTime.UtcNow;
-            newOrganization.TableAdapters.UserTableAdapter.Update(userRow);
+
+            WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(newOrganization.OrganizationId).UserTableAdapter.Update(userRow);
 
             if (SelectedOrganizationChanged != null)
                 SelectedOrganizationChanged(this, EventArgs.Empty);
@@ -1143,8 +1142,7 @@ namespace Micajah.Common.Security
         public bool IsInRole(Guid instanceId, params string[] shortName)
         {
             bool exists = false;
-            Organization org = this.SelectedOrganization;
-            if (org != null)
+            if (this.SelectedOrganizationId != Guid.Empty)
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (Guid groupId in GroupIdList)
@@ -1156,7 +1154,8 @@ namespace Micajah.Common.Security
                     sb.Remove(0, 1);
 
                     ArrayList roleIdList = RoleProvider.GetRoleIdListByShortNames(shortName);
-                    OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = org.DataSet.GroupsInstancesRoles;
+                    OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(this.SelectedOrganizationId);
+                    OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
 
                     foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(string.Concat(
                         "CONVERT(", gdrTable.InstanceIdColumn.ColumnName, ", 'System.String') = '", instanceId

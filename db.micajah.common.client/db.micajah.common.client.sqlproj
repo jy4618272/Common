@@ -526,6 +526,11 @@
     </Build>
     <None Include="Sql Scripts\v99\ConvertDateTimeToUtc.sql" />
     <PostDeploy Include="Sql Scripts\PostDeployment.sql" />
+    <Build Include="Stored Procedures\Mc_GetEntityNode.sql" />
+    <Build Include="Stored Procedures\Mc_GetEntityNodesByParentEntityNodeId.sql" />
+    <Build Include="Stored Procedures\Mc_GetEntityNodesByEntityId.sql" />
+    <Build Include="Stored Procedures\Mc_GetEntityNodeType.sql" />
+    <Build Include="Stored Procedures\Mc_GetEntityNodeTypesByEntityId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompareToLocal.scmp" />

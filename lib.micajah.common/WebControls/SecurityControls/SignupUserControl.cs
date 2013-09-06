@@ -1,15 +1,15 @@
-using System;
-using System.Globalization;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
+using System;
+using System.Globalization;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -93,10 +93,10 @@ namespace Micajah.Common.WebControls.SecurityControls
                     else
                     {
                         WebApplication.LoginProvider.DeleteExpiredInvitation();
-                        CommonDataSet.InvitedLoginDataTable table = LoginProvider.GetInvitedLogin(this.InvitedLoginId);
+                        MasterDataSet.InvitedLoginDataTable table = LoginProvider.GetInvitedLogin(this.InvitedLoginId);
                         if (table.Count == 1)
                         {
-                            CommonDataSet.InvitedLoginRow row = table[0];
+                            MasterDataSet.InvitedLoginRow row = table[0];
                             obj = row.OrganizationId;
                             this.GroupId = row.GroupId;
                             this.LoginName = row.LoginName;
@@ -200,7 +200,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     return 1;
                 }
 
-                OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(loginName);
+                ClientDataSet.UserRow userRow = UserProvider.GetUserRow(loginName);
                 if (userRow != null)
                 {
                     FirstNameTextBox.Text = userRow.FirstName;

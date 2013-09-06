@@ -223,17 +223,17 @@ namespace Micajah.Common.WebControls.SetupControls
 
             foreach (Organization org in orgs)
             {
-                Dal.OrganizationDataSet.UserDataTable orgAdmins = UserProvider.GetUsers(org.OrganizationId, Guid.Empty, RoleProvider.OrganizationAdministratorRoleId);
+                ClientDataSet.UserDataTable orgAdmins = UserProvider.GetUsers(org.OrganizationId, Guid.Empty, RoleProvider.OrganizationAdministratorRoleId);
                 string afName = string.Empty;
                 string aEmail = string.Empty;
                 string aPhone = string.Empty;
-                OrganizationDataSet.UserRow orgAdmin = null;
+                ClientDataSet.UserRow orgAdmin = null;
                 if (orgAdmins.Count == 1) orgAdmin = orgAdmins[0];
                 else
                 {
                     if (!string.IsNullOrEmpty(org.EmailSuffixes))
                     {
-                        foreach (OrganizationDataSet.UserRow admin in orgAdmins)
+                        foreach (ClientDataSet.UserRow admin in orgAdmins)
                         {
                             if (string.IsNullOrEmpty(admin.Email)) continue;
                             string[] arr = admin.Email.Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries);

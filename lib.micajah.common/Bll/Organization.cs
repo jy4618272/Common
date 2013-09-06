@@ -1,3 +1,7 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,11 +9,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Text;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
 
 namespace Micajah.Common.Bll
 {
@@ -133,22 +132,6 @@ namespace Micajah.Common.Bll
             }
         }
 
-        /// <summary>
-        /// Gets the dataset of the organization.
-        /// </summary>
-        internal OrganizationDataSet DataSet
-        {
-            get { return WebApplication.GetOrganizationDataSetByOrganizationId(OrganizationId); }
-        }
-
-        /// <summary>
-        /// Gets the table adapters of the organization dataset.
-        /// </summary>
-        internal OrganizationDataSetTableAdapters TableAdapters
-        {
-            get { return WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(this.ConnectionString); }
-        }
-
         #endregion
 
         #region Public Properties
@@ -216,7 +199,7 @@ namespace Micajah.Common.Bll
             {
                 if (!m_LogoImageResourceIdLoaded)
                 {
-                    CommonDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow("OrganizationLogo", m_OrganizationId.ToString("N"));
+                    MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow("OrganizationLogo", m_OrganizationId.ToString("N"));
                     if (resourceRow != null) m_LogoImageResourceId = resourceRow.ResourceId;
                     m_LogoImageResourceIdLoaded = true;
                 }

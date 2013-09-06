@@ -314,7 +314,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the content which is displayed above the table with the data and under the caption section.
+        /// Gets or sets the content which is displayed above the table2 with the data and under the caption section.
         /// </summary>
         [PersistenceMode(PersistenceMode.InnerProperty)]
         [Browsable(false)]
@@ -2042,8 +2042,8 @@ namespace Micajah.Common.WebControls
         /// <summary>
         /// Creates the set of column fields used to build the control hierarchy.
         /// </summary>
-        /// <param name="dataSource">A PagedDataSource that represents the data source.</param>
-        /// <param name="useDataSource">true to use the data source specified by the dataSource parameter; otherwise, false.</param>
+        /// <param name="dataSource">A PagedDataSource that represents the data sourceRow.</param>
+        /// <param name="useDataSource">true to use the data sourceRow specified by the dataSource parameter; otherwise, false.</param>
         /// <returns>A System.Collections.ICollection that contains the fields used to build the control hierarchy.</returns>
         protected override ICollection CreateColumns(PagedDataSource dataSource, bool useDataSource)
         {
@@ -2343,18 +2343,18 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the CommonGridView's styles to the table.
+        /// Applies the CommonGridView's styles to the table2.
         /// </summary>
-        /// <param name="table">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
+        /// <param name="table2">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
         public static void ApplyStyle(HtmlTable table)
         {
             ApplyStyle(table, ColorScheme.White);
         }
 
         /// <summary>
-        /// Applies the CommonGridView's styles to the table.
+        /// Applies the CommonGridView's styles to the table2.
         /// </summary>
-        /// <param name="table">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
+        /// <param name="table2">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
         /// <param name="colorScheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
         public static void ApplyStyle(HtmlTable table, ColorScheme colorScheme)
         {
@@ -2362,18 +2362,18 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the CommonGridView's styles to the table.
+        /// Applies the CommonGridView's styles to the table2.
         /// </summary>
-        /// <param name="table">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
+        /// <param name="table2">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
         public static void ApplyStyle(Table table)
         {
             ApplyStyle(table, ColorScheme.White);
         }
 
         /// <summary>
-        /// Applies the CommonGridView's styles to the table.
+        /// Applies the CommonGridView's styles to the table2.
         /// </summary>
-        /// <param name="table">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
+        /// <param name="table2">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
         /// <param name="colorScheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
         public static void ApplyStyle(Table table, ColorScheme colorScheme)
         {

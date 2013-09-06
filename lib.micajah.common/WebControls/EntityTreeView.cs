@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Web.UI;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Web.UI;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls
@@ -365,8 +365,8 @@ namespace Micajah.Common.WebControls
                 Entity entity = WebApplication.Entities[EntityId.ToString()];
                 Guid? instanceId = new Guid?();
                 if (entity.HierarchyStartLevel == EntityLevel.Instance)
-                    instanceId = new Guid?(UserContext.Current.SelectedInstance.InstanceId);
-                OrganizationDataSet.EntityNodeDataTable dt = new OrganizationDataSet.EntityNodeDataTable();
+                    instanceId = new Guid?(UserContext.Current.SelectedInstanceId);
+                ClientDataSet.EntityNodeDataTable dt = new ClientDataSet.EntityNodeDataTable();
                 if (UserContext.Current != null)
                 {
                     this.OnClientNodeClicked = "onClientNodeClicked";
@@ -375,7 +375,7 @@ namespace Micajah.Common.WebControls
                     base.DataFieldParentID = dt.ParentEntityNodeIdColumn.ColumnName;
                     base.DataTextField = dt.NameColumn.ColumnName;
                     base.DataValueField = dt.EntityNodeIdColumn.ColumnName;
-                    this.DataSource = EntityNodeProvider.GetEntityNodesTree(UserContext.Current.SelectedOrganization.OrganizationId, instanceId, EntityId, entity.Name);
+                    this.DataSource = EntityNodeProvider.GetEntityNodesTree(UserContext.Current.SelectedOrganizationId, instanceId, EntityId, entity.Name);
                     this.DataBind();
                     if (this.Nodes.Count > 0)
                     {
@@ -392,9 +392,9 @@ namespace Micajah.Common.WebControls
                 }
             }
 
-            OrganizationDataSet.EntityNodesRelatedEntityNodesDataTable t = EntityNodesRelatedEntityNodesProvider.GetAllEntityNodesRelatedEntityNodes(UserContext.Current.SelectedOrganization.OrganizationId, EntityNodeId, EntityId);
+            ClientDataSet.EntityNodesRelatedEntityNodesDataTable t = EntityNodeProvider.GetAllEntityNodesRelatedEntityNodes(UserContext.Current.SelectedOrganizationId, EntityNodeId, EntityId);
             RadTreeNode rtn;
-            foreach (OrganizationDataSet.EntityNodesRelatedEntityNodesRow row in t.Rows)
+            foreach (ClientDataSet.EntityNodesRelatedEntityNodesRow row in t.Rows)
             {
                 rtn = this.FindNodeByValue(row.RelatedEntityNodeId.ToString());
                 if (rtn == null)
@@ -430,7 +430,7 @@ namespace Micajah.Common.WebControls
 
         public void SaveTree()
         {
-            EntityNodesRelatedEntityNodesProvider.DeleteAll(UserContext.Current.SelectedOrganization.OrganizationId, EntityNodeId, EntityId);
+            EntityNodeProvider.DeleteAllEntityNodesRelatedEntityNodes(UserContext.Current.SelectedOrganizationId, EntityNodeId, EntityId);
             RelationType rt;
             foreach (RadTreeNode rtn in this.CheckedNodes)
             {
@@ -441,7 +441,7 @@ namespace Micajah.Common.WebControls
                 else
                     rt = RelationType.Checked;
 
-                EntityNodesRelatedEntityNodesProvider.InsertEntityNodesRelatedEntityNodes(EntityNodeId, new Guid(rtn.Value), EntityId, rt, UserContext.Current.SelectedOrganization.OrganizationId);
+                EntityNodeProvider.InsertEntityNodesRelatedEntityNodes(EntityNodeId, new Guid(rtn.Value), EntityId, rt, UserContext.Current.SelectedOrganizationId);
             }
             if (OnSaved != null)
                 OnSaved(this, new EventArgs());

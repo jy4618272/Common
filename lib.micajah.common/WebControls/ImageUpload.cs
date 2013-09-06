@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,11 +12,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls
@@ -589,7 +588,7 @@ namespace Micajah.Common.WebControls
         {
             if (this.ObjectChanged && (!string.IsNullOrEmpty(this.LocalObjectType)) && (!string.IsNullOrEmpty(this.LocalObjectId)))
             {
-                CommonDataSet.ResourceRow originalFile = ResourceProvider.GetResourceRow(this.LocalObjectType, this.LocalObjectId);
+                MasterDataSet.ResourceRow originalFile = ResourceProvider.GetResourceRow(this.LocalObjectType, this.LocalObjectId);
                 OriginalFileField.Value = CurrentFileField.Value = ((originalFile == null) ? string.Empty : originalFile.ResourceId.ToString("N"));
             }
         }

@@ -1,11 +1,11 @@
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls
 {
@@ -61,9 +61,9 @@ namespace Micajah.Common.WebControls
                 this.Controls.Add(m_ProfileLink);
 
                 string name = string.Empty;
-                if (user.SelectedInstance != null)
+                if (user.SelectedInstanceId != System.Guid.Empty)
                     name = user.SelectedInstance.Name;
-                else if (user.SelectedOrganization != null)
+                else if (user.SelectedOrganizationId != System.Guid.Empty)
                     name = user.SelectedOrganization.Name;
 
                 m_RoleLabel = new HtmlGenericControl("div");

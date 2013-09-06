@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_InvitedLogin table.
+    /// The adapter for the Mc_InvitedLogin table2.
     /// </summary>
     internal class InvitedLoginTableAdapter : BaseTableAdapter
     {

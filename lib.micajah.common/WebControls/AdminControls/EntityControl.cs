@@ -264,7 +264,7 @@ namespace Micajah.Common.WebControls.AdminControls
             foreach (RadTreeNode sourceNode in radTreeNode.Nodes)
             {
                 Guid sourceId = new Guid(sourceNode.Value);
-                OrganizationDataSet.EntityNodeRow source = UserContext.Current.SelectedOrganization.DataSet.EntityNode.FindByEntityNodeId(sourceId);
+                ClientDataSet.EntityNodeRow source = EntityNodeProvider.GetEntityNode(sourceId);
 
                 RadTreeNode rtn = new RadTreeNode();
                 rtn.Text = sourceNode.Text;
@@ -485,7 +485,7 @@ namespace Micajah.Common.WebControls.AdminControls
             else if (e.MenuItem.Value.ToUpperInvariant() == "CLONE")
             {
                 Guid sourceId = new Guid(e.Node.Value);
-                OrganizationDataSet.EntityNodeRow source = UserContext.Current.SelectedOrganization.DataSet.EntityNode.FindByEntityNodeId(sourceId);
+                ClientDataSet.EntityNodeRow source = EntityNodeProvider.GetEntityNode(sourceId);
 
                 if (source.IsParentEntityNodeIdNull())
                     source.ParentEntityNodeId = Guid.Empty;

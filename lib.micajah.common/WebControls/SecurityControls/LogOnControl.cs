@@ -715,7 +715,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the login button is clicked.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void LogOnButton_Click(object sender, EventArgs e)
         {
@@ -783,7 +783,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the sign up user button is clicked.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void SignupUserButton_Click(object sender, EventArgs e)
         {

@@ -1,12 +1,13 @@
+using Micajah.Common.Application;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
 using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Text;
-using Micajah.Common.Application;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -275,7 +276,7 @@ namespace Micajah.Common.Bll.Providers
             row.DatabaseServerId = databaseServerId;
 
             WebApplication.CommonDataSet.Database.AddDatabaseRow(row);
-            WebApplication.CommonDataSetTableAdapters.DatabaseTableAdapter.Update(row);
+            MasterDataSetTableAdapters.Current.DatabaseTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -301,7 +302,7 @@ namespace Micajah.Common.Bll.Providers
             row.Private = Private;
             row.DatabaseServerId = databaseServerId;
 
-            WebApplication.CommonDataSetTableAdapters.DatabaseTableAdapter.Update(row);
+            MasterDataSetTableAdapters.Current.DatabaseTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -316,7 +317,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.Deleted = true;
 
-            WebApplication.CommonDataSetTableAdapters.DatabaseTableAdapter.Update(row);
+            MasterDataSetTableAdapters.Current.DatabaseTableAdapter.Update(row);
             WebApplication.CommonDataSet.Database.RemoveDatabaseRow(row);
         }
 

@@ -1,6 +1,7 @@
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -423,13 +424,13 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="invitedLoginId">The unique identifier of the invitation.</param>
         /// <returns>The specified invitation.</returns>
-        internal static CommonDataSet.InvitedLoginDataTable GetInvitedLogin(Guid invitedLoginId)
+        internal static MasterDataSet.InvitedLoginDataTable GetInvitedLogin(Guid invitedLoginId)
         {
-            CommonDataSet.InvitedLoginDataTable table = null;
+            MasterDataSet.InvitedLoginDataTable table = null;
             try
             {
-                table = new CommonDataSet.InvitedLoginDataTable();
-                WebApplication.CommonDataSetTableAdapters.InvitedLoginTableAdapter.Fill(table, 0, invitedLoginId);
+                table = new MasterDataSet.InvitedLoginDataTable();
+                MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Fill(table, 0, invitedLoginId);
                 return table;
             }
             finally
@@ -497,13 +498,13 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="resetPasswordRequestId">The unique identifier of the reset password request.</param>
         /// <returns>The specified reset password request.</returns>
-        internal static CommonDataSet.ResetPasswordRequestDataTable GetResetPasswordRequest(Guid resetPasswordRequestId)
+        internal static MasterDataSet.ResetPasswordRequestDataTable GetResetPasswordRequest(Guid resetPasswordRequestId)
         {
-            CommonDataSet.ResetPasswordRequestDataTable table = null;
+            MasterDataSet.ResetPasswordRequestDataTable table = null;
             try
             {
-                table = new CommonDataSet.ResetPasswordRequestDataTable();
-                WebApplication.CommonDataSetTableAdapters.ResetPasswordRequestTableAdapter.Fill(table, 0, resetPasswordRequestId);
+                table = new MasterDataSet.ResetPasswordRequestDataTable();
+                MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Fill(table, 0, resetPasswordRequestId);
                 return table;
             }
             finally
@@ -781,7 +782,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="invitedLoginId">The unique identifier of the invitation.</param>
         public virtual void CancelInvitation(Guid invitedLoginId)
         {
-            WebApplication.CommonDataSetTableAdapters.InvitedLoginTableAdapter.Delete((invitedLoginId == Guid.Empty) ? (object)DBNull.Value : (object)invitedLoginId);
+            MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Delete((invitedLoginId == Guid.Empty) ? (object)DBNull.Value : (object)invitedLoginId);
         }
 
         /// <summary>
@@ -790,7 +791,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="resetPasswordRequestId">The unique identifier of the reset password request.</param>
         public virtual void CancelResetPasswordRequest(Guid resetPasswordRequestId)
         {
-            WebApplication.CommonDataSetTableAdapters.ResetPasswordRequestTableAdapter.Delete((resetPasswordRequestId == Guid.Empty) ? (object)DBNull.Value : (object)resetPasswordRequestId);
+            MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Delete((resetPasswordRequestId == Guid.Empty) ? (object)DBNull.Value : (object)resetPasswordRequestId);
         }
 
         /// <summary>
@@ -927,7 +928,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Adds a new login to the data source. 
+        /// Adds a new login to the data sourceRow. 
         /// </summary>
         /// <param name="loginName">The name for the new login.</param>
         /// <param name="password">The password for the new login.</param>
@@ -962,7 +963,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Removes a login from the data source. 
+        /// Removes a login from the data sourceRow. 
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to delete.</param>
         /// <returns>true if the user was successfully deleted; otherwise, false.</returns>
@@ -1013,13 +1014,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The unique identifier for the organization to get invitations for.</param>
         /// <returns>The invitations to the specified organization.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public CommonDataSet.InvitedLoginDataTable GetInvitedLoginsByOrganizationId(Guid organizationId)
+        public MasterDataSet.InvitedLoginDataTable GetInvitedLoginsByOrganizationId(Guid organizationId)
         {
-            CommonDataSet.InvitedLoginDataTable table = null;
+            MasterDataSet.InvitedLoginDataTable table = null;
             try
             {
-                table = new CommonDataSet.InvitedLoginDataTable();
-                WebApplication.CommonDataSetTableAdapters.InvitedLoginTableAdapter.Fill(table, 1, organizationId);
+                table = new MasterDataSet.InvitedLoginDataTable();
+                MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Fill(table, 1, organizationId);
                 return table;
             }
             finally
@@ -1029,7 +1030,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets a list of all the logins in the data source.
+        /// Gets a list of all the logins in the data sourceRow.
         /// </summary>
         /// <returns>A list that contains all the logins.</returns>
         public virtual DataTable GetLogins()
@@ -1122,7 +1123,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the e-mail address for the specified login from the data source.
+        /// Gets the e-mail address for the specified login from the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to retrieve the e-mail for.</param>
         /// <returns>The e-mail address for the specified login.</returns>
@@ -1132,10 +1133,10 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source for a login based on the unique identifier for the login.
+        /// Gets information from the data sourceRow for a login based on the unique identifier for the login.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to get information for.</param>
-        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        /// <returns>An object populated with the specified login's information from the data sourceRow.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
         public virtual DataRowView GetLogin(Guid loginId)
         {
@@ -1152,10 +1153,10 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source based on the name for the login.
+        /// Gets information from the data sourceRow based on the name for the login.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
-        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        /// <returns>An object populated with the specified login's information from the data sourceRow.</returns>
         public virtual DataRowView GetLogin(string loginName)
         {
             using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
@@ -1171,23 +1172,23 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source for a login based on the unique identifier and password for the login.
+        /// Gets information from the data sourceRow for a login based on the unique identifier and password for the login.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
         /// <param name="password">The password.</param>
-        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        /// <returns>An object populated with the specified login's information from the data sourceRow.</returns>
         public virtual DataRowView GetLogin(string loginName, string password)
         {
             return GetLogin(loginName, password, true);
         }
 
         /// <summary>
-        /// Gets information from the data source for a login based on the unique identifier and password for the login.
+        /// Gets information from the data sourceRow for a login based on the unique identifier and password for the login.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
         /// <param name="password">The password.</param>
         /// <param name="usePasswordEncryption">true to use encryption for password before compare login details; otherwise, false.</param>
-        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        /// <returns>An object populated with the specified login's information from the data sourceRow.</returns>
         public virtual DataRowView GetLogin(string loginName, string password, bool usePasswordEncryption)
         {
             DataRowView drv = GetLogin(loginName);
@@ -1203,10 +1204,10 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source based on the token for the login.
+        /// Gets information from the data sourceRow based on the token for the login.
         /// </summary>
         /// <param name="token">The token for the login to get information for.</param>
-        /// <returns>An object populated with the specified login's information from the data source.</returns>
+        /// <returns>An object populated with the specified login's information from the data sourceRow.</returns>
         public virtual DataRowView GetLoginByToken(string token)
         {
             using (SqlConnection connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
@@ -1222,7 +1223,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the login identifier for the specified login name from the data source.
+        /// Gets the login identifier for the specified login name from the data sourceRow.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
         /// <returns>The login identifier for the specified login name.</returns>
@@ -1234,7 +1235,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the login name for the specified login from the data source.
+        /// Gets the login name for the specified login from the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to get information for.</param>
         /// <returns>The login name for the specified login.</returns>
@@ -1246,7 +1247,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the identifier of the last session for the specified login from the data source.
+        /// Gets the identifier of the last session for the specified login from the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to get information for.</param>
         /// <returns>The identifier of the last session for the specified login.</returns>
@@ -1262,7 +1263,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the token of the specified login from the data source.
+        /// Gets the token of the specified login from the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to get information for.</param>
         /// <returns>The token of the specified login.</returns>
@@ -1278,7 +1279,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the token of the specified login from the data source.
+        /// Gets the token of the specified login from the data sourceRow.
         /// </summary>
         /// <param name="loginName">The name for the login to get information for.</param>
         /// <returns>The token of the specified login.</returns>
@@ -1478,7 +1479,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the password for the specified login from the data source.
+        /// Gets the password for the specified login from the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to retrieve the password for.</param>
         /// <returns>The password for the specified login.</returns>
@@ -1587,7 +1588,7 @@ namespace Micajah.Common.Bll.Providers
                         UpdateLogin(loginId, (string)drv["LoginName"], (string)drv["Password"], firstName, lastName);
                     }
 
-                    Dal.OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(loginId, organizationId);
+                    ClientDataSet.UserRow userRow = UserProvider.GetUserRow(loginId, organizationId);
                     if (userRow != null)
                     {
                         UserProvider.UpdateUser(loginId, userRow.Email, firstName, lastName, userRow.MiddleName, userRow.Phone, userRow.MobilePhone, userRow.Fax, userRow.Title, userRow.Department, userRow.Street, userRow.Street2, userRow.City, userRow.State, userRow.PostalCode, userRow.Country
@@ -1627,13 +1628,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="additionalMessage">The additional message for the people.</param>
         public virtual void Invite(Guid invitedByLoginId, string invitedByFullName, string invitedByEmail, string emails, Guid organizationId, string groupId, string additionalMessage)
         {
-            CommonDataSet.InvitedLoginDataTable table = GetInvitedLoginsByOrganizationId(organizationId);
+            MasterDataSet.InvitedLoginDataTable table = GetInvitedLoginsByOrganizationId(organizationId);
             if (table == null) return;
 
             if (string.IsNullOrEmpty(emails)) return;
 
             List<string> emailsList = new List<string>(emails.ToLowerInvariant().Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-            foreach (CommonDataSet.InvitedLoginRow row in table)
+            foreach (MasterDataSet.InvitedLoginRow row in table)
             {
                 string str = row.LoginName.ToLowerInvariant();
                 if (emailsList.Contains(str)) emails = emails.Replace(str, string.Empty);
@@ -1662,7 +1663,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (!this.LoginInOrganization(email, organizationId))
                 {
-                    CommonDataSet.InvitedLoginRow row = table.NewInvitedLoginRow();
+                    MasterDataSet.InvitedLoginRow row = table.NewInvitedLoginRow();
                     row.InvitedLoginId = Guid.NewGuid();
                     row.LoginName = email;
                     row.OrganizationId = organizationId;
@@ -1675,7 +1676,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            WebApplication.CommonDataSetTableAdapters.InvitedLoginTableAdapter.Update(table);
+            MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Update(table);
         }
 
         /// <summary>
@@ -1746,10 +1747,10 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns true if the login name is found in data source; otherwise, false;
+        /// Returns true if the login name is found in data sourceRow; otherwise, false;
         /// </summary>
         /// <param name="loginName">The name for the login to find.</param>
-        /// <returns>true if the login name is found in data source; otherwise, false;</returns>
+        /// <returns>true if the login name is found in data sourceRow; otherwise, false;</returns>
         public virtual bool LoginNameExists(string loginName)
         {
             return (GetLogin(loginName) != null);
@@ -1799,12 +1800,12 @@ namespace Micajah.Common.Bll.Providers
         {
             this.DeleteExpiredResetPasswordRequests();
 
-            CommonDataSet.ResetPasswordRequestRow row = null;
-            CommonDataSet.ResetPasswordRequestDataTable table = null;
+            MasterDataSet.ResetPasswordRequestRow row = null;
+            MasterDataSet.ResetPasswordRequestDataTable table = null;
             try
             {
-                table = new CommonDataSet.ResetPasswordRequestDataTable();
-                WebApplication.CommonDataSetTableAdapters.ResetPasswordRequestTableAdapter.Fill(table, 1, loginId);
+                table = new MasterDataSet.ResetPasswordRequestDataTable();
+                MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Fill(table, 1, loginId);
 
                 if (table.Count > 0)
                     row = table[0];
@@ -1816,7 +1817,7 @@ namespace Micajah.Common.Bll.Providers
                     row.CreatedTime = DateTime.UtcNow;
                     table.AddResetPasswordRequestRow(row);
 
-                    WebApplication.CommonDataSetTableAdapters.ResetPasswordRequestTableAdapter.Update(table);
+                    MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Update(table);
                 }
             }
             finally
@@ -1871,7 +1872,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Updates information about a login in the data source.
+        /// Updates information about a login in the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to update information for.</param>
         /// <param name="details">An System.Object array containing zero or more objects that represents the details for the login.</param>
@@ -1927,7 +1928,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Updates the identifier of the session of the specified login in the data source.
+        /// Updates the identifier of the session of the specified login in the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to update information for.</param>
         /// <param name="sessionId">The identifier of the session.</param>
@@ -1952,7 +1953,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Updates the organization's specific information of the specified login in the data source.
+        /// Updates the organization's specific information of the specified login in the data sourceRow.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to update information for.</param>
         /// <param name="organizationId">The organization identifier to update information for.</param>
@@ -1977,7 +1978,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Verifies that the specified login and password exist in the data source. 
+        /// Verifies that the specified login and password exist in the data sourceRow. 
         /// </summary>
         /// <param name="loginName">The name for the login to validate.</param>
         /// <param name="password">The password for the specified login.</param>
@@ -1988,7 +1989,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Verifies that the specified login and password exist in the data source. 
+        /// Verifies that the specified login and password exist in the data sourceRow. 
         /// </summary>
         /// <param name="loginId">The unique identifier of the login to validate.</param>
         /// <param name="password">The password for the specified login.</param>

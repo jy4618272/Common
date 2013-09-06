@@ -1,3 +1,4 @@
+using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -145,7 +146,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private void Atv_DataBind(Guid groupId, Guid instanceId)
         {
-            OrganizationDataSet ds = UserContext.Current.SelectedOrganization.DataSet;
+            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
             OrganizationDataSet.GroupsInstancesRolesRow roleRow = ds.GroupsInstancesRoles.FindByGroupIdInstanceId(groupId, instanceId);
             Guid roleId = roleRow.RoleId;
 
@@ -193,7 +194,8 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (!IsPostBack)
             {
-                OrganizationDataSet.GroupDataTable table = UserContext.Current.SelectedOrganization.DataSet.Group;
+                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
+                OrganizationDataSet.GroupDataTable table = ds.Group;
                 OrganizationDataSet.GroupRow row = table.FindByGroupId(GroupId);
                 if ((table.Rows.Count > 0) && (row != null))
                 {

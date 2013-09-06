@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Web;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -74,9 +75,9 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteCustomUrl(Guid customUrlId)
         {
-            CommonDataSet.CustomUrlRow row = GetCustomUrl(customUrlId);
+            MasterDataSet.CustomUrlRow row = GetCustomUrl(customUrlId);
             if (row != null)
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Delete(customUrlId);
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Delete(customUrlId);
         }
 
         /// <summary>
@@ -87,14 +88,14 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataView GetCustomUrls(Guid organizationId)
         {
-            CommonDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlDataTable table = null;
             try
             {
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 0, organizationId);
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 0, organizationId);
                 table.Columns.Add("Name", typeof(string));
                 Organization org = null;
-                foreach (CommonDataSet.CustomUrlRow row in table)
+                foreach (MasterDataSet.CustomUrlRow row in table)
                 {
                     if (org == null)
                         org = OrganizationProvider.GetOrganization(organizationId);
@@ -122,15 +123,15 @@ namespace Micajah.Common.Bll.Providers
         /// Returns the custom URLs by specified unique identifier.
         /// </summary>
         /// <param name="customUrlId">The unique identifier of the custom URLs.</param>
-        /// <returns>The Micajah.Common.Dal.CommonDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
+        /// <returns>The Micajah.Common.Dal.MasterDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static CommonDataSet.CustomUrlRow GetCustomUrl(Guid customUrlId)
+        public static MasterDataSet.CustomUrlRow GetCustomUrl(Guid customUrlId)
         {
-            CommonDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlDataTable table = null;
             try
             {
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 1, customUrlId);
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 1, customUrlId);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -143,16 +144,16 @@ namespace Micajah.Common.Bll.Providers
         /// Returns the custom URLs by specified host.
         /// </summary>
         /// <param name="host">The host of the URL to find the custom URLs.</param>
-        /// <returns>The Micajah.Common.Dal.CommonDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
-        public static CommonDataSet.CustomUrlRow GetCustomUrl(string host)
+        /// <returns>The Micajah.Common.Dal.MasterDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
+        public static MasterDataSet.CustomUrlRow GetCustomUrl(string host)
         {
             if (!string.IsNullOrEmpty(host))
                 host = host.ToLowerInvariant();
-            CommonDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlDataTable table = null;
             try
             {
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, host, host);
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, host, host);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -165,16 +166,16 @@ namespace Micajah.Common.Bll.Providers
         /// Returns the custom URLs by specified organization id.
         /// </summary>
         /// <param name="host">The host of the URL to find the custom URLs.</param>
-        /// <returns>The Micajah.Common.Dal.CommonDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
+        /// <returns>The Micajah.Common.Dal.MasterDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static CommonDataSet.CustomUrlRow GetCustomUrlByOrganizationId(Guid organizationId)
+        public static MasterDataSet.CustomUrlRow GetCustomUrlByOrganizationId(Guid organizationId)
         {
-            CommonDataSet.CustomUrlDataTable table = null;
-            CommonDataSet.CustomUrlRow row = null;
+            MasterDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlRow row = null;
             try
             {
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
                 row = ((table.Count > 0) ? table[0] : null);
                 return row;
             }
@@ -189,14 +190,14 @@ namespace Micajah.Common.Bll.Providers
         /// Returns the custom URLs by by specified organization id and instance id.
         /// </summary>
         /// <param name="host">The host of the URL to find the custom URLs.</param>
-        /// <returns>The Micajah.Common.Dal.CommonDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
-        public static CommonDataSet.CustomUrlRow GetCustomUrl(Guid organizationId, Guid instanceId)
+        /// <returns>The Micajah.Common.Dal.MasterDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
+        public static MasterDataSet.CustomUrlRow GetCustomUrl(Guid organizationId, Guid instanceId)
         {
-            CommonDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlDataTable table = null;
             try
             {
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, null, null);
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, null, null);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -218,11 +219,11 @@ namespace Micajah.Common.Bll.Providers
         {
             ValidatePartialCustomUrl(partialCustomUrl);
 
-            CommonDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlDataTable table = null;
             try
             {
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
                 if (table.Count > 0)
                     throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
@@ -232,7 +233,7 @@ namespace Micajah.Common.Bll.Providers
                 if (!ValidateCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl))
                     throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
-                CommonDataSet.CustomUrlRow row = WebApplication.CommonDataSet.CustomUrl.NewCustomUrlRow();
+                MasterDataSet.CustomUrlRow row = table.NewCustomUrlRow();
                 row.CustomUrlId = Guid.NewGuid();
                 if (!string.IsNullOrEmpty(fullCustomUrl))
                     row.FullCustomUrl = fullCustomUrl.ToLower(CultureInfo.CurrentCulture);
@@ -242,8 +243,8 @@ namespace Micajah.Common.Bll.Providers
                 if (instanceId.HasValue)
                     row.InstanceId = instanceId.Value;
 
-                WebApplication.CommonDataSet.CustomUrl.AddCustomUrlRow(row);
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(row);
+                table.AddCustomUrlRow(row);
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Update(row);
 
                 return row.CustomUrlId;
             }
@@ -266,12 +267,12 @@ namespace Micajah.Common.Bll.Providers
 
             ValidatePartialCustomUrl(partialCustomUrl);
 
-            CommonDataSet.CustomUrlDataTable table = null;
+            MasterDataSet.CustomUrlDataTable table = null;
             try
             {
-                CommonDataSet.CustomUrlRow row = null;
-                table = new CommonDataSet.CustomUrlDataTable();
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, fullCustomUrl, partialCustomUrl);
+                MasterDataSet.CustomUrlRow row = null;
+                table = new MasterDataSet.CustomUrlDataTable();
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, fullCustomUrl, partialCustomUrl);
                 if (table.Count > 0)
                 {
                     if (table.Count == 1)
@@ -299,7 +300,7 @@ namespace Micajah.Common.Bll.Providers
                 if (string.IsNullOrEmpty(partialCustomUrl))
                     partialCustomUrl = string.Empty;
 
-                WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
+                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
             }
             finally
             {
@@ -316,13 +317,13 @@ namespace Micajah.Common.Bll.Providers
         {
             if (!string.IsNullOrEmpty(partialCustomUrl))
             {
-                CommonDataSet.CustomUrlDataTable table = null;
+                MasterDataSet.CustomUrlDataTable table = null;
                 Organization org = null;
                 string segment = null;
                 try
                 {
-                    table = new CommonDataSet.CustomUrlDataTable();
-                    WebApplication.CommonDataSetTableAdapters.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
+                    table = new MasterDataSet.CustomUrlDataTable();
+                    MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
 
                     if (table.Rows.Count > 0)
                         return false;
@@ -336,7 +337,7 @@ namespace Micajah.Common.Bll.Providers
 
                         if (org == null)
                         {
-                            CommonDataSet.CustomUrlRow row = GetCustomUrl(segment);
+                            MasterDataSet.CustomUrlRow row = GetCustomUrl(segment);
                             if (row != null)
                                 org = OrganizationProvider.GetOrganization(row.OrganizationId);
                         }
@@ -385,7 +386,7 @@ namespace Micajah.Common.Bll.Providers
             if (org != null)
             {
                 Instance inst = null;
-                CommonDataSet.CustomUrlRow row = null;
+                MasterDataSet.CustomUrlRow row = null;
 
                 if (instanceId != Guid.Empty)
                     row = GetCustomUrl(organizationId, instanceId);
@@ -532,7 +533,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instance">An instance.</param>
         public static void ParseHost(string host, ref Organization organization, ref Instance instance)
         {
-            CommonDataSet.CustomUrlRow row = GetCustomUrl(host);
+            MasterDataSet.CustomUrlRow row = GetCustomUrl(host);
             if (row != null)
             {
                 organization = OrganizationProvider.GetOrganization(row.OrganizationId);
@@ -554,7 +555,7 @@ namespace Micajah.Common.Bll.Providers
                 if (string.Compare(segment, FrameworkConfiguration.Current.WebApplication.CustomUrl.AuthenticationTicketDomain, StringComparison.OrdinalIgnoreCase) == 0)
                     return;
 
-                CommonDataSet.CustomUrlRow customUrlRow = null;
+                MasterDataSet.CustomUrlRow customUrlRow = null;
                 string instPseudoId = null;
                 string[] pseudos = segment.Split('-');
 

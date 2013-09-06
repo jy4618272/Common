@@ -1,14 +1,38 @@
-using System.Collections;
 using Micajah.Common.Bll.Providers;
+using System.Collections;
 
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The container class for the tables adapters of the common data set.
+    /// The container class for the tables adapters of the common and master data sets.
     /// </summary>
-    public sealed class CommonDataSetTableAdapters : TableAdaptersHolder
+    public sealed class MasterDataSetTableAdapters : TableAdaptersHolder
     {
+        #region Members
+
+        private static MasterDataSetTableAdapters s_Current;
+
+        #endregion
+
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the current instance of the class.
+        /// </summary>
+        public static MasterDataSetTableAdapters Current
+        {
+            get
+            {
+                if (s_Current == null)
+                    s_Current = new MasterDataSetTableAdapters();
+                return s_Current;
+            }
+            set
+            {
+                s_Current = value;
+                Micajah.Common.Application.WebApplication.RefreshCommonData();
+            }
+        }
 
         public ITableAdapter DatabaseTableAdapter { get { return this.TableAdapters[TableName.Database]; } }
 
@@ -50,12 +74,12 @@ namespace Micajah.Common.Dal.TableAdapters
 
         #region Constructors
 
-        public CommonDataSetTableAdapters()
+        public MasterDataSetTableAdapters()
         {
             this.Initialize();
         }
 
-        public CommonDataSetTableAdapters(ICollection adapters)
+        public MasterDataSetTableAdapters(ICollection adapters)
             : base(adapters)
         {
             this.Initialize();
@@ -106,7 +130,6 @@ namespace Micajah.Common.Dal.TableAdapters
             OrganizationTableAdapter.Fill(dataSet.Organization);
             UnitsOfMeasureAdapter.Fill(dataSet.UnitsOfMeasure);
             UnitsOfMeasureConversionAdapter.Fill(dataSet.UnitsOfMeasureConversion);
-            CountryTableAdapter.Fill(dataSet.Country);
         }
 
         #endregion

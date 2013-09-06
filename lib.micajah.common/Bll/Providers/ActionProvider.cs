@@ -151,7 +151,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets a value indicating that the action table contains only built-in actions.
+        /// Gets a value indicating that the action table2 contains only built-in actions.
         /// </summary>
         internal static bool OnlyBuiltInActionsAvailable
         {
@@ -506,15 +506,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static bool AccessDeniedToSettingsDiagnosticPage()
         {
-            bool groupsExist = false;
-            UserContext user = UserContext.Current;
-            if (user != null)
-            {
-                Organization org = user.SelectedOrganization;
-                if (org != null)
-                    groupsExist = (org.DataSet.Group.Count > 0);
-            }
-            return (!(SettingProvider.GroupSettingsExist && groupsExist));
+            return (!(SettingProvider.GroupSettingsExist && GroupProvider.GroupsExist));
         }
 
         internal static bool AuthenticationRequired(Guid actionId)
@@ -697,9 +689,9 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns the actions table.
+        /// Returns the actions table2.
         /// </summary>
-        /// <returns>The actions table.</returns>
+        /// <returns>The actions table2.</returns>
         internal static DataTable GetActionsTree()
         {
             CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action.Copy() as CommonDataSet.ActionDataTable;

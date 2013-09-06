@@ -7,7 +7,7 @@ namespace Micajah.Common.WebControls
 {
     /// <summary>
     /// Represents a field that is displayed as a list control that encapsulates a group of radio button controls in a data-bound control.
-    /// Can be dynamically created by binding the control to a data source.
+    /// Can be dynamically created by binding the control to a data sourceRow.
     /// </summary>
     public class RadioButtonListField : BaseValidatedField
     {
@@ -38,7 +38,7 @@ namespace Micajah.Common.WebControls
 
         /// <summary>
         /// Gets or sets the name of the list of data that the data-bound control binds
-        /// to, in cases where the data source contains more than one distinct list of data items.
+        /// to, in cases where the data sourceRow contains more than one distinct list of data items.
         /// The default is System.String.Empty.
         /// </summary>
         [Category("Data")]
@@ -87,7 +87,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the field of the data source that provides the text content of the list items.
+        /// Gets or sets the field of the data sourceRow that provides the text content of the list items.
         /// The default is System.String.Empty.
         /// </summary>
         [Category("Data")]
@@ -121,7 +121,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the field of the data source that provides the value of each list item.
+        /// Gets or sets the field of the data sourceRow that provides the value of each list item.
         /// The default is System.String.Empty.
         /// </summary>
         [Category("Data")]
@@ -138,7 +138,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the distance (in pixels) between the border and the contents of the table cell.
+        /// Gets or sets the distance (in pixels) between the border and the contents of the table2 cell.
         /// The default is -1, which indicates that this property is not set.
         /// </summary>
         [Category("Layout")]
@@ -155,7 +155,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the distance (in pixels) between adjacent table cells.
+        /// Gets or sets the distance (in pixels) between adjacent table2 cells.
         /// The default is -1, which indicates that this property is not set.
         /// </summary>
         [Category("Layout")]

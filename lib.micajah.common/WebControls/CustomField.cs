@@ -60,7 +60,7 @@ namespace Micajah.Common.WebControls
                 object obj = this.ViewState["EntityId"];
                 if ((obj == null) && (!this.DesignMode))
                 {
-                    OrganizationDataSet.EntityFieldDataTable table = EntityFieldProvider.GetEntityField(this.EntityFieldId, this.OrganizationId);
+                    ClientDataSet.EntityFieldDataTable table = EntityFieldProvider.GetEntityField(this.EntityFieldId, this.OrganizationId);
                     if (table.Count > 0)
                         obj = table[0].EntityId;
                 }

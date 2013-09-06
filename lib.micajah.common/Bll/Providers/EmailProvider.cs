@@ -1,11 +1,8 @@
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
 using System;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -15,7 +12,7 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class EmailProvider
     {
-        #region Public Methods        
+        #region Public Methods
 
         /// <summary>
         /// Checks if Email is Exist.
@@ -35,11 +32,11 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetEmail(string email)
         {
-            CommonDataSet.EmailDataTable table = null;
+            MasterDataSet.EmailDataTable table = null;
             try
             {
-                table = new CommonDataSet.EmailDataTable();
-                WebApplication.CommonDataSetTableAdapters.EmailTableAdapter.Fill(table, 0, email);
+                table = new MasterDataSet.EmailDataTable();
+                MasterDataSetTableAdapters.Current.EmailTableAdapter.Fill(table, 0, email);
                 return table;
             }
             finally
@@ -57,11 +54,11 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetEmails(Guid loginId)
         {
-            CommonDataSet.EmailDataTable table = null;
+            MasterDataSet.EmailDataTable table = null;
             try
             {
-                table = new CommonDataSet.EmailDataTable();
-                WebApplication.CommonDataSetTableAdapters.EmailTableAdapter.Fill(table, 1, loginId);
+                table = new MasterDataSet.EmailDataTable();
+                MasterDataSetTableAdapters.Current.EmailTableAdapter.Fill(table, 1, loginId);
                 table.DefaultView.Sort = "[Email] ASC";
                 return table;
             }
@@ -69,7 +66,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (table != null) table.Dispose();
             }
-        }     
+        }
 
         /// <summary>
         /// Inserts the email.
@@ -79,7 +76,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertEmail(string email, Guid loginId)
         {
-            WebApplication.CommonDataSetTableAdapters.EmailTableAdapter.Insert(email, loginId);
+            MasterDataSetTableAdapters.Current.EmailTableAdapter.Insert(email, loginId);
         }
 
         /// <summary>
@@ -89,7 +86,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEmails(Guid loginId, String email)
         {
-            WebApplication.CommonDataSetTableAdapters.EmailTableAdapter.Delete(loginId, email);
+            MasterDataSetTableAdapters.Current.EmailTableAdapter.Delete(loginId, email);
         }
 
         #endregion

@@ -388,7 +388,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 userContext = arg as UserContext;
                 if (userContext != null)
                 {
-                    processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", userContext.SelectedOrganization.OrganizationId);
+                    processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", userContext.SelectedOrganizationId);
 
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
@@ -455,13 +455,13 @@ namespace Micajah.Common.WebControls.AdminControls
             string ldapUserName = null;
             string ldapPassword = null;
             string ldapDomain = null;
-            Bll.Handlers.LdapHandler ldapHendler = null;
+            Bll.Handlers.LdapHandler ldapHandler = null;
             try
             {
                 userContext = arg as UserContext;
                 if (userContext != null)
                 {
-                    processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", userContext.SelectedOrganization.OrganizationId);
+                    processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", userContext.SelectedOrganizationId);
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
                         LdapInfoProvider.LdapProcesses.Remove(ldapProcess);
@@ -487,10 +487,10 @@ namespace Micajah.Common.WebControls.AdminControls
                         ldapPassword = OldPassword.Text.ToString();
                     ldapDomain = (EditForm.Rows[3].Cells[1].Controls[0] as TextBox).Text;
 
-                    ldapHendler = new Bll.Handlers.LdapHandler();
-                    ldapHendler.ImportLdapGroups(userContext.SelectedOrganization.OrganizationId);
+                    ldapHandler = new Bll.Handlers.LdapHandler();
+                    ldapHandler.ImportLdapGroups(userContext.SelectedOrganizationId);
 
-                    ldapProcess.Data = LdapInfoProvider.GetGroups(ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, DomainsComboBox.SelectedItem.Text, userContext.SelectedOrganization.OrganizationId);
+                    ldapProcess.Data = LdapInfoProvider.GetGroups(ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, DomainsComboBox.SelectedItem.Text, userContext.SelectedOrganizationId);
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
 
                 }
@@ -517,20 +517,20 @@ namespace Micajah.Common.WebControls.AdminControls
                 ldapUserName = null;
                 ldapPassword = null;
                 ldapDomain = null;
-                ldapHendler = null;
+                ldapHandler = null;
             }
         }
 
         protected void LdapProcessTestADReplication(object arg)
         {
             LdapHandler ldap = new LdapHandler();
-            ldap.RunADReplication((arg as UserContext).SelectedOrganization.OrganizationId, false);
+            ldap.RunADReplication((arg as UserContext).SelectedOrganizationId, false);
         }
 
         protected void LdapProcessRealADReplication(object arg)
         {
             LdapHandler ldap = new LdapHandler();
-            ldap.RunADReplication((arg as UserContext).SelectedOrganization.OrganizationId, true);
+            ldap.RunADReplication((arg as UserContext).SelectedOrganizationId, true);
         }
 
         protected void ShowResultsGetDomains()

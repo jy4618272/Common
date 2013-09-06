@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls
 {
@@ -229,7 +229,7 @@ namespace Micajah.Common.WebControls
             DataRowView drv = e.Item.DataItem as DataRowView;
             if (drv == null) return;
 
-            OrganizationDataSet.MessageRow messageRow = drv.Row as OrganizationDataSet.MessageRow;
+            ClientDataSet.MessageRow messageRow = drv.Row as ClientDataSet.MessageRow;
             if (messageRow == null)
                 return;
 
@@ -264,7 +264,7 @@ namespace Micajah.Common.WebControls
                 e.Item.Controls.Add(headerPanel);
 
                 string headerText = string.Empty;
-                OrganizationDataSet.UserRow userRow = UserProvider.GetUserRow(messageRow.FromUserId, false);
+                ClientDataSet.UserRow userRow = UserProvider.GetUserRow(messageRow.FromUserId, false);
                 if (userRow != null) headerText = userRow.FullName;
 
                 if (!messageRow.IsToUserIdNull())

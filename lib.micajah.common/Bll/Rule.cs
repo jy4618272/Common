@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Micajah.Common.Bll.Providers;
+﻿using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using Micajah.Common.Security;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Micajah.Common.Bll
 {
@@ -35,7 +35,7 @@ namespace Micajah.Common.Bll
         #endregion
 
         #region Fabric Methods
-        internal static Rule Create(OrganizationDataSet.RuleRow row)
+        internal static Rule Create(ClientDataSet.RuleRow row)
         {
             if (row == null) return null;
             Rule rule = new Rule();
@@ -126,7 +126,7 @@ namespace Micajah.Common.Bll
             internal set { lastUsedUser = value; }
         }
 
-        public Micajah.Common.Dal.OrganizationDataSet.UserRow LastUsedUser
+        public Micajah.Common.Dal.ClientDataSet.UserRow LastUsedUser
         {
             get
             {
@@ -148,7 +148,7 @@ namespace Micajah.Common.Bll
             internal set { createdBy = value; }
         }
 
-        public Micajah.Common.Dal.OrganizationDataSet.UserRow CreatedBy
+        public Micajah.Common.Dal.ClientDataSet.UserRow CreatedBy
         {
             get { return UserProvider.GetUserRow(createdBy, this.OrganizationId); }
         }
@@ -202,17 +202,17 @@ namespace Micajah.Common.Bll
 
         public bool Resolve()
         {
-            OrganizationDataSet.RuleParametersDataTable table = RuleEngineProvider.GetRuleParameters(this.RuleId);
+            ClientDataSet.RuleParametersDataTable table = RuleEngineProvider.GetRuleParameters(this.RuleId);
             this.LastUsedUserId = UserContext.Current.UserId;
             RuleEngineProvider.UpdateRuleUses(
-                UserContext.Current.SelectedOrganization.OrganizationId,
+                UserContext.Current.SelectedOrganizationId,
                 this.RuleId,
                 UserContext.Current.UserId,
                 DateTime.UtcNow);
             int count = table.Count;
             if (count == 0) return true;
             int result = 0;
-            foreach (OrganizationDataSet.RuleParametersRow row in table)
+            foreach (ClientDataSet.RuleParametersRow row in table)
             {
                 foreach (Entity ent in this.InputEntities)
                 {
@@ -573,7 +573,7 @@ namespace Micajah.Common.Bll
             if (instanceId.Value == Guid.Empty) instanceId = null;
 
             RuleCollection coll = new RuleCollection();
-            foreach (OrganizationDataSet.RuleRow row in RuleEngineProvider.GetRules(ruleEngineId, UserContext.Current.SelectedOrganizationId, instanceId))
+            foreach (ClientDataSet.RuleRow row in RuleEngineProvider.GetRules(ruleEngineId, UserContext.Current.SelectedOrganizationId, instanceId))
             {
                 coll.Add(Rule.Create(row));
             }

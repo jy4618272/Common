@@ -8,8 +8,8 @@ namespace Micajah.Common.TestSite
     {
         protected override void Application_Start(object sender, EventArgs e)
         {
-            //    OrganizationDataSetTableAdapters.InstanceTableAdapter.InsertCommand.CommandText = "[dbo].[Instance_Insert]";
-            //    OrganizationDataSetTableAdapters.InstanceTableAdapter.UpdateCommand.CommandText = "[dbo].[Instance_Update]";
+            //    ClientDataSetTableAdapters.InstanceTableAdapter.InsertCommand.CommandText = "[dbo].[Instance_Insert]";
+            //    ClientDataSetTableAdapters.InstanceTableAdapter.UpdateCommand.CommandText = "[dbo].[Instance_Update]";
             base.Application_Start(sender, e);
 
             Micajah.Common.Bll.Handlers.ActionHandler.Current = new ActionCustomHandler();

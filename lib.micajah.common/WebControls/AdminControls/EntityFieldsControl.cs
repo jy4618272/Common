@@ -1,7 +1,4 @@
-﻿using System;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -9,6 +6,9 @@ using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -185,12 +185,12 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            OrganizationDataSet.EntityFieldDataTable table = e.ReturnValue as OrganizationDataSet.EntityFieldDataTable;
+            ClientDataSet.EntityFieldDataTable table = e.ReturnValue as ClientDataSet.EntityFieldDataTable;
             if (table != null)
             {
                 if (table.Count > 0)
                 {
-                    OrganizationDataSet.EntityFieldRow row = table[0];
+                    ClientDataSet.EntityFieldRow row = table[0];
                     EntityFieldType fieldType = (EntityFieldType)row.EntityFieldTypeId;
                     SwitchDataTypeFields(fieldType, (EntityFieldDataType)row.DataTypeId);
                     (EditForm.Fields[4] as TextBoxField).Required = (!row.AllowDBNull);

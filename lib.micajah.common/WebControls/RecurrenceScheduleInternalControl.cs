@@ -356,7 +356,7 @@ namespace Micajah.Common.WebControls
         {
             get
             {
-                return (Guid)(ViewState["OrganizationId"] ?? (UserContext.Current == null ? Guid.Empty : UserContext.Current.SelectedOrganization.OrganizationId));
+                return (Guid)(ViewState["OrganizationId"] ?? UserContext.Current.SelectedOrganizationId);
             }
             set
             {
@@ -368,7 +368,7 @@ namespace Micajah.Common.WebControls
         {
             get
             {
-                return (Guid?)(ViewState["InstanceId"] ?? ((UserContext.Current == null || UserContext.Current.SelectedInstance == null) ? new Guid?() : new Guid?(UserContext.Current.SelectedInstance.InstanceId)));
+                return (Guid?)(ViewState["InstanceId"] ?? ((UserContext.Current == null || UserContext.Current.SelectedInstanceId == Guid.Empty) ? new Guid?() : new Guid?(UserContext.Current.SelectedInstanceId)));
             }
             set
             {

@@ -86,7 +86,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                if (m_OrgId == Guid.Empty) m_OrgId = UserContext.Current.SelectedOrganization.OrganizationId;
+                if (m_OrgId == Guid.Empty) m_OrgId = UserContext.Current.SelectedOrganizationId;
                 return m_OrgId;
             }
         }
@@ -95,7 +95,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                if (m_InstId == Guid.Empty) m_InstId = UserContext.Current.SelectedInstance.InstanceId;
+                if (m_InstId == Guid.Empty) m_InstId = UserContext.Current.SelectedInstanceId;
                 return m_InstId;
             }
         }
@@ -182,7 +182,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 UserContext user = UserContext.Current;
                 if (user != null)
                 {
-                    if (user.SelectedInstance == null)
+                    if (user.SelectedInstanceId == Guid.Empty)
                         Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, false));
                 }
             }

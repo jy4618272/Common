@@ -162,7 +162,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the page is being loaded.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -209,9 +209,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                         count = coll.Count;
                         if (count == 1)
                         {
-                            if (user.SelectedOrganization != null)
+                            if (user.SelectedOrganizationId != Guid.Empty)
                             {
-                                if (coll[0].OrganizationId != user.SelectedOrganization.OrganizationId)
+                                if (coll[0].OrganizationId != user.SelectedOrganizationId)
                                     count = 2;
                             }
                         }

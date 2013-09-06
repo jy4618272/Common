@@ -56,7 +56,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the page is being loaded.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {

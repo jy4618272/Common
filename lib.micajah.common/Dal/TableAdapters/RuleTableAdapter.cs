@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using Micajah.Common.Bll;
 
 namespace Micajah.Common.Dal.TableAdapters
 {

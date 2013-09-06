@@ -45,7 +45,7 @@ namespace Micajah.Common.WebControls
         #region Private Properties
 
         /// <summary>
-        /// Gets the width of the table's columns.
+        /// Gets the width of the table2's columns.
         /// </summary>
         private Unit ColumnWidth
         {

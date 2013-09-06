@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.LdapAdapter;
+using Micajah.Common.Properties;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
-
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.LdapAdapter;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
+using System.Text;
 
 namespace Micajah.Common.Bll.Handlers
 {
@@ -62,11 +60,11 @@ namespace Micajah.Common.Bll.Handlers
                                     dvGroups = LdapInfoProvider.GetGroupsByDomainDistinguishedName(org.OrganizationId, drDomain["DistinguishedName"].ToString());
                                     if (dvGroups.Table.Rows.Count > 0)
                                     {
-                                        WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Delete(org.OrganizationId, drDomain["DomainName"].ToString());
+                                        MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Delete(org.OrganizationId, drDomain["DomainName"].ToString());
                                         for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
                                         {
                                             drGroup = dvGroups.Table.Rows[j];
-                                            WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), org.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.UtcNow);
+                                            MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), org.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.UtcNow);
                                         }
                                     }
                                 }
@@ -143,11 +141,11 @@ namespace Micajah.Common.Bll.Handlers
                                 dvGroups = LdapInfoProvider.GetGroupsByDomainDistinguishedName(organization.OrganizationId, drDomain["DistinguishedName"].ToString());
                                 if (dvGroups.Table.Rows.Count > 0)
                                 {
-                                    WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Delete(organization.OrganizationId, drDomain["DomainName"].ToString());
+                                    MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Delete(organization.OrganizationId, drDomain["DomainName"].ToString());
                                     for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
                                     {
                                         drGroup = dvGroups.Table.Rows[j];
-                                        WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), organization.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.UtcNow);
+                                        MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Insert(Guid.NewGuid(), organization.OrganizationId, drDomain["Id"], drDomain["DomainName"].ToString(), drGroup["Id"], drGroup["GroupName"], drGroup["DistinguishedName"], DateTime.UtcNow);
                                     }
                                 }
                             }
@@ -192,8 +190,8 @@ namespace Micajah.Common.Bll.Handlers
             DataColumn newColumn = null;
             DataRow row = null;
             DataRow newRow = null;
-            CommonDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
-            CommonDataSet.GroupMappingsDataTable groupMappings = null;
+            MasterDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
+            MasterDataSet.GroupMappingsDataTable groupMappings = null;
             Bll.Handlers.LdapHandler ldapHendler = null;
             try
             {
@@ -313,19 +311,19 @@ namespace Micajah.Common.Bll.Handlers
                     newColumn.DefaultValue = false;
                     ldapActiveLogins.Columns.Add(newColumn);
 
-                    orgTable = new CommonDataSet.OrganizationsLdapGroupsDataTable();
-                    WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 3, organizationId);
+                    orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
+                    MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 3, organizationId);
 
                     if (orgTable.Rows.Count == 0)
                     {
                         ldapHendler = new Bll.Handlers.LdapHandler();
                         ldapHendler.ImportLdapGroups(organizationId);
-                        orgTable = new CommonDataSet.OrganizationsLdapGroupsDataTable();
-                        WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 3, organizationId);
+                        orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
+                        MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 3, organizationId);
                     }
 
-                    groupMappings = new CommonDataSet.GroupMappingsDataTable();
-                    WebApplication.CommonDataSetTableAdapters.GroupMappingsTableAdapter.Fill(groupMappings, 0, organizationId);
+                    groupMappings = new MasterDataSet.GroupMappingsDataTable();
+                    MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Fill(groupMappings, 0, organizationId);
 
                     if (isRealReplication)
                     {
@@ -480,7 +478,7 @@ namespace Micajah.Common.Bll.Handlers
             }
         }
 
-        private static void LocalUsersCreate(DataTable localUsers, DataTable ldapUsers, Guid organizationId, ref Bll.LdapProcess ldapProcess, DomainUserCollection users, CommonDataSet.OrganizationsLdapGroupsDataTable orgTable, CommonDataSet.GroupMappingsDataTable groupMappings, bool isRealReplication)
+        private static void LocalUsersCreate(DataTable localUsers, DataTable ldapUsers, Guid organizationId, ref Bll.LdapProcess ldapProcess, DomainUserCollection users, MasterDataSet.OrganizationsLdapGroupsDataTable orgTable, MasterDataSet.GroupMappingsDataTable groupMappings, bool isRealReplication)
         {
             int count = 0;
             DataTable newTable = null;
@@ -642,10 +640,10 @@ namespace Micajah.Common.Bll.Handlers
             }
         }
 
-        private static void LocalUsersCheckGroups(Guid organizationId, DataTable localMappedLogins, DomainUserCollection users, CommonDataSet.OrganizationsLdapGroupsDataTable orgTable, CommonDataSet.GroupMappingsDataTable groupMappings)
+        private static void LocalUsersCheckGroups(Guid organizationId, DataTable localMappedLogins, DomainUserCollection users, MasterDataSet.OrganizationsLdapGroupsDataTable orgTable, MasterDataSet.GroupMappingsDataTable groupMappings)
         {
             DataView ldapGroups = null;
-            OrganizationDataSet.UserRow userRow = null;
+            ClientDataSet.UserRow userRow = null;
             StringBuilder newUserGroups = null;
             User ldapUser = null;
             DomainUser ldapDomainUser = null;

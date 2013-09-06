@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
+using Micajah.Common.WebControls.SetupControls;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
-using Micajah.Common.WebControls.SetupControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -170,7 +170,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     GridViewParameters.Visible = false;
                     TableEditParameter.Visible = true;
                     RuleParameterCaption.Text = MagicForm.GetCaption(DetailsViewMode.Edit, Resources.RuleParametersControl_RuleParameterCaption_Text);
-                    OrganizationDataSet.RuleParametersRow row = RuleEngineProvider.GetRuleParameterRow(this.RuleParameterId);
+                    ClientDataSet.RuleParametersRow row = RuleEngineProvider.GetRuleParameterRow(this.RuleParameterId);
                     if (row != null)
                     {
                         m_FieldName = row.FieldName;
@@ -388,7 +388,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void FormRuleView_DataBound(object sender, EventArgs e)
         {
-            OrganizationDataSet.RuleRow row = FormRoleView.DataItem as OrganizationDataSet.RuleRow;
+            ClientDataSet.RuleRow row = FormRoleView.DataItem as ClientDataSet.RuleRow;
             Label LabelUserName = FormRoleView.FindControl("LabelUserName") as Label;
             Label LabelUserDate = FormRoleView.FindControl("LabelUserDate") as Label;
             if (row != null && LabelUserName != null && LabelUserDate != null)

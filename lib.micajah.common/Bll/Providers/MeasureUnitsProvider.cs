@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Micajah.Common.Application;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
-using Micajah.Common.Application;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -19,13 +19,6 @@ namespace Micajah.Common.Bll.Providers
     public static class MeasureUnitsProvider
     {
         #region Private Methods
-        private static Guid GetCurrOrgId()
-        {
-            Guid organizationId = Guid.Empty;
-            if (UserContext.Current != null && UserContext.Current.SelectedOrganization != null)
-                organizationId = UserContext.Current.SelectedOrganization.OrganizationId;
-            return organizationId;
-        }
 
         private static Guid InsertMeasureUnit(
             string singularName,
@@ -53,7 +46,7 @@ namespace Micajah.Common.Bll.Providers
             row.OrganizationId = organizationId;
             table.AddUnitsOfMeasureRow(row);
 
-            CommonDataSetTableAdapters adapters = WebApplication.CommonDataSetTableAdapters;
+            MasterDataSetTableAdapters adapters = MasterDataSetTableAdapters.Current;
             if (adapters != null) adapters.UnitsOfMeasureAdapter.Update(row);
             if (refreshData) WebApplication.RefreshMeasureUnits();
             return newId;
@@ -106,7 +99,7 @@ namespace Micajah.Common.Bll.Providers
                 row.Delete();
             //throw new ConstraintException(Resources.MeasureUnitsProvider_ErrorMessage_ConversionAlreadyExists, ex);
 
-            CommonDataSetTableAdapters adapters = WebApplication.CommonDataSetTableAdapters;
+            MasterDataSetTableAdapters adapters = MasterDataSetTableAdapters.Current;
             if (adapters != null) adapters.UnitsOfMeasureConversionAdapter.Update(row);
             if (refreshData) WebApplication.RefreshMeasureUnits();
         }
@@ -248,7 +241,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static CommonDataSet.UnitsOfMeasureDataTable GetMeasureUnits()
         {
-            return GetMeasureUnits(GetCurrOrgId());
+            return GetMeasureUnits(UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -286,7 +279,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static CommonDataSet.UnitsOfMeasureRow GetMeasureUnitRow(Guid unitsOfMeasureId)
         {
-            return GetMeasureUnitRow(unitsOfMeasureId, GetCurrOrgId());
+            return GetMeasureUnitRow(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -364,13 +357,13 @@ namespace Micajah.Common.Bll.Providers
             string groupName,
             string localName)
         {
-            return InsertMeasureUnit(singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName, GetCurrOrgId(), true);
+            return InsertMeasureUnit(singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName, UserContext.Current.SelectedOrganizationId, true);
         }
 
         /// <summary>
         /// Creates a new conversion of measure units
         /// </summary>
-        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion source</param>
+        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion sourceRow</param>
         /// <param name="measureUnitTo">Measure Unit Identifier of conversion target</param>
         /// <param name="factor">Conversion factor. Must be more zero.</param>
         [DataObjectMethod(DataObjectMethodType.Insert)]
@@ -386,7 +379,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Creates a new conversion of measure units
         /// </summary>
-        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion source</param>
+        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion sourceRow</param>
         /// <param name="measureUnitTo">Measure Unit Identifier of conversion target</param>
         /// <param name="factor">Conversion factor. Must be more zero.</param>
         [DataObjectMethod(DataObjectMethodType.Insert)]
@@ -395,7 +388,7 @@ namespace Micajah.Common.Bll.Providers
             Guid targetUnitsOfMeasureId,
             double factor)
         {
-            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, GetCurrOrgId(), factor, true, false);
+            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.SelectedOrganizationId, factor, true, false);
         }
 
         /// <summary>
@@ -426,7 +419,7 @@ namespace Micajah.Common.Bll.Providers
             row.PluralAbbrv = pluralAbbrv;
             if (groupName != null) row.GroupName = groupName;
             if (localName != null) row.LocalName = localName;
-            CommonDataSetTableAdapters adapters = WebApplication.CommonDataSetTableAdapters;
+            MasterDataSetTableAdapters adapters = MasterDataSetTableAdapters.Current;
             if (adapters != null) adapters.UnitsOfMeasureAdapter.Update(row);
             WebApplication.RefreshMeasureUnits();
         }
@@ -450,7 +443,7 @@ namespace Micajah.Common.Bll.Providers
             string groupName,
             string localName)
         {
-            UpdateMeasureUnit(unitsOfMeasureId, GetCurrOrgId(), singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName);
+            UpdateMeasureUnit(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId, singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName);
         }
 
         /// <summary>
@@ -489,13 +482,13 @@ namespace Micajah.Common.Bll.Providers
             string pluralName,
             string pluralAbbrv)
         {
-            UpdateMeasureUnit(unitsOfMeasureId, GetCurrOrgId(), singularName, singularAbbrv, pluralName, pluralAbbrv, null, null);
+            UpdateMeasureUnit(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId, singularName, singularAbbrv, pluralName, pluralAbbrv, null, null);
         }
 
         /// <summary>
         /// Updates the conversion of measure units
         /// </summary>
-        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion source</param>
+        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion sourceRow</param>
         /// <param name="measureUnitTo">Measure Unit Identifier of conversion target</param>
         /// <param name="factor">Conversion factor. Must be more zero.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
@@ -511,7 +504,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Updates the conversion of measure units
         /// </summary>
-        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion source</param>
+        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion sourceRow</param>
         /// <param name="measureUnitTo">Measure Unit Identifier of conversion target</param>
         /// <param name="factor">Conversion factor. Must be more zero.</param>
         [DataObjectMethod(DataObjectMethodType.Update)]
@@ -520,7 +513,7 @@ namespace Micajah.Common.Bll.Providers
             Guid targetUnitsOfMeasureId,
             double factor)
         {
-            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, GetCurrOrgId(), factor, true, false);
+            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.SelectedOrganizationId, factor, true, false);
         }
 
         /// <summary>
@@ -533,7 +526,7 @@ namespace Micajah.Common.Bll.Providers
             CommonDataSet.UnitsOfMeasureRow row = GetMeasureUnitRow(unitsOfMeasureId, organizationId);
             if (row == null) throw new ArgumentException(Resources.MeasureUnitsProvider_ErrorMessage_CannotFindByMeasureUnitId);
             row.Delete();
-            CommonDataSetTableAdapters adapters = WebApplication.CommonDataSetTableAdapters;
+            MasterDataSetTableAdapters adapters = MasterDataSetTableAdapters.Current;
             if (adapters != null) adapters.UnitsOfMeasureAdapter.Update(row);
             WebApplication.RefreshMeasureUnits();
         }
@@ -545,27 +538,27 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteMeasureUnits(Guid unitsOfMeasureId)
         {
-            DeleteMeasureUnits(unitsOfMeasureId, GetCurrOrgId());
+            DeleteMeasureUnits(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
         /// Deletes the conversion of measure units
         /// </summary>
-        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion source</param>
+        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion sourceRow</param>
         /// <param name="measureUnitTo">Measure Unit Identifier of conversion target</param>
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteMeasureUnitsConversion(
             Guid sourceUnitsOfMeasureId,
             Guid targetUnitsOfMeasureId)
         {
-            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, GetCurrOrgId(), 1, true, true);
+            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.SelectedOrganizationId, 1, true, true);
         }
 
 
         /// <summary>
         /// Deletes the conversion of measure units
         /// </summary>
-        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion source</param>
+        /// <param name="measureUnitFrom">Measure Unit Identifier of conversion sourceRow</param>
         /// <param name="measureUnitTo">Measure Unit Identifier of conversion target</param>
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteMeasureUnitsConversion(
@@ -579,7 +572,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetConvertedMeasureUnits(Guid unitsOfMeasureId)
         {
-            return GetConvertedMeasureUnits(unitsOfMeasureId, GetCurrOrgId());
+            return GetConvertedMeasureUnits(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -668,7 +661,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static bool OverrideMeasureUnit(Guid unitsOfMeasureId, Guid organizationId)
         {
-            UnitsOfMeasureAdapter adapter = WebApplication.CommonDataSetTableAdapters.UnitsOfMeasureAdapter as UnitsOfMeasureAdapter;
+            UnitsOfMeasureAdapter adapter = MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter as UnitsOfMeasureAdapter;
             if (adapter != null && adapter.OverrideUnit(unitsOfMeasureId, organizationId) > 0)
             {
                 WebApplication.RefreshMeasureUnits();
@@ -677,6 +670,5 @@ namespace Micajah.Common.Bll.Providers
             return false;
         }
         #endregion
-
     }
 }

@@ -4,17 +4,38 @@ using System.Collections;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The container class for the tables adapters of the organization dataset.
+    /// The container class for the tables adapters of the organization and client dataset.
     /// </summary>
-    public sealed class OrganizationDataSetTableAdapters : TableAdaptersHolder, ICloneable
+    public sealed class ClientDataSetTableAdapters : TableAdaptersHolder, ICloneable
     {
         #region Members
+
+        private static ClientDataSetTableAdapters s_Current;
 
         private string m_ConnectionString;
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the current instance of the class.
+        /// </summary>
+        public static ClientDataSetTableAdapters Current
+        {
+            get
+            {
+                if (s_Current == null)
+                    s_Current = new ClientDataSetTableAdapters();
+                return s_Current;
+            }
+            set
+            {
+                s_Current = value;
+                Micajah.Common.Application.WebApplication.RefreshOrganizationDataSetTableAdaptersList();
+                Micajah.Common.Application.WebApplication.RefreshOrganizationDataSets();
+            }
+        }
 
         public ITableAdapter InstanceTableAdapter { get { return this.TableAdapters[TableName.Instance]; } }
 
@@ -64,12 +85,12 @@ namespace Micajah.Common.Dal.TableAdapters
 
         #region Constructors
 
-        public OrganizationDataSetTableAdapters()
+        public ClientDataSetTableAdapters()
         {
             this.Initialize();
         }
 
-        public OrganizationDataSetTableAdapters(ICollection adapters)
+        public ClientDataSetTableAdapters(ICollection adapters)
             : base(adapters)
         {
             this.Initialize();
@@ -110,6 +131,11 @@ namespace Micajah.Common.Dal.TableAdapters
             SettingsValuesTableAdapter.Fill(dataSet.SettingsValues, 0, organizationId);
         }
 
+        internal static void RefreshCurrent()
+        {
+            s_Current = null;
+        }
+
         #endregion
 
         #region Private Methods
@@ -141,7 +167,7 @@ namespace Micajah.Common.Dal.TableAdapters
 
         #region Public Methods
 
-        public OrganizationDataSetTableAdapters Clone()
+        public ClientDataSetTableAdapters Clone()
         {
             ArrayList list = new ArrayList();
             foreach (TableName tableName in this.TableAdapters.Keys)
@@ -152,7 +178,7 @@ namespace Micajah.Common.Dal.TableAdapters
                     if (adapter != null) list.Add(adapter.Clone());
                 }
             }
-            OrganizationDataSetTableAdapters adapters = new OrganizationDataSetTableAdapters(list);
+            ClientDataSetTableAdapters adapters = new ClientDataSetTableAdapters(list);
             adapters.ConnectionString = this.ConnectionString;
             return adapters;
         }

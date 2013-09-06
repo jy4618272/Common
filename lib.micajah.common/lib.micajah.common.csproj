@@ -163,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\CacheManager.cs" />
-    <Compile Include="Application\StartTheadItem.cs" />
     <Compile Include="Bll\Handlers\ActionHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyWebhookHandler.cs" />
@@ -205,7 +204,6 @@
     <Compile Include="Bll\Providers\ResourceProvider.cs" />
     <Compile Include="Bll\Providers\EntityFieldProvider.cs" />
     <Compile Include="Bll\Providers\EntityNodeProvider.cs" />
-    <Compile Include="Bll\Providers\EntityNodesRelatedEntityNodes.cs" />
     <Compile Include="Bll\Providers\InstanceProvider.cs" />
     <Compile Include="Bll\Enums.cs" />
     <Compile Include="Bll\Providers\GroupProvider.cs" />
@@ -278,10 +276,20 @@
     <Compile Include="Configuration\SupportElement.cs" />
     <Compile Include="Configuration\WebApplicationElement.cs" />
     <Compile Include="Configuration\WebsiteConfiguration.cs" />
-    <Compile Include="Dal\CommonDataSet.Designer.cs">
+    <Compile Include="Dal\ClientDataSet.Designer.cs">
+      <DependentUpon>ClientDataSet.xsd</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Dal\MasterDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasterDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Dal\CommonDataSet.Designer.cs">
       <DependentUpon>CommonDataSet.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Dal\OAuthDataSet.cs">
       <DependentUpon>OAuthDataSet.xsd</DependentUpon>
@@ -552,10 +560,10 @@
     <Compile Include="Dal\TableAdapters\GroupsInstancesRolesTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\GroupTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\Interfaces.cs" />
-    <Compile Include="Dal\TableAdapters\OrganizationDataSetTableAdapters.cs" />
+    <Compile Include="Dal\TableAdapters\ClientDataSetTableAdapters.cs" />
     <Compile Include="Dal\TableAdapters\DatabaseServerTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\SettingsValuesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\CommonDataSetTableAdapters.cs" />
+    <Compile Include="Dal\TableAdapters\MasterDataSetTableAdapters.cs" />
     <Compile Include="Dal\TableAdapters\UsersGroupsTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\WebsiteTableAdapter.cs" />
     <Compile Include="WebControls\SecurityControls\LogOnControl.cs">
@@ -608,6 +616,28 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dal\CommonDataSet.xsc">
+      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\CommonDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CommonDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Dal\CommonDataSet.xss">
+      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\ClientDataSet.xsc">
+      <DependentUpon>ClientDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\ClientDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ClientDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Dal\ClientDataSet.xss">
+      <DependentUpon>ClientDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Dal\OAuthDataSet.xsc">
       <DependentUpon>OAuthDataSet.xsd</DependentUpon>
     </None>
@@ -630,16 +660,16 @@
     <None Include="Dal\OrganizationDataSet.xss">
       <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
     </None>
-    <None Include="Dal\CommonDataSet.xsc">
-      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    <None Include="Dal\MasterDataSet.xsc">
+      <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </None>
-    <None Include="Dal\CommonDataSet.xsd">
+    <None Include="Dal\MasterDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CommonDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>MasterDataSet.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Dal\CommonDataSet.xss">
-      <DependentUpon>CommonDataSet.xsd</DependentUpon>
+    <None Include="Dal\MasterDataSet.xss">
+      <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </None>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v65.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v66.sql" />
@@ -2302,7 +2332,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v116.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

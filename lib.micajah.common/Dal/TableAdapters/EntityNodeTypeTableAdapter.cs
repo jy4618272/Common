@@ -1,11 +1,10 @@
 using System.Data;
 using System.Data.SqlClient;
-using System;
 
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_EntityNodeType table.
+    /// The adapter for the Mc_EntityNodeType table2.
     /// </summary>
     internal class EntityNodeTypeTableAdapter : BaseTableAdapter
     {
@@ -61,6 +60,24 @@ namespace Micajah.Common.Dal.TableAdapters
 
             SelectCommand.CommandText = "dbo.Mc_GetEntityNodeTypes";
             SelectCommand.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetEntityNodeTypesByEntityId"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@EntityId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "EntityId", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@InstanceId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "InstanceId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetEntityNodeType"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@EntityNodeTypeId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "EntityNodeTypeId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
 
             #endregion
         }

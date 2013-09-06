@@ -1,14 +1,13 @@
-﻿using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
+using System;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -98,10 +97,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 WebApplication.LoginProvider.DeleteExpiredResetPasswordRequests();
 
-                CommonDataSet.ResetPasswordRequestDataTable table = LoginProvider.GetResetPasswordRequest(this.ResetPasswordRequestId);
+                MasterDataSet.ResetPasswordRequestDataTable table = LoginProvider.GetResetPasswordRequest(this.ResetPasswordRequestId);
                 if (table.Count == 1)
                 {
-                    CommonDataSet.ResetPasswordRequestRow row = table[0];
+                    MasterDataSet.ResetPasswordRequestRow row = table[0];
                     this.LoginId = row.LoginId;
                     LoginTextBox.Text = WebApplication.LoginProvider.GetLoginName(row.LoginId);
 
@@ -119,7 +118,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the page is being loaded.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -152,7 +151,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the submit button is clicked.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void SubmitButton_Click(object sender, EventArgs e)
         {

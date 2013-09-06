@@ -1,3 +1,9 @@
+using Micajah.Common.Application;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,12 +12,6 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Web;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -51,14 +51,14 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationAdministrator">true, if the users should be the organization administrator; otherwise, false.</param>
         /// <param name="active">true, if the users should be the active in the organization or instance; otherwise, false.</param>
         /// <param name="roles">The string that contains the list of the role indetifiers.</param>
-        /// <returns>The Micajah.Common.Dal.OrganizationDataSet.UserDataTable object populated with information of the users.</returns>
-        public static OrganizationDataSet.UserDataTable GetUsers(Guid organizationId, Guid instanceId, bool? organizationAdministrator, bool? active, string roles, string lowerRoles)
+        /// <returns>The Micajah.Common.Dal.ClientDataSet.UserDataTable object populated with information of the users.</returns>
+        public static ClientDataSet.UserDataTable GetUsers(Guid organizationId, Guid instanceId, bool? organizationAdministrator, bool? active, string roles, string lowerRoles)
         {
-            OrganizationDataSet.UserDataTable table = null;
+            ClientDataSet.UserDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.UserDataTable(true);
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                table = new ClientDataSet.UserDataTable(true);
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 adapters.UserTableAdapter.Fill(table, 4, organizationId, ((instanceId == Guid.Empty) ? null : (object)instanceId)
                     , organizationAdministrator, active, roles, (string.IsNullOrEmpty(lowerRoles) ? null : lowerRoles));
                 return table;
@@ -69,17 +69,17 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static OrganizationDataSet.UsersInstancesDataTable GetUsersInstances(Guid userId, Guid organizationId)
+        private static ClientDataSet.UsersInstancesDataTable GetUsersInstances(Guid userId, Guid organizationId)
         {
             return GetUsersInstances(userId, organizationId, WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId));
         }
 
-        private static OrganizationDataSet.UsersInstancesDataTable GetUsersInstances(Guid userId, Guid organizationId, OrganizationDataSetTableAdapters adapters)
+        private static ClientDataSet.UsersInstancesDataTable GetUsersInstances(Guid userId, Guid organizationId, ClientDataSetTableAdapters adapters)
         {
-            OrganizationDataSet.UsersInstancesDataTable table = null;
+            ClientDataSet.UsersInstancesDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.UsersInstancesDataTable();
+                table = new ClientDataSet.UsersInstancesDataTable();
                 adapters.UsersInstancesTableAdapter.Fill(table, 0, userId, organizationId);
                 return table;
             }
@@ -97,11 +97,11 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the user is the last organization administrator of the specified organization; otherwise, false.</returns>
         private static bool UserIsLastAdministrator(Guid userId, Guid organizationId)
         {
-            OrganizationDataSet.UserDataTable table = null;
+            ClientDataSet.UserDataTable table = null;
             try
             {
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-                table = new OrganizationDataSet.UserDataTable(true);
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                table = new ClientDataSet.UserDataTable(true);
                 adapters.UserTableAdapter.Fill(table, 3, userId, organizationId);
                 return (table.Count == 0);
             }
@@ -124,9 +124,9 @@ namespace Micajah.Common.Bll.Providers
 
             WebApplication.LoginProvider.AddLoginToOrganization(loginId, organizationId, orgAdmin);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
 
-            OrganizationDataSet.UserRow row = GetUserRow(loginId, organizationId);
+            ClientDataSet.UserRow row = GetUserRow(loginId, organizationId);
             if (row == null)
             {
                 adapters.UserTableAdapter.Insert(loginId, (string.IsNullOrEmpty(email) ? string.Empty : email)
@@ -166,7 +166,7 @@ namespace Micajah.Common.Bll.Providers
                 UsersGroupsAcceptChanges(loginId, email, groupId, false, organizationId, adapters, false);
         }
 
-        private static void UpdateUser(Guid userId, string email, string groupId, bool addGroup, Guid organizationId, OrganizationDataSet.UserRow row, OrganizationDataSetTableAdapters adapters, bool sendEmailNotification)
+        private static void UpdateUser(Guid userId, string email, string groupId, bool addGroup, Guid organizationId, ClientDataSet.UserRow row, ClientDataSetTableAdapters adapters, bool sendEmailNotification)
         {
             bool isOrganizationAdministratorModified = false;
             bool isOrganizationAdministrator = false;
@@ -201,7 +201,7 @@ namespace Micajah.Common.Bll.Providers
 
                 if (string.IsNullOrEmpty(email))
                 {
-                    OrganizationDataSet.UserRow uRow = GetUserRow(userId, organizationId);
+                    ClientDataSet.UserRow uRow = GetUserRow(userId, organizationId);
                     if (uRow != null)
                         email = uRow.Email;
                 }
@@ -249,9 +249,9 @@ namespace Micajah.Common.Bll.Providers
             , string timeZoneId, int? timeFormat, int? dateFormat
             , string groupId, bool addGroup, Guid organizationId, bool sendEmailNotification)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
 
-            OrganizationDataSet.UserRow row = GetUserRow(userId, organizationId);
+            ClientDataSet.UserRow row = GetUserRow(userId, organizationId);
             if (row != null)
             {
                 WebApplication.LoginProvider.ChangeLoginName(userId, email, sendEmailNotification);
@@ -263,12 +263,12 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static void InsertUserIntoOrganization(Guid userId, Guid organizationId, bool isOrganizationAdministrator, OrganizationDataSetTableAdapters adapters)
+        private static void InsertUserIntoOrganization(Guid userId, Guid organizationId, bool isOrganizationAdministrator, ClientDataSetTableAdapters adapters)
         {
             adapters.OrganizationsUsersTableAdapter.Insert(organizationId, userId, isOrganizationAdministrator, true);
         }
 
-        private static void UpdateUserInOrganization(Guid userId, Guid organizationId, bool? isOrganizationAdministrator, bool? active, OrganizationDataSetTableAdapters adapters)
+        private static void UpdateUserInOrganization(Guid userId, Guid organizationId, bool? isOrganizationAdministrator, bool? active, ClientDataSetTableAdapters adapters)
         {
             adapters.OrganizationsUsersTableAdapter.Update(organizationId, userId, (isOrganizationAdministrator.HasValue ? isOrganizationAdministrator.Value : (object)DBNull.Value), (active.HasValue ? active.Value : (object)DBNull.Value));
         }
@@ -279,8 +279,8 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="userId">The unique identifier of the user to update.</param>
         /// <param name="organizationId">The unique identifier of the organization to update the user in.</param>
         /// <param name="active">true, if the user is active in the specified organization; otherwise, false.</param>
-        /// <param name="adapters">The table adapters of the organization dataset.</param>
-        private static void UpdateUserActive(Guid userId, Guid organizationId, bool active, OrganizationDataSetTableAdapters adapters)
+        /// <param name="adapters">The table2 adapters of the organization dataset.</param>
+        private static void UpdateUserActive(Guid userId, Guid organizationId, bool active, ClientDataSetTableAdapters adapters)
         {
             WebApplication.LoginProvider.UpdateLoginInOrganization(userId, organizationId, null, active);
             UpdateUserInOrganization(userId, organizationId, null, active, adapters);
@@ -387,7 +387,7 @@ namespace Micajah.Common.Bll.Providers
         {
             ArrayList list = new ArrayList();
 
-            foreach (OrganizationDataSet.UsersInstancesRow row in GetUsersInstances(userId, organizationId))
+            foreach (ClientDataSet.UsersInstancesRow row in GetUsersInstances(userId, organizationId))
             {
                 if (!row.Active)
                     list.Add(row.InstanceId);
@@ -399,13 +399,13 @@ namespace Micajah.Common.Bll.Providers
             return list;
         }
 
-        internal static OrganizationDataSet.UsersGroupsDataTable GetUserGroups(Guid userId, Guid organizationId)
+        internal static ClientDataSet.UsersGroupsDataTable GetUserGroups(Guid userId, Guid organizationId)
         {
-            OrganizationDataSet.UsersGroupsDataTable table = null;
+            ClientDataSet.UsersGroupsDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.UsersGroupsDataTable();
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                table = new ClientDataSet.UsersGroupsDataTable();
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 adapters.UsersGroupsTableAdapter.Fill(table, 0, userId, organizationId);
                 return table;
             }
@@ -422,7 +422,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 OrganizationDataSet.GroupsInstancesRolesDataTable girTable = ds.GroupsInstancesRoles;
 
-                foreach (OrganizationDataSet.UsersGroupsRow ugRow in GetUserGroups(userId, organizationId))
+                foreach (ClientDataSet.UsersGroupsRow ugRow in GetUserGroups(userId, organizationId))
                 {
                     OrganizationDataSet.GroupsInstancesRolesRow girRow = girTable.FindByGroupIdInstanceId(ugRow.GroupId, instanceId);
                     if (girRow != null)
@@ -443,22 +443,22 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="addGroup">Specifies the groups identifiers should be added only to the user's groups.</param>
         /// <param name="organizationId">The unique identifier of the organization.</param>
         /// <param name="adapters">The tables adapters to update database.</param>
-        internal static void UsersGroupsAcceptChanges(Guid userId, string email, string groupId, bool addGroup, Guid organizationId, OrganizationDataSetTableAdapters adapters, bool sendEmailNotification)
+        internal static void UsersGroupsAcceptChanges(Guid userId, string email, string groupId, bool addGroup, Guid organizationId, ClientDataSetTableAdapters adapters, bool sendEmailNotification)
         {
-            OrganizationDataSet.UsersGroupsDataTable table = null;
+            ClientDataSet.UsersGroupsDataTable table = null;
             try
             {
                 if (adapters == null)
                     adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
 
-                table = new OrganizationDataSet.UsersGroupsDataTable();
+                table = new ClientDataSet.UsersGroupsDataTable();
                 adapters.UsersGroupsTableAdapter.Fill(table, 0, userId, organizationId);
 
                 List<Guid> groupIdList = new List<Guid>();
                 if (groupId == null) groupId = string.Empty;
                 groupId = string.Concat(",", groupId, ",").Replace("," + Guid.Empty.ToString() + ",", ",");
 
-                foreach (OrganizationDataSet.UsersGroupsRow row in table)
+                foreach (ClientDataSet.UsersGroupsRow row in table)
                 {
                     string currentGroupId = string.Concat(",", row.GroupId, ",");
                     if (groupId.Contains(currentGroupId))
@@ -479,7 +479,7 @@ namespace Micajah.Common.Bll.Providers
 
                         if (table.FindByUserIdGroupId(userId, gid) == null)
                         {
-                            OrganizationDataSet.UsersGroupsRow row = table.NewUsersGroupsRow();
+                            ClientDataSet.UsersGroupsRow row = table.NewUsersGroupsRow();
                             row.UserId = userId;
                             row.GroupId = gid;
                             table.AddUsersGroupsRow(row);
@@ -739,25 +739,25 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets the users, excluding marked as deleted.
         /// </summary>
-        /// <returns>The table pupulated with information of the users.</returns>
+        /// <returns>The table2 pupulated with information of the users.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.UserDataTable GetUsers()
+        public static ClientDataSet.UserDataTable GetUsers()
         {
-            return GetUsers(UserContext.Current.SelectedOrganization.OrganizationId);
+            return GetUsers(UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
         /// Gets the users of the specified organization, excluding marked as deleted.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization.</param>
-        /// <returns>The table pupulated with information of the users.</returns>
-        public static OrganizationDataSet.UserDataTable GetUsers(Guid organizationId)
+        /// <returns>The table2 pupulated with information of the users.</returns>
+        public static ClientDataSet.UserDataTable GetUsers(Guid organizationId)
         {
-            OrganizationDataSet.UserDataTable table = null;
+            ClientDataSet.UserDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.UserDataTable(true);
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                table = new ClientDataSet.UserDataTable(true);
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 adapters.UserTableAdapter.Fill(table, 0, organizationId);
                 return table;
             }
@@ -772,8 +772,8 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <param name="roleShortName">The short names of the roles.</param>
-        /// <returns>The Micajah.Common.Dal.OrganizationDataSet.UserDataTable object populated with information of the users.</returns>
-        public static OrganizationDataSet.UserDataTable GetUsers(Guid organizationId, params string[] roleShortName)
+        /// <returns>The Micajah.Common.Dal.ClientDataSet.UserDataTable object populated with information of the users.</returns>
+        public static ClientDataSet.UserDataTable GetUsers(Guid organizationId, params string[] roleShortName)
         {
             return GetUsers(organizationId, Guid.Empty, roleShortName);
         }
@@ -784,13 +784,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <param name="instanceId">The identifier of the organization's instance.</param>
         /// <param name="roleShortName">The short names of the roles.</param>
-        /// <returns>The Micajah.Common.Dal.OrganizationDataSet.UserDataTable object populated with information of the users.</returns>
-        public static OrganizationDataSet.UserDataTable GetUsers(Guid organizationId, Guid instanceId, params string[] roleShortName)
+        /// <returns>The Micajah.Common.Dal.ClientDataSet.UserDataTable object populated with information of the users.</returns>
+        public static ClientDataSet.UserDataTable GetUsers(Guid organizationId, Guid instanceId, params string[] roleShortName)
         {
             return GetUsers(organizationId, instanceId, new bool?(), true, ((roleShortName == null) ? null : Support.ConvertListToString(RoleProvider.GetRoleIdListByShortNames(roleShortName))), null);
         }
 
-        public static OrganizationDataSet.UserDataTable GetUsers(Guid organizationId, Guid instanceId, Guid roleId)
+        public static ClientDataSet.UserDataTable GetUsers(Guid organizationId, Guid instanceId, Guid roleId)
         {
             if (roleId == RoleProvider.OrganizationAdministratorRoleId)
                 return GetUsers(organizationId, Guid.Empty, true, true, null, null);
@@ -822,7 +822,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 OrganizationDataSet.GroupsInstancesRolesDataTable girTable = ds.GroupsInstancesRoles;
 
-                foreach (OrganizationDataSet.UsersGroupsRow ugRow in GetUserGroups(userId, organizationId))
+                foreach (ClientDataSet.UsersGroupsRow ugRow in GetUserGroups(userId, organizationId))
                 {
                     if (girTable.FindByGroupIdInstanceId(ugRow.GroupId, instanceId) != null)
                         list.Add(ugRow.GroupId);
@@ -842,7 +842,7 @@ namespace Micajah.Common.Bll.Providers
         {
             ArrayList list = new ArrayList();
 
-            foreach (OrganizationDataSet.UsersGroupsRow row in GetUserGroups(userId, organizationId))
+            foreach (ClientDataSet.UsersGroupsRow row in GetUserGroups(userId, organizationId))
             {
                 list.Add(row.GroupId);
             }
@@ -862,7 +862,7 @@ namespace Micajah.Common.Bll.Providers
         /// If the user is not found, the method returns null reference.
         /// </returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.UserRow GetUserRow(Guid userId)
+        public static ClientDataSet.UserRow GetUserRow(Guid userId)
         {
             return GetUserRow(userId, true);
         }
@@ -876,9 +876,9 @@ namespace Micajah.Common.Bll.Providers
         /// If the user is not found, the method returns null reference.
         /// </returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.UserRow GetUserRowWithSecondaryEmails(Guid userId)
+        public static ClientDataSet.UserRow GetUserRowWithSecondaryEmails(Guid userId)
         {
-            OrganizationDataSet.UserRow dr = GetUserRow(userId, true);
+            ClientDataSet.UserRow dr = GetUserRow(userId, true);
             if (dr != null)
             {
                 string secondaryEmail = string.Empty;
@@ -904,9 +904,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="userId">Specifies the user identifier to get user information.</param>
         /// <param name="includeGroups">The flag indicating that the additional information of groups is included in result.</param>
         /// <returns>The object populated with information of the specified user. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRow(Guid userId, bool includeGroups)
+        public static ClientDataSet.UserRow GetUserRow(Guid userId, bool includeGroups)
         {
-            return GetUserRow(userId, UserContext.Current.SelectedOrganization.OrganizationId, includeGroups);
+            return GetUserRow(userId, UserContext.Current.SelectedOrganizationId, includeGroups);
         }
 
         /// <summary>
@@ -915,7 +915,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="userId">Specifies the user identifier to get user information.</param>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <returns>The object populated with information of the specified user. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRow(Guid userId, Guid organizationId)
+        public static ClientDataSet.UserRow GetUserRow(Guid userId, Guid organizationId)
         {
             return GetUserRow(userId, organizationId, false);
         }
@@ -927,17 +927,17 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <param name="includeGroups">The flag indicating that the additional information of groups is included in result.</param>
         /// <returns>The object populated with information of the specified user. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRow(Guid userId, Guid organizationId, bool includeGroups)
+        public static ClientDataSet.UserRow GetUserRow(Guid userId, Guid organizationId, bool includeGroups)
         {
             if (userId == Guid.Empty) return null;
 
-            OrganizationDataSet.UserDataTable table = null;
+            ClientDataSet.UserDataTable table = null;
             try
             {
-                OrganizationDataSet.UserRow row = null;
+                ClientDataSet.UserRow row = null;
 
-                table = new OrganizationDataSet.UserDataTable(true);
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                table = new ClientDataSet.UserDataTable(true);
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 if (adapters != null)
                     adapters.UserTableAdapter.Fill(table, 1, userId, organizationId);
 
@@ -966,13 +966,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="userId">Specifies the user identifier to get user information.</param>
         /// <param name="connectionString">Specifies the connection string to the database to get information from.</param>
         /// <returns>The object populated with information of the specified user from specified database. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRowFromDatabase(Guid userId, string connectionString)
+        public static ClientDataSet.UserRow GetUserRowFromDatabase(Guid userId, string connectionString)
         {
-            OrganizationDataSet.UserDataTable table = null;
+            ClientDataSet.UserDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.UserDataTable(true);
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
+                table = new ClientDataSet.UserDataTable(true);
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
                 adapters.UserTableAdapter.Fill(table, 1, userId, null);
                 return ((table.Count > 0) ? table[0] : null);
             }
@@ -988,13 +988,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="email">Specifies the e-mail address of the user to get the user information.</param>
         /// <param name="connectionString">Specifies the connection string to the database to get information from.</param>
         /// <returns>The object populated with information of the specified user from specified database. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRowFromDatabase(string email, string connectionString)
+        public static ClientDataSet.UserRow GetUserRowFromDatabase(string email, string connectionString)
         {
-            OrganizationDataSet.UserDataTable table = null;
+            ClientDataSet.UserDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.UserDataTable(true);
-                OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
+                table = new ClientDataSet.UserDataTable(true);
+                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
                 adapters.UserTableAdapter.Fill(table, 2, email);
                 return ((table.Count > 0) ? table[0] : null);
             }
@@ -1010,7 +1010,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="email">Specifies the e-mail address of the user to get the user information.</param>
         /// <param name="databaseId">Specifies the database identifier to get information from.</param>
         /// <returns>The object populated with information of the specified user from specified database. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRowFromDatabase(string email, Guid databaseId)
+        public static ClientDataSet.UserRow GetUserRowFromDatabase(string email, Guid databaseId)
         {
             if (!string.IsNullOrEmpty(email))
                 return GetUserRowFromDatabase(email, DatabaseProvider.GetConnectionString(databaseId));
@@ -1022,9 +1022,9 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="email">Specifies the e-mail address of the user to get the user information.</param>
         /// <returns>The object populated with information of the specified user. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRow(string email)
+        public static ClientDataSet.UserRow GetUserRow(string email)
         {
-            OrganizationDataSet.UserRow row = null;
+            ClientDataSet.UserRow row = null;
             if (!string.IsNullOrEmpty(email))
             {
                 foreach (Organization org in WebApplication.LoginProvider.GetOrganizationsByLoginName(email))
@@ -1043,16 +1043,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="email">Specifies the e-mail address of the user to get the user information.</param>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <returns>The object populated with information of the specified user. If the user is not found, the method returns null reference.</returns>
-        public static OrganizationDataSet.UserRow GetUserRow(string email, Guid organizationId)
+        public static ClientDataSet.UserRow GetUserRow(string email, Guid organizationId)
         {
-            OrganizationDataSet.UserRow row = null;
+            ClientDataSet.UserRow row = null;
             if (!string.IsNullOrEmpty(email))
             {
-                OrganizationDataSet.UserDataTable table = null;
+                ClientDataSet.UserDataTable table = null;
                 try
                 {
-                    table = new OrganizationDataSet.UserDataTable(true);
-                    OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                    table = new ClientDataSet.UserDataTable(true);
+                    ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
 
                     adapters.UserTableAdapter.Fill(table, 2, email, organizationId);
 
@@ -1080,7 +1080,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertUser(string email, string firstName, string lastName, string middleName, string groupId)
         {
-            return InsertUser(email, firstName, lastName, middleName, groupId, UserContext.Current.SelectedOrganization.OrganizationId);
+            return InsertUser(email, firstName, lastName, middleName, groupId, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -1330,7 +1330,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the newly created user or of the updated user if it already exists.</returns>
         public static Guid AddUserToOrganization(string email, string groupId)
         {
-            return AddUserToOrganization(email, groupId, UserContext.Current.SelectedOrganization.OrganizationId);
+            return AddUserToOrganization(email, groupId, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -1373,7 +1373,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid AddUserToOrganization(string email, string firstName, string lastName, string middleName, string groupId)
         {
-            return AddUserToOrganization(email, firstName, lastName, middleName, groupId, UserContext.Current.SelectedOrganization.OrganizationId);
+            return AddUserToOrganization(email, firstName, lastName, middleName, groupId, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -1413,7 +1413,7 @@ namespace Micajah.Common.Bll.Providers
                  , street, street2, city, state, postalCode, country
                  , timeZoneId, timeFormat, dateFormat
                  , groupId, false
-                 , UserContext.Current.SelectedOrganization.OrganizationId, false
+                 , UserContext.Current.SelectedOrganizationId, false
                  , true, true
                  , 0, 0, out password);
         }
@@ -1455,7 +1455,7 @@ namespace Micajah.Common.Bll.Providers
                  , phone, mobilePhone, fax, title, department
                  , street, street2, city, state, postalCode, country
                  , timeZoneId, timeFormat, dateFormat
-                 , groupId, false, UserContext.Current.SelectedOrganization.OrganizationId
+                 , groupId, false, UserContext.Current.SelectedOrganizationId
                  , false, true, true, 0, 0, out password);
 
             UpdateUserSecondaryEmails(userId, secondaryEmails);
@@ -1807,8 +1807,8 @@ namespace Micajah.Common.Bll.Providers
             LoginProvider loginProvider = WebApplication.LoginProvider;
             bool needEmailUpdate = loginProvider.ChangeLoginName(userId, email);
 
-            OrganizationDataSet.UserRow row = null;
-            OrganizationDataSet.UserRow lastUpdatedRow = null;
+            ClientDataSet.UserRow row = null;
+            ClientDataSet.UserRow lastUpdatedRow = null;
             ArrayList list = new ArrayList();
 
             foreach (Organization organization in loginProvider.GetOrganizationsByLoginId(userId))
@@ -1847,7 +1847,7 @@ namespace Micajah.Common.Bll.Providers
                         else
                             row.SetDateFormatNull();
 
-                        OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
+                        ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByConnectionString(connectionString);
                         adapters.UserTableAdapter.Update(row);
 
                         lastUpdatedRow = row;
@@ -2111,8 +2111,8 @@ namespace Micajah.Common.Bll.Providers
             UserContext user = UserContext.Current;
             if (user != null)
             {
-                if (user.SelectedOrganization != null)
-                    UpdateUser(userId, groupId, user.SelectedOrganization.OrganizationId);
+                if (user.SelectedOrganizationId != Guid.Empty)
+                    UpdateUser(userId, groupId, user.SelectedOrganizationId);
             }
         }
 
@@ -2140,11 +2140,11 @@ namespace Micajah.Common.Bll.Providers
 
         public static bool UserIsActiveInInstance(Guid userId, Guid instanceId, Guid organizationId)
         {
-            OrganizationDataSet.UsersInstancesDataTable table = null;
+            ClientDataSet.UsersInstancesDataTable table = null;
             try
             {
                 table = GetUsersInstances(userId, organizationId);
-                OrganizationDataSet.UsersInstancesRow row = table.FindByUserIdInstanceId(userId, instanceId);
+                ClientDataSet.UsersInstancesRow row = table.FindByUserIdInstanceId(userId, instanceId);
                 if (row != null)
                     return row.Active;
                 return true;
@@ -2175,14 +2175,14 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The unique identifier of the organization to update the user in.</param>
         public static void UpdateUserActive(Guid userId, Guid instanceId, Guid organizationId, bool active)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters == null) return;
 
-            OrganizationDataSet.UsersInstancesDataTable table = null;
+            ClientDataSet.UsersInstancesDataTable table = null;
             try
             {
                 table = GetUsersInstances(userId, organizationId);
-                OrganizationDataSet.UsersInstancesRow row = table.FindByUserIdInstanceId(userId, instanceId);
+                ClientDataSet.UsersInstancesRow row = table.FindByUserIdInstanceId(userId, instanceId);
                 if (row != null)
                 {
                     if (active)
@@ -2215,10 +2215,10 @@ namespace Micajah.Common.Bll.Providers
             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
             if (ds == null) return;
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters == null) return;
 
-            OrganizationDataSet.UsersInstancesDataTable usersInstancesTable = GetUsersInstances(userId, organizationId, adapters);
+            ClientDataSet.UsersInstancesDataTable usersInstancesTable = GetUsersInstances(userId, organizationId, adapters);
 
             ICollection<Guid> coll = Support.ConvertStringToGuidList(instanceIdListWhereUserIsActive);
 
@@ -2228,7 +2228,7 @@ namespace Micajah.Common.Bll.Providers
                 if (coll != null)
                     inactivate = (!coll.Contains(instanceRow.InstanceId));
 
-                OrganizationDataSet.UsersInstancesRow usersInstancesRow = usersInstancesTable.FindByUserIdInstanceId(userId, instanceRow.InstanceId);
+                ClientDataSet.UsersInstancesRow usersInstancesRow = usersInstancesTable.FindByUserIdInstanceId(userId, instanceRow.InstanceId);
 
                 if (inactivate)
                 {
@@ -2262,7 +2262,7 @@ namespace Micajah.Common.Bll.Providers
         {
             UserContext user = UserContext.Current;
             if (user != null)
-                RemoveUserFromOrganization(userId, user.SelectedOrganization.OrganizationId);
+                RemoveUserFromOrganization(userId, user.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -2272,7 +2272,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The organization's identifier to remove the user from.</param>
         public static void RemoveUserFromOrganization(Guid userId, Guid organizationId)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
                 adapters.OrganizationsUsersTableAdapter.Delete(organizationId, userId);
 

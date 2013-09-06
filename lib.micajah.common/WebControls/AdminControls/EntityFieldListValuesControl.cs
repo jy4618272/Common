@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
+﻿using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Globalization;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -55,10 +55,10 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!this.IsPostBack)
             {
-                OrganizationDataSet.EntityFieldDataTable table = EntityFieldProvider.GetEntityField(this.EntityFieldId);
+                ClientDataSet.EntityFieldDataTable table = EntityFieldProvider.GetEntityField(this.EntityFieldId);
                 if (table.Count > 0)
                 {
-                    OrganizationDataSet.EntityFieldRow row = table[0];
+                    ClientDataSet.EntityFieldRow row = table[0];
                     if (row != null)
                     {
                         switch ((EntityFieldType)row.EntityFieldTypeId)

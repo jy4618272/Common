@@ -1,5 +1,6 @@
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -28,7 +29,7 @@ namespace Micajah.Common.Bll.Providers
         #region Internal Properties
 
         /// <summary>
-        /// Gets the instance of the Micajah.Common.Dal.CommonDataSet class that contains common data of application.
+        /// Gets the instance of the Micajah.Common.Dal.MasterDataSet class that contains common data of application.
         /// </summary>
         internal static List<LdapProcess> LdapProcesses
         {
@@ -134,8 +135,6 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-
-
         /// <summary>
         /// Gets list of domains from ldap.
         /// </summary>
@@ -229,8 +228,8 @@ namespace Micajah.Common.Bll.Providers
         public static DataView GetDomainsFromDB(Guid organizationId)
         {
             DataTable table = null;
-            CommonDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
-            CommonDataSet.OrganizationsLdapGroupsRow dr = null;
+            MasterDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
+            MasterDataSet.OrganizationsLdapGroupsRow dr = null;
             Organization org = null;
             try
             {
@@ -240,14 +239,14 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("DomainName", typeof(string));
                 table.Columns.Add("DistinguishedName", typeof(string));
 
-                orgTable = new CommonDataSet.OrganizationsLdapGroupsDataTable();
-                WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 2, organizationId);
+                orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
+                MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 2, organizationId);
 
                 if (orgTable.Rows.Count > 0)
                 {
                     for (int i = 0; i < orgTable.Rows.Count; i++)
                     {
-                        dr = orgTable.Rows[i] as CommonDataSet.OrganizationsLdapGroupsRow;
+                        dr = orgTable.Rows[i] as MasterDataSet.OrganizationsLdapGroupsRow;
                         if (dr.Domain != "DomainDnsZones" && dr.Domain != "ForestDnsZones")
                             table.Rows.Add(dr.DomainId, dr.Domain, string.Empty);
                     }
@@ -306,8 +305,8 @@ namespace Micajah.Common.Bll.Providers
         public static DataView GetGroups(string ldapServerAddress, Int32 ldapServerPort, string ldapUserName, string ldapPassword, string ldapDomain, string selectedDomain, Guid organizationId)
         {
             DataTable table = null;
-            CommonDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
-            CommonDataSet.OrganizationsLdapGroupsRow dr = null;
+            MasterDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
+            MasterDataSet.OrganizationsLdapGroupsRow dr = null;
             try
             {
                 table = new DataTable("Groups");
@@ -315,14 +314,14 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("Id", typeof(Guid));
                 table.Columns.Add("GroupName", typeof(string));
 
-                orgTable = new CommonDataSet.OrganizationsLdapGroupsDataTable();
-                WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 1, organizationId, selectedDomain);
+                orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
+                MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 1, organizationId, selectedDomain);
 
                 if (orgTable.Rows.Count > 0)
                 {
                     for (int i = 0; i < orgTable.Rows.Count; i++)
                     {
-                        dr = orgTable.Rows[i] as CommonDataSet.OrganizationsLdapGroupsRow;
+                        dr = orgTable.Rows[i] as MasterDataSet.OrganizationsLdapGroupsRow;
                         table.Rows.Add(dr.ObjectGUID, dr.Name);
                     }
                     table.DefaultView.Sort = "[GroupName] asc";
@@ -381,8 +380,8 @@ namespace Micajah.Common.Bll.Providers
             Domain domain = null;
             DomainUserGroupCollection groups = null;
             DomainUserGroup group = null;
-            CommonDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
-            CommonDataSet.OrganizationsLdapGroupsRow dr = null;
+            MasterDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
+            MasterDataSet.OrganizationsLdapGroupsRow dr = null;
             try
             {
                 table = new DataTable("Groups");
@@ -390,14 +389,14 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("Id", typeof(Guid));
                 table.Columns.Add("GroupName", typeof(string));
 
-                orgTable = new CommonDataSet.OrganizationsLdapGroupsDataTable();
-                WebApplication.CommonDataSetTableAdapters.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 0, organizationId, domainName);
+                orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
+                MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 0, organizationId, domainName);
 
                 if (orgTable.Rows.Count > 0)
                 {
                     for (int i = 0; i < orgTable.Rows.Count; i++)
                     {
-                        dr = orgTable.Rows[i] as CommonDataSet.OrganizationsLdapGroupsRow;
+                        dr = orgTable.Rows[i] as MasterDataSet.OrganizationsLdapGroupsRow;
                         table.Rows.Add(dr.ObjectGUID, dr.Name);
                     }
                     table.DefaultView.Sort = "[GroupName] asc";
@@ -452,7 +451,6 @@ namespace Micajah.Common.Bll.Providers
                 dr = null;
             }
         }
-
 
         /// <summary>
         /// Gets list of groups for the selected domain from ldap by organization id.
@@ -539,13 +537,13 @@ namespace Micajah.Common.Bll.Providers
                 groupNames[i] = (string)drv["LdapGroupName"];
                 i++;
             }
-            
+
             ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundMappedGroups, i) });
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
                 if (server.Initialize())
-                {                    
+                {
                     ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ConnectedToLDAP, i) });
                     ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_GettingUsersFromMappedGroups, i) });
                     users = server.GetUsers(groupNames);
@@ -566,8 +564,8 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataView GetGroupMappings(Guid organizationId)
         {
-            CommonDataSet.GroupMappingsDataTable table = new CommonDataSet.GroupMappingsDataTable();
-            WebApplication.CommonDataSetTableAdapters.GroupMappingsTableAdapter.Fill(table, 0, organizationId);
+            MasterDataSet.GroupMappingsDataTable table = new MasterDataSet.GroupMappingsDataTable();
+            MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Fill(table, 0, organizationId);
 
             DataView dv = table.DefaultView;
             dv.Sort = "[GroupName] asc";
@@ -588,7 +586,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertGroupMapping(Guid groupId, Guid organizationId, string groupName, Guid ldapDomainId, string ldapDomainName, Guid ldapGroupId, string ldapGroupName)
         {
-            WebApplication.CommonDataSetTableAdapters.GroupMappingsTableAdapter.Insert(groupId, organizationId, groupName, ldapDomainId, ldapDomainName, ldapGroupId, ldapGroupName);
+            MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Insert(groupId, organizationId, groupName, ldapDomainId, ldapDomainName, ldapGroupId, ldapGroupName);
         }
 
         /// <summary>
@@ -600,7 +598,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteGroupMapping(Guid groupId, Guid ldapDomainId, Guid ldapGroupId)
         {
-            WebApplication.CommonDataSetTableAdapters.GroupMappingsTableAdapter.Delete(groupId, ldapDomainId, ldapGroupId);
+            MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Delete(groupId, ldapDomainId, ldapGroupId);
         }
 
         /// <summary>
@@ -632,7 +630,6 @@ namespace Micajah.Common.Bll.Providers
 
             return table.DefaultView;
         }
-
 
         /// <summary>
         /// Gets the list of application groups with its instances/roles.
@@ -769,9 +766,9 @@ namespace Micajah.Common.Bll.Providers
                         OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
                         if (ds == null) return null;
 
-                        OrganizationDataSet.UserDataTable userTable = ds.User;
-                        OrganizationDataSet.UserRow userRow = userTable.FindByUserId(userId);
-                        if (userRow == null) return null;
+                        ClientDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
+                        if (userRow == null)
+                            return null;
 
                         if (string.IsNullOrEmpty(userRow.Email) == false)
                             ldapGroups = server.GetUserGroupsByEmail(userRow.Email);

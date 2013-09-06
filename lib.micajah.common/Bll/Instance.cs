@@ -1,12 +1,12 @@
+using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Text;
-using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
 
 namespace Micajah.Common.Bll
 {
@@ -83,7 +83,8 @@ namespace Micajah.Common.Bll
                     m_GroupIdRoleIdList = new SortedList();
 
                     CommonDataSet.RoleDataTable roleTable = WebApplication.CommonDataSet.Role;
-                    OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = Organization.DataSet.GroupsInstancesRoles;
+                    OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(this.OrganizationId);
+                    OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
 
                     foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(string.Concat(gdrTable.InstanceIdColumn.ColumnName, "='", InstanceId, "'")))
                     {
@@ -157,7 +158,7 @@ namespace Micajah.Common.Bll
             {
                 if (!m_LogoImageResourceIdLoaded)
                 {
-                    CommonDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow("InstanceLogo", m_InstanceId.ToString("N"));
+                    MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow("InstanceLogo", m_InstanceId.ToString("N"));
                     if (resourceRow != null) m_LogoImageResourceId = resourceRow.ResourceId;
                     m_LogoImageResourceIdLoaded = true;
                 }

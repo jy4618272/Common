@@ -29,7 +29,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Button LogOffLink;
 
         /// <summary>
-        /// The table row that contains the controls related to organization selection process.
+        /// The table2 row that contains the controls related to organization selection process.
         /// </summary>
         protected PlaceHolder OrganizationArea;
 
@@ -61,7 +61,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the page is being loaded.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -71,7 +71,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 UserContext user = UserContext.Current;
 
-                if (user.SelectedOrganization == null)
+                if (user.SelectedOrganizationId == null)
                     Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery));
 
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId));
@@ -79,7 +79,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 OrganizationArea.Visible = false;
                 InstanceArea.Visible = false;
 
-                InstanceCollection instances = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganization.OrganizationId);
+                InstanceCollection instances = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganizationId);
                 OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
                 int instCount = instances.Count;
                 int orgsCount = 0;
@@ -92,13 +92,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                         orgsCount = orgs.Count;
                         if (orgsCount == 1)
                         {
-                            if (orgs[0].OrganizationId != user.SelectedOrganization.OrganizationId)
+                            if (orgs[0].OrganizationId != user.SelectedOrganizationId)
                                 orgsCount = 2;
                         }
                     }
                 }
 
-                if (user.SelectedInstance == null)
+                if (user.SelectedInstanceId == Guid.Empty)
                     instCount = 0;
                 else
                 {
@@ -145,7 +145,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// Occurs when the hyperlink to logoff is clicked.
         /// Cancels the current session, removes the forms-authentication ticket from the browser and redirects to the login page.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void LogOffLink_Click(object sender, EventArgs e)
         {
@@ -168,7 +168,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// Occurs when an organization hyperlink is clicked.
         /// Switches to selected organization and redirects to the default page. 
         /// </summary>
-        /// <param name="source">The source of the event.</param>
+        /// <param name="sourceRow">The sourceRow of the event.</param>
         /// <param name="e">An DataListCommandEventArgs that contains event data.</param>
         protected void OrganizationList_ItemCommand(object source, CommandEventArgs e)
         {

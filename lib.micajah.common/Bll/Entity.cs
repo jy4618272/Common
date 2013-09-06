@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Security;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.Bll
 {
@@ -237,7 +238,7 @@ namespace Micajah.Common.Bll
         public EntityNodeTypeCollection GetCustomNodeTypes(Guid organizationId, Guid? instanceId)
         {
             EntityNodeTypeCollection customNodeTypes = new EntityNodeTypeCollection();
-            foreach (Dal.OrganizationDataSet.EntityNodeTypeRow entRow in EntityNodeProvider.GetCustomEntityNodeTypesByEntityId(organizationId, instanceId, this.Id).Rows)
+            foreach (ClientDataSet.EntityNodeTypeRow entRow in EntityNodeProvider.GetCustomEntityNodeTypesByEntityId(organizationId, instanceId, this.Id).Rows)
             {
                 EntityNodeType ent = new EntityNodeType();
                 ent.Id = entRow.EntityNodeTypeId;
@@ -266,7 +267,7 @@ namespace Micajah.Common.Bll
         {
             string result = string.Empty;
 
-            Micajah.Common.Dal.OrganizationDataSet.EntityNodeRow row = EntityNodeProvider.GetEntityNode(entityNodeId);
+            ClientDataSet.EntityNodeRow row = EntityNodeProvider.GetEntityNode(entityNodeId);
             if (row != null)
                 result = row.FullPath;
 

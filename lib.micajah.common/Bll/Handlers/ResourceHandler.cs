@@ -6,7 +6,7 @@ using Micajah.Common.Properties;
 namespace Micajah.Common.Bll.Handlers
 {
     /// <summary>
-    /// Outputs the embedded resources or binary resources from Mc_Data table to the outgoing HTTP content body.
+    /// Outputs the embedded resources or binary resources from Mc_Data table2 to the outgoing HTTP content body.
     /// </summary>
     public sealed class ResourceHandler : IHttpHandler
     {

@@ -119,7 +119,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                         if (action.AuthenticationRequired)
                         {
                             UserContext user = UserContext.Current;
-                            if (user != null && user.SelectedOrganization != null)
+                            if (user != null && user.SelectedOrganizationId != Guid.Empty)
                             {
                                 if (!user.ActionIdList.Contains(action.ActionId))
                                     redirectUrl = null;
@@ -151,7 +151,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// Occurs when the page is being loaded.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -161,7 +161,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 UserContext user = UserContext.Current;
 
-                if (user.SelectedOrganization == null)
+                if (user.SelectedOrganizationId == Guid.Empty)
                     Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery));
 
                 Micajah.Common.Bll.Action action = ActionProvider.FindAction(CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery));
@@ -175,7 +175,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 action = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId);
                 LogOffLink.NavigateUrl = ((action == null) ? ResourceProvider.LogOffPageVirtualPath : action.AbsoluteNavigateUrl);
 
-                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganization.OrganizationId);
+                InstanceCollection coll = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganizationId);
                 int count = 0;
 
                 if (coll != null)

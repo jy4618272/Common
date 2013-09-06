@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using System;
+using System.ComponentModel;
+using System.Data;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -143,7 +143,7 @@ namespace Micajah.Common.Bll.Providers
             row.AdminContactInfo = adminContactInfo;
 
             WebApplication.CommonDataSet.Website.AddWebsiteRow(row);
-            WebApplication.CommonDataSetTableAdapters.WebsiteTableAdapter.Update(row);
+            MasterDataSetTableAdapters.Current.WebsiteTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             row.AdminContactInfo = adminContactInfo;
 
-            WebApplication.CommonDataSetTableAdapters.WebsiteTableAdapter.Update(row);
+            MasterDataSetTableAdapters.Current.WebsiteTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 row.Deleted = true;
 
-                WebApplication.CommonDataSetTableAdapters.WebsiteTableAdapter.Update(row);
+                MasterDataSetTableAdapters.Current.WebsiteTableAdapter.Update(row);
                 WebApplication.CommonDataSet.Website.RemoveWebsiteRow(row);
             }
         }

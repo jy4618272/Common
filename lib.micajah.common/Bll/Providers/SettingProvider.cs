@@ -838,7 +838,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.SettingsValuesTableAdapter.Update(svTable);
 
             Refresh();
@@ -883,7 +883,7 @@ namespace Micajah.Common.Bll.Providers
                     toRow.Value = fromRow.Value;
             }
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(toOrganizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(toOrganizationId);
             adapters.SettingsValuesTableAdapter.Update(toTable);
 
             WebApplication.RefreshOrganizationDataSetByOrganizationId(toOrganizationId);
@@ -1039,7 +1039,7 @@ namespace Micajah.Common.Bll.Providers
             if (svRow.RowState == DataRowState.Detached)
                 svTable.AddSettingsValuesRow(svRow);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.SettingsValuesTableAdapter.Update(svRow);
 
             Refresh();

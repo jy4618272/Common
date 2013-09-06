@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_OrganizationsLdapGroups table.
+    /// The adapter for the Mc_OrganizationsLdapGroups table2.
     /// </summary>
     internal class OrganizationsLdapGroupsTableAdapter : BaseTableAdapter
     {

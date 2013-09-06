@@ -1,9 +1,9 @@
 ﻿using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
-using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Security;
 using System;
 using System.Security.Cryptography;
@@ -94,21 +94,21 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public IConsumerDescription GetConsumer(Guid consumerId)
         {
             OAuthDataSet.OAuthConsumerDataTable table = new OAuthDataSet.OAuthConsumerDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthConsumerTableAdapter.Fill(table, 0, consumerId);
+            MasterDataSetTableAdapters.Current.OAuthConsumerTableAdapter.Fill(table, 0, consumerId);
             return ((table.Count > 0) ? table[0] : null);
         }
 
         public IConsumerDescription GetConsumer(string consumerKey)
         {
             OAuthDataSet.OAuthConsumerDataTable table = new OAuthDataSet.OAuthConsumerDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthConsumerTableAdapter.Fill(table, 1, consumerKey);
+            MasterDataSetTableAdapters.Current.OAuthConsumerTableAdapter.Fill(table, 1, consumerKey);
             return ((table.Count > 0) ? table[0] : null);
         }
 
         public IServiceProviderAccessToken GetAccessToken(string token)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
@@ -121,7 +121,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public IServiceProviderRequestToken GetRequestToken(string token)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
@@ -134,7 +134,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public bool IsRequestTokenAuthorized(string requestToken)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
@@ -147,14 +147,14 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public string GetTokenSecret(string token)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
             return ((table.Count > 0) ? table[0].TokenSecret : null);
         }
 
         public TokenType GetTokenType(string token)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
             if (table.Count > 0)
                 return ((table[0].TokenTypeId == (int)OAuthTokenType.AccessToken) ? TokenType.AccessToken : TokenType.RequestToken);
             return TokenType.InvalidToken;
@@ -170,14 +170,14 @@ namespace Micajah.Common.Bll.Providers.OAuth
             if (request.Callback != null)
                 callback = request.Callback.AbsoluteUri;
 
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Insert(Guid.NewGuid(), response.Token, response.TokenSecret, (int)OAuthTokenType.UnauthorizedRequestToken
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Insert(Guid.NewGuid(), response.Token, response.TokenSecret, (int)OAuthTokenType.UnauthorizedRequestToken
                 , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), scope, null, string.Empty, callback, DateTime.UtcNow, null, null, null);
         }
 
         public void ExpireRequestTokenAndStoreNewAccessToken(string consumerKey, string requestToken, string accessToken, string accessTokenSecret)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
@@ -188,7 +188,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
                     row.Token = accessToken;
                     row.TokenSecret = accessTokenSecret;
 
-                    WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
+                    MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Update(row);
                 }
             }
         }
@@ -196,13 +196,13 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public void UpdateToken(IServiceProviderRequestToken token)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token.Token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token.Token);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
                 row.RequestTokenVerifier = token.VerificationCode;
 
-                WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
+                MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Update(row);
             }
         }
 
@@ -211,7 +211,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
             string verifier = null;
 
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
@@ -223,7 +223,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
 
                     row.RequestTokenVerifier = verifier;
 
-                    WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
+                    MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Update(row);
                 }
 
                 return verifier;
@@ -238,7 +238,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
             if (!string.IsNullOrEmpty(token))
             {
                 OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-                WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+                MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
                 if (table.Count > 0)
                 {
                     OAuthDataSet.OAuthTokenRow row = table[0];
@@ -255,20 +255,20 @@ namespace Micajah.Common.Bll.Providers.OAuth
         public void UpdatePendingUserAuthorizationRequest(string token, UserAuthorizationRequest pendingUserAuthorizationRequest)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, token);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
                 row.PendingUserAuthorizationRequest = Support.Serialize(pendingUserAuthorizationRequest);
 
-                WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
+                MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Update(row);
             }
         }
 
         public void AuthorizeRequestToken(string requestToken)
         {
             OAuthDataSet.OAuthTokenDataTable table = new OAuthDataSet.OAuthTokenDataTable();
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Fill(table, 0, requestToken);
             if (table.Count > 0)
             {
                 OAuthDataSet.OAuthTokenRow row = table[0];
@@ -287,13 +287,13 @@ namespace Micajah.Common.Bll.Providers.OAuth
                     }
                 }
 
-                WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Update(row);
+                MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Update(row);
             }
         }
 
         public void DeleteToken(string token)
         {
-            WebApplication.CommonDataSetTableAdapters.OAuthTokenTableAdapter.Delete(token);
+            MasterDataSetTableAdapters.Current.OAuthTokenTableAdapter.Delete(token);
         }
 
         public string GenerateTokenSecret()

@@ -11,7 +11,7 @@ using Micajah.Common.Properties;
 namespace Micajah.Common.WebControls
 {
     /// <summary>
-    /// Provides a multi selection check box group that can be dynamically created by binding the control to a data source.
+    /// Provides a multi selection check box group that can be dynamically created by binding the control to a data sourceRow.
     /// </summary>
     [ValidationProperty("SelectedValue")]
     [SupportsEventValidation]

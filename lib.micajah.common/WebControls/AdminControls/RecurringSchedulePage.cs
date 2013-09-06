@@ -64,15 +64,15 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!IsPostBack)
             {
-                if (m_UserContext == null || m_UserContext.SelectedOrganization == null)
+                if (m_UserContext == null || m_UserContext.SelectedOrganizationId == Guid.Empty)
                 {
                     this.Visible = false;
                     return;
                 }
 
-                RecurrenceScheduleControl.OrganizationId = m_UserContext.SelectedOrganization.OrganizationId;
-                if (m_UserContext.SelectedInstance != null)
-                    RecurrenceScheduleControl.InstanceId = m_UserContext.SelectedInstance.InstanceId;
+                RecurrenceScheduleControl.OrganizationId = m_UserContext.SelectedOrganizationId;
+                if (m_UserContext.SelectedInstanceId != Guid.Empty)
+                    RecurrenceScheduleControl.InstanceId = m_UserContext.SelectedInstanceId;
                 RecurrenceScheduleControl.DateFormat = Support.GetLongDateTimeFormat(m_UserContext.TimeFormat, m_UserContext.DateFormat);
             }
 
@@ -90,13 +90,13 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganization.OrganizationId;
-            e.InputParameters["instanceId"] = m_UserContext.SelectedInstance == null ? Guid.Empty : m_UserContext.SelectedInstance.InstanceId;
+            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+            e.InputParameters["instanceId"] = m_UserContext.SelectedInstanceId;
         }
 
         protected void List_Action(object sender, CommonGridViewActionEventArgs e)
         {
-            Guid organizationId = m_UserContext.SelectedOrganization.OrganizationId;
+            Guid organizationId = m_UserContext.SelectedOrganizationId;
             Guid recurringScheduleId = Guid.Empty;
 
             if (e == null) return;
@@ -119,7 +119,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     this.AddBreadcrumbs();
                     break;
                 case CommandActions.Edit:
-                    Micajah.Common.Dal.OrganizationDataSet.RecurringScheduleRow row = Micajah.Common.Bll.Providers.RecurringScheduleProvider.GetRecurringSchedulesRow(recurringScheduleId, organizationId);
+                    Micajah.Common.Dal.ClientDataSet.RecurringScheduleRow row = Micajah.Common.Bll.Providers.RecurringScheduleProvider.GetRecurringSchedulesRow(recurringScheduleId, organizationId);
                     if (row != null)
                     {
                         List.Visible = false;

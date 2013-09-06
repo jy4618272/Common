@@ -1,9 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Security;
+using System;
+using System.ComponentModel;
+using System.Data;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -26,7 +27,7 @@ namespace Micajah.Common.Bll.Providers
             if (ruleId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.RuleTableAdapter.Delete(ruleId);
         }
 
@@ -37,7 +38,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteRule(Guid ruleId)
         {
-            DeleteRule(ruleId, UserContext.Current.SelectedOrganization.OrganizationId);
+            DeleteRule(ruleId, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -54,16 +55,15 @@ namespace Micajah.Common.Bll.Providers
             if (ruleId.Equals(Guid.Empty) || ruleEngineId.Equals(Guid.Empty) || string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            OrganizationDataSet.RuleDataTable table = new OrganizationDataSet.RuleDataTable();
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 1, ruleId);
 
-            OrganizationDataSet.RuleRow row = ((table.Count > 0) ? table[0] : null);
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
+            ClientDataSet.RuleRow row = ((table.Count > 0) ? table[0] : null);
 
             if (row == null)
             {
-                row = ds.Rule.NewRuleRow();
+                row = table.NewRuleRow();
                 row.RuleId = ruleId;
                 row.RuleEngineId = ruleEngineId;
                 row.OrganizationId = organizationId;
@@ -83,17 +83,9 @@ namespace Micajah.Common.Bll.Providers
             row.Active = active;
             row.OrderNumber = orderNumber;
 
-            if (row.RowState == System.Data.DataRowState.Detached)
-            {
-                ds.Rule.AddRuleRow(row);
-                adapters.RuleTableAdapter.Update(ds);
-            }
-            else
-            {
-                row.AcceptChanges();
-                row.SetModified();
-                adapters.RuleTableAdapter.Update(row);
-            }
+            if (row.RowState == DataRowState.Detached)
+                table.AddRuleRow(row);
+            adapters.RuleTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -111,7 +103,7 @@ namespace Micajah.Common.Bll.Providers
                 || organizationId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             return adapters.RuleTableAdapter.UpdateRuleUses(ruleId, lastUsedUser, lastUsedDate);
         }
 
@@ -129,7 +121,7 @@ namespace Micajah.Common.Bll.Providers
                 || ruleId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             return adapters.RuleTableAdapter.UpdateOrderNumber(ruleId, orderNumber);
         }
 
@@ -142,7 +134,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static int UpdateOrderNumber(Guid ruleId, int orderNumber)
         {
-            return UpdateOrderNumber(UserContext.Current.SelectedOrganization.OrganizationId, ruleId, orderNumber);
+            return UpdateOrderNumber(UserContext.Current.SelectedOrganizationId, ruleId, orderNumber);
         }
 
         /// <summary>
@@ -179,16 +171,12 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instanceId">Specifies the instance identifier</param>
         /// <returns>The RuleDataTable object pupulated with information of the rules.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleDataTable GetRules(Guid ruleEngineId, Guid organizationId, Guid? instanceId)
+        public static ClientDataSet.RuleDataTable GetRules(Guid ruleEngineId, Guid organizationId, Guid? instanceId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            adapters.RuleTableAdapter.SelectCommand.Parameters["@RuleEngineId"].Value = ruleEngineId;
-            adapters.RuleTableAdapter.SelectCommand.Parameters["@OrganizationId"].Value = organizationId;
-            if (instanceId.HasValue) adapters.RuleTableAdapter.SelectCommand.Parameters["@InstanceId"].Value = instanceId.Value;
-            else adapters.RuleTableAdapter.SelectCommand.Parameters["@InstanceId"].Value = DBNull.Value;
-            adapters.RuleTableAdapter.Fill(ds.Rule);
-            return ds.Rule;
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
+            adapters.RuleTableAdapter.Fill(table, 0, ruleEngineId, organizationId, instanceId);
+            return table;
         }
 
         /// <summary>
@@ -198,10 +186,10 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">Specifies the organization identifier</param>
         /// <returns>The RuleRow object pupulated with information of the rule.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleRow GetRuleRow(Guid ruleId, Guid organizationId)
+        public static ClientDataSet.RuleRow GetRuleRow(Guid ruleId, Guid organizationId)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            OrganizationDataSet.RuleDataTable table = new OrganizationDataSet.RuleDataTable();
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 1, ruleId);
             return ((table.Count > 0) ? table[0] : null);
         }
@@ -213,10 +201,10 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">Specifies the organization identifier</param>
         /// <returns>The RuleRow object pupulated with information of the rule.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleRow GetRuleRow(string ruleName, Guid organizationId)
+        public static ClientDataSet.RuleRow GetRuleRow(string ruleName, Guid organizationId)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            OrganizationDataSet.RuleDataTable table = new OrganizationDataSet.RuleDataTable();
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 2, ruleName);
             return ((table.Count > 0) ? table[0] : null);
         }
@@ -227,9 +215,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ruleName">Specifies the rule name</param>
         /// <returns>The RuleRow object pupulated with information of the rule.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleRow GetRuleRow(string ruleName)
+        public static ClientDataSet.RuleRow GetRuleRow(string ruleName)
         {
-            return GetRuleRow(ruleName, UserContext.Current.SelectedOrganization.OrganizationId);
+            return GetRuleRow(ruleName, UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
@@ -238,9 +226,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ruleId">Specifies the recurring scheduler identifier</param>
         /// <returns>The RuleRow object pupulated with information of the rule.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleRow GetRuleRow(Guid ruleId)
+        public static ClientDataSet.RuleRow GetRuleRow(Guid ruleId)
         {
-            return GetRuleRow(ruleId, UserContext.Current.SelectedOrganization.OrganizationId);
+            return GetRuleRow(ruleId, UserContext.Current.SelectedOrganizationId);
         }
 
         #endregion
@@ -258,7 +246,7 @@ namespace Micajah.Common.Bll.Providers
             if (ruleParameterId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleParameterId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.RuleParametersTableAdapter.Delete(ruleParameterId);
         }
 
@@ -269,7 +257,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteRuleParameter(Guid ruleParameterId)
         {
-            DeleteRuleParameter(UserContext.Current.SelectedOrganization.OrganizationId, ruleParameterId);
+            DeleteRuleParameter(UserContext.Current.SelectedOrganizationId, ruleParameterId);
         }
 
         /// <summary>
@@ -295,15 +283,14 @@ namespace Micajah.Common.Bll.Providers
             if (organizationId.Equals(Guid.Empty) || ruleParameterId.Equals(Guid.Empty) || value == null)
                 throw new ArgumentNullException("ruleParameterId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            OrganizationDataSet.RuleParametersDataTable table = new OrganizationDataSet.RuleParametersDataTable();
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleParametersDataTable table = new ClientDataSet.RuleParametersDataTable();
             adapters.RuleParametersTableAdapter.Fill(table, 1, ruleParameterId);
 
-            OrganizationDataSet.RuleParametersRow row = ((table.Count > 0) ? table[0] : null);
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
+            ClientDataSet.RuleParametersRow row = ((table.Count > 0) ? table[0] : null);
 
             if (row == null)
-                row = ds.RuleParameters.NewRuleParametersRow();
+                row = table.NewRuleParametersRow();
 
             row.RuleParameterId = ruleParameterId;
             row.RuleId = ruleId;
@@ -316,17 +303,10 @@ namespace Micajah.Common.Bll.Providers
             row.Term = term;
             row.Value = value;
 
-            if (row.RowState == System.Data.DataRowState.Detached)
-            {
-                ds.RuleParameters.AddRuleParametersRow(row);
-                adapters.RuleParametersTableAdapter.Update(ds);
-            }
-            else
-            {
-                row.AcceptChanges();
-                row.SetModified();
-                adapters.RuleParametersTableAdapter.Update(row);
-            }
+            if (row.RowState == DataRowState.Detached)
+                table.AddRuleParametersRow(row);
+
+            adapters.RuleParametersTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -348,7 +328,7 @@ namespace Micajah.Common.Bll.Providers
             bool isInputParameter, bool isEntity, string fieldName, string fullName, string typeName
             , string term, object value)
         {
-            UpdateRuleParameter(UserContext.Current.SelectedOrganization.OrganizationId, ruleParameterId,
+            UpdateRuleParameter(UserContext.Current.SelectedOrganizationId, ruleParameterId,
                 ruleId, entityNodeTypeId, isInputParameter, isEntity, fieldName, fullName, typeName, term, value);
         }
 
@@ -406,13 +386,12 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ruleId">Specifies the rule identifier</param>
         /// <returns>The RuleParametersDataTable object pupulated with information of the rule parameters.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleParametersDataTable GetRuleParameters(Guid organizationId, Guid ruleId)
+        public static ClientDataSet.RuleParametersDataTable GetRuleParameters(Guid organizationId, Guid ruleId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            adapters.RuleParametersTableAdapter.SelectCommand.Parameters["@RuleId"].Value = ruleId;
-            adapters.RuleParametersTableAdapter.Fill(ds.RuleParameters);
-            return ds.RuleParameters;
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleParametersDataTable table = new ClientDataSet.RuleParametersDataTable();
+            adapters.RuleParametersTableAdapter.Fill(table, 0, ruleId);
+            return table;
         }
 
         /// <summary>
@@ -421,9 +400,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ruleId">Specifies the rule identifier</param>
         /// <returns>The RuleParametersDataTable object pupulated with information of the rule parameters.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleParametersDataTable GetRuleParameters(Guid ruleId)
+        public static ClientDataSet.RuleParametersDataTable GetRuleParameters(Guid ruleId)
         {
-            return GetRuleParameters(UserContext.Current.SelectedOrganization.OrganizationId, ruleId);
+            return GetRuleParameters(UserContext.Current.SelectedOrganizationId, ruleId);
         }
 
         /// <summary>
@@ -433,10 +412,10 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">Specifies the organization identifier</param>
         /// <returns>The RuleParametersRow object pupulated with information of the rule.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleParametersRow GetRuleParameterRow(Guid ruleParameterId, Guid organizationId)
+        public static ClientDataSet.RuleParametersRow GetRuleParameterRow(Guid ruleParameterId, Guid organizationId)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            OrganizationDataSet.RuleParametersDataTable table = new OrganizationDataSet.RuleParametersDataTable();
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientDataSet.RuleParametersDataTable table = new ClientDataSet.RuleParametersDataTable();
             adapters.RuleParametersTableAdapter.Fill(table, 1, ruleParameterId);
             return ((table.Count > 0) ? table[0] : null);
         }
@@ -447,9 +426,9 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ruleParameterId">Specifies the rule parameter identifier</param>
         /// <returns>The RuleParametersRow object pupulated with information of the rule.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.RuleParametersRow GetRuleParameterRow(Guid ruleParameterId)
+        public static ClientDataSet.RuleParametersRow GetRuleParameterRow(Guid ruleParameterId)
         {
-            return GetRuleParameterRow(ruleParameterId, UserContext.Current.SelectedOrganization.OrganizationId);
+            return GetRuleParameterRow(ruleParameterId, UserContext.Current.SelectedOrganizationId);
         }
 
         #endregion
@@ -481,7 +460,7 @@ namespace Micajah.Common.Bll.Providers
         public static string GetDisplayUserName(Guid userId, Guid organizationId)
         {
             string result = string.Empty;
-            Micajah.Common.Dal.OrganizationDataSet.UserRow userRow = Micajah.Common.Bll.Providers.UserProvider.GetUserRow(userId, organizationId);
+            Micajah.Common.Dal.ClientDataSet.UserRow userRow = Micajah.Common.Bll.Providers.UserProvider.GetUserRow(userId, organizationId);
             if (userRow != null) result = userRow.FirstName + " " + userRow.LastName;
             return result;
         }

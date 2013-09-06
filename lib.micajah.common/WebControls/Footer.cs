@@ -82,14 +82,14 @@ namespace Micajah.Common.WebControls
                         leftDiv = new HtmlGenericControl("div");
                         ul1 = new HtmlGenericControl("ul");
 
-                        if (m_UserContext.SelectedOrganization != null)
+                        if (m_UserContext.SelectedOrganizationId != Guid.Empty)
                         {
                             li = new HtmlGenericControl("li");
                             li.InnerHtml = m_UserContext.SelectedOrganization.Name;
                             ul1.Controls.Add(li);
                         }
 
-                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstance != null))
+                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstanceId != Guid.Empty))
                         {
                             li = new HtmlGenericControl("li");
                             li.InnerHtml = "|";
@@ -159,10 +159,10 @@ namespace Micajah.Common.WebControls
                         leftDiv = new HtmlGenericControl("div");
                         StringBuilder sb = new StringBuilder();
 
-                        if (m_UserContext.SelectedOrganization != null)
+                        if (m_UserContext.SelectedOrganizationId != Guid.Empty)
                             sb.Append(m_UserContext.SelectedOrganization.Name);
 
-                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstance != null))
+                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstanceId != Guid.Empty))
                         {
                             if (sb.Length > 0) sb.Append("<br />");
                             sb.Append(m_UserContext.SelectedInstance.Name);

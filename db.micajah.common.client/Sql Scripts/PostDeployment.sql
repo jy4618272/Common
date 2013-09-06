@@ -1,1 +1,1 @@
-﻿INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (115)
+﻿INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (116)

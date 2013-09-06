@@ -465,7 +465,7 @@ namespace Micajah.Common.Bll.Providers
             ParseResourceName(resourceName, ref decodedResourceName, ref resourceId, ref width, ref height, ref align);
             if (resourceId != Guid.Empty)
             {
-                CommonDataSet.ResourceRow row = GetResourceRow(resourceId, width, height, align, true);
+                MasterDataSet.ResourceRow row = GetResourceRow(resourceId, width, height, align, true);
                 if (row != null)
                 {
                     if (!row.IsContentTypeNull()) contentType = row.ContentType;
@@ -693,7 +693,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 object obj = Support.ConvertStringToType(str, typeof(Guid));
                 if (obj != null)
-                    WebApplication.CommonDataSetTableAdapters.ResourceTableAdapter.Delete((Guid)obj);
+                    MasterDataSetTableAdapters.Current.ResourceTableAdapter.Delete((Guid)obj);
             }
         }
 
@@ -774,30 +774,30 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="resourceId">The unique identifier of the resource.</param>
         /// <returns>The object populated with information of the resource or null reference, if the resources is not found.</returns>
-        public static CommonDataSet.ResourceRow GetResourceRow(Guid resourceId)
+        public static MasterDataSet.ResourceRow GetResourceRow(Guid resourceId)
         {
             return GetResourceRow(resourceId, 0, 0, 0);
         }
 
-        public static CommonDataSet.ResourceRow GetResourceRow(Guid resourceId, int width, int height, int align)
+        public static MasterDataSet.ResourceRow GetResourceRow(Guid resourceId, int width, int height, int align)
         {
             return GetResourceRow(resourceId, width, height, align, false);
         }
 
-        public static CommonDataSet.ResourceRow GetResourceRow(Guid resourceId, int width, int height, int align, bool createThumbnailIfNotExists)
+        public static MasterDataSet.ResourceRow GetResourceRow(Guid resourceId, int width, int height, int align, bool createThumbnailIfNotExists)
         {
             int? w = ((width > 0) ? new int?(width) : null);
             int? h = ((height > 0) ? new int?(height) : null);
             int? a = ((align > 0) ? new int?(align) : null);
-            CommonDataSet.ResourceDataTable table = null;
+            MasterDataSet.ResourceDataTable table = null;
 
             try
             {
-                ITableAdapter resourceTableAdapter = WebApplication.CommonDataSetTableAdapters.ResourceTableAdapter.Clone() as ITableAdapter;
+                ITableAdapter resourceTableAdapter = MasterDataSetTableAdapters.Current.ResourceTableAdapter.Clone() as ITableAdapter;
 
-                table = new CommonDataSet.ResourceDataTable();
+                table = new MasterDataSet.ResourceDataTable();
                 resourceTableAdapter.Fill(table, 0, resourceId, w, h, a);
-                CommonDataSet.ResourceRow row = ((table.Count > 0) ? table[0] : null);
+                MasterDataSet.ResourceRow row = ((table.Count > 0) ? table[0] : null);
 
                 if (row != null)
                 {
@@ -848,13 +848,13 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        public static CommonDataSet.ResourceRow GetResourceRow(string localObjectType, string localObjectId)
+        public static MasterDataSet.ResourceRow GetResourceRow(string localObjectType, string localObjectId)
         {
-            CommonDataSet.ResourceDataTable table = null;
+            MasterDataSet.ResourceDataTable table = null;
             try
             {
-                table = new CommonDataSet.ResourceDataTable();
-                WebApplication.CommonDataSetTableAdapters.ResourceTableAdapter.Fill(table, 1, localObjectType, localObjectId);
+                table = new MasterDataSet.ResourceDataTable();
+                MasterDataSetTableAdapters.Current.ResourceTableAdapter.Fill(table, 1, localObjectType, localObjectId);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -864,7 +864,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Downloads the resource with the specified URI and stores the downloaded data in the table.
+        /// Downloads the resource with the specified URI and stores the downloaded data in the table2.
         /// </summary>
         /// <param name="fileName">The URI from which to download data or path to the file.</param>
         /// <param name="localObjectType">The type of the object which the resource is associated with.</param>
@@ -933,7 +933,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Stores the binary resource in the table.
+        /// Stores the binary resource in the table2.
         /// </summary>
         /// <param name="parentResourceId">The unique identifier of the parent resource.</param>
         /// <param name="localObjectType">The type of the object which the resource is associated with.</param>
@@ -954,7 +954,8 @@ namespace Micajah.Common.Bll.Providers
                 int? h = ((height > 0) ? new int?(height) : null);
                 int? a = ((align > 0) ? new int?(align) : null);
 
-                CommonDataSet.ResourceRow row = WebApplication.CommonDataSet.Resource.NewResourceRow();
+                MasterDataSet.ResourceDataTable table = new MasterDataSet.ResourceDataTable();
+                MasterDataSet.ResourceRow row = table.NewResourceRow();
                 row.ResourceId = Guid.NewGuid();
                 if (parentResourceId.HasValue && (parentResourceId.Value != Guid.Empty)) row.ParentResourceId = parentResourceId.Value;
                 row.LocalObjectType = localObjectType;
@@ -968,8 +969,8 @@ namespace Micajah.Common.Bll.Providers
                 row.Temporary = temporary;
                 row.CreatedTime = DateTime.UtcNow;
 
-                WebApplication.CommonDataSet.Resource.AddResourceRow(row);
-                WebApplication.CommonDataSetTableAdapters.ResourceTableAdapter.Update(row);
+                table.AddResourceRow(row);
+                MasterDataSetTableAdapters.Current.ResourceTableAdapter.Update(row);
 
                 return row.ResourceId;
             }
@@ -979,7 +980,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateResource(Guid resourceId, string localObjectType, string localObjectId, bool temporary)
         {
             if (resourceId != Guid.Empty)
-                WebApplication.CommonDataSetTableAdapters.ResourceTableAdapter.Update(resourceId, localObjectType, localObjectId, temporary);
+                MasterDataSetTableAdapters.Current.ResourceTableAdapter.Update(resourceId, localObjectType, localObjectId, temporary);
         }
 
         #endregion

@@ -48,8 +48,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
             UserContext userContext = UserContext.Current;
 
-            Organization org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(userContext.SelectedOrganization.OrganizationId);
-            InstanceCollection instances = Micajah.Common.Bll.Providers.InstanceProvider.GetInstances(userContext.SelectedOrganization.OrganizationId, false);
+            Organization org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(userContext.SelectedOrganizationId);
+            InstanceCollection instances = Micajah.Common.Bll.Providers.InstanceProvider.GetInstances(userContext.SelectedOrganizationId, false);
 
             if (instances.Count == 1)
             {
@@ -63,29 +63,29 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             else
             {
-            if (UserContext.Current.IsInRole("OrgAdmin"))
-            {
-                DataRow dr = dt.NewRow();
-                dr["ObjectId"] = org.OrganizationId;
-                dr["Name"] = org.Name;
-                dr["Type"] = Resources.LogosControl_List_OrganisationType_Text;
-                dr["Logo"] = org.LogoImageUrl;
-                dr["ObjectType"] = "OrganizationLogo";
-                dt.Rows.Add(dr);
-            }
+                if (UserContext.Current.IsInRole("OrgAdmin"))
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["ObjectId"] = org.OrganizationId;
+                    dr["Name"] = org.Name;
+                    dr["Type"] = Resources.LogosControl_List_OrganisationType_Text;
+                    dr["Logo"] = org.LogoImageUrl;
+                    dr["ObjectType"] = "OrganizationLogo";
+                    dt.Rows.Add(dr);
+                }
 
-            foreach (Instance instance in instances)
-            {
-                DataRow dr = dt.NewRow();
-                dr["ObjectId"] = instance.InstanceId;
-                dr["Name"] = instance.Name;
-                dr["Type"] = Resources.LogosControl_List_InstanceType_Text;
-                dr["Logo"] = instance.LogoImageUrl;
-                dr["ObjectType"] = "InstanceLogo";
-                dt.Rows.Add(dr);
-            }
+                foreach (Instance instance in instances)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["ObjectId"] = instance.InstanceId;
+                    dr["Name"] = instance.Name;
+                    dr["Type"] = Resources.LogosControl_List_InstanceType_Text;
+                    dr["Logo"] = instance.LogoImageUrl;
+                    dr["ObjectType"] = "InstanceLogo";
+                    dt.Rows.Add(dr);
+                }
 
-            List.EditIndex = -1;
+                List.EditIndex = -1;
             }
             List.DataSource = dt;
             List.DataBind();

@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Security;
+using System;
+using System.ComponentModel;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -30,7 +30,7 @@ namespace Micajah.Common.Bll.Providers
         public static Guid InsertMessage(Guid? parentMessageId, string localObjectType, string localObjectId, Guid fromUserId, Guid? toUserId, string subject, string text)
         {
             Guid messageId = Guid.Empty;
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null)
             {
                 messageId = Guid.NewGuid();
@@ -46,13 +46,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="localObjectId">The unique identifier of the object which the message are associated with.</param>
         /// <returns>The messages for the specified object.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static OrganizationDataSet.MessageDataTable GetMessages(string localObjectType, string localObjectId)
+        public static ClientDataSet.MessageDataTable GetMessages(string localObjectType, string localObjectId)
         {
-            OrganizationDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganization.OrganizationId);
-            OrganizationDataSet.MessageDataTable table = null;
+            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientDataSet.MessageDataTable table = null;
             try
             {
-                table = new OrganizationDataSet.MessageDataTable();
+                table = new ClientDataSet.MessageDataTable();
                 if (adapters != null) adapters.MessageTableAdapter.Fill(table, 0, localObjectType, localObjectId);
                 return table;
             }

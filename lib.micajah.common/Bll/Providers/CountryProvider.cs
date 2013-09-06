@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Micajah.Common.Dal;
+using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Properties;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
-using Micajah.Common.Application;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -23,7 +23,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataView GetCountriesView()
         {
-            DataView dv = WebApplication.CommonDataSet.Country.DefaultView;
+            MasterDataSet.CountryDataTable table = new MasterDataSet.CountryDataTable();
+            MasterDataSetTableAdapters.Current.CountryTableAdapter.Fill(table);
+
+            DataView dv = table.DefaultView;
             dv.Sort = "Name";
             return dv;
         }
@@ -37,8 +40,8 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertCountry(string name, bool throwOnError)
         {
-            CommonDataSet.CountryDataTable table = WebApplication.CommonDataSet.Country;
-            CommonDataSet.CountryRow row = table.NewCountryRow();
+            MasterDataSet.CountryDataTable table = new MasterDataSet.CountryDataTable();
+            MasterDataSet.CountryRow row = table.NewCountryRow();
 
             row.CountryId = Guid.NewGuid();
 
@@ -47,7 +50,7 @@ namespace Micajah.Common.Bll.Providers
                 row.Name = name;
 
                 table.AddCountryRow(row);
-                WebApplication.CommonDataSetTableAdapters.CountryTableAdapter.Update(row);
+                MasterDataSetTableAdapters.Current.CountryTableAdapter.Update(row);
             }
             catch (ConstraintException ex)
             {

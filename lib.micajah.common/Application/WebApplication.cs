@@ -29,8 +29,7 @@ namespace Micajah.Common.Application
     {
         #region Members
 
-        private static CommonDataSetTableAdapters s_CommonDataSetTableAdapters;
-        private static OrganizationDataSetTableAdapters s_OrganizationDataSetTableAdapters;
+        private static ClientDataSetTableAdapters s_OrganizationDataSetTableAdapters;
         private static SortedList s_OrganizationDataSetTableAdaptersList;
         private static LoginProvider s_LoginProvider;
 
@@ -92,7 +91,7 @@ namespace Micajah.Common.Application
                             if (ds == null)
                             {
                                 ds = new CommonDataSet();
-                                CommonDataSetTableAdapters.Fill(ds);
+                                MasterDataSetTableAdapters.Current.Fill(ds);
 
                                 CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
                             }
@@ -150,43 +149,6 @@ namespace Micajah.Common.Application
             {
                 return ((HttpContext.Current.Request.ApplicationPath == "/")
                     ? string.Empty : HttpContext.Current.Request.ApplicationPath);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the class that contains the tables adapters of the common data set.
-        /// </summary>
-        public static CommonDataSetTableAdapters CommonDataSetTableAdapters
-        {
-            get
-            {
-                if (s_CommonDataSetTableAdapters == null)
-                    s_CommonDataSetTableAdapters = new CommonDataSetTableAdapters();
-                return s_CommonDataSetTableAdapters;
-            }
-            set
-            {
-                s_CommonDataSetTableAdapters = value;
-                RefreshCommonData();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the class that contains the tables adapters of the organization data set.
-        /// </summary>
-        public static OrganizationDataSetTableAdapters OrganizationDataSetTableAdapters
-        {
-            get
-            {
-                if (s_OrganizationDataSetTableAdapters == null)
-                    s_OrganizationDataSetTableAdapters = new OrganizationDataSetTableAdapters();
-                return s_OrganizationDataSetTableAdapters;
-            }
-            set
-            {
-                s_OrganizationDataSetTableAdapters = value;
-                s_OrganizationDataSetTableAdaptersList = null;
-                RefreshOrganizationDataSets();
             }
         }
 
@@ -332,7 +294,7 @@ namespace Micajah.Common.Application
                 {
                     lock (s_CommonDataSetSyncRoot)
                     {
-                        CommonDataSetTableAdapters.OrganizationTableAdapter.Fill(ds.Organization);
+                        MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Fill(ds.Organization);
 
                         CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
                     }
@@ -407,14 +369,12 @@ namespace Micajah.Common.Application
             }
         }
 
-        internal static void RefreshCommonDataSetTableAdapters()
+        internal static void RefreshOrganizationDataSetTableAdaptersList()
         {
-            CommonDataSetTableAdapters = null;
-        }
-
-        internal static void RefreshOrganizationDataSetTableAdapters()
-        {
-            OrganizationDataSetTableAdapters = null;
+            lock (s_OrganizationDataSetTableAdaptersListSyncRoot)
+            {
+                s_OrganizationDataSetTableAdaptersList = null;
+            }
         }
 
         /// <summary>
@@ -462,7 +422,7 @@ namespace Micajah.Common.Application
                         if (ds == null)
                         {
                             ds = new OrganizationDataSet();
-                            OrganizationDataSetTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                            ClientDataSetTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                             adapters.Fill(ds, organizationId);
 
                             CacheManager.Current.AddWithDefaultExpiration(key, ds);
@@ -480,31 +440,31 @@ namespace Micajah.Common.Application
         }
 
         /// <summary>
-        /// Returns the instance of the OrganizationDataSetTableAdapters class that contains 
+        /// Returns the instance of the ClientDataSetTableAdapters class that contains 
         /// tables adapters and connection to database of specified organization.
         /// </summary>
         /// <param name="organizationId">The organization's identifier.</param>
         /// <returns>
-        /// The instance of the OrganizationDataSetTableAdapters class that contains 
+        /// The instance of the ClientDataSetTableAdapters class that contains 
         /// tables adapters and connection to database of specified organization.
         /// </returns>
-        internal static OrganizationDataSetTableAdapters GetOrganizationDataSetTableAdaptersByOrganizationId(Guid organizationId)
+        internal static ClientDataSetTableAdapters GetOrganizationDataSetTableAdaptersByOrganizationId(Guid organizationId)
         {
             return GetOrganizationDataSetTableAdaptersByConnectionString(OrganizationProvider.GetConnectionString(organizationId));
         }
 
         /// <summary>
-        /// Returns the instance of the OrganizationDataSetTableAdapters class that contains 
+        /// Returns the instance of the ClientDataSetTableAdapters class that contains 
         /// tables adapters and specified connection to database.
         /// </summary>
         /// <param name="connectionString">The connection string to organization's database.</param>
         /// <returns>
-        /// The instance of the OrganizationDataSetTableAdapters class that contains 
+        /// The instance of the ClientDataSetTableAdapters class that contains 
         /// tables adapters and specified connection to database.
         /// </returns>
-        internal static OrganizationDataSetTableAdapters GetOrganizationDataSetTableAdaptersByConnectionString(string connectionString)
+        internal static ClientDataSetTableAdapters GetOrganizationDataSetTableAdaptersByConnectionString(string connectionString)
         {
-            OrganizationDataSetTableAdapters adapters = null;
+            ClientDataSetTableAdapters adapters = null;
 
             if (s_OrganizationDataSetTableAdaptersList == null) s_OrganizationDataSetTableAdaptersList = new SortedList();
 
@@ -514,13 +474,13 @@ namespace Micajah.Common.Application
                 {
                     if (!s_OrganizationDataSetTableAdaptersList.ContainsKey(connectionString))
                     {
-                        adapters = OrganizationDataSetTableAdapters.Clone();
+                        adapters = ClientDataSetTableAdapters.Current.Clone();
                         adapters.ConnectionString = connectionString;
                         s_OrganizationDataSetTableAdaptersList.Add(connectionString, adapters);
                     }
                 }
             }
-            else adapters = s_OrganizationDataSetTableAdaptersList[connectionString] as OrganizationDataSetTableAdapters;
+            else adapters = s_OrganizationDataSetTableAdaptersList[connectionString] as ClientDataSetTableAdapters;
 
             return adapters;
         }
@@ -604,7 +564,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Raises when a security module has established the identity of the user.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_AuthenticateRequest(object sender, EventArgs e)
         {
@@ -646,7 +606,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Raises when an application is started.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_Start(object sender, EventArgs e)
         {
@@ -666,7 +626,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Raises when an application is ended.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_End(object sender, EventArgs e)
         {
@@ -677,7 +637,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Raises when an error occured in an application.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_Error(object sender, EventArgs e)
         {
@@ -686,7 +646,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Occurs as the first event in the HTTP pipeline chain of execution when ASP.NET responds to a request.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_BeginRequest(object sender, EventArgs e)
         {
@@ -695,7 +655,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Occurs when a security module has established the identity of the user.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_PostAuthenticateRequest(object sender, EventArgs e)
         {
@@ -704,7 +664,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Occurs when the request state (for example, session state) that is associated with the current request has been obtained.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_PostAcquireRequestState(object sender, EventArgs e)
         {
@@ -892,7 +852,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Raises when a session is started.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Session_Start(object sender, EventArgs e)
         {
@@ -901,7 +861,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Raises when a session is abandoned or expires.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
+        /// <param name="sender">The sourceRow of the event.</param>
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Session_End(object sender, EventArgs e)
         {

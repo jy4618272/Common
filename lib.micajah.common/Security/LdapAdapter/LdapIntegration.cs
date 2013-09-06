@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.LdapAdapter;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Micajah.Common.Security
 {
@@ -194,7 +194,7 @@ namespace Micajah.Common.Security
                 CommonDataSet.RoleRow[] roles = WebApplication.CommonDataSet.Role.Select(string.Format(CultureInfo.CurrentCulture, "RoleId = '{0}'", row["RoleId"])) as CommonDataSet.RoleRow[];
                 if (roles.Length > 0) row["RoleName"] = roles[0].Name;
 
-                CommonDataSet.GroupMappingsRow[] groups = WebApplication.CommonDataSet.GroupMappings.Select(string.Format(CultureInfo.CurrentCulture, "GroupId = '{0}' AND OrganizationId = '{1}'", row["GroupId"], organizationId)) as CommonDataSet.GroupMappingsRow[];
+                MasterDataSet.GroupMappingsRow[] groups = LdapInfoProvider.GetGroupMappings(organizationId).Table.Select(string.Format(CultureInfo.InvariantCulture, "GroupId = '{0}' AND OrganizationId = '{1}'", row["GroupId"], organizationId)) as MasterDataSet.GroupMappingsRow[];
                 if (groups.Length > 0) row["GroupName"] = groups[0].LdapGroupName;
             }
 
@@ -252,7 +252,7 @@ namespace Micajah.Common.Security
 
             connection.Close();
 
-            ApplicationLogger.LogInfo("LDAPIntegration", "User RoleID was updated in the local Logins table.");
+            ApplicationLogger.LogInfo("LDAPIntegration", "User RoleID was updated in the local Logins table2.");
             */
             return true;
         }
