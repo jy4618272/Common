@@ -128,8 +128,6 @@ namespace Micajah.Common.Dal.TableAdapters
             DatabaseServerTableAdapter.Fill(dataSet.DatabaseServer);
             DatabaseTableAdapter.Fill(dataSet.Database);
             OrganizationTableAdapter.Fill(dataSet.Organization);
-            UnitsOfMeasureAdapter.Fill(dataSet.UnitsOfMeasure);
-            UnitsOfMeasureConversionAdapter.Fill(dataSet.UnitsOfMeasureConversion);
         }
 
         #endregion

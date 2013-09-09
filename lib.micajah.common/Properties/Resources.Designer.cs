@@ -1428,7 +1428,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;li&gt;Move Item:&lt;br /&gt;Drag and drop item into its new parent item.&lt;/li&gt;&lt;li&gt;Merge Item:&lt;br /&gt;Drag and drop sourceRow item into some level destination item.&lt;/li&gt;&lt;li&gt;&lt;nobr&gt;Copy Item without subitem:&lt;/nobr&gt;&lt;br /&gt;&amp;lt;Ctrl&amp;gt; key + drag and drop item into its new parent item.&lt;/li&gt;&lt;li&gt;Context menu:&lt;br /&gt;right or left mouse click.&lt;/li&gt;.
+        ///   Looks up a localized string similar to &lt;li&gt;Move Item:&lt;br /&gt;Drag and drop item into its new parent item.&lt;/li&gt;&lt;li&gt;Merge Item:&lt;br /&gt;Drag and drop source item into some level destination item.&lt;/li&gt;&lt;li&gt;&lt;nobr&gt;Copy Item without subitem:&lt;/nobr&gt;&lt;br /&gt;&amp;lt;Ctrl&amp;gt; key + drag and drop item into its new parent item.&lt;/li&gt;&lt;li&gt;Context menu:&lt;br /&gt;right or left mouse click.&lt;/li&gt;.
         /// </summary>
         internal static string EntityControl_DescriptionLabel_Text {
             get {
@@ -4216,15 +4216,6 @@ namespace Micajah.Common.Properties {
         internal static string MeasureUnitsProvider_ErrorMessage_CannotFindByMeasureUnitId {
             get {
                 return ResourceManager.GetString("MeasureUnitsProvider_ErrorMessage_CannotFindByMeasureUnitId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This measure unit conversion already exists in system..
-        /// </summary>
-        internal static string MeasureUnitsProvider_ErrorMessage_ConversionAlreadyExists {
-            get {
-                return ResourceManager.GetString("MeasureUnitsProvider_ErrorMessage_ConversionAlreadyExists", resourceCulture);
             }
         }
         

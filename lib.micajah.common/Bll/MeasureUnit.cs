@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using Micajah.Common.Dal;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
 
 namespace Micajah.Common.Bll
 {
@@ -59,21 +58,14 @@ namespace Micajah.Common.Bll
             get
             {
                 MeasureUnitCollection list = new MeasureUnitCollection();
-                CommonDataSet ds = WebApplication.CommonDataSet;
-                if (ds != null)
+                foreach (MasterDataSet.UnitsOfMeasureConversionRow r in MeasureUnitsProvider.GetUnitOfMeasureConversionFromByOrganizationId(this.MeasureUnitId, this.OrganizationId))
                 {
-                    foreach (CommonDataSet.UnitsOfMeasureConversionRow r in ds.UnitsOfMeasureConversion)
+                    MeasureUnit unit = MeasureUnit.Create(r.UnitOfMeasureTo, this.OrganizationId);
+                    if (unit != null)
                     {
-                        if (r.OrganizationId.Equals(this.OrganizationId) && r.UnitOfMeasureFrom.Equals(this.MeasureUnitId))
-                        {
-                            MeasureUnit unit = MeasureUnit.Create(r.UnitOfMeasureTo, this.OrganizationId);
-                            if (unit != null)
-                            {
-                                unit.SetConversionFactor(r.Factor);
-                                unit.SetLevel(this.Level + 1);
-                                list.Add(unit);
-                            }
-                        }
+                        unit.SetConversionFactor(r.Factor);
+                        unit.SetLevel(this.Level + 1);
+                        list.Add(unit);
                     }
                 }
                 return list;
@@ -113,7 +105,7 @@ namespace Micajah.Common.Bll
 
         #region Fabric Methods
 
-        public static MeasureUnit Create(CommonDataSet.UnitsOfMeasureRow row)
+        public static MeasureUnit Create(MasterDataSet.UnitsOfMeasureRow row)
         {
             MeasureUnit unit = new MeasureUnit();
             if (row != null)
@@ -363,10 +355,10 @@ namespace Micajah.Common.Bll
         {
             MeasureUnitCollection list = new MeasureUnitCollection();
 
-            foreach (CommonDataSet.UnitsOfMeasureRow row in MeasureUnitsProvider.GetBuiltInMeasureUnits())
+            foreach (MasterDataSet.UnitsOfMeasureRow row in MeasureUnitsProvider.GetBuiltInMeasureUnits())
                 list.Add(MeasureUnit.Create(row));
 
-            foreach (CommonDataSet.UnitsOfMeasureRow row in MeasureUnitsProvider.GetMeasureUnits(organizationId))
+            foreach (MasterDataSet.UnitsOfMeasureRow row in MeasureUnitsProvider.GetMeasureUnits(organizationId))
                 list.Add(MeasureUnit.Create(row));
 
             return list;
@@ -376,8 +368,8 @@ namespace Micajah.Common.Bll
         public static MeasureUnitCollection GetUnitsByGroup(Guid organizationId, string groupName)
         {
             MeasureUnitCollection list = new MeasureUnitCollection();
-            CommonDataSet.UnitsOfMeasureDataTable table = MeasureUnitsProvider.GetMeasureUnits(organizationId);
-            foreach (CommonDataSet.UnitsOfMeasureRow row in table)
+            MasterDataSet.UnitsOfMeasureDataTable table = MeasureUnitsProvider.GetMeasureUnits(organizationId);
+            foreach (MasterDataSet.UnitsOfMeasureRow row in table)
                 if (row.GroupName.Equals(groupName))
                     list.Add(MeasureUnit.Create(row));
             return list;
@@ -396,8 +388,8 @@ namespace Micajah.Common.Bll
         public static MeasureUnitCollection GetUnitsByUnitType(Guid organizationId, string unitType)
         {
             MeasureUnitCollection list = new MeasureUnitCollection();
-            CommonDataSet.UnitsOfMeasureDataTable table = MeasureUnitsProvider.GetMeasureUnits(organizationId);
-            foreach (CommonDataSet.UnitsOfMeasureRow row in table)
+            MasterDataSet.UnitsOfMeasureDataTable table = MeasureUnitsProvider.GetMeasureUnits(organizationId);
+            foreach (MasterDataSet.UnitsOfMeasureRow row in table)
                 if (row.LocalName.Equals(unitType))
                     list.Add(MeasureUnit.Create(row));
             return list;

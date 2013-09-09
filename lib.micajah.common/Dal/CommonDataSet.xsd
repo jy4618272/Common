@@ -431,80 +431,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="UnitsOfMeasureConversion" msprop:Generator_UserTableName="UnitsOfMeasureConversion" msprop:Generator_RowEvArgName="UnitsOfMeasureConversionRowChangeEvent" msprop:Generator_TableVarName="tableUnitsOfMeasureConversion" msprop:Generator_TablePropName="UnitsOfMeasureConversion" msprop:Generator_RowDeletingName="UnitsOfMeasureConversionRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureConversionRowChanging" msprop:Generator_RowDeletedName="UnitsOfMeasureConversionRowDeleted" msprop:Generator_RowEvHandlerName="UnitsOfMeasureConversionRowChangeEventHandler" msprop:Generator_TableClassName="UnitsOfMeasureConversionDataTable" msprop:Generator_RowChangedName="UnitsOfMeasureConversionRowChanged" msprop:Generator_RowClassName="UnitsOfMeasureConversionRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="UnitOfMeasureFrom" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitOfMeasureFrom" msprop:Generator_ColumnPropNameInRow="UnitOfMeasureFrom" msprop:Generator_ColumnPropNameInTable="UnitOfMeasureFromColumn" msprop:Generator_UserColumnName="UnitOfMeasureFrom" type="xs:string" />
-              <xs:element name="UnitOfMeasureTo" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitOfMeasureTo" msprop:Generator_ColumnPropNameInRow="UnitOfMeasureTo" msprop:Generator_ColumnPropNameInTable="UnitOfMeasureToColumn" msprop:Generator_UserColumnName="UnitOfMeasureTo" type="xs:string" />
-              <xs:element name="Factor" msprop:Generator_ColumnVarNameInTable="columnFactor" msprop:Generator_ColumnPropNameInRow="Factor" msprop:Generator_ColumnPropNameInTable="FactorColumn" msprop:Generator_UserColumnName="Factor" type="xs:double" />
-              <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="UnitsOfMeasure" msprop:Generator_UserTableName="UnitsOfMeasure" msprop:Generator_RowEvArgName="UnitsOfMeasureRowChangeEvent" msprop:Generator_TableVarName="tableUnitsOfMeasure" msprop:Generator_TablePropName="UnitsOfMeasure" msprop:Generator_RowDeletingName="UnitsOfMeasureRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureRowChanging" msprop:Generator_RowDeletedName="UnitsOfMeasureRowDeleted" msprop:Generator_RowEvHandlerName="UnitsOfMeasureRowChangeEventHandler" msprop:Generator_TableClassName="UnitsOfMeasureDataTable" msprop:Generator_RowChangedName="UnitsOfMeasureRowChanged" msprop:Generator_RowClassName="UnitsOfMeasureRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="UnitsOfMeasureId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitsOfMeasureId" msprop:Generator_ColumnPropNameInRow="UnitsOfMeasureId" msprop:Generator_ColumnPropNameInTable="UnitsOfMeasureIdColumn" msprop:Generator_UserColumnName="UnitsOfMeasureId" type="xs:string" />
-              <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />
-              <xs:element name="SingularName" msprop:Generator_ColumnVarNameInTable="columnSingularName" msprop:Generator_ColumnPropNameInRow="SingularName" msprop:Generator_ColumnPropNameInTable="SingularNameColumn" msprop:Generator_UserColumnName="SingularName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="255" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="SingularAbbrv" msprop:nullValue="_throw" msprop:Generator_ColumnPropNameInRow="SingularAbbrv" msprop:Generator_ColumnVarNameInTable="columnSingularAbbrv" msprop:Generator_ColumnPropNameInTable="SingularAbbrvColumn" msprop:Generator_UserColumnName="SingularAbbrv">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="PluralName" msprop:Generator_ColumnVarNameInTable="columnPluralName" msprop:Generator_ColumnPropNameInRow="PluralName" msprop:Generator_ColumnPropNameInTable="PluralNameColumn" msprop:Generator_UserColumnName="PluralName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="255" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="PluralAbbrv" msprop:Generator_ColumnVarNameInTable="columnPluralAbbrv" msprop:Generator_ColumnPropNameInRow="PluralAbbrv" msprop:Generator_ColumnPropNameInTable="PluralAbbrvColumn" msprop:Generator_UserColumnName="PluralAbbrv">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="GroupName" msprop:Generator_ColumnVarNameInTable="columnGroupName" msprop:Generator_ColumnPropNameInRow="GroupName" msprop:Generator_ColumnPropNameInTable="GroupNameColumn" msprop:Generator_UserColumnName="GroupName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="LocalName" msprop:Generator_ColumnVarNameInTable="columnLocalName" msprop:Generator_ColumnPropNameInRow="LocalName" msprop:Generator_ColumnPropNameInTable="LocalNameColumn" msprop:Generator_UserColumnName="LocalName">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="50" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="SingularFullName" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="SingularFullName" msprop:Generator_ColumnVarNameInTable="columnSingularFullName" msprop:Generator_ColumnPropNameInTable="SingularFullNameColumn" msprop:Generator_UserColumnName="SingularFullName" default="">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="255" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="PluralFullName" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="PluralFullName" msprop:Generator_ColumnVarNameInTable="columnPluralFullName" msprop:Generator_ColumnPropNameInTable="PluralFullNameColumn" msprop:Generator_UserColumnName="PluralFullName" default="">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:maxLength value="255" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
@@ -561,34 +487,21 @@
       <xs:selector xpath=".//mstns:Organization" />
       <xs:field xpath="mstns:OrganizationId" />
     </xs:unique>
-    <xs:unique name="UnitsOfMeasureConversion_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
-      <xs:selector xpath=".//mstns:UnitsOfMeasureConversion" />
-      <xs:field xpath="mstns:OrganizationId" />
-      <xs:field xpath="mstns:UnitOfMeasureTo" />
-      <xs:field xpath="mstns:UnitOfMeasureFrom" />
-    </xs:unique>
-    <xs:unique name="UnitsOfMeasure_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
-      <xs:selector xpath=".//mstns:UnitsOfMeasure" />
-      <xs:field xpath="mstns:UnitsOfMeasureId" />
-      <xs:field xpath="mstns:OrganizationId" />
-    </xs:unique>
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="FK_Mc_Action_Mc_Action" msdata:parent="Action" msdata:child="Action" msdata:parentkey="ActionId" msdata:childkey="ParentActionId" msprop:Generator_UserChildTable="Action" msprop:Generator_ChildPropName="GetActionRows" msprop:Generator_UserRelationName="FK_Mc_Action_Mc_Action" msprop:Generator_RelationVarName="relationFK_Mc_Action_Mc_Action" msprop:Generator_UserParentTable="Action" msprop:Generator_ParentPropName="ActionRowParent" />
-      <msdata:Relationship name="FK_Mc_ActionsParentActions_Mc_Action_1" msdata:parent="Action" msdata:child="ActionsParentActions" msdata:parentkey="ActionId" msdata:childkey="ParentActionId" msprop:Generator_UserChildTable="ActionsParentActions" msprop:Generator_ChildPropName="GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_UserRelationName="FK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_RelationVarName="relationFK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_UserParentTable="Action" msprop:Generator_ParentPropName="Mc_ActionRowByFK_Mc_ActionsParentActions_Mc_Action_1" />
-      <msdata:Relationship name="FK_Mc_ActionsParentActions_Mc_Action_2" msdata:parent="Action" msdata:child="ActionsParentActions" msdata:parentkey="ActionId" msdata:childkey="ActionId" msprop:Generator_UserChildTable="ActionsParentActions" msprop:Generator_ChildPropName="GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_UserRelationName="FK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_RelationVarName="relationFK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_UserParentTable="Action" msprop:Generator_ParentPropName="Mc_ActionRowByFK_Mc_ActionsParentActions_Mc_Action_2" />
-      <msdata:Relationship name="FK_Mc_Database_Mc_DatabaseServer" msdata:parent="DatabaseServer" msdata:child="Database" msdata:parentkey="DatabaseServerId" msdata:childkey="DatabaseServerId" msprop:Generator_UserChildTable="Database" msprop:Generator_ChildPropName="GetDatabaseRows" msprop:Generator_UserRelationName="FK_Mc_Database_Mc_DatabaseServer" msprop:Generator_RelationVarName="relationFK_Mc_Database_Mc_DatabaseServer" msprop:Generator_UserParentTable="DatabaseServer" msprop:Generator_ParentPropName="DatabaseServerRow" />
-      <msdata:Relationship name="FK_Mc_DatabaseServer_Mc_Website" msdata:parent="Website" msdata:child="DatabaseServer" msdata:parentkey="WebsiteId" msdata:childkey="WebsiteId" msprop:Generator_UserChildTable="DatabaseServer" msprop:Generator_ChildPropName="GetDatabaseServerRows" msprop:Generator_UserRelationName="FK_Mc_DatabaseServer_Mc_Website" msprop:Generator_RelationVarName="relationFK_Mc_DatabaseServer_Mc_Website" msprop:Generator_UserParentTable="Website" msprop:Generator_ParentPropName="Mc_WebsiteRow" />
-      <msdata:Relationship name="FK_Mc_Role_Mc_Action" msdata:parent="Action" msdata:child="Role" msdata:parentkey="ActionId" msdata:childkey="StartActionId" msprop:Generator_UserChildTable="Role" msprop:Generator_ChildPropName="GetRoleRows" msprop:Generator_UserRelationName="FK_Mc_Role_Mc_Action" msprop:Generator_RelationVarName="relationFK_Mc_Role_Mc_Action" msprop:Generator_UserParentTable="Action" msprop:Generator_ParentPropName="ActionRow" />
-      <msdata:Relationship name="FK_Mc_RolesActions_Mc_Action" msdata:parent="Action" msdata:child="RolesActions" msdata:parentkey="ActionId" msdata:childkey="ActionId" msprop:Generator_UserChildTable="RolesActions" msprop:Generator_ChildPropName="GetRolesActionsRows" msprop:Generator_UserRelationName="FK_Mc_RolesActions_Mc_Action" msprop:Generator_RelationVarName="relationFK_Mc_RolesActions_Mc_Action" msprop:Generator_UserParentTable="Action" msprop:Generator_ParentPropName="ActionRow" />
-      <msdata:Relationship name="FK_Mc_RolesActions_Mc_Role" msdata:parent="Role" msdata:child="RolesActions" msdata:parentkey="RoleId" msdata:childkey="RoleId" msprop:Generator_UserChildTable="RolesActions" msprop:Generator_ChildPropName="GetRolesActionsRows" msprop:Generator_UserRelationName="FK_Mc_RolesActions_Mc_Role" msprop:Generator_RelationVarName="relationFK_Mc_RolesActions_Mc_Role" msprop:Generator_UserParentTable="Role" msprop:Generator_ParentPropName="RoleRow" />
-      <msdata:Relationship name="FK_Mc_Setting_Mc_Setting" msdata:parent="Setting" msdata:child="Setting" msdata:parentkey="SettingId" msdata:childkey="ParentSettingId" msprop:Generator_UserChildTable="Setting" msprop:Generator_ChildPropName="GetSettingRows" msprop:Generator_UserRelationName="FK_Mc_Setting_Mc_Setting" msprop:Generator_RelationVarName="relationFK_Mc_Setting_Mc_Setting" msprop:Generator_UserParentTable="Setting" msprop:Generator_ParentPropName="SettingRowParent" />
-      <msdata:Relationship name="FK_Mc_SettingListsValues_Mc_Setting" msdata:parent="Setting" msdata:child="SettingListsValues" msdata:parentkey="SettingId" msdata:childkey="SettingId" msprop:Generator_UserChildTable="SettingListsValues" msprop:Generator_ChildPropName="GetSettingListsValuesRows" msprop:Generator_UserRelationName="FK_Mc_SettingListsValues_Mc_Setting" msprop:Generator_RelationVarName="relationFK_Mc_SettingListsValues_Mc_Setting" msprop:Generator_UserParentTable="Setting" msprop:Generator_ParentPropName="Mc_SettingRow" />
-      <msdata:Relationship name="FK_Mc_Organization_Mc_Database" msdata:parent="Database" msdata:child="Organization" msdata:parentkey="DatabaseId" msdata:childkey="DatabaseId" msprop:Generator_UserChildTable="Organization" msprop:Generator_ChildPropName="GetOrganizationRows" msprop:Generator_UserRelationName="FK_Mc_Organization_Mc_Database" msprop:Generator_RelationVarName="relationFK_Mc_Organization_Mc_Database" msprop:Generator_UserParentTable="Database" msprop:Generator_ParentPropName="DatabaseRow" />
-      <msdata:Relationship name="FK_Mc_Setting_Mc_Action" msdata:parent="Action" msdata:child="Setting" msdata:parentkey="ActionId" msdata:childkey="ActionId" msprop:Generator_UserChildTable="Setting" msprop:Generator_ChildPropName="GetSettingRows" msprop:Generator_UserRelationName="FK_Mc_Setting_Mc_Action" msprop:Generator_RelationVarName="relationFK_Mc_Setting_Mc_Action" msprop:Generator_UserParentTable="Action" msprop:Generator_ParentPropName="ActionRow" />
-      <msdata:Relationship name="UnitsOfMeasure_UnitsOfMeasureConversion1" msdata:parent="UnitsOfMeasure" msdata:child="UnitsOfMeasureConversion" msdata:parentkey="UnitsOfMeasureId" msdata:childkey="UnitOfMeasureTo" msprop:Generator_UserChildTable="UnitsOfMeasureConversion" msprop:Generator_ChildPropName="GetUnitsOfMeasureConversionRowsByUnitsOfMeasure_UnitsOfMeasureConversion1" msprop:Generator_UserRelationName="UnitsOfMeasure_UnitsOfMeasureConversion1" msprop:Generator_RelationVarName="relationUnitsOfMeasure_UnitsOfMeasureConversion1" msprop:Generator_UserParentTable="UnitsOfMeasure" msprop:Generator_ParentPropName="UnitsOfMeasureRowByUnitsOfMeasure_UnitsOfMeasureConversion1" />
-      <msdata:Relationship name="UnitsOfMeasure_UnitsOfMeasureConversion" msdata:parent="UnitsOfMeasure" msdata:child="UnitsOfMeasureConversion" msdata:parentkey="UnitsOfMeasureId" msdata:childkey="UnitOfMeasureFrom" msprop:Generator_UserChildTable="UnitsOfMeasureConversion" msprop:Generator_ChildPropName="GetUnitsOfMeasureConversionRowsByUnitsOfMeasure_UnitsOfMeasureConversion" msprop:Generator_UserRelationName="UnitsOfMeasure_UnitsOfMeasureConversion" msprop:Generator_RelationVarName="relationUnitsOfMeasure_UnitsOfMeasureConversion" msprop:Generator_UserParentTable="UnitsOfMeasure" msprop:Generator_ParentPropName="UnitsOfMeasureRowByUnitsOfMeasure_UnitsOfMeasureConversion" />
+      <msdata:Relationship name="FK_Mc_Action_Mc_Action" msdata:parent="Action" msdata:child="Action" msdata:parentkey="ActionId" msdata:childkey="ParentActionId" msprop:Generator_UserChildTable="Action" msprop:Generator_ChildPropName="GetActionRows" msprop:Generator_UserRelationName="FK_Mc_Action_Mc_Action" msprop:Generator_ParentPropName="ActionRowParent" msprop:Generator_RelationVarName="relationFK_Mc_Action_Mc_Action" msprop:Generator_UserParentTable="Action" />
+      <msdata:Relationship name="FK_Mc_ActionsParentActions_Mc_Action_1" msdata:parent="Action" msdata:child="ActionsParentActions" msdata:parentkey="ActionId" msdata:childkey="ParentActionId" msprop:Generator_UserChildTable="ActionsParentActions" msprop:Generator_ChildPropName="GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_UserRelationName="FK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_ParentPropName="Mc_ActionRowByFK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_RelationVarName="relationFK_Mc_ActionsParentActions_Mc_Action_1" msprop:Generator_UserParentTable="Action" />
+      <msdata:Relationship name="FK_Mc_ActionsParentActions_Mc_Action_2" msdata:parent="Action" msdata:child="ActionsParentActions" msdata:parentkey="ActionId" msdata:childkey="ActionId" msprop:Generator_UserChildTable="ActionsParentActions" msprop:Generator_ChildPropName="GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_UserRelationName="FK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_ParentPropName="Mc_ActionRowByFK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_RelationVarName="relationFK_Mc_ActionsParentActions_Mc_Action_2" msprop:Generator_UserParentTable="Action" />
+      <msdata:Relationship name="FK_Mc_Database_Mc_DatabaseServer" msdata:parent="DatabaseServer" msdata:child="Database" msdata:parentkey="DatabaseServerId" msdata:childkey="DatabaseServerId" msprop:Generator_UserChildTable="Database" msprop:Generator_ChildPropName="GetDatabaseRows" msprop:Generator_UserRelationName="FK_Mc_Database_Mc_DatabaseServer" msprop:Generator_ParentPropName="DatabaseServerRow" msprop:Generator_RelationVarName="relationFK_Mc_Database_Mc_DatabaseServer" msprop:Generator_UserParentTable="DatabaseServer" />
+      <msdata:Relationship name="FK_Mc_DatabaseServer_Mc_Website" msdata:parent="Website" msdata:child="DatabaseServer" msdata:parentkey="WebsiteId" msdata:childkey="WebsiteId" msprop:Generator_UserChildTable="DatabaseServer" msprop:Generator_ChildPropName="GetDatabaseServerRows" msprop:Generator_UserRelationName="FK_Mc_DatabaseServer_Mc_Website" msprop:Generator_ParentPropName="Mc_WebsiteRow" msprop:Generator_RelationVarName="relationFK_Mc_DatabaseServer_Mc_Website" msprop:Generator_UserParentTable="Website" />
+      <msdata:Relationship name="FK_Mc_Role_Mc_Action" msdata:parent="Action" msdata:child="Role" msdata:parentkey="ActionId" msdata:childkey="StartActionId" msprop:Generator_UserChildTable="Role" msprop:Generator_ChildPropName="GetRoleRows" msprop:Generator_UserRelationName="FK_Mc_Role_Mc_Action" msprop:Generator_ParentPropName="ActionRow" msprop:Generator_RelationVarName="relationFK_Mc_Role_Mc_Action" msprop:Generator_UserParentTable="Action" />
+      <msdata:Relationship name="FK_Mc_RolesActions_Mc_Action" msdata:parent="Action" msdata:child="RolesActions" msdata:parentkey="ActionId" msdata:childkey="ActionId" msprop:Generator_UserChildTable="RolesActions" msprop:Generator_ChildPropName="GetRolesActionsRows" msprop:Generator_UserRelationName="FK_Mc_RolesActions_Mc_Action" msprop:Generator_ParentPropName="ActionRow" msprop:Generator_RelationVarName="relationFK_Mc_RolesActions_Mc_Action" msprop:Generator_UserParentTable="Action" />
+      <msdata:Relationship name="FK_Mc_RolesActions_Mc_Role" msdata:parent="Role" msdata:child="RolesActions" msdata:parentkey="RoleId" msdata:childkey="RoleId" msprop:Generator_UserChildTable="RolesActions" msprop:Generator_ChildPropName="GetRolesActionsRows" msprop:Generator_UserRelationName="FK_Mc_RolesActions_Mc_Role" msprop:Generator_ParentPropName="RoleRow" msprop:Generator_RelationVarName="relationFK_Mc_RolesActions_Mc_Role" msprop:Generator_UserParentTable="Role" />
+      <msdata:Relationship name="FK_Mc_Setting_Mc_Setting" msdata:parent="Setting" msdata:child="Setting" msdata:parentkey="SettingId" msdata:childkey="ParentSettingId" msprop:Generator_UserChildTable="Setting" msprop:Generator_ChildPropName="GetSettingRows" msprop:Generator_UserRelationName="FK_Mc_Setting_Mc_Setting" msprop:Generator_ParentPropName="SettingRowParent" msprop:Generator_RelationVarName="relationFK_Mc_Setting_Mc_Setting" msprop:Generator_UserParentTable="Setting" />
+      <msdata:Relationship name="FK_Mc_SettingListsValues_Mc_Setting" msdata:parent="Setting" msdata:child="SettingListsValues" msdata:parentkey="SettingId" msdata:childkey="SettingId" msprop:Generator_UserChildTable="SettingListsValues" msprop:Generator_ChildPropName="GetSettingListsValuesRows" msprop:Generator_UserRelationName="FK_Mc_SettingListsValues_Mc_Setting" msprop:Generator_ParentPropName="Mc_SettingRow" msprop:Generator_RelationVarName="relationFK_Mc_SettingListsValues_Mc_Setting" msprop:Generator_UserParentTable="Setting" />
+      <msdata:Relationship name="FK_Mc_Organization_Mc_Database" msdata:parent="Database" msdata:child="Organization" msdata:parentkey="DatabaseId" msdata:childkey="DatabaseId" msprop:Generator_UserChildTable="Organization" msprop:Generator_ChildPropName="GetOrganizationRows" msprop:Generator_UserRelationName="FK_Mc_Organization_Mc_Database" msprop:Generator_ParentPropName="DatabaseRow" msprop:Generator_RelationVarName="relationFK_Mc_Organization_Mc_Database" msprop:Generator_UserParentTable="Database" />
+      <msdata:Relationship name="FK_Mc_Setting_Mc_Action" msdata:parent="Action" msdata:child="Setting" msdata:parentkey="ActionId" msdata:childkey="ActionId" msprop:Generator_UserChildTable="Setting" msprop:Generator_ChildPropName="GetSettingRows" msprop:Generator_UserRelationName="FK_Mc_Setting_Mc_Action" msprop:Generator_ParentPropName="ActionRow" msprop:Generator_RelationVarName="relationFK_Mc_Setting_Mc_Action" msprop:Generator_UserParentTable="Action" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

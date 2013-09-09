@@ -15,8 +15,8 @@
     <Shape ID="DesignTable:EmailSuffix" ZOrder="5" X="242" Y="-532" Height="105" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="24" SplitterPosition="101" />
     <Shape ID="DesignTable:Email" ZOrder="4" X="-25" Y="-358" Height="67" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="24" SplitterPosition="63" />
     <Shape ID="DesignTable:OrganizationsLdapGroups" ZOrder="3" X="243" Y="-222" Height="181" Width="217" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="24" SplitterPosition="177" />
-    <Shape ID="DesignTable:UnitsOfMeasure" ZOrder="1" X="740" Y="-529" Height="219" Width="159" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="215" />
-    <Shape ID="DesignTable:UnitsOfMeasureConversion" ZOrder="2" X="743" Y="-223" Height="105" Width="224" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="101" />
+    <Shape ID="DesignTable:UnitsOfMeasure" ZOrder="1" X="749" Y="-532" Height="219" Width="159" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="215" />
+    <Shape ID="DesignTable:UnitsOfMeasureConversion" ZOrder="2" X="750" Y="-274" Height="105" Width="224" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="101" />
   </Shapes>
   <Connectors>
     <Connector ID="DesignRelation:FK_Mc_Resource_Mc_Resource" ZOrder="12" LineWidth="11">

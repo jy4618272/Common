@@ -1,11 +1,11 @@
-﻿using System;
-using System.Data;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll.Providers;
+﻿using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Data;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -123,7 +123,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 ShowLinkButtonBack();
 
-                CommonDataSet.UnitsOfMeasureRow row = MeasureUnitsProvider.GetMeasureUnitRow((Guid)List.DataKeys[index]["UnitsOfMeasureId"]);
+                MasterDataSet.UnitsOfMeasureRow row = MeasureUnitsProvider.GetMeasureUnitRow((Guid)List.DataKeys[index]["UnitsOfMeasureId"]);
                 if (row != null)
                     LinkButtonBack.CommandArgument = row.GroupName;
 
@@ -193,7 +193,7 @@ namespace Micajah.Common.WebControls.AdminControls
             switch (e.Action)
             {
                 case CommandActions.Add:
-                    CommonDataSet.UnitsOfMeasureRow row = MeasureUnitsProvider.GetMeasureUnitRow(sourceid);
+                    MasterDataSet.UnitsOfMeasureRow row = MeasureUnitsProvider.GetMeasureUnitRow(sourceid);
                     if (row == null) return;
                     DataTable table = MeasureUnitsProvider.GetConvertedMeasureUnits(sourceid);
                     DataRow newRow = table.NewRow();

@@ -559,8 +559,15 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="Stored Procedures\Mc_GetUnitsOfMeasureByOrganizationId.sql" />
+    <Build Include="Stored Procedures\Mc_GetUnitOfMeasure.sql" />
+    <Build Include="Stored Procedures\Mc_GetUnitOfMeasureConversionByOrganizationId.sql" />
+    <Build Include="Stored Procedures\Mc_GetUnitOfMeasureConversionFromByOrganizationId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompareToLocal.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="db.micajah.common.master.refactorlog" />
   </ItemGroup>
 </Project>

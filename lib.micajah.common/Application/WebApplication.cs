@@ -321,14 +321,6 @@ namespace Micajah.Common.Application
             RefreshStartThreads();
         }
 
-        /// <summary>
-        /// Refreshes the measure units tables.
-        /// </summary>
-        internal static void RefreshMeasureUnits()
-        {
-            RefreshCommonDataSet(false);
-        }
-
         internal static void RefreshEntities()
         {
             lock (s_EntitiesSyncRoot)

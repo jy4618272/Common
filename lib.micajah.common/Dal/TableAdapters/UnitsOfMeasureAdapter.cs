@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using Micajah.Common.Bll;
 
 namespace Micajah.Common.Dal.TableAdapters
 {
@@ -67,10 +67,27 @@ namespace Micajah.Common.Dal.TableAdapters
 
             #endregion
 
-            #region SelectCommand
+            #region SelectCommands
 
             SelectCommand.CommandText = "dbo.Mc_GetUnitsOfMeasure";
             SelectCommand.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetUnitsOfMeasureByOrganizationId"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetUnitOfMeasure"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@UnitsOfMeasureId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitsOfMeasureId", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
 
             #endregion
         }

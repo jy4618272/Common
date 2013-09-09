@@ -975,9 +975,6 @@
   <data name="Hello_VisitorText" xml:space="preserve">
     <value>Visitor</value>
   </data>
-  <data name="MeasureUnitsProvider_ErrorMessage_ConversionAlreadyExists" xml:space="preserve">
-    <value>This measure unit conversion already exists in system.</value>
-  </data>
   <data name="MeasureUnitsProvider_ErrorMessage_FactorCannotBeZero" xml:space="preserve">
     <value>Conversion factor cannot be zero or negative.</value>
   </data>

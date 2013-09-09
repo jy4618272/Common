@@ -42,6 +42,10 @@ namespace Micajah.Common.Dal {
         
         private OrganizationsLdapGroupsDataTable tableOrganizationsLdapGroups;
         
+        private UnitsOfMeasureDataTable tableUnitsOfMeasure;
+        
+        private UnitsOfMeasureConversionDataTable tableUnitsOfMeasureConversion;
+        
         private global::System.Data.DataRelation relationFK_Mc_Resource_Mc_Resource;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
@@ -55,6 +59,7 @@ namespace Micajah.Common.Dal {
             base.Tables.CollectionChanged += schemaChangedHandler;
             base.Relations.CollectionChanged += schemaChangedHandler;
             this.EndInit();
+            this.InitExpressions();
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -66,6 +71,9 @@ namespace Micajah.Common.Dal {
                 global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler1 = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
                 this.Tables.CollectionChanged += schemaChangedHandler1;
                 this.Relations.CollectionChanged += schemaChangedHandler1;
+                if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.ExcludeSchema)) {
+                    this.InitExpressions();
+                }
                 return;
             }
             string strSchema = ((string)(info.GetValue("XmlSchema", typeof(string))));
@@ -99,6 +107,12 @@ namespace Micajah.Common.Dal {
                 if ((ds.Tables["OrganizationsLdapGroups"] != null)) {
                     base.Tables.Add(new OrganizationsLdapGroupsDataTable(ds.Tables["OrganizationsLdapGroups"]));
                 }
+                if ((ds.Tables["UnitsOfMeasure"] != null)) {
+                    base.Tables.Add(new UnitsOfMeasureDataTable(ds.Tables["UnitsOfMeasure"]));
+                }
+                if ((ds.Tables["UnitsOfMeasureConversion"] != null)) {
+                    base.Tables.Add(new UnitsOfMeasureConversionDataTable(ds.Tables["UnitsOfMeasureConversion"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -110,6 +124,7 @@ namespace Micajah.Common.Dal {
             }
             else {
                 this.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
+                this.InitExpressions();
             }
             this.GetSerializationData(info, context);
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -209,6 +224,26 @@ namespace Micajah.Common.Dal {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public UnitsOfMeasureDataTable UnitsOfMeasure {
+            get {
+                return this.tableUnitsOfMeasure;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public UnitsOfMeasureConversionDataTable UnitsOfMeasureConversion {
+            get {
+                return this.tableUnitsOfMeasureConversion;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -251,6 +286,7 @@ namespace Micajah.Common.Dal {
         public override global::System.Data.DataSet Clone() {
             MasterDataSet cln = ((MasterDataSet)(base.Clone()));
             cln.InitVars();
+            cln.InitExpressions();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
         }
@@ -300,6 +336,12 @@ namespace Micajah.Common.Dal {
                 }
                 if ((ds.Tables["OrganizationsLdapGroups"] != null)) {
                     base.Tables.Add(new OrganizationsLdapGroupsDataTable(ds.Tables["OrganizationsLdapGroups"]));
+                }
+                if ((ds.Tables["UnitsOfMeasure"] != null)) {
+                    base.Tables.Add(new UnitsOfMeasureDataTable(ds.Tables["UnitsOfMeasure"]));
+                }
+                if ((ds.Tables["UnitsOfMeasureConversion"] != null)) {
+                    base.Tables.Add(new UnitsOfMeasureConversionDataTable(ds.Tables["UnitsOfMeasureConversion"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -388,6 +430,18 @@ namespace Micajah.Common.Dal {
                     this.tableOrganizationsLdapGroups.InitVars();
                 }
             }
+            this.tableUnitsOfMeasure = ((UnitsOfMeasureDataTable)(base.Tables["UnitsOfMeasure"]));
+            if ((initTable == true)) {
+                if ((this.tableUnitsOfMeasure != null)) {
+                    this.tableUnitsOfMeasure.InitVars();
+                }
+            }
+            this.tableUnitsOfMeasureConversion = ((UnitsOfMeasureConversionDataTable)(base.Tables["UnitsOfMeasureConversion"]));
+            if ((initTable == true)) {
+                if ((this.tableUnitsOfMeasureConversion != null)) {
+                    this.tableUnitsOfMeasureConversion.InitVars();
+                }
+            }
             this.relationFK_Mc_Resource_Mc_Resource = this.Relations["FK_Mc_Resource_Mc_Resource"];
         }
         
@@ -417,6 +471,10 @@ namespace Micajah.Common.Dal {
             base.Tables.Add(this.tableEmail);
             this.tableOrganizationsLdapGroups = new OrganizationsLdapGroupsDataTable();
             base.Tables.Add(this.tableOrganizationsLdapGroups);
+            this.tableUnitsOfMeasure = new UnitsOfMeasureDataTable(false);
+            base.Tables.Add(this.tableUnitsOfMeasure);
+            this.tableUnitsOfMeasureConversion = new UnitsOfMeasureConversionDataTable();
+            base.Tables.Add(this.tableUnitsOfMeasureConversion);
             this.relationFK_Mc_Resource_Mc_Resource = new global::System.Data.DataRelation("FK_Mc_Resource_Mc_Resource", new global::System.Data.DataColumn[] {
                         this.tableResource.ResourceIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableResource.ParentResourceIdColumn}, false);
@@ -479,6 +537,18 @@ namespace Micajah.Common.Dal {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeUnitsOfMeasure() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeUnitsOfMeasureConversion() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void SchemaChanged(object sender, global::System.ComponentModel.CollectionChangeEventArgs e) {
             if ((e.Action == global::System.ComponentModel.CollectionChangeAction.Remove)) {
                 this.InitVars();
@@ -532,6 +602,13 @@ namespace Micajah.Common.Dal {
             return type;
         }
         
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private void InitExpressions() {
+            this.UnitsOfMeasure.SingularFullNameColumn.Expression = "SingularName + \' (\' + LocalName + \')\'";
+            this.UnitsOfMeasure.PluralFullNameColumn.Expression = "PluralName + \' (\' + LocalName + \')\'";
+        }
+        
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void InvitedLoginRowChangeEventHandler(object sender, InvitedLoginRowChangeEvent e);
         
@@ -558,6 +635,12 @@ namespace Micajah.Common.Dal {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void OrganizationsLdapGroupsRowChangeEventHandler(object sender, OrganizationsLdapGroupsRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void UnitsOfMeasureRowChangeEventHandler(object sender, UnitsOfMeasureRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void UnitsOfMeasureConversionRowChangeEventHandler(object sender, UnitsOfMeasureConversionRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -3469,6 +3552,754 @@ namespace Micajah.Common.Dal {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class UnitsOfMeasureDataTable : global::System.Data.TypedTableBase<UnitsOfMeasureRow> {
+            
+            private global::System.Data.DataColumn columnUnitsOfMeasureId;
+            
+            private global::System.Data.DataColumn columnOrganizationId;
+            
+            private global::System.Data.DataColumn columnSingularName;
+            
+            private global::System.Data.DataColumn columnSingularAbbrv;
+            
+            private global::System.Data.DataColumn columnPluralName;
+            
+            private global::System.Data.DataColumn columnPluralAbbrv;
+            
+            private global::System.Data.DataColumn columnGroupName;
+            
+            private global::System.Data.DataColumn columnLocalName;
+            
+            private global::System.Data.DataColumn columnSingularFullName;
+            
+            private global::System.Data.DataColumn columnPluralFullName;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureDataTable() : 
+                    this(false) {
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureDataTable(bool initExpressions) {
+                this.TableName = "UnitsOfMeasure";
+                this.BeginInit();
+                this.InitClass();
+                if ((initExpressions == true)) {
+                    this.InitExpressions();
+                }
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal UnitsOfMeasureDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected UnitsOfMeasureDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn UnitsOfMeasureIdColumn {
+                get {
+                    return this.columnUnitsOfMeasureId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OrganizationIdColumn {
+                get {
+                    return this.columnOrganizationId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SingularNameColumn {
+                get {
+                    return this.columnSingularName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SingularAbbrvColumn {
+                get {
+                    return this.columnSingularAbbrv;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PluralNameColumn {
+                get {
+                    return this.columnPluralName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PluralAbbrvColumn {
+                get {
+                    return this.columnPluralAbbrv;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn GroupNameColumn {
+                get {
+                    return this.columnGroupName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn LocalNameColumn {
+                get {
+                    return this.columnLocalName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SingularFullNameColumn {
+                get {
+                    return this.columnSingularFullName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PluralFullNameColumn {
+                get {
+                    return this.columnPluralFullName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRow this[int index] {
+                get {
+                    return ((UnitsOfMeasureRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureRowChangeEventHandler UnitsOfMeasureRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureRowChangeEventHandler UnitsOfMeasureRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureRowChangeEventHandler UnitsOfMeasureRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureRowChangeEventHandler UnitsOfMeasureRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddUnitsOfMeasureRow(UnitsOfMeasureRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRow AddUnitsOfMeasureRow(System.Guid UnitsOfMeasureId, System.Guid OrganizationId, string SingularName, string SingularAbbrv, string PluralName, string PluralAbbrv, string GroupName, string LocalName, string SingularFullName, string PluralFullName) {
+                UnitsOfMeasureRow rowUnitsOfMeasureRow = ((UnitsOfMeasureRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        UnitsOfMeasureId,
+                        OrganizationId,
+                        SingularName,
+                        SingularAbbrv,
+                        PluralName,
+                        PluralAbbrv,
+                        GroupName,
+                        LocalName,
+                        SingularFullName,
+                        PluralFullName};
+                rowUnitsOfMeasureRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowUnitsOfMeasureRow);
+                return rowUnitsOfMeasureRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRow AddUnitsOfMeasureRow(System.Guid UnitsOfMeasureId, System.Guid OrganizationId, string SingularName, string SingularAbbrv, string PluralName, string PluralAbbrv, string GroupName, string LocalName) {
+                UnitsOfMeasureRow rowUnitsOfMeasureRow = ((UnitsOfMeasureRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        UnitsOfMeasureId,
+                        OrganizationId,
+                        SingularName,
+                        SingularAbbrv,
+                        PluralName,
+                        PluralAbbrv,
+                        GroupName,
+                        LocalName,
+                        null,
+                        null};
+                rowUnitsOfMeasureRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowUnitsOfMeasureRow);
+                return rowUnitsOfMeasureRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRow FindByUnitsOfMeasureIdOrganizationId(System.Guid UnitsOfMeasureId, System.Guid OrganizationId) {
+                return ((UnitsOfMeasureRow)(this.Rows.Find(new object[] {
+                            UnitsOfMeasureId,
+                            OrganizationId})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                UnitsOfMeasureDataTable cln = ((UnitsOfMeasureDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new UnitsOfMeasureDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnUnitsOfMeasureId = base.Columns["UnitsOfMeasureId"];
+                this.columnOrganizationId = base.Columns["OrganizationId"];
+                this.columnSingularName = base.Columns["SingularName"];
+                this.columnSingularAbbrv = base.Columns["SingularAbbrv"];
+                this.columnPluralName = base.Columns["PluralName"];
+                this.columnPluralAbbrv = base.Columns["PluralAbbrv"];
+                this.columnGroupName = base.Columns["GroupName"];
+                this.columnLocalName = base.Columns["LocalName"];
+                this.columnSingularFullName = base.Columns["SingularFullName"];
+                this.columnPluralFullName = base.Columns["PluralFullName"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnUnitsOfMeasureId = new global::System.Data.DataColumn("UnitsOfMeasureId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUnitsOfMeasureId);
+                this.columnOrganizationId = new global::System.Data.DataColumn("OrganizationId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOrganizationId);
+                this.columnSingularName = new global::System.Data.DataColumn("SingularName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSingularName);
+                this.columnSingularAbbrv = new global::System.Data.DataColumn("SingularAbbrv", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSingularAbbrv);
+                this.columnPluralName = new global::System.Data.DataColumn("PluralName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPluralName);
+                this.columnPluralAbbrv = new global::System.Data.DataColumn("PluralAbbrv", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPluralAbbrv);
+                this.columnGroupName = new global::System.Data.DataColumn("GroupName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGroupName);
+                this.columnLocalName = new global::System.Data.DataColumn("LocalName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLocalName);
+                this.columnSingularFullName = new global::System.Data.DataColumn("SingularFullName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSingularFullName);
+                this.columnPluralFullName = new global::System.Data.DataColumn("PluralFullName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPluralFullName);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnUnitsOfMeasureId,
+                                this.columnOrganizationId}, true));
+                this.columnUnitsOfMeasureId.AllowDBNull = false;
+                this.columnOrganizationId.AllowDBNull = false;
+                this.columnSingularName.AllowDBNull = false;
+                this.columnSingularName.MaxLength = 255;
+                this.columnSingularAbbrv.AllowDBNull = false;
+                this.columnSingularAbbrv.MaxLength = 50;
+                this.columnPluralName.AllowDBNull = false;
+                this.columnPluralName.MaxLength = 255;
+                this.columnPluralAbbrv.AllowDBNull = false;
+                this.columnPluralAbbrv.MaxLength = 50;
+                this.columnGroupName.AllowDBNull = false;
+                this.columnGroupName.MaxLength = 50;
+                this.columnLocalName.AllowDBNull = false;
+                this.columnLocalName.MaxLength = 50;
+                this.columnSingularFullName.AllowDBNull = false;
+                this.columnSingularFullName.ReadOnly = true;
+                this.columnSingularFullName.DefaultValue = ((string)(""));
+                this.columnSingularFullName.MaxLength = 255;
+                this.columnPluralFullName.AllowDBNull = false;
+                this.columnPluralFullName.ReadOnly = true;
+                this.columnPluralFullName.DefaultValue = ((string)(""));
+                this.columnPluralFullName.MaxLength = 255;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRow NewUnitsOfMeasureRow() {
+                return ((UnitsOfMeasureRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new UnitsOfMeasureRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(UnitsOfMeasureRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitExpressions() {
+                this.SingularFullNameColumn.Expression = "SingularName + \' (\' + LocalName + \')\'";
+                this.PluralFullNameColumn.Expression = "PluralName + \' (\' + LocalName + \')\'";
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.UnitsOfMeasureRowChanged != null)) {
+                    this.UnitsOfMeasureRowChanged(this, new UnitsOfMeasureRowChangeEvent(((UnitsOfMeasureRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.UnitsOfMeasureRowChanging != null)) {
+                    this.UnitsOfMeasureRowChanging(this, new UnitsOfMeasureRowChangeEvent(((UnitsOfMeasureRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.UnitsOfMeasureRowDeleted != null)) {
+                    this.UnitsOfMeasureRowDeleted(this, new UnitsOfMeasureRowChangeEvent(((UnitsOfMeasureRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.UnitsOfMeasureRowDeleting != null)) {
+                    this.UnitsOfMeasureRowDeleting(this, new UnitsOfMeasureRowChangeEvent(((UnitsOfMeasureRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveUnitsOfMeasureRow(UnitsOfMeasureRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                MasterDataSet ds = new MasterDataSet();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "UnitsOfMeasureDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class UnitsOfMeasureConversionDataTable : global::System.Data.TypedTableBase<UnitsOfMeasureConversionRow> {
+            
+            private global::System.Data.DataColumn columnUnitOfMeasureFrom;
+            
+            private global::System.Data.DataColumn columnUnitOfMeasureTo;
+            
+            private global::System.Data.DataColumn columnFactor;
+            
+            private global::System.Data.DataColumn columnOrganizationId;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionDataTable() {
+                this.TableName = "UnitsOfMeasureConversion";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal UnitsOfMeasureConversionDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected UnitsOfMeasureConversionDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn UnitOfMeasureFromColumn {
+                get {
+                    return this.columnUnitOfMeasureFrom;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn UnitOfMeasureToColumn {
+                get {
+                    return this.columnUnitOfMeasureTo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn FactorColumn {
+                get {
+                    return this.columnFactor;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OrganizationIdColumn {
+                get {
+                    return this.columnOrganizationId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionRow this[int index] {
+                get {
+                    return ((UnitsOfMeasureConversionRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureConversionRowChangeEventHandler UnitsOfMeasureConversionRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureConversionRowChangeEventHandler UnitsOfMeasureConversionRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureConversionRowChangeEventHandler UnitsOfMeasureConversionRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event UnitsOfMeasureConversionRowChangeEventHandler UnitsOfMeasureConversionRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddUnitsOfMeasureConversionRow(UnitsOfMeasureConversionRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionRow AddUnitsOfMeasureConversionRow(System.Guid UnitOfMeasureFrom, System.Guid UnitOfMeasureTo, double Factor, System.Guid OrganizationId) {
+                UnitsOfMeasureConversionRow rowUnitsOfMeasureConversionRow = ((UnitsOfMeasureConversionRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        UnitOfMeasureFrom,
+                        UnitOfMeasureTo,
+                        Factor,
+                        OrganizationId};
+                rowUnitsOfMeasureConversionRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowUnitsOfMeasureConversionRow);
+                return rowUnitsOfMeasureConversionRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionRow FindByOrganizationIdUnitOfMeasureToUnitOfMeasureFrom(System.Guid OrganizationId, System.Guid UnitOfMeasureTo, System.Guid UnitOfMeasureFrom) {
+                return ((UnitsOfMeasureConversionRow)(this.Rows.Find(new object[] {
+                            OrganizationId,
+                            UnitOfMeasureTo,
+                            UnitOfMeasureFrom})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                UnitsOfMeasureConversionDataTable cln = ((UnitsOfMeasureConversionDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new UnitsOfMeasureConversionDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnUnitOfMeasureFrom = base.Columns["UnitOfMeasureFrom"];
+                this.columnUnitOfMeasureTo = base.Columns["UnitOfMeasureTo"];
+                this.columnFactor = base.Columns["Factor"];
+                this.columnOrganizationId = base.Columns["OrganizationId"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnUnitOfMeasureFrom = new global::System.Data.DataColumn("UnitOfMeasureFrom", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUnitOfMeasureFrom);
+                this.columnUnitOfMeasureTo = new global::System.Data.DataColumn("UnitOfMeasureTo", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUnitOfMeasureTo);
+                this.columnFactor = new global::System.Data.DataColumn("Factor", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFactor);
+                this.columnOrganizationId = new global::System.Data.DataColumn("OrganizationId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOrganizationId);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnOrganizationId,
+                                this.columnUnitOfMeasureTo,
+                                this.columnUnitOfMeasureFrom}, true));
+                this.columnUnitOfMeasureFrom.AllowDBNull = false;
+                this.columnUnitOfMeasureTo.AllowDBNull = false;
+                this.columnFactor.AllowDBNull = false;
+                this.columnOrganizationId.AllowDBNull = false;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionRow NewUnitsOfMeasureConversionRow() {
+                return ((UnitsOfMeasureConversionRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new UnitsOfMeasureConversionRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(UnitsOfMeasureConversionRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.UnitsOfMeasureConversionRowChanged != null)) {
+                    this.UnitsOfMeasureConversionRowChanged(this, new UnitsOfMeasureConversionRowChangeEvent(((UnitsOfMeasureConversionRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.UnitsOfMeasureConversionRowChanging != null)) {
+                    this.UnitsOfMeasureConversionRowChanging(this, new UnitsOfMeasureConversionRowChangeEvent(((UnitsOfMeasureConversionRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.UnitsOfMeasureConversionRowDeleted != null)) {
+                    this.UnitsOfMeasureConversionRowDeleted(this, new UnitsOfMeasureConversionRowChangeEvent(((UnitsOfMeasureConversionRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.UnitsOfMeasureConversionRowDeleting != null)) {
+                    this.UnitsOfMeasureConversionRowDeleting(this, new UnitsOfMeasureConversionRowChangeEvent(((UnitsOfMeasureConversionRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveUnitsOfMeasureConversionRow(UnitsOfMeasureConversionRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                MasterDataSet ds = new MasterDataSet();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "UnitsOfMeasureConversionDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class InvitedLoginRow : global::System.Data.DataRow {
@@ -4301,6 +5132,190 @@ namespace Micajah.Common.Dal {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class UnitsOfMeasureRow : global::System.Data.DataRow {
+            
+            private UnitsOfMeasureDataTable tableUnitsOfMeasure;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal UnitsOfMeasureRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableUnitsOfMeasure = ((UnitsOfMeasureDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid UnitsOfMeasureId {
+                get {
+                    return ((global::System.Guid)(this[this.tableUnitsOfMeasure.UnitsOfMeasureIdColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.UnitsOfMeasureIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid OrganizationId {
+                get {
+                    return ((global::System.Guid)(this[this.tableUnitsOfMeasure.OrganizationIdColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.OrganizationIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SingularName {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.SingularNameColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.SingularNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SingularAbbrv {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.SingularAbbrvColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.SingularAbbrvColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PluralName {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.PluralNameColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.PluralNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PluralAbbrv {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.PluralAbbrvColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.PluralAbbrvColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string GroupName {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.GroupNameColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.GroupNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string LocalName {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.LocalNameColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.LocalNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SingularFullName {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.SingularFullNameColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.SingularFullNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PluralFullName {
+                get {
+                    return ((string)(this[this.tableUnitsOfMeasure.PluralFullNameColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasure.PluralFullNameColumn] = value;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class UnitsOfMeasureConversionRow : global::System.Data.DataRow {
+            
+            private UnitsOfMeasureConversionDataTable tableUnitsOfMeasureConversion;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal UnitsOfMeasureConversionRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableUnitsOfMeasureConversion = ((UnitsOfMeasureConversionDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid UnitOfMeasureFrom {
+                get {
+                    return ((global::System.Guid)(this[this.tableUnitsOfMeasureConversion.UnitOfMeasureFromColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasureConversion.UnitOfMeasureFromColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid UnitOfMeasureTo {
+                get {
+                    return ((global::System.Guid)(this[this.tableUnitsOfMeasureConversion.UnitOfMeasureToColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasureConversion.UnitOfMeasureToColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public double Factor {
+                get {
+                    return ((double)(this[this.tableUnitsOfMeasureConversion.FactorColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasureConversion.FactorColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public System.Guid OrganizationId {
+                get {
+                    return ((global::System.Guid)(this[this.tableUnitsOfMeasureConversion.OrganizationIdColumn]));
+                }
+                set {
+                    this[this.tableUnitsOfMeasureConversion.OrganizationIdColumn] = value;
+                }
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -4592,6 +5607,74 @@ namespace Micajah.Common.Dal {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public OrganizationsLdapGroupsRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class UnitsOfMeasureRowChangeEvent : global::System.EventArgs {
+            
+            private UnitsOfMeasureRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRowChangeEvent(UnitsOfMeasureRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class UnitsOfMeasureConversionRowChangeEvent : global::System.EventArgs {
+            
+            private UnitsOfMeasureConversionRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionRowChangeEvent(UnitsOfMeasureConversionRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public UnitsOfMeasureConversionRow Row {
                 get {
                     return this.eventRow;
                 }

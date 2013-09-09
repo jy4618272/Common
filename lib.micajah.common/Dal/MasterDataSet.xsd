@@ -199,6 +199,80 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="UnitsOfMeasure" msprop:Generator_TableClassName="UnitsOfMeasureDataTable" msprop:Generator_TableVarName="tableUnitsOfMeasure" msprop:Generator_RowChangedName="UnitsOfMeasureRowChanged" msprop:Generator_TablePropName="UnitsOfMeasure" msprop:Generator_RowDeletingName="UnitsOfMeasureRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureRowChanging" msprop:Generator_RowEvHandlerName="UnitsOfMeasureRowChangeEventHandler" msprop:Generator_RowDeletedName="UnitsOfMeasureRowDeleted" msprop:Generator_RowClassName="UnitsOfMeasureRow" msprop:Generator_UserTableName="UnitsOfMeasure" msprop:Generator_RowEvArgName="UnitsOfMeasureRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="UnitsOfMeasureId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitsOfMeasureId" msprop:Generator_ColumnPropNameInRow="UnitsOfMeasureId" msprop:Generator_ColumnPropNameInTable="UnitsOfMeasureIdColumn" msprop:Generator_UserColumnName="UnitsOfMeasureId" type="xs:string" />
+              <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />
+              <xs:element name="SingularName" msprop:Generator_ColumnVarNameInTable="columnSingularName" msprop:Generator_ColumnPropNameInRow="SingularName" msprop:Generator_ColumnPropNameInTable="SingularNameColumn" msprop:Generator_UserColumnName="SingularName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SingularAbbrv" msprop:nullValue="_throw" msprop:Generator_ColumnPropNameInRow="SingularAbbrv" msprop:Generator_ColumnVarNameInTable="columnSingularAbbrv" msprop:Generator_ColumnPropNameInTable="SingularAbbrvColumn" msprop:Generator_UserColumnName="SingularAbbrv">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PluralName" msprop:Generator_ColumnVarNameInTable="columnPluralName" msprop:Generator_ColumnPropNameInRow="PluralName" msprop:Generator_ColumnPropNameInTable="PluralNameColumn" msprop:Generator_UserColumnName="PluralName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PluralAbbrv" msprop:Generator_ColumnVarNameInTable="columnPluralAbbrv" msprop:Generator_ColumnPropNameInRow="PluralAbbrv" msprop:Generator_ColumnPropNameInTable="PluralAbbrvColumn" msprop:Generator_UserColumnName="PluralAbbrv">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="GroupName" msprop:Generator_ColumnVarNameInTable="columnGroupName" msprop:Generator_ColumnPropNameInRow="GroupName" msprop:Generator_ColumnPropNameInTable="GroupNameColumn" msprop:Generator_UserColumnName="GroupName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="LocalName" msprop:Generator_ColumnVarNameInTable="columnLocalName" msprop:Generator_ColumnPropNameInRow="LocalName" msprop:Generator_ColumnPropNameInTable="LocalNameColumn" msprop:Generator_UserColumnName="LocalName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SingularFullName" msdata:ReadOnly="true" msdata:Expression="SingularName + ' (' + LocalName + ')'" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="SingularFullName" msprop:Generator_ColumnVarNameInTable="columnSingularFullName" msprop:Generator_ColumnPropNameInTable="SingularFullNameColumn" msprop:Generator_UserColumnName="SingularFullName" default="">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PluralFullName" msdata:ReadOnly="true" msdata:Expression="PluralName + ' (' + LocalName + ')'" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="PluralFullName" msprop:Generator_ColumnVarNameInTable="columnPluralFullName" msprop:Generator_ColumnPropNameInTable="PluralFullNameColumn" msprop:Generator_UserColumnName="PluralFullName" default="">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="UnitsOfMeasureConversion" msprop:Generator_TableClassName="UnitsOfMeasureConversionDataTable" msprop:Generator_TableVarName="tableUnitsOfMeasureConversion" msprop:Generator_RowChangedName="UnitsOfMeasureConversionRowChanged" msprop:Generator_TablePropName="UnitsOfMeasureConversion" msprop:Generator_RowDeletingName="UnitsOfMeasureConversionRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureConversionRowChanging" msprop:Generator_RowEvHandlerName="UnitsOfMeasureConversionRowChangeEventHandler" msprop:Generator_RowDeletedName="UnitsOfMeasureConversionRowDeleted" msprop:Generator_RowClassName="UnitsOfMeasureConversionRow" msprop:Generator_UserTableName="UnitsOfMeasureConversion" msprop:Generator_RowEvArgName="UnitsOfMeasureConversionRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="UnitOfMeasureFrom" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitOfMeasureFrom" msprop:Generator_ColumnPropNameInRow="UnitOfMeasureFrom" msprop:Generator_ColumnPropNameInTable="UnitOfMeasureFromColumn" msprop:Generator_UserColumnName="UnitOfMeasureFrom" type="xs:string" />
+              <xs:element name="UnitOfMeasureTo" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitOfMeasureTo" msprop:Generator_ColumnPropNameInRow="UnitOfMeasureTo" msprop:Generator_ColumnPropNameInTable="UnitOfMeasureToColumn" msprop:Generator_UserColumnName="UnitOfMeasureTo" type="xs:string" />
+              <xs:element name="Factor" msprop:Generator_ColumnVarNameInTable="columnFactor" msprop:Generator_ColumnPropNameInRow="Factor" msprop:Generator_ColumnPropNameInTable="FactorColumn" msprop:Generator_UserColumnName="Factor" type="xs:double" />
+              <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
@@ -228,6 +302,17 @@
     <xs:unique name="OrganizationsLdapGroups_Constraint1" msdata:ConstraintName="Constraint1">
       <xs:selector xpath=".//mstns:OrganizationsLdapGroups" />
       <xs:field xpath="mstns:Id" />
+    </xs:unique>
+    <xs:unique name="UnitsOfMeasure_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:UnitsOfMeasure" />
+      <xs:field xpath="mstns:UnitsOfMeasureId" />
+      <xs:field xpath="mstns:OrganizationId" />
+    </xs:unique>
+    <xs:unique name="UnitsOfMeasureConversion_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:UnitsOfMeasureConversion" />
+      <xs:field xpath="mstns:OrganizationId" />
+      <xs:field xpath="mstns:UnitOfMeasureTo" />
+      <xs:field xpath="mstns:UnitOfMeasureFrom" />
     </xs:unique>
   </xs:element>
   <xs:annotation>

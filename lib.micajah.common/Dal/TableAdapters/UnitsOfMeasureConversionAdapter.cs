@@ -18,9 +18,9 @@ namespace Micajah.Common.Dal.TableAdapters
             TableName = TableName.UnitsOfMeasureConversion;
             TableMapping.ColumnMappings.Add("UnitOfMeasureFrom", "UnitOfMeasureFrom");
             TableMapping.ColumnMappings.Add("UnitOfMeasureTo", "UnitOfMeasureTo");
-            TableMapping.ColumnMappings.Add("OrganizationId", "OrganizationId"); 
+            TableMapping.ColumnMappings.Add("OrganizationId", "OrganizationId");
             TableMapping.ColumnMappings.Add("Factor", "Factor");
-            
+
             #endregion
 
             #region InsertCommand
@@ -52,16 +52,35 @@ namespace Micajah.Common.Dal.TableAdapters
             DeleteCommand.Parameters.Add(new SqlParameter("@UnitOfMeasureFrom", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureFrom", DataRowVersion.Current, false, null, "", "", ""));
             DeleteCommand.Parameters.Add(new SqlParameter("@UnitOfMeasureTo", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureTo", DataRowVersion.Current, false, null, "", "", ""));
             DeleteCommand.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
-            
+
             #endregion
 
-            #region SelectCommand
+            #region SelectCommands
 
             SelectCommand.CommandText = "dbo.Mc_GetUnitsOfMeasureConversion";
             SelectCommand.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
             SelectCommand.Parameters.Add(new SqlParameter("@UnitOfMeasureFrom", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureFrom", DataRowVersion.Current, false, null, "", "", ""));
             SelectCommand.Parameters.Add(new SqlParameter("@UnitOfMeasureTo", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureTo", DataRowVersion.Current, false, null, "", "", ""));
-            
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetUnitOfMeasureConversionByOrganizationId"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@UnitOfMeasureFrom", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureFrom", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@UnitOfMeasureTo", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureTo", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
+            using (SqlCommand command = new SqlCommand("dbo.Mc_GetUnitOfMeasureConversionFromByOrganizationId"))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Variant, 0, ParameterDirection.ReturnValue, 0, 0, null, DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@UnitOfMeasureFrom", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "UnitOfMeasureFrom", DataRowVersion.Current, false, null, "", "", ""));
+                command.Parameters.Add(new SqlParameter("@OrganizationId", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, 0, 0, "OrganizationId", DataRowVersion.Current, false, null, "", "", ""));
+                SelectCommands.Add(command);
+            }
+
             #endregion
         }
 
