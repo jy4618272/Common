@@ -65,16 +65,19 @@ namespace Micajah.Common.Bll.Handlers
                     accessDenied = ActionProvider.AccessDeniedToSettingsDiagnosticPage();
                 else if ((action.ActionId == ActionProvider.SetupEntitiesPageActionId)
                     || (action.ActionId == ActionProvider.EntitiesFieldsPageActionId)
-                    || (action.ActionId == ActionProvider.EntityFieldsPageActionId))
-                    accessDenied = (WebApplication.Entities.FindAllByEnableHierarchy(false).Count == 0);
+                    || (action.ActionId == ActionProvider.EntityFieldsPageActionId)
+                    || (action.ActionId == ActionProvider.EntityFieldListsValuesPageActionId))
+                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.Entities.FindAllByEnableHierarchy(false).Count == 0));
                 else if (action.ActionId == ActionProvider.UserAssociateToOrganizationStructurePageActionId)
-                    accessDenied = (WebApplication.Entities["4cda22f3-4f01-4768-8608-938dc6a06825"] == null);
+                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.Entities["4cda22f3-4f01-4768-8608-938dc6a06825"] == null));
                 else if ((action.ActionId == ActionProvider.RulesEnginePageActionId)
                     || (action.ActionId == ActionProvider.RulesPageActionId)
                     || (action.ActionId == ActionProvider.RuleParametersPageActionId))
-                    accessDenied = (WebApplication.RulesEngines.Count == 0);
-                else if (action.ActionId == ActionProvider.TreesPageActionId)
-                    accessDenied = (WebApplication.Entities.FindAllByEnableHierarchy(true).Count == 0);
+                    accessDenied = ((!FrameworkConfiguration.Current.RulesEngines.Enabled) || (!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.RulesEngines.Count == 0));
+                else if ((action.ActionId == ActionProvider.TreesPageActionId)
+                    || (action.ActionId == ActionProvider.TreePageActionId)
+                    || (action.ActionId == ActionProvider.NodeTypePageActionId))
+                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.Entities.FindAllByEnableHierarchy(true).Count == 0));
                 else if (action.ActionId == ActionProvider.InstancesPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances);
                 else if (action.ActionId == ActionProvider.CustomUrlsPageActionId)
@@ -107,6 +110,11 @@ namespace Micajah.Common.Bll.Handlers
                 {
                     UserContext user = UserContext.Current;
                     accessDenied = (!((user != null) && user.CanLogOnAsUser && (user.SelectedOrganizationId == Guid.Empty)));
+                }
+                else if (ActionProvider.IsSetupPage(action))
+                {
+                    UserContext user = UserContext.Current;
+                    accessDenied = (!((user != null) && user.IsFrameworkAdministrator && (user.SelectedOrganizationId == Guid.Empty)));
                 }
             }
 

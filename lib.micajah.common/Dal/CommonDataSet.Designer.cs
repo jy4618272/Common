@@ -805,6 +805,8 @@ namespace Micajah.Common.Dal {
             
             private global::System.Data.DataColumn columnAuthenticationRequired;
             
+            private global::System.Data.DataColumn columnOrganizationRequired;
+            
             private global::System.Data.DataColumn columnInstanceRequired;
             
             private global::System.Data.DataColumn columnVisible;
@@ -984,6 +986,14 @@ namespace Micajah.Common.Dal {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OrganizationRequiredColumn {
+                get {
+                    return this.columnOrganizationRequired;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn InstanceRequiredColumn {
                 get {
                     return this.columnInstanceRequired;
@@ -1131,6 +1141,7 @@ namespace Micajah.Common.Dal {
                         string VideoUrl, 
                         int OrderNumber, 
                         bool AuthenticationRequired, 
+                        bool OrganizationRequired, 
                         bool InstanceRequired, 
                         bool Visible, 
                         bool ShowInDetailMenu, 
@@ -1160,6 +1171,7 @@ namespace Micajah.Common.Dal {
                         VideoUrl,
                         OrderNumber,
                         AuthenticationRequired,
+                        OrganizationRequired,
                         InstanceRequired,
                         Visible,
                         ShowInDetailMenu,
@@ -1219,6 +1231,7 @@ namespace Micajah.Common.Dal {
                 this.columnVideoUrl = base.Columns["VideoUrl"];
                 this.columnOrderNumber = base.Columns["OrderNumber"];
                 this.columnAuthenticationRequired = base.Columns["AuthenticationRequired"];
+                this.columnOrganizationRequired = base.Columns["OrganizationRequired"];
                 this.columnInstanceRequired = base.Columns["InstanceRequired"];
                 this.columnVisible = base.Columns["Visible"];
                 this.columnShowInDetailMenu = base.Columns["ShowInDetailMenu"];
@@ -1266,6 +1279,8 @@ namespace Micajah.Common.Dal {
                 base.Columns.Add(this.columnOrderNumber);
                 this.columnAuthenticationRequired = new global::System.Data.DataColumn("AuthenticationRequired", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAuthenticationRequired);
+                this.columnOrganizationRequired = new global::System.Data.DataColumn("OrganizationRequired", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOrganizationRequired);
                 this.columnInstanceRequired = new global::System.Data.DataColumn("InstanceRequired", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnInstanceRequired);
                 this.columnVisible = new global::System.Data.DataColumn("Visible", typeof(bool), null, global::System.Data.MappingType.Element);
@@ -1318,6 +1333,8 @@ namespace Micajah.Common.Dal {
                 this.columnOrderNumber.DefaultValue = ((int)(0));
                 this.columnAuthenticationRequired.AllowDBNull = false;
                 this.columnAuthenticationRequired.DefaultValue = ((bool)(false));
+                this.columnOrganizationRequired.AllowDBNull = false;
+                this.columnOrganizationRequired.DefaultValue = ((bool)(true));
                 this.columnInstanceRequired.AllowDBNull = false;
                 this.columnInstanceRequired.DefaultValue = ((bool)(true));
                 this.columnVisible.AllowDBNull = false;
@@ -6229,6 +6246,17 @@ namespace Micajah.Common.Dal {
                 }
                 set {
                     this[this.tableAction.AuthenticationRequiredColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool OrganizationRequired {
+                get {
+                    return ((bool)(this[this.tableAction.OrganizationRequiredColumn]));
+                }
+                set {
+                    this[this.tableAction.OrganizationRequiredColumn] = value;
                 }
             }
             

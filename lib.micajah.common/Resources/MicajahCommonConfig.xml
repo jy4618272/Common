@@ -4,11 +4,11 @@
     <role id="00000000-0000-0000-0000-000000000002" name="Instance Administrator" description="Built-in Role for administering the Instance" shortName="InstAdmin" rank="2" startPageId="00000000-0000-0000-0000-000000000015" />
   </roles>
   <actions>
-    <action id="D576595D-3F88-42D8-B76B-36907653CDE6" type="Page" name="Resource Handler" navigateUrl="/mc.axd" authenticationRequired="false" instanceRequired="false" visible="false" />
+    <action id="D576595D-3F88-42D8-B76B-36907653CDE6" type="Page" name="Resource Handler" navigateUrl="/mc.axd" instanceRequired="false" visible="false" />
     <action id="48D41DA0-AFB4-46CC-AE22-10BA269D1304" type="Page" name="Select Organization" navigateUrl="/mc/activeorganization.aspx" authenticationRequired="true" instanceRequired="false" visible="false" />
     <action id="AB6741E3-7D2D-4BB3-9BB7-E2DB26AACA63" type="Page" name="Select Instance" navigateUrl="/mc/activeinstance.aspx" authenticationRequired="true" instanceRequired="false" visible="false" />
     <action id="5900F3EF-F423-4AC8-BAA5-828B746E3F43" type="Page" name="Permissions" navigateUrl="/mc/oauth.aspx" authenticationRequired="true" visible="false" roles="*" />
-    <action id="13303E59-B780-421E-BF76-DF83D4DB24FE" type="Page" name="OAuth Handler" navigateUrl="/mc/oauth.ashx" authenticationRequired="false" instanceRequired="false" visible="false" />
+    <action id="13303E59-B780-421E-BF76-DF83D4DB24FE" type="Page" name="OAuth Handler" navigateUrl="/mc/oauth.ashx" instanceRequired="false" visible="false" />
     <action id="EF1FAD4E-60EF-443F-AE42-FE6BE89283A2" type="Page" name="Reset Password" navigateUrl="/mc/resetpassword.aspx" instanceRequired="false" visible="false" />
     <action id="9851FE58-B27B-408E-9D33-60419B300D5B" type="Page" name="Password Recovery" navigateUrl="/mc/passwordrecovery.aspx" instanceRequired="false" visible="false" />
     <action id="1896F722-B3D8-49C7-A531-57597E2BF5DC" type="Page" name="Sign Up User" navigateUrl="/mc/signupuser.aspx" instanceRequired="false" visible="false" />
@@ -16,24 +16,24 @@
     <action id="90B6CA7C-A042-406F-8D3B-1F3BB40191D5" type="Page" name="Detail Menu" navigateUrl="/mc/detailmenu.aspx" instanceRequired="false" visible="false" />
     <action id="DE48276A-8CBB-41FC-96C9-88F9809D416F" type="Page" name="Image Upload" navigateUrl="/mc/imageupload.aspx" instanceRequired="false" visible="false" />
     <action id="D230A5A8-CE26-4251-B51B-3135E033A06F" type="Page" name="Support" navigateUrl="/mc/support.aspx" instanceRequired="false" visible="false" />
-    <action id="00000000-0000-0000-0000-000000000027" type="Page" name="MC Setup" description="Micajah.Common Setup" navigateUrl="" authenticationRequired="true" instanceRequired="false" visible="false">
+    <action id="00000000-0000-0000-0000-000000000027" type="Page" name="MC Setup" description="Micajah.Common Setup" navigateUrl="" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" visible="false">
       <detailMenu show="false" />
       <actions>
-        <action id="00000000-0000-0000-0000-000000000028" type="Page" name="Framework" description="Framework information and management" navigateUrl="/mc/setup/framework.aspx" orderNumber="1" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000008" type="Page" name="Entities" description="The Entities which are registered in the Framework" navigateUrl="/mc/setup/entities.aspx" orderNumber="3" handle="true" authenticationRequired="true" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000030" type="Page" name="Actions" description="View the Actions" navigateUrl="/mc/setup/actions.aspx" orderNumber="4" authenticationRequired="true" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000031" type="Page" name="Roles" description="View the Roles" navigateUrl="/mc/setup/roles.aspx" orderNumber="5" authenticationRequired="true" instanceRequired="false">
+        <action id="00000000-0000-0000-0000-000000000028" type="Page" name="Framework" description="Framework information and management" navigateUrl="/mc/setup/framework.aspx" orderNumber="1" organizationRequired="false" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000008" type="Page" name="Entities" description="The Entities which are registered in the Framework" navigateUrl="/mc/setup/entities.aspx" orderNumber="3" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000030" type="Page" name="Actions" description="View the Actions" navigateUrl="/mc/setup/actions.aspx" orderNumber="4" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000031" type="Page" name="Roles" description="View the Roles" navigateUrl="/mc/setup/roles.aspx" orderNumber="5" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false">
           <actions>
-            <action id="00000000-0000-0000-0000-000000000032" type="Page" name="View Role" description="View Role" navigateUrl="/mc/setup/roleedit.aspx" authenticationRequired="true" instanceRequired="false">
+            <action id="00000000-0000-0000-0000-000000000032" type="Page" name="View Role" description="View Role" navigateUrl="/mc/setup/roleedit.aspx" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false">
               <detailMenu show="false" />
             </action>
           </actions>
         </action>
-        <action id="00000000-0000-0000-0000-000000000037" type="Page" name="Websites" description="Manage the Websites" navigateUrl="/mc/setup/websites.aspx" orderNumber="7" authenticationRequired="true" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000038" type="Page" name="Database Servers" description="Manage the Database Servers" navigateUrl="/mc/setup/databaseservers.aspx" orderNumber="8" authenticationRequired="true" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000039" type="Page" name="Databases" description="Manage the Databases" navigateUrl="/mc/setup/databases.aspx" orderNumber="9" authenticationRequired="true" instanceRequired="false" />
-        <action id="00000000-0000-0000-0000-000000000040" type="Page" name="Organizations" description="Manage the Organizations" navigateUrl="/mc/setup/organizations.aspx" orderNumber="10" authenticationRequired="true" instanceRequired="false" />
-        <action id="7062A21C-BA40-4A8F-9F33-DA68751E4F0D" type="Page" name="Activity Report" description="Build Application Accounts Activity Report" navigateUrl="/mc/setup/activityreport.aspx" orderNumber="11" handle="true" authenticationRequired="true" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000037" type="Page" name="Websites" description="Manage the Websites" navigateUrl="/mc/setup/websites.aspx" handle="true" orderNumber="7" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000038" type="Page" name="Database Servers" description="Manage the Database Servers" navigateUrl="/mc/setup/databaseservers.aspx" handle="true" orderNumber="8" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000039" type="Page" name="Databases" description="Manage the Databases" navigateUrl="/mc/setup/databases.aspx" orderNumber="9" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
+        <action id="00000000-0000-0000-0000-000000000040" type="Page" name="Organizations" description="Manage the Organizations" navigateUrl="/mc/setup/organizations.aspx" handle="true" orderNumber="10" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
+        <action id="7062A21C-BA40-4A8F-9F33-DA68751E4F0D" type="Page" name="Activity Report" description="Build Application Accounts Activity Report" navigateUrl="/mc/setup/activityreport.aspx" handle="true" orderNumber="11" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
       </actions>
     </action>
     <action id="00000000-0000-0000-0000-000000000021" type="Page" name="My Account" description="Edit personal settings" navigateUrl="" handle="true" authenticationRequired="true" instanceRequired="false" visible="false" roles="*">
@@ -73,9 +73,9 @@
             <action id="00000000-0000-0000-0000-000000000020" type="Page" name="CSS Style Override" description="CSS Style Override" navigateUrl="/mc/admin/customstylesheetedit.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
             <action id="5A25507B-F8B2-4D5C-AC70-71A0DD5C8729" type="Page" name="Custom Fields" description="Manage the Custom Fields of the Entities" navigateUrl="/mc/admin/entitiesfields.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
               <actions>
-                <action id="6E03B1C3-7AD0-460B-BF73-E3F9055A71DE" type="Page" name="Entity Custom Fields" description="Manage the Custom Fields of the Entity" navigateUrl="/mc/admin/entityfields.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
+                <action id="6E03B1C3-7AD0-460B-BF73-E3F9055A71DE" type="Page" name="Entity Custom Fields" description="Manage the Custom Fields of the Entity" navigateUrl="/mc/admin/entityfields.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
                   <actions>
-                    <action id="A058B233-203B-472C-8D15-86A353ADD11A" type="Page" name="Custom Field Values" description="Manage the Values of the Custom Field" navigateUrl="/mc/admin/entityfieldlistvalues.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" alternativeParents="F813370C-B0AA-4D7D-A6AB-B8CE4EA7F771"/>
+                    <action id="A058B233-203B-472C-8D15-86A353ADD11A" type="Page" name="Custom Field Values" description="Manage the Values of the Custom Field" navigateUrl="/mc/admin/entityfieldlistvalues.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" alternativeParents="F813370C-B0AA-4D7D-A6AB-B8CE4EA7F771"/>
                   </actions>
                 </action>
               </actions>
@@ -121,8 +121,8 @@
             </action>
             <action id="B3CCC73F-7194-4F0A-AABB-77AE91E31CE9" type="Page" name="Trees" description="Manage the Trees" navigateUrl="/mc/admin/trees.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
               <actions>
-                <action id="8375FC0A-4A82-46F1-B9D8-E53918E4FB42" type="Page" name="Node Types" description="Node Types" navigateUrl="/mc/admin/nodetype.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
-                <action id="7D20C2C0-09DC-4399-89D0-FE16757FF169" type="Page" name="Tree" description="Manage the Tree" navigateUrl="/mc/admin/tree.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
+                <action id="8375FC0A-4A82-46F1-B9D8-E53918E4FB42" type="Page" name="Node Types" description="Node Types" navigateUrl="/mc/admin/nodetype.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
+                <action id="7D20C2C0-09DC-4399-89D0-FE16757FF169" type="Page" name="Tree" description="Manage the Tree" navigateUrl="/mc/admin/tree.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
               </actions>
             </action>
             <action id="EC76EC60-F654-49DD-88FA-84472B9B5727" type="Page" name="Logos" description="Manage the organisation and all instances logos" navigateUrl="/mc/admin/logos.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
@@ -169,7 +169,7 @@
         <action id="00000000-0000-0000-0000-000000000002" type="GlobalNavigationLink" name="Configuration" description="Configuration" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000009" orderNumber="1" authenticationRequired="true" instanceRequired="false" handle="true" roles="OrgAdmin,InstAdmin" />
         <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="2" authenticationRequired="true" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000005" type="GlobalNavigationLink" name="My Profile" description="Edit personal settings" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" orderNumber="11000" authenticationRequired="true" instanceRequired="false" handle="true" roles="*" />
-        <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="11001" authenticationRequired="true" instanceRequired="false" handle="true" />
+        <action id="709A6B39-36A2-43FC-AF18-24C2E3332D7A" type="GlobalNavigationLink" name="Log In as User" description="Log In as another User" navigateUrl="/mc/security/loginasuser.aspx" orderNumber="11001" authenticationRequired="true" organizationRequired="false" instanceRequired="false" handle="true" />
         <action id="00000000-0000-0000-0000-000000000006" type="GlobalNavigationLink" name="Log Out" description="Log Out" navigateUrl="/mc/logoff.aspx" orderNumber="11002" authenticationRequired="true" instanceRequired="false" roles="*" />
       </actions>
     </action>

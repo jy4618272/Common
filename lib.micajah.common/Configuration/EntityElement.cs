@@ -101,5 +101,18 @@ namespace Micajah.Common.Configuration
     [ConfigurationCollection(typeof(EntityElement), AddItemName = "entity")]
     public class EntityElementCollection : BaseConfigurationElementCollection<EntityElement>
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the vale whether the entities are enabled in the application.
+        /// </summary>
+        [ConfigurationProperty("enabled", DefaultValue = true)]
+        public bool Enabled
+        {
+            get { return (bool)this["enabled"]; }
+            set { this["enabled"] = value; }
+        }
+
+        #endregion
     }
 }

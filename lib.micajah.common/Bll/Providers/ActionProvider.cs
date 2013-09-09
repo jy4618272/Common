@@ -1,7 +1,6 @@
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Security;
 using Micajah.Common.WebControls;
 using System;
 using System.Collections;
@@ -341,6 +340,7 @@ namespace Micajah.Common.Bll.Providers
             row.NavigateUrl = action.NavigateUrl;
             row.OrderNumber = action.OrderNumber;
             row.AuthenticationRequired = action.AuthenticationRequired;
+            row.OrganizationRequired = action.OrganizationRequired;
             row.InstanceRequired = action.InstanceRequired;
             row.Visible = action.Visible;
 
@@ -535,6 +535,7 @@ namespace Micajah.Common.Bll.Providers
                 action.VideoUrl = row.VideoUrl;
                 action.OrderNumber = row.OrderNumber;
                 action.AuthenticationRequired = row.AuthenticationRequired;
+                action.OrganizationRequired = row.OrganizationRequired;
                 action.InstanceRequired = row.InstanceRequired;
                 action.Visible = row.Visible;
                 action.ShowInDetailMenu = row.ShowInDetailMenu;

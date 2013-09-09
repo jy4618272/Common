@@ -245,6 +245,11 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets or sets a value that indicates whether the action requires the selected instance.
         /// </summary>
+        public bool OrganizationRequired { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether the action requires the selected instance.
+        /// </summary>
         public bool InstanceRequired
         {
             get { return m_InstanceRequired; }

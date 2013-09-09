@@ -76,7 +76,6 @@ namespace Micajah.Common.Pages
         private Micajah.Common.Bll.Action m_ActiveAction;
 
         private bool? m_IsDetailMenuPage;
-        private bool? m_IsSetupPage;
         private bool? m_IsSettingPage;
         private bool m_LogoIsLoaded;
         private bool? m_ShowLeftArea;
@@ -747,19 +746,6 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
-        /// Gets a value that indicates the current page is setup page.
-        /// </summary>
-        public bool IsSetupPage
-        {
-            get
-            {
-                if (!m_IsSetupPage.HasValue)
-                    m_IsSetupPage = ((this.ActiveAction != null) && (ActionProvider.IsSetupPage(m_ActiveAction) || (m_ActiveAction.ActionId == ActionProvider.LoginAsUserGlobalNavigationLinkActionId)));
-                return m_IsSetupPage.Value;
-            }
-        }
-
-        /// <summary>
         /// Gets a value that indicates the current page is setting page.
         /// </summary>
         public bool IsSettingPage
@@ -1229,7 +1215,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         private void CheckAccessToPage()
         {
-            CheckAccessToPage(Context, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated, m_OrganizationId, m_InstanceId, this.ActiveAction, this.IsSetupPage);
+            CheckAccessToPage(Context, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated, m_OrganizationId, m_InstanceId, this.ActiveAction);
         }
 
         private void SetAccessToControls(Micajah.Common.Bll.Action item, Control control)
@@ -1288,62 +1274,53 @@ namespace Micajah.Common.Pages
 
         #region Internal Methods
 
-        internal static void CheckAccessToPage(HttpContext http, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated, Guid organizationId, Guid instanceId, Micajah.Common.Bll.Action action, bool isSetupPage)
+        internal static void CheckAccessToPage(HttpContext http, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated, Guid organizationId, Guid instanceId, Micajah.Common.Bll.Action action)
         {
-            if (isSetupPage)
+            if (action != null)
             {
-                if ((string.Compare(http.Request.AppRelativeCurrentExecutionFilePath, ResourceProvider.FrameworkPageVirtualPath, StringComparison.OrdinalIgnoreCase) != 0)
-                    && (!isFrameworkAdmin))
+                if (action.GroupInDetailMenu)
                     throw new HttpException(404, Resources.Error_404);
+                else if (!action.AuthenticationRequired)
+                    return;
             }
             else
             {
-                if (action != null)
-                {
-                    if (action.GroupInDetailMenu)
-                        throw new HttpException(404, Resources.Error_404);
-                    else if (!action.AuthenticationRequired)
-                        return;
-                }
+                if (http.SkipAuthorization)
+                    return;
                 else
-                {
-                    if (http.SkipAuthorization)
-                        return;
-                    else
-                        throw new HttpException(404, Resources.Error_404_ActionNotFound);
-                }
-
-                bool accessDenied = false;
-                string redirectUrl = null;
-                string returnUrl = http.Request.Url.PathAndQuery;
-
-                if (isAuthenticated)
-                {
-                    if (organizationId == Guid.Empty)
-                        redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
-                    else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && action.InstanceRequired && (instanceId == Guid.Empty))
-                        redirectUrl = ResourceProvider.GetActiveInstanceUrl(returnUrl);
-                    else if (action.ActionType == ActionType.Page || action.ActionType == ActionType.GlobalNavigationLink)
-                    {
-                        accessDenied = action.AccessDenied();
-                        if (!accessDenied)
-                            accessDenied = (!ActionProvider.ShowAction(action, actionIdList, isFrameworkAdmin, isAuthenticated));
-                    }
-                }
-                else
-                    accessDenied = true;
-
-                if (accessDenied)
-                {
-                    if (isAuthenticated)
-                        throw new HttpException(403, Resources.Error_403);
-                    else
-                        redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
-                }
-
-                if (!string.IsNullOrEmpty(redirectUrl))
-                    http.Response.Redirect(redirectUrl);
+                    throw new HttpException(404, Resources.Error_404_ActionNotFound);
             }
+
+            bool accessDenied = false;
+            string redirectUrl = null;
+            string returnUrl = http.Request.Url.PathAndQuery;
+
+            if (isAuthenticated)
+            {
+                if (action.OrganizationRequired && organizationId == Guid.Empty)
+                    redirectUrl = ResourceProvider.GetActiveOrganizationUrl(returnUrl);
+                else if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && action.InstanceRequired && (instanceId == Guid.Empty))
+                    redirectUrl = ResourceProvider.GetActiveInstanceUrl(returnUrl);
+                else if (action.ActionType == ActionType.Page || action.ActionType == ActionType.GlobalNavigationLink)
+                {
+                    accessDenied = action.AccessDenied();
+                    if (!accessDenied)
+                        accessDenied = (!ActionProvider.ShowAction(action, actionIdList, isFrameworkAdmin, isAuthenticated));
+                }
+            }
+            else
+                accessDenied = true;
+
+            if (accessDenied)
+            {
+                if (isAuthenticated)
+                    throw new HttpException(403, Resources.Error_403);
+                else
+                    redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
+            }
+
+            if (!string.IsNullOrEmpty(redirectUrl))
+                http.Response.Redirect(redirectUrl);
         }
 
         internal static Micajah.Common.Pages.MasterPage GetMasterPage(Page page)

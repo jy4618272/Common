@@ -92,5 +92,18 @@ namespace Micajah.Common.Configuration
     [ConfigurationCollection(typeof(RulesEngineElement), AddItemName = "rulesEngine")]
     public class RulesEngineElementCollection : BaseConfigurationElementCollection<RulesEngineElement>
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the vale whether the rules engine is enabled in the application.
+        /// </summary>
+        [ConfigurationProperty("enabled", DefaultValue = true)]
+        public bool Enabled
+        {
+            get { return (bool)this["enabled"]; }
+            set { this["enabled"] = value; }
+        }
+
+        #endregion
     }
 }

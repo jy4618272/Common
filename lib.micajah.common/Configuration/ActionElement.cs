@@ -176,7 +176,17 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the action requires the authentication.
+        /// Gets or sets a value that indicates whether the action requires the selected organization.
+        /// </summary>
+        [ConfigurationProperty("organizationRequired", DefaultValue = true)]
+        public bool OrganizationRequired
+        {
+            get { return (bool)this["organizationRequired"]; }
+            set { this["organizationRequired"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether the action requires the selected instance.
         /// </summary>
         public bool InstanceRequired
         {
@@ -345,6 +355,7 @@ namespace Micajah.Common.Configuration
                 this.NavigateUrl = action.NavigateUrl;
             this.OrderNumber = action.OrderNumber;
             this.AuthenticationRequired = action.AuthenticationRequired;
+            this.OrganizationRequired = action.OrganizationRequired;
             if (!m_OriginalInstanceRequired.HasValue)
                 this.InstanceRequired = action.InstanceRequired;
             if (!m_OriginalVisible.HasValue)
