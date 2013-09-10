@@ -77,6 +77,7 @@ namespace Micajah.Common.Pages
 
         private bool? m_IsDetailMenuPage;
         private bool? m_IsSettingPage;
+        private bool? m_IsSetupPage;
         private bool m_LogoIsLoaded;
         private bool? m_ShowLeftArea;
         private bool m_UpdateBreadcrumbs;
@@ -767,6 +768,19 @@ namespace Micajah.Common.Pages
             {
                 return ((Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1)
                     && ((this.ActiveAction != null) && (m_ActiveAction.ActionId != ActionProvider.StartPageActionId)));
+            }
+        }
+
+        /// <summary>
+        /// Gets a value that indicates the current page is setup page.
+        /// </summary>
+        public bool IsSetupPage
+        {
+            get
+            {
+                if (!m_IsSetupPage.HasValue)
+                    m_IsSetupPage = ((this.ActiveAction != null) && ActionProvider.IsSetupPage(m_ActiveAction));
+                return m_IsSetupPage.Value;
             }
         }
 
