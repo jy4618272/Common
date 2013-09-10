@@ -743,7 +743,8 @@ namespace Micajah.Common.Pages
             get
             {
                 return ((Request.AppRelativeCurrentExecutionFilePath.IndexOf(ResourceProvider.AdminVirtualRootShortPath, StringComparison.OrdinalIgnoreCase) > -1)
-                    && ((this.ActiveAction != null) && (m_ActiveAction.ActionId != ActionProvider.StartPageActionId)));
+                    && ((this.ActiveAction != null) && (m_ActiveAction.ActionId != ActionProvider.StartPageActionId)))
+                    || ((this.ActiveAction != null) && (m_ActiveAction.ActionId == ActionProvider.ConfigurationPageActionId));
             }
         }
 
@@ -896,15 +897,18 @@ namespace Micajah.Common.Pages
                 Controls.Add(m_MainMenu);
             }
 
-            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern) && this.IsAdminPage)
+            if (this.IsAdminPage)
             {
-                this.SubmenuParentActionId = ActionProvider.ConfigurationPageActionId;
-                this.SubmenuPosition = WebControls.SubmenuPosition.Left;
-                this.VisibleLeftArea = this.VisibleSubmenu = true;
-            }
-            else
-            {
-                this.VisibleLeftArea = this.VisibleSubmenu = false;
+                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                {
+                    this.SubmenuParentActionId = ActionProvider.ConfigurationPageActionId;
+                    this.SubmenuPosition = WebControls.SubmenuPosition.Left;
+                    this.VisibleLeftArea = this.VisibleSubmenu = true;
+                }
+                else
+                {
+                    this.VisibleLeftArea = this.VisibleSubmenu = false;
+                }
             }
 
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)
