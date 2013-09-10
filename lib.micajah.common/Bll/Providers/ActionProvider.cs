@@ -157,7 +157,7 @@ namespace Micajah.Common.Bll.Providers
             get
             {
                 CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action;
-                return (table.Select(string.Concat(table.BuiltInColumn.ColumnName, " = 1")).Length == 0);
+                return (table.Select(string.Concat(table.BuiltInColumn.ColumnName, " = 0")).Length == 0);
             }
         }
 
