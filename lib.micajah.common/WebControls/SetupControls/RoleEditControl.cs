@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
@@ -121,7 +120,7 @@ namespace Micajah.Common.WebControls.SetupControls
             if (!IsPostBack)
             {
                 bool editMode = (this.RoleId != Guid.Empty);
-                if (RoleProvider.IsBuiltIn(this.RoleId) || (editMode && (WebApplication.CommonDataSet.Role.FindByRoleId(RoleId) == null)))
+                if (RoleProvider.IsBuiltIn(this.RoleId) || (editMode && (RoleProvider.GetRoleRow(RoleId) == null)))
                     this.RedirectToRolePage();
 
                 LoadResources();

@@ -52,7 +52,7 @@ namespace Micajah.Common.Bll
         private Action m_ParentMainMenuAction;
         private ActionCollection m_ChildActions;
         private ActionCollection m_ChildControls;
-        private ActionCollection m_AlternativeParentActions;
+        private List<Guid> m_AlternativeParentActions;
 
         #endregion
 
@@ -373,7 +373,8 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                if (m_ChildActions == null) m_ChildActions = new ActionCollection();
+                if (m_ChildActions == null)
+                    m_ChildActions = new ActionCollection();
                 return m_ChildActions;
             }
         }
@@ -381,11 +382,12 @@ namespace Micajah.Common.Bll
         /// <summary>
         /// Gets the collection of the alternative parent actions.
         /// </summary>
-        public ActionCollection AlternativeParentActions
+        public List<Guid> AlternativeParentActions
         {
             get
             {
-                if (m_AlternativeParentActions == null) m_AlternativeParentActions = ActionProvider.GetAlternativeParentActions(m_ActionId);
+                if (m_AlternativeParentActions == null)
+                    m_AlternativeParentActions = new List<Guid>();
                 return m_AlternativeParentActions;
             }
         }
@@ -599,6 +601,7 @@ namespace Micajah.Common.Bll
             item.Handle = this.Handle;
             item.SetChildActions(this.ChildActions);
             item.SetChildControls(this.ChildControls);
+            item.AlternativeParentActions.AddRange(this.AlternativeParentActions);
             return item;
         }
 

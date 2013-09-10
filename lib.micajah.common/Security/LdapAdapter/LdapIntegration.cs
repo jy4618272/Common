@@ -191,8 +191,8 @@ namespace Micajah.Common.Security
 
             foreach (OrganizationDataSet.GroupsInstancesRolesRow row in table.Rows)
             {
-                CommonDataSet.RoleRow[] roles = WebApplication.CommonDataSet.Role.Select(string.Format(CultureInfo.CurrentCulture, "RoleId = '{0}'", row["RoleId"])) as CommonDataSet.RoleRow[];
-                if (roles.Length > 0) row["RoleName"] = roles[0].Name;
+                CommonDataSet.RoleRow roleRow = RoleProvider.GetRoleRow((Guid)row["RoleId"]);
+                if (row != null) row["RoleName"] = roleRow.Name;
 
                 MasterDataSet.GroupMappingsRow[] groups = LdapInfoProvider.GetGroupMappings(organizationId).Table.Select(string.Format(CultureInfo.InvariantCulture, "GroupId = '{0}' AND OrganizationId = '{1}'", row["GroupId"], organizationId)) as MasterDataSet.GroupMappingsRow[];
                 if (groups.Length > 0) row["GroupName"] = groups[0].LdapGroupName;

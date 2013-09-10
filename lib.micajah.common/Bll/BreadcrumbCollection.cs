@@ -98,7 +98,7 @@ namespace Micajah.Common.Bll
                 add = (lastItem.ActionId == value.ParentActionId);
                 if (!add)
                 {
-                    if (value.AlternativeParentActions.FindByActionId(lastItem.ActionId) != null)
+                    if (value.AlternativeParentActions.Contains(lastItem.ActionId))
                     {
                         add = true;
                         value.ParentAction = lastItem;

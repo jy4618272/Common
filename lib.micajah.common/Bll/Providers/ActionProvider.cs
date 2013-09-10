@@ -558,6 +558,11 @@ namespace Micajah.Common.Bll.Providers
                         action.OrderNumber = -action.OrderNumber;
                 }
 
+                foreach (CommonDataSet.ActionsParentActionsRow alternativeParentActionRow in row.GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_2())
+                {
+                    action.AlternativeParentActions.Add(alternativeParentActionRow.ParentActionId);
+                }
+
                 return action;
             }
             return null;
@@ -738,23 +743,6 @@ namespace Micajah.Common.Bll.Providers
             table.AcceptChanges();
 
             return table;
-        }
-
-        /// <summary>
-        /// Gets the collection of the alternative parent actions for the specified action.
-        /// </summary>
-        /// <param name="actionId">The identifier of the action.</param>
-        /// <returns>The collection of the alternative parent actions.</returns>
-        internal static ActionCollection GetAlternativeParentActions(Guid actionId)
-        {
-            ActionCollection coll = new ActionCollection();
-            CommonDataSet.ActionsParentActionsDataTable table = WebApplication.CommonDataSet.ActionsParentActions;
-            foreach (CommonDataSet.ActionsParentActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.ActionIdColumn.ColumnName, actionId.ToString())))
-            {
-                Action action = ActionProvider.PagesAndControls.FindByActionId(row.ParentActionId);
-                if (action != null) coll.Add(action);
-            }
-            return coll;
         }
 
         internal static ArrayList GetAlternativeParentActionsIdList(Guid actionId)
