@@ -151,7 +151,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupId">The group's identifier.</param>
         /// <param name="instanceId">The instance's identifier.</param>
         /// <param name="roleId">The group's role identifier in specified instance.</param>
-        /// <param name="table2">The data sourceRow to get data from.</param>
+        /// <param name="table">The data sourceRow to get data from.</param>
         /// <returns>The System.Collections.ArrayList that contains identifiers of actions associated with specified group role in specified instance.</returns>
         internal static ArrayList GetActionIdList(Guid groupId, Guid instanceId, Guid roleId, OrganizationDataSet.GroupsInstancesActionsDataTable table)
         {
@@ -394,7 +394,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Removes the specified rows collection from GroupsInstancesRoles data table2.
+        /// Removes the specified rows collection from GroupsInstancesRoles data table.
         /// </summary>
         /// <param name="rows">The rows collection to remove.</param>
         internal static void RemoveGroupsInstancesRolesRows(OrganizationDataSet.GroupsInstancesRolesRow[] rows)

@@ -29,7 +29,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Button LogOffLink;
 
         /// <summary>
-        /// The table2 row that contains the controls related to organization selection process.
+        /// The table row that contains the controls related to organization selection process.
         /// </summary>
         protected PlaceHolder OrganizationArea;
 

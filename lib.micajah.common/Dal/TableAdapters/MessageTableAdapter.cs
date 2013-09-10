@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_Message table2.
+    /// The adapter for the Mc_Message table.
     /// </summary>
     internal class MessageTableAdapter : BaseTableAdapter
     {

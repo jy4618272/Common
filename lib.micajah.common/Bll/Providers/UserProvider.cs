@@ -279,7 +279,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="userId">The unique identifier of the user to update.</param>
         /// <param name="organizationId">The unique identifier of the organization to update the user in.</param>
         /// <param name="active">true, if the user is active in the specified organization; otherwise, false.</param>
-        /// <param name="adapters">The table2 adapters of the organization dataset.</param>
+        /// <param name="adapters">The table adapters of the organization dataset.</param>
         private static void UpdateUserActive(Guid userId, Guid organizationId, bool active, ClientDataSetTableAdapters adapters)
         {
             WebApplication.LoginProvider.UpdateLoginInOrganization(userId, organizationId, null, active);
@@ -739,7 +739,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets the users, excluding marked as deleted.
         /// </summary>
-        /// <returns>The table2 pupulated with information of the users.</returns>
+        /// <returns>The table pupulated with information of the users.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.UserDataTable GetUsers()
         {
@@ -750,7 +750,7 @@ namespace Micajah.Common.Bll.Providers
         /// Gets the users of the specified organization, excluding marked as deleted.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization.</param>
-        /// <returns>The table2 pupulated with information of the users.</returns>
+        /// <returns>The table pupulated with information of the users.</returns>
         public static ClientDataSet.UserDataTable GetUsers(Guid organizationId)
         {
             ClientDataSet.UserDataTable table = null;

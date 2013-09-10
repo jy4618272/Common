@@ -150,7 +150,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets a value indicating that the action table2 contains only built-in actions.
+        /// Gets a value indicating that the action table contains only built-in actions.
         /// </summary>
         internal static bool OnlyBuiltInActionsAvailable
         {
@@ -695,9 +695,9 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns the actions table2.
+        /// Returns the actions table.
         /// </summary>
-        /// <returns>The actions table2.</returns>
+        /// <returns>The actions table.</returns>
         internal static DataTable GetActionsTree()
         {
             CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action.Copy() as CommonDataSet.ActionDataTable;
@@ -955,7 +955,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static Action GetAction(Guid actionId)
         {
-            return CreateAction(WebApplication.CommonDataSet.Action.FindByActionId(actionId));
+            return FindAction(actionId);
         }
 
         /// <summary>

@@ -252,7 +252,7 @@ namespace Micajah.Common.Security
 
             connection.Close();
 
-            ApplicationLogger.LogInfo("LDAPIntegration", "User RoleID was updated in the local Logins table2.");
+            ApplicationLogger.LogInfo("LDAPIntegration", "User RoleID was updated in the local Logins table.");
             */
             return true;
         }

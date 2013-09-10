@@ -864,7 +864,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Downloads the resource with the specified URI and stores the downloaded data in the table2.
+        /// Downloads the resource with the specified URI and stores the downloaded data in the table.
         /// </summary>
         /// <param name="fileName">The URI from which to download data or path to the file.</param>
         /// <param name="localObjectType">The type of the object which the resource is associated with.</param>
@@ -933,7 +933,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Stores the binary resource in the table2.
+        /// Stores the binary resource in the table.
         /// </summary>
         /// <param name="parentResourceId">The unique identifier of the parent resource.</param>
         /// <param name="localObjectType">The type of the object which the resource is associated with.</param>

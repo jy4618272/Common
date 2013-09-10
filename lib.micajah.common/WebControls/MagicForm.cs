@@ -17,7 +17,7 @@ using Micajah.Common.Properties;
 namespace Micajah.Common.WebControls
 {
     /// <summary>
-    /// Displays the values of a single record from a data sourceRow in a table2, where each data row represents a field of the record. 
+    /// Displays the values of a single record from a data sourceRow in a table, where each data row represents a field of the record. 
     /// The MagicForm control allows you to edit, delete, and insert records. 
     /// </summary>
     [ToolboxData("<{0}:MagicForm runat=server></{0}:MagicForm>")]
@@ -425,7 +425,7 @@ namespace Micajah.Common.WebControls
         #region Internal Properties
 
         /// <summary>
-        /// Gets the Required Info HTML table2.
+        /// Gets the Required Info HTML table.
         /// </summary>
         internal static HtmlTable RequiredTable
         {
@@ -1235,18 +1235,18 @@ namespace Micajah.Common.WebControls
         #region Public Methods
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
         public static void ApplyStyle(Table table)
         {
             ApplyStyle(table, ColorScheme.White);
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
         /// <param name="scheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
         public static void ApplyStyle(Table table, ColorScheme scheme)
         {
@@ -1254,11 +1254,11 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
         /// <param name="scheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
-        /// <param name="applyToRowsOnly">Whether the styles should be applied to table2 rows only.</param>
+        /// <param name="applyToRowsOnly">Whether the styles should be applied to table rows only.</param>
         /// <param name="topLabels">Whether the text labels are placed above the control.</param>
         public static void ApplyStyle(Table table, ColorScheme scheme, bool applyToRowsOnly, bool topLabels)
         {
@@ -1266,11 +1266,11 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.WebControls.Table object to apply the styles to.</param>
         /// <param name="scheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
-        /// <param name="applyToRowsOnly">Whether the styles should be applied to table2 rows only.</param>
+        /// <param name="applyToRowsOnly">Whether the styles should be applied to table rows only.</param>
         /// <param name="topLabels">Whether the text labels are placed above the control.</param>
         /// <param name="theme">The theme of which the styles should be applied.</param>
         public static void ApplyStyle(Table table, ColorScheme scheme, bool applyToRowsOnly, bool topLabels, MasterPageTheme theme)
@@ -1336,18 +1336,18 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
         public static void ApplyStyle(HtmlTable table)
         {
             ApplyStyle(table, ColorScheme.White);
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
         /// <param name="scheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
         public static void ApplyStyle(HtmlTable table, ColorScheme scheme)
         {
@@ -1355,11 +1355,11 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
         /// <param name="scheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
-        /// <param name="applyToRowsOnly">Whether the styles should be applied to table2 rows only.</param>
+        /// <param name="applyToRowsOnly">Whether the styles should be applied to table rows only.</param>
         /// <param name="topLabels">Whether the text labels are placed above the control.</param>
         public static void ApplyStyle(HtmlTable table, ColorScheme scheme, bool applyToRowsOnly, bool topLabels)
         {
@@ -1367,11 +1367,11 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Applies the MagicForm's styles to the table2.
+        /// Applies the MagicForm's styles to the table.
         /// </summary>
-        /// <param name="table2">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
+        /// <param name="table">The System.Web.UI.HtmlControls.HtmlTable object to apply the styles to.</param>
         /// <param name="scheme">The Micajah.Common.Style.ColorScheme object that specifies the color scheme to apply.</param>
-        /// <param name="applyToRowsOnly">Whether the styles should be applied to table2 rows only.</param>
+        /// <param name="applyToRowsOnly">Whether the styles should be applied to table rows only.</param>
         /// <param name="topLabels">Whether the text labels are placed above the control.</param>
         /// <param name="theme">The theme of which the styles should be applied.</param>
         public static void ApplyStyle(HtmlTable table, ColorScheme scheme, bool applyToRowsOnly, bool topLabels, MasterPageTheme theme)

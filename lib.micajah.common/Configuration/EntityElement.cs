@@ -47,7 +47,7 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the name of the table2 where the entity stores.
+        /// Gets or sets the name of the table where the entity stores.
         /// </summary>
         [ConfigurationProperty("tableName")]
         public string TableName

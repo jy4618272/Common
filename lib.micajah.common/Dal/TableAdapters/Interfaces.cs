@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// Represents a set of command-related properties and methods that are used to fill the data table2 and 
+    /// Represents a set of command-related properties and methods that are used to fill the data table and 
     /// update a data sourceRow, and is implemented by .NET Framework data providers that access relational databases.
     /// </summary>
     public interface ITableAdapter : IDisposable, ICloneable
@@ -15,7 +15,7 @@ namespace Micajah.Common.Dal.TableAdapters
         #region Properties
 
         /// <summary>
-        /// Gets or sets the name of the table2 which the adapter relate to.
+        /// Gets or sets the name of the table which the adapter relate to.
         /// </summary>
         TableName TableName { get; set; }
 
@@ -47,7 +47,7 @@ namespace Micajah.Common.Dal.TableAdapters
         SqlCommand DeleteCommand { get; set; }
 
         /// <summary>
-        /// Gets or sets the master mapping between a sourceRow table2 and a table2 which the adapter relate to.
+        /// Gets or sets the master mapping between a sourceRow table and a table which the adapter relate to.
         /// </summary>
         DataTableMapping TableMapping { get; set; }
 

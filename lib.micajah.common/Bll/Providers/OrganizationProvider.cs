@@ -354,7 +354,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Creates and returns the organizations collection sorted by name from specified data sourceRow.
         /// </summary>
-        /// <param name="table2">A System.Data.DataTable object that represents the data sourceRow to create a collection from.</param>
+        /// <param name="table">A System.Data.DataTable object that represents the data sourceRow to create a collection from.</param>
         /// <returns>A Micajah.Common.Bll.OrganizationCollection object that contains the organizations.</returns>
         internal static OrganizationCollection CreateOrganizationCollection(DataTable table)
         {

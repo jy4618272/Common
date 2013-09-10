@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_Organization table2.
+    /// The adapter for the Mc_Organization table.
     /// </summary>
     internal class OrganizationTableAdapter : BaseTableAdapter
     {

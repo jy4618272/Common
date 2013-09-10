@@ -21,7 +21,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HtmlGenericControl MainContainer;
 
         /// <summary>
-        /// The table2 row that contains password recovery form.
+        /// The table row that contains password recovery form.
         /// </summary>
         protected HtmlTable FormTable;
 

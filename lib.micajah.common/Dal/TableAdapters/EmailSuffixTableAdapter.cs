@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_EmailSuffix table2.
+    /// The adapter for the Mc_EmailSuffix table.
     /// </summary>
     public class EmailSuffixTableAdapter : BaseTableAdapter
     {

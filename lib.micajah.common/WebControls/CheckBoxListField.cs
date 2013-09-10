@@ -169,7 +169,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the distance (in pixels) between the border and the contents of the table2 cell.
+        /// Gets or sets the distance (in pixels) between the border and the contents of the table cell.
         /// The default is -1, which indicates that this property is not set.
         /// </summary>
         [Category("Layout")]
@@ -186,7 +186,7 @@ namespace Micajah.Common.WebControls
         }
 
         /// <summary>
-        /// Gets or sets the distance (in pixels) between adjacent table2 cells.
+        /// Gets or sets the distance (in pixels) between adjacent table cells.
         /// The default is -1, which indicates that this property is not set.
         /// </summary>
         [Category("Layout")]

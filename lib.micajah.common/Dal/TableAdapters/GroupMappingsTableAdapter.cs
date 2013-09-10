@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_GroupMappings table2.
+    /// The adapter for the Mc_GroupMappings table.
     /// </summary>
     internal class GroupMappingsTableAdapter : BaseTableAdapter
     {

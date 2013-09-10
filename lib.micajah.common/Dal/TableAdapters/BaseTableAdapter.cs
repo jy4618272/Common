@@ -31,7 +31,7 @@ namespace Micajah.Common.Dal.TableAdapters
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the name of the table2 which the adapter relate to.
+        /// Gets or sets the name of the table which the adapter relate to.
         /// </summary>
         public TableName TableName
         {
@@ -148,7 +148,7 @@ namespace Micajah.Common.Dal.TableAdapters
         }
 
         /// <summary>
-        /// Gets or sets the master mapping between a sourceRow table2 and a table2 which the adapter relate to.
+        /// Gets or sets the master mapping between a sourceRow table and a table which the adapter relate to.
         /// </summary>
         public DataTableMapping TableMapping
         {

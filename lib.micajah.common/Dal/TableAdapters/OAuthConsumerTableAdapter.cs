@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 namespace Micajah.Common.Dal.TableAdapters
 {
     /// <summary>
-    /// The adapter for the Mc_OAuthConsumer table2.
+    /// The adapter for the Mc_OAuthConsumer table.
     /// </summary>
     internal class OAuthConsumerTableAdapter : BaseTableAdapter
     {
