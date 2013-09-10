@@ -49,6 +49,13 @@ namespace Micajah.Common.WebControls.AdminControls
             LinkButtonBack.Visible = false;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
+        }
+
         protected override void EditFormInitialize()
         {
             base.EditFormInitialize();

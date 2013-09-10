@@ -405,6 +405,8 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             base.OnLoad(e);
 
+            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
+
             m_UserContext = UserContext.Current;
 
             if (!Page.IsPostBack)

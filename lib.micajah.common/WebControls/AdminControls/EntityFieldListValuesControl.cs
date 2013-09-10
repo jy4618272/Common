@@ -53,6 +53,8 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             base.OnLoad(e);
 
+            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
+
             if (!this.IsPostBack)
             {
                 ClientDataSet.EntityFieldDataTable table = EntityFieldProvider.GetEntityField(this.EntityFieldId);

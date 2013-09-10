@@ -1,3 +1,8 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Dal;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,12 +12,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Properties;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.SetupControls
@@ -202,10 +201,6 @@ namespace Micajah.Common.WebControls.SetupControls
                     EditForm.Fields[6].Visible = false; // Visible
                     break;
                 case ActionType.Page:
-                    // AuthenticationRequired
-                    if (parentActionId.HasValue) EditForm.Fields[4].Visible = (!ActionProvider.AuthenticationRequired(parentActionId.Value)); // AuthenticationRequired
-                    if (actionId != Guid.Empty) EditForm.Fields[4].Visible = (!ActionProvider.AuthenticationRequired(actionId)); // AuthenticationRequired
-
                     // AlternativeParents
                     m_AlternativeParentActionsIdList = ActionProvider.GetAlternativeParentActionsIdList(actionId);
                     if ((m_AlternativeParentActionsIdList != null) && (m_AlternativeParentActionsIdList.Count > 0))

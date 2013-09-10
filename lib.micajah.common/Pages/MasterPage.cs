@@ -76,7 +76,6 @@ namespace Micajah.Common.Pages
         private Micajah.Common.Bll.Action m_ActiveAction;
 
         private bool? m_IsDetailMenuPage;
-        private bool? m_IsSettingPage;
         private bool? m_IsSetupPage;
         private bool m_LogoIsLoaded;
         private bool? m_ShowLeftArea;
@@ -589,12 +588,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleLeftArea
         {
-            get
-            {
-                return (m_VisibleLeftArea.HasValue
-                    ? m_VisibleLeftArea.Value
-                    : (FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Visible && (!this.IsSettingPage)));
-            }
+            get { return (m_VisibleLeftArea.HasValue ? m_VisibleLeftArea.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Visible); }
             set { m_VisibleLeftArea = value; }
         }
 
@@ -603,12 +597,7 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleSubmenu
         {
-            get
-            {
-                return (m_VisibleSubmenu.HasValue
-                    ? m_VisibleSubmenu.Value
-                    : (FrameworkConfiguration.Current.WebApplication.MasterPage.Submenu.Visible && (!this.IsSettingPage)));
-            }
+            get { return (m_VisibleSubmenu.HasValue ? m_VisibleSubmenu.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Submenu.Visible); }
             set { m_VisibleSubmenu = value; }
         }
 
@@ -743,19 +732,6 @@ namespace Micajah.Common.Pages
                     }
                 }
                 return isEmpty;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates the current page is setting page.
-        /// </summary>
-        public bool IsSettingPage
-        {
-            get
-            {
-                if (!m_IsSettingPage.HasValue)
-                    m_IsSettingPage = ((this.ActiveAction != null) && ActionProvider.IsSettingPage(m_ActiveAction.ActionId));
-                return m_IsSettingPage.Value;
             }
         }
 
@@ -1491,6 +1467,15 @@ namespace Micajah.Common.Pages
                     = master.VisibleLeftArea
                     = master.VisibleSubmenu
                     = false;
+            }
+        }
+
+        internal static void InitializeAdminPage(Page page)
+        {
+            MasterPage master = GetMasterPage(page);
+            if (master != null)
+            {
+                master.VisibleLeftArea = master.VisibleSubmenu = false;
             }
         }
 

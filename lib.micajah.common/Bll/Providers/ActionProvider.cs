@@ -67,16 +67,12 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid OAuthPageActionId = new Guid("5900F3EF-F423-4AC8-BAA5-828B746E3F43");
 
         // The objects which are used to synchronize access to the cached collections and lists.
-        private static readonly object s_MyAccountActionIdListSyncRoot = new object();
         private static readonly object s_PagesAndControlsSyncRoot = new object();
-        private static readonly object s_SettingsActionIdListSyncRoot = new object();
         private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
         private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
 
         private static ActionCollection s_GlobalNavigationLinks;
         private static ActionCollection s_PagesAndControls;
-        private static ArrayList s_MyAccountActionIdList;
-        private static ArrayList s_SettingsActionIdList;
 
         #endregion
 
@@ -120,31 +116,6 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the collection of the actions identifiers of the profile management pages.
-        /// </summary>
-        internal static ArrayList MyAccountActionIdList
-        {
-            get
-            {
-                if (s_MyAccountActionIdList == null)
-                {
-                    lock (s_MyAccountActionIdListSyncRoot)
-                    {
-                        if (s_MyAccountActionIdList == null)
-                        {
-                            ArrayList list = new ArrayList();
-                            GetActionIdListByParentActionId(ConfigurationDataSet.Current.Action.FindByActionId(MyAccountPageActionId), list);
-                            list.Add(MyAccountGlobalNavigationLinkActionId);
-
-                            s_MyAccountActionIdList = list;
-                        }
-                    }
-                }
-                return s_MyAccountActionIdList;
-            }
-        }
-
-        /// <summary>
         /// Gets a value indicating that the action table contains only built-in actions.
         /// </summary>
         internal static bool OnlyBuiltInActionsAvailable
@@ -153,31 +124,6 @@ namespace Micajah.Common.Bll.Providers
             {
                 ConfigurationDataSet.ActionDataTable table = ConfigurationDataSet.Current.Action;
                 return (table.Select(string.Concat(table.BuiltInColumn.ColumnName, " = 0")).Length == 0);
-            }
-        }
-
-        /// <summary>
-        /// Gets the collection of the actions identifiers which available for the administrator of the organizations and instances.
-        /// </summary>
-        internal static ArrayList SettingsActionIdList
-        {
-            get
-            {
-                if (s_SettingsActionIdList == null)
-                {
-                    lock (s_SettingsActionIdListSyncRoot)
-                    {
-                        if (s_SettingsActionIdList == null)
-                        {
-                            ArrayList list = new ArrayList();
-                            GetActionIdListByParentActionId(ConfigurationDataSet.Current.Action.FindByActionId(ConfigurationPageActionId), list);
-                            list.Add(ConfigurationGlobalNavigationLinkActionId);
-
-                            s_SettingsActionIdList = list;
-                        }
-                    }
-                }
-                return s_SettingsActionIdList;
             }
         }
 
@@ -384,17 +330,6 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static void GetActionIdListByParentActionId(ConfigurationDataSet.ActionRow row, ArrayList list)
-        {
-            if (row == null) return;
-
-            list.Add(row.ActionId);
-            foreach (ConfigurationDataSet.ActionRow dr in row.GetActionRows())
-            {
-                GetActionIdListByParentActionId(dr, list);
-            }
-        }
-
         private static string GetActionIdListKey(ArrayList groupIdList, Guid instanceId)
         {
             StringBuilder sb = new StringBuilder();
@@ -547,11 +482,6 @@ namespace Micajah.Common.Bll.Providers
         internal static bool AccessDeniedToSettingsDiagnosticPage()
         {
             return (!(SettingProvider.GroupSettingsExist && GroupProvider.GroupsExist));
-        }
-
-        internal static bool AuthenticationRequired(Guid actionId)
-        {
-            return (ActionProvider.SettingsActionIdList.Contains(actionId) || ActionProvider.MyAccountActionIdList.Contains(actionId));
         }
 
         internal static Action CreateAction(ConfigurationDataSet.ActionRow row)
@@ -825,17 +755,17 @@ namespace Micajah.Common.Bll.Providers
             return levels;
         }
 
-        /// <summary>
-        /// Gets a value indicating that the specified action is setting page.
-        /// </summary>
-        /// <param name="actionId">The identifier of the action to check.</param>
-        /// <returns>true, if the specified action is configuration page; otherwise, false.</returns>
-        internal static bool IsSettingPage(Guid actionId)
-        {
-            if (actionId == Guid.Empty)
-                return false;
-            return SettingsActionIdList.Contains(actionId);
-        }
+        ///// <summary>
+        ///// Gets a value indicating that the specified action is setting page.
+        ///// </summary>
+        ///// <param name="actionId">The identifier of the action to check.</param>
+        ///// <returns>true, if the specified action is configuration page; otherwise, false.</returns>
+        //internal static bool IsSettingPage(Guid actionId)
+        //{
+        //    if (actionId == Guid.Empty)
+        //        return false;
+        //    return SettingsActionIdList.Contains(actionId);
+        //}
 
         /// <summary>
         /// Gets a value indicating that the authentication is not required for the specified URL.
@@ -888,10 +818,11 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void Refresh()
         {
-            s_GlobalNavigationLinks = null;
-            s_MyAccountActionIdList = null;
-            s_SettingsActionIdList = null;
-            s_PagesAndControls = null;
+            lock (s_PagesAndControlsSyncRoot)
+            {
+                s_GlobalNavigationLinks = null;
+                s_PagesAndControls = null;
+            }
         }
 
         internal static void Refresh(Guid groupId, Guid instanceId)

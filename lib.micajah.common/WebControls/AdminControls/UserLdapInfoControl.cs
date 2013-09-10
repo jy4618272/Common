@@ -69,6 +69,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
+
             if (!IsPostBack)
             {
                 OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginId(this.UserId).FindAllVisible();

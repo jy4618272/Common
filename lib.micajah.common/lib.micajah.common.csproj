@@ -360,9 +360,6 @@
     <Compile Include="WebControls\AdminControls\LogosControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\AdminControls\LdapIntegrationControl.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="WebControls\AdminControls\StartControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -1971,12 +1968,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\UserLdapInfo.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\LdapIntegration.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\LdapIntegration.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ResetPassword.ascx">

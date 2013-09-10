@@ -102,6 +102,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void OnLoad(EventArgs e)
         {
+            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
+
             if (!IsPostBack)
             {
                 FormRoleView.ObjectName = Resources.RulesControl_EditForm_ObjectName;

@@ -16,7 +16,6 @@ using Google.GData.Apps;
 using Google.GData.Apps.Groups;
 using Google.GData.Extensions;
 
-
 namespace Micajah.Common.WebControls.AdminControls
 {
     public class GoogleIntegrationControl : BaseEditFormControl
@@ -287,6 +286,13 @@ namespace Micajah.Common.WebControls.AdminControls
             upStep2Progress.HideAfter = int.MaxValue;
             upStep2Progress.ShowSuccessText = false;
             upStep2Progress.PostBackControlId = this.lbStep2.ClientID;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
         }
 
         #endregion
