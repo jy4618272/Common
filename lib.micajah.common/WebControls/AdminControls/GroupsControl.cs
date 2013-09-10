@@ -31,8 +31,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void OnLoad(EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
-
             if (!IsPostBack)
             {
                 if (UserContext.Current.SelectedOrganization.Instances.Count == 0)

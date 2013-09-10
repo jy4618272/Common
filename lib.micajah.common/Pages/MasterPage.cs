@@ -900,8 +900,11 @@ namespace Micajah.Common.Pages
             {
                 this.SubmenuParentActionId = ActionProvider.ConfigurationPageActionId;
                 this.SubmenuPosition = WebControls.SubmenuPosition.Left;
-                this.VisibleSubmenu = true;
-                this.VisibleLeftArea = true;
+                this.VisibleLeftArea = this.VisibleSubmenu = true;
+            }
+            else
+            {
+                this.VisibleLeftArea = this.VisibleSubmenu = false;
             }
 
             if ((this.SubmenuPosition == SubmenuPosition.Top) && VisibleSubmenu)
@@ -1467,15 +1470,6 @@ namespace Micajah.Common.Pages
                     = master.VisibleLeftArea
                     = master.VisibleSubmenu
                     = false;
-            }
-        }
-
-        internal static void InitializeAdminPage(Page page)
-        {
-            MasterPage master = GetMasterPage(page);
-            if (master != null)
-            {
-                master.VisibleLeftArea = master.VisibleSubmenu = false;
             }
         }
 

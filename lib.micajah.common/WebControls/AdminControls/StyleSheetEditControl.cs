@@ -39,8 +39,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
-
             m_IsModernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern);
 
             MagicForm.ApplyStyle(FormTable);

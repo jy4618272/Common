@@ -308,8 +308,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
-
             if (!IsPostBack)
             {
                 if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)

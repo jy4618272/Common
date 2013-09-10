@@ -288,13 +288,6 @@ namespace Micajah.Common.WebControls.AdminControls
             upStep2Progress.PostBackControlId = this.lbStep2.ClientID;
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            Micajah.Common.Pages.MasterPage.InitializeAdminPage(this.Page);
-        }
-
         #endregion
     }
 }
