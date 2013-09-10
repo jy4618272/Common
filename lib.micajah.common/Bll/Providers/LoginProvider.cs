@@ -430,7 +430,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.InvitedLoginDataTable();
-                MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Fill(table, 0, invitedLoginId);
+                MasterTableAdapters.Current.InvitedLoginTableAdapter.Fill(table, 0, invitedLoginId);
                 return table;
             }
             finally
@@ -504,7 +504,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.ResetPasswordRequestDataTable();
-                MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Fill(table, 0, resetPasswordRequestId);
+                MasterTableAdapters.Current.ResetPasswordRequestTableAdapter.Fill(table, 0, resetPasswordRequestId);
                 return table;
             }
             finally
@@ -782,7 +782,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="invitedLoginId">The unique identifier of the invitation.</param>
         public virtual void CancelInvitation(Guid invitedLoginId)
         {
-            MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Delete((invitedLoginId == Guid.Empty) ? (object)DBNull.Value : (object)invitedLoginId);
+            MasterTableAdapters.Current.InvitedLoginTableAdapter.Delete((invitedLoginId == Guid.Empty) ? (object)DBNull.Value : (object)invitedLoginId);
         }
 
         /// <summary>
@@ -791,7 +791,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="resetPasswordRequestId">The unique identifier of the reset password request.</param>
         public virtual void CancelResetPasswordRequest(Guid resetPasswordRequestId)
         {
-            MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Delete((resetPasswordRequestId == Guid.Empty) ? (object)DBNull.Value : (object)resetPasswordRequestId);
+            MasterTableAdapters.Current.ResetPasswordRequestTableAdapter.Delete((resetPasswordRequestId == Guid.Empty) ? (object)DBNull.Value : (object)resetPasswordRequestId);
         }
 
         /// <summary>
@@ -1020,7 +1020,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.InvitedLoginDataTable();
-                MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Fill(table, 1, organizationId);
+                MasterTableAdapters.Current.InvitedLoginTableAdapter.Fill(table, 1, organizationId);
                 return table;
             }
             finally
@@ -1676,7 +1676,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            MasterDataSetTableAdapters.Current.InvitedLoginTableAdapter.Update(table);
+            MasterTableAdapters.Current.InvitedLoginTableAdapter.Update(table);
         }
 
         /// <summary>
@@ -1805,7 +1805,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.ResetPasswordRequestDataTable();
-                MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Fill(table, 1, loginId);
+                MasterTableAdapters.Current.ResetPasswordRequestTableAdapter.Fill(table, 1, loginId);
 
                 if (table.Count > 0)
                     row = table[0];
@@ -1817,7 +1817,7 @@ namespace Micajah.Common.Bll.Providers
                     row.CreatedTime = DateTime.UtcNow;
                     table.AddResetPasswordRequestRow(row);
 
-                    MasterDataSetTableAdapters.Current.ResetPasswordRequestTableAdapter.Update(table);
+                    MasterTableAdapters.Current.ResetPasswordRequestTableAdapter.Update(table);
                 }
             }
             finally

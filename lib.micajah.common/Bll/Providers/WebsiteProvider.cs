@@ -143,7 +143,7 @@ namespace Micajah.Common.Bll.Providers
             row.AdminContactInfo = adminContactInfo;
 
             WebApplication.CommonDataSet.Website.AddWebsiteRow(row);
-            MasterDataSetTableAdapters.Current.WebsiteTableAdapter.Update(row);
+            MasterTableAdapters.Current.WebsiteTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Micajah.Common.Bll.Providers
             row.Description = description;
             row.AdminContactInfo = adminContactInfo;
 
-            MasterDataSetTableAdapters.Current.WebsiteTableAdapter.Update(row);
+            MasterTableAdapters.Current.WebsiteTableAdapter.Update(row);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 row.Deleted = true;
 
-                MasterDataSetTableAdapters.Current.WebsiteTableAdapter.Update(row);
+                MasterTableAdapters.Current.WebsiteTableAdapter.Update(row);
                 WebApplication.CommonDataSet.Website.RemoveWebsiteRow(row);
             }
         }

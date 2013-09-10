@@ -37,14 +37,14 @@ namespace Micajah.Common.WebControls.SetupControls
             Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
 
             hlExcelFile.NavigateUrl = Request.Url.ToString() + "?file=excel";
-            CommonDataSet.SettingDataTable table = Micajah.Common.Application.WebApplication.CommonDataSet.Setting;
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} = " + ((int)SettingType.Counter).ToString(), table.SettingTypeIdColumn.ColumnName);
             counterSettings = new SettingCollection();
-            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) counterSettings.Add(SettingProvider.CreateSetting(_srow));
+            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) counterSettings.Add(SettingProvider.CreateSetting(_srow));
 
             filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
             paidSettings = new SettingCollection();
-            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) paidSettings.Add(SettingProvider.CreateSetting(_srow));
+            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) paidSettings.Add(SettingProvider.CreateSetting(_srow));
 
             if (!string.IsNullOrEmpty(Request.QueryString["file"]) && Request.QueryString["file"] == "excel") return;
 

@@ -92,6 +92,8 @@ namespace Micajah.Common.Bll.Handlers
                 {
                     accessDenied = (!(FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled && UserContext.Current.SelectedOrganization.Beta));
                 }
+                else if (action.ActionId == ActionProvider.CustomStyleSheetPageActionId)
+                    accessDenied = (!FrameworkConfiguration.Current.WebApplication.MasterPage.EnableCustomStyleSheet);
                 else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
                 {
                     UserContext user = UserContext.Current;

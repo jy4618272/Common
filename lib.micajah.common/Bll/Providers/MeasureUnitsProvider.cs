@@ -23,12 +23,12 @@ namespace Micajah.Common.Bll.Providers
         {
             using (MasterDataSet.UnitsOfMeasureDataTable table = new MasterDataSet.UnitsOfMeasureDataTable(true))
             {
-                MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter.Fill(table);
+                MasterTableAdapters.Current.UnitsOfMeasureAdapter.Fill(table);
                 return table;
             }
         }
 
-        private static MasterDataSet.UnitsOfMeasureConversionRow GetUnitsOfMeasureConversionRow(Guid from, Guid to, Guid organizationId, MasterDataSetTableAdapters adapters)
+        private static MasterDataSet.UnitsOfMeasureConversionRow GetUnitsOfMeasureConversionRow(Guid from, Guid to, Guid organizationId, MasterTableAdapters adapters)
         {
             using (MasterDataSet.UnitsOfMeasureConversionDataTable table = new MasterDataSet.UnitsOfMeasureConversionDataTable())
             {
@@ -53,7 +53,7 @@ namespace Micajah.Common.Bll.Providers
             row.OrganizationId = organizationId;
             table.AddUnitsOfMeasureRow(row);
 
-            MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter.Update(row);
+            MasterTableAdapters.Current.UnitsOfMeasureAdapter.Update(row);
 
             return newId;
         }
@@ -66,7 +66,7 @@ namespace Micajah.Common.Bll.Providers
             if (measureUnitFrom.Equals(Guid.Empty) || measureUnitTo.Equals(Guid.Empty) || measureUnitFrom.Equals(measureUnitTo))
                 throw new ArgumentException(Resources.MeasureUnitsProvider_ErrorMessage_IncorrectIdentifier);
 
-            MasterDataSetTableAdapters adapters = MasterDataSetTableAdapters.Current;
+            MasterTableAdapters adapters = MasterTableAdapters.Current;
             MasterDataSet.UnitsOfMeasureConversionRow row = GetUnitsOfMeasureConversionRow(measureUnitFrom, measureUnitTo, organizationId, adapters);
 
             if (row == null)
@@ -98,7 +98,7 @@ namespace Micajah.Common.Bll.Providers
         {
             using (MasterDataSet.UnitsOfMeasureConversionDataTable table = new MasterDataSet.UnitsOfMeasureConversionDataTable())
             {
-                MasterDataSetTableAdapters.Current.UnitsOfMeasureConversionAdapter.Fill(table, 2, unitsOfMeasureId, organizationId);
+                MasterTableAdapters.Current.UnitsOfMeasureConversionAdapter.Fill(table, 2, unitsOfMeasureId, organizationId);
                 return table;
             }
         }
@@ -162,7 +162,7 @@ namespace Micajah.Common.Bll.Providers
         {
             using (MasterDataSet.UnitsOfMeasureDataTable table = new MasterDataSet.UnitsOfMeasureDataTable(true))
             {
-                MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter.Fill(table, 1, organizationId);
+                MasterTableAdapters.Current.UnitsOfMeasureAdapter.Fill(table, 1, organizationId);
                 return table;
             }
         }
@@ -191,7 +191,7 @@ namespace Micajah.Common.Bll.Providers
         {
             using (MasterDataSet.UnitsOfMeasureDataTable table = new MasterDataSet.UnitsOfMeasureDataTable(true))
             {
-                MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter.Fill(table, 2, unitsOfMeasureId, organizationId);
+                MasterTableAdapters.Current.UnitsOfMeasureAdapter.Fill(table, 2, unitsOfMeasureId, organizationId);
                 return ((table.Count > 0) ? table[0] : null);
             }
         }
@@ -321,7 +321,7 @@ namespace Micajah.Common.Bll.Providers
             if (groupName != null) row.GroupName = groupName;
             if (localName != null) row.LocalName = localName;
 
-            MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter.Update(row);
+            MasterTableAdapters.Current.UnitsOfMeasureAdapter.Update(row);
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.Delete();
 
-            MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter.Update(row);
+            MasterTableAdapters.Current.UnitsOfMeasureAdapter.Update(row);
         }
 
         /// <summary>
@@ -511,7 +511,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>Returns a converted value; otherwise return 0 (zero).</returns>
         public static double ConvertValue(Guid from, Guid to, Guid organizationId, double value)
         {
-            MasterDataSet.UnitsOfMeasureConversionRow row = GetUnitsOfMeasureConversionRow(from, to, organizationId, MasterDataSetTableAdapters.Current);
+            MasterDataSet.UnitsOfMeasureConversionRow row = GetUnitsOfMeasureConversionRow(from, to, organizationId, MasterTableAdapters.Current);
             if (row != null)
                 return value * row.Factor;
             return 0;
@@ -519,7 +519,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static bool OverrideMeasureUnit(Guid unitsOfMeasureId, Guid organizationId)
         {
-            return ((MasterDataSetTableAdapters.Current.UnitsOfMeasureAdapter as UnitsOfMeasureAdapter).OverrideUnit(unitsOfMeasureId, organizationId) > 0);
+            return ((MasterTableAdapters.Current.UnitsOfMeasureAdapter as UnitsOfMeasureAdapter).OverrideUnit(unitsOfMeasureId, organizationId) > 0);
         }
 
         #endregion

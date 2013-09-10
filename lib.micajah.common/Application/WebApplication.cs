@@ -29,7 +29,6 @@ namespace Micajah.Common.Application
     {
         #region Members
 
-        private static ClientDataSetTableAdapters s_OrganizationDataSetTableAdapters;
         private static SortedList s_OrganizationDataSetTableAdaptersList;
         private static LoginProvider s_LoginProvider;
 
@@ -91,7 +90,7 @@ namespace Micajah.Common.Application
                             if (ds == null)
                             {
                                 ds = new CommonDataSet();
-                                MasterDataSetTableAdapters.Current.Fill(ds);
+                                MasterTableAdapters.Current.Fill(ds);
 
                                 CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
                             }
@@ -294,7 +293,7 @@ namespace Micajah.Common.Application
                 {
                     lock (s_CommonDataSetSyncRoot)
                     {
-                        MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Fill(ds.Organization);
+                        MasterTableAdapters.Current.OrganizationTableAdapter.Fill(ds.Organization);
 
                         CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
                     }
@@ -414,7 +413,7 @@ namespace Micajah.Common.Application
                         if (ds == null)
                         {
                             ds = new OrganizationDataSet();
-                            ClientDataSetTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                            ClientTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                             adapters.Fill(ds, organizationId);
 
                             CacheManager.Current.AddWithDefaultExpiration(key, ds);
@@ -440,7 +439,7 @@ namespace Micajah.Common.Application
         /// The instance of the ClientDataSetTableAdapters class that contains 
         /// tables adapters and connection to database of specified organization.
         /// </returns>
-        internal static ClientDataSetTableAdapters GetOrganizationDataSetTableAdaptersByOrganizationId(Guid organizationId)
+        internal static ClientTableAdapters GetOrganizationDataSetTableAdaptersByOrganizationId(Guid organizationId)
         {
             return GetOrganizationDataSetTableAdaptersByConnectionString(OrganizationProvider.GetConnectionString(organizationId));
         }
@@ -454,9 +453,9 @@ namespace Micajah.Common.Application
         /// The instance of the ClientDataSetTableAdapters class that contains 
         /// tables adapters and specified connection to database.
         /// </returns>
-        internal static ClientDataSetTableAdapters GetOrganizationDataSetTableAdaptersByConnectionString(string connectionString)
+        internal static ClientTableAdapters GetOrganizationDataSetTableAdaptersByConnectionString(string connectionString)
         {
-            ClientDataSetTableAdapters adapters = null;
+            ClientTableAdapters adapters = null;
 
             if (s_OrganizationDataSetTableAdaptersList == null) s_OrganizationDataSetTableAdaptersList = new SortedList();
 
@@ -466,13 +465,13 @@ namespace Micajah.Common.Application
                 {
                     if (!s_OrganizationDataSetTableAdaptersList.ContainsKey(connectionString))
                     {
-                        adapters = ClientDataSetTableAdapters.Current.Clone();
+                        adapters = ClientTableAdapters.Current.Clone();
                         adapters.ConnectionString = connectionString;
                         s_OrganizationDataSetTableAdaptersList.Add(connectionString, adapters);
                     }
                 }
             }
-            else adapters = s_OrganizationDataSetTableAdaptersList[connectionString] as ClientDataSetTableAdapters;
+            else adapters = s_OrganizationDataSetTableAdaptersList[connectionString] as ClientTableAdapters;
 
             return adapters;
         }

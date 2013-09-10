@@ -28,7 +28,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.EmailSuffixDataTable();
-                MasterDataSetTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 2, organizationId, instanceId, emailSuffixName);
+                MasterTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 2, organizationId, instanceId, emailSuffixName);
 
                 table.DefaultView.Sort = table.EmailSuffixNameColumn.ColumnName;
 
@@ -52,7 +52,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.EmailSuffixDataTable();
-                MasterDataSetTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 0, organizationId);
+                MasterTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 0, organizationId);
 
                 return table;
             }
@@ -74,7 +74,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.EmailSuffixDataTable();
-                MasterDataSetTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 3, instanceId);
+                MasterTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 3, instanceId);
 
                 return table;
             }
@@ -104,7 +104,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertEmailSuffix(Guid emailSuffixId, Guid organizationId, Guid? instanceId, string emailSuffixName)
         {
-            MasterDataSetTableAdapters.Current.EmailSuffixTableAdapter.Insert(emailSuffixId, organizationId, instanceId, emailSuffixName);
+            MasterTableAdapters.Current.EmailSuffixTableAdapter.Insert(emailSuffixId, organizationId, instanceId, emailSuffixName);
         }
 
         public static void InsertEmailSuffixName(Guid organizationId, Guid? instanceId, ref string emailSuffixName)
@@ -136,7 +136,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEmailSuffixes(Guid organizationId, Guid? instanceId)
         {
-            MasterDataSetTableAdapters.Current.EmailSuffixTableAdapter.Delete(organizationId, instanceId);
+            MasterTableAdapters.Current.EmailSuffixTableAdapter.Delete(organizationId, instanceId);
         }
 
         /// <summary>

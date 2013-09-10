@@ -37,7 +37,7 @@ namespace Micajah.Common.Bll.Providers
             get
             {
                 int rank = 0;
-                foreach (CommonDataSet.RoleRow row in WebApplication.CommonDataSet.Role.Rows)
+                foreach (ConfigurationDataSet.RoleRow row in ConfigurationDataSet.Current.Role.Rows)
                 {
                     if (row.Rank > rank) rank = row.Rank;
                 }
@@ -49,17 +49,17 @@ namespace Micajah.Common.Bll.Providers
 
         #region Private Methods
 
-        private static void Fill(CommonDataSet.RoleDataTable roleTable, RoleElementCollection roles)
+        private static void Fill(ConfigurationDataSet.RoleDataTable roleTable, RoleElementCollection roles)
         {
             foreach (RoleElement role in roles)
             {
-                CommonDataSet.RoleRow roleRow = roleTable.NewRoleRow();
+                ConfigurationDataSet.RoleRow roleRow = roleTable.NewRoleRow();
                 Fill(roleRow, role);
                 roleTable.AddRoleRow(roleRow);
             }
         }
 
-        private static void Fill(CommonDataSet.RoleRow row, RoleElement role)
+        private static void Fill(ConfigurationDataSet.RoleRow row, RoleElement role)
         {
             row.RoleId = role.Id;
             row.Name = role.Name;
@@ -129,7 +129,7 @@ namespace Micajah.Common.Bll.Providers
             return roleId;
         }
 
-        internal static void Fill(CommonDataSet dataSet)
+        internal static void Fill(ConfigurationDataSet dataSet)
         {
             if (dataSet == null) return;
 
@@ -138,7 +138,7 @@ namespace Micajah.Common.Bll.Providers
             dataSet.Role.AcceptChanges();
         }
 
-        internal static void FillRolesActions(CommonDataSet dataSet, ActionElement action)
+        internal static void FillRolesActions(ConfigurationDataSet dataSet, ActionElement action)
         {
             ArrayList roleList = GetRoleIdListByShortNames(dataSet.Role, action.Roles);
             foreach (Guid roleId in roleList)
@@ -148,7 +148,7 @@ namespace Micajah.Common.Bll.Providers
 
                 if (dataSet.RolesActions.FindByRoleIdActionId(roleId, action.Id) == null)
                 {
-                    CommonDataSet.RolesActionsRow rolesActionsRow = dataSet.RolesActions.NewRolesActionsRow();
+                    ConfigurationDataSet.RolesActionsRow rolesActionsRow = dataSet.RolesActions.NewRolesActionsRow();
                     rolesActionsRow.ActionId = action.Id;
                     rolesActionsRow.RoleId = roleId;
                     dataSet.RolesActions.AddRolesActionsRow(rolesActionsRow);
@@ -163,7 +163,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the action of the start page for specified role.</returns>
         internal static Guid GetStartActionId(Guid roleId)
         {
-            CommonDataSet.RoleRow row = WebApplication.CommonDataSet.Role.FindByRoleId(roleId);
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
             return (row == null ? Guid.Empty : row.StartActionId);
         }
 
@@ -173,10 +173,10 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The role identifier.</returns>
         internal static Guid GetHighestNonBuiltInRoleId()
         {
-            CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role;
-            CommonDataSet.RoleRow searchedRoleRow = null;
+            ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+            ConfigurationDataSet.RoleRow searchedRoleRow = null;
             Guid roleId = Guid.Empty;
-            foreach (CommonDataSet.RoleRow row in table.Rows)
+            foreach (ConfigurationDataSet.RoleRow row in table.Rows)
             {
                 roleId = row.RoleId;
                 if (!IsBuiltIn(roleId))
@@ -197,12 +197,12 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The role identifier.</returns>
         internal static Guid GetLowestNonBuiltInRoleId(IList roleIdList)
         {
-            CommonDataSet.RoleRow searchedRoleRow = null;
+            ConfigurationDataSet.RoleRow searchedRoleRow = null;
 
             if (roleIdList != null)
             {
-                CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role;
-                CommonDataSet.RoleRow row = null;
+                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+                ConfigurationDataSet.RoleRow row = null;
 
                 foreach (Guid roleId in roleIdList)
                 {
@@ -230,12 +230,12 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The role identifier.</returns>
         internal static Guid GetHighestNonBuiltInRoleId(IList roleIdList)
         {
-            CommonDataSet.RoleRow searchedRoleRow = null;
+            ConfigurationDataSet.RoleRow searchedRoleRow = null;
 
             if (roleIdList != null)
             {
-                CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role;
-                CommonDataSet.RoleRow row = null;
+                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+                ConfigurationDataSet.RoleRow row = null;
 
                 foreach (Guid roleId in roleIdList)
                 {
@@ -263,12 +263,12 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The role identifier.</returns>
         internal static Guid GetHighestBuiltInRoleId(IList roleIdList)
         {
-            CommonDataSet.RoleRow searchedRoleRow = null;
+            ConfigurationDataSet.RoleRow searchedRoleRow = null;
 
             if (roleIdList != null)
             {
-                CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role;
-                CommonDataSet.RoleRow row = null;
+                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+                ConfigurationDataSet.RoleRow row = null;
 
                 foreach (Guid roleId in roleIdList)
                 {
@@ -298,7 +298,7 @@ namespace Micajah.Common.Bll.Providers
         internal static string GetStartActionNavigateUrl(Guid roleId, out bool instanceRequired)
         {
             instanceRequired = false;
-            CommonDataSet.RoleRow row = WebApplication.CommonDataSet.Role.FindByRoleId(roleId);
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
             Action action = null;
             if (row != null)
             {
@@ -317,11 +317,11 @@ namespace Micajah.Common.Bll.Providers
         internal static ArrayList GetLowerNonBuiltInRoleIdList(Guid roleId)
         {
             ArrayList list = new ArrayList();
-            CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role;
-            CommonDataSet.RoleRow row = table.FindByRoleId(roleId);
+            ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+            ConfigurationDataSet.RoleRow row = table.FindByRoleId(roleId);
             if (row != null)
             {
-                foreach (CommonDataSet.RoleRow row1 in table)
+                foreach (ConfigurationDataSet.RoleRow row1 in table)
                 {
                     if (!row1.BuiltIn)
                     {
@@ -335,10 +335,10 @@ namespace Micajah.Common.Bll.Providers
 
         internal static ArrayList GetRoleIdListByShortNames(IEnumerable shortName)
         {
-            return GetRoleIdListByShortNames(WebApplication.CommonDataSet.Role, shortName);
+            return GetRoleIdListByShortNames(ConfigurationDataSet.Current.Role, shortName);
         }
 
-        internal static ArrayList GetRoleIdListByShortNames(CommonDataSet.RoleDataTable table, IEnumerable shortName)
+        internal static ArrayList GetRoleIdListByShortNames(ConfigurationDataSet.RoleDataTable table, IEnumerable shortName)
         {
             ArrayList roleIdList = new ArrayList();
 
@@ -363,7 +363,7 @@ namespace Micajah.Common.Bll.Providers
                     sb.Insert(0, string.Concat(table.ShortNameColumn.ColumnName, " IN ("));
                 }
 
-                foreach (CommonDataSet.RoleRow row in table.Select(sb.ToString()))
+                foreach (ConfigurationDataSet.RoleRow row in table.Select(sb.ToString()))
                 {
                     if (!roleIdList.Contains(row.RoleId)) roleIdList.Add(row.RoleId);
                 }
@@ -379,13 +379,13 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.String that represents the name of the specified role.</returns>
         internal static string GetRoleName(Guid roleId)
         {
-            CommonDataSet.RoleRow row = WebApplication.CommonDataSet.Role.FindByRoleId(roleId);
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
             return ((row == null) ? string.Empty : row.Name);
         }
 
         internal static bool IsBuiltIn(Guid roleId)
         {
-            CommonDataSet.RoleRow row = WebApplication.CommonDataSet.Role.FindByRoleId(roleId);
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
             return ((row == null) ? false : row.BuiltIn);
         }
 
@@ -399,7 +399,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The DataTable that contains roles.</returns>s
         public static DataTable GetRoles()
         {
-            return WebApplication.CommonDataSet.Role;
+            return ConfigurationDataSet.Current.Role;
         }
 
         /// <summary>
@@ -429,8 +429,8 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Data.DataTable that contains roles.</returns>
         public static DataTable GetAvailableRoles(bool includeInstanceAdministratorRole, bool includeOrganizationAdministratorRole)
         {
-            CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role.Copy() as CommonDataSet.RoleDataTable;
-            CommonDataSet.RoleRow row = null;
+            ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role.Copy() as ConfigurationDataSet.RoleDataTable;
+            ConfigurationDataSet.RoleRow row = null;
 
             if (!includeOrganizationAdministratorRole)
             {
@@ -469,9 +469,9 @@ namespace Micajah.Common.Bll.Providers
         /// The object populated with information of the specified role. 
         /// If the role is not found, the method returns null reference.
         /// </returns>
-        public static CommonDataSet.RoleRow GetRoleRow(Guid roleId)
+        public static ConfigurationDataSet.RoleRow GetRoleRow(Guid roleId)
         {
-            return WebApplication.CommonDataSet.Role.FindByRoleId(roleId);
+            return ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
         }
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupId">The unique identifier of the group.</param>
         /// <param name="instanceId">The unique identifier of the instance.</param>
         /// <returns></returns>
-        public static CommonDataSet.RoleRow GetRoleRow(Guid organizationId, Guid groupId, Guid instanceId)
+        public static ConfigurationDataSet.RoleRow GetRoleRow(Guid organizationId, Guid groupId, Guid instanceId)
         {
             OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
             if (ds != null)
@@ -504,8 +504,8 @@ namespace Micajah.Common.Bll.Providers
 
             if (!string.IsNullOrEmpty(name))
             {
-                CommonDataSet.RoleDataTable table = WebApplication.CommonDataSet.Role.Copy() as CommonDataSet.RoleDataTable;
-                CommonDataSet.RoleRow[] rows = table.Select(string.Concat(table.NameColumn.ColumnName, " = '", name.Replace("'", "''"), "'")) as CommonDataSet.RoleRow[];
+                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role.Copy() as ConfigurationDataSet.RoleDataTable;
+                ConfigurationDataSet.RoleRow[] rows = table.Select(string.Concat(table.NameColumn.ColumnName, " = '", name.Replace("'", "''"), "'")) as ConfigurationDataSet.RoleRow[];
                 if (rows.Length > 0) roleId = rows[0].RoleId;
             }
             return roleId;

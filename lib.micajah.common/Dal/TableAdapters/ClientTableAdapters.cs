@@ -6,11 +6,11 @@ namespace Micajah.Common.Dal.TableAdapters
     /// <summary>
     /// The container class for the tables adapters of the organization and client dataset.
     /// </summary>
-    public sealed class ClientDataSetTableAdapters : TableAdaptersHolder, ICloneable
+    public sealed class ClientTableAdapters : TableAdaptersHolder, ICloneable
     {
         #region Members
 
-        private static ClientDataSetTableAdapters s_Current;
+        private static ClientTableAdapters s_Current;
 
         private string m_ConnectionString;
 
@@ -21,12 +21,12 @@ namespace Micajah.Common.Dal.TableAdapters
         /// <summary>
         /// Gets or sets the current instance of the class.
         /// </summary>
-        public static ClientDataSetTableAdapters Current
+        public static ClientTableAdapters Current
         {
             get
             {
                 if (s_Current == null)
-                    s_Current = new ClientDataSetTableAdapters();
+                    s_Current = new ClientTableAdapters();
                 return s_Current;
             }
             set
@@ -85,12 +85,12 @@ namespace Micajah.Common.Dal.TableAdapters
 
         #region Constructors
 
-        public ClientDataSetTableAdapters()
+        public ClientTableAdapters()
         {
             this.Initialize();
         }
 
-        public ClientDataSetTableAdapters(ICollection adapters)
+        public ClientTableAdapters(ICollection adapters)
             : base(adapters)
         {
             this.Initialize();
@@ -167,7 +167,7 @@ namespace Micajah.Common.Dal.TableAdapters
 
         #region Public Methods
 
-        public ClientDataSetTableAdapters Clone()
+        public ClientTableAdapters Clone()
         {
             ArrayList list = new ArrayList();
             foreach (TableName tableName in this.TableAdapters.Keys)
@@ -178,7 +178,7 @@ namespace Micajah.Common.Dal.TableAdapters
                     if (adapter != null) list.Add(adapter.Clone());
                 }
             }
-            ClientDataSetTableAdapters adapters = new ClientDataSetTableAdapters(list);
+            ClientTableAdapters adapters = new ClientTableAdapters(list);
             adapters.ConnectionString = this.ConnectionString;
             return adapters;
         }

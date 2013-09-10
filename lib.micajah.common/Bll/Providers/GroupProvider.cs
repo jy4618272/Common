@@ -355,7 +355,7 @@ namespace Micajah.Common.Bll.Providers
                 throw new ConstraintException(string.Format(CultureInfo.CurrentCulture, Resources.GroupProvider_ErrorMessage_GroupAlreadyExists, name), ex);
             }
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.GroupTableAdapter.Update(row);
 
             Guid groupId = row.GroupId;
@@ -387,7 +387,7 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddGroupsInstancesRolesRow(row);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.GroupsInstancesRolesTableAdapter.Update(row);
 
             if (refreshOrganizationData) WebApplication.RefreshOrganizationData(organizationId);
@@ -656,7 +656,7 @@ namespace Micajah.Common.Bll.Providers
                 if (row != null)
                 {
                     OrganizationDataSet.InstanceDataTable instanceTable = ds.Instance;
-                    CommonDataSet.RoleDataTable roleTable = WebApplication.CommonDataSet.Role;
+                    ConfigurationDataSet.RoleDataTable roleTable = ConfigurationDataSet.Current.Role;
                     Instance firstInstance = InstanceProvider.GetFirstInstance();
 
                     foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in row.GetGroupsInstancesRolesRows())
@@ -671,7 +671,7 @@ namespace Micajah.Common.Bll.Providers
                         }
 
                         OrganizationDataSet.InstanceRow instanceRow = instanceTable.FindByInstanceId(instanceId);
-                        CommonDataSet.RoleRow roleRow = roleTable.FindByRoleId(roleId);
+                        ConfigurationDataSet.RoleRow roleRow = roleTable.FindByRoleId(roleId);
 
                         if ((instanceRow != null) && (roleRow != null))
                         {
@@ -718,7 +718,6 @@ namespace Micajah.Common.Bll.Providers
 
                     OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId);
                     OrganizationDataSet.InstanceDataTable instanceTable = ds.Instance;
-                    CommonDataSet.RoleDataTable roleTable = WebApplication.CommonDataSet.Role;
                     Instance firstInstance = InstanceProvider.GetFirstInstance();
 
                     foreach (Guid groupId in groupIds)
@@ -746,7 +745,7 @@ namespace Micajah.Common.Bll.Providers
                                 }
 
                                 OrganizationDataSet.InstanceRow instanceRow = instanceTable.FindByInstanceId(instanceId);
-                                CommonDataSet.RoleRow roleRow = roleTable.FindByRoleId(roleId);
+                                ConfigurationDataSet.RoleRow roleRow = RoleProvider.GetRoleRow(roleId);
 
                                 if ((instanceRow != null) && (roleRow != null))
                                 {
@@ -811,7 +810,7 @@ namespace Micajah.Common.Bll.Providers
                     actionRow.Delete();
                 }
 
-                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(ctx.SelectedOrganizationId);
+                ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(ctx.SelectedOrganizationId);
                 adapters.GroupsInstancesActionsTableAdapter.Update(table);
                 adapters.GroupsInstancesRolesTableAdapter.Update(row);
 

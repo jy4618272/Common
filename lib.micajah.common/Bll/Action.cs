@@ -1,13 +1,11 @@
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
 using Micajah.Common.WebControls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Data;
 using System.Web;
 using System.Web.UI.WebControls;
 
@@ -661,38 +659,6 @@ namespace Micajah.Common.Bll
             return result;
         }
 
-        private void ReadFromCommonDataSet(Action parent, DataRow[] actionRows, List<ActionType> allowedTypes)
-        {
-            foreach (CommonDataSet.ActionRow row in actionRows)
-            {
-                ActionType type = (ActionType)row.ActionTypeId;
-                if (allowedTypes.Contains(type))
-                {
-                    Action item = ActionProvider.CreateAction(row, parent);
-
-                    DataRow[] childActionRows = row.GetActionRows();
-                    if (childActionRows.Length > 0) ReadFromCommonDataSet(item, childActionRows, allowedTypes);
-
-                    if ((type == ActionType.Page) || (type == ActionType.GlobalNavigationLink))
-                    {
-                        if (parent != null) parent.ChildActions.Add(item);
-                        this.Add(item);
-                    }
-                    else if (type == ActionType.Control && parent != null)
-                        parent.ChildControls.Add(item);
-                }
-            }
-
-            if (parent != null)
-            {
-                if (parent.ChildActions.Count > 1) parent.ChildActions.Sort();
-            }
-            else if (this.Count > 1)
-            {
-                Sort();
-            }
-        }
-
         private Action GetMainMenuItem(Action item)
         {
             if ((item != null) && (!item.IsMainMenuRoot))
@@ -901,17 +867,6 @@ namespace Micajah.Common.Bll
                 }
             }
             return items;
-        }
-
-        /// <summary>
-        /// Loads the collection from CommonDataSet.
-        /// </summary>
-        internal void LoadFromCommonDataSet(params ActionType[] allowedTypes)
-        {
-            lock (((ICollection)this).SyncRoot)
-            {
-                ReadFromCommonDataSet(null, ActionProvider.GetRootActionRows(), new List<ActionType>(allowedTypes));
-            }
         }
 
         #endregion

@@ -955,12 +955,15 @@ namespace Micajah.Common.Pages
         {
             CreatePageHeader(this.Page, this.EnableClientCaching, this.EnableGlobalStyleSheet, this.EnableJQuery, this.EnableFancyBox, this.EnableClientEncoding);
 
-            if (this.Page.Header != null)
+            if (FrameworkConfiguration.Current.WebApplication.MasterPage.EnableCustomStyleSheet)
             {
-                if ((m_UserContext != null) && (m_UserContext.SelectedOrganizationId != Guid.Empty))
+                if (this.Page.Header != null)
                 {
-                    if (!string.IsNullOrEmpty(m_UserContext.SelectedOrganization.CustomStyleSheet))
-                        this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.CustomStyleSheet + "?" + m_UserContext.SelectedOrganizationId.ToString("N"), true)));
+                    if ((m_UserContext != null) && (m_UserContext.SelectedOrganizationId != Guid.Empty))
+                    {
+                        if (!string.IsNullOrEmpty(m_UserContext.SelectedOrganization.CustomStyleSheet))
+                            this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.CustomStyleSheet + "?" + m_UserContext.SelectedOrganizationId.ToString("N"), true)));
+                    }
                 }
             }
         }

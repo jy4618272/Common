@@ -171,7 +171,7 @@ namespace Micajah.Common.Bll.Providers
                 throw new ConstraintException(string.Format(CultureInfo.CurrentCulture, Resources.InstanceProvider_ErrorMessage_InstanceAlreadyExists, name), ex);
             }
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.InstanceTableAdapter.Update(row);
 
             Instance inst = new Instance();
@@ -377,7 +377,7 @@ namespace Micajah.Common.Bll.Providers
                         instanceRow.PseudoId = Support.GeneratePseudoUnique();
                 }
 
-                ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+                ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
                 if (adapters != null)
                     adapters.InstanceTableAdapter.Update(ds.Instance);
             }
@@ -397,7 +397,7 @@ namespace Micajah.Common.Bll.Providers
             string name = GetInstanceName(instanceId, organizationId);
             if (!string.IsNullOrEmpty(name)) name += " ";
 
-            foreach (CommonDataSet.RoleRow roleRow in WebApplication.CommonDataSet.Role.Rows)
+            foreach (ConfigurationDataSet.RoleRow roleRow in ConfigurationDataSet.Current.Role.Rows)
             {
                 if (!roleRow.BuiltIn)
                 {
@@ -832,7 +832,7 @@ namespace Micajah.Common.Bll.Providers
             if (creditCardStatus >= 0) row.CreditCardStatus = (byte)creditCardStatus;
             row.Deleted = false;
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.InstanceTableAdapter.Update(row);
 
             Instance inst = new Instance();

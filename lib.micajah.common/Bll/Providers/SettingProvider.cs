@@ -23,7 +23,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// The identifier of the master page's custom style sheet.
         /// </summary>
-        internal readonly static Guid MasterPageCustomStyleSheetSettingId = new Guid("00000000-0000-0000-0000-000000000066");
+        internal readonly static Guid CustomStyleSheetSettingId = new Guid("00000000-0000-0000-0000-000000000066");
 
         // The object that is used to synchronize access to the global settings collection.
         private static readonly object s_GlobalSettingsSyncRoot = new object();
@@ -119,7 +119,7 @@ namespace Micajah.Common.Bll.Providers
             return sb.ToString();
         }
 
-        private static void LoadSettingAttributes(CommonDataSet.SettingRow row, SettingElement setting, SettingLevels? levels)
+        private static void LoadSettingAttributes(ConfigurationDataSet.SettingRow row, SettingElement setting, SettingLevels? levels)
         {
             row.SettingId = setting.Id;
             row.SettingTypeId = (int)setting.SettingType;
@@ -216,7 +216,7 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
-        internal static Setting CreateSetting(CommonDataSet.SettingRow row)
+        internal static Setting CreateSetting(ConfigurationDataSet.SettingRow row)
         {
             if (row != null)
             {
@@ -254,7 +254,7 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        internal static Setting CreateSetting(CommonDataSet.SettingRow row, Setting parentSetting)
+        internal static Setting CreateSetting(ConfigurationDataSet.SettingRow row, Setting parentSetting)
         {
             Setting setting = CreateSetting(row);
             if (setting != null)
@@ -262,7 +262,7 @@ namespace Micajah.Common.Bll.Providers
             return setting;
         }
 
-        internal static void Fill(CommonDataSet dataSet)
+        internal static void Fill(ConfigurationDataSet dataSet)
         {
             if (dataSet == null) return;
 
@@ -272,13 +272,13 @@ namespace Micajah.Common.Bll.Providers
             dataSet.SettingListsValues.AcceptChanges();
         }
 
-        internal static void Fill(CommonDataSet.SettingDataTable settingTable
-            , CommonDataSet.SettingListsValuesDataTable settingListsValuesTable
+        internal static void Fill(ConfigurationDataSet.SettingDataTable settingTable
+            , ConfigurationDataSet.SettingListsValuesDataTable settingListsValuesTable
             , SettingElementCollection settings, Guid? parentSettingId, Guid? actionId, SettingLevels? levels)
         {
             foreach (SettingElement setting in settings)
             {
-                CommonDataSet.SettingRow settingRow = settingTable.NewSettingRow();
+                ConfigurationDataSet.SettingRow settingRow = settingTable.NewSettingRow();
                 LoadSettingAttributes(settingRow, setting, levels);
                 if (parentSettingId.HasValue)
                     settingRow.ParentSettingId = parentSettingId.Value;
@@ -290,7 +290,7 @@ namespace Micajah.Common.Bll.Providers
                 {
                     foreach (SettingValueElement value in setting.Values)
                     {
-                        CommonDataSet.SettingListsValuesRow settingListsValuesRow = settingListsValuesTable.NewSettingListsValuesRow();
+                        ConfigurationDataSet.SettingListsValuesRow settingListsValuesRow = settingListsValuesTable.NewSettingListsValuesRow();
                         settingListsValuesRow.SettingListValueId = Guid.NewGuid();
                         settingListsValuesRow.Name = value.Name;
                         settingListsValuesRow.SettingId = settingRow.SettingId;
@@ -374,7 +374,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="visible">The value of visbile to match the setting before adding to the collection.</param>
         internal static void FillSettings(ref SettingCollection settings, SettingLevels level, Setting parentSetting, DataRow[] settingRows, bool? visible)
         {
-            foreach (CommonDataSet.SettingRow row in settingRows)
+            foreach (ConfigurationDataSet.SettingRow row in settingRows)
             {
                 if (visible.HasValue)
                 {
@@ -593,7 +593,7 @@ namespace Micajah.Common.Bll.Providers
         {
             if (level == SettingLevels.None) return null;
 
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             StringBuilder sb = new StringBuilder();
             if (parentSettingId.HasValue)
                 sb.AppendFormat(CultureInfo.InvariantCulture, "{0} = '{1}'", table.ParentSettingIdColumn.ColumnName, parentSettingId.Value.ToString());
@@ -664,7 +664,7 @@ namespace Micajah.Common.Bll.Providers
                         level = SettingLevels.Instance;
                 }
 
-                CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+                ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
                 string filter = string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} IS NULL", table.ActionIdColumn.ColumnName, actionId.ToString(), table.ParentSettingIdColumn.ColumnName);
                 if (visible.HasValue) filter += string.Format(CultureInfo.InvariantCulture, " AND {0} = {1}", table.VisibleColumn.ColumnName, (visible.Value ? 1 : 0));
                 FillSettings(ref settings, level, null, table.Select(filter), visible);
@@ -682,10 +682,10 @@ namespace Micajah.Common.Bll.Providers
 
         internal static SettingCollection GetPaidSettings(Guid organizationId, Guid instanceId)
         {
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} = 1", table.PaidColumn.ColumnName);
             SettingCollection settings = new SettingCollection();
-            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
+            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
             settings.Sort();
             return settings;
@@ -693,10 +693,10 @@ namespace Micajah.Common.Bll.Providers
 
         internal static SettingCollection GetCounterSettings(Guid organizationId, Guid instanceId)
         {
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
             SettingCollection settings = new SettingCollection();
-            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
+            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
             for (int i = 0; i < settings.Count; i++)
             {
@@ -719,10 +719,10 @@ namespace Micajah.Common.Bll.Providers
 
         internal static SettingCollection GetAllPricedSettings(Guid organizationId, Guid instanceId)
         {
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
             SettingCollection settings = new SettingCollection();
-            foreach (CommonDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
+            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
             for (int i = 0; i < settings.Count; i++)
             {
@@ -838,7 +838,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.SettingsValuesTableAdapter.Update(svTable);
 
             Refresh();
@@ -883,7 +883,7 @@ namespace Micajah.Common.Bll.Providers
                     toRow.Value = fromRow.Value;
             }
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(toOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(toOrganizationId);
             adapters.SettingsValuesTableAdapter.Update(toTable);
 
             WebApplication.RefreshOrganizationDataSetByOrganizationId(toOrganizationId);
@@ -896,7 +896,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetSettings()
         {
-            return WebApplication.CommonDataSet.Setting;
+            return ConfigurationDataSet.Current.Setting;
         }
 
         /// <summary>
@@ -906,8 +906,8 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetRootSettings()
         {
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
-            DataTable newTable = WebApplication.CommonDataSet.Setting.Clone();
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
+            DataTable newTable = ConfigurationDataSet.Current.Setting.Clone();
 
             foreach (DataRow dr in table.Select(string.Concat(table.ParentSettingIdColumn.ColumnName, " IS NULL AND ", table.BuiltInColumn.ColumnName, " = 0")))
             {
@@ -925,8 +925,8 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetChildSettings(Guid settingId)
         {
-            DataTable newTable = WebApplication.CommonDataSet.Setting.Clone();
-            CommonDataSet.SettingRow row = WebApplication.CommonDataSet.Setting.FindBySettingId(settingId);
+            DataTable newTable = ConfigurationDataSet.Current.Setting.Clone();
+            ConfigurationDataSet.SettingRow row = ConfigurationDataSet.Current.Setting.FindBySettingId(settingId);
 
             if (row != null)
             {
@@ -946,8 +946,8 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetPaidSettings()
         {
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
-            DataTable newTable = WebApplication.CommonDataSet.Setting.Clone();
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
+            DataTable newTable = ConfigurationDataSet.Current.Setting.Clone();
 
             foreach (DataRow dr in table.Select(string.Concat(table.PaidColumn.ColumnName, " = 1")))
             {
@@ -968,7 +968,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static Setting GetSetting(Guid settingId)
         {
-            return CreateSetting(WebApplication.CommonDataSet.Setting.FindBySettingId(settingId));
+            return CreateSetting(ConfigurationDataSet.Current.Setting.FindBySettingId(settingId));
         }
 
         /// <summary>
@@ -981,9 +981,9 @@ namespace Micajah.Common.Bll.Providers
         /// </returns>
         public static Setting GetSettingByShortName(string shortName)
         {
-            CommonDataSet.SettingDataTable table = WebApplication.CommonDataSet.Setting;
+            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.ShortNameColumn.ColumnName, Support.PreserveSingleQuote(shortName)));
-            return ((rows.Length > 0) ? CreateSetting((CommonDataSet.SettingRow)rows[0]) : null);
+            return ((rows.Length > 0) ? CreateSetting((ConfigurationDataSet.SettingRow)rows[0]) : null);
         }
 
         /// <summary>
@@ -993,8 +993,8 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetSettingListValues(Guid settingId)
         {
-            DataTable table = WebApplication.CommonDataSet.SettingListsValues.Clone();
-            CommonDataSet.SettingRow row = WebApplication.CommonDataSet.Setting.FindBySettingId(settingId);
+            DataTable table = ConfigurationDataSet.Current.SettingListsValues.Clone();
+            ConfigurationDataSet.SettingRow row = ConfigurationDataSet.Current.Setting.FindBySettingId(settingId);
             if (row != null)
             {
                 foreach (DataRow dr in row.GetSettingListsValuesRows())
@@ -1014,9 +1014,9 @@ namespace Micajah.Common.Bll.Providers
         /// If the setting is not found, the method returns null reference.
         /// </returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static CommonDataSet.SettingListsValuesRow GetSettingListsValuesRow(Guid settingListValueId)
+        public static ConfigurationDataSet.SettingListsValuesRow GetSettingListsValuesRow(Guid settingListValueId)
         {
-            return WebApplication.CommonDataSet.SettingListsValues.FindBySettingListValueId(settingListValueId);
+            return ConfigurationDataSet.Current.SettingListsValues.FindBySettingListValueId(settingListValueId);
         }
 
         /// <summary>
@@ -1039,7 +1039,7 @@ namespace Micajah.Common.Bll.Providers
             if (svRow.RowState == DataRowState.Detached)
                 svTable.AddSettingsValuesRow(svRow);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.SettingsValuesTableAdapter.Update(svRow);
 
             Refresh();

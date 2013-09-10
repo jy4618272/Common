@@ -46,7 +46,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
 
         public bool StoreNonce(string context, string nonce, DateTime timestampUtc)
         {
-            return (MasterDataSetTableAdapters.Current.NonceTableAdapter.Insert(context, nonce, timestampUtc) == 1);
+            return (MasterTableAdapters.Current.NonceTableAdapter.Insert(context, nonce, timestampUtc) == 1);
         }
 
         #endregion

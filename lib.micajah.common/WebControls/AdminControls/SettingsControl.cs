@@ -581,7 +581,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private void CreateSettingControl(Setting setting, Control container, int visibleChildSettingsCount)
         {
             if (setting == null) return;
-            if (setting.SettingId == SettingProvider.MasterPageCustomStyleSheetSettingId) return;
+            if (setting.SettingId == SettingProvider.CustomStyleSheetSettingId) return;
 
             switch (setting.SettingType)
             {

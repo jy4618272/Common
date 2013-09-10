@@ -111,7 +111,7 @@ namespace Micajah.Common.Bll
                 if (m_CustomStyleSheet == null)
                 {
                     m_CustomStyleSheet = string.Empty;
-                    Setting setting = this.Settings.FindBySettingId(SettingProvider.MasterPageCustomStyleSheetSettingId);
+                    Setting setting = this.Settings.FindBySettingId(SettingProvider.CustomStyleSheetSettingId);
                     if (setting != null)
                     {
                         if (!Support.StringIsNullOrEmpty(setting.Value))
@@ -122,7 +122,7 @@ namespace Micajah.Common.Bll
             }
             set
             {
-                Setting setting = this.Settings.FindBySettingId(SettingProvider.MasterPageCustomStyleSheetSettingId);
+                Setting setting = this.Settings.FindBySettingId(SettingProvider.CustomStyleSheetSettingId);
                 if (setting != null)
                 {
                     setting.Value = value;

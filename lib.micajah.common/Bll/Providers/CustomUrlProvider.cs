@@ -77,7 +77,7 @@ namespace Micajah.Common.Bll.Providers
         {
             MasterDataSet.CustomUrlRow row = GetCustomUrl(customUrlId);
             if (row != null)
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Delete(customUrlId);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Delete(customUrlId);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 0, organizationId);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 0, organizationId);
                 table.Columns.Add("Name", typeof(string));
                 Organization org = null;
                 foreach (MasterDataSet.CustomUrlRow row in table)
@@ -131,7 +131,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 1, customUrlId);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 1, customUrlId);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -153,7 +153,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, host, host);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, host, host);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -175,7 +175,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
                 row = ((table.Count > 0) ? table[0] : null);
                 return row;
             }
@@ -197,7 +197,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, null, null);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, null, null);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -223,7 +223,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
                 if (table.Count > 0)
                     throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
@@ -244,7 +244,7 @@ namespace Micajah.Common.Bll.Providers
                     row.InstanceId = instanceId.Value;
 
                 table.AddCustomUrlRow(row);
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Update(row);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Update(row);
 
                 return row.CustomUrlId;
             }
@@ -272,7 +272,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 MasterDataSet.CustomUrlRow row = null;
                 table = new MasterDataSet.CustomUrlDataTable();
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, fullCustomUrl, partialCustomUrl);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, fullCustomUrl, partialCustomUrl);
                 if (table.Count > 0)
                 {
                     if (table.Count == 1)
@@ -300,7 +300,7 @@ namespace Micajah.Common.Bll.Providers
                 if (string.IsNullOrEmpty(partialCustomUrl))
                     partialCustomUrl = string.Empty;
 
-                MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
+                MasterTableAdapters.Current.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
             }
             finally
             {
@@ -323,7 +323,7 @@ namespace Micajah.Common.Bll.Providers
                 try
                 {
                     table = new MasterDataSet.CustomUrlDataTable();
-                    MasterDataSetTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
+                    MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
 
                     if (table.Rows.Count > 0)
                         return false;

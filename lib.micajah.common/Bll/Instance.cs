@@ -82,7 +82,7 @@ namespace Micajah.Common.Bll
                 {
                     m_GroupIdRoleIdList = new SortedList();
 
-                    CommonDataSet.RoleDataTable roleTable = WebApplication.CommonDataSet.Role;
+                    ConfigurationDataSet.RoleDataTable roleTable = ConfigurationDataSet.Current.Role;
                     OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(this.OrganizationId);
                     OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
 

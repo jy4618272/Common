@@ -84,7 +84,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     list.Add(node.Value);
             }
 
-            CommonDataSet.ActionDataTable table = ActionProvider.GetActionsTree() as CommonDataSet.ActionDataTable;
+            ConfigurationDataSet.ActionDataTable table = ActionProvider.GetActionsTree() as ConfigurationDataSet.ActionDataTable;
             table.DefaultView.Sort = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2}", table.ParentActionIdColumn.ColumnName, table.OrderNumberColumn.ColumnName, table.NameColumn.ColumnName);
 
             Tree.DataSource = table;

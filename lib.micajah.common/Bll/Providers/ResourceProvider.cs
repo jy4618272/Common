@@ -212,7 +212,7 @@ namespace Micajah.Common.Bll.Providers
                 {
                     object obj = Support.ConvertStringToType(parts[1], typeof(Guid));
                     if (obj != null)
-                        setting = SettingProvider.GetOrganizationSetting((Guid)obj, SettingProvider.MasterPageCustomStyleSheetSettingId);
+                        setting = SettingProvider.GetOrganizationSetting((Guid)obj, SettingProvider.CustomStyleSheetSettingId);
                 }
                 if (setting != null && (!Support.StringIsNullOrEmpty(setting.Value)))
                     content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(setting.Value, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme, FrameworkConfiguration.Current.WebApplication.MasterPage.ThemeColor));
@@ -693,7 +693,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 object obj = Support.ConvertStringToType(str, typeof(Guid));
                 if (obj != null)
-                    MasterDataSetTableAdapters.Current.ResourceTableAdapter.Delete((Guid)obj);
+                    MasterTableAdapters.Current.ResourceTableAdapter.Delete((Guid)obj);
             }
         }
 
@@ -793,7 +793,7 @@ namespace Micajah.Common.Bll.Providers
 
             try
             {
-                ITableAdapter resourceTableAdapter = MasterDataSetTableAdapters.Current.ResourceTableAdapter.Clone() as ITableAdapter;
+                ITableAdapter resourceTableAdapter = MasterTableAdapters.Current.ResourceTableAdapter.Clone() as ITableAdapter;
 
                 table = new MasterDataSet.ResourceDataTable();
                 resourceTableAdapter.Fill(table, 0, resourceId, w, h, a);
@@ -854,7 +854,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.ResourceDataTable();
-                MasterDataSetTableAdapters.Current.ResourceTableAdapter.Fill(table, 1, localObjectType, localObjectId);
+                MasterTableAdapters.Current.ResourceTableAdapter.Fill(table, 1, localObjectType, localObjectId);
                 return ((table.Count > 0) ? table[0] : null);
             }
             finally
@@ -970,7 +970,7 @@ namespace Micajah.Common.Bll.Providers
                 row.CreatedTime = DateTime.UtcNow;
 
                 table.AddResourceRow(row);
-                MasterDataSetTableAdapters.Current.ResourceTableAdapter.Update(row);
+                MasterTableAdapters.Current.ResourceTableAdapter.Update(row);
 
                 return row.ResourceId;
             }
@@ -980,7 +980,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateResource(Guid resourceId, string localObjectType, string localObjectId, bool temporary)
         {
             if (resourceId != Guid.Empty)
-                MasterDataSetTableAdapters.Current.ResourceTableAdapter.Update(resourceId, localObjectType, localObjectId, temporary);
+                MasterTableAdapters.Current.ResourceTableAdapter.Update(resourceId, localObjectType, localObjectId, temporary);
         }
 
         #endregion

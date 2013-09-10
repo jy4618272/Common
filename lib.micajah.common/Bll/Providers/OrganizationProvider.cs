@@ -143,7 +143,7 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddOrganizationRow(row);
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
 
             Organization org = new Organization();
             org.Load(row);
@@ -310,7 +310,7 @@ namespace Micajah.Common.Bll.Providers
             else
                 row.SetParentOrganizationIdNull();
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
 
             Organization org = new Organization();
             org.Load(row);
@@ -384,7 +384,7 @@ namespace Micajah.Common.Bll.Providers
                 InstanceProvider.UpdateInstancesPseudoId(organizationRow.OrganizationId);
             }
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(table);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(table);
         }
 
         #endregion
@@ -907,7 +907,7 @@ namespace Micajah.Common.Bll.Providers
             if (String.IsNullOrEmpty(ldapUpdatePassword) == false && String.IsNullOrEmpty(ldapConfirmNewPassword) == false && ldapUpdatePassword == ldapConfirmNewPassword)
                 row.LdapPassword = Support.TrimString(ldapUpdatePassword, table.LdapPasswordColumn.MaxLength);
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
 
             Organization org = new Organization();
@@ -930,7 +930,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.LdapDomains = Support.TrimString(ldapDomains, table.LdapDomainsColumn.MaxLength);
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
 
             Organization org = new Organization();
@@ -952,7 +952,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.ExpirationTime = expirationTime;
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
 
             Organization org = new Organization();
@@ -974,7 +974,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.Active = active;
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
 
             Organization org = new Organization();
@@ -995,7 +995,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.Deleted = false;
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
             UserContext.RefreshCurrent();
 
             Organization org = new Organization();
@@ -1016,7 +1016,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.Deleted = true;
 
-            MasterDataSetTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
             WebApplication.RemoveOrganizationDataSetByOrganizationId(organizationId);
         }
 

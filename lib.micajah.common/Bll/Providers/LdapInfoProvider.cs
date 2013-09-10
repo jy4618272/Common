@@ -240,7 +240,7 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("DistinguishedName", typeof(string));
 
                 orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
-                MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 2, organizationId);
+                MasterTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 2, organizationId);
 
                 if (orgTable.Rows.Count > 0)
                 {
@@ -315,7 +315,7 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("GroupName", typeof(string));
 
                 orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
-                MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 1, organizationId, selectedDomain);
+                MasterTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 1, organizationId, selectedDomain);
 
                 if (orgTable.Rows.Count > 0)
                 {
@@ -390,7 +390,7 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("GroupName", typeof(string));
 
                 orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
-                MasterDataSetTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 0, organizationId, domainName);
+                MasterTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 0, organizationId, domainName);
 
                 if (orgTable.Rows.Count > 0)
                 {
@@ -565,7 +565,7 @@ namespace Micajah.Common.Bll.Providers
         public static DataView GetGroupMappings(Guid organizationId)
         {
             MasterDataSet.GroupMappingsDataTable table = new MasterDataSet.GroupMappingsDataTable();
-            MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Fill(table, 0, organizationId);
+            MasterTableAdapters.Current.GroupMappingsTableAdapter.Fill(table, 0, organizationId);
 
             DataView dv = table.DefaultView;
             dv.Sort = "[GroupName] asc";
@@ -586,7 +586,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertGroupMapping(Guid groupId, Guid organizationId, string groupName, Guid ldapDomainId, string ldapDomainName, Guid ldapGroupId, string ldapGroupName)
         {
-            MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Insert(groupId, organizationId, groupName, ldapDomainId, ldapDomainName, ldapGroupId, ldapGroupName);
+            MasterTableAdapters.Current.GroupMappingsTableAdapter.Insert(groupId, organizationId, groupName, ldapDomainId, ldapDomainName, ldapGroupId, ldapGroupName);
         }
 
         /// <summary>
@@ -598,7 +598,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteGroupMapping(Guid groupId, Guid ldapDomainId, Guid ldapGroupId)
         {
-            MasterDataSetTableAdapters.Current.GroupMappingsTableAdapter.Delete(groupId, ldapDomainId, ldapGroupId);
+            MasterTableAdapters.Current.GroupMappingsTableAdapter.Delete(groupId, ldapDomainId, ldapGroupId);
         }
 
         /// <summary>

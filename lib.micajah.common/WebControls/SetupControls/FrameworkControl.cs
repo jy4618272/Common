@@ -185,7 +185,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     {
                         sqlScript = sqlScript.Replace("$Input$", outputSqlScript);
 
-                        MasterDataSetTableAdapters.Current = null;
+                        MasterTableAdapters.Current = null;
                     }
 
                     // Gets the unique connection strings to the databases.
@@ -213,7 +213,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     }
 
                     WebApplicationElement.CurrentDatabaseVersion = 0;
-                    ClientDataSetTableAdapters.RefreshCurrent();
+                    ClientTableAdapters.RefreshCurrent();
 
                     if (v == 77 || v == 78)
                         OrganizationProvider.UpdateOrganizationsPseudoId();

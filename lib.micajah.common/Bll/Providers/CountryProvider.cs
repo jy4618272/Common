@@ -24,7 +24,7 @@ namespace Micajah.Common.Bll.Providers
         public static DataView GetCountriesView()
         {
             MasterDataSet.CountryDataTable table = new MasterDataSet.CountryDataTable();
-            MasterDataSetTableAdapters.Current.CountryTableAdapter.Fill(table);
+            MasterTableAdapters.Current.CountryTableAdapter.Fill(table);
 
             DataView dv = table.DefaultView;
             dv.Sort = "Name";
@@ -50,7 +50,7 @@ namespace Micajah.Common.Bll.Providers
                 row.Name = name;
 
                 table.AddCountryRow(row);
-                MasterDataSetTableAdapters.Current.CountryTableAdapter.Update(row);
+                MasterTableAdapters.Current.CountryTableAdapter.Update(row);
             }
             catch (ConstraintException ex)
             {

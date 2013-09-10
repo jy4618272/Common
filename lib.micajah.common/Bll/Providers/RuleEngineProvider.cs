@@ -27,7 +27,7 @@ namespace Micajah.Common.Bll.Providers
             if (ruleId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.RuleTableAdapter.Delete(ruleId);
         }
 
@@ -55,7 +55,7 @@ namespace Micajah.Common.Bll.Providers
             if (ruleId.Equals(Guid.Empty) || ruleEngineId.Equals(Guid.Empty) || string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 1, ruleId);
 
@@ -103,7 +103,7 @@ namespace Micajah.Common.Bll.Providers
                 || organizationId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             return adapters.RuleTableAdapter.UpdateRuleUses(ruleId, lastUsedUser, lastUsedDate);
         }
 
@@ -121,7 +121,7 @@ namespace Micajah.Common.Bll.Providers
                 || ruleId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             return adapters.RuleTableAdapter.UpdateOrderNumber(ruleId, orderNumber);
         }
 
@@ -173,7 +173,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleDataTable GetRules(Guid ruleEngineId, Guid organizationId, Guid? instanceId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 0, ruleEngineId, organizationId, instanceId);
             return table;
@@ -188,7 +188,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleRow GetRuleRow(Guid ruleId, Guid organizationId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 1, ruleId);
             return ((table.Count > 0) ? table[0] : null);
@@ -203,7 +203,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleRow GetRuleRow(string ruleName, Guid organizationId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleDataTable table = new ClientDataSet.RuleDataTable();
             adapters.RuleTableAdapter.Fill(table, 2, ruleName);
             return ((table.Count > 0) ? table[0] : null);
@@ -246,7 +246,7 @@ namespace Micajah.Common.Bll.Providers
             if (ruleParameterId.Equals(Guid.Empty))
                 throw new ArgumentNullException("ruleParameterId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             adapters.RuleParametersTableAdapter.Delete(ruleParameterId);
         }
 
@@ -283,7 +283,7 @@ namespace Micajah.Common.Bll.Providers
             if (organizationId.Equals(Guid.Empty) || ruleParameterId.Equals(Guid.Empty) || value == null)
                 throw new ArgumentNullException("ruleParameterId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleParametersDataTable table = new ClientDataSet.RuleParametersDataTable();
             adapters.RuleParametersTableAdapter.Fill(table, 1, ruleParameterId);
 
@@ -388,7 +388,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleParametersDataTable GetRuleParameters(Guid organizationId, Guid ruleId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleParametersDataTable table = new ClientDataSet.RuleParametersDataTable();
             adapters.RuleParametersTableAdapter.Fill(table, 0, ruleId);
             return table;
@@ -414,7 +414,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleParametersRow GetRuleParameterRow(Guid ruleParameterId, Guid organizationId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RuleParametersDataTable table = new ClientDataSet.RuleParametersDataTable();
             adapters.RuleParametersTableAdapter.Fill(table, 1, ruleParameterId);
             return ((table.Count > 0) ? table[0] : null);

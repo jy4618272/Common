@@ -32,6 +32,7 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid InstancesPageActionId = new Guid("00000000-0000-0000-0000-000000000010");
         internal readonly static Guid UsersPageActionId = new Guid("00000000-0000-0000-0000-000000000012");
         internal readonly static Guid SettingsDiagnosticPageActionId = new Guid("00000000-0000-0000-0000-000000000018");
+        internal readonly static Guid CustomStyleSheetPageActionId = new Guid("00000000-0000-0000-0000-000000000020");
         internal readonly static Guid MyAccountPageActionId = new Guid("00000000-0000-0000-0000-000000000021");
         internal readonly static Guid UserNameAndEmailPageActionId = new Guid("00000000-0000-0000-0000-000000000024");
         internal readonly static Guid UserPasswordPageActionId = new Guid("00000000-0000-0000-0000-000000000025");
@@ -66,7 +67,6 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid OAuthPageActionId = new Guid("5900F3EF-F423-4AC8-BAA5-828B746E3F43");
 
         // The objects which are used to synchronize access to the cached collections and lists.
-        private static readonly object s_GlobalNavigationLinksSyncRoot = new object();
         private static readonly object s_MyAccountActionIdListSyncRoot = new object();
         private static readonly object s_PagesAndControlsSyncRoot = new object();
         private static readonly object s_SettingsActionIdListSyncRoot = new object();
@@ -109,15 +109,10 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (s_GlobalNavigationLinks == null)
                 {
-                    lock (s_GlobalNavigationLinksSyncRoot)
+                    lock (s_PagesAndControlsSyncRoot)
                     {
                         if (s_GlobalNavigationLinks == null)
-                        {
-                            ActionCollection coll = new ActionCollection();
-                            coll.LoadFromCommonDataSet(ActionType.GlobalNavigationLink);
-
-                            s_GlobalNavigationLinks = coll;
-                        }
+                            LoadFromConfigurationDataSet();
                     }
                 }
                 return s_GlobalNavigationLinks;
@@ -138,7 +133,7 @@ namespace Micajah.Common.Bll.Providers
                         if (s_MyAccountActionIdList == null)
                         {
                             ArrayList list = new ArrayList();
-                            GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(MyAccountPageActionId), list);
+                            GetActionIdListByParentActionId(ConfigurationDataSet.Current.Action.FindByActionId(MyAccountPageActionId), list);
                             list.Add(MyAccountGlobalNavigationLinkActionId);
 
                             s_MyAccountActionIdList = list;
@@ -156,7 +151,7 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action;
+                ConfigurationDataSet.ActionDataTable table = ConfigurationDataSet.Current.Action;
                 return (table.Select(string.Concat(table.BuiltInColumn.ColumnName, " = 0")).Length == 0);
             }
         }
@@ -175,7 +170,7 @@ namespace Micajah.Common.Bll.Providers
                         if (s_SettingsActionIdList == null)
                         {
                             ArrayList list = new ArrayList();
-                            GetActionIdListByParentActionId(WebApplication.CommonDataSet.Action.FindByActionId(ConfigurationPageActionId), list);
+                            GetActionIdListByParentActionId(ConfigurationDataSet.Current.Action.FindByActionId(ConfigurationPageActionId), list);
                             list.Add(ConfigurationGlobalNavigationLinkActionId);
 
                             s_SettingsActionIdList = list;
@@ -209,12 +204,7 @@ namespace Micajah.Common.Bll.Providers
                     lock (s_PagesAndControlsSyncRoot)
                     {
                         if (s_PagesAndControls == null)
-                        {
-                            ActionCollection coll = new ActionCollection();
-                            coll.LoadFromCommonDataSet(ActionType.Page, ActionType.Control);
-
-                            s_PagesAndControls = coll;
-                        }
+                            LoadFromConfigurationDataSet();
                     }
                 }
                 return s_PagesAndControls;
@@ -225,11 +215,11 @@ namespace Micajah.Common.Bll.Providers
 
         #region Private Methods
 
-        private static void Fill(CommonDataSet dataSet, ActionElementCollection actions, Guid? parentActionId)
+        private static void Fill(ConfigurationDataSet dataSet, ActionElementCollection actions, Guid? parentActionId)
         {
             foreach (ActionElement action in actions)
             {
-                CommonDataSet.ActionRow actionRow = dataSet.Action.FindByActionId(action.Id);
+                ConfigurationDataSet.ActionRow actionRow = dataSet.Action.FindByActionId(action.Id);
                 if (actionRow != null)
                 {
                     if (!actionRow.BuiltIn) actionRow = null;
@@ -266,7 +256,7 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static void FillAlternativeParents(CommonDataSet.ActionsParentActionsDataTable table, ActionElement action)
+        private static void FillAlternativeParents(ConfigurationDataSet.ActionsParentActionsDataTable table, ActionElement action)
         {
             if (action.AlternativeParents == null) return;
 
@@ -275,7 +265,7 @@ namespace Micajah.Common.Bll.Providers
                 object obj = Support.ConvertStringToType(value, typeof(Guid));
                 if (obj != null)
                 {
-                    CommonDataSet.ActionsParentActionsRow actionsParentActionsRow = table.NewActionsParentActionsRow();
+                    ConfigurationDataSet.ActionsParentActionsRow actionsParentActionsRow = table.NewActionsParentActionsRow();
                     actionsParentActionsRow.ActionId = action.Id;
                     actionsParentActionsRow.ParentActionId = (Guid)obj;
                     table.AddActionsParentActionsRow(actionsParentActionsRow);
@@ -304,7 +294,7 @@ namespace Micajah.Common.Bll.Providers
             return originalItem;
         }
 
-        private static void LoadActionAttributes(CommonDataSet.ActionRow row, ActionElement action, Guid? parentActionId)
+        private static void LoadActionAttributes(ConfigurationDataSet.ActionRow row, ActionElement action, Guid? parentActionId)
         {
             row.BuiltIn = action.BuiltIn;
             if (action.ActionType != ActionType.NotSet)
@@ -328,14 +318,14 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static void LoadControlAttributes(CommonDataSet.ActionRow row, ActionElement action)
+        private static void LoadControlAttributes(ConfigurationDataSet.ActionRow row, ActionElement action)
         {
             row.ActionId = action.Id;
             row.Name = action.Name;
             row.Description = action.Description;
         }
 
-        private static void LoadGlobalNavigationLinkAttributes(CommonDataSet.ActionRow row, ActionElement action)
+        private static void LoadGlobalNavigationLinkAttributes(ConfigurationDataSet.ActionRow row, ActionElement action)
         {
             row.NavigateUrl = action.NavigateUrl;
             row.OrderNumber = action.OrderNumber;
@@ -348,7 +338,7 @@ namespace Micajah.Common.Bll.Providers
             LoadDetailMenuAttributes(row, action.DetailMenu);
         }
 
-        private static void LoadPageAttributes(CommonDataSet.ActionRow row, ActionElement action)
+        private static void LoadPageAttributes(ConfigurationDataSet.ActionRow row, ActionElement action)
         {
             row.LearnMoreUrl = action.LearnMoreUrl;
             row.VideoUrl = action.VideoUrl;
@@ -357,7 +347,7 @@ namespace Micajah.Common.Bll.Providers
             LoadSubmenuAttributes(row, action.Submenu);
         }
 
-        private static void LoadDetailMenuAttributes(CommonDataSet.ActionRow row, ActionDetailMenuElement detailMenu)
+        private static void LoadDetailMenuAttributes(ConfigurationDataSet.ActionRow row, ActionDetailMenuElement detailMenu)
         {
             row.ShowInDetailMenu = detailMenu.Show;
             row.ShowChildrenInDetailMenu = detailMenu.ShowChildren;
@@ -371,7 +361,7 @@ namespace Micajah.Common.Bll.Providers
                 row.DetailMenuIconSize = (int)detailMenu.IconSize.Value;
         }
 
-        private static void LoadSubmenuAttributes(CommonDataSet.ActionRow row, ActionSubmenuElement submenu)
+        private static void LoadSubmenuAttributes(ConfigurationDataSet.ActionRow row, ActionSubmenuElement submenu)
         {
             row.SubmenuItemImageUrl = submenu.ImageUrl;
             row.SubmenuItemTypeId = (int)submenu.ItemType;
@@ -380,7 +370,7 @@ namespace Micajah.Common.Bll.Providers
             row.HighlightInSubmenu = submenu.Highlight;
         }
 
-        private static void FillActionIdList(CommonDataSet.ActionRow row, ref ArrayList list)
+        private static void FillActionIdList(ConfigurationDataSet.ActionRow row, ref ArrayList list)
         {
             if ((row == null) || (list == null)) return;
             if ((row.ActionTypeId == (int)ActionType.Page) && (!list.Contains(row.ActionId))
@@ -388,18 +378,18 @@ namespace Micajah.Common.Bll.Providers
             {
                 list.Add(row.ActionId);
             }
-            foreach (CommonDataSet.ActionRow actionRow in row.GetActionRows())
+            foreach (ConfigurationDataSet.ActionRow actionRow in row.GetActionRows())
             {
                 FillActionIdList(actionRow, ref list);
             }
         }
 
-        private static void GetActionIdListByParentActionId(CommonDataSet.ActionRow row, ArrayList list)
+        private static void GetActionIdListByParentActionId(ConfigurationDataSet.ActionRow row, ArrayList list)
         {
             if (row == null) return;
 
             list.Add(row.ActionId);
-            foreach (CommonDataSet.ActionRow dr in row.GetActionRows())
+            foreach (ConfigurationDataSet.ActionRow dr in row.GetActionRows())
             {
                 GetActionIdListByParentActionId(dr, list);
             }
@@ -500,6 +490,56 @@ namespace Micajah.Common.Bll.Providers
             return list;
         }
 
+        /// <summary>
+        /// Loads the collection from configuration data set.
+        /// </summary>
+        private static void LoadFromConfigurationDataSet()
+        {
+            ActionCollection globalNavigationLinks = new ActionCollection();
+            ActionCollection pagesAndControls = new ActionCollection();
+
+            ConfigurationDataSet.ActionDataTable table = ConfigurationDataSet.Current.Action;
+            ConfigurationDataSet.ActionRow[] rows = (ConfigurationDataSet.ActionRow[])table.Select(string.Concat(table.ParentActionIdColumn.ColumnName, " IS NULL"));
+
+            ReadFromConfigurationDataSet(null, rows, new List<ActionType>() { ActionType.Page, ActionType.Control }, pagesAndControls);
+            ReadFromConfigurationDataSet(null, rows, new List<ActionType>() { ActionType.GlobalNavigationLink }, globalNavigationLinks);
+
+            s_PagesAndControls = pagesAndControls;
+            s_GlobalNavigationLinks = globalNavigationLinks;
+        }
+
+        private static void ReadFromConfigurationDataSet(Action parent, DataRow[] actionRows, List<ActionType> allowedTypes, ActionCollection actions)
+        {
+            foreach (ConfigurationDataSet.ActionRow row in actionRows)
+            {
+                ActionType type = (ActionType)row.ActionTypeId;
+                if (allowedTypes.Contains(type))
+                {
+                    Action item = CreateAction(row, parent);
+
+                    DataRow[] childActionRows = row.GetActionRows();
+                    if (childActionRows.Length > 0) ReadFromConfigurationDataSet(item, childActionRows, allowedTypes, actions);
+
+                    if ((type == ActionType.Page) || (type == ActionType.GlobalNavigationLink))
+                    {
+                        if (parent != null) parent.ChildActions.Add(item);
+                        actions.Add(item);
+                    }
+                    else if (type == ActionType.Control && parent != null)
+                        parent.ChildControls.Add(item);
+                }
+            }
+
+            if (parent != null)
+            {
+                if (parent.ChildActions.Count > 1) parent.ChildActions.Sort();
+            }
+            else if (actions.Count > 1)
+            {
+                actions.Sort();
+            }
+        }
+
         #endregion
 
         #region Internal Methods
@@ -514,7 +554,7 @@ namespace Micajah.Common.Bll.Providers
             return (ActionProvider.SettingsActionIdList.Contains(actionId) || ActionProvider.MyAccountActionIdList.Contains(actionId));
         }
 
-        internal static Action CreateAction(CommonDataSet.ActionRow row)
+        internal static Action CreateAction(ConfigurationDataSet.ActionRow row)
         {
             if (row != null)
             {
@@ -558,7 +598,7 @@ namespace Micajah.Common.Bll.Providers
                         action.OrderNumber = -action.OrderNumber;
                 }
 
-                foreach (CommonDataSet.ActionsParentActionsRow alternativeParentActionRow in row.GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_2())
+                foreach (ConfigurationDataSet.ActionsParentActionsRow alternativeParentActionRow in row.GetActionsParentActionsRowsByFK_Mc_ActionsParentActions_Mc_Action_2())
                 {
                     action.AlternativeParentActions.Add(alternativeParentActionRow.ParentActionId);
                 }
@@ -568,7 +608,7 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        internal static Action CreateAction(CommonDataSet.ActionRow row, Action parentAction)
+        internal static Action CreateAction(ConfigurationDataSet.ActionRow row, Action parentAction)
         {
             Action action = CreateAction(row);
             if (action != null)
@@ -576,11 +616,11 @@ namespace Micajah.Common.Bll.Providers
             return action;
         }
 
-        internal static void Fill(CommonDataSet dataSet)
+        internal static void Fill(ConfigurationDataSet dataSet)
         {
             if (dataSet == null) return;
 
-            CommonDataSet.ActionRow row = dataSet.Action.NewActionRow();
+            ConfigurationDataSet.ActionRow row = dataSet.Action.NewActionRow();
             row.ActionTypeId = (int)ActionType.GlobalNavigationLink;
             row.Name = "Global Navigation Links";
             row.ActionId = GlobalNavigationLinksActionId;
@@ -602,16 +642,6 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the root actions.
-        /// </summary>
-        /// <returns>The array of the DataRow that contains the root actions.</returns>
-        internal static DataRow[] GetRootActionRows()
-        {
-            CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action;
-            return table.Select(string.Concat(table.ParentActionIdColumn.ColumnName, " IS NULL"));
-        }
-
-        /// <summary>
         /// Gets the identifiers of actions associated with specified role.
         /// </summary>
         /// <param name="roleId">Specifies the role's identifier.</param>
@@ -620,8 +650,8 @@ namespace Micajah.Common.Bll.Providers
         {
             ArrayList actionIdList = new ArrayList();
 
-            CommonDataSet.RolesActionsDataTable table = WebApplication.CommonDataSet.RolesActions;
-            foreach (CommonDataSet.RolesActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.RoleIdColumn.ColumnName, roleId.ToString())))
+            ConfigurationDataSet.RolesActionsDataTable table = ConfigurationDataSet.Current.RolesActions;
+            foreach (ConfigurationDataSet.RolesActionsRow row in table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.RoleIdColumn.ColumnName, roleId.ToString())))
             {
                 actionIdList.Add(row.ActionId);
             }
@@ -700,19 +730,19 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The actions table.</returns>
         internal static DataTable GetActionsTree()
         {
-            CommonDataSet.ActionDataTable table = WebApplication.CommonDataSet.Action.Copy() as CommonDataSet.ActionDataTable;
+            ConfigurationDataSet.ActionDataTable table = ConfigurationDataSet.Current.Action.Copy() as ConfigurationDataSet.ActionDataTable;
 
-            foreach (CommonDataSet.ActionRow row in table.Select(string.Concat(table.ParentActionIdColumn.ColumnName, " = '", ConfigurationPageActionId.ToString(), "'")))
+            foreach (ConfigurationDataSet.ActionRow row in table.Select(string.Concat(table.ParentActionIdColumn.ColumnName, " = '", ConfigurationPageActionId.ToString(), "'")))
             {
                 row.ParentActionId = ConfigurationGlobalNavigationLinkActionId;
             }
 
-            foreach (CommonDataSet.ActionRow row in table.Select(string.Concat(table.ParentActionIdColumn.ColumnName, " = '", MyAccountPageActionId.ToString(), "'")))
+            foreach (ConfigurationDataSet.ActionRow row in table.Select(string.Concat(table.ParentActionIdColumn.ColumnName, " = '", MyAccountPageActionId.ToString(), "'")))
             {
                 row.ParentActionId = MyAccountGlobalNavigationLinkActionId;
             }
 
-            CommonDataSet.ActionRow actionRow = table.FindByActionId(ConfigurationPageActionId);
+            ConfigurationDataSet.ActionRow actionRow = table.FindByActionId(ConfigurationPageActionId);
             if (actionRow != null) actionRow.Delete();
 
             actionRow = table.FindByActionId(MyAccountPageActionId);
@@ -728,7 +758,7 @@ namespace Micajah.Common.Bll.Providers
 
             ArrayList setupActionIdList = new ArrayList();
 
-            foreach (CommonDataSet.ActionRow row in table)
+            foreach (ConfigurationDataSet.ActionRow row in table)
             {
                 if (IsSetupPage(row))
                     setupActionIdList.Add(row.ActionId);
@@ -748,8 +778,8 @@ namespace Micajah.Common.Bll.Providers
         internal static ArrayList GetAlternativeParentActionsIdList(Guid actionId)
         {
             ArrayList list = new ArrayList();
-            CommonDataSet.ActionsParentActionsDataTable table = WebApplication.CommonDataSet.ActionsParentActions;
-            foreach (CommonDataSet.ActionsParentActionsRow row in table.Select(string.Concat(table.ActionIdColumn.ColumnName, " = '", actionId.ToString(), "'")))
+            ConfigurationDataSet.ActionsParentActionsDataTable table = ConfigurationDataSet.Current.ActionsParentActions;
+            foreach (ConfigurationDataSet.ActionsParentActionsRow row in table.Select(string.Concat(table.ActionIdColumn.ColumnName, " = '", actionId.ToString(), "'")))
             {
                 if (!list.Contains(row.ParentActionId)) list.Add(row.ParentActionId);
             }
@@ -758,12 +788,12 @@ namespace Micajah.Common.Bll.Providers
 
         internal static DataTable GetAlternativeParentActionsTree(Guid actionId)
         {
-            CommonDataSet.ActionDataTable table = GetActionsTree() as CommonDataSet.ActionDataTable;
+            ConfigurationDataSet.ActionDataTable table = GetActionsTree() as ConfigurationDataSet.ActionDataTable;
 
             ArrayList list = new ArrayList();
-            FillActionIdList(WebApplication.CommonDataSet.Action.FindByActionId(actionId), ref list);
+            FillActionIdList(ConfigurationDataSet.Current.Action.FindByActionId(actionId), ref list);
 
-            foreach (CommonDataSet.ActionRow row in table.Rows)
+            foreach (ConfigurationDataSet.ActionRow row in table.Rows)
             {
                 if (!((row.ActionId == GlobalNavigationLinksActionId)
                     || (row.ActionId == ConfigurationGlobalNavigationLinkActionId)
@@ -844,7 +874,7 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="action">The action to check.</param>
         /// <returns>true, if the specified action is setup page; otherwise, false.</returns>
-        internal static bool IsSetupPage(CommonDataSet.ActionRow action)
+        internal static bool IsSetupPage(ConfigurationDataSet.ActionRow action)
         {
             if ((ActionType)action.ActionTypeId == ActionType.Page)
             {
@@ -944,7 +974,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetActions()
         {
-            return WebApplication.CommonDataSet.Action;
+            return ConfigurationDataSet.Current.Action;
         }
 
         /// <summary>

@@ -36,7 +36,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.EmailDataTable();
-                MasterDataSetTableAdapters.Current.EmailTableAdapter.Fill(table, 0, email);
+                MasterTableAdapters.Current.EmailTableAdapter.Fill(table, 0, email);
                 return table;
             }
             finally
@@ -58,7 +58,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 table = new MasterDataSet.EmailDataTable();
-                MasterDataSetTableAdapters.Current.EmailTableAdapter.Fill(table, 1, loginId);
+                MasterTableAdapters.Current.EmailTableAdapter.Fill(table, 1, loginId);
                 table.DefaultView.Sort = "[Email] ASC";
                 return table;
             }
@@ -76,7 +76,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertEmail(string email, Guid loginId)
         {
-            MasterDataSetTableAdapters.Current.EmailTableAdapter.Insert(email, loginId);
+            MasterTableAdapters.Current.EmailTableAdapter.Insert(email, loginId);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEmails(Guid loginId, String email)
         {
-            MasterDataSetTableAdapters.Current.EmailTableAdapter.Delete(loginId, email);
+            MasterTableAdapters.Current.EmailTableAdapter.Delete(loginId, email);
         }
 
         #endregion

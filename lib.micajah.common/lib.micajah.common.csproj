@@ -281,6 +281,15 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Dal\ConfigurationDataSet.cs">
+      <DependentUpon>ConfigurationDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dal\ConfigurationDataSet.Designer.cs">
+      <DependentUpon>ConfigurationDataSet.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Dal\MasterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -560,10 +569,10 @@
     <Compile Include="Dal\TableAdapters\GroupsInstancesRolesTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\GroupTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\Interfaces.cs" />
-    <Compile Include="Dal\TableAdapters\ClientDataSetTableAdapters.cs" />
+    <Compile Include="Dal\TableAdapters\ClientTableAdapters.cs" />
     <Compile Include="Dal\TableAdapters\DatabaseServerTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\SettingsValuesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\MasterDataSetTableAdapters.cs" />
+    <Compile Include="Dal\TableAdapters\MasterTableAdapters.cs" />
     <Compile Include="Dal\TableAdapters\UsersGroupsTableAdapter.cs" />
     <Compile Include="Dal\TableAdapters\WebsiteTableAdapter.cs" />
     <Compile Include="WebControls\SecurityControls\LogOnControl.cs">
@@ -637,6 +646,17 @@
     </None>
     <None Include="Dal\ClientDataSet.xss">
       <DependentUpon>ClientDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\ConfigurationDataSet.xsc">
+      <DependentUpon>ConfigurationDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Dal\ConfigurationDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ConfigurationDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Dal\ConfigurationDataSet.xss">
+      <DependentUpon>ConfigurationDataSet.xsd</DependentUpon>
     </None>
     <None Include="Dal\OAuthDataSet.xsc">
       <DependentUpon>OAuthDataSet.xsd</DependentUpon>

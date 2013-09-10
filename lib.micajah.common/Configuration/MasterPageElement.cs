@@ -47,13 +47,23 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the name of the aplication is added as prefix for the page title.
+        /// Gets or sets a value that indicates whether the name of the application is added as prefix for the page title.
         /// </summary>
         [ConfigurationProperty("titlePrefix", DefaultValue = true)]
         public bool TitlePrefix
         {
             get { return (bool)this["titlePrefix"]; }
             set { this["titlePrefix"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether the CustomStyleSheet is enabled.
+        /// </summary>
+        [ConfigurationProperty("enableCustomStyleSheet", DefaultValue = true)]
+        public bool EnableCustomStyleSheet
+        {
+            get { return (bool)this["enableCustomStyleSheet"]; }
+            set { this["enableCustomStyleSheet"] = value; }
         }
 
         /// <summary>

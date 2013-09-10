@@ -6,11 +6,11 @@ namespace Micajah.Common.Dal.TableAdapters
     /// <summary>
     /// The container class for the tables adapters of the common and master data sets.
     /// </summary>
-    public sealed class MasterDataSetTableAdapters : TableAdaptersHolder
+    public sealed class MasterTableAdapters : TableAdaptersHolder
     {
         #region Members
 
-        private static MasterDataSetTableAdapters s_Current;
+        private static MasterTableAdapters s_Current;
 
         #endregion
 
@@ -19,12 +19,12 @@ namespace Micajah.Common.Dal.TableAdapters
         /// <summary>
         /// Gets or sets the current instance of the class.
         /// </summary>
-        public static MasterDataSetTableAdapters Current
+        public static MasterTableAdapters Current
         {
             get
             {
                 if (s_Current == null)
-                    s_Current = new MasterDataSetTableAdapters();
+                    s_Current = new MasterTableAdapters();
                 return s_Current;
             }
             set
@@ -74,12 +74,12 @@ namespace Micajah.Common.Dal.TableAdapters
 
         #region Constructors
 
-        public MasterDataSetTableAdapters()
+        public MasterTableAdapters()
         {
             this.Initialize();
         }
 
-        public MasterDataSetTableAdapters(ICollection adapters)
+        public MasterTableAdapters(ICollection adapters)
             : base(adapters)
         {
             this.Initialize();
@@ -116,18 +116,26 @@ namespace Micajah.Common.Dal.TableAdapters
         #region Internal Methods
 
         /// <summary>
-        /// Fills the tables of specified CommonDataSet.
+        /// Fills the tables of specified data set.
         /// </summary>
-        /// <param name="dataSet">The CommonDataSet to fill.</param>
+        /// <param name="dataSet">The data set to fill.</param>
         internal void Fill(CommonDataSet dataSet)
         {
-            SettingProvider.Fill(dataSet);
-            RoleProvider.Fill(dataSet);
-            ActionProvider.Fill(dataSet);
             WebsiteTableAdapter.Fill(dataSet.Website);
             DatabaseServerTableAdapter.Fill(dataSet.DatabaseServer);
             DatabaseTableAdapter.Fill(dataSet.Database);
             OrganizationTableAdapter.Fill(dataSet.Organization);
+        }
+
+        /// <summary>
+        /// Fills the tables of specified data set.
+        /// </summary>
+        /// <param name="dataSet">The data set to fill.</param>
+        internal void Fill(ConfigurationDataSet dataSet)
+        {
+            SettingProvider.Fill(dataSet);
+            RoleProvider.Fill(dataSet);
+            ActionProvider.Fill(dataSet);
         }
 
         #endregion

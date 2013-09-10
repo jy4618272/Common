@@ -52,7 +52,7 @@ namespace Micajah.Common.Bll.Providers
         private static ClientDataSet.EntityFieldsValuesDataTable GetEntityFieldsValues(Guid organizationId, Guid entityId, string localEntityId)
         {
             ClientDataSet.EntityFieldsValuesDataTable table = null;
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
             {
                 table = new ClientDataSet.EntityFieldsValuesDataTable();
@@ -64,7 +64,7 @@ namespace Micajah.Common.Bll.Providers
         private static ClientDataSet.EntityFieldsValuesDataTable GetEntityFieldValues(Guid organizationId, Guid entityFieldId, string localEntityId)
         {
             ClientDataSet.EntityFieldsValuesDataTable table = null;
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
             {
                 table = new ClientDataSet.EntityFieldsValuesDataTable();
@@ -232,7 +232,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.EntityFieldsValuesTableAdapter.Update(table);
 
             WebApplication.RefreshEntities();
@@ -268,7 +268,7 @@ namespace Micajah.Common.Bll.Providers
                 table.AddEntityFieldsValuesRow(row);
             }
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.EntityFieldsValuesTableAdapter.Update(table);
 
             WebApplication.RefreshEntities();
@@ -330,7 +330,7 @@ namespace Micajah.Common.Bll.Providers
         public static ClientDataSet.EntityFieldDataTable GetEntityField(Guid entityFieldId, Guid organizationId)
         {
             ClientDataSet.EntityFieldDataTable table = null;
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
             {
                 table = new ClientDataSet.EntityFieldDataTable();
@@ -343,7 +343,7 @@ namespace Micajah.Common.Bll.Providers
         public static ClientDataSet.EntityFieldDataTable GetEntityFields(Guid entityId, Guid organizationId, Guid? instanceId, bool? active)
         {
             ClientDataSet.EntityFieldDataTable table = null;
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
             {
                 table = new ClientDataSet.EntityFieldDataTable();
@@ -371,7 +371,7 @@ namespace Micajah.Common.Bll.Providers
         public static ClientDataSet.EntityFieldListsValuesDataTable GetEntityFieldListValues(Guid entityFieldId, Guid organizationId, bool? active)
         {
             ClientDataSet.EntityFieldListsValuesDataTable table = null;
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
             {
                 table = new ClientDataSet.EntityFieldListsValuesDataTable();
@@ -384,7 +384,7 @@ namespace Micajah.Common.Bll.Providers
         public static ClientDataSet.EntityFieldListsValuesDataTable GetEntityFieldListValue(Guid entityFieldListValueId)
         {
             ClientDataSet.EntityFieldListsValuesDataTable table = null;
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null)
             {
                 table = new ClientDataSet.EntityFieldListsValuesDataTable();
@@ -402,7 +402,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityField(Guid entityFieldId, Guid organizationId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.EntityFieldTableAdapter.Delete(entityFieldId);
 
             WebApplication.RefreshEntities();
@@ -411,7 +411,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityFieldListValue(Guid entityFieldListValueId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null) adapters.EntityFieldListsValuesTableAdapter.Delete(entityFieldListValueId);
 
             WebApplication.RefreshEntities();
@@ -446,7 +446,7 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddEntityFieldRow(row);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null) adapters.EntityFieldTableAdapter.Update(row);
 
             WebApplication.RefreshEntities();
@@ -469,7 +469,7 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddEntityFieldListsValuesRow(row);
 
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null) adapters.EntityFieldListsValuesTableAdapter.Update(row);
 
             WebApplication.RefreshEntities();
@@ -482,7 +482,7 @@ namespace Micajah.Common.Bll.Providers
             , bool allowDBNull, bool unique, int maxLength, string minValue, string maxValue, int decimalDigits, int orderNumber
             , Guid entityId, Guid organizationId, Guid? instanceId, bool active)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             if (adapters != null)
             {
                 adapters.EntityFieldTableAdapter.Update(entityFieldId, entityFieldTypeId, name, description, dataTypeId, (((EntityFieldType)entityFieldTypeId == EntityFieldType.Value) ? defaultValue : null)
@@ -495,7 +495,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityFieldListValue(Guid entityFieldListValueId, Guid entityFieldId, string name, string value, bool Default, bool active)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
             if (adapters != null) adapters.EntityFieldListsValuesTableAdapter.Update(entityFieldListValueId, entityFieldId, name, value, Default, active);
 
             WebApplication.RefreshEntities();

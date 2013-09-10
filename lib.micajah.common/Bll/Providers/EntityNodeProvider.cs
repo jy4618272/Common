@@ -14,7 +14,7 @@ namespace Micajah.Common.Bll.Providers
     {
         #region Private Methods
 
-        private static void DeleteChildEntityNodes(ClientDataSet.EntityNodeRow parentRow, ClientDataSetTableAdapters adapters)
+        private static void DeleteChildEntityNodes(ClientDataSet.EntityNodeRow parentRow, ClientTableAdapters adapters)
         {
             parentRow.Deleted = true;
 
@@ -29,14 +29,14 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static ClientDataSet.EntityNodeRow GetEntityNode(Guid entityNodeId, ClientDataSetTableAdapters adapters)
+        private static ClientDataSet.EntityNodeRow GetEntityNode(Guid entityNodeId, ClientTableAdapters adapters)
         {
             ClientDataSet.EntityNodeDataTable table = new ClientDataSet.EntityNodeDataTable();
             adapters.EntityNodeTableAdapter.Fill(table, 3, entityNodeId);
             return ((table.Count > 0) ? table[0] : null);
         }
 
-        private static ClientDataSet.EntityNodeTypeRow GetEntityNodeType(Guid entityNodeTypeId, ClientDataSetTableAdapters adapters)
+        private static ClientDataSet.EntityNodeTypeRow GetEntityNodeType(Guid entityNodeTypeId, ClientTableAdapters adapters)
         {
             ClientDataSet.EntityNodeTypeDataTable table = new ClientDataSet.EntityNodeTypeDataTable();
             adapters.EntityNodeTypeTableAdapter.Fill(table, 2, entityNodeTypeId);
@@ -56,7 +56,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static void UpdateEntityNodePath(Guid entityNodeId, string fullPath)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, adapters);
             if (row != null)
@@ -69,7 +69,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static void MergeEntityNode(Guid sourceId, Guid targetId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeRow sourceRow = GetEntityNode(sourceId, adapters);
             ClientDataSet.EntityNodeRow destRow = GetEntityNode(targetId, adapters);
@@ -92,7 +92,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="parentEntityNodeId">The identifier of new parent of the entity node.</param>
         public static void ChangeParentEntityNode(Guid entityNodeId, Guid? parentEntityNodeId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, adapters);
             if (row != null)
@@ -108,7 +108,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static void ChangeParentEntityNodeType(Guid entityId, Guid sourceId, Guid destinationId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             EntityNodeType source = WebApplication.Entities[entityId.ToString("N")].CustomNodeTypes[sourceId.ToString("N")];
             EntityNodeType dest = WebApplication.Entities[entityId.ToString("N")].CustomNodeTypes[destinationId.ToString("N")];
@@ -188,7 +188,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityType(Guid entityNodeId, Guid entityNodeTypeId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, adapters);
             if (row != null)
@@ -202,7 +202,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityName(Guid entityNodeId, string name)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, adapters);
             if (row != null)
@@ -216,7 +216,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityNodeTypeName(Guid entityId, Guid entityNodeTypeId, string name)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeTypeRow row = GetEntityNodeType(entityNodeTypeId, adapters);
             if (row != null)
@@ -230,7 +230,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityNodeType(Guid organizationId, Guid entityNodeTypeId, string name, int orderNumber)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodeTypeDataTable table = new ClientDataSet.EntityNodeTypeDataTable();
             adapters.EntityNodeTypeTableAdapter.Fill(table, 2, entityNodeTypeId);
 
@@ -301,7 +301,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityNodeType(Guid entityNodeTypeId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeTypeRow row = GetEntityNodeType(entityNodeTypeId, adapters);
             if (row != null)
@@ -315,7 +315,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityNode(Guid entityNodeId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, adapters);
             if (row != null)
@@ -346,7 +346,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityNodeDataTable GetEntityNodes(Guid organizationId, Guid nodeTypeId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodeDataTable table = new ClientDataSet.EntityNodeDataTable();
             adapters.EntityNodeTableAdapter.Fill(table, 1, nodeTypeId);
             return table;
@@ -355,7 +355,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityNodeTypeDataTable GetCustomEntityNodeTypesByEntityId(Guid organizationId, Guid? instanceId, Guid entityId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodeTypeDataTable table = new ClientDataSet.EntityNodeTypeDataTable();
             adapters.EntityNodeTypeTableAdapter.Fill(table, 1, entityId, organizationId, instanceId);
             return table;
@@ -384,7 +384,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityNodeDataTable GetEntityNodesTree(Guid organizationId, Guid? instanceId, Guid entityId, string entityName)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodeDataTable table = new ClientDataSet.EntityNodeDataTable();
             adapters.EntityNodeTableAdapter.Fill(table, 2, entityId, organizationId, instanceId);
 
@@ -417,7 +417,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityNodesRelatedEntityNodesDataTable GetAllEntityNodesRelatedEntityNodes(Guid organizationId, Guid entityNodeId, Guid entityId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodesRelatedEntityNodesDataTable table = new ClientDataSet.EntityNodesRelatedEntityNodesDataTable();
             adapters.EntityNodesRelatedEntityNodesTableAdapter.Fill(table, 0, entityNodeId, entityId, organizationId);
             return table;
@@ -432,7 +432,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteAllEntityNodesRelatedEntityNodes(Guid organizationId, Guid entityNodeId, Guid entityId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodesRelatedEntityNodesDataTable dt = GetAllEntityNodesRelatedEntityNodes(organizationId, entityNodeId, entityId);
             while (dt.Rows.Count > 0)
             {
@@ -446,7 +446,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityNodesRelatedEntityNodes(Guid entityNodesRelatedEntityNodesId, Guid entityNodeId, Guid relatedEntityNodeId, Guid entityId, RelationType relationType, Guid organizationId)
         {
-            ClientDataSetTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
+            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.EntityNodesRelatedEntityNodesDataTable table = new ClientDataSet.EntityNodesRelatedEntityNodesDataTable();
             adapters.EntityNodesRelatedEntityNodesTableAdapter.Fill(table, 1, entityNodesRelatedEntityNodesId);
 
