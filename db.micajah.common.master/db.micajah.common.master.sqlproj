@@ -567,7 +567,4 @@
   <ItemGroup>
     <None Include="SqlSchemaCompareToLocal.scmp" />
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="db.micajah.common.master.refactorlog" />
-  </ItemGroup>
 </Project>
