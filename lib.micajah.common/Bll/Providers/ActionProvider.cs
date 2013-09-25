@@ -211,10 +211,13 @@ namespace Micajah.Common.Bll.Providers
                 object obj = Support.ConvertStringToType(value, typeof(Guid));
                 if (obj != null)
                 {
-                    ConfigurationDataSet.ActionsParentActionsRow actionsParentActionsRow = table.NewActionsParentActionsRow();
-                    actionsParentActionsRow.ActionId = action.Id;
-                    actionsParentActionsRow.ParentActionId = (Guid)obj;
-                    table.AddActionsParentActionsRow(actionsParentActionsRow);
+                    if (table.FindByActionIdParentActionId(action.Id, (Guid)obj) == null)
+                    {
+                        ConfigurationDataSet.ActionsParentActionsRow actionsParentActionsRow = table.NewActionsParentActionsRow();
+                        actionsParentActionsRow.ActionId = action.Id;
+                        actionsParentActionsRow.ParentActionId = (Guid)obj;
+                        table.AddActionsParentActionsRow(actionsParentActionsRow);
+                    }
                 }
             }
         }
