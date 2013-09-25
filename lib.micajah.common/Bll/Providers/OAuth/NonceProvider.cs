@@ -1,5 +1,5 @@
 ﻿using DotNetOpenAuth.Messaging.Bindings;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.OAuthDataSetTableAdapters;
 using System;
 
 namespace Micajah.Common.Bll.Providers.OAuth
@@ -46,7 +46,10 @@ namespace Micajah.Common.Bll.Providers.OAuth
 
         public bool StoreNonce(string context, string nonce, DateTime timestampUtc)
         {
-            return (MasterTableAdapters.Current.NonceTableAdapter.Insert(context, nonce, timestampUtc) == 1);
+            using (NonceTableAdapter adapter = new NonceTableAdapter())
+            {
+                return (adapter.InsertNonce(context, nonce, timestampUtc) == 1);
+            }
         }
 
         #endregion

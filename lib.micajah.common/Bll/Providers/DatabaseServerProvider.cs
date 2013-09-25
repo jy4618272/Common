@@ -1,6 +1,5 @@
-using Micajah.Common.Application;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +12,19 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class DatabaseServerProvider
     {
+        #region Private Methods
+
+        private static MasterDataSet.DatabaseServerRow GetDatabaseServerRowByDatabaseId(Guid databaseId)
+        {
+            using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
+            {
+                MasterDataSet.DatabaseServerDataTable table = adapter.GetDatabaseServerByDatabaseId(databaseId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
+        }
+
+        #endregion
+
         #region Internal Methods
 
         /// <summary>
@@ -22,7 +34,19 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.String that represents the full name of the specified SQL-server, incuding instance name and port.</returns>
         internal static string GetDatabaseServerFullName(Guid databaseServerId)
         {
-            CommonDataSet.DatabaseServerRow row = WebApplication.CommonDataSet.DatabaseServer.FindByDatabaseServerId(databaseServerId);
+            MasterDataSet.DatabaseServerRow row = GetDatabaseServerRow(databaseServerId);
+            return ((row == null) ? string.Empty : row.FullName);
+        }
+
+
+        /// <summary>
+        /// Returns the SQL-server full name, where the specified database is placed.
+        /// </summary>
+        /// <param name="databaseId">Specifies the database identifier.</param>
+        /// <returns>The System.String that represents the SQL-server full name, where the specified database is placed.</returns>
+        internal static string GetDatabaseServerFullNameByDatabaseId(Guid databaseId)
+        {
+            MasterDataSet.DatabaseServerRow row = GetDatabaseServerRowByDatabaseId(databaseId);
             return ((row == null) ? string.Empty : row.FullName);
         }
 
@@ -34,9 +58,12 @@ namespace Micajah.Common.Bll.Providers
         /// Gets the SQL-servers, excluding marked as deleted.
         /// </summary>
         /// <returns>The DataTable that contains SQL-servers.</returns>
-        public static DataTable GetDatabaseServers()
+        public static MasterDataSet.DatabaseServerDataTable GetDatabaseServers()
         {
-            return WebApplication.CommonDataSet.DatabaseServer;
+            using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
+            {
+                return adapter.GetDatabaseServers();
+            }
         }
 
         /// <summary>
@@ -48,9 +75,13 @@ namespace Micajah.Common.Bll.Providers
         /// If the SQL-server is not found, the method returns null reference.
         /// </returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static CommonDataSet.DatabaseServerRow GetDatabaseServerRow(Guid databaseServerId)
+        public static MasterDataSet.DatabaseServerRow GetDatabaseServerRow(Guid databaseServerId)
         {
-            return WebApplication.CommonDataSet.DatabaseServer.FindByDatabaseServerId(databaseServerId);
+            using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
+            {
+                MasterDataSet.DatabaseServerDataTable table = adapter.GetDatabaseServer(databaseServerId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
         }
 
         /// <summary>
@@ -62,19 +93,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="description">The SQL-server description.</param>
         /// <param name="websiteId">The identifier of a web site where the SQL-server is placed.</param>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static void InsertDatabaseServer(string name, string instanceName, int port, string description, Guid websiteId)
+        public static Guid InsertDatabaseServer(string name, string instanceName, int port, string description, Guid websiteId)
         {
-            CommonDataSet.DatabaseServerRow row = WebApplication.CommonDataSet.DatabaseServer.NewDatabaseServerRow();
+            Guid databaseServerId = Guid.NewGuid();
 
-            row.DatabaseServerId = Guid.NewGuid();
-            row.Name = name;
-            row.InstanceName = instanceName;
-            row.Port = port;
-            row.Description = description;
-            row.WebsiteId = websiteId;
+            using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
+            {
+                adapter.Insert(databaseServerId, name, instanceName, port, description, websiteId, false);
+            }
 
-            WebApplication.CommonDataSet.DatabaseServer.AddDatabaseServerRow(row);
-            MasterTableAdapters.Current.DatabaseServerTableAdapter.Update(row);
+            return databaseServerId;
         }
 
         /// <summary>
@@ -89,16 +117,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateDatabaseServer(Guid databaseServerId, string name, string instanceName, int port, string description, Guid websiteId)
         {
-            CommonDataSet.DatabaseServerRow row = WebApplication.CommonDataSet.DatabaseServer.FindByDatabaseServerId(databaseServerId);
-            if (row == null) return;
-
-            row.Name = name;
-            row.InstanceName = instanceName;
-            row.Port = port;
-            row.Description = description;
-            row.WebsiteId = websiteId;
-
-            MasterTableAdapters.Current.DatabaseServerTableAdapter.Update(row);
+            using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
+            {
+                adapter.Update(databaseServerId, name, instanceName, port, description, websiteId, false);
+            }
         }
 
         /// <summary>
@@ -107,13 +129,15 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="databaseServerId">Specifies the SQL-server's identifier.</param>
         public static void DeleteDatabaseServer(Guid databaseServerId)
         {
-            CommonDataSet.DatabaseServerRow row = WebApplication.CommonDataSet.DatabaseServer.FindByDatabaseServerId(databaseServerId);
+            MasterDataSet.DatabaseServerRow row = GetDatabaseServerRow(databaseServerId);
             if (row == null) return;
 
             row.Deleted = true;
 
-            MasterTableAdapters.Current.DatabaseServerTableAdapter.Update(row);
-            WebApplication.CommonDataSet.DatabaseServer.RemoveDatabaseServerRow(row);
+            using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
+            {
+                adapter.Update(row);
+            }
         }
 
         #endregion

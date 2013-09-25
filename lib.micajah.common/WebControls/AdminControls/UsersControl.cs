@@ -182,7 +182,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (CountryList != null)
             {
                 if (m_CountryList.SelectedIndex == -1)
-                    CountryProvider.InsertCountry(m_CountryList.Text, false);
+                    CountryProvider.InsertCountry(m_CountryList.Text);
             }
         }
 

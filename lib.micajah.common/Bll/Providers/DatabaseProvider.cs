@@ -1,6 +1,5 @@
-using Micajah.Common.Application;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.Properties;
 using System;
 using System.ComponentModel;
@@ -26,21 +25,11 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                Guid databaseId = Guid.Empty;
-                int count = 0;
-                int previousCount = -1;
-
-                foreach (CommonDataSet.DatabaseRow row in WebApplication.CommonDataSet.Database.Rows)
+                using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
                 {
-                    count = row.GetOrganizationRows().Length;
-                    if (previousCount == -1)
-                        previousCount = count;
-                    else if (count >= previousCount)
-                        continue;
-                    databaseId = row.DatabaseId;
+                    MasterDataSet.DatabaseDataTable table = adapter.GetDatabaseByMinimalNumberOfOrganizations();
+                    return ((table.Count > 0) ? table[0].DatabaseId : Guid.Empty);
                 }
-
-                return databaseId;
             }
         }
 
@@ -62,21 +51,19 @@ namespace Micajah.Common.Bll.Providers
 
         private static DataTable GetPublicDatabases(Guid organizationId, bool includeAdditionalInfo)
         {
-            DataTable table = WebApplication.CommonDataSet.Database.Clone();
+            DataTable table = new MasterDataSet.DatabaseDataTable();
 
-            foreach (CommonDataSet.DatabaseRow row in WebApplication.CommonDataSet.Database)
+            foreach (MasterDataSet.DatabaseRow row in GetDatabases())
             {
                 if (row.Private)
                 {
                     if (organizationId != Guid.Empty)
                     {
-                        foreach (CommonDataSet.OrganizationRow orgRow in row.GetOrganizationRows())
+                        Organization org = OrganizationProvider.GetOrganization(organizationId);
+                        if (org != null)
                         {
-                            if (orgRow.OrganizationId == organizationId)
-                            {
+                            if (org.DatabaseId == row.DatabaseId)
                                 table.ImportRow(row);
-                                break;
-                            }
                         }
                     }
                 }
@@ -137,7 +124,7 @@ namespace Micajah.Common.Bll.Providers
         {
             bool success = false;
             errorMessage = string.Empty;
-            CommonDataSet.DatabaseServerRow row = WebApplication.CommonDataSet.DatabaseServer.FindByDatabaseServerId(databaseServerId);
+            MasterDataSet.DatabaseServerRow row = DatabaseServerProvider.GetDatabaseServerRow(databaseServerId);
             if (row != null)
             {
                 string connectionString = CreateConnectionString(name, userName, password, row.Name, row.InstanceName, row.Port);
@@ -159,24 +146,13 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns the SQL-server full name, where the specified database is placed.
-        /// </summary>
-        /// <param name="databaseId">Specifies the database identifier.</param>
-        /// <returns>The System.String that represents the SQL-server full name, where the specified database is placed.</returns>
-        internal static string GetDatabaseServerFullName(Guid databaseId)
-        {
-            CommonDataSet.DatabaseRow row = WebApplication.CommonDataSet.Database.FindByDatabaseId(databaseId);
-            return ((row == null) ? string.Empty : row.DatabaseServerRow.FullName);
-        }
-
-        /// <summary>
         /// Returns the name of the specified database.
         /// </summary>
         /// <param name="databaseId">Specifies the database identifier.</param>
         /// <returns>The System.String that represents the name of the specified database.</returns>
         internal static string GetDatabaseName(Guid databaseId)
         {
-            CommonDataSet.DatabaseRow row = WebApplication.CommonDataSet.Database.FindByDatabaseId(databaseId);
+            MasterDataSet.DatabaseRow row = GetDatabaseRow(databaseId);
             return ((row == null) ? string.Empty : row.Name);
         }
 
@@ -206,10 +182,13 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets the databases, excluding marked as deleted.
         /// </summary>
-        /// <returns>The System.Data.DataTable that contains databases.</returns>
-        public static DataTable GetDatabases()
+        /// <returns>The table that contains databases.</returns>
+        public static MasterDataSet.DatabaseDataTable GetDatabases()
         {
-            return WebApplication.CommonDataSet.Database;
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                return adapter.GetDatabases();
+            }
         }
 
         /// <summary>
@@ -222,7 +201,7 @@ namespace Micajah.Common.Bll.Providers
         {
             if (includeAdditionalInfo)
             {
-                DataTable table = WebApplication.CommonDataSet.Database.Copy();
+                DataTable table = GetDatabases();
                 IncludeAdditionalInfo(ref table);
                 return table;
             }
@@ -248,9 +227,13 @@ namespace Micajah.Common.Bll.Providers
         /// If the database is not found, the method returns null reference.
         /// </returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static CommonDataSet.DatabaseRow GetDatabaseRow(Guid databaseId)
+        public static MasterDataSet.DatabaseRow GetDatabaseRow(Guid databaseId)
         {
-            return WebApplication.CommonDataSet.Database.FindByDatabaseId(databaseId);
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                MasterDataSet.DatabaseDataTable table = adapter.GetDatabase(databaseId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
         }
 
         /// <summary>
@@ -263,20 +246,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="Private">The flag indicated the database is private and can be used only by one organization.</param>
         /// <param name="databaseServerId">The identifier of the SQL-server which the database belong to.</param>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static void InsertDatabase(string name, string description, string userName, string password, bool Private, Guid databaseServerId)
+        public static Guid InsertDatabase(string name, string description, string userName, string password, bool Private, Guid databaseServerId)
         {
-            CommonDataSet.DatabaseRow row = WebApplication.CommonDataSet.Database.NewDatabaseRow();
+            Guid databaseId = Guid.NewGuid();
 
-            row.DatabaseId = Guid.NewGuid();
-            row.Name = name;
-            row.Description = description;
-            row.UserName = userName;
-            row.Password = password;
-            row.Private = Private;
-            row.DatabaseServerId = databaseServerId;
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                adapter.Insert(databaseId, name, description, userName, password, databaseServerId, Private, false);
+            }
 
-            WebApplication.CommonDataSet.Database.AddDatabaseRow(row);
-            MasterTableAdapters.Current.DatabaseTableAdapter.Update(row);
+            return databaseId;
         }
 
         /// <summary>
@@ -292,17 +271,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateDatabase(Guid databaseId, string name, string description, string userName, string password, bool Private, Guid databaseServerId)
         {
-            CommonDataSet.DatabaseRow row = WebApplication.CommonDataSet.Database.FindByDatabaseId(databaseId);
-            if (row == null) return;
-
-            row.Name = name;
-            row.Description = description;
-            row.UserName = userName;
-            row.Password = password;
-            row.Private = Private;
-            row.DatabaseServerId = databaseServerId;
-
-            MasterTableAdapters.Current.DatabaseTableAdapter.Update(row);
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                adapter.Update(databaseId, name, description, userName, password, databaseServerId, Private, false);
+            }
         }
 
         /// <summary>
@@ -312,13 +284,15 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteDatabase(Guid databaseId)
         {
-            CommonDataSet.DatabaseRow row = WebApplication.CommonDataSet.Database.FindByDatabaseId(databaseId);
+            MasterDataSet.DatabaseRow row = GetDatabaseRow(databaseId);
             if (row == null) return;
 
             row.Deleted = true;
 
-            MasterTableAdapters.Current.DatabaseTableAdapter.Update(row);
-            WebApplication.CommonDataSet.Database.RemoveDatabaseRow(row);
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                adapter.Update(row);
+            }
         }
 
         /// <summary>
@@ -331,14 +305,13 @@ namespace Micajah.Common.Bll.Providers
         {
             string connectionString = string.Empty;
 
-            CommonDataSet ds = WebApplication.CommonDataSet;
-            CommonDataSet.DatabaseRow db = ds.Database.FindByDatabaseId(databaseId);
-            if (db != null)
+            MasterDataSet.DatabaseRow db = GetDatabaseRow(databaseId);
+            if ((db != null) && (!db.Deleted))
             {
                 Guid databaseServerId = db.DatabaseServerId;
-                CommonDataSet.DatabaseServerRow server = ds.DatabaseServer.FindByDatabaseServerId(databaseServerId);
-                if (server != null)
-                    connectionString = DatabaseProvider.CreateConnectionString(db.Name, db.UserName, db.Password, server.Name, server.InstanceName, server.Port);
+                MasterDataSet.DatabaseServerRow server = DatabaseServerProvider.GetDatabaseServerRow(databaseServerId);
+                if ((server != null) && (!server.Deleted))
+                    connectionString = CreateConnectionString(db.Name, db.UserName, db.Password, server.Name, server.InstanceName, server.Port);
                 else
                     throw new DataException(string.Format(CultureInfo.CurrentCulture, Resources.DatabaseServerProvider_ErrorMessage_NoDatabaseServer, databaseServerId));
             }

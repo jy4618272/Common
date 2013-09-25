@@ -46,7 +46,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                if (m_Entity == null) m_Entity = WebApplication.Entities[this.EntityId.ToString()];
+                if (m_Entity == null) m_Entity = EntityFieldProvider.Entities[this.EntityId.ToString()];
                 return m_Entity;
             }
         }

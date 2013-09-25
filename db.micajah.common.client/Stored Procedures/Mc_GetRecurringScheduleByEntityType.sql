@@ -13,6 +13,7 @@ begin
 		  ,[InstanceId]
 		  ,[LocalEntityType]
 		  ,[LocalEntityId]
+		  ,[Name]
 		  ,[StartDate]
 		  ,[EndDate]
 		  ,[RecurrenceRule]

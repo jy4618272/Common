@@ -119,7 +119,7 @@
                 <asp:Parameter Name="active" Type="Boolean" />
                 <asp:Parameter Name="canceledTime" Type="DateTime" />
                 <asp:Parameter Name="trial" Type="Boolean" />
-                <asp:Parameter Name="parentorgid" Type="Object" />
+                <asp:Parameter Name="parentOrganizationId" Type="Object" />
             </UpdateParameters>
             <SelectParameters>
                 <asp:ControlParameter ControlID="List" PropertyName="SelectedValue" Name="organizationId"
@@ -136,6 +136,7 @@
                 <asp:Parameter Name="active" Type="Boolean" />
                 <asp:Parameter Name="canceledTime" Type="DateTime" />
                 <asp:Parameter Name="trial" Type="Boolean" />
+                <asp:Parameter Name="parentOrganizationId" Type="Object" />
             </InsertParameters>
         </asp:ObjectDataSource>
         <asp:ObjectDataSource ID="DatabaseListDataSource" runat="server" SelectMethod="GetPublicDatabases"

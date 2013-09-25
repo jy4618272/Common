@@ -700,15 +700,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Country &quot;{0}&quot; already exists.
-        /// </summary>
-        internal static string CountryProvider_ErrorMessage_CountryNameAlreadyExists {
-            get {
-                return ResourceManager.GetString("CountryProvider_ErrorMessage_CountryNameAlreadyExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to StyleSheet.
         /// </summary>
         internal static string CustomStyleSheetEditControl_FormTable_ObjectName {

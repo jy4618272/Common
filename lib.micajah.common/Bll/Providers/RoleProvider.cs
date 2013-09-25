@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using System;
@@ -483,13 +482,9 @@ namespace Micajah.Common.Bll.Providers
         /// <returns></returns>
         public static ConfigurationDataSet.RoleRow GetRoleRow(Guid organizationId, Guid groupId, Guid instanceId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds != null)
-            {
-                OrganizationDataSet.GroupsInstancesRolesRow row = ds.GroupsInstancesRoles.FindByGroupIdInstanceId(groupId, instanceId);
-                if (row != null)
-                    return GetRoleRow(row.RoleId);
-            }
+            Guid roleId = GroupProvider.GetGroupInstanceRole(organizationId, groupId, instanceId);
+            if (roleId != Guid.Empty)
+                return GetRoleRow(roleId);
             return null;
         }
 

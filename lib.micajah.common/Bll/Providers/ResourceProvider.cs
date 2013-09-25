@@ -1,7 +1,6 @@
-﻿using Micajah.Common.Application;
-using Micajah.Common.Configuration;
+﻿using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.Pages;
 using Micajah.Common.WebControls;
 using System;
@@ -693,7 +692,12 @@ namespace Micajah.Common.Bll.Providers
             {
                 object obj = Support.ConvertStringToType(str, typeof(Guid));
                 if (obj != null)
-                    MasterTableAdapters.Current.ResourceTableAdapter.Delete((Guid)obj);
+                {
+                    using (ResourceTableAdapter adapter = new ResourceTableAdapter())
+                    {
+                        adapter.Delete((Guid)obj);
+                    }
+                }
             }
         }
 
@@ -793,54 +797,55 @@ namespace Micajah.Common.Bll.Providers
 
             try
             {
-                ITableAdapter resourceTableAdapter = MasterTableAdapters.Current.ResourceTableAdapter.Clone() as ITableAdapter;
-
-                table = new MasterDataSet.ResourceDataTable();
-                resourceTableAdapter.Fill(table, 0, resourceId, w, h, a);
-                MasterDataSet.ResourceRow row = ((table.Count > 0) ? table[0] : null);
-
-                if (row != null)
+                using (ResourceTableAdapter adapter = new ResourceTableAdapter())
                 {
-                    if ((height > 0) || (width > 0))
+                    table = adapter.GetResource(resourceId, w, h, a);
+                    MasterDataSet.ResourceRow row = ((table.Count > 0) ? table[0] : null);
+
+                    if (row != null)
                     {
-                        if (row.ResourceId == resourceId)
+                        if ((height > 0) || (width > 0))
                         {
-                            if (createThumbnailIfNotExists)
+                            if (row.ResourceId == resourceId)
                             {
-                                byte[] content = CreateThumbnail(row.Content, width, height, align);
-                                string name = (row.IsNameNull() ? null : row.Name);
-                                bool temporary = row.Temporary;
-                                string localObjectType = row.LocalObjectType;
-                                string localObjectId = row.LocalObjectId;
-
-                                row = null;
-                                if (content != null)
+                                if (createThumbnailIfNotExists)
                                 {
-                                    row = table.NewResourceRow();
-                                    row.ResourceId = Guid.NewGuid();
-                                    row.ParentResourceId = resourceId;
-                                    row.LocalObjectType = localObjectType;
-                                    row.LocalObjectId = localObjectId;
-                                    row.Content = content;
-                                    row.ContentType = MimeType.Png;
-                                    if (!string.IsNullOrEmpty(name)) row.Name = name.Split('.')[0] + ".png";
-                                    if (w.HasValue) row.Width = w.Value;
-                                    if (h.HasValue) row.Height = h.Value;
-                                    if (a.HasValue) row.Align = a.Value;
-                                    row.Temporary = temporary;
-                                    row.CreatedTime = DateTime.UtcNow;
+                                    byte[] content = CreateThumbnail(row.Content, width, height, align);
+                                    string name = (row.IsNameNull() ? null : row.Name);
+                                    bool temporary = row.Temporary;
+                                    string localObjectType = row.LocalObjectType;
+                                    string localObjectId = row.LocalObjectId;
 
-                                    table.AddResourceRow(row);
-                                    resourceTableAdapter.Update(row);
+                                    row = null;
+                                    if (content != null)
+                                    {
+                                        row = table.NewResourceRow();
+                                        row.ResourceId = Guid.NewGuid();
+                                        row.ParentResourceId = resourceId;
+                                        row.LocalObjectType = localObjectType;
+                                        row.LocalObjectId = localObjectId;
+                                        row.Content = content;
+                                        row.ContentType = MimeType.Png;
+                                        if (!string.IsNullOrEmpty(name)) row.Name = name.Split('.')[0] + ".png";
+                                        if (w.HasValue) row.Width = w.Value;
+                                        if (h.HasValue) row.Height = h.Value;
+                                        if (a.HasValue) row.Align = a.Value;
+                                        row.Temporary = temporary;
+                                        row.CreatedTime = DateTime.UtcNow;
+
+                                        table.AddResourceRow(row);
+
+                                        adapter.Update(row);
+                                    }
                                 }
+                                else
+                                    row = null;
                             }
-                            else
-                                row = null;
                         }
                     }
-                }
 
-                return row;
+                    return row;
+                }
             }
             finally
             {
@@ -850,16 +855,10 @@ namespace Micajah.Common.Bll.Providers
 
         public static MasterDataSet.ResourceRow GetResourceRow(string localObjectType, string localObjectId)
         {
-            MasterDataSet.ResourceDataTable table = null;
-            try
+            using (ResourceTableAdapter adapter = new ResourceTableAdapter())
             {
-                table = new MasterDataSet.ResourceDataTable();
-                MasterTableAdapters.Current.ResourceTableAdapter.Fill(table, 1, localObjectType, localObjectId);
+                MasterDataSet.ResourceDataTable table = adapter.GetResources(localObjectType, localObjectId);
                 return ((table.Count > 0) ? table[0] : null);
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
             }
         }
 
@@ -953,26 +952,15 @@ namespace Micajah.Common.Bll.Providers
                 int? w = ((width > 0) ? new int?(width) : null);
                 int? h = ((height > 0) ? new int?(height) : null);
                 int? a = ((align > 0) ? new int?(align) : null);
+                Guid resourceId = Guid.NewGuid();
 
-                MasterDataSet.ResourceDataTable table = new MasterDataSet.ResourceDataTable();
-                MasterDataSet.ResourceRow row = table.NewResourceRow();
-                row.ResourceId = Guid.NewGuid();
-                if (parentResourceId.HasValue && (parentResourceId.Value != Guid.Empty)) row.ParentResourceId = parentResourceId.Value;
-                row.LocalObjectType = localObjectType;
-                row.LocalObjectId = localObjectId;
-                row.Content = content;
-                if (!string.IsNullOrEmpty(contentType)) row.ContentType = contentType;
-                if (!string.IsNullOrEmpty(name)) row.Name = name;
-                if (w.HasValue) row.Width = w.Value;
-                if (h.HasValue) row.Height = h.Value;
-                if (a.HasValue) row.Align = a.Value;
-                row.Temporary = temporary;
-                row.CreatedTime = DateTime.UtcNow;
+                using (ResourceTableAdapter adapter = new ResourceTableAdapter())
+                {
+                    adapter.Insert(resourceId, ((parentResourceId.HasValue && (parentResourceId.Value != Guid.Empty)) ? parentResourceId : new Guid?()), localObjectType, localObjectId
+                        , content, (string.IsNullOrEmpty(contentType) ? null : contentType), (string.IsNullOrEmpty(name) ? null : name), w, h, a, temporary, DateTime.UtcNow);
+                }
 
-                table.AddResourceRow(row);
-                MasterTableAdapters.Current.ResourceTableAdapter.Update(row);
-
-                return row.ResourceId;
+                return resourceId;
             }
             return null;
         }
@@ -980,7 +968,12 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateResource(Guid resourceId, string localObjectType, string localObjectId, bool temporary)
         {
             if (resourceId != Guid.Empty)
-                MasterTableAdapters.Current.ResourceTableAdapter.Update(resourceId, localObjectType, localObjectId, temporary);
+            {
+                using (ResourceTableAdapter adapter = new ResourceTableAdapter())
+                {
+                    adapter.Update(resourceId, localObjectType, localObjectId, temporary);
+                }
+            }
         }
 
         #endregion

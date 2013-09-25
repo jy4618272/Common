@@ -236,7 +236,5 @@
         </div>
     </div>
 </div>
-<asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountriesView"
-    TypeName="Micajah.Common.Bll.Providers.CountryProvider"></asp:ObjectDataSource>
 <asp:ObjectDataSource ID="InstanceListDataSource" runat="server" SelectMethod="GetTemplateInstances"
     TypeName="Micajah.Common.Bll.Providers.InstanceProvider"></asp:ObjectDataSource>

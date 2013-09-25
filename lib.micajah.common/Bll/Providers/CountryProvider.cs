@@ -1,10 +1,7 @@
 ﻿using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
-using Micajah.Common.Properties;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
 using System.ComponentModel;
-using System.Data;
-using System.Globalization;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -21,50 +18,28 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <returns>The System.Data.DataView object that contains the countries.</returns>s
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataView GetCountriesView()
+        public static MasterDataSet.CountryDataTable GetCountries()
         {
-            MasterDataSet.CountryDataTable table = new MasterDataSet.CountryDataTable();
-            MasterTableAdapters.Current.CountryTableAdapter.Fill(table);
-
-            DataView dv = table.DefaultView;
-            dv.Sort = "Name";
-            return dv;
+            using (CountryTableAdapter adapter = new CountryTableAdapter())
+            {
+                return adapter.GetCountries();
+            }
         }
 
         /// <summary>
         /// Creates new country.
         /// </summary>
         /// <param name="name">The name of the country.</param>
-        /// <param name="throwOnError">true to throw an exception if an error occured; false to return false.</param>
         /// <returns>The identifier of the newly created country.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static Guid InsertCountry(string name, bool throwOnError)
+        public static Guid InsertCountry(string name)
         {
-            MasterDataSet.CountryDataTable table = new MasterDataSet.CountryDataTable();
-            MasterDataSet.CountryRow row = table.NewCountryRow();
-
-            row.CountryId = Guid.NewGuid();
-
-            try
+            using (CountryTableAdapter adapter = new CountryTableAdapter())
             {
-                row.Name = name;
-
-                table.AddCountryRow(row);
-                MasterTableAdapters.Current.CountryTableAdapter.Update(row);
+                Guid countryId = Guid.NewGuid();
+                adapter.Insert(countryId, name);
+                return countryId;
             }
-            catch (ConstraintException ex)
-            {
-                string msg = ex.Message;
-                if (msg.Contains(string.Concat("'", table.NameColumn.ColumnName, "'")))
-                    msg = string.Format(CultureInfo.CurrentCulture, Resources.CountryProvider_ErrorMessage_CountryNameAlreadyExists, name);
-
-                row.CountryId = Guid.Empty;
-
-                if (throwOnError)
-                    throw new ConstraintException(msg);
-            }
-
-            return row.CountryId;
         }
 
         #endregion

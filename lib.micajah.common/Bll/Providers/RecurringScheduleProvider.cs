@@ -1,6 +1,6 @@
 ﻿using Micajah.Common.Application;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.ClientDataSetTableAdapters;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -28,8 +28,10 @@ namespace Micajah.Common.Bll.Providers
             {
                 row.Deleted = true;
 
-                ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-                adapters.RecurringScheduleTableAdapter.Update(row);
+                using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+                {
+                    adapter.Update(row);
+                }
             }
         }
 
@@ -53,7 +55,6 @@ namespace Micajah.Common.Bll.Providers
             if (recurringScheduleId.Equals(Guid.Empty) || organizationId.Equals(Guid.Empty) || string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("recurringScheduleId", Properties.Resources.ExceptionMessage_ArgumentsIsEmpty);
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
             ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
 
             ClientDataSet.RecurringScheduleRow row = GetRecurringSchedulesRow(recurringScheduleId, organizationId);
@@ -79,7 +80,10 @@ namespace Micajah.Common.Bll.Providers
             if (row.RowState == DataRowState.Detached)
                 table.AddRecurringScheduleRow(row);
 
-            adapters.RecurringScheduleTableAdapter.Update(row);
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                adapter.Update(row);
+            }
         }
 
         /// <summary>
@@ -111,10 +115,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RecurringScheduleDataTable GetRecurringSchedules(Guid organizationId, Guid? instanceId)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
-            adapters.RecurringScheduleTableAdapter.Fill(table, 0, organizationId, instanceId);
-            return table;
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetRecurringSchedules(organizationId, instanceId);
+            }
         }
 
         /// <summary>
@@ -125,10 +129,11 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RecurringScheduleRow GetRecurringSchedulesRow(Guid recurringScheduleId, Guid organizationId)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
-            adapters.RecurringScheduleTableAdapter.Fill(table, 1, recurringScheduleId);
-            return ((table.Count > 0) ? table[0] : null);
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                ClientDataSet.RecurringScheduleDataTable table = adapter.GetRecurringScheduleById(recurringScheduleId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
         }
 
         /// <summary>
@@ -141,10 +146,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RecurringScheduleDataTable GetRecurringSchedulesByEntityType(Guid organizationId, Guid? instanceId, string localEntityType)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
-            adapters.RecurringScheduleTableAdapter.Fill(table, 2, organizationId, instanceId, localEntityType);
-            return table;
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetRecurringScheduleByEntityType(organizationId, instanceId, localEntityType);
+            }
         }
 
         /// <summary>
@@ -158,10 +163,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RecurringScheduleDataTable GetRecurringSchedulesByEntityId(Guid organizationId, Guid? instanceId, string localEntityType, string localEntityId)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
-            adapters.RecurringScheduleTableAdapter.Fill(table, 3, organizationId, instanceId, localEntityType, localEntityId);
-            return table;
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetRecurringScheduleByEntityId(organizationId, instanceId, localEntityType, localEntityId);
+            }
         }
 
         /// <summary>
@@ -174,10 +179,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RecurringScheduleDataTable GetRecurringSchedulesByName(Guid organizationId, Guid? instanceId, string name)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
-            adapters.RecurringScheduleTableAdapter.Fill(table, 4, organizationId, instanceId, name);
-            return table;
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetRecurringScheduleByName(organizationId, instanceId, name);
+            }
         }
 
         /// <summary>
@@ -190,10 +195,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RecurringScheduleDataTable GetRecurringSchedulesByRecurrenceRule(Guid organizationId, Guid? instanceId, string definition)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            ClientDataSet.RecurringScheduleDataTable table = new ClientDataSet.RecurringScheduleDataTable();
-            adapters.RecurringScheduleTableAdapter.Fill(table, 5, organizationId, instanceId, definition);
-            return table;
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetRecurringScheduleByRecurrenceRule(organizationId, instanceId, definition);
+            }
         }
 
         /// <summary>
@@ -208,14 +213,16 @@ namespace Micajah.Common.Bll.Providers
         {
             Collection<string> result = new Collection<string>();
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            DataTable table = new DataTable();
-            table.Locale = CultureInfo.CurrentCulture;
-            adapters.RecurringScheduleTableAdapter.Fill(table, 6, organizationId, instanceId);
+            ClientDataSet.RecurringScheduleDataTable table = null;
 
-            foreach (DataRow row in table.Rows)
+            using (RecurringScheduleTableAdapter adapter = new RecurringScheduleTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                result.Add((string)row[0]);
+                table = adapter.GetRecurringScheduleEntityTypes(organizationId, instanceId);
+            }
+
+            foreach (ClientDataSet.RecurringScheduleRow row in table)
+            {
+                result.Add(row.LocalEntityType);
             }
 
             return result;

@@ -75,7 +75,7 @@
               <actions>
                 <action id="6E03B1C3-7AD0-460B-BF73-E3F9055A71DE" type="Page" name="Entity Custom Fields" description="Manage the Custom Fields of the Entity" navigateUrl="/mc/admin/entityfields.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
                   <actions>
-                    <action id="A058B233-203B-472C-8D15-86A353ADD11A" type="Page" name="Custom Field Values" description="Manage the Values of the Custom Field" navigateUrl="/mc/admin/entityfieldlistvalues.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" alternativeParents="F813370C-B0AA-4D7D-A6AB-B8CE4EA7F771"/>
+                    <action id="A058B233-203B-472C-8D15-86A353ADD11A" type="Page" name="Custom Field Values" description="Manage the Values of the Custom Field" navigateUrl="/mc/admin/entityfieldlistvalues.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin" />
                   </actions>
                 </action>
               </actions>

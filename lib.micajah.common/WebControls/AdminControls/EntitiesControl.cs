@@ -54,7 +54,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     descriptionFormat = Resources.EntitiesControl_EntityFieldsActionDescriptionFormat;
                 }
 
-                foreach (Entity entity in WebApplication.Entities)
+                foreach (Entity entity in EntityFieldProvider.Entities)
                 {
                     if (this.DisplayedEntityType == EntityType.Hierarchical)
                     {

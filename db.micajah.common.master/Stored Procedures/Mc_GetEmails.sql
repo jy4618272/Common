@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Mc_GetEmails]
+﻿CREATE PROCEDURE [dbo].[Mc_GetEmails]
 (
 	@LoginId uniqueidentifier
 )
@@ -10,4 +9,5 @@ BEGIN
 	SELECT Email, LoginId
 	FROM dbo.Mc_Email
 	WHERE (LoginId = @LoginId)
+	ORDER BY Email;
 END

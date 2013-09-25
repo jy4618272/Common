@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Micajah.Common.Application;
-using Micajah.Common.Configuration;
 
 namespace Micajah.Common.Bll
 {
@@ -26,7 +26,7 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                if (m_Entity == null) m_Entity = WebApplication.Entities[this.Id.ToString()];
+                if (m_Entity == null) m_Entity = EntityFieldProvider.Entities[this.Id.ToString()];
                 return m_Entity;
             }
         }

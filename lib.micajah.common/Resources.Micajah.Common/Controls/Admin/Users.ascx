@@ -222,7 +222,7 @@
                 <asp:Parameter Name="invitedLoginId" Type="Object" />
             </DeleteParameters>
         </asp:ObjectDataSource>
-        <asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountriesView"
+        <asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountries"
             TypeName="Micajah.Common.Bll.Providers.CountryProvider"></asp:ObjectDataSource>
         <asp:ObjectDataSource ID="InstancesDataSource" runat="server" SelectMethod="GetInstances"
             TypeName="Micajah.Common.Bll.Providers.InstanceProvider"></asp:ObjectDataSource>

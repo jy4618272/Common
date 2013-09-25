@@ -288,9 +288,6 @@ namespace Micajah.Common.WebControls.SecurityControls
                 if (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                     (new LoginProvider()).SignOut(true, false);
 
-                if (string.Compare(Request.QueryString["on"], bool.TrueString, StringComparison.OrdinalIgnoreCase) == 0)
-                    WebApplication.RefreshCommonDataSet(true);
-
                 try
                 {
                     WebApplication.LoginProvider.Authenticate(loginName, Support.Decrypt(password), false, isPersistent, organizationId, instanceId);

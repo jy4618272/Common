@@ -1,9 +1,7 @@
-using Micajah.Common.Application;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
 using System.ComponentModel;
-using System.Data;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -15,16 +13,22 @@ namespace Micajah.Common.Bll.Providers
     {
         #region Internal Methods
 
+        internal static Guid GetWebsiteIdByUrl(params string[] urls)
+        {
+            MasterDataSet.WebsiteRow row = GetWebsiteRowByUrl(urls);
+            return ((row != null) ? row.WebsiteId : Guid.Empty);
+        }
+
         /// <summary>
         /// Finds a web site by specified URLs and returns the identifier of the web site, if it's found and not deleted; otherwise, zero.
         /// </summary>
         /// <param name="urls">The URLs to find web site.</param>
         /// <returns>The web site if it's found; otherwise, null reference.</returns>
-        internal static CommonDataSet.WebsiteRow GetWebsiteRowByUrl(params string[] urls)
+        internal static MasterDataSet.WebsiteRow GetWebsiteRowByUrl(params string[] urls)
         {
-            CommonDataSet.WebsiteRow site = null;
+            MasterDataSet.WebsiteRow site = null;
 
-            foreach (CommonDataSet.WebsiteRow row in WebApplication.CommonDataSet.Website)
+            foreach (MasterDataSet.WebsiteRow row in GetWebsites())
             {
                 foreach (string url in urls)
                 {
@@ -65,24 +69,13 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <returns>The web site if it's found; otherwise, null reference.</returns>
-        internal static CommonDataSet.WebsiteRow GetWebsiteRowByOrganizationId(Guid organizationId)
+        internal static MasterDataSet.WebsiteRow GetWebsiteRowByOrganizationId(Guid organizationId)
         {
-            CommonDataSet ds = WebApplication.CommonDataSet;
-            CommonDataSet.OrganizationRow org = ds.Organization.FindByOrganizationId(organizationId);
-            if (org != null)
+            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
             {
-                if (!org.IsDatabaseIdNull())
-                {
-                    CommonDataSet.DatabaseRow db = ds.Database.FindByDatabaseId(org.DatabaseId);
-                    if (db != null)
-                    {
-                        CommonDataSet.DatabaseServerRow server = ds.DatabaseServer.FindByDatabaseServerId(db.DatabaseServerId);
-                        if (server != null)
-                            return ds.Website.FindByWebsiteId(server.WebsiteId);
-                    }
-                }
+                MasterDataSet.WebsiteDataTable table = adapter.GetWebsiteByOrganizationId(organizationId);
+                return ((table.Count > 0) ? table[0] : null);
             }
-            return null;
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the web site if it's found; otherwise, System.Guid.Empty.</returns>
         internal static Guid GetWebsiteIdByOrganizationId(Guid organizationId)
         {
-            CommonDataSet.WebsiteRow row = GetWebsiteRowByOrganizationId(organizationId);
+            MasterDataSet.WebsiteRow row = GetWebsiteRowByOrganizationId(organizationId);
             return ((row == null) ? Guid.Empty : row.WebsiteId);
         }
 
@@ -105,9 +98,12 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <returns>The DataTable that contains web sites.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataTable GetWebsites()
+        public static MasterDataSet.WebsiteDataTable GetWebsites()
         {
-            return WebApplication.CommonDataSet.Website;
+            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
+            {
+                return adapter.GetWebsites();
+            }
         }
 
         /// <summary>
@@ -119,9 +115,13 @@ namespace Micajah.Common.Bll.Providers
         /// If the web site is not found, the method returns null reference.
         /// </returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static CommonDataSet.WebsiteRow GetWebsiteRow(Guid websiteId)
+        public static MasterDataSet.WebsiteRow GetWebsiteRow(Guid websiteId)
         {
-            return WebApplication.CommonDataSet.Website.FindByWebsiteId(websiteId);
+            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
+            {
+                MasterDataSet.WebsiteDataTable table = adapter.GetWebsite(websiteId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
         }
 
         /// <summary>
@@ -132,18 +132,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="description">The web site description.</param>
         /// <param name="adminContactInfo">The information to contact with administrator of the web site.</param>
         [DataObjectMethod(DataObjectMethodType.Insert)]
-        public static void InsertWebsite(string name, string url, string description, string adminContactInfo)
+        public static Guid InsertWebsite(string name, string url, string description, string adminContactInfo)
         {
-            CommonDataSet.WebsiteRow row = WebApplication.CommonDataSet.Website.NewWebsiteRow();
+            Guid websiteId = Guid.NewGuid();
 
-            row.WebsiteId = Guid.NewGuid();
-            row.Name = name;
-            row.Url = url;
-            row.Description = description;
-            row.AdminContactInfo = adminContactInfo;
+            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
+            {
+                adapter.Insert(websiteId, name, url, description, adminContactInfo, false);
+            }
 
-            WebApplication.CommonDataSet.Website.AddWebsiteRow(row);
-            MasterTableAdapters.Current.WebsiteTableAdapter.Update(row);
+            return websiteId;
         }
 
         /// <summary>
@@ -157,15 +155,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateWebsite(Guid websiteId, string name, string url, string description, string adminContactInfo)
         {
-            CommonDataSet.WebsiteRow row = WebApplication.CommonDataSet.Website.FindByWebsiteId(websiteId);
-            if (row == null) return;
-
-            row.Name = name;
-            row.Url = url;
-            row.Description = description;
-            row.AdminContactInfo = adminContactInfo;
-
-            MasterTableAdapters.Current.WebsiteTableAdapter.Update(row);
+            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
+            {
+                adapter.Update(websiteId, name, url, description, adminContactInfo, false);
+            }
         }
 
         /// <summary>
@@ -175,13 +168,15 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteWebsite(Guid websiteId)
         {
-            CommonDataSet.WebsiteRow row = WebApplication.CommonDataSet.Website.FindByWebsiteId(websiteId);
+            MasterDataSet.WebsiteRow row = GetWebsiteRow(websiteId);
             if (row != null)
             {
                 row.Deleted = true;
 
-                MasterTableAdapters.Current.WebsiteTableAdapter.Update(row);
-                WebApplication.CommonDataSet.Website.RemoveWebsiteRow(row);
+                using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
+                {
+                    adapter.Update(row);
+                }
             }
         }
 
@@ -192,7 +187,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The first URL of the web site.</returns>
         public static string GetWebsiteUrl(Guid websiteId)
         {
-            CommonDataSet.WebsiteRow row = WebApplication.CommonDataSet.Website.FindByWebsiteId(websiteId);
+            MasterDataSet.WebsiteRow row = GetWebsiteRow(websiteId);
             return ((row == null) ? null : row.Url.Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0]);
         }
 

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using Micajah.Common.Application;
 
 namespace Micajah.Common.Bll
 {
@@ -100,7 +100,7 @@ namespace Micajah.Common.Bll
                 if (!this.IsCustom)
                 {
                     if (m_Entity == null)
-                        m_Entity = WebApplication.Entities[this.Id.ToString()];
+                        m_Entity = EntityFieldProvider.Entities[this.Id.ToString()];
                 }
                 return m_Entity;
             }

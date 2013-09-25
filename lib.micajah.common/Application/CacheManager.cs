@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using Micajah.Common.Security;
+using System;
 using System.Web;
 using System.Web.Caching;
 
@@ -51,6 +53,24 @@ namespace Micajah.Common.Application
         public virtual object Cache
         {
             get { return HttpRuntime.Cache; }
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        /// <summary>
+        /// Refreshes all cached data.
+        /// </summary>
+        internal static void RefreshAllData()
+        {
+            ActionProvider.Refresh();
+            SettingProvider.Refresh();
+            CustomUrlProvider.Refresh();
+            EntityFieldProvider.Refresh();
+            RuleEngineProvider.Refresh();
+
+            UserContext.RefreshCurrent();
         }
 
         #endregion

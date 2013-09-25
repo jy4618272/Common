@@ -678,31 +678,11 @@ namespace Micajah.Common.Security
         {
             ArrayList groupIdList = new ArrayList();
             ArrayList roleIdList = new ArrayList();
-            Guid roleId = Guid.Empty;
             string startUrl = null;
 
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(newInstance.OrganizationId);
-            OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
+            UserProvider.GetUserGroupsAndRoles(newInstance.OrganizationId, newInstance.InstanceId, this.UserId, ref groupIdList, ref roleIdList);
 
-            // Gets the actions that the user have access to.
-            foreach (ClientDataSet.UsersGroupsRow ugRow in UserProvider.GetUserGroups(this.UserId, newInstance.OrganizationId))
-            {
-                Guid groupId = ugRow.GroupId;
-                OrganizationDataSet.GroupsInstancesRolesRow gdrRow = gdrTable.FindByGroupIdInstanceId(groupId, newInstance.InstanceId);
-                if (gdrRow != null)
-                {
-                    if (!groupIdList.Contains(groupId)) groupIdList.Add(groupId);
-
-                    roleId = gdrRow.RoleId;
-                    if (!roleIdList.Contains(roleId))
-                    {
-                        if (RoleProvider.GetRoleRow(roleId) != null)
-                            roleIdList.Add(roleId);
-                    }
-                }
-            }
-
-            roleId = RoleProvider.AssumeRole(this.IsOrganizationAdministrator, ref roleIdList, ref startUrl);
+            Guid roleId = RoleProvider.AssumeRole(this.IsOrganizationAdministrator, ref roleIdList, ref startUrl);
 
             if (roleIdList.Count == 0)
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, newInstance.Name));
@@ -845,7 +825,7 @@ namespace Micajah.Common.Security
             }
 
             Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
-            if (WebApplication.WebsiteId != webSiteId)
+            if (WebsiteProvider.GetWebsiteIdByUrl(WebApplication.Hosts) != webSiteId)
             {
                 (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
             }
@@ -940,9 +920,7 @@ namespace Micajah.Common.Security
 
             RefreshDetails(this, userRow);
 
-            userRow.LastLoginDate = DateTime.UtcNow;
-
-            WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(newOrganization.OrganizationId).UserTableAdapter.Update(userRow);
+            UserProvider.UpdateLastLoginDate(userRow, newOrganization.OrganizationId);
 
             if (SelectedOrganizationChanged != null)
                 SelectedOrganizationChanged(this, EventArgs.Empty);
@@ -1141,35 +1119,13 @@ namespace Micajah.Common.Security
         /// <returns>true if the current user is a member of the specified roles in specified instance of the selected organization; otherwise, false.</returns>
         public bool IsInRole(Guid instanceId, params string[] shortName)
         {
-            bool exists = false;
             if (this.SelectedOrganizationId != Guid.Empty)
             {
-                StringBuilder sb = new StringBuilder();
-                foreach (Guid groupId in GroupIdList)
-                {
-                    sb.AppendFormat(CultureInfo.InvariantCulture, ",'{0}'", groupId.ToString());
-                }
-                if (sb.Length > 0)
-                {
-                    sb.Remove(0, 1);
+                ArrayList roleIdList = RoleProvider.GetRoleIdListByShortNames(shortName);
 
-                    ArrayList roleIdList = RoleProvider.GetRoleIdListByShortNames(shortName);
-                    OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(this.SelectedOrganizationId);
-                    OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
-
-                    foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(string.Concat(
-                        "CONVERT(", gdrTable.InstanceIdColumn.ColumnName, ", 'System.String') = '", instanceId
-                        , "' AND CONVERT(", gdrTable.GroupIdColumn.ColumnName, ", 'System.String') IN (", sb.ToString(), ")")))
-                    {
-                        if (roleIdList.Contains(gdrRow.RoleId))
-                        {
-                            exists = true;
-                            break;
-                        }
-                    }
-                }
+                return GroupProvider.GroupsInstanceHasRole(this.SelectedOrganizationId, this.GroupIdList, instanceId, roleIdList);
             }
-            return exists;
+            return false;
         }
 
         /// <summary>

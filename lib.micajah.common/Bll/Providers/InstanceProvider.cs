@@ -1,7 +1,7 @@
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.ClientDataSetTableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
@@ -21,6 +21,10 @@ namespace Micajah.Common.Bll.Providers
     public static class InstanceProvider
     {
         #region Members
+
+        private const int NameMaxLength = 255;
+        private const int DescriptionMaxLength = 255;
+        private const int ExternalIdMaxLength = 255;
 
         internal const string DefaultTimeZoneId = "Eastern Standard Time";
         internal const string DefaultWorkingDays = "1111100";
@@ -47,28 +51,27 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                StringBuilder sb1 = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 UserContext user = UserContext.Current;
                 if ((user != null) && (user.SelectedOrganizationId != Guid.Empty))
                 {
                     if (!user.IsOrganizationAdministrator)
                     {
-                        OrganizationDataSet dataSet = WebApplication.GetOrganizationDataSetByOrganizationId(user.SelectedOrganizationId);
-                        foreach (OrganizationDataSet.InstanceRow instanceRow in dataSet.Instance)
+                        foreach (ClientDataSet.InstanceRow instanceRow in GetInstances(user.SelectedOrganizationId))
                         {
                             if (!user.IsInstanceAdministrator(instanceRow.InstanceId))
-                                sb1.AppendFormat(",'{0}'", instanceRow.InstanceId);
+                                sb.AppendFormat(",'{0}'", instanceRow.InstanceId);
                         }
 
-                        if (sb1.Length > 0)
+                        if (sb.Length > 0)
                         {
-                            sb1.Remove(0, 1);
-                            sb1.Append(")");
-                            sb1.Insert(0, "CONVERT(InstanceId, 'System.String') NOT IN (");
+                            sb.Remove(0, 1);
+                            sb.Append(")");
+                            sb.Insert(0, "CONVERT(InstanceId, 'System.String') NOT IN (");
                         }
                     }
                 }
-                return sb1.ToString();
+                return sb.ToString();
             }
         }
 
@@ -110,22 +113,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization.</param>
         /// <param name="adminEmail">The email of the user to make his the administrator of the instance.</param>
         /// <param name="sendNotificationEmail">true to send notification email to administrator; otherwise, false.</param>
-        /// <param name="refreshOrganizationData">true to refresh cached organization's data.</param>
         /// <param name="configure">true to configure the instance.</param>
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         private static Guid InsertInstance(string name, string description, bool enableSignupUser
             , string externalId, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes
-            , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool refreshOrganizationData, bool configure, bool newOrg
+            , Guid organizationId, string adminEmail, string adminPassword, bool sendNotificationEmail, bool configure, bool newOrg
             , Guid? templateInstanceId
             , string partialCustomUrl)
         {
-            if (refreshOrganizationData) WebApplication.RefreshAllData();
-
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds == null) return Guid.Empty;
-
-            OrganizationDataSet.InstanceDataTable table = ds.Instance;
-            OrganizationDataSet.InstanceRow row = table.NewInstanceRow();
+            ClientDataSet.InstanceDataTable table = new ClientDataSet.InstanceDataTable();
+            ClientDataSet.InstanceRow row = table.NewInstanceRow();
             Guid instanceId = Guid.NewGuid();
 
             name = Support.TrimString(name, table.NameColumn.MaxLength);
@@ -171,15 +168,17 @@ namespace Micajah.Common.Bll.Providers
                 throw new ConstraintException(string.Format(CultureInfo.CurrentCulture, Resources.InstanceProvider_ErrorMessage_InstanceAlreadyExists, name), ex);
             }
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            if (adapters != null) adapters.InstanceTableAdapter.Update(row);
+            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                adapter.Update(row);
+            }
 
             Instance inst = new Instance();
             inst.Load(row);
 
             // Creates the built-in group for the Administrators of this Instance.
-            Guid groupId = GroupProvider.InsertGroup(string.Format(CultureInfo.InvariantCulture, Resources.GroupProvider_InstanceAdministratorGroup_Name, name), Resources.GroupProvider_InstanceAdministratorGroup_Description, organizationId, true, false);
-            GroupProvider.InsertGroupInstanceRole(groupId, instanceId, RoleProvider.InstanceAdministratorRoleId, organizationId, false);
+            Guid groupId = GroupProvider.InsertGroup(string.Format(CultureInfo.InvariantCulture, Resources.GroupProvider_InstanceAdministratorGroup_Name, name), Resources.GroupProvider_InstanceAdministratorGroup_Description, organizationId, true);
+            GroupProvider.InsertGroupInstanceRole(groupId, instanceId, RoleProvider.InstanceAdministratorRoleId, organizationId);
 
             Guid? userId = null;
             string password = null;
@@ -193,7 +192,7 @@ namespace Micajah.Common.Bll.Providers
                     , null, null, null
                     , groupId.ToString(), true
                     , organizationId, false
-                    , false, false
+                    , false
                     , 0, 0, out password);
 
                 if (string.IsNullOrEmpty(password))
@@ -211,8 +210,6 @@ namespace Micajah.Common.Bll.Providers
 
             if (!string.IsNullOrEmpty(partialCustomUrl))
                 CustomUrlProvider.InsertCustomUrl(organizationId, instanceId, null, partialCustomUrl);
-
-            if (refreshOrganizationData) WebApplication.RefreshOrganizationData(organizationId);
 
             RaiseInstanceInserted(inst, userId, templateInstance);
 
@@ -250,10 +247,10 @@ namespace Micajah.Common.Bll.Providers
 
         internal static Guid InsertFirstInstance(string timeZoneId, Guid? templateInstanceId, Guid organizationId
             , string adminEmail, string adminPassword, string partialCustomUrl
-            , bool sendNotificationEmail, bool refreshOrganiationData)
+            , bool sendNotificationEmail)
         {
             return InsertInstance(Resources.InstanceProvider_FirstInstance_Name, null, false, null, timeZoneId, 0, 0, null, true, null, false, false, null, organizationId
-                , adminEmail, adminPassword, sendNotificationEmail, refreshOrganiationData, false, true, templateInstanceId, partialCustomUrl);
+                , adminEmail, adminPassword, sendNotificationEmail, false, true, templateInstanceId, partialCustomUrl);
         }
 
         /// <summary>
@@ -269,7 +266,7 @@ namespace Micajah.Common.Bll.Providers
                 foreach (DataRow row in table.Rows)
                 {
                     Instance inst = new Instance();
-                    inst.Load(row as OrganizationDataSet.InstanceRow);
+                    inst.Load(row as ClientDataSet.InstanceRow);
                     coll.Add(inst);
                 }
 
@@ -289,7 +286,7 @@ namespace Micajah.Common.Bll.Providers
             Instance inst = null;
             DataTable table = GetInstances(organizationId);
 
-            foreach (OrganizationDataSet.InstanceRow row in table.Rows)
+            foreach (ClientDataSet.InstanceRow row in table.Rows)
             {
                 if (row != null)
                 {
@@ -309,6 +306,41 @@ namespace Micajah.Common.Bll.Providers
         {
             Instance inst = GetFirstInstance(organizationId);
             return ((inst == null) ? Guid.Empty : inst.InstanceId);
+        }
+
+        internal static ClientDataSet.InstanceRow GetInstanceRow(Guid organizationId, Guid instanceId)
+        {
+            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                ClientDataSet.InstanceDataTable table = adapter.GetInstance(instanceId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
+        }
+
+        internal static List<Guid> GetGroupsInstances(string groupId, Guid organizationId)
+        {
+            List<Guid> instanceIdList = new List<Guid>();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (string id in groupId.Split(','))
+            {
+                sb.AppendFormat(CultureInfo.InvariantCulture, ",'{0}'", id);
+            }
+            if (sb.Length > 0)
+            {
+                sb.Remove(0, 1);
+
+                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+                {
+                    foreach (ClientDataSet.InstanceRow row in adapter.GetInstancesByGroups(organizationId, sb.ToString()))
+                    {
+                        if (!instanceIdList.Contains(row.InstanceId))
+                            instanceIdList.Add(row.InstanceId);
+                    }
+                }
+            }
+
+            return instanceIdList;
         }
 
         /// <summary>
@@ -368,18 +400,17 @@ namespace Micajah.Common.Bll.Providers
 
         internal static void UpdateInstancesPseudoId(Guid organizationId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds != null)
+            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                foreach (OrganizationDataSet.InstanceRow instanceRow in ds.Instance)
+                ClientDataSet.InstanceDataTable table = adapter.GetInstances(organizationId);
+
+                foreach (ClientDataSet.InstanceRow instanceRow in table)
                 {
                     if (string.IsNullOrEmpty(instanceRow.PseudoId))
                         instanceRow.PseudoId = Support.GeneratePseudoUnique();
                 }
 
-                ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-                if (adapters != null)
-                    adapters.InstanceTableAdapter.Update(ds.Instance);
+                adapter.Update(table);
             }
         }
 
@@ -401,8 +432,8 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (!roleRow.BuiltIn)
                 {
-                    Guid groupId = GroupProvider.InsertGroup(name + roleRow.Name + "s", string.Empty, organizationId, false, false);
-                    GroupProvider.InsertGroupInstanceRole(groupId, instanceId, roleRow.RoleId, organizationId, false);
+                    Guid groupId = GroupProvider.InsertGroup(name + roleRow.Name + "s", string.Empty, organizationId, false);
+                    GroupProvider.InsertGroupInstanceRole(groupId, instanceId, roleRow.RoleId, organizationId);
                 }
             }
         }
@@ -414,18 +445,20 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetInstances()
         {
-            return WebApplication.GetOrganizationDataSetByOrganizationId(UserContext.Current.SelectedOrganizationId).Instance;
+            return GetInstances(UserContext.Current.SelectedOrganizationId);
         }
 
         /// <summary>
         /// Gets the instances for the specified organization, excluding marked as deleted.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization.</param>
-        /// <returns>The System.Data.DataTable object that contains instances.</returns>
-        public static DataTable GetInstances(Guid organizationId)
+        /// <returns>The table object that contains instances.</returns>
+        public static ClientDataSet.InstanceDataTable GetInstances(Guid organizationId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            return ((ds == null) ? null : ds.Instance);
+            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetInstances(organizationId);
+            }
         }
 
         /// <summary>
@@ -533,7 +566,7 @@ namespace Micajah.Common.Bll.Providers
             bool loaded = false;
             if (organizationId == Guid.Empty)
             {
-                foreach (CommonDataSet.OrganizationRow row in WebApplication.CommonDataSet.Organization)
+                foreach (MasterDataSet.OrganizationRow row in OrganizationProvider.GetOrganizations(null))
                 {
                     loaded = instance.Load(row.OrganizationId, instanceId);
                     if (loaded) break;
@@ -555,16 +588,15 @@ namespace Micajah.Common.Bll.Providers
             Instance instance = null;
             if (!string.IsNullOrEmpty(pseudoId))
             {
-                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-                if (ds != null)
+                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                 {
-                    OrganizationDataSet.InstanceDataTable table = ds.Instance;
-                    OrganizationDataSet.InstanceRow[] rows = table.Select(string.Concat(table.PseudoIdColumn.ColumnName, " = '", pseudoId, "' AND ", table.DeletedColumn.ColumnName, " = 0")) as OrganizationDataSet.InstanceRow[];
-                    if (rows.Length > 0)
+                    ClientDataSet.InstanceDataTable table = adapter.GetInstanceByPseudoId(pseudoId);
+                    if (table.Count > 0)
                     {
                         instance = new Instance();
-                        instance.Load(rows[0]);
+                        instance.Load(table[0]);
                     }
+
                 }
             }
             return instance;
@@ -579,15 +611,15 @@ namespace Micajah.Common.Bll.Providers
         public static Guid GetInstanceIdByName(string organizationName, string instanceName)
         {
             Guid instanceId = Guid.Empty;
-            Guid organizationId = OrganizationProvider.GetOrganizationIdByName(organizationName);
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds != null)
+            if (!string.IsNullOrEmpty(instanceName))
             {
-                if (!string.IsNullOrEmpty(instanceName))
+                Guid organizationId = OrganizationProvider.GetOrganizationIdByName(organizationName);
+
+                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                 {
-                    OrganizationDataSet.InstanceDataTable table = ds.Instance;
-                    OrganizationDataSet.InstanceRow[] rows = table.Select(string.Concat(table.NameColumn.ColumnName, " = '", instanceName.Replace("'", "''"), "' AND ", table.DeletedColumn.ColumnName, " = 0")) as OrganizationDataSet.InstanceRow[];
-                    if (rows.Length > 0) instanceId = rows[0].InstanceId;
+                    ClientDataSet.InstanceDataTable table = adapter.GetInstanceByName(instanceName);
+                    if (table.Count > 0)
+                        instanceId = table[0].InstanceId;
                 }
             }
             return instanceId;
@@ -601,15 +633,8 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.String that represents the name of the instance.</returns>
         public static string GetInstanceName(Guid instanceId, Guid organizationId)
         {
-            string name = string.Empty;
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds != null)
-            {
-                OrganizationDataSet.InstanceRow instanceRow = ds.Instance.FindByInstanceId(instanceId);
-                if (instanceRow != null)
-                    name = instanceRow.Name;
-            }
-            return name;
+            ClientDataSet.InstanceRow instanceRow = GetInstanceRow(organizationId, instanceId);
+            return ((instanceRow == null) ? string.Empty : instanceRow.Name);
         }
 
         public static string[] GetInstanceNames(IList<Guid> instanceIdList, Guid organizationId)
@@ -618,12 +643,11 @@ namespace Micajah.Common.Bll.Providers
 
             if (instanceIdList != null)
             {
-                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-                OrganizationDataSet.InstanceDataTable table = ds.Instance;
+                ClientDataSet.InstanceDataTable table = GetInstances(organizationId);
 
                 foreach (Guid instId in instanceIdList)
                 {
-                    OrganizationDataSet.InstanceRow row = table.FindByInstanceId(instId);
+                    ClientDataSet.InstanceRow row = table.FindByInstanceId(instId);
                     if (row != null)
                         names.Add(row.Name);
                 }
@@ -646,7 +670,7 @@ namespace Micajah.Common.Bll.Providers
         public static Guid InsertInstance(string name, string description, bool active, bool beta, string vanityUrl, Guid templateInstanceId)
         {
             UserContext user = UserContext.Current;
-            Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, user.SelectedOrganizationId, user.Email, null, true, true, false, false, templateInstanceId, null);
+            Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, user.SelectedOrganizationId, user.Email, null, true, false, false, templateInstanceId, null);
             if (!string.IsNullOrEmpty(vanityUrl))
                 CustomUrlProvider.InsertCustomUrl(user.SelectedOrganizationId, instanceId, null, vanityUrl.ToLowerInvariant());
             return instanceId;
@@ -670,7 +694,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
         {
-            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganizationId, adminEmail, null, true, true, false, false, null, null);
+            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganizationId, adminEmail, null, true, false, false, null, null);
         }
 
         /// <summary>
@@ -694,7 +718,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Guid that represents the identifier of the newly created instance.</returns>
         public static Guid InsertInstance(string name, string description, bool enableSignupUser, string externalId, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, DateTime? canceledTime, bool trial, bool beta, string emailSuffixes, Guid organizationId)
         {
-            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, true, false, false, null, null);
+            return InsertInstance(name, description, enableSignupUser, externalId, timeZoneId, timeFormat, dateFormat, workingDays, active, canceledTime, trial, beta, emailSuffixes, organizationId, null, null, true, false, false, null, null);
         }
 
         /// <summary>
@@ -796,15 +820,11 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="creditCardStatus"></param>
         public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string externalId, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, Guid organizationId, bool raiseEvent, int billingPlan, int creditCardStatus)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds == null) return;
-
-            OrganizationDataSet.InstanceDataTable table = ds.Instance;
-            OrganizationDataSet.InstanceRow row = table.FindByInstanceId(instanceId);
+            ClientDataSet.InstanceRow row = GetInstanceRow(organizationId, instanceId);
             if (row == null) return;
 
-            name = Support.TrimString(name, table.NameColumn.MaxLength);
-            description = Support.TrimString(description, table.DescriptionColumn.MaxLength);
+            name = Support.TrimString(name, NameMaxLength);
+            description = Support.TrimString(description, DescriptionMaxLength);
 
             bool nameIsModified = (string.Compare(name, row.Name, StringComparison.Ordinal) != 0);
 
@@ -819,7 +839,7 @@ namespace Micajah.Common.Bll.Providers
 
             row.Description = description;
             if (enableSignupUser.HasValue) row.EnableSignUpUser = enableSignupUser.Value;
-            if (externalId != null) row.ExternalId = Support.TrimString(externalId, table.ExternalIdColumn.MaxLength);
+            if (externalId != null) row.ExternalId = Support.TrimString(externalId, ExternalIdMaxLength);
             if (!string.IsNullOrEmpty(timeZoneId)) row.TimeZoneId = timeZoneId;
             if (timeFormat.HasValue) row.TimeFormat = timeFormat.Value;
             if (dateFormat.HasValue) row.DateFormat = dateFormat.Value;
@@ -832,14 +852,16 @@ namespace Micajah.Common.Bll.Providers
             if (creditCardStatus >= 0) row.CreditCardStatus = (byte)creditCardStatus;
             row.Deleted = false;
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            if (adapters != null) adapters.InstanceTableAdapter.Update(row);
+            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                adapter.Update(row);
+            }
 
             Instance inst = new Instance();
             inst.Load(row);
 
             if (nameIsModified)
-                GroupProvider.UpdateInstanceAdministratorGroup(ds, organizationId, instanceId, name);
+                GroupProvider.UpdateInstanceAdministratorGroup(organizationId, instanceId, name);
 
             if (emailSuffixes != null)
             {
@@ -903,33 +925,27 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteInstance(Guid instanceId)
         {
-            UserContext ctx = UserContext.Current;
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(ctx.SelectedOrganizationId);
-            OrganizationDataSet.InstanceDataTable table = ds.Instance;
-            OrganizationDataSet.InstanceRow row = table.FindByInstanceId(instanceId);
-            if (row == null) return;
+            UserContext user = UserContext.Current;
 
-            row.Deleted = true;
-
-            WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(ctx.SelectedOrganizationId).InstanceTableAdapter.Update(row);
-
-            // Looks for built-in group for the instance's administators.
-            Guid groupId = Guid.Empty;
-            OrganizationDataSet.GroupsInstancesRolesRow[] rows = row.GetGroupsInstancesRolesRows();
-            foreach (OrganizationDataSet.GroupsInstancesRolesRow girRow in rows)
+            ClientDataSet.InstanceRow row = GetInstanceRow(user.SelectedOrganizationId, instanceId);
+            if (row != null)
             {
-                if (girRow.RoleId == RoleProvider.InstanceAdministratorRoleId)
-                    groupId = girRow.GroupId;
+                row.Deleted = true;
+
+                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(user.SelectedOrganizationId)))
+                {
+                    adapter.Update(row);
+                }
+
+                // Looks for built-in group for the instance's administators.
+                ClientDataSet.GroupsInstancesRolesDataTable table = GroupProvider.GetGroupsInstancesRolesByRoleId(user.SelectedOrganizationId, RoleProvider.InstanceAdministratorRoleId);
+                if (table.Count > 0)
+                    GroupProvider.DeleteGroup(table[0].GroupId);
+
+                EmailSuffixProvider.DeleteEmailSuffixes(user.SelectedOrganizationId, instanceId);
+
+                user.Refresh();
             }
-
-            GroupProvider.RemoveGroupsInstancesRolesRows(rows);
-            table.RemoveInstanceRow(row);
-
-            if (groupId != Guid.Empty) GroupProvider.DeleteGroup(groupId);
-
-            EmailSuffixProvider.DeleteEmailSuffixes(ctx.SelectedOrganizationId, instanceId);
-
-            ctx.Refresh();
         }
 
         /// <summary>

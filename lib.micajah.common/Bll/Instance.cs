@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using System;
@@ -79,19 +78,7 @@ namespace Micajah.Common.Bll
             get
             {
                 if (m_GroupIdRoleIdList == null)
-                {
-                    m_GroupIdRoleIdList = new SortedList();
-
-                    ConfigurationDataSet.RoleDataTable roleTable = ConfigurationDataSet.Current.Role;
-                    OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(this.OrganizationId);
-                    OrganizationDataSet.GroupsInstancesRolesDataTable gdrTable = ds.GroupsInstancesRoles;
-
-                    foreach (OrganizationDataSet.GroupsInstancesRolesRow gdrRow in gdrTable.Select(string.Concat(gdrTable.InstanceIdColumn.ColumnName, "='", InstanceId, "'")))
-                    {
-                        if ((roleTable.FindByRoleId(gdrRow.RoleId) != null) && (!m_GroupIdRoleIdList.Contains(gdrRow.GroupId)))
-                            m_GroupIdRoleIdList.Add(gdrRow.GroupId, gdrRow.RoleId);
-                    }
-                }
+                    m_GroupIdRoleIdList = GroupProvider.GetGroupIdRoleIdList(this.OrganizationId, this.InstanceId);
                 return m_GroupIdRoleIdList;
             }
         }
@@ -426,15 +413,11 @@ namespace Micajah.Common.Bll
         /// <returns>true, if the specified instance is found; otherwise, false.</returns>
         internal bool Load(Guid organizationId, Guid instanceId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (ds != null)
+            ClientDataSet.InstanceRow instanceRow = InstanceProvider.GetInstanceRow(organizationId, instanceId);
+            if (instanceRow != null)
             {
-                OrganizationDataSet.InstanceRow instanceRow = ds.Instance.FindByInstanceId(instanceId);
-                if (instanceRow != null)
-                {
-                    Load(instanceRow);
-                    return true;
-                }
+                Load(instanceRow);
+                return true;
             }
             return false;
         }
@@ -443,7 +426,7 @@ namespace Micajah.Common.Bll
         /// Loads the data of specified instance into Micajah.Common.Bll.Instance class from CommonDataSet.
         /// </summary>
         /// <param name="row">The data row of the instance to load.</param>
-        internal void Load(OrganizationDataSet.InstanceRow row)
+        internal void Load(ClientDataSet.InstanceRow row)
         {
             if (row != null)
             {

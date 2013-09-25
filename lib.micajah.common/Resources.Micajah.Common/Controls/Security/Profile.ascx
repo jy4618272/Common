@@ -77,5 +77,5 @@
         <asp:Parameter Name="dateFormat" Type="Int32" />
     </UpdateParameters>
 </asp:ObjectDataSource>
-<asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountriesView"
+<asp:ObjectDataSource ID="CountriesDataSource" runat="server" SelectMethod="GetCountries"
     TypeName="Micajah.Common.Bll.Providers.CountryProvider"></asp:ObjectDataSource>

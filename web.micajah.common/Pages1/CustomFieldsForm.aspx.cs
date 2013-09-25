@@ -1,6 +1,7 @@
 ﻿using System;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
 using Telerik.Web.UI;
 
 public partial class CustomFieldsFormTestPage : System.Web.UI.Page
@@ -18,7 +19,7 @@ public partial class CustomFieldsFormTestPage : System.Web.UI.Page
         {
             ComboBox1.Items.Add(new RadComboBoxItem());
 
-            foreach (Entity entity in WebApplication.Entities)
+            foreach (Entity entity in EntityFieldProvider.Entities)
             {
                 if (!entity.EnableHierarchy)
                     ComboBox1.Items.Add(new RadComboBoxItem(entity.Name, entity.Id.ToString()));

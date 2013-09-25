@@ -1,7 +1,6 @@
-using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.ClientDataSetTableAdapters;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -80,43 +79,12 @@ namespace Micajah.Common.Bll.Providers
 
         #region Private Methods
 
-        private static string GetSettingsValuesDataTableFilter(OrganizationDataSet.SettingsValuesDataTable svTable
-            , Guid organizationId, Guid instanceId)
+        private static ClientDataSet.SettingsValuesDataTable GetSettingsValues(Guid organizationId, Guid? instanceId, Guid? groupId)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0} = '{{0}}' AND {1} = '{2}' AND {3}"
-                , svTable.SettingIdColumn.ColumnName
-                , svTable.OrganizationIdColumn.ColumnName, organizationId.ToString()
-                , svTable.InstanceIdColumn.ColumnName);
-
-            if (instanceId != Guid.Empty)
-                sb.AppendFormat(CultureInfo.InvariantCulture, " = '{0}' AND {1} = '{{1}}'", instanceId.ToString(), svTable.GroupIdColumn.ColumnName);
-            else
-                sb.AppendFormat(CultureInfo.InvariantCulture, " IS NULL AND {0} IS NULL", svTable.GroupIdColumn.ColumnName);
-
-            return sb.ToString();
-        }
-
-        private static string GetSettingsValuesDataTableFilter(OrganizationDataSet.SettingsValuesDataTable svTable
-            , Guid organizationId, Guid instanceId, Guid groupId)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0} = '{{0}}' AND {1} = '{2}' AND {3}"
-                , svTable.SettingIdColumn.ColumnName
-                , svTable.OrganizationIdColumn.ColumnName, organizationId.ToString()
-                , svTable.InstanceIdColumn.ColumnName);
-
-            if (instanceId != Guid.Empty)
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                if (groupId != Guid.Empty)
-                    sb.AppendFormat(CultureInfo.InvariantCulture, " = '{0}' AND {1} = '{2}'", instanceId.ToString(), svTable.GroupIdColumn.ColumnName, groupId.ToString());
-                else
-                    sb.AppendFormat(CultureInfo.InvariantCulture, " = '{0}' AND {1} IS NULL", instanceId.ToString(), svTable.GroupIdColumn.ColumnName);
+                return adapter.GetSettingsValues(organizationId, instanceId, groupId);
             }
-            else
-                sb.AppendFormat(CultureInfo.InvariantCulture, " IS NULL AND {0} IS NULL", svTable.GroupIdColumn.ColumnName);
-
-            return sb.ToString();
         }
 
         private static void LoadSettingAttributes(ConfigurationDataSet.SettingRow row, SettingElement setting, SettingLevels? levels)
@@ -150,66 +118,6 @@ namespace Micajah.Common.Bll.Providers
                 row.EnableOrganization = true;
             if ((levels.Value & SettingLevels.Group) == SettingLevels.Group)
                 row.EnableGroup = true;
-        }
-
-        /// <summary>
-        /// Updates the value of the specified setting in the data row.
-        /// </summary>
-        /// <param name="setting">The setting to update.</param>
-        /// <param name="organizationId">The identifier of the organization.</param>
-        /// <param name="instanceId">The identifier of the instance.</param>
-        /// <param name="groupId">The identifier of the group.</param>
-        /// <param name="svTable"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        private static OrganizationDataSet.SettingsValuesRow UpdateSettingValueRow(Setting setting, Guid organizationId, Guid? instanceId, Guid? groupId
-            , OrganizationDataSet.SettingsValuesDataTable svTable, string filter)
-        {
-            OrganizationDataSet.SettingsValuesRow svRow = null;
-
-            Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
-            Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
-
-            if (string.IsNullOrEmpty(filter))
-                filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instId, grpId);
-
-            DataRow[] svRows = svTable.Select(string.Format(CultureInfo.CurrentCulture, filter, setting.SettingId));
-
-            if (svRows.Length > 0)
-            {
-                svRow = (svRows[0] as OrganizationDataSet.SettingsValuesRow);
-                if (svRow != null)
-                {
-                    if (setting.ValueIsDefault)
-                        svRow.Delete();
-                    else
-                        svRow.Value = setting.Value;
-                }
-            }
-            else if (!setting.ValueIsDefault)
-            {
-                svRow = svTable.NewSettingsValuesRow();
-                svRow.SettingValueId = Guid.NewGuid();
-                svRow.SettingId = setting.SettingId;
-                svRow.Value = setting.Value;
-
-                if (organizationId != Guid.Empty)
-                    svRow.OrganizationId = organizationId;
-                else
-                    svRow.SetOrganizationIdNull();
-
-                if (instId != Guid.Empty)
-                    svRow.InstanceId = instId;
-                else
-                    svRow.SetInstanceIdNull();
-
-                if (grpId != Guid.Empty)
-                    svRow.GroupId = grpId;
-                else
-                    svRow.SetGroupIdNull();
-            }
-
-            return svRow;
         }
 
         #endregion
@@ -408,21 +316,16 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization to get values of.</param>
         internal static void FillSettingsByOrganizationValues(ref SettingCollection settings, Guid organizationId)
         {
-            if (settings == null) return;
+            if (settings == null)
+                return;
 
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
-
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
-            DataRow[] svRow = null;
-            string columnName = svTable.ValueColumn.ColumnName;
-            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, Guid.Empty, Guid.Empty);
+            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, null, null);
 
             foreach (Setting setting in settings)
             {
-                svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, filter, setting.SettingId));
-                if (svRow.Length > 0)
-                    setting.Value = svRow[0][columnName].ToString();
+                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
+                if (rows.Length > 0)
+                    setting.Value = rows[0][table.ValueColumn.ColumnName].ToString();
                 else
                     setting.Value = setting.DefaultValue;
             }
@@ -436,26 +339,21 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instanceId">The identifier of the instance to get values of.</param>
         internal static void FillSettingsByInstanceValues(ref SettingCollection settings, Guid organizationId, Guid instanceId)
         {
-            if (settings == null) return;
-
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
+            if (settings == null)
+                return;
 
             FillSettingsByOrganizationValues(ref settings, organizationId);
 
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
-            string columnName = svTable.ValueColumn.ColumnName;
-            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instanceId, Guid.Empty);
+            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, instanceId, null);
 
-            DataRow[] svRow = null;
             foreach (Setting setting in settings)
             {
-                svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, filter, setting.SettingId));
-                if (svRow.Length > 0)
+                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
+                if (rows.Length > 0)
                 {
                     if (setting.EnableOrganization)
                         setting.DefaultValue = setting.Value;
-                    setting.Value = svRow[0][columnName].ToString();
+                    setting.Value = rows[0][table.ValueColumn.ColumnName].ToString();
                 }
                 else if (!setting.EnableOrganization)
                     setting.Value = setting.DefaultValue;
@@ -471,26 +369,21 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupId">The identifier of the group to get values of.</param>
         internal static void FillSettingsByGroupValues(ref SettingCollection settings, Guid organizationId, Guid instanceId, Guid groupId)
         {
-            if (settings == null) return;
-
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
+            if (settings == null)
+                return;
 
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
 
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
-            string columnName = svTable.ValueColumn.ColumnName;
-            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instanceId, groupId);
+            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, instanceId, groupId);
 
-            DataRow[] svRow = null;
             foreach (Setting setting in settings)
             {
-                svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, filter, setting.SettingId));
-                if (svRow.Length > 0)
+                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
+                if (rows.Length > 0)
                 {
                     if (setting.EnableOrganization || setting.EnableInstance)
                         setting.DefaultValue = setting.Value;
-                    setting.Value = svRow[0][columnName].ToString();
+                    setting.Value = rows[0][table.ValueColumn.ColumnName].ToString();
                 }
                 else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
                     setting.Value = setting.DefaultValue;
@@ -506,68 +399,67 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupIdList">The collection of the groups identifiers to get values of.</param>
         internal static void FillSettingsByGroupValues(ref SettingCollection settings, Guid organizationId, Guid instanceId, IList groupIdList)
         {
-            if ((settings == null) || (groupIdList == null)) return;
-
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
+            if ((settings == null) || (groupIdList == null))
+                return;
 
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
 
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
-            DataRow[] svRow = null;
             Type booleanType = typeof(bool);
-            string columnName = svTable.ValueColumn.ColumnName;
-            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instanceId);
 
-            foreach (Guid groupId in groupIdList)
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                foreach (Setting setting in settings)
+                foreach (Guid groupId in groupIdList)
                 {
-                    svRow = svTable.Select(string.Format(CultureInfo.CurrentCulture, filter, setting.SettingId, groupId));
-                    string newValue = null;
+                    ClientDataSet.SettingsValuesDataTable table = adapter.GetSettingsValues(organizationId, instanceId, groupId);
 
-                    if (svRow.Length > 0)
+                    foreach (Setting setting in settings)
                     {
+                        string newValue = null;
+                        DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
+                        if (rows.Length > 0)
+                        {
+                            if (setting.Values.Count == 0)
+                            {
+                                if (setting.EnableOrganization || setting.EnableInstance)
+                                    setting.DefaultValue = setting.Value;
+                            }
+                            newValue = rows[0][table.ValueColumn.ColumnName].ToString();
+                        }
+                        else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
+                            newValue = setting.DefaultValue;
+
+                        if (newValue == null)
+                            continue;
+
                         if (setting.Values.Count == 0)
                         {
-                            if (setting.EnableOrganization || setting.EnableInstance)
-                                setting.DefaultValue = setting.Value;
-                        }
-                        newValue = svRow[0][columnName].ToString();
-                    }
-                    else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
-                        newValue = setting.DefaultValue;
-
-                    if (newValue == null) continue;
-
-                    if (setting.Values.Count == 0)
-                    {
-                        setting.Value = newValue;
-                        setting.Values.Add(newValue);
-                    }
-                    else if (!setting.Values.Contains(newValue))
-                    {
-                        if ((setting.SettingType == SettingType.CheckBox) || (setting.SettingType == SettingType.OnOffSwitch))
-                        {
-                            object value1 = null;
-                            object value2 = null;
-
-                            bool val = false;
-                            if (bool.TryParse(setting.Value, out val))
-                                value1 = val;
-
-                            if (bool.TryParse(newValue, out val))
-                                value2 = val;
-
-                            if (!((value1 == null) || (value2 == null)))
-                            {
-                                newValue = ((((bool)value1) && ((bool)value2)) ? "true" : "false");
-                                setting.Value = newValue;
-                                setting.Values.Add((bool)value2 ? "true" : "false");
-                            }
-                        }
-                        else
+                            setting.Value = newValue;
                             setting.Values.Add(newValue);
+                        }
+                        else if (!setting.Values.Contains(newValue))
+                        {
+                            if ((setting.SettingType == SettingType.CheckBox) || (setting.SettingType == SettingType.OnOffSwitch))
+                            {
+                                object value1 = null;
+                                object value2 = null;
+
+                                bool val = false;
+                                if (bool.TryParse(setting.Value, out val))
+                                    value1 = val;
+
+                                if (bool.TryParse(newValue, out val))
+                                    value2 = val;
+
+                                if (!((value1 == null) || (value2 == null)))
+                                {
+                                    newValue = ((((bool)value1) && ((bool)value2)) ? "true" : "false");
+                                    setting.Value = newValue;
+                                    setting.Values.Add((bool)value2 ? "true" : "false");
+                                }
+                            }
+                            else
+                                setting.Values.Add(newValue);
+                        }
                     }
                 }
             }
@@ -818,28 +710,58 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupId">The identifier of the group.</param>
         internal static void UpdateSettingsValues(SettingCollection settings, Guid organizationId, Guid? instanceId, Guid? groupId)
         {
-            if (settings == null) return;
+            if (settings == null)
+                return;
 
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
-
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
+            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, instanceId, groupId);
             Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
             Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
-            string filter = GetSettingsValuesDataTableFilter(svTable, organizationId, instId, grpId);
+            ClientDataSet.SettingsValuesRow row = null;
 
             foreach (Setting setting in settings)
             {
-                OrganizationDataSet.SettingsValuesRow svRow = UpdateSettingValueRow(setting, organizationId, instanceId, groupId, svTable, filter);
-                if (svRow != null)
+                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
+                if (rows.Length > 0)
                 {
-                    if (svRow.RowState == DataRowState.Detached)
-                        svTable.AddSettingsValuesRow(svRow);
+                    row = (ClientDataSet.SettingsValuesRow)rows[0];
+                    if (row != null)
+                    {
+                        if (setting.ValueIsDefault)
+                            row.Delete();
+                        else
+                            row.Value = setting.Value;
+                    }
+                }
+                else if (!setting.ValueIsDefault)
+                {
+                    row = table.NewSettingsValuesRow();
+                    row.SettingValueId = Guid.NewGuid();
+                    row.SettingId = setting.SettingId;
+                    row.Value = setting.Value;
+
+                    if (organizationId != Guid.Empty)
+                        row.OrganizationId = organizationId;
+                    else
+                        row.SetOrganizationIdNull();
+
+                    if (instId != Guid.Empty)
+                        row.InstanceId = instId;
+                    else
+                        row.SetInstanceIdNull();
+
+                    if (grpId != Guid.Empty)
+                        row.GroupId = grpId;
+                    else
+                        row.SetGroupIdNull();
+
+                    table.AddSettingsValuesRow(row);
                 }
             }
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            adapters.SettingsValuesTableAdapter.Update(svTable);
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                adapter.Update(table);
+            }
 
             Refresh();
         }
@@ -850,24 +772,16 @@ namespace Micajah.Common.Bll.Providers
 
         public static void CopySettingValues(Guid fromOrganizationId, Guid fromInstanceId, Guid toOrganizationId, Guid toInstanceId)
         {
-            OrganizationDataSet fromOrgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(fromOrganizationId);
-            if (fromOrgDataSet == null) return;
+            ClientDataSet.SettingsValuesDataTable fromTable = GetSettingsValues(fromOrganizationId, fromInstanceId, null);
+            ClientDataSet.SettingsValuesDataTable toTable = GetSettingsValues(toOrganizationId, toInstanceId, null);
 
-            OrganizationDataSet toOrgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(toOrganizationId);
-            if (toOrgDataSet == null) return;
-
-            OrganizationDataSet.SettingsValuesDataTable fromTable = fromOrgDataSet.SettingsValues;
-            OrganizationDataSet.SettingsValuesDataTable toTable = toOrgDataSet.SettingsValues;
-
-            foreach (OrganizationDataSet.SettingsValuesRow fromRow in fromTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}' AND {4} IS NULL"
-                , fromTable.OrganizationIdColumn.ColumnName, fromOrganizationId.ToString()
-                , fromTable.InstanceIdColumn.ColumnName, fromInstanceId.ToString()
-                , fromTable.GroupIdColumn.ColumnName)))
+            foreach (ClientDataSet.SettingsValuesRow fromRow in fromTable)
             {
-                OrganizationDataSet.SettingsValuesRow toRow = null;
-                DataRow[] rows = toTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", fromTable.SettingIdColumn.ColumnName, fromRow.SettingId.ToString()));
+                DataRow[] rows = fromTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", fromTable.SettingIdColumn.ColumnName, fromRow.SettingId));
+
+                ClientDataSet.SettingsValuesRow toRow = null;
                 if (rows.Length > 0)
-                    toRow = (OrganizationDataSet.SettingsValuesRow)rows[0];
+                    toRow = (ClientDataSet.SettingsValuesRow)rows[0];
 
                 if (toRow == null)
                 {
@@ -883,10 +797,13 @@ namespace Micajah.Common.Bll.Providers
                     toRow.Value = fromRow.Value;
             }
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(toOrganizationId);
-            adapters.SettingsValuesTableAdapter.Update(toTable);
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(toOrganizationId)))
+            {
+                adapter.Update(toTable);
+            }
 
-            WebApplication.RefreshOrganizationDataSetByOrganizationId(toOrganizationId);
+            // TODO: Refresh cached org data.
+            //WebApplication.RefreshOrganizationDataSetByOrganizationId(toOrganizationId);
         }
 
         /// <summary>
@@ -1028,19 +945,53 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupId">The identifier of the group.</param>
         public static void UpdateSettingValue(Setting setting, Guid organizationId, Guid? instanceId, Guid? groupId)
         {
-            if (setting == null) return;
+            if (setting == null)
+                return;
 
-            OrganizationDataSet orgDataSet = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            if (orgDataSet == null) return;
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                ClientDataSet.SettingsValuesDataTable table = adapter.GetSettingValue(setting.SettingId, organizationId, instanceId, groupId);
+                ClientDataSet.SettingsValuesRow row = null;
+                if (table.Count > 0)
+                    row = table[0];
 
-            OrganizationDataSet.SettingsValuesDataTable svTable = orgDataSet.SettingsValues;
+                Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
+                Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
 
-            OrganizationDataSet.SettingsValuesRow svRow = UpdateSettingValueRow(setting, organizationId, instanceId, groupId, svTable, null);
-            if (svRow.RowState == DataRowState.Detached)
-                svTable.AddSettingsValuesRow(svRow);
+                if (row != null)
+                {
+                    if (setting.ValueIsDefault)
+                        row.Delete();
+                    else
+                        row.Value = setting.Value;
+                }
+                else if (!setting.ValueIsDefault)
+                {
+                    row = table.NewSettingsValuesRow();
+                    row.SettingValueId = Guid.NewGuid();
+                    row.SettingId = setting.SettingId;
+                    row.Value = setting.Value;
 
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-            adapters.SettingsValuesTableAdapter.Update(svRow);
+                    if (organizationId != Guid.Empty)
+                        row.OrganizationId = organizationId;
+                    else
+                        row.SetOrganizationIdNull();
+
+                    if (instId != Guid.Empty)
+                        row.InstanceId = instId;
+                    else
+                        row.SetInstanceIdNull();
+
+                    if (grpId != Guid.Empty)
+                        row.GroupId = grpId;
+                    else
+                        row.SetGroupIdNull();
+
+                    table.AddSettingsValuesRow(row);
+                }
+
+                adapter.Update(table);
+            }
 
             Refresh();
         }

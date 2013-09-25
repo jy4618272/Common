@@ -1,7 +1,7 @@
 ﻿using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.Properties;
 using System;
 using System.ComponentModel;
@@ -49,7 +49,7 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets the default vanity URL.
         /// </summary>
-        /// <returns>The String that represents the default vanity URL.</returns>
+        /// <returns>The string that represents the default vanity URL.</returns>
         public static string DefaultVanityUrl
         {
             get
@@ -66,6 +66,15 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
+        #region Internal Methods
+
+        internal static void Refresh()
+        {
+            // TODO: Refresh cached custom urls.
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -75,9 +84,13 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteCustomUrl(Guid customUrlId)
         {
-            MasterDataSet.CustomUrlRow row = GetCustomUrl(customUrlId);
-            if (row != null)
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Delete(customUrlId);
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
+            {
+                adapter.Delete(customUrlId);
+            }
+
+            // TODO: Refresh cached data.
+            //Micajah.Common.Application.WebApplication.RefreshAllData();
         }
 
         /// <summary>
@@ -88,18 +101,19 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataView GetCustomUrls(Guid organizationId)
         {
-            MasterDataSet.CustomUrlDataTable table = null;
-            try
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 0, organizationId);
+                MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrlsByOrganizationId(organizationId);
                 table.Columns.Add("Name", typeof(string));
+
                 Organization org = null;
                 foreach (MasterDataSet.CustomUrlRow row in table)
                 {
                     if (org == null)
                         org = OrganizationProvider.GetOrganization(organizationId);
+
                     string name = string.Empty;
+
                     if (row.IsInstanceIdNull())
                         name = org.Name;
                     else
@@ -113,10 +127,6 @@ namespace Micajah.Common.Bll.Providers
                 table.DefaultView.Sort = string.Format(CultureInfo.InvariantCulture, "{0}, Name", table.InstanceIdColumn.ColumnName);
                 return table.DefaultView;
             }
-            finally
-            {
-                if (table != null) table.Dispose();
-            }
         }
 
         /// <summary>
@@ -127,16 +137,12 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static MasterDataSet.CustomUrlRow GetCustomUrl(Guid customUrlId)
         {
-            MasterDataSet.CustomUrlDataTable table = null;
-            try
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 1, customUrlId);
-                return ((table.Count > 0) ? table[0] : null);
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrl(customUrlId))
+                {
+                    return ((table.Count > 0) ? table[0] : null);
+                }
             }
         }
 
@@ -149,16 +155,13 @@ namespace Micajah.Common.Bll.Providers
         {
             if (!string.IsNullOrEmpty(host))
                 host = host.ToLowerInvariant();
-            MasterDataSet.CustomUrlDataTable table = null;
-            try
+
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, host, host);
-                return ((table.Count > 0) ? table[0] : null);
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrls(null, null, host, host))
+                {
+                    return ((table.Count > 0) ? table[0] : null);
+                }
             }
         }
 
@@ -170,19 +173,12 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static MasterDataSet.CustomUrlRow GetCustomUrlByOrganizationId(Guid organizationId)
         {
-            MasterDataSet.CustomUrlDataTable table = null;
-            MasterDataSet.CustomUrlRow row = null;
-            try
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, null, null, null);
-                row = ((table.Count > 0) ? table[0] : null);
-                return row;
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
-                if (row != null) row = null;
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrls(organizationId, null, null, null))
+                {
+                    return ((table.Count > 0) ? table[0] : null);
+                }
             }
         }
 
@@ -193,16 +189,12 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The Micajah.Common.Dal.MasterDataSet.CustomUrlRow that pupulated by data of the custom URLs.</returns>
         public static MasterDataSet.CustomUrlRow GetCustomUrl(Guid organizationId, Guid instanceId)
         {
-            MasterDataSet.CustomUrlDataTable table = null;
-            try
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, null, null);
-                return ((table.Count > 0) ? table[0] : null);
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrls(organizationId, instanceId, null, null))
+                {
+                    return ((table.Count > 0) ? table[0] : null);
+                }
             }
         }
 
@@ -219,38 +211,26 @@ namespace Micajah.Common.Bll.Providers
         {
             ValidatePartialCustomUrl(partialCustomUrl);
 
-            MasterDataSet.CustomUrlDataTable table = null;
-            try
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
-                if (table.Count > 0)
-                    throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrls(organizationId, instanceId, fullCustomUrl, partialCustomUrl))
+                {
+                    if (table.Count > 0)
+                        throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
+                }
 
-                if (!ValidateCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl))
-                    throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
-
-                if (!ValidateCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl))
-                    throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
-
-                MasterDataSet.CustomUrlRow row = table.NewCustomUrlRow();
-                row.CustomUrlId = Guid.NewGuid();
+                Guid customUrlId = Guid.NewGuid();
                 if (!string.IsNullOrEmpty(fullCustomUrl))
-                    row.FullCustomUrl = fullCustomUrl.ToLower(CultureInfo.CurrentCulture);
+                    fullCustomUrl = fullCustomUrl.ToLower(CultureInfo.CurrentCulture);
                 if (!string.IsNullOrEmpty(partialCustomUrl))
-                    row.PartialCustomUrl = partialCustomUrl.ToLower(CultureInfo.CurrentCulture);
-                row.OrganizationId = organizationId;
-                if (instanceId.HasValue)
-                    row.InstanceId = instanceId.Value;
+                    partialCustomUrl = partialCustomUrl.ToLower(CultureInfo.CurrentCulture);
 
-                table.AddCustomUrlRow(row);
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Update(row);
+                adapter.Insert(customUrlId, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
 
-                return row.CustomUrlId;
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                // TODO: Refresh cached data.
+                //Micajah.Common.Application.WebApplication.RefreshAllData();
+
+                return customUrlId;
             }
         }
 
@@ -267,44 +247,43 @@ namespace Micajah.Common.Bll.Providers
 
             ValidatePartialCustomUrl(partialCustomUrl);
 
-            MasterDataSet.CustomUrlDataTable table = null;
-            try
+            using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                MasterDataSet.CustomUrlRow row = null;
-                table = new MasterDataSet.CustomUrlDataTable();
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, fullCustomUrl, partialCustomUrl);
-                if (table.Count > 0)
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrls(null, null, fullCustomUrl, partialCustomUrl))
                 {
-                    if (table.Count == 1)
+                    MasterDataSet.CustomUrlRow row = null;
+                    if (table.Count > 0)
                     {
-                        if (table[0].CustomUrlId == customUrlId)
-                            row = table[0];
+                        if (table.Count == 1)
+                        {
+                            if (table[0].CustomUrlId == customUrlId)
+                                row = table[0];
+                            else
+                                throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
+                        }
                         else
                             throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
                     }
-                    else
+
+                    if (row == null)
+                        row = GetCustomUrl(customUrlId);
+
+                    if (!ValidateCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl) && (row != null && string.Compare(row.FullCustomUrl, fullCustomUrl, true) != 0))
                         throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
+
+                    if (!ValidateCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl) && (row != null && string.Compare(row.PartialCustomUrl, partialCustomUrl, true) != 0))
+                        throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
+
+                    if (string.IsNullOrEmpty(fullCustomUrl))
+                        fullCustomUrl = string.Empty;
+                    if (string.IsNullOrEmpty(partialCustomUrl))
+                        partialCustomUrl = string.Empty;
+
+                    adapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
+
+                    // TODO: Refresh cached data.
+                    //Micajah.Common.Application.WebApplication.RefreshAllData();
                 }
-
-                if (row == null)
-                    row = GetCustomUrl(customUrlId);
-
-                if (!ValidateCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl) && (row != null && string.Compare(row.FullCustomUrl, fullCustomUrl, true) != 0))
-                    throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
-
-                if (!ValidateCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl) && (row != null && string.Compare(row.PartialCustomUrl, partialCustomUrl, true) != 0))
-                    throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
-
-                if (string.IsNullOrEmpty(fullCustomUrl))
-                    fullCustomUrl = string.Empty;
-                if (string.IsNullOrEmpty(partialCustomUrl))
-                    partialCustomUrl = string.Empty;
-
-                MasterTableAdapters.Current.CustomUrlTableAdapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
             }
         }
 
@@ -317,37 +296,31 @@ namespace Micajah.Common.Bll.Providers
         {
             if (!string.IsNullOrEmpty(partialCustomUrl))
             {
-                MasterDataSet.CustomUrlDataTable table = null;
-                Organization org = null;
-                string segment = null;
-                try
+                using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
                 {
-                    table = new MasterDataSet.CustomUrlDataTable();
-                    MasterTableAdapters.Current.CustomUrlTableAdapter.Fill(table, 2, null, null, partialCustomUrl, partialCustomUrl);
-
-                    if (table.Rows.Count > 0)
-                        return false;
-                    else
+                    using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrls(null, null, partialCustomUrl, partialCustomUrl))
                     {
-                        segment = RemoveSchemeFormUri(partialCustomUrl);
-                        if (segment.Contains("-"))
-                            org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
+                        if (table.Count > 0)
+                            return false;
                         else
-                            org = OrganizationProvider.GetOrganizationByPseudoId(segment);
-
-                        if (org == null)
                         {
-                            MasterDataSet.CustomUrlRow row = GetCustomUrl(segment);
-                            if (row != null)
-                                org = OrganizationProvider.GetOrganization(row.OrganizationId);
-                        }
+                            Organization org = null;
+                            string segment = RemoveSchemeFormUri(partialCustomUrl);
+                            if (segment.Contains("-"))
+                                org = OrganizationProvider.GetOrganizationByPseudoId(segment.Split('-')[0]);
+                            else
+                                org = OrganizationProvider.GetOrganizationByPseudoId(segment);
 
-                        return (org == null);
+                            if (org == null)
+                            {
+                                MasterDataSet.CustomUrlRow row = GetCustomUrl(segment);
+                                if (row != null)
+                                    org = OrganizationProvider.GetOrganization(row.OrganizationId);
+                            }
+
+                            return (org == null);
+                        }
                     }
-                }
-                finally
-                {
-                    if (table != null) table.Dispose();
                 }
             }
 

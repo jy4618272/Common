@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls
 {
@@ -254,7 +254,7 @@ namespace Micajah.Common.WebControls
             get
             {
                 if (m_Entity == null)
-                    m_Entity = WebApplication.Entities[this.EntityId.ToString()];
+                    m_Entity = EntityFieldProvider.Entities[this.EntityId.ToString()];
                 return m_Entity;
             }
             set

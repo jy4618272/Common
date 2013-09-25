@@ -20,12 +20,11 @@ namespace Micajah.Common.Configuration
         /// </summary>
         internal const int RequiredDatabaseVersion = 117;
 
-        internal const string MasterConnectionStringName = "Micajah.Common.ConnectionString";
+        internal const string MasterConnectionStringName = "Micajah.Common.Properties.Settings.MasterConnectionString";
 
         private string m_ApplicationUrl;
         private object m_AuthenticationMode;
         private string m_ConnectionString;
-        private static int s_CurrentDatabaseVersion;
 
         #endregion
 
@@ -45,20 +44,6 @@ namespace Micajah.Common.Configuration
         #endregion
 
         #region Internal Properties
-
-        /// <summary>
-        /// Gets or sets the current schema version of the database.
-        /// </summary>
-        internal static int CurrentDatabaseVersion
-        {
-            get
-            {
-                if (s_CurrentDatabaseVersion == 0)
-                    s_CurrentDatabaseVersion = Micajah.Common.Dal.TableAdapters.VersionTableAdapter.GetVersion();
-                return s_CurrentDatabaseVersion;
-            }
-            set { s_CurrentDatabaseVersion = value; }
-        }
 
         /// <summary>
         /// Gets the login names of the administrators of the framework.
@@ -194,7 +179,11 @@ namespace Micajah.Common.Configuration
                     m_ConnectionString = ConfigurationManager.ConnectionStrings[MasterConnectionStringName].ConnectionString;
                 return m_ConnectionString;
             }
-            set { m_ConnectionString = value; }
+            set
+            {
+                m_ConnectionString = value;
+                Micajah.Common.Properties.Settings.Default["MasterConnectionString"] = value;
+            }
         }
 
         /// <summary>

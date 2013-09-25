@@ -1,5 +1,4 @@
-﻿using Micajah.Common.Application;
-using Micajah.Common.Bll.Providers;
+﻿using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Security;
@@ -67,17 +66,17 @@ namespace Micajah.Common.Bll.Handlers
                     || (action.ActionId == ActionProvider.EntitiesFieldsPageActionId)
                     || (action.ActionId == ActionProvider.EntityFieldsPageActionId)
                     || (action.ActionId == ActionProvider.EntityFieldListsValuesPageActionId))
-                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.Entities.FindAllByEnableHierarchy(false).Count == 0));
+                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (EntityFieldProvider.Entities.FindAllByEnableHierarchy(false).Count == 0));
                 else if (action.ActionId == ActionProvider.UserAssociateToOrganizationStructurePageActionId)
-                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.Entities["4cda22f3-4f01-4768-8608-938dc6a06825"] == null));
+                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (EntityFieldProvider.Entities["4cda22f3-4f01-4768-8608-938dc6a06825"] == null));
                 else if ((action.ActionId == ActionProvider.RulesEnginePageActionId)
                     || (action.ActionId == ActionProvider.RulesPageActionId)
                     || (action.ActionId == ActionProvider.RuleParametersPageActionId))
-                    accessDenied = ((!FrameworkConfiguration.Current.RulesEngines.Enabled) || (!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.RulesEngines.Count == 0));
+                    accessDenied = ((!FrameworkConfiguration.Current.RulesEngines.Enabled) || (!FrameworkConfiguration.Current.Entities.Enabled) || (RuleEngineProvider.RulesEngines.Count == 0));
                 else if ((action.ActionId == ActionProvider.TreesPageActionId)
                     || (action.ActionId == ActionProvider.TreePageActionId)
                     || (action.ActionId == ActionProvider.NodeTypePageActionId))
-                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (WebApplication.Entities.FindAllByEnableHierarchy(true).Count == 0));
+                    accessDenied = ((!FrameworkConfiguration.Current.Entities.Enabled) || (EntityFieldProvider.Entities.FindAllByEnableHierarchy(true).Count == 0));
                 else if (action.ActionId == ActionProvider.InstancesPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances);
                 else if (action.ActionId == ActionProvider.CustomUrlsPageActionId)

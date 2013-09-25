@@ -2,7 +2,6 @@ using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
@@ -52,7 +51,7 @@ namespace Micajah.Common.WebControls.SetupControls
 
         private void CheckDbVersion()
         {
-            int version = WebApplicationElement.CurrentDatabaseVersion;
+            int version = VersionProvider.GetVersion();
 
             DbNeedUpgradePanel.Visible = false;
             if (version > 0)
@@ -165,7 +164,7 @@ namespace Micajah.Common.WebControls.SetupControls
             using (SqlConnection masterConnection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString))
             {
                 // Upgrades the databases.
-                for (int v = (WebApplicationElement.CurrentDatabaseVersion + 1); v <= WebApplicationElement.RequiredDatabaseVersion; v++)
+                for (int v = (VersionProvider.GetVersion() + 1); v <= WebApplicationElement.RequiredDatabaseVersion; v++)
                 {
                     string versionUpgradeSqlScript = versionUpgradeSqlScriptOriginal.Replace("$Input$", v.ToString(CultureInfo.InvariantCulture));
                     string outputSqlScript = string.Empty;
@@ -182,11 +181,7 @@ namespace Micajah.Common.WebControls.SetupControls
 
                     sqlScript = ResourceProvider.GetSqlScript(v, "Client");
                     if (!string.IsNullOrEmpty(sqlScript))
-                    {
                         sqlScript = sqlScript.Replace("$Input$", outputSqlScript);
-
-                        MasterTableAdapters.Current = null;
-                    }
 
                     // Gets the unique connection strings to the databases.
                     ArrayList connectionStrings = new ArrayList();
@@ -212,19 +207,17 @@ namespace Micajah.Common.WebControls.SetupControls
                         }
                     }
 
-                    WebApplicationElement.CurrentDatabaseVersion = 0;
-                    ClientTableAdapters.RefreshCurrent();
-
                     if (v == 77 || v == 78)
                         OrganizationProvider.UpdateOrganizationsPseudoId();
                 }
             }
-            WebApplication.RefreshAllData();
+
+            CacheManager.RefreshAllData();
         }
 
         protected void ClearApplicationDataLink_Click(object sender, EventArgs e)
         {
-            WebApplication.RefreshAllData();
+            CacheManager.RefreshAllData();
         }
 
         #endregion

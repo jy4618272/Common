@@ -1,4 +1,4 @@
-﻿using Micajah.Common.Dal.TableAdapters;
+﻿using Micajah.Common.Bll.Providers;
 
 namespace Micajah.Common.Dal
 {
@@ -25,7 +25,11 @@ namespace Micajah.Common.Dal
                         if (s_Current == null)
                         {
                             ConfigurationDataSet ds = new ConfigurationDataSet();
-                            MasterTableAdapters.Current.Fill(ds);
+
+                            SettingProvider.Fill(ds);
+                            RoleProvider.Fill(ds);
+                            ActionProvider.Fill(ds);
+
                             s_Current = ds;
                         }
                     }

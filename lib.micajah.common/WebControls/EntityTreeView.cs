@@ -26,7 +26,7 @@ namespace Micajah.Common.WebControls
         {
             get
             {
-                if (m_Entity == null) m_Entity = WebApplication.Entities[EntityId.ToString()];
+                if (m_Entity == null) m_Entity = EntityFieldProvider.Entities[EntityId.ToString()];
                 return m_Entity;
             }
         }
@@ -362,7 +362,7 @@ namespace Micajah.Common.WebControls
         {
             if (EntityId != Guid.Empty && UserContext.Current != null)
             {
-                Entity entity = WebApplication.Entities[EntityId.ToString()];
+                Entity entity = EntityFieldProvider.Entities[EntityId.ToString()];
                 Guid? instanceId = new Guid?();
                 if (entity.HierarchyStartLevel == EntityLevel.Instance)
                     instanceId = new Guid?(UserContext.Current.SelectedInstanceId);

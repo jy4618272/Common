@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroups]
+﻿CREATE PROCEDURE [dbo].[Mc_GetOrganizationsLdapGroups]
 (
 	@OrganizationId uniqueidentifier,
 	@Domain nvarchar(255)

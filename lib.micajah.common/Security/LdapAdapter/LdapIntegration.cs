@@ -1,8 +1,8 @@
 using Micajah.Common.Application;
-using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.LdapAdapter;
 using System;
 using System.Collections.Generic;
@@ -73,17 +73,17 @@ namespace Micajah.Common.Security
 
         public IList<IUser> GetUsersByEmail(string email)
         {
+            ApplicationLogger.LogInfo("LDAPIntegration", string.Format(CultureInfo.CurrentCulture, "Searching local Logins table for email={0}", email));
+
             DataTable table = new DataTable();
             table.Locale = CultureInfo.CurrentCulture;
-            List<IUser> users = new List<IUser>();
-            ApplicationLogger.LogInfo("LDAPIntegration", string.Format(CultureInfo.CurrentCulture, "Searching local Mc_Login table for email={0}", email));
 
-            using (SqlCommand command = new SqlCommand("dbo.Mc_GetLoginByEmail", Connection))
+            using (OrganizationsLoginsTableAdapter adapter = new OrganizationsLoginsTableAdapter())
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@EmailAddress", SqlDbType.NVarChar).Value = email;
-                table = Support.GetDataTable(command);
+                table = adapter.GetLoginByEmail(email);
             }
+
+            List<IUser> users = new List<IUser>();
 
             if (table.Rows.Count > 0)
             {
@@ -101,20 +101,21 @@ namespace Micajah.Common.Security
 
         public IList<IUser> GetUsersByDomainLogin(string domainName, string userAlias, string firstName, string lastName)
         {
-            DataTable table = new DataTable();
-            table.Locale = CultureInfo.CurrentCulture;
-            List<IUser> users = new List<IUser>();
             ApplicationLogger.LogInfo("LDAPIntegration", string.Format(CultureInfo.CurrentCulture, "Searching local Logins tables for DomainName={0} AND UserAlias={1} AND FirstName={2} AND LastName={3}", domainName, userAlias, firstName, lastName));
 
-            using (SqlCommand command = new SqlCommand("dbo.Mc_GetLoginByDomainName", Connection))
+            DataTable table = new DataTable();
+            table.Locale = CultureInfo.CurrentCulture;
+
+            using (OrganizationsLoginsTableAdapter adapter = new OrganizationsLoginsTableAdapter())
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@DomainName", SqlDbType.NVarChar).Value = (string.IsNullOrEmpty(domainName) == false) ? domainName : (object)DBNull.Value;
-                command.Parameters.Add("@UserAlias", SqlDbType.NVarChar).Value = (string.IsNullOrEmpty(userAlias) == false) ? userAlias : (object)DBNull.Value;
-                command.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = (string.IsNullOrEmpty(firstName) == false) ? firstName : (object)DBNull.Value;
-                command.Parameters.Add("@LastName", SqlDbType.NVarChar).Value = (string.IsNullOrEmpty(lastName) == false) ? lastName : (object)DBNull.Value;
-                table = Support.GetDataTable(command);
+                table = adapter.GetLoginByDomainName(
+                    (string.IsNullOrEmpty(domainName) == false) ? domainName : null
+                    , (string.IsNullOrEmpty(userAlias) == false) ? userAlias : null
+                    , (string.IsNullOrEmpty(firstName) == false) ? firstName : null
+                    , (string.IsNullOrEmpty(lastName) == false) ? lastName : null);
             }
+
+            List<IUser> users = new List<IUser>();
 
             if (table.Rows.Count > 0)
             {
@@ -142,10 +143,10 @@ namespace Micajah.Common.Security
                 roleGuid = data.Tables[0].Rows[i].Field<Guid>("RoleId"); */
             string ldapDomainName = string.Empty;
             int ldapPort = 0;
-            if (string.IsNullOrEmpty(Convert.ToString(row["UserLdapDomain"], CultureInfo.CurrentCulture)) == false)
-                ldapDomainName = (string)row["UserLdapDomain"];
-            else
+            if (string.IsNullOrEmpty(Convert.ToString(row["LdapDomain"], CultureInfo.CurrentCulture)) == false)
                 ldapDomainName = (string)row["LdapDomain"];
+            else
+                ldapDomainName = (string)row["OrganizationLdapDomain"];
             if (string.IsNullOrEmpty((string)row["LdapServerPort"]) == false)
                 ldapPort = Convert.ToInt32((string)row["LdapServerPort"], CultureInfo.CurrentCulture);
 
@@ -184,17 +185,16 @@ namespace Micajah.Common.Security
 
         public DataSet GetSortedListOfRolesGroupsById(Guid organizationId)
         {
-            OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-            OrganizationDataSet.GroupsInstancesRolesDataTable table = ds.GroupsInstancesRoles;
+            ClientDataSet.GroupsInstancesRolesDataTable table = GroupProvider.GetGroupsInstancesRoles(organizationId);
             table.Columns.Add("RoleName", typeof(string));
             table.Columns.Add("GroupName", typeof(string));
 
-            foreach (OrganizationDataSet.GroupsInstancesRolesRow row in table.Rows)
+            foreach (ClientDataSet.GroupsInstancesRolesRow row in table.Rows)
             {
                 ConfigurationDataSet.RoleRow roleRow = RoleProvider.GetRoleRow((Guid)row["RoleId"]);
                 if (row != null) row["RoleName"] = roleRow.Name;
 
-                MasterDataSet.GroupMappingsRow[] groups = LdapInfoProvider.GetGroupMappings(organizationId).Table.Select(string.Format(CultureInfo.InvariantCulture, "GroupId = '{0}' AND OrganizationId = '{1}'", row["GroupId"], organizationId)) as MasterDataSet.GroupMappingsRow[];
+                MasterDataSet.GroupMappingsRow[] groups = LdapInfoProvider.GetGroupMappings(organizationId).Select(string.Format(CultureInfo.InvariantCulture, "GroupId = '{0}' AND OrganizationId = '{1}'", row["GroupId"], organizationId)) as MasterDataSet.GroupMappingsRow[];
                 if (groups.Length > 0) row["GroupName"] = groups[0].LdapGroupName;
             }
 
@@ -259,30 +259,28 @@ namespace Micajah.Common.Security
 
         public Micajah.Common.LdapAdapter.ILdapServer GetLdapServer(Guid serverId)
         {
-            DataTable table = null;
             LdapServer server = null;
-            int ldapPort = 0;
 
-            using (SqlCommand command = new SqlCommand("dbo.Mc_GetLdapServerDetails", Connection))
+            MasterDataSet.OrganizationRow row = OrganizationProvider.GetOrganizationRow(serverId);
+
+            if (row != null)
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Add("@OrganizationId", SqlDbType.UniqueIdentifier).Value = serverId;
-
-                table = Support.GetDataTable(command);
-            }
-
-            if (table.Rows.Count > 0)
-            {
-                if (string.IsNullOrEmpty(Convert.ToString(table.Rows[0]["LdapServerPort"], CultureInfo.CurrentCulture)) == false) ldapPort = Convert.ToInt32((string)table.Rows[0]["LdapServerPort"], CultureInfo.CurrentCulture);
-                server = new LdapServer()
+                if ((!row.Deleted) && row.Active)
                 {
-                    ServerAddress = (string)table.Rows[0]["LdapServerAddress"],
-                    Port = ldapPort,
-                    SiteDomain = (string)table.Rows[0]["LdapDomain"],
-                    UserName = (string)table.Rows[0]["LdapUserName"],
-                    Password = (string)table.Rows[0]["LdapPassword"],
-                    AuthenticationType = "Default"
-                };
+                    int ldapPort = 0;
+                    if (!string.IsNullOrEmpty(row.LdapServerPort))
+                        ldapPort = Convert.ToInt32(row.LdapServerPort);
+
+                    server = new LdapServer()
+                    {
+                        ServerAddress = row.LdapServerAddress,
+                        Port = ldapPort,
+                        SiteDomain = row.LdapDomain,
+                        UserName = row.LdapUserName,
+                        Password = row.LdapPassword,
+                        AuthenticationType = "Default"
+                    };
+                }
             }
 
             return server;

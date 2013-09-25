@@ -1,7 +1,6 @@
-using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
@@ -19,6 +18,20 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class OrganizationProvider
     {
+        #region Memebers
+
+        private const int NameMaxLength = 255;
+        private const int DescriptionMaxLength = 255;
+        private const int WebsiteUrlMaxLength = 2048;
+        private const int LdapDomainsMaxLength = 2048;
+        private const int LdapServerAddressMaxLength = 255;
+        private const int LdapServerPortMaxLength = 50;
+        private const int LdapDomainMaxLength = 255;
+        private const int LdapUserNameMaxLength = 255;
+        private const int LdapPasswordMaxLength = 255;
+
+        #endregion
+
         #region Events
 
         /// <summary>
@@ -44,18 +57,31 @@ namespace Micajah.Common.Bll.Providers
 
         #region Private Methods
 
+        private static MasterDataSet.OrganizationRow GetOrganizationRowByName(string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+                {
+                    MasterDataSet.OrganizationDataTable table = adapter.GetOrganizationByName(name);
+                    return ((table.Count > 0) ? table[0] : null);
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Returns an object populated with information of the specified organization.
         /// </summary>
         /// <param name="pseudoId">The pseudo unique identifier of the organization.</param>
         /// <returns>The object populated with information of the specified organization. If the organization is not found, the method returns null reference.</returns>
-        private static CommonDataSet.OrganizationRow GetOrganizationRowByPseudoId(string pseudoId)
+        private static MasterDataSet.OrganizationRow GetOrganizationRowByPseudoId(string pseudoId)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow[] rows = table.Select(string.Concat(table.PseudoIdColumn.ColumnName, " = '", pseudoId, "' AND ", table.DeletedColumn.ColumnName, " = 0")) as CommonDataSet.OrganizationRow[];
-            if (rows.Length > 0)
-                return rows[0] as CommonDataSet.OrganizationRow;
-            return null;
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                MasterDataSet.OrganizationDataTable table = adapter.GetOrganizationByPseudoId(pseudoId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
         }
 
         /// <summary>
@@ -91,7 +117,6 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="phone">The phone of the organization administrator.</param>
         /// <param name="mobilePhone">The mobile phone of the organization administrator.</param>
         /// <param name="sendNotificationEmail">true to send notification email to administrator; otherwise, false.</param>
-        /// <param name="refreshAllData">true to refresh all cached data by application.</param>
         private static Guid InsertOrganization(string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
             , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial
@@ -99,7 +124,7 @@ namespace Micajah.Common.Bll.Providers
             , string timeZoneId, Guid? templateInstanceId
             , string adminEmail, string password, string firstName, string lastName, string middleName, string title, string phone, string mobilePhone
             , string partialCustomUrl, HttpRequest request
-            , bool sendNotificationEmail, bool refreshAllData, Guid? parentorgId)
+            , bool sendNotificationEmail, Guid? parentOrganizationId)
         {
             adminEmail = Support.TrimString(adminEmail, UserProvider.EmailMaxLength);
             Support.ValidateEmail(adminEmail);
@@ -109,8 +134,8 @@ namespace Micajah.Common.Bll.Providers
             else
                 websiteUrl = string.Empty;
 
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.NewOrganizationRow();
+            MasterDataSet.OrganizationDataTable table = new MasterDataSet.OrganizationDataTable();
+            MasterDataSet.OrganizationRow row = table.NewOrganizationRow();
             Guid organizationId = Guid.NewGuid();
 
             name = Support.TrimString(name, table.NameColumn.MaxLength);
@@ -139,11 +164,14 @@ namespace Micajah.Common.Bll.Providers
             if (country != null) row.Country = country;
             if (currency != null) row.Currency = currency;
             if (howYouHearAboutUs != null) row.HowYouHearAboutUs = howYouHearAboutUs;
-            if (parentorgId.HasValue) row.ParentOrganizationId = parentorgId.Value;
+            if (parentOrganizationId.HasValue) row.ParentOrganizationId = parentOrganizationId.Value;
 
             table.AddOrganizationRow(row);
 
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                adapter.Update(row);
+            }
 
             Organization org = new Organization();
             org.Load(row);
@@ -184,14 +212,14 @@ namespace Micajah.Common.Bll.Providers
                       , null, null, null
                       , string.Empty, false
                       , organizationId, true
-                      , false, false
+                      , false
                       , 0, 0, out password);
             }
 
             Guid instanceId = InstanceProvider.InsertFirstInstance(timeZoneId, templateInstanceId, organizationId
                 , adminEmail, password
                 , partialCustomUrl
-                , sendNotificationEmail, refreshAllData);
+                , sendNotificationEmail);
 
             Setting setting = SettingProvider.GetSettingByShortName("StartMenuCheckedItems");
             if (setting != null)
@@ -235,20 +263,19 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomains">The organization ldap domains.</param>
         private static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
-            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains, Guid? parentorgid)
+            , DateTime? expirationTime, int? graceDays, bool? active, DateTime? canceledTime, bool? trial, bool? beta, string emailSuffixes, string ldapDomains, Guid? parentOrganizationId)
         {
             if (!string.IsNullOrEmpty(websiteUrl))
                 Support.ValidateUrl(websiteUrl);
             else
                 websiteUrl = string.Empty;
 
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
             if (row == null) return;
 
-            name = Support.TrimString(name, table.NameColumn.MaxLength);
-            description = Support.TrimString(description, table.DescriptionColumn.MaxLength);
-            websiteUrl = Support.TrimString(websiteUrl, table.WebsiteUrlColumn.MaxLength);
+            name = Support.TrimString(name, NameMaxLength);
+            description = Support.TrimString(description, DescriptionMaxLength);
+            websiteUrl = Support.TrimString(websiteUrl, WebsiteUrlMaxLength);
 
             row.Name = name;
 
@@ -303,14 +330,17 @@ namespace Micajah.Common.Bll.Providers
             if (trial.HasValue) row.Trial = trial.Value;
             if (beta.HasValue) row.Beta = beta.Value;
 
-            if (parentorgid.HasValue)
+            if (parentOrganizationId.HasValue)
             {
-                if (parentorgid.Value != Guid.Empty) row.ParentOrganizationId = parentorgid.Value;
+                if (parentOrganizationId.Value != Guid.Empty) row.ParentOrganizationId = parentOrganizationId.Value;
             }
             else
                 row.SetParentOrganizationIdNull();
 
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                adapter.Update(row);
+            }
 
             Organization org = new Organization();
             org.Load(row);
@@ -323,6 +353,21 @@ namespace Micajah.Common.Bll.Providers
             }
 
             UserContext.RefreshCurrent();
+
+            RaiseOrganizationUpdated(org);
+        }
+
+        private static void UpdateOrganizationRow(MasterDataSet.OrganizationRow row)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                adapter.Update(row);
+            }
+
+            UserContext.RefreshCurrent();
+
+            Organization org = new Organization();
+            org.Load(row);
 
             RaiseOrganizationUpdated(org);
         }
@@ -356,35 +401,46 @@ namespace Micajah.Common.Bll.Providers
         /// </summary>
         /// <param name="table">A System.Data.DataTable object that represents the data sourceRow to create a collection from.</param>
         /// <returns>A Micajah.Common.Bll.OrganizationCollection object that contains the organizations.</returns>
-        internal static OrganizationCollection CreateOrganizationCollection(DataTable table)
+        internal static OrganizationCollection CreateOrganizationCollection(MasterDataSet.OrganizationDataTable table)
         {
             OrganizationCollection coll = new OrganizationCollection();
             if (table != null)
             {
-                foreach (DataRow row in table.Rows)
+                foreach (MasterDataSet.OrganizationRow row in table.Rows)
                 {
                     Organization org = new Organization();
                     org.Load(row);
                     coll.Add(org);
                 }
-                coll.Sort();
             }
             return coll;
         }
 
+        internal static MasterDataSet.OrganizationRow GetOrganizationRow(Guid organizationId)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                MasterDataSet.OrganizationDataTable table = adapter.GetOrganization(organizationId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
+        }
+
         internal static void UpdateOrganizationsPseudoId()
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-
-            foreach (CommonDataSet.OrganizationRow organizationRow in table)
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
             {
-                if (string.IsNullOrEmpty(organizationRow.PseudoId))
-                    organizationRow.PseudoId = Support.GeneratePseudoUnique();
+                MasterDataSet.OrganizationDataTable table = adapter.GetOrganizations(null);
 
-                InstanceProvider.UpdateInstancesPseudoId(organizationRow.OrganizationId);
+                foreach (MasterDataSet.OrganizationRow organizationRow in table)
+                {
+                    if (string.IsNullOrEmpty(organizationRow.PseudoId))
+                        organizationRow.PseudoId = Support.GeneratePseudoUnique();
+
+                    InstanceProvider.UpdateInstancesPseudoId(organizationRow.OrganizationId);
+                }
+
+                adapter.Update(table);
             }
-
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(table);
         }
 
         #endregion
@@ -394,14 +450,66 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets the organizations, excluding marked as deleted.
         /// </summary>
-        /// <returns>The System.Data.DataTable that contains organizations.</returns>
+        /// <returns>The table that contains organizations.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataTable GetOrganizations()
+        public static MasterDataSet.OrganizationDataTable GetOrganizations()
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            DataView dv = table.DefaultView;
-            dv.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} = 0", table.DeletedColumn.ColumnName);
-            return dv.ToTable();
+            return GetOrganizations(false);
+        }
+
+        public static MasterDataSet.OrganizationDataTable GetOrganizations(bool? deleted)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                return adapter.GetOrganizations(deleted);
+            }
+        }
+
+        public static MasterDataSet.OrganizationDataTable GetOrganizationsByLdapDomain(string ldapDomain)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                return adapter.GetOrganizationsByLdapDomain(ldapDomain);
+            }
+        }
+
+        public static MasterDataSet.OrganizationDataTable GetOrganizationsByParentOrganizationId(Guid? organizationId)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                return adapter.GetOrganizationsByParentOrganizationId(organizationId);
+            }
+        }
+
+        public static MasterDataSet.OrganizationDataTable GetOrganizationsByParentOrganizationIdAndDatabaseId(Guid databaseId, Guid? organizationId)
+        {
+            MasterDataSet.OrganizationDataTable table = GetOrganizationsByParentOrganizationId(null);
+
+            if (organizationId.HasValue)
+            {
+                MasterDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId.Value);
+                if (row != null)
+                {
+                    row.Delete();
+                    table.AcceptChanges();
+                }
+            }
+
+            for (int x = 0; x < table.Count; x++)
+            {
+                MasterDataSet.OrganizationRow row = table[x];
+                if (!row.IsDatabaseIdNull())
+                {
+                    if (row.DatabaseId != databaseId)
+                        row.Delete();
+                }
+                else if (databaseId != Guid.Empty)
+                    row.Delete();
+            }
+
+            table.AcceptChanges();
+
+            return table;
         }
 
         /// <summary>
@@ -412,7 +520,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataView GetOrganizations(bool includeAdditionalInfo, string name, int statusId)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization.Copy() as CommonDataSet.OrganizationDataTable;
+            MasterDataSet.OrganizationDataTable table = GetOrganizations(null);
 
             if ((!string.IsNullOrEmpty(name)) || statusId > 0)
             {
@@ -446,8 +554,6 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("DatabaseName", typeof(string));
                 table.Columns.Add("ParentOrganizationName", typeof(string));
 
-                CommonDataSet.OrganizationDataTable tbOrgs = Micajah.Common.Application.WebApplication.CommonDataSet.Organization.Copy() as CommonDataSet.OrganizationDataTable;
-
                 Guid databaseId = Guid.Empty;
                 foreach (DataRowView drv in table.DefaultView)
                 {
@@ -463,16 +569,15 @@ namespace Micajah.Common.Bll.Providers
                             drv["DatabaseServerFullName"] = drv["DatabaseName"] = "Error:DatabaseDoesntExistOrInactive";
                         else
                         {
-                            drv["DatabaseServerFullName"] = DatabaseProvider.GetDatabaseServerFullName(databaseId);
+                            drv["DatabaseServerFullName"] = DatabaseServerProvider.GetDatabaseServerFullName(databaseId);
                             drv["DatabaseName"] = DatabaseProvider.GetDatabaseName(databaseId);
                         }
                     }
-                    if (drv.Row.IsNull("ParentOrganizationId")) drv["ParentOrganizationName"] = string.Empty;
+
+                    if (drv.Row.IsNull("ParentOrganizationId"))
+                        drv["ParentOrganizationName"] = string.Empty;
                     else
-                    {
-                        tbOrgs.DefaultView.RowFilter = string.Format("{0}='{1}'", tbOrgs.OrganizationIdColumn.ColumnName, drv["ParentOrganizationId"]);
-                        if (tbOrgs.DefaultView.Count > 0) drv["ParentOrganizationName"] = tbOrgs.DefaultView[0]["Name"];
-                    }
+                        drv["ParentOrganizationName"] = GetName((Guid)drv["ParentOrganizationId"]);
                 }
             }
 
@@ -542,17 +647,28 @@ namespace Micajah.Common.Bll.Providers
         public static OrganizationCollection GetChildOrganizations(Guid organizationId, bool includeInactive)
         {
             OrganizationCollection coll = new OrganizationCollection();
-            DataTable dt = GetOrganizations();
-            dt.DefaultView.RowFilter = "ParentOrganizationId='" + organizationId.ToString() + "'";
-            foreach (DataRowView rv in dt.DefaultView)
+
+            MasterDataSet.OrganizationDataTable table = GetOrganizationsByParentOrganizationId(organizationId);
+
+            foreach (MasterDataSet.OrganizationRow row in table)
             {
+                if (!includeInactive && !row.Active)
+                    continue;
+
                 Organization org = new Organization();
-                org.Load(rv.Row);
-                if (!includeInactive && !org.Active) continue;
+                org.Load(row);
                 coll.Add(org);
             }
-            coll.Sort();
+
             return coll;
+        }
+
+        public static OrganizationCollection GetOrganizationsByLoginId(Guid loginId)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                return CreateOrganizationCollection(adapter.GetOrganizationsByLoginId(loginId));
+            }
         }
 
         /// <summary>
@@ -578,8 +694,7 @@ namespace Micajah.Common.Bll.Providers
             string connectionString = string.Empty;
             string errorMessage = string.Empty;
 
-            CommonDataSet ds = WebApplication.CommonDataSet;
-            CommonDataSet.OrganizationRow org = ds.Organization.FindByOrganizationId(organizationId);
+            MasterDataSet.OrganizationRow org = GetOrganizationRow(organizationId);
             if (org != null)
             {
                 if (org.IsDatabaseIdNull())
@@ -587,16 +702,16 @@ namespace Micajah.Common.Bll.Providers
                 else
                 {
                     Guid databaseId = org.DatabaseId;
-                    CommonDataSet.DatabaseRow db = ds.Database.FindByDatabaseId(databaseId);
-                    if (db != null)
+                    MasterDataSet.DatabaseRow db = DatabaseProvider.GetDatabaseRow(databaseId);
+                    if ((db != null) && (!db.Deleted))
                     {
                         Guid databaseServerId = db.DatabaseServerId;
-                        CommonDataSet.DatabaseServerRow server = ds.DatabaseServer.FindByDatabaseServerId(databaseServerId);
-                        if (server != null)
+                        MasterDataSet.DatabaseServerRow server = DatabaseServerProvider.GetDatabaseServerRow(databaseServerId);
+                        if ((server != null) && (!server.Deleted))
                         {
                             Guid websiteId = server.WebsiteId;
-                            CommonDataSet.WebsiteRow site = ds.Website.FindByWebsiteId(websiteId);
-                            if (site != null)
+                            MasterDataSet.WebsiteRow site = WebsiteProvider.GetWebsiteRow(websiteId);
+                            if ((site != null) && (!site.Deleted))
                                 connectionString = DatabaseProvider.CreateConnectionString(db.Name, db.UserName, db.Password, server.Name, server.InstanceName, server.Port);
                             else
                                 errorMessage = string.Format(CultureInfo.CurrentCulture, Resources.WebsiteProvider_ErrorMessage_NoWebsite, websiteId);
@@ -624,10 +739,9 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The name of the specified organization.</returns>
         public static string GetName(Guid organizationId)
         {
-            string name = string.Empty;
-            CommonDataSet.OrganizationRow row = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
-            if (row != null) name = row.Name;
-            return name;
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null) return row.Name;
+            return string.Empty;
         }
 
         /// <summary>
@@ -637,15 +751,10 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The identifier of the specified organization.</returns>
         public static Guid GetOrganizationIdByName(string name)
         {
-            Guid organizationId = Guid.Empty;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-                CommonDataSet.OrganizationRow[] rows = table.Select(string.Concat(table.NameColumn.ColumnName, " = '", Support.PreserveSingleQuote(name), "' AND ", table.DeletedColumn.ColumnName, " = 0")) as CommonDataSet.OrganizationRow[];
-                if (rows.Length > 0) organizationId = rows[0].OrganizationId;
-            }
-            return organizationId;
+            MasterDataSet.OrganizationRow row = GetOrganizationRowByName(name);
+            if ((row != null) && (!row.Deleted))
+                return row.OrganizationId;
+            return Guid.Empty;
         }
 
         /// <summary>
@@ -655,7 +764,14 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The organization.</returns>
         public static Organization GetOrganizationByName(string name)
         {
-            return GetOrganization(GetOrganizationIdByName(name));
+            MasterDataSet.OrganizationRow row = GetOrganizationRowByName(name);
+            if ((row != null) && (!row.Deleted))
+            {
+                Organization org = new Organization();
+                org.Load(row);
+                return org;
+            }
+            return null;
         }
 
         /// <summary>
@@ -665,20 +781,20 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The Micajah.Common.Bll.Organization object populated with information of the specified organization. If the organization is not found, the method returns null reference.</returns>
         public static Organization GetOrganizationByPseudoId(string pseudoId)
         {
-            Organization org = null;
             if (!string.IsNullOrEmpty(pseudoId))
             {
-                CommonDataSet.OrganizationRow row = GetOrganizationRowByPseudoId(pseudoId);
-                if (row == null)
-                    row = GetOrganizationRowByPseudoId(pseudoId);
-
+                MasterDataSet.OrganizationRow row = GetOrganizationRowByPseudoId(pseudoId);
                 if (row != null)
                 {
-                    org = new Organization();
-                    org.Load(row);
+                    if (!row.Deleted)
+                    {
+                        Organization org = new Organization();
+                        org.Load(row);
+                        return org;
+                    }
                 }
             }
-            return org;
+            return null;
         }
 
         /// <summary>
@@ -698,19 +814,16 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The database identifier or 0 (zero) if the specified organization is not found.</returns>
         public static Guid GetOrganizationDatabaseId(string name)
         {
-            Guid databaseId = Guid.Empty;
-
             if (!string.IsNullOrEmpty(name))
             {
-                CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-                CommonDataSet.OrganizationRow[] rows = table.Select(string.Concat(table.NameColumn.ColumnName, " = '", Support.PreserveSingleQuote(name), "'")) as CommonDataSet.OrganizationRow[];
-                if (rows.Length > 0)
+                MasterDataSet.OrganizationRow row = GetOrganizationRowByName(name);
+                if (row != null)
                 {
-                    CommonDataSet.OrganizationRow row = rows[0];
-                    if (!row.IsDatabaseIdNull()) databaseId = row.DatabaseId;
+                    if (!row.IsDatabaseIdNull())
+                        return row.DatabaseId;
                 }
             }
-            return databaseId;
+            return Guid.Empty;
         }
 
         /// <summary>
@@ -731,7 +844,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, null, null, null, null, null, null, null, null
-                , true, true, null);
+                , true, null);
         }
 
         /// <summary>
@@ -757,7 +870,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, firstName, lastName, middleName, null, null, null, null, null
-                , sendNotificationEmail, true, null);
+                , sendNotificationEmail, null);
         }
 
         /// <summary>
@@ -774,7 +887,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the newly created organization.</returns>
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertOrganization(string name, string description, string websiteUrl, Guid? databaseId, string adminEmail
-            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial, Guid? parentorgId)
+            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial, Guid? parentOrganizationId)
         {
             return InsertOrganization(name, description, websiteUrl, databaseId
                 , null, null, null
@@ -782,7 +895,7 @@ namespace Micajah.Common.Bll.Providers
                 , null, null, null, null, null, null, null, null
                 , null, null
                 , adminEmail, null, null, null, null, null, null, null, null, null
-                , true, true, parentorgId);
+                , true, parentOrganizationId);
         }
 
         /// <summary>
@@ -823,7 +936,7 @@ namespace Micajah.Common.Bll.Providers
                 , timeZoneId, templateInstanceId
                 , adminEmail, password, firstName, lastName, null, title, phone, mobilePhone
                 , partialCustomUrl, request
-                , sendNotificationEmail, false, null);
+                , sendNotificationEmail, null);
         }
 
         /// <summary>
@@ -879,9 +992,9 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, string name, string description, string websiteUrl, Guid? databaseId
             , int? fiscalYearStartMonth, int? fiscalYearStartDay, int? weekStartsDay
-            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial, Guid? parentorgid)
+            , DateTime? expirationTime, int graceDays, bool active, DateTime? canceledTime, bool trial, Guid? parentOrganizationId)
         {
-            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null, parentorgid);
+            UpdateOrganization(organizationId, name, description, websiteUrl, databaseId, fiscalYearStartMonth, fiscalYearStartDay, weekStartsDay, expirationTime, new int?(graceDays), new bool?(active), canceledTime, trial, null, null, null, parentOrganizationId);
         }
 
         /// <summary>
@@ -896,24 +1009,18 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, string ldapServerAddress, string ldapServerPort, string ldapDomain, string ldapUserName, string ldapUpdatePassword, string ldapConfirmNewPassword)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
-            if (row == null) return;
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null)
+            {
+                row.LdapServerAddress = Support.TrimString(ldapServerAddress, LdapServerAddressMaxLength);
+                row.LdapServerPort = Support.TrimString(ldapServerPort, LdapServerPortMaxLength);
+                row.LdapDomain = Support.TrimString(ldapDomain, LdapDomainMaxLength);
+                row.LdapUserName = Support.TrimString(ldapUserName, LdapUserNameMaxLength);
+                if (String.IsNullOrEmpty(ldapUpdatePassword) == false && String.IsNullOrEmpty(ldapConfirmNewPassword) == false && ldapUpdatePassword == ldapConfirmNewPassword)
+                    row.LdapPassword = Support.TrimString(ldapUpdatePassword, LdapPasswordMaxLength);
 
-            row.LdapServerAddress = Support.TrimString(ldapServerAddress, table.LdapServerAddressColumn.MaxLength);
-            row.LdapServerPort = Support.TrimString(ldapServerPort, table.LdapServerPortColumn.MaxLength);
-            row.LdapDomain = Support.TrimString(ldapDomain, table.LdapDomainColumn.MaxLength);
-            row.LdapUserName = Support.TrimString(ldapUserName, table.LdapUserNameColumn.MaxLength);
-            if (String.IsNullOrEmpty(ldapUpdatePassword) == false && String.IsNullOrEmpty(ldapConfirmNewPassword) == false && ldapUpdatePassword == ldapConfirmNewPassword)
-                row.LdapPassword = Support.TrimString(ldapUpdatePassword, table.LdapPasswordColumn.MaxLength);
-
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
-            UserContext.RefreshCurrent();
-
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
+                UpdateOrganizationRow(row);
+            }
         }
 
         /// <summary>
@@ -924,19 +1031,13 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, string ldapDomains)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
-            if (row == null) return;
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null)
+            {
+                row.LdapDomains = Support.TrimString(ldapDomains, LdapDomainsMaxLength);
 
-            row.LdapDomains = Support.TrimString(ldapDomains, table.LdapDomainsColumn.MaxLength);
-
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
-            UserContext.RefreshCurrent();
-
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
+                UpdateOrganizationRow(row);
+            }
         }
 
         /// <summary>
@@ -947,18 +1048,13 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateOrganization(Guid organizationId, DateTime expirationTime)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null)
+            {
+                row.ExpirationTime = expirationTime;
 
-            row.ExpirationTime = expirationTime;
-
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
-            UserContext.RefreshCurrent();
-
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
+                UpdateOrganizationRow(row);
+            }
         }
 
         /// <summary>
@@ -968,19 +1064,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="active">true, if the organization is active; otherwise, false.</param>
         public static void UpdateOrganizationActive(Guid organizationId, bool active)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
-            if (row == null) return;
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null)
+            {
+                row.Active = active;
 
-            row.Active = active;
-
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
-            UserContext.RefreshCurrent();
-
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
+                UpdateOrganizationRow(row);
+            }
         }
 
         /// <summary>
@@ -989,19 +1079,13 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">The identifier of the organization.</param>        
         public static void UndeleteOrganization(Guid organizationId)
         {
-            CommonDataSet.OrganizationDataTable table = WebApplication.CommonDataSet.Organization;
-            CommonDataSet.OrganizationRow row = table.FindByOrganizationId(organizationId);
-            if (row == null) return;
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null)
+            {
+                row.Deleted = false;
 
-            row.Deleted = false;
-
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
-            UserContext.RefreshCurrent();
-
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
+                UpdateOrganizationRow(row);
+            }
         }
 
         /// <summary>
@@ -1011,13 +1095,19 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteOrganization(Guid organizationId)
         {
-            CommonDataSet.OrganizationRow row = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
-            if (row == null) return;
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            if (row != null)
+            {
+                row.Deleted = true;
 
-            row.Deleted = true;
+                using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+                {
+                    adapter.Update(row);
+                }
 
-            MasterTableAdapters.Current.OrganizationTableAdapter.Update(row);
-            WebApplication.RemoveOrganizationDataSetByOrganizationId(organizationId);
+                // TODO: Refresh cached org data.
+                //WebApplication.RemoveOrganizationDataSetByOrganizationId(organizationId);
+            }
         }
 
         #endregion

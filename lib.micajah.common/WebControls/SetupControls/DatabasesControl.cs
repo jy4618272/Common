@@ -37,7 +37,7 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
 
-            if (WebApplication.CommonDataSet.DatabaseServer.Rows.Count == 0)
+            if (DatabaseServerProvider.GetDatabaseServers().Count == 0)
             {
                 List.EmptyDataText = string.Format(CultureInfo.CurrentCulture
                     , Resources.DatabasesControl_ErrorMessage_NoDatabaseServer

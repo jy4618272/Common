@@ -109,7 +109,6 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Label ErrorContinueLabel;
         protected HyperLink ErrorContinueLink;
 
-        protected ObjectDataSource CountriesDataSource;
         protected ObjectDataSource InstanceListDataSource;
 
         #endregion
@@ -746,8 +745,6 @@ function InstanceRequiredValidation(source, arguments) {{
                 Session["NewOrg"] = "1";
 
                 Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
-
-                WebApplication.RefreshAllData(false);
 
                 if (GoogleProvider.IsGoogleProviderRequest(this.Request))
                 {

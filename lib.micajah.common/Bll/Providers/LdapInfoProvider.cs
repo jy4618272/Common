@@ -1,6 +1,6 @@
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -239,8 +239,10 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("DomainName", typeof(string));
                 table.Columns.Add("DistinguishedName", typeof(string));
 
-                orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
-                MasterTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 2, organizationId);
+                using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
+                {
+                    orgTable = adapter.GetOrganizationsLdapGroupsDomains(organizationId);
+                }
 
                 if (orgTable.Rows.Count > 0)
                 {
@@ -314,8 +316,10 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("Id", typeof(Guid));
                 table.Columns.Add("GroupName", typeof(string));
 
-                orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
-                MasterTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 1, organizationId, selectedDomain);
+                using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
+                {
+                    orgTable = adapter.GetOrganizationsLdapGroups(organizationId, selectedDomain);
+                }
 
                 if (orgTable.Rows.Count > 0)
                 {
@@ -389,8 +393,10 @@ namespace Micajah.Common.Bll.Providers
                 table.Columns.Add("Id", typeof(Guid));
                 table.Columns.Add("GroupName", typeof(string));
 
-                orgTable = new MasterDataSet.OrganizationsLdapGroupsDataTable();
-                MasterTableAdapters.Current.OrganizationsLdapGroupsTableAdapter.Fill(orgTable, 0, organizationId, domainName);
+                using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
+                {
+                    orgTable = adapter.GetOrganizationsLdapGroupsAll(organizationId, domainName);
+                }
 
                 if (orgTable.Rows.Count > 0)
                 {
@@ -527,12 +533,12 @@ namespace Micajah.Common.Bll.Providers
             if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true)
                 return null;
 
-            DataView dv = GetGroupMappings(organizationId);
-            if (dv.Count == 0) return null;
+            MasterDataSet.GroupMappingsDataTable table = GetGroupMappings(organizationId);
+            if (table.Count == 0) return null;
 
-            string[] groupNames = new string[dv.Count];
+            string[] groupNames = new string[table.Count];
             int i = 0;
-            foreach (DataRowView drv in dv)
+            foreach (DataRowView drv in table.DefaultView)
             {
                 groupNames[i] = (string)drv["LdapGroupName"];
                 i++;
@@ -560,17 +566,14 @@ namespace Micajah.Common.Bll.Providers
         /// Gets the group mappings.
         /// </summary>
         /// <param name="organizationId">OrganizationId.</param>
-        /// <returns>The System.Data.DataView object that contains the group mappings.</returns>s
+        /// <returns>The table object that contains the group mappings.</returns>s
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataView GetGroupMappings(Guid organizationId)
+        public static MasterDataSet.GroupMappingsDataTable GetGroupMappings(Guid organizationId)
         {
-            MasterDataSet.GroupMappingsDataTable table = new MasterDataSet.GroupMappingsDataTable();
-            MasterTableAdapters.Current.GroupMappingsTableAdapter.Fill(table, 0, organizationId);
-
-            DataView dv = table.DefaultView;
-            dv.Sort = "[GroupName] asc";
-
-            return dv;
+            using (GroupMappingsTableAdapter adapter = new GroupMappingsTableAdapter())
+            {
+                return adapter.GetGroupMappings(organizationId);
+            }
         }
 
         /// <summary>
@@ -586,7 +589,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertGroupMapping(Guid groupId, Guid organizationId, string groupName, Guid ldapDomainId, string ldapDomainName, Guid ldapGroupId, string ldapGroupName)
         {
-            MasterTableAdapters.Current.GroupMappingsTableAdapter.Insert(groupId, organizationId, groupName, ldapDomainId, ldapDomainName, ldapGroupId, ldapGroupName);
+            using (GroupMappingsTableAdapter adapter = new GroupMappingsTableAdapter())
+            {
+                adapter.Insert(groupId, organizationId, groupName, ldapDomainId, ldapDomainName, ldapGroupId, ldapGroupName);
+            }
         }
 
         /// <summary>
@@ -598,7 +604,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteGroupMapping(Guid groupId, Guid ldapDomainId, Guid ldapGroupId)
         {
-            MasterTableAdapters.Current.GroupMappingsTableAdapter.Delete(groupId, ldapDomainId, ldapGroupId);
+            using (GroupMappingsTableAdapter adapter = new GroupMappingsTableAdapter())
+            {
+                adapter.Delete(groupId, ldapDomainId, ldapGroupId);
+            }
         }
 
         /// <summary>
@@ -682,7 +691,7 @@ namespace Micajah.Common.Bll.Providers
             if (string.IsNullOrEmpty(groupId)) return string.Empty;
             groupId = string.Concat(",", groupId, ",").Replace("," + Guid.Empty.ToString() + ",", ",");
 
-            DataTable table = GetGroupMappings(organizationId).Table;
+            DataTable table = GetGroupMappings(organizationId);
 
             if (groupId.Replace(",", string.Empty).Length > 0)
             {
@@ -722,7 +731,7 @@ namespace Micajah.Common.Bll.Providers
 
             groupList = string.Concat(",", groupList, ",").Replace("," + Guid.Empty.ToString() + ",", ",");
 
-            DataTable table = GetGroupMappings(organizationId).Table;
+            MasterDataSet.GroupMappingsDataTable table = GetGroupMappings(organizationId);
 
             if (groupList.Replace(",", string.Empty).Length > 0)
             {
@@ -763,9 +772,6 @@ namespace Micajah.Common.Bll.Providers
                     DataView dv = WebApplication.LoginProvider.GetUserLdapInfo(organizationId, userId);
                     if (dv == null || dv.Table.Rows.Count == 0 || (dv.Table.Rows[0]["LdapUserId"]).GetType() != typeof(Guid) || (Guid)dv.Table.Rows[0]["LdapUserId"] == Guid.Empty)
                     {
-                        OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-                        if (ds == null) return null;
-
                         ClientDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
                         if (userRow == null)
                             return null;
@@ -783,8 +789,9 @@ namespace Micajah.Common.Bll.Providers
                         ldapGroups = server.GetUserGroupsById((Guid)dv.Table.Rows[0]["LdapUserId"]);
                     }
 
-                    DataView groupMappingsView = GetGroupMappings(organizationId);
-                    resultTable = groupMappingsView.Table.Clone();
+                    DataTable table = GetGroupMappings(organizationId);
+                    DataView groupMappingsView = table.DefaultView;
+                    resultTable = table.Clone();
                     resultTable.Columns.Add("IsDirect", typeof(bool));
 
                     if (ldapGroups != null)

@@ -211,10 +211,13 @@ namespace Micajah.Common.Bll.Providers
                 object obj = Support.ConvertStringToType(value, typeof(Guid));
                 if (obj != null)
                 {
-                    ConfigurationDataSet.ActionsParentActionsRow actionsParentActionsRow = table.NewActionsParentActionsRow();
-                    actionsParentActionsRow.ActionId = action.Id;
-                    actionsParentActionsRow.ParentActionId = (Guid)obj;
-                    table.AddActionsParentActionsRow(actionsParentActionsRow);
+                    if (table.FindByActionIdParentActionId(action.Id, (Guid)obj) == null)
+                    {
+                        ConfigurationDataSet.ActionsParentActionsRow actionsParentActionsRow = table.NewActionsParentActionsRow();
+                        actionsParentActionsRow.ActionId = action.Id;
+                        actionsParentActionsRow.ParentActionId = (Guid)obj;
+                        table.AddActionsParentActionsRow(actionsParentActionsRow);
+                    }
                 }
             }
         }
@@ -344,10 +347,9 @@ namespace Micajah.Common.Bll.Providers
             return sb.ToString();
         }
 
-        private static SortedList GetGroupInstanceActionIdList(Guid groupId, Guid instanceId, OrganizationDataSet ds)
+        private static SortedList GetGroupInstanceActionIdList(Guid organizationId, Guid groupId, Guid instanceId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId);
-            OrganizationDataSet.GroupsInstancesActionsDataTable giaTable = ds.GroupsInstancesActions;
 
             SortedList list = CacheManager.Current.Get(key) as SortedList;
             if (list == null)
@@ -360,8 +362,7 @@ namespace Micajah.Common.Bll.Providers
                         list = new SortedList();
 
                         // Overrides the access to the actions by the values for the group in the instance.
-                        foreach (OrganizationDataSet.GroupsInstancesActionsRow actionRow in giaTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'"
-                            , giaTable.GroupIdColumn.ColumnName, groupId.ToString(), giaTable.InstanceIdColumn.ColumnName, instanceId.ToString())))
+                        foreach (ClientDataSet.GroupsInstancesActionsRow actionRow in GroupProvider.GetGroupsInstancesActionsByGroupIdInstanceId(organizationId, groupId, instanceId))
                         {
                             if (list.Contains(actionRow.ActionId))
                                 list[actionRow.ActionId] = actionRow.Enabled;
@@ -380,7 +381,7 @@ namespace Micajah.Common.Bll.Providers
             return list;
         }
 
-        private static SortedList GetGroupsInstanceActionIdList(ArrayList groupIdList, Guid instanceId, OrganizationDataSet ds)
+        private static SortedList GetGroupsInstanceActionIdList(Guid organizationId, ArrayList groupIdList, Guid instanceId)
         {
             string key = GetActionIdListKey(groupIdList, instanceId);
 
@@ -396,7 +397,7 @@ namespace Micajah.Common.Bll.Providers
 
                         foreach (Guid groupId in groupIdList)
                         {
-                            SortedList list2 = GetGroupInstanceActionIdList(groupId, instanceId, ds);
+                            SortedList list2 = GetGroupInstanceActionIdList(organizationId, groupId, instanceId);
                             if (list2 != null)
                             {
                                 foreach (Guid actionId in list2.Keys)
@@ -628,8 +629,7 @@ namespace Micajah.Common.Bll.Providers
                 if (roleIdList.Count > 0)
                     RemoveDuplicates(ref list);
 
-                OrganizationDataSet ds = WebApplication.GetOrganizationDataSetByOrganizationId(organizationId);
-                SortedList list2 = GetGroupsInstanceActionIdList(groupIdList, instanceId, ds);
+                SortedList list2 = GetGroupsInstanceActionIdList(organizationId, groupIdList, instanceId);
 
                 if (list2 != null)
                 {

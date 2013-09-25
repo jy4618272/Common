@@ -1,6 +1,5 @@
-﻿using Micajah.Common.Application;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+﻿using Micajah.Common.Dal;
+using Micajah.Common.Dal.ClientDataSetTableAdapters;
 using Micajah.Common.Security;
 using System;
 using System.ComponentModel;
@@ -29,12 +28,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertMessage(Guid? parentMessageId, string localObjectType, string localObjectId, Guid fromUserId, Guid? toUserId, string subject, string text)
         {
-            Guid messageId = Guid.Empty;
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
-            if (adapters != null)
+            Guid messageId = Guid.NewGuid();
+            using (MessageTableAdapter adapter = new MessageTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
             {
-                messageId = Guid.NewGuid();
-                adapters.MessageTableAdapter.Insert(messageId, parentMessageId, localObjectType, localObjectId, fromUserId, toUserId, subject, text, DateTime.UtcNow);
+                adapter.Insert(messageId, parentMessageId, localObjectType, localObjectId, fromUserId, toUserId, subject, text, DateTime.UtcNow);
             }
             return messageId;
         }
@@ -48,17 +45,9 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.MessageDataTable GetMessages(string localObjectType, string localObjectId)
         {
-            ClientTableAdapters adapters = WebApplication.GetOrganizationDataSetTableAdaptersByOrganizationId(UserContext.Current.SelectedOrganizationId);
-            ClientDataSet.MessageDataTable table = null;
-            try
+            using (MessageTableAdapter adapter = new MessageTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
             {
-                table = new ClientDataSet.MessageDataTable();
-                if (adapters != null) adapters.MessageTableAdapter.Fill(table, 0, localObjectType, localObjectId);
-                return table;
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                return adapter.GetMessages(localObjectType, localObjectId);
             }
         }
 

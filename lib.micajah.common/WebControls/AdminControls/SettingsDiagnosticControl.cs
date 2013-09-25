@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -78,31 +77,14 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 if (!user.IsOrganizationAdministrator)
                 {
-                    OrganizationDataSet dataSet = WebApplication.GetOrganizationDataSetByOrganizationId(user.SelectedOrganizationId);
-                    ClientDataSet.UserRow userRow = UserProvider.GetUserRow(user.UserId, user.SelectedOrganizationId);
+                    ArrayList userGroups = user.GroupIdList;
 
-                    if (userRow != null)
+                    foreach (ClientDataSet.GroupsInstancesRolesRow row in GroupProvider.GetGroupsInstancesRolesByRoleId(user.SelectedOrganizationId, RoleProvider.InstanceAdministratorRoleId))
                     {
-                        ArrayList userGroups = user.GroupIdList;
-                        OrganizationDataSet.GroupsInstancesRolesDataTable girTable = dataSet.GroupsInstancesRoles;
-
-                        foreach (OrganizationDataSet.GroupRow groupRow in dataSet.Group)
+                        if (!userGroups.Contains(row.GroupId))
                         {
-                            foreach (OrganizationDataSet.InstanceRow instanceRow in dataSet.Instance)
-                            {
-                                OrganizationDataSet.GroupsInstancesRolesRow girRow = girTable.FindByGroupIdInstanceId(groupRow.GroupId, instanceRow.InstanceId);
-                                if (girRow != null)
-                                {
-                                    if (girRow.RoleId == RoleProvider.InstanceAdministratorRoleId)
-                                    {
-                                        if (!userGroups.Contains(groupRow.GroupId))
-                                        {
-                                            sb1.AppendFormat(",'{0}'", instanceRow.InstanceId);
-                                            sb2.AppendFormat(",'{0}'", groupRow.GroupId);
-                                        }
-                                    }
-                                }
-                            }
+                            sb1.AppendFormat(",'{0}'", row.InstanceId);
+                            sb2.AppendFormat(",'{0}'", row.GroupId);
                         }
                     }
 

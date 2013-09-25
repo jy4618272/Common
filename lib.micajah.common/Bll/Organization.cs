@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
@@ -19,6 +18,8 @@ namespace Micajah.Common.Bll
     public sealed class Organization : IComparable<Organization>
     {
         #region Members
+
+        private const string DefaultLdapServerPort = "636";
 
         private Guid m_OrganizationId;
         private string m_PseudoId;
@@ -678,7 +679,7 @@ namespace Micajah.Common.Bll
         #region Internal Methods
 
         /// <summary>
-        /// Loads the data of specified organization into Micajah.Common.Bll.Organization class from CommonDataSet.
+        /// Loads the data of specified organization into Micajah.Common.Bll.Organization class from MasterDataSet.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization to load.</param>
         /// <returns>true, if the specified organization is found; otherwise, false.</returns>
@@ -686,7 +687,7 @@ namespace Micajah.Common.Bll
         {
             if (organizationId != Guid.Empty)
             {
-                CommonDataSet.OrganizationRow orgRow = WebApplication.CommonDataSet.Organization.FindByOrganizationId(organizationId);
+                MasterDataSet.OrganizationRow orgRow = OrganizationProvider.GetOrganizationRow(organizationId);
                 if (orgRow != null)
                 {
                     Load(orgRow);
@@ -699,7 +700,7 @@ namespace Micajah.Common.Bll
             return false;
         }
 
-        internal void Load(CommonDataSet.OrganizationRow row)
+        internal void Load(MasterDataSet.OrganizationRow row)
         {
             if (row != null)
             {
@@ -716,7 +717,7 @@ namespace Micajah.Common.Bll
                 m_LogoImageResourceIdLoaded = false;
                 m_LogoImageResourceId = null;
                 m_LdapServerAddress = row.LdapServerAddress;
-                m_LdapServerPort = string.IsNullOrEmpty(row.LdapServerPort) ? "636" : row.LdapServerPort;
+                m_LdapServerPort = string.IsNullOrEmpty(row.LdapServerPort) ? DefaultLdapServerPort : row.LdapServerPort;
                 m_LdapDomain = row.LdapDomain;
                 m_LdapUserName = row.LdapUserName;
                 m_LdapPassword = row.LdapPassword;
@@ -738,80 +739,6 @@ namespace Micajah.Common.Bll
                 m_Country = row.Country;
                 m_Currency = row.Currency;
                 HowYouHearAboutUs = row.HowYouHearAboutUs;
-
-                this.Reset();
-            }
-        }
-
-        /// <summary>
-        /// Loads the data of specified organization into Micajah.Common.Bll.Organization class from DataRow.
-        /// </summary>
-        /// <param name="row">The data row of the organization to load.</param>
-        internal void Load(DataRow row)
-        {
-            if (row != null)
-            {
-                m_OrganizationId = (Guid)row["OrganizationId"];
-
-                if (row.Table.Columns.Contains("PseudoId")) m_PseudoId = (string)row["PseudoId"];
-
-                m_ParentOrganizationId = !row.IsNull("ParentOrganizationId") ? new Guid?((Guid)row["ParentOrganizationId"]) : null;
-
-                m_Name = (string)row["Name"];
-                m_Description = (string)row["Description"];
-                m_WebsiteUrl = (string)row["WebSiteUrl"];
-                if (!row.IsNull("DatabaseId")) m_DatabaseId = new Guid?((Guid)row["DatabaseId"]);
-                if (!row.IsNull("FiscalYearStartMonth")) m_FiscalYearStartMonth = new int?((int)row["FiscalYearStartMonth"]);
-                if (!row.IsNull("FiscalYearStartDay")) m_FiscalYearStartDay = new int?((int)row["FiscalYearStartDay"]);
-                if (!row.IsNull("WeekStartsDay")) m_WeekStartsDay = new int?((int)row["WeekStartsDay"]);
-                m_LogoImageResourceIdLoaded = false;
-                m_LogoImageResourceId = null;
-
-                if (row.Table.Columns.Contains("LdapServerAddress"))
-                {
-                    m_LdapServerAddress = (string)row["LdapServerAddress"];
-                    m_LdapServerPort = (string)row["LdapServerPort"];
-                    m_LdapDomain = (string)row["LdapDomain"];
-                    m_LdapUserName = (string)row["LdapUserName"];
-                    m_LdapPassword = (string)row["LdapPassword"];
-                }
-
-                if (row.Table.Columns.Contains("LdapDomains"))
-                    m_LdapDomains = (Convert.IsDBNull(row["LdapDomains"])) ? string.Empty : (string)row["LdapDomains"];
-
-                if (row.Table.Columns.Contains("ExpirationTime"))
-                {
-                    if (!row.IsNull("ExpirationTime")) m_ExpirationTime = new DateTime?((DateTime)row["ExpirationTime"]);
-                    m_GraceDays = (int)row["GraceDays"];
-                    m_Active = (bool)row["Active"];
-
-                    if (row.Table.Columns.Contains("CanceledTime"))
-                    {
-                        if (!row.IsNull("CanceledTime")) m_CanceledTime = new DateTime?((DateTime)row["CanceledTime"]);
-                        m_Trial = (bool)row["Trial"];
-                    }
-                }
-
-                if (row.Table.Columns.Contains("ExternalId"))
-                    m_ExternalId = (string)row["ExternalId"];
-
-                if (row.Table.Columns.Contains("Beta"))
-                    m_Beta = (bool)row["Beta"];
-
-                if (row.Table.Columns.Contains("CreatedTime"))
-                {
-                    if (!row.IsNull("CreatedTime")) m_CreatedTime = new DateTime?((DateTime)row["CreatedTime"]);
-                }
-
-                m_Deleted = (bool)row["Deleted"];
-                m_Street = (string)row["Street"];
-                m_Street2 = (string)row["Street2"];
-                m_City = (string)row["City"];
-                m_State = (string)row["State"];
-                m_PostalCode = (string)row["PostalCode"];
-                m_Country = (string)row["Country"];
-                m_Currency = (string)row["Currency"];
-                HowYouHearAboutUs = (string)row["HowYouHearAboutUs"];
 
                 this.Reset();
             }

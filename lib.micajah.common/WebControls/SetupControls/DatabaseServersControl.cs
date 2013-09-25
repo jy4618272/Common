@@ -17,7 +17,7 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
 
-            if (WebApplication.CommonDataSet.Website.Rows.Count == 0)
+            if (WebsiteProvider.GetWebsites().Count == 0)
             {
                 List.EmptyDataText = string.Format(CultureInfo.CurrentCulture
                     , Resources.DatabaseServersControl_ErrorMessage_NoWebsite

@@ -24,7 +24,7 @@ namespace Micajah.Common.WebControls.SetupControls
             string fieldImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Field.gif"));
             string eventImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GetImageUrl(typeOfThis, "Event.gif"));
 
-            foreach (Entity entity in WebApplication.Entities)
+            foreach (Entity entity in EntityFieldProvider.Entities)
             {
                 RadTreeNode entityNode = new RadTreeNode(entity.Name);
                 entityNode.ImageUrl = entityImageUrl;

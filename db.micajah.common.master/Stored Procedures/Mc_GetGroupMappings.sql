@@ -8,5 +8,6 @@ BEGIN
 
 	SELECT GroupId, OrganizationId, [GroupName], LdapDomainId, [LdapDomainName], LdapGroupId, [LdapGroupName] 
 	FROM dbo.Mc_GroupMappings 
-	WHERE (OrganizationId = @OrganizationId);
+	WHERE (OrganizationId = @OrganizationId)
+	ORDER BY GroupName;
 END

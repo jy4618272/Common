@@ -1,12 +1,9 @@
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Mail;
@@ -29,16 +26,10 @@ namespace Micajah.Common.Application
     {
         #region Members
 
-        private static SortedList s_OrganizationDataSetTableAdaptersList;
         private static LoginProvider s_LoginProvider;
 
         // The objects which are used to synchronize access to the cached objects.
-        private static object s_CommonDataSetSyncRoot = new object();
-        private static object s_EntitiesSyncRoot = new object();
-        private static object s_RulesEnginesSyncRoot = new object();
         private static object s_StartThreadsSyncRoot = new object();
-        private static object s_OrganizationDataSetSyncRoot = new object();
-        private static object s_OrganizationDataSetTableAdaptersListSyncRoot = new object();
 
         #endregion
 
@@ -51,77 +42,12 @@ namespace Micajah.Common.Application
 
         #endregion
 
-        #region Private Properties
-
-        private static List<string> OrganizationDataSetsKeys
-        {
-            get
-            {
-                List<string> list = CacheManager.Current.Get("mc.OrganizationDataSetsKeys") as List<string>;
-                if (list == null)
-                {
-                    list = new List<string>();
-                    CacheManager.Current.AddWithDefaultExpiration("mc.OrganizationDataSetsKeys", list);
-                }
-                return list;
-            }
-        }
-
-        #endregion
-
-        #region Internal Properties
-
-        /// <summary>
-        /// Gets the instance of the Micajah.Common.Dal.CommonDataSet class that contains common data of application.
-        /// </summary>
-        internal static CommonDataSet CommonDataSet
-        {
-            get
-            {
-                CommonDataSet ds = null;
-                try
-                {
-                    ds = CacheManager.Current.Get("mc.CommonDataSet") as CommonDataSet;
-                    if (ds == null)
-                    {
-                        lock (s_CommonDataSetSyncRoot)
-                        {
-                            ds = CacheManager.Current.Get("mc.CommonDataSet") as CommonDataSet;
-                            if (ds == null)
-                            {
-                                ds = new CommonDataSet();
-                                MasterTableAdapters.Current.Fill(ds);
-
-                                CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
-                            }
-                        }
-                    }
-                    return ds;
-                }
-                finally
-                {
-                    if (ds != null) ds.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the identifier of the web site, which the current web application is beign run.
-        /// Zero, If the web site isn't found or is deleted.
-        /// </summary>
-        internal static Guid WebsiteId
-        {
-            get
-            {
-                CommonDataSet.WebsiteRow row = WebsiteProvider.GetWebsiteRowByUrl(Hosts.ToArray());
-                return ((row != null) ? row.WebsiteId : Guid.Empty);
-            }
-        }
+        #region Public Properties
 
         /// <summary>
         /// Gets the hosts adresses of the current web application.
         /// </summary>
-        internal static List<string> Hosts
+        public static string[] Hosts
         {
             get
             {
@@ -131,13 +57,9 @@ namespace Micajah.Common.Application
                 list.Add(string.Concat(request.Url.Scheme, Uri.SchemeDelimiter, request.Url.Host));
                 list.Add(string.Concat(request.Url.Scheme, Uri.SchemeDelimiter, request.UserHostAddress, ':', request.Url.Port));
                 list.Add(string.Concat(request.Url.Scheme, Uri.SchemeDelimiter, request.Url.Host, ':', request.Url.Port));
-                return list;
+                return list.ToArray();
             }
         }
-
-        #endregion
-
-        #region Public Properties
 
         /// <summary>
         /// Gets the application's virtual application root path on the server.
@@ -162,48 +84,6 @@ namespace Micajah.Common.Application
                 return s_LoginProvider;
             }
             set { s_LoginProvider = value; }
-        }
-
-        public static EntityCollection Entities
-        {
-            get
-            {
-                EntityCollection coll = CacheManager.Current.Get("mc.Entities") as EntityCollection;
-                if (coll == null)
-                {
-                    lock (s_EntitiesSyncRoot)
-                    {
-                        coll = CacheManager.Current.Get("mc.Entities") as EntityCollection;
-                        if (coll == null)
-                        {
-                            coll = EntityCollection.Load();
-                            CacheManager.Current.AddWithDefaultExpiration("mc.Entities", coll);
-                        }
-                    }
-                }
-                return coll;
-            }
-        }
-
-        public static RulesEngineCollection RulesEngines
-        {
-            get
-            {
-                RulesEngineCollection coll = CacheManager.Current.Get("mc.RulesEngines") as RulesEngineCollection;
-                if (coll == null)
-                {
-                    lock (s_RulesEnginesSyncRoot)
-                    {
-                        coll = CacheManager.Current.Get("mc.RulesEngines") as RulesEngineCollection;
-                        if (coll == null)
-                        {
-                            coll = RulesEngineCollection.Load();
-                            CacheManager.Current.AddWithDefaultExpiration("mc.RulesEngines", coll);
-                        }
-                    }
-                }
-                return coll;
-            }
         }
 
         public static StartThreadCollection StartThreads
@@ -239,241 +119,6 @@ namespace Micajah.Common.Application
         {
             if (EmailSending != null)
                 EmailSending(null, e);
-        }
-
-        /// <summary>
-        /// Refreshes all cached data.
-        /// </summary>
-        internal static void RefreshAllData()
-        {
-            RefreshAllData(true);
-        }
-
-        /// <summary>
-        /// Refreshes all cached data.
-        /// </summary>
-        /// <param name="refreshUserContext">Whether the current user context should be refreshed.</param>
-        internal static void RefreshAllData(bool refreshUserContext)
-        {
-            RefreshCommonData();
-            RefreshOrganizationDataSets();
-            if (refreshUserContext)
-                UserContext.RefreshCurrent();
-        }
-
-        /// <summary>
-        /// Refreshes the cached data set of specified organization and the cached data of the current user.
-        /// </summary>
-        /// <param name="organizationId">The organization's identifier to refresh.</param>
-        internal static void RefreshOrganizationData(Guid organizationId)
-        {
-            RefreshOrganizationDataSetByOrganizationId(organizationId);
-            UserContext.RefreshCurrent();
-        }
-
-        /// <summary>
-        /// Refreshes the cached common data set and related data stored in collections.
-        /// </summary>
-        internal static void RefreshCommonData()
-        {
-            WebApplicationElement.CurrentDatabaseVersion = 0;
-            RefreshCommonDataSet(false);
-            RefreshCollections();
-        }
-
-        /// <summary>
-        /// Refreshes the cached common data set.
-        /// </summary>
-        internal static void RefreshCommonDataSet(bool organizationOnly)
-        {
-            if (organizationOnly)
-            {
-                CommonDataSet ds = CacheManager.Current.Get("mc.CommonDataSet") as CommonDataSet;
-                if (ds != null)
-                {
-                    lock (s_CommonDataSetSyncRoot)
-                    {
-                        MasterTableAdapters.Current.OrganizationTableAdapter.Fill(ds.Organization);
-
-                        CacheManager.Current.AddWithDefaultExpiration("mc.CommonDataSet", ds);
-                    }
-                }
-            }
-            else
-            {
-                lock (s_CommonDataSetSyncRoot)
-                {
-                    CacheManager.Current.Remove("mc.CommonDataSet");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the cached collections of the actions, global navigation links and settings.
-        /// </summary>
-        internal static void RefreshCollections()
-        {
-            ActionProvider.Refresh();
-            SettingProvider.Refresh();
-            RefreshEntities();
-            RefreshRulesEngines();
-            RefreshStartThreads();
-        }
-
-        internal static void RefreshEntities()
-        {
-            lock (s_EntitiesSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.Entities");
-            }
-        }
-
-        internal static void RefreshRulesEngines()
-        {
-            lock (s_RulesEnginesSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.RulesEngines");
-            }
-        }
-
-        internal static void RefreshStartThreads()
-        {
-            lock (s_StartThreadsSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.StartThreads");
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the cached organization data sets.
-        /// </summary>
-        internal static void RefreshOrganizationDataSets()
-        {
-            lock (s_OrganizationDataSetSyncRoot)
-            {
-                foreach (string key in OrganizationDataSetsKeys)
-                {
-                    CacheManager.Current.Remove(key);
-                }
-
-                OrganizationDataSetsKeys.Clear();
-            }
-        }
-
-        internal static void RefreshOrganizationDataSetTableAdaptersList()
-        {
-            lock (s_OrganizationDataSetTableAdaptersListSyncRoot)
-            {
-                s_OrganizationDataSetTableAdaptersList = null;
-            }
-        }
-
-        /// <summary>
-        /// Deletes the cached data set of specified organization.
-        /// </summary>
-        /// <param name="organizationId">The organization's identifier.</param>
-        internal static void RemoveOrganizationDataSetByOrganizationId(Guid organizationId)
-        {
-            lock (s_OrganizationDataSetSyncRoot)
-            {
-                string key = "mc.OrganizationDataSet." + organizationId.ToString("N");
-
-                CacheManager.Current.Remove(key);
-
-                OrganizationDataSetsKeys.Remove(key);
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the cached data set of specified organization.
-        /// </summary>
-        /// <param name="organizationId">The organization's identifier to refresh.</param>
-        internal static void RefreshOrganizationDataSetByOrganizationId(Guid organizationId)
-        {
-            RemoveOrganizationDataSetByOrganizationId(organizationId);
-        }
-
-        /// <summary>
-        /// Returns the instance of the OrganizationDataSet class that contains data of specified organization.
-        /// </summary>
-        /// <param name="organizationId">The organization's identifier to get data set.</param>
-        /// <returns>The instance of the OrganizationDataSet class that contains data of specified organization.</returns>
-        internal static OrganizationDataSet GetOrganizationDataSetByOrganizationId(Guid organizationId)
-        {
-            OrganizationDataSet ds = null;
-            try
-            {
-                string key = "mc.OrganizationDataSet." + organizationId.ToString("N");
-                ds = CacheManager.Current.Get(key) as OrganizationDataSet;
-                if (ds == null)
-                {
-                    lock (s_OrganizationDataSetSyncRoot)
-                    {
-                        ds = CacheManager.Current.Get(key) as OrganizationDataSet;
-                        if (ds == null)
-                        {
-                            ds = new OrganizationDataSet();
-                            ClientTableAdapters adapters = GetOrganizationDataSetTableAdaptersByOrganizationId(organizationId);
-                            adapters.Fill(ds, organizationId);
-
-                            CacheManager.Current.AddWithDefaultExpiration(key, ds);
-
-                            OrganizationDataSetsKeys.Add(key);
-                        }
-                    }
-                }
-                return ds;
-            }
-            finally
-            {
-                if (ds != null) ds.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Returns the instance of the ClientDataSetTableAdapters class that contains 
-        /// tables adapters and connection to database of specified organization.
-        /// </summary>
-        /// <param name="organizationId">The organization's identifier.</param>
-        /// <returns>
-        /// The instance of the ClientDataSetTableAdapters class that contains 
-        /// tables adapters and connection to database of specified organization.
-        /// </returns>
-        internal static ClientTableAdapters GetOrganizationDataSetTableAdaptersByOrganizationId(Guid organizationId)
-        {
-            return GetOrganizationDataSetTableAdaptersByConnectionString(OrganizationProvider.GetConnectionString(organizationId));
-        }
-
-        /// <summary>
-        /// Returns the instance of the ClientDataSetTableAdapters class that contains 
-        /// tables adapters and specified connection to database.
-        /// </summary>
-        /// <param name="connectionString">The connection string to organization's database.</param>
-        /// <returns>
-        /// The instance of the ClientDataSetTableAdapters class that contains 
-        /// tables adapters and specified connection to database.
-        /// </returns>
-        internal static ClientTableAdapters GetOrganizationDataSetTableAdaptersByConnectionString(string connectionString)
-        {
-            ClientTableAdapters adapters = null;
-
-            if (s_OrganizationDataSetTableAdaptersList == null) s_OrganizationDataSetTableAdaptersList = new SortedList();
-
-            if (!s_OrganizationDataSetTableAdaptersList.ContainsKey(connectionString))
-            {
-                lock (s_OrganizationDataSetTableAdaptersListSyncRoot)
-                {
-                    if (!s_OrganizationDataSetTableAdaptersList.ContainsKey(connectionString))
-                    {
-                        adapters = ClientTableAdapters.Current.Clone();
-                        adapters.ConnectionString = connectionString;
-                        s_OrganizationDataSetTableAdaptersList.Add(connectionString, adapters);
-                    }
-                }
-            }
-            else adapters = s_OrganizationDataSetTableAdaptersList[connectionString] as ClientTableAdapters;
-
-            return adapters;
         }
 
         #endregion

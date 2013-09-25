@@ -320,8 +320,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
                     SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewMessageLabel_Text;
 
-                    Micajah.Common.Application.WebApplication.RefreshAllData();
-
                     if (SaveButtonClick != null)
                         SaveButtonClick(sender, e);
                 }
@@ -380,18 +378,6 @@ namespace Micajah.Common.WebControls.AdminControls
                     DnsAddressPanel.Visible = false;
                     break;
             }
-        }
-
-        protected override void EditForm_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
-        {
-            base.EditForm_ItemInserted(sender, e);
-            Micajah.Common.Application.WebApplication.RefreshAllData();
-        }
-
-        protected override void EditForm_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
-        {
-            base.EditForm_ItemUpdated(sender, e);
-            Micajah.Common.Application.WebApplication.RefreshAllData();
         }
 
         protected override void Render(HtmlTextWriter writer)

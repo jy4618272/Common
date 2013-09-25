@@ -1,6 +1,5 @@
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
@@ -154,7 +153,7 @@ namespace Micajah.Common.WebControls.SetupControls
                 e.InputParameters["canceledTime"] = TimeZoneInfo.ConvertTimeToUtc(this.CanceledTime.SelectedDate, m_UserContext.TimeZone);
 
             obj = Support.ConvertStringToType(this.ParentOrgsList.SelectedValue, typeof(Guid));
-            e.InputParameters["parentorgid"] = ((obj == null) ? null : new Guid?((Guid)obj));
+            e.InputParameters["parentOrganizationId"] = ((obj == null) ? null : new Guid?((Guid)obj));
 
             EntityDataSource.Selected += new ObjectDataSourceStatusEventHandler(EntityDataSource_Selected);
         }
@@ -217,11 +216,12 @@ namespace Micajah.Common.WebControls.SetupControls
                 }
 
                 obj = DataBinder.Eval(EditForm.DataItem, "DatabaseId");
-                if (Support.IsNullOrDBNull(obj)) obj = string.Empty;
-
-                RadComboBoxItem item1 = this.DatabaseList.FindItemByValue(obj.ToString());
-                if (item1 != null)
-                    this.DatabaseList.SelectedValue = obj.ToString();
+                if (!Support.IsNullOrDBNull(obj))
+                {
+                    RadComboBoxItem item1 = this.DatabaseList.FindItemByValue(obj.ToString());
+                    if (item1 != null)
+                        this.DatabaseList.SelectedValue = obj.ToString();
+                }
             }
 
             if (this.ParentOrgsList != null)
@@ -231,18 +231,19 @@ namespace Micajah.Common.WebControls.SetupControls
                     this.ParentOrgsList.Items.Add(item);
                 }
 
-                CommonDataSet.OrganizationDataTable tbOrgs = Micajah.Common.Application.WebApplication.CommonDataSet.Organization.Copy() as CommonDataSet.OrganizationDataTable;
+                Guid databaseId = Guid.Empty;
+                Guid? organizationId = null;
                 if (EditForm.CurrentMode == DetailsViewMode.Insert)
                 {
-                    if (DatabaseList.Items.Count > 2) obj = DatabaseList.Items[2].Value;
-                    else obj = Guid.Empty.ToString();
-                    tbOrgs.DefaultView.RowFilter = string.Format("{0} = 0 AND {1}='{2}' AND {3} IS NULL", tbOrgs.DeletedColumn.ColumnName, tbOrgs.DatabaseIdColumn.ColumnName, obj, tbOrgs.ParentOrganizationIdColumn.ColumnName);
+                    databaseId = ((DatabaseList.Items.Count > 2) ? (Guid)Support.ConvertStringToType(DatabaseList.Items[2].Value, typeof(Guid)) : Guid.Empty);
                 }
                 else
-                    tbOrgs.DefaultView.RowFilter = string.Format("{0} = 0 AND {1}='{2}' AND {3}<>'{4}' AND {5} IS NULL", tbOrgs.DeletedColumn.ColumnName, tbOrgs.DatabaseIdColumn.ColumnName, obj, tbOrgs.OrganizationIdColumn.ColumnName, (Guid)EditForm.DataKey[0], tbOrgs.ParentOrganizationIdColumn.ColumnName);
+                {
+                    databaseId = (Support.IsNullOrDBNull(obj) ? Guid.Empty : (Guid)obj);
+                    organizationId = new Guid?((Guid)EditForm.DataKey[0]);
+                }
 
-                tbOrgs.DefaultView.Sort="Name";
-                this.ParentOrgsList.DataSource = tbOrgs.DefaultView;
+                this.ParentOrgsList.DataSource = OrganizationProvider.GetOrganizationsByParentOrganizationIdAndDatabaseId(databaseId, organizationId);
                 this.ParentOrgsList.DataBind();
 
                 obj = DataBinder.Eval(EditForm.DataItem, "ParentOrganizationId");

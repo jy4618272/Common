@@ -178,6 +178,7 @@
     <Compile Include="Bll\Providers\OAuth\ServiceProvider.cs" />
     <Compile Include="Bll\Providers\OAuth\NonceProvider.cs" />
     <Compile Include="Bll\Providers\OAuth\TokenProvider.cs" />
+    <Compile Include="Bll\Providers\VersionProvider.cs" />
     <Compile Include="Bll\Providers\ViewStateProvider.cs" />
     <Compile Include="Bll\StartThread.cs">
       <SubType>Component</SubType>
@@ -276,6 +277,10 @@
     <Compile Include="Configuration\SupportElement.cs" />
     <Compile Include="Configuration\WebApplicationElement.cs" />
     <Compile Include="Configuration\WebsiteConfiguration.cs" />
+    <Compile Include="Dal\ClientDataSet.cs">
+      <DependentUpon>ClientDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Dal\ClientDataSet.Designer.cs">
       <DependentUpon>ClientDataSet.xsd</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -295,11 +300,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Dal\CommonDataSet.Designer.cs">
-      <DependentUpon>CommonDataSet.xsd</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Dal\OAuthDataSet.cs">
       <DependentUpon>OAuthDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -309,44 +309,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>OAuthDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Dal\OrganizationDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Dal\TableAdapters\OAuthConsumerTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\OAuthTokenTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\NonceTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\OrganizationsLdapGroupsTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EmailTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EmailSuffixTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\GroupMappingsTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\CustomUrlTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\MessageTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\ResetPasswordRequestTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\ResourceTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\CountryTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EntityFieldsValuesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EntityFieldListsValuesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EntityFieldTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EntityNodesRelatedEntityNodesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\InvitedLoginTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\RecurringScheduleTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EntityNodeTypeTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\EntityNodeTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\RuleParametersTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\RuleTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\TableAdaptersHolder.cs" />
-    <Compile Include="Dal\TableAdapters\UnitsOfMeasureAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\UnitsOfMeasureConversionAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\UsersInstancesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\VersionTableAdapter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Pages\Enums.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Security\LdapAdapter\ApplicationLogger.cs" />
     <Compile Include="Security\LdapAdapter\LdapIntegration.cs" />
@@ -515,8 +488,6 @@
     <Compile Include="WebControls\SetupControls\WebsitesControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Dal\TableAdapters\OrganizationsUsersTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\OrganizationTableAdapter.cs" />
     <Compile Include="Pages\PageAdapter.cs" />
     <Compile Include="Pages\PageStatePersister.cs" />
     <Compile Include="Bll\Action.cs" />
@@ -559,19 +530,6 @@
     <Compile Include="WebControls\AdminControls\UsersControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Dal\Enums.cs" />
-    <Compile Include="Dal\TableAdapters\DatabaseTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\InstanceTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\GroupsInstancesActionsTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\GroupsInstancesRolesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\GroupTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\Interfaces.cs" />
-    <Compile Include="Dal\TableAdapters\ClientTableAdapters.cs" />
-    <Compile Include="Dal\TableAdapters\DatabaseServerTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\SettingsValuesTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\MasterTableAdapters.cs" />
-    <Compile Include="Dal\TableAdapters\UsersGroupsTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\WebsiteTableAdapter.cs" />
     <Compile Include="WebControls\SecurityControls\LogOnControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -612,9 +570,6 @@
     <Compile Include="WebControls\TextBoxField.cs" />
     <Compile Include="WebControls\TextEditor.cs" />
     <Compile Include="WebControls\TextEditorField.cs" />
-    <Compile Include="Dal\TableAdapters\BaseTableAdapter.cs" />
-    <Compile Include="Dal\TableAdapters\UserTableAdapter.cs">
-    </Compile>
     <Compile Include="WebControls\ControlList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\MasterPage.cs">
@@ -622,17 +577,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dal\CommonDataSet.xsc">
-      <DependentUpon>CommonDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Dal\CommonDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CommonDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Dal\CommonDataSet.xss">
-      <DependentUpon>CommonDataSet.xsd</DependentUpon>
-    </None>
+    <None Include="app.config" />
     <None Include="Dal\ClientDataSet.xsc">
       <DependentUpon>ClientDataSet.xsd</DependentUpon>
     </None>
@@ -665,17 +610,6 @@
     </None>
     <None Include="Dal\OAuthDataSet.xss">
       <DependentUpon>OAuthDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Dal\OrganizationDataSet.xsc">
-      <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Dal\OrganizationDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>OrganizationDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Dal\OrganizationDataSet.xss">
-      <DependentUpon>OrganizationDataSet.xsd</DependentUpon>
     </None>
     <None Include="Dal\MasterDataSet.xsc">
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
@@ -771,6 +705,11 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
@@ -2176,7 +2115,9 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\SettingsDiagnostic.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Users.ascx" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Users.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\ActiveInstance.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -2225,9 +2166,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\DatabaseServers.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Websites.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Websites.ascx" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\DropArrow.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropDownList.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.UpdateProgress\Loader.gif" />

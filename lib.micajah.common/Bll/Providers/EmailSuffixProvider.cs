@@ -1,5 +1,5 @@
 using Micajah.Common.Dal;
-using Micajah.Common.Dal.TableAdapters;
+using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
 using System.ComponentModel;
 using System.Data;
@@ -22,21 +22,11 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="emailSuffixName">Email Suffix Name.</param>
         /// <returns>The System.Data.DataTable object that contains the email suffixes.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataTable GetEmailSuffixes(Guid? organizationId, Guid? instanceId, string emailSuffixName)
+        public static MasterDataSet.EmailSuffixDataTable GetEmailSuffixes(Guid? organizationId, Guid? instanceId, string emailSuffixName)
         {
-            MasterDataSet.EmailSuffixDataTable table = null;
-            try
+            using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
             {
-                table = new MasterDataSet.EmailSuffixDataTable();
-                MasterTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 2, organizationId, instanceId, emailSuffixName);
-
-                table.DefaultView.Sort = table.EmailSuffixNameColumn.ColumnName;
-
-                return table;
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                return adapter.GetEmailSuffixes(organizationId, instanceId, emailSuffixName);
             }
         }
 
@@ -48,17 +38,9 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetEmailSuffixes(Guid organizationId)
         {
-            MasterDataSet.EmailSuffixDataTable table = null;
-            try
+            using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
             {
-                table = new MasterDataSet.EmailSuffixDataTable();
-                MasterTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 0, organizationId);
-
-                return table;
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                return adapter.GetEmailSuffixesByOrganizationId(organizationId);
             }
         }
 
@@ -70,23 +52,15 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetEmailSuffixesByInstanceId(Guid instanceId)
         {
-            MasterDataSet.EmailSuffixDataTable table = null;
-            try
+            using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
             {
-                table = new MasterDataSet.EmailSuffixDataTable();
-                MasterTableAdapters.Current.EmailSuffixTableAdapter.Fill(table, 3, instanceId);
-
-                return table;
-            }
-            finally
-            {
-                if (table != null) table.Dispose();
+                return adapter.GetEmailSuffixesByInstanceId(instanceId);
             }
         }
 
         public static Guid GetOrganizationId(string emailSuffixName)
         {
-            MasterDataSet.EmailSuffixDataTable table = (MasterDataSet.EmailSuffixDataTable)GetEmailSuffixes(null, null, emailSuffixName);
+            MasterDataSet.EmailSuffixDataTable table = GetEmailSuffixes(null, null, emailSuffixName);
 
             if (table.Count > 0)
                 return table[0].OrganizationId;
@@ -104,29 +78,26 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertEmailSuffix(Guid emailSuffixId, Guid organizationId, Guid? instanceId, string emailSuffixName)
         {
-            MasterTableAdapters.Current.EmailSuffixTableAdapter.Insert(emailSuffixId, organizationId, instanceId, emailSuffixName);
-        }
-
-        public static void InsertEmailSuffixName(Guid organizationId, Guid? instanceId, ref string emailSuffixName)
-        {
             if (!String.IsNullOrEmpty(emailSuffixName))
             {
                 emailSuffixName = emailSuffixName.Replace(" ", string.Empty).Replace("@", string.Empty);
 
-                InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixName);
+                using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
+                {
+                    adapter.Insert(emailSuffixId, organizationId, instanceId, emailSuffixName);
+                }
             }
+        }
+
+        public static void InsertEmailSuffixName(Guid organizationId, Guid? instanceId, ref string emailSuffixName)
+        {
+            InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixName);
         }
 
         public static void UpdateEmailSuffixName(Guid organizationId, Guid? instanceId, ref string emailSuffixName)
         {
             DeleteEmailSuffixes(organizationId, instanceId);
-
-            if (!String.IsNullOrEmpty(emailSuffixName))
-            {
-                emailSuffixName = emailSuffixName.Replace(" ", string.Empty).Replace("@", string.Empty);
-
-                InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixName);
-            }
+            InsertEmailSuffix(Guid.NewGuid(), organizationId, instanceId, emailSuffixName);
         }
 
         /// <summary>
@@ -136,7 +107,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEmailSuffixes(Guid organizationId, Guid? instanceId)
         {
-            MasterTableAdapters.Current.EmailSuffixTableAdapter.Delete(organizationId, instanceId);
+            using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
+            {
+                adapter.Delete(organizationId, instanceId);
+            }
         }
 
         /// <summary>
@@ -147,7 +121,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instanceId">The unique identifier of the instance.</param>
         public static void ParseEmailSuffixName(string emailSuffixName, ref Guid organizationId, ref Guid instanceId)
         {
-            MasterDataSet.EmailSuffixDataTable table = (MasterDataSet.EmailSuffixDataTable)GetEmailSuffixes(null, null, emailSuffixName);
+            MasterDataSet.EmailSuffixDataTable table = GetEmailSuffixes(null, null, emailSuffixName);
 
             if (table.Count > 0)
             {
