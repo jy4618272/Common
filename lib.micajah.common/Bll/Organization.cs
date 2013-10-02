@@ -19,8 +19,6 @@ namespace Micajah.Common.Bll
     {
         #region Members
 
-        private const string DefaultLdapServerPort = "636";
-
         private Guid m_OrganizationId;
         private string m_PseudoId;
         private Guid? m_ParentOrganizationId;
@@ -46,7 +44,6 @@ namespace Micajah.Common.Bll
         private bool m_Trial;
         private bool m_Beta;
         private DateTime? m_CreatedTime;
-        private string m_ConnectionString;
         private bool m_LogoImageResourceIdLoaded;
         private SettingCollection m_Settings;
         private InstanceCollection m_Instances;
@@ -417,18 +414,6 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets the connection string of the organization's database.
-        /// </summary>
-        public string ConnectionString
-        {
-            get
-            {
-                if (m_ConnectionString == null) m_ConnectionString = OrganizationProvider.GetConnectionString(OrganizationId);
-                return m_ConnectionString;
-            }
-        }
-
-        /// <summary>
         /// Gets a collection that contains the organization level settings.
         /// </summary>
         public SettingCollection Settings
@@ -664,95 +649,6 @@ namespace Micajah.Common.Bll
             }
         }
 
-        private void Reset()
-        {
-            m_ConnectionString = null;
-            m_EmailSuffixes = null;
-            m_EmailSuffixesList = null;
-            m_Instances = null;
-
-            this.Refresh();
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        /// <summary>
-        /// Loads the data of specified organization into Micajah.Common.Bll.Organization class from MasterDataSet.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization to load.</param>
-        /// <returns>true, if the specified organization is found; otherwise, false.</returns>
-        internal bool Load(Guid organizationId)
-        {
-            if (organizationId != Guid.Empty)
-            {
-                MasterDataSet.OrganizationRow orgRow = OrganizationProvider.GetOrganizationRow(organizationId);
-                if (orgRow != null)
-                {
-                    Load(orgRow);
-
-                    this.Reset();
-
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        internal void Load(MasterDataSet.OrganizationRow row)
-        {
-            if (row != null)
-            {
-                m_OrganizationId = row.OrganizationId;
-                m_PseudoId = row.PseudoId;
-                m_ParentOrganizationId = !row.IsParentOrganizationIdNull() ? new Guid?(row.ParentOrganizationId) : null;
-                m_Name = row.Name;
-                m_Description = row.Description;
-                m_WebsiteUrl = row.WebsiteUrl;
-                if (!row.IsDatabaseIdNull()) m_DatabaseId = new Guid?(row.DatabaseId);
-                if (!row.IsFiscalYearStartMonthNull()) m_FiscalYearStartMonth = new int?(row.FiscalYearStartMonth);
-                if (!row.IsFiscalYearStartDayNull()) m_FiscalYearStartDay = new int?(row.FiscalYearStartDay);
-                if (!row.IsWeekStartsDayNull()) m_WeekStartsDay = new int?(row.WeekStartsDay);
-                m_LogoImageResourceIdLoaded = false;
-                m_LogoImageResourceId = null;
-                m_LdapServerAddress = row.LdapServerAddress;
-                m_LdapServerPort = string.IsNullOrEmpty(row.LdapServerPort) ? DefaultLdapServerPort : row.LdapServerPort;
-                m_LdapDomain = row.LdapDomain;
-                m_LdapUserName = row.LdapUserName;
-                m_LdapPassword = row.LdapPassword;
-                m_LdapDomains = (string.IsNullOrEmpty(row.LdapDomains) == true) ? string.Empty : row.LdapDomains;
-                if (!row.IsExpirationTimeNull()) m_ExpirationTime = new DateTime?(row.ExpirationTime);
-                m_GraceDays = row.GraceDays;
-                m_ExternalId = (string.IsNullOrEmpty(row.ExternalId) == true) ? string.Empty : row.ExternalId;
-                m_Active = row.Active;
-                if (!row.IsCanceledTimeNull()) m_CanceledTime = new DateTime?(row.CanceledTime);
-                m_Trial = row.Trial;
-                m_Beta = row.Beta;
-                if (!row.IsCreatedTimeNull()) m_CreatedTime = new DateTime?(row.CreatedTime);
-                m_Deleted = row.Deleted;
-                m_Street = row.Street;
-                m_Street2 = row.Street2;
-                m_City = row.City;
-                m_State = row.State;
-                m_PostalCode = row.PostalCode;
-                m_Country = row.Country;
-                m_Currency = row.Currency;
-                HowYouHearAboutUs = row.HowYouHearAboutUs;
-
-                this.Reset();
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the the organization level settings and the email settings.
-        /// </summary>
-        internal void Refresh()
-        {
-            m_Settings = null;
-            m_EmailSettings = null;
-        }
-
         #endregion
 
         #region Overriden Methods
@@ -883,6 +779,23 @@ namespace Micajah.Common.Bll
                     {
                         return (org.Visible);
                     }));
+            }
+        }
+
+        /// <summary>
+        /// Finds the organization by specified identifier.
+        /// </summary>
+        /// <param name="actionId">The identifier of the organization.</param>
+        /// <returns>The Micajah.Common.Bll.Organization object if the organization is found; otherwise a null reference.</returns>
+        public Organization FindByOrganizationId(Guid organizationId)
+        {
+            lock (((ICollection)this).SyncRoot)
+            {
+                return this.Find(
+                    delegate(Organization organization)
+                    {
+                        return organization.OrganizationId == organizationId;
+                    });
             }
         }
 

@@ -56,7 +56,9 @@ namespace Micajah.Common.Bll.Providers
         {
             using (UserTableAdapter adapter = new UserTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                return adapter.GetUsersByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), organizationAdministrator, active, roles, (string.IsNullOrEmpty(lowerRoles) ? null : lowerRoles));
+                return adapter.GetUsersByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), organizationAdministrator, active
+                    , (string.IsNullOrEmpty(roles) ? null : roles.ToUpperInvariant())
+                    , (string.IsNullOrEmpty(lowerRoles) ? null : lowerRoles.ToUpperInvariant()));
             }
         }
 
@@ -1733,7 +1735,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 foreach (Organization organization in loginProvider.GetOrganizationsByLoginId(userId))
                 {
-                    string connectionString = organization.ConnectionString;
+                    string connectionString = OrganizationProvider.GetConnectionString(organization.OrganizationId);
                     if (!list.Contains(connectionString))
                     {
                         row = GetUserRowFromDatabase(userId, connectionString);

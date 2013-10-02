@@ -400,6 +400,20 @@ namespace Micajah.Common.Configuration
     [ConfigurationCollection(typeof(ActionElement), AddItemName = "action")]
     public class ActionElementCollection : BaseConfigurationElementCollection<ActionElement>
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the value whether the overriding the access to the actions by the values for the group in the instance is enabled.
+        /// </summary>
+        [ConfigurationProperty("enableOverride", DefaultValue = true)]
+        public bool EnableOverride
+        {
+            get { return (bool)this["enableOverride"]; }
+            set { this["enableOverride"] = value; }
+        }
+
+        #endregion
+
         #region Internal Methods
 
         internal void SetBuiltIn(bool builtIn)

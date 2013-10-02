@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -27,9 +26,6 @@ namespace Micajah.Common.WebControls.SetupControls
         protected Label DbNeedUpgradeLabel;
         protected Label DbNeedUpgradeNotesLabel;
         protected LinkButton UpgradeLink;
-        protected PlaceHolder FrameworkManagementPanel;
-        protected Label TitleLabel1;
-        protected LinkButton ClearApplicationDataLink;
         protected Label TitleLabel2;
         protected CommonGridView AssemblyList;
 
@@ -41,10 +37,8 @@ namespace Micajah.Common.WebControls.SetupControls
 
         private void LoadResources()
         {
-            TitleLabel1.Text = Resources.FrameworkControl_TitleLabel1_Text;
             TitleLabel2.Text = Resources.FrameworkControl_TitleLabel2_Text;
             TitleLabel3.Text = Resources.FrameworkControl_TitleLabel3_Text;
-            ClearApplicationDataLink.Text = Resources.FrameworkControl_ClearApplicationDataLink_Text;
 
             BaseControl.LoadResources(AssemblyList, this.GetType().BaseType.Name);
         }
@@ -136,16 +130,12 @@ namespace Micajah.Common.WebControls.SetupControls
             UserContext user = UserContext.Current;
             if (user != null) m_IsFrameworkAdministrator = user.IsFrameworkAdministrator;
 
-            if (m_IsFrameworkAdministrator)
-            {
-                FrameworkManagementPanel.Visible = true;
-            }
-            else
+            if (!m_IsFrameworkAdministrator)
             {
                 this.MasterPage.VisibleBreadcrumbs = this.MasterPage.VisibleHeader = this.MasterPage.VisibleFooter
                     = this.MasterPage.VisibleLeftArea = this.MasterPage.VisibleMainMenu = this.MasterPage.VisibleHelpLink
                     = this.MasterPage.VisibleApplicationLogo
-                    = FrameworkManagementPanel.Visible = false;
+                    = false;
             }
         }
 
@@ -188,7 +178,7 @@ namespace Micajah.Common.WebControls.SetupControls
                     foreach (Organization organization in OrganizationProvider.CreateOrganizationCollection(OrganizationProvider.GetOrganizations()))
                     {
                         // TODO: Should we throw exception there?
-                        string connStr = OrganizationProvider.GetConnectionString(organization.OrganizationId, false);
+                        string connStr = OrganizationProvider.GetConnectionString(organization.OrganizationId);
                         if (!(string.IsNullOrEmpty(connStr) || connectionStrings.Contains(connStr)))
                             connectionStrings.Add(connStr);
                     }
@@ -211,13 +201,6 @@ namespace Micajah.Common.WebControls.SetupControls
                         OrganizationProvider.UpdateOrganizationsPseudoId();
                 }
             }
-
-            CacheManager.RefreshAllData();
-        }
-
-        protected void ClearApplicationDataLink_Click(object sender, EventArgs e)
-        {
-            CacheManager.RefreshAllData();
         }
 
         #endregion

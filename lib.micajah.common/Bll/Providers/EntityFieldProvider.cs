@@ -39,7 +39,7 @@ namespace Micajah.Common.Bll.Providers
                         if (coll == null)
                         {
                             coll = EntityCollection.Load();
-                            CacheManager.Current.AddWithDefaultExpiration("mc.Entities", coll);
+                            CacheManager.Current.PutWithDefaultTimeout("mc.Entities", coll);
                         }
                     }
                 }
@@ -89,6 +89,14 @@ namespace Micajah.Common.Bll.Providers
             using (EntityFieldsValuesTableAdapter adapter = new EntityFieldsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
                 return adapter.GetEntityFieldValues(entityFieldId, localEntityId);
+            }
+        }
+
+        private static void RemoveFromCache()
+        {
+            lock (s_EntitiesSyncRoot)
+            {
+                CacheManager.Current.Remove("mc.Entities");
             }
         }
 
@@ -256,7 +264,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(table);
             }
 
-            Refresh();
+            RemoveFromCache();
         }
 
         internal static void SaveEntityCustomField(EntityField field, Guid organizationId, string localEntityId)
@@ -294,15 +302,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(table);
             }
 
-            Refresh();
-        }
-
-        internal static void Refresh()
-        {
-            lock (s_EntitiesSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.Entities");
-            }
+            RemoveFromCache();
         }
 
         #endregion
@@ -425,7 +425,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Delete(entityFieldId);
             }
 
-            Refresh();
+            RemoveFromCache();
         }
 
         [DataObjectMethod(DataObjectMethodType.Delete)]
@@ -436,7 +436,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Delete(entityFieldListValueId);
             }
 
-            Refresh();
+            RemoveFromCache();
         }
 
         [DataObjectMethod(DataObjectMethodType.Insert)]
@@ -473,7 +473,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
-            Refresh();
+            RemoveFromCache();
 
             return row.EntityFieldId;
         }
@@ -498,7 +498,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
-            Refresh();
+            RemoveFromCache();
 
             return row.EntityFieldListValueId;
         }
@@ -514,7 +514,7 @@ namespace Micajah.Common.Bll.Providers
                     , allowDBNull, unique, maxLength, minValue, maxValue, decimalDigits, orderNumber, entityId, organizationId, instanceId, active);
             }
 
-            Refresh();
+            RemoveFromCache();
         }
 
         [DataObjectMethod(DataObjectMethodType.Update)]
@@ -525,7 +525,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(entityFieldListValueId, entityFieldId, name, value, Default, active);
             }
 
-            Refresh();
+            RemoveFromCache();
         }
 
         #endregion

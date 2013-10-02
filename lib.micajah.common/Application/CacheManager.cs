@@ -1,6 +1,4 @@
-﻿using Micajah.Common.Bll.Providers;
-using Micajah.Common.Security;
-using System;
+﻿using System;
 using System.Web;
 using System.Web.Caching;
 
@@ -14,6 +12,18 @@ namespace Micajah.Common.Application
         #region Members
 
         private static CacheManager s_Current;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        public CacheManager()
+        {
+            DefaultTimeout = new TimeSpan(23, 30, 0);
+        }
 
         #endregion
 
@@ -44,7 +54,7 @@ namespace Micajah.Common.Application
         public virtual object this[string key]
         {
             get { return this.Get(key); }
-            set { this.Add(key, value); }
+            set { this.Put(key, value); }
         }
 
         /// <summary>
@@ -55,57 +65,44 @@ namespace Micajah.Common.Application
             get { return HttpRuntime.Cache; }
         }
 
-        #endregion
-
-        #region Internal Methods
-
         /// <summary>
-        /// Refreshes all cached data.
+        /// Gets or sets the default timeout for the cache. By default it is 23.5 hours.
         /// </summary>
-        internal static void RefreshAllData()
-        {
-            ActionProvider.Refresh();
-            SettingProvider.Refresh();
-            CustomUrlProvider.Refresh();
-            EntityFieldProvider.Refresh();
-            RuleEngineProvider.Refresh();
-
-            UserContext.RefreshCurrent();
-        }
+        public virtual TimeSpan DefaultTimeout { get; set; }
 
         #endregion
 
         #region Public Methods
 
         /// <summary>
-        /// Adds the specified item to the cache.
+        /// Adds or replaces an object in the cache.
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        public virtual void Add(string key, object value)
+        public virtual void Put(string key, object value)
         {
-            this.Add(key, value, TimeSpan.MaxValue);
+            HttpRuntime.Cache.Add(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>
-        /// Adds the specified item to the cache with dependencies, expiration and priority policies, and a delegate you can use to notify your application when the inserted item is removed from the cache.
+        /// Adds or replaces an object in the cache. Specifies the timeout value of the cached object.
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        /// <param name="timeout">The interval between the time the object was added and the time at which that object expires.</param>
-        public virtual void Add(string key, object value, TimeSpan timeout)
+        /// <param name="timeout">The amount of time that the object should reside in the cache before expiration.</param>
+        public virtual void Put(string key, object value, TimeSpan timeout)
         {
-            HttpRuntime.Cache.Add(key, value, null, ((timeout == TimeSpan.MaxValue) ? System.Web.Caching.Cache.NoAbsoluteExpiration : DateTime.UtcNow.Add(timeout)), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            HttpRuntime.Cache.Add(key, value, null, DateTime.UtcNow.Add(timeout), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>
-        /// Adds the specified item to the cache with default timeout (23.5 hours).
+        /// Adds or replaces an object in the cache with default timeout.
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        public virtual void AddWithDefaultExpiration(string key, object value)
+        public virtual void PutWithDefaultTimeout(string key, object value)
         {
-            this.Add(key, value, new TimeSpan(23, 30, 0));
+            this.Put(key, value, DefaultTimeout);
         }
 
         /// <summary>

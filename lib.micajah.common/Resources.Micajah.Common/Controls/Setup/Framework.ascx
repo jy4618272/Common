@@ -8,14 +8,6 @@
         <asp:LinkButton ID="UpgradeLink" runat="server" Visible="false" OnClick="UpgradeLink_Click" />
     </asp:PlaceHolder>
 </div>
-<asp:PlaceHolder ID="FrameworkManagementPanel" runat="server" Visible="false">
-    <p>
-        <asp:Label ID="TitleLabel1" runat="server" Font-Bold="true" />
-        <div style="padding-top: 7px;">
-            <asp:LinkButton ID="ClearApplicationDataLink" runat="server" OnClick="ClearApplicationDataLink_Click" />
-        </div>
-    </p>
-</asp:PlaceHolder>
 <p>
     <asp:Label ID="TitleLabel2" runat="server" Font-Bold="true" />
     <div style="padding-top: 7px;">

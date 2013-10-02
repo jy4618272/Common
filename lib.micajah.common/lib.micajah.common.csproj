@@ -1885,9 +1885,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\OrganizationLdapSettings.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\CustomUrls.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\CustomUrls.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>

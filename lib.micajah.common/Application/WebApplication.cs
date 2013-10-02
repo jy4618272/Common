@@ -99,7 +99,7 @@ namespace Micajah.Common.Application
                         if (coll == null)
                         {
                             coll = StartThreadCollection.Load();
-                            CacheManager.Current.AddWithDefaultExpiration("mc.StartThreads", coll);
+                            CacheManager.Current.PutWithDefaultTimeout("mc.StartThreads", coll);
                         }
                     }
                 }
@@ -407,8 +407,13 @@ namespace Micajah.Common.Application
                         {
                             try
                             {
-                                user.SelectOrganization(organizationId, setAuthCookie, null, null);
-                                user.SelectInstance(instanceId, setAuthCookie, null);
+                                if (user.SelectedOrganizationId != organizationId)
+                                {
+                                    user.SelectOrganization(organizationId, setAuthCookie, null, null);
+                                    user.SelectInstance(instanceId, setAuthCookie, null);
+                                }
+                                else if (user.SelectedInstanceId != instanceId)
+                                    user.SelectInstance(instanceId, setAuthCookie, null);
                             }
                             catch (AuthenticationException)
                             {
@@ -444,30 +449,20 @@ namespace Micajah.Common.Application
                         {
                             if (instanceId == Guid.Empty)
                             {
-                                try
+                                if (user.SelectedInstanceId != Guid.Empty)
                                 {
-                                    user.SelectOrganization(organizationId, true, null, null);
-                                }
-                                catch (AuthenticationException)
-                                {
-                                    redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
+                                    try
+                                    {
+                                        user.SelectOrganization(organizationId, true, null, null);
+                                    }
+                                    catch (AuthenticationException)
+                                    {
+                                        redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
+                                    }
                                 }
                             }
                             else if (user.SelectedInstanceId != instanceId)
-                            {
                                 redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    user.SelectInstance(instanceId, true, null);
-                                }
-                                catch (AuthenticationException)
-                                {
-                                    redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
-                                }
-                            }
                         }
                     }
                     else if (organizationId != Guid.Empty)

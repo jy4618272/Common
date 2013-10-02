@@ -20,7 +20,7 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
-        #region Public Methods
+        #region Public Properties
 
         public static RulesEngineCollection RulesEngines
         {
@@ -35,7 +35,7 @@ namespace Micajah.Common.Bll.Providers
                         if (coll == null)
                         {
                             coll = RulesEngineCollection.Load();
-                            CacheManager.Current.AddWithDefaultExpiration("mc.RulesEngines", coll);
+                            CacheManager.Current.PutWithDefaultTimeout("mc.RulesEngines", coll);
                         }
                     }
                 }
@@ -43,12 +43,11 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-
         #endregion
 
-        #region Internal Methods
+        #region Private Methods
 
-        internal static void Refresh()
+        private static void RemoveFromCache()
         {
             lock (s_RulesEnginesSyncRoot)
             {

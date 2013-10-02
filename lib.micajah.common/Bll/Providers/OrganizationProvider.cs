@@ -1,3 +1,4 @@
+using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
@@ -29,6 +30,12 @@ namespace Micajah.Common.Bll.Providers
         private const int LdapDomainMaxLength = 255;
         private const int LdapUserNameMaxLength = 255;
         private const int LdapPasswordMaxLength = 255;
+        private const string DefaultLdapServerPort = "636";
+
+        private const string ConnectionStringKeyFormat = "mc.ConnectionString.{0:N}";
+        private const string OrganizationKeyFormat = "mc.Organization.{0:N}";
+        private const string OrganizationByPseudoIdKeyFormat = "mc.Organization.{0}";
+        private const string WebsiteIdKeyFormat = "mc.WebsiteId.{0:N}";
 
         #endregion
 
@@ -173,8 +180,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
-            Organization org = new Organization();
-            org.Load(row);
+            Organization org = CreateOrganization(row);
 
             string domain = null;
             if (GoogleProvider.IsGoogleProviderRequest(request))
@@ -342,19 +348,22 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
-            Organization org = new Organization();
-            org.Load(row);
+            Organization organization = CreateOrganization(row);
 
             if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
             {
                 EmailSuffixProvider.UpdateEmailSuffixName(organizationId, null, ref emailSuffixes);
 
-                org.EmailSuffixes = emailSuffixes;
+                organization.EmailSuffixes = emailSuffixes;
             }
+
+            RemoveConnectionStringFromCache(organizationId);
+            RemoveWebsiteIdFromCache(organizationId);
+            PutOrganizationToCache(organization);
 
             UserContext.RefreshCurrent();
 
-            RaiseOrganizationUpdated(org);
+            RaiseOrganizationUpdated(organization);
         }
 
         private static void UpdateOrganizationRow(MasterDataSet.OrganizationRow row)
@@ -364,12 +373,15 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
+            Organization organization = CreateOrganization(row);
+
+            RemoveConnectionStringFromCache(organization.OrganizationId);
+            RemoveWebsiteIdFromCache(organization.OrganizationId);
+            PutOrganizationToCache(organization);
+
             UserContext.RefreshCurrent();
 
-            Organization org = new Organization();
-            org.Load(row);
-
-            RaiseOrganizationUpdated(org);
+            RaiseOrganizationUpdated(organization);
         }
 
         /// <summary>
@@ -396,6 +408,154 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
+        #region Cache Methods
+
+        internal static string GetConnectionStringFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, ConnectionStringKeyFormat, organizationId);
+            string connectionString = CacheManager.Current.Get(key) as string;
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = DatabaseProvider.GetConnectionStringByOrganizationId(organizationId);
+
+                if (!string.IsNullOrEmpty(connectionString))
+                    CacheManager.Current.PutWithDefaultTimeout(key, connectionString);
+            }
+
+            return connectionString;
+        }
+
+        internal static Organization GetOrganizationFromCache(Guid organizationId)
+        {
+            return GetOrganizationFromCache(organizationId, false);
+        }
+
+        internal static Organization GetOrganizationFromCache(Guid organizationId, bool putToCacheIfNotExists)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationKeyFormat, organizationId);
+            Organization organization = CacheManager.Current.Get(key) as Organization;
+
+            if (organization == null)
+            {
+                if (putToCacheIfNotExists)
+                {
+                    organization = GetOrganization(organizationId);
+
+                    if (organization != null)
+                        CacheManager.Current.PutWithDefaultTimeout(key, organization);
+                }
+            }
+
+            return organization;
+        }
+
+        internal static Organization GetOrganizationByPseudoIdFromCache(string pseudoId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationByPseudoIdKeyFormat, pseudoId);
+            Organization organization = CacheManager.Current.Get(key) as Organization;
+
+            if (organization == null)
+            {
+                organization = GetOrganizationByPseudoId(pseudoId);
+
+                if (organization != null)
+                    CacheManager.Current.PutWithDefaultTimeout(key, organization);
+            }
+
+            return organization;
+        }
+
+        internal static Guid GetWebsiteIdFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, WebsiteIdKeyFormat, organizationId);
+            object value = CacheManager.Current.Get(key);
+
+            if (value == null)
+            {
+                Guid websiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
+
+                if (websiteId != Guid.Empty)
+                    CacheManager.Current.PutWithDefaultTimeout(key, websiteId);
+            }
+            else
+                return (Guid)value;
+
+            return Guid.Empty;
+        }
+
+        internal static void PutOrganizationToCache(Organization organization)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationKeyFormat, organization.OrganizationId);
+            CacheManager.Current.PutWithDefaultTimeout(key, organization);
+        }
+
+        internal static void RemoveOrganizationFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationKeyFormat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        internal static void RemoveConnectionStringFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, ConnectionStringKeyFormat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        internal static void RemoveWebsiteIdFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, WebsiteIdKeyFormat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
+
+        internal static Organization CreateOrganization(MasterDataSet.OrganizationRow row)
+        {
+            if (row != null)
+            {
+                Organization organization = new Organization();
+
+                organization.OrganizationId = row.OrganizationId;
+                organization.PseudoId = row.PseudoId;
+                if (!row.IsParentOrganizationIdNull()) organization.ParentOrganizationId = new Guid?(row.ParentOrganizationId);
+                organization.Name = row.Name;
+                organization.Description = row.Description;
+                organization.WebsiteUrl = row.WebsiteUrl;
+                if (!row.IsDatabaseIdNull()) organization.DatabaseId = new Guid?(row.DatabaseId);
+                if (!row.IsFiscalYearStartMonthNull()) organization.FiscalYearStartMonth = new int?(row.FiscalYearStartMonth);
+                if (!row.IsFiscalYearStartDayNull()) organization.FiscalYearStartDay = new int?(row.FiscalYearStartDay);
+                if (!row.IsWeekStartsDayNull()) organization.WeekStartsDay = new int?(row.WeekStartsDay);
+                organization.LdapServerAddress = row.LdapServerAddress;
+                organization.LdapServerPort = string.IsNullOrEmpty(row.LdapServerPort) ? DefaultLdapServerPort : row.LdapServerPort;
+                organization.LdapDomain = row.LdapDomain;
+                organization.LdapUserName = row.LdapUserName;
+                organization.LdapPassword = row.LdapPassword;
+                if (!string.IsNullOrEmpty(row.LdapDomains)) organization.LdapDomains = row.LdapDomains;
+                if (!row.IsExpirationTimeNull()) organization.ExpirationTime = new DateTime?(row.ExpirationTime);
+                organization.GraceDays = row.GraceDays;
+                if (!string.IsNullOrEmpty(row.ExternalId)) organization.ExternalId = row.ExternalId;
+                organization.Active = row.Active;
+                if (!row.IsCanceledTimeNull()) organization.CanceledTime = new DateTime?(row.CanceledTime);
+                organization.Trial = row.Trial;
+                organization.Beta = row.Beta;
+                if (!row.IsCreatedTimeNull()) organization.CreatedTime = new DateTime?(row.CreatedTime);
+                organization.Deleted = row.Deleted;
+                organization.Street = row.Street;
+                organization.Street2 = row.Street2;
+                organization.City = row.City;
+                organization.State = row.State;
+                organization.PostalCode = row.PostalCode;
+                organization.Country = row.Country;
+                organization.Currency = row.Currency;
+                organization.HowYouHearAboutUs = row.HowYouHearAboutUs;
+
+                return organization;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Creates and returns the organizations collection sorted by name from specified data sourceRow.
         /// </summary>
@@ -408,9 +568,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 foreach (MasterDataSet.OrganizationRow row in table.Rows)
                 {
-                    Organization org = new Organization();
-                    org.Load(row);
-                    coll.Add(org);
+                    coll.Add(CreateOrganization(row));
                 }
             }
             return coll;
@@ -569,7 +727,7 @@ namespace Micajah.Common.Bll.Providers
                             drv["DatabaseServerFullName"] = drv["DatabaseName"] = "Error:DatabaseDoesntExistOrInactive";
                         else
                         {
-                            drv["DatabaseServerFullName"] = DatabaseServerProvider.GetDatabaseServerFullName(databaseId);
+                            drv["DatabaseServerFullName"] = DatabaseServerProvider.GetDatabaseServerFullNameByDatabaseId(databaseId);
                             drv["DatabaseName"] = DatabaseProvider.GetDatabaseName(databaseId);
                         }
                     }
@@ -595,8 +753,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static Organization GetOrganization(Guid organizationId)
         {
-            Organization org = new Organization();
-            return (org.Load(organizationId) ? org : null);
+            return CreateOrganization(GetOrganizationRow(organizationId));
         }
 
         /// <summary>
@@ -655,9 +812,7 @@ namespace Micajah.Common.Bll.Providers
                 if (!includeInactive && !row.Active)
                     continue;
 
-                Organization org = new Organization();
-                org.Load(row);
-                coll.Add(org);
+                coll.Add(CreateOrganization(row));
             }
 
             return coll;
@@ -673,63 +828,12 @@ namespace Micajah.Common.Bll.Providers
 
         /// <summary>
         /// Returns the connection string to organization database.
-        /// Generates an System.Data.DataException exception if error occured.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization to get connection string.</param>
         /// <returns>The connection string to organization database.</returns>
         public static string GetConnectionString(Guid organizationId)
         {
-            return GetConnectionString(organizationId, true);
-        }
-
-        /// <summary>
-        /// Returns the connection string to organization database.
-        /// Generates an System.Data.DataException exception if error occured.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization to get connection string.</param>
-        /// <param name="throwOnError">true to throw an exception if an error occured; false to return an empty string.</param>
-        /// <returns>The connection string to organization database.</returns>
-        public static string GetConnectionString(Guid organizationId, bool throwOnError)
-        {
-            string connectionString = string.Empty;
-            string errorMessage = string.Empty;
-
-            MasterDataSet.OrganizationRow org = GetOrganizationRow(organizationId);
-            if (org != null)
-            {
-                if (org.IsDatabaseIdNull())
-                    connectionString = FrameworkConfiguration.Current.WebApplication.ConnectionString;
-                else
-                {
-                    Guid databaseId = org.DatabaseId;
-                    MasterDataSet.DatabaseRow db = DatabaseProvider.GetDatabaseRow(databaseId);
-                    if ((db != null) && (!db.Deleted))
-                    {
-                        Guid databaseServerId = db.DatabaseServerId;
-                        MasterDataSet.DatabaseServerRow server = DatabaseServerProvider.GetDatabaseServerRow(databaseServerId);
-                        if ((server != null) && (!server.Deleted))
-                        {
-                            Guid websiteId = server.WebsiteId;
-                            MasterDataSet.WebsiteRow site = WebsiteProvider.GetWebsiteRow(websiteId);
-                            if ((site != null) && (!site.Deleted))
-                                connectionString = DatabaseProvider.CreateConnectionString(db.Name, db.UserName, db.Password, server.Name, server.InstanceName, server.Port);
-                            else
-                                errorMessage = string.Format(CultureInfo.CurrentCulture, Resources.WebsiteProvider_ErrorMessage_NoWebsite, websiteId);
-                        }
-                        else
-                            errorMessage = string.Format(CultureInfo.CurrentCulture, Resources.DatabaseServerProvider_ErrorMessage_NoDatabaseServer, databaseServerId);
-                    }
-                    else
-                        errorMessage = string.Format(CultureInfo.CurrentCulture, Resources.DatabaseProvider_ErrorMessage_NoDatabase, databaseId);
-                }
-            }
-            else
-                errorMessage = string.Format(CultureInfo.CurrentCulture, Resources.OrganizationProvider_ErrorMessage_NoOrganization, organizationId);
-
-            if (throwOnError && (!string.IsNullOrEmpty(errorMessage)))
-                throw new DataException(errorMessage);
-
-            return connectionString;
+            return GetConnectionStringFromCache(organizationId);
         }
 
         /// <summary>
@@ -766,11 +870,7 @@ namespace Micajah.Common.Bll.Providers
         {
             MasterDataSet.OrganizationRow row = GetOrganizationRowByName(name);
             if ((row != null) && (!row.Deleted))
-            {
-                Organization org = new Organization();
-                org.Load(row);
-                return org;
-            }
+                return CreateOrganization(row);
             return null;
         }
 
@@ -784,15 +884,8 @@ namespace Micajah.Common.Bll.Providers
             if (!string.IsNullOrEmpty(pseudoId))
             {
                 MasterDataSet.OrganizationRow row = GetOrganizationRowByPseudoId(pseudoId);
-                if (row != null)
-                {
-                    if (!row.Deleted)
-                    {
-                        Organization org = new Organization();
-                        org.Load(row);
-                        return org;
-                    }
-                }
+                if ((row != null) && (!row.Deleted))
+                    return CreateOrganization(row);
             }
             return null;
         }
@@ -1105,8 +1198,11 @@ namespace Micajah.Common.Bll.Providers
                     adapter.Update(row);
                 }
 
-                // TODO: Refresh cached org data.
-                //WebApplication.RemoveOrganizationDataSetByOrganizationId(organizationId);
+                RemoveConnectionStringFromCache(organizationId);
+                RemoveWebsiteIdFromCache(organizationId);
+                RemoveOrganizationFromCache(organizationId);
+                SettingProvider.RemoveOrganizationSettingsValuesFromCache(organizationId);
+                CustomUrlProvider.RemoveOrganizationCustomUrlFromCache(organizationId);
             }
         }
 

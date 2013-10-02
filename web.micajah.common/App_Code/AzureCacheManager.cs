@@ -33,12 +33,14 @@ namespace Micajah.Common.TestSite
             get { return AzureCache; }
         }
 
-        public override void Add(string key, object value, TimeSpan timeout)
+        public override void Put(string key, object value)
         {
-            if (timeout == TimeSpan.MaxValue)
-                AzureCache.Put(key, value);
-            else
-                AzureCache.Put(key, value, timeout);
+            AzureCache.Put(key, value);
+        }
+
+        public override void Put(string key, object value, TimeSpan timeout)
+        {
+            AzureCache.Put(key, value, timeout);
         }
 
         public override object Get(string key)

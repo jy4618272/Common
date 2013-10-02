@@ -1,6 +1,8 @@
+using Micajah.Common.Application;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Micajah.Common.Bll.Providers
@@ -11,72 +13,73 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class WebsiteProvider
     {
+        #region Memebers
+
+        private const string WebsitesKey = "mc.WebsiteUrls";
+
+        #endregion
+
+        #region Private Methods
+
+        #region Cache Methods
+
+        private static Dictionary<Guid, string> GetWebsiteUrlsFromCache()
+        {
+            Dictionary<Guid, string> dict = CacheManager.Current.Get(WebsitesKey) as Dictionary<Guid, string>;
+
+            if (dict == null)
+            {
+                dict = new Dictionary<Guid, string>();
+
+                foreach (MasterDataSet.WebsiteRow row in GetWebsites())
+                {
+                    dict.Add(row.WebsiteId, row.Url);
+                }
+
+                CacheManager.Current.PutWithDefaultTimeout(WebsitesKey, dict);
+            }
+
+            return dict;
+        }
+
+        private static void RemoveWebsiteUrlsFromCache()
+        {
+            CacheManager.Current.Remove(WebsitesKey);
+        }
+
+        #endregion
+
+        #endregion
+
         #region Internal Methods
 
-        internal static Guid GetWebsiteIdByUrl(params string[] urls)
-        {
-            MasterDataSet.WebsiteRow row = GetWebsiteRowByUrl(urls);
-            return ((row != null) ? row.WebsiteId : Guid.Empty);
-        }
+        #region Cache Methods
 
-        /// <summary>
-        /// Finds a web site by specified URLs and returns the identifier of the web site, if it's found and not deleted; otherwise, zero.
-        /// </summary>
-        /// <param name="urls">The URLs to find web site.</param>
-        /// <returns>The web site if it's found; otherwise, null reference.</returns>
-        internal static MasterDataSet.WebsiteRow GetWebsiteRowByUrl(params string[] urls)
+        internal static Guid GetWebsiteIdByUrlFromCache(params string[] urls)
         {
-            MasterDataSet.WebsiteRow site = null;
+            Dictionary<Guid, string> dict = GetWebsiteUrlsFromCache();
 
-            foreach (MasterDataSet.WebsiteRow row in GetWebsites())
+            foreach (Guid websiteId in dict.Keys)
             {
+                string websiteUrl = dict[websiteId];
                 foreach (string url in urls)
                 {
-                    if (row.Url.Contains(url))
-                    {
-                        site = row;
-                        break;
-                    }
-                }
-                if (site != null) break;
-            }
-
-            if (site == null)
-            {
-                if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                {
-                    Instance inst = new Instance();
-
-                    foreach (string url in urls)
-                    {
-                        Organization org = null;
-
-                        CustomUrlProvider.ParseHost(CustomUrlProvider.RemoveSchemeFormUri(url), ref org, ref inst);
-
-                        if (org != null)
-                            site = WebsiteProvider.GetWebsiteRowByOrganizationId(org.OrganizationId);
-
-                        if (site != null) break;
-                    }
+                    if (websiteUrl.Contains(url))
+                        return websiteId;
                 }
             }
 
-            return site;
+            return Guid.Empty;
         }
 
-        /// <summary>
-        /// Returns the web site that the specified organization is associated with.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization.</param>
-        /// <returns>The web site if it's found; otherwise, null reference.</returns>
-        internal static MasterDataSet.WebsiteRow GetWebsiteRowByOrganizationId(Guid organizationId)
+        internal static string GetWebsiteUrlFromCache(Guid websiteId)
         {
-            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
-            {
-                MasterDataSet.WebsiteDataTable table = adapter.GetWebsiteByOrganizationId(organizationId);
-                return ((table.Count > 0) ? table[0] : null);
-            }
+            Dictionary<Guid, string> dict = GetWebsiteUrlsFromCache();
+
+            return (dict.ContainsKey(websiteId) ? dict[websiteId].Replace("\r", string.Empty).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0] : null);
         }
+
+        #endregion
 
         /// <summary>
         /// Returns the identifier of the web site that the specified organization is associated with.
@@ -85,8 +88,11 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the web site if it's found; otherwise, System.Guid.Empty.</returns>
         internal static Guid GetWebsiteIdByOrganizationId(Guid organizationId)
         {
-            MasterDataSet.WebsiteRow row = GetWebsiteRowByOrganizationId(organizationId);
-            return ((row == null) ? Guid.Empty : row.WebsiteId);
+            using (WebsiteTableAdapter adapter = new WebsiteTableAdapter())
+            {
+                MasterDataSet.WebsiteDataTable table = adapter.GetWebsiteByOrganizationId(organizationId);
+                return ((table.Count > 0) ? table[0].WebsiteId : Guid.Empty);
+            }
         }
 
         #endregion
@@ -141,6 +147,8 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Insert(websiteId, name, url, description, adminContactInfo, false);
             }
 
+            RemoveWebsiteUrlsFromCache();
+
             return websiteId;
         }
 
@@ -159,6 +167,8 @@ namespace Micajah.Common.Bll.Providers
             {
                 adapter.Update(websiteId, name, url, description, adminContactInfo, false);
             }
+
+            RemoveWebsiteUrlsFromCache();
         }
 
         /// <summary>
@@ -177,6 +187,8 @@ namespace Micajah.Common.Bll.Providers
                 {
                     adapter.Update(row);
                 }
+
+                RemoveWebsiteUrlsFromCache();
             }
         }
 

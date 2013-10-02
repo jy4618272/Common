@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
-using System.Web;
-using DotNetOpenAuth.OpenId;
+﻿using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.RelyingParty;
 using Google.GData.Apps;
@@ -12,6 +7,12 @@ using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections;
+using System.Globalization;
+using System.Net;
+using System.Net.Http;
+using System.Web;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -223,7 +224,10 @@ namespace Micajah.Common.Bll.Providers
                 {
                     UpdateOAuth2RefreshToken(organizationId, parameters.RefreshToken);
 
-                    ImportUsers(organizationId, domain, parameters);
+                    int totalcount = 0;
+                    int failedCount = 0;
+
+                    ImportUsers(organizationId, domain, parameters, out totalcount, out failedCount);
 
                     if (string.IsNullOrEmpty(returnUrl))
                         returnUrl = GetLoginUrl(domain);
@@ -312,71 +316,83 @@ namespace Micajah.Common.Bll.Providers
             return service;
         }
 
-        public static void ImportUsers(Guid organizationId, string domain, OAuth2Parameters parameters)
+        public static void ImportUsers(Guid organizationId, string domain, OAuth2Parameters parameters, out int totalCount, out int failedCount)
         {
+            totalCount = 0;
+            failedCount = 0;
+
             AppsService service = CreateAppsService(domain, parameters);
-            if (service != null)
+
+            ImportUsers(organizationId, service, out totalCount, out failedCount);
+        }
+
+        public static void ImportUsers(Guid organizationId, AppsService service, out int totalCount, out int failedCount)
+        {
+            totalCount = 0;
+            failedCount = 0;
+
+            if (service == null) return;
+
+            UserFeed userFeed = service.RetrieveAllUsers();
+            if (userFeed == null) return;
+
+            totalCount = userFeed.Entries.Count;
+            for (int i = 0; i < totalCount; i++)
             {
-                UserFeed userFeed = service.RetrieveAllUsers();
-                if (userFeed != null)
+                try
                 {
-                    if (userFeed.Entries.Count > 0)
+                    UserEntry userEntry = userFeed.Entries[i] as UserEntry;
+                    if (userEntry != null)
                     {
-                        for (int i = 0; i < userFeed.Entries.Count; i++)
+                        Guid instanceId = InstanceProvider.GetFirstInstanceId(organizationId);
+                        SortedList list = GroupProvider.GetGroupIdRoleIdList(organizationId, instanceId);
+                        Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(list);
+
+                        string groups = groupId.ToString();
+
+                        if (userEntry.Login.Admin)
                         {
-                            UserEntry userEntry = userFeed.Entries[i] as UserEntry;
-                            if (userEntry != null)
+                            groups = Guid.Empty.ToString();
+
+                            System.Collections.IList roleIdList = list.GetValueList();
+                            if (roleIdList != null)
                             {
-                                Guid instanceId = InstanceProvider.GetFirstInstanceId(organizationId);
-                                Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(organizationId, instanceId);
-
-                                string groups = groupId.ToString();
-
-                                if (userEntry.Login.Admin)
+                                Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
+                                if (roleId != Guid.Empty)
                                 {
-                                    groups = Guid.Empty.ToString();
-
-                                    Bll.Instance inst = new Bll.Instance();
-                                    if (inst.Load(organizationId, instanceId))
+                                    int idx = list.IndexOfValue(roleId);
+                                    if (idx > -1)
                                     {
-                                        System.Collections.IList roleIdList = inst.GroupIdRoleIdList.GetValueList();
-                                        if (roleIdList != null)
-                                        {
-                                            Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
-                                            if (roleId != Guid.Empty)
-                                            {
-                                                int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
-                                                if (idx > -1)
-                                                {
-                                                    groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
-                                                    groups = string.Format("{0}, {1}", groups, groupId.ToString());
-                                                }
-                                            }
-
-                                            roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
-                                            if (roleId != Guid.Empty)
-                                            {
-                                                int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
-                                                if (idx > -1)
-                                                {
-                                                    groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
-                                                    groups = string.Format("{0}, {1}", groups, groupId.ToString());
-                                                }
-                                            }
-                                        }
+                                        groupId = (Guid)list.GetKey(idx);
+                                        groups = string.Format("{0}, {1}", groups, groupId.ToString());
                                     }
                                 }
 
-                                Guid loginId = UserProvider.AddUserToOrganization(string.Format("{0}@{1}", userEntry.Login.UserName, domain), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
-                                , null, null, null, null, null
-                                , null, null, null, null, null, null
-                                , groups, organizationId
-                                , Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(), false, true);
-
-                                UserProvider.RaiseUserInserted(loginId, organizationId, null, Bll.Support.ConvertStringToGuidList(groups));
+                                roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
+                                if (roleId != Guid.Empty)
+                                {
+                                    int idx = list.IndexOfValue(roleId);
+                                    if (idx > -1)
+                                    {
+                                        groupId = (Guid)list.GetKey(idx);
+                                        groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                    }
+                                }
                             }
                         }
+
+                        Guid loginId = UserProvider.AddUserToOrganization(string.Format("{0}@{1}", userEntry.Login.UserName, service.Domain), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
+                            , null, null, null, null, null
+                            , null, null, null, null, null, null
+                            , groups, organizationId
+                            , WebApplication.LoginProvider.GeneratePassword(), false, true);
+
+                        UserProvider.RaiseUserInserted(loginId, organizationId, null, Support.ConvertStringToGuidList(groups));
                     }
+                }
+                catch
+                {
+                    failedCount++;
                 }
             }
         }

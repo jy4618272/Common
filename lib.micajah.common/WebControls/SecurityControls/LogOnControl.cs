@@ -411,7 +411,10 @@ namespace Micajah.Common.WebControls.SecurityControls
                 Guid orgId = Guid.Empty;
                 Guid insId = Guid.Empty;
                 if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled && m_Organization == null)
-                    CustomUrlProvider.ParseHost(Request.Url.Host, ref orgId, ref insId);
+                {
+                    if (!CustomUrlProvider.IsDefaultVanityUrl(Request.Url.Host))
+                        CustomUrlProvider.ParseHost(Request.Url.Host, ref orgId, ref insId);
+                }
 
                 this.OrganizationId = orgId;
                 this.InstanceId = insId;
@@ -455,7 +458,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!instance.EnableSignupUser) return;
 
-            Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(instance);
+            Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(instance.OrganizationId, instance.InstanceId);
             if (groupId != Guid.Empty)
             {
                 m_MainContainerHeight = 300;
@@ -932,18 +935,14 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (organizationId != Guid.Empty)
             {
-                Organization org = new Organization();
-                if (org.Load(organizationId))
+                Organization org = OrganizationProvider.GetOrganization(organizationId);
+                if (org != null)
                 {
                     Instance inst = null;
                     if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
                     {
                         if (instanceId != Guid.Empty)
-                        {
-                            inst = new Instance();
-                            if (!inst.Load(organizationId, instanceId))
-                                inst = null;
-                        }
+                            inst = InstanceProvider.GetInstance(instanceId, organizationId);
                     }
 
                     HyperLink link = null;

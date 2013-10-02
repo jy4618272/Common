@@ -18,29 +18,75 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class CustomUrlProvider
     {
+        #region Members
+
+        private const string CustomUrlKeyFormat = "mc.CustomUrl.{0}";
+        private const string OrganizationCustomUrlKeyFormat = "mc.OrganizationCustomUrl.{0:N}";
+        private const string InstanceCustomUrlKeyFormat = "mc.InstanceCustomUrl.{0:N}";
+
+        #endregion
+
         #region Private Methods
 
-        /// <summary>
-        /// Validates the specified partial custom URL.
-        /// </summary>
-        /// <param name="partialCustomUrl">The partial custom URL to validate.</param>
-        public static void ValidatePartialCustomUrl(string partialCustomUrl)
+        #region Cache Methods
+
+        private static Guid[] GetCustomUrlFromCache(string host)
         {
-            if (partialCustomUrl != null)
-            {
-                Regex re = new Regex("^[0-9a-z][0-9a-z-]{1,18}[0-9a-z]$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                if (re.IsMatch(partialCustomUrl))
-                {
-                    foreach (string address in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
-                    {
-                        if (partialCustomUrl.StartsWith(address, StringComparison.OrdinalIgnoreCase))
-                            throw new ConstraintException(Resources.CustomUrlProvider_UrlReserved);
-                    }
-                }
-                else
-                    throw new DataException(Resources.CustomUrlProvider_InvalidUrl);
-            }
+            string key = string.Format(CultureInfo.InvariantCulture, CustomUrlKeyFormat, host.ToLowerInvariant());
+            return CacheManager.Current.Get(key) as Guid[];
         }
+
+        private static string GetOrganizationCustomUrlFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationCustomUrlKeyFormat, organizationId);
+            return CacheManager.Current.Get(key) as string;
+        }
+
+        private static string GetInstanceCustomUrlFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceCustomUrlKeyFormat, instanceId);
+            return CacheManager.Current.Get(key) as string;
+        }
+
+        private static void PutCustomUrlToCache(string host, Guid[] values)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, CustomUrlKeyFormat, host.ToLowerInvariant());
+            CacheManager.Current.PutWithDefaultTimeout(key, values);
+        }
+
+        private static void PutOrganizationCustomUrlToCache(Guid organizationId, string customUrl)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationCustomUrlKeyFormat, organizationId);
+            CacheManager.Current.PutWithDefaultTimeout(key, customUrl);
+        }
+
+        private static void PutInstanceCustomUrlToCache(Guid instanceId, string customUrl)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceCustomUrlKeyFormat, instanceId);
+            CacheManager.Current.PutWithDefaultTimeout(key, customUrl);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Internal Methods
+
+        #region Cache Methods
+
+        internal static void RemoveOrganizationCustomUrlFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationCustomUrlKeyFormat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        internal static void RemoveInstanceCustomUrlFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceCustomUrlKeyFormat, instanceId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
 
         #endregion
 
@@ -66,15 +112,6 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
-        #region Internal Methods
-
-        internal static void Refresh()
-        {
-            // TODO: Refresh cached custom urls.
-        }
-
-        #endregion
-
         #region Public Methods
 
         /// <summary>
@@ -86,11 +123,23 @@ namespace Micajah.Common.Bll.Providers
         {
             using (CustomUrlTableAdapter adapter = new CustomUrlTableAdapter())
             {
-                adapter.Delete(customUrlId);
-            }
+                using (MasterDataSet.CustomUrlDataTable table = adapter.GetCustomUrl(customUrlId))
+                {
+                    if (table.Count > 0)
+                    {
+                        MasterDataSet.CustomUrlRow row = table[0];
 
-            // TODO: Refresh cached data.
-            //Micajah.Common.Application.WebApplication.RefreshAllData();
+                        if (row.IsInstanceIdNull())
+                            RemoveOrganizationCustomUrlFromCache(row.OrganizationId);
+                        else
+                            RemoveInstanceCustomUrlFromCache(row.InstanceId);
+
+                        row.Delete();
+
+                        adapter.Update(table);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -227,9 +276,6 @@ namespace Micajah.Common.Bll.Providers
 
                 adapter.Insert(customUrlId, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
 
-                // TODO: Refresh cached data.
-                //Micajah.Common.Application.WebApplication.RefreshAllData();
-
                 return customUrlId;
             }
         }
@@ -281,8 +327,10 @@ namespace Micajah.Common.Bll.Providers
 
                     adapter.Update(customUrlId, fullCustomUrl, partialCustomUrl);
 
-                    // TODO: Refresh cached data.
-                    //Micajah.Common.Application.WebApplication.RefreshAllData();
+                    if (row.IsInstanceIdNull())
+                        RemoveOrganizationCustomUrlFromCache(row.OrganizationId);
+                    else
+                        RemoveInstanceCustomUrlFromCache(row.InstanceId);
                 }
             }
         }
@@ -327,6 +375,28 @@ namespace Micajah.Common.Bll.Providers
             return false;
         }
 
+        /// <summary>
+        /// Validates the specified partial custom URL.
+        /// </summary>
+        /// <param name="partialCustomUrl">The partial custom URL to validate.</param>
+        public static void ValidatePartialCustomUrl(string partialCustomUrl)
+        {
+            if (partialCustomUrl != null)
+            {
+                Regex re = new Regex("^[0-9a-z][0-9a-z-]{1,18}[0-9a-z]$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                if (re.IsMatch(partialCustomUrl))
+                {
+                    foreach (string address in FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlReservedAddresses)
+                    {
+                        if (partialCustomUrl.StartsWith(address, StringComparison.OrdinalIgnoreCase))
+                            throw new ConstraintException(Resources.CustomUrlProvider_UrlReserved);
+                    }
+                }
+                else
+                    throw new DataException(Resources.CustomUrlProvider_InvalidUrl);
+            }
+        }
+
         public static bool IsDefaultVanityUrl(string host)
         {
             if (string.IsNullOrEmpty(host))
@@ -353,9 +423,18 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>Custom Url</returns>
         public static string GetVanityUrl(Guid organizationId, Guid instanceId)
         {
-            string customUrl = string.Empty;
+            string customUrl = null;
 
-            Organization org = OrganizationProvider.GetOrganization(organizationId);
+            if (instanceId != Guid.Empty)
+                customUrl = GetInstanceCustomUrlFromCache(instanceId);
+
+            if (string.IsNullOrEmpty(customUrl))
+                customUrl = GetOrganizationCustomUrlFromCache(organizationId);
+
+            if (!string.IsNullOrEmpty(customUrl))
+                return customUrl;
+
+            Organization org = OrganizationProvider.GetOrganizationFromCache(organizationId, true);
             if (org != null)
             {
                 Instance inst = null;
@@ -368,18 +447,26 @@ namespace Micajah.Common.Bll.Providers
                     row = GetCustomUrlByOrganizationId(organizationId);
 
                 if (instanceId != Guid.Empty)
-                    inst = InstanceProvider.GetInstance(instanceId, organizationId);
+                    inst = InstanceProvider.GetInstanceFromCache(instanceId, organizationId, true);
 
                 CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
 
                 if (row != null)
                 {
                     if (row.IsInstanceIdNull() && (inst != null))
+                    {
                         customUrl = row.PartialCustomUrl + "-" + inst.PseudoId + "." + customUrlSettings.PartialCustomUrlRootAddressesFirst;
+
+                        PutInstanceCustomUrlToCache(instanceId, customUrl);
+                    }
                     else
+                    {
                         customUrl = (!string.IsNullOrEmpty(row.FullCustomUrl))
                             ? row.FullCustomUrl
                             : row.PartialCustomUrl + "." + customUrlSettings.PartialCustomUrlRootAddressesFirst;
+
+                        PutOrganizationCustomUrlToCache(organizationId, customUrl);
+                    }
                 }
                 else
                 {
@@ -390,7 +477,7 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
 
-            return customUrl;
+            return (string.IsNullOrEmpty(customUrl) ? string.Empty : customUrl);
         }
 
         public static string GetVanityUri(Guid organizationId, Guid instanceId)
@@ -410,9 +497,9 @@ namespace Micajah.Common.Bll.Providers
             }
             else
             {
-                Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
+                Guid webSiteId = OrganizationProvider.GetWebsiteIdFromCache(organizationId);
                 if (webSiteId != Guid.Empty)
-                    websiteUrl = WebsiteProvider.GetWebsiteUrl(webSiteId);
+                    websiteUrl = WebsiteProvider.GetWebsiteUrlFromCache(webSiteId);
             }
 
             return CreateApplicationUri(websiteUrl, pathAndQuery);
@@ -506,15 +593,26 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instance">An instance.</param>
         public static void ParseHost(string host, ref Organization organization, ref Instance instance)
         {
+            Guid[] values = GetCustomUrlFromCache(host);
+            if (values != null)
+            {
+                organization = OrganizationProvider.GetOrganizationFromCache(values[0], true);
+
+                if (values.Length > 1)
+                    instance = InstanceProvider.GetInstanceFromCache(values[1], values[0], true);
+
+                return;
+            }
+
             MasterDataSet.CustomUrlRow row = GetCustomUrl(host);
             if (row != null)
             {
-                organization = OrganizationProvider.GetOrganization(row.OrganizationId);
+                organization = OrganizationProvider.GetOrganizationFromCache(row.OrganizationId, true);
 
                 if (instance == null)
                 {
                     if (!row.IsInstanceIdNull())
-                        instance = InstanceProvider.GetInstance(row.InstanceId, row.OrganizationId);
+                        instance = InstanceProvider.GetInstanceFromCache(row.InstanceId, row.OrganizationId, true);
                 }
             }
             else
@@ -534,30 +632,30 @@ namespace Micajah.Common.Bll.Providers
 
                 if (pseudos.Length > 1)
                 {
-                    organization = OrganizationProvider.GetOrganizationByPseudoId(pseudos[0]);
+                    organization = OrganizationProvider.GetOrganizationByPseudoIdFromCache(pseudos[0]);
                     instPseudoId = pseudos[1];
 
                     if (organization == null)
                     {
                         customUrlRow = GetCustomUrl(pseudos[0]);
                         if (customUrlRow != null)
-                            organization = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                            organization = OrganizationProvider.GetOrganizationFromCache(customUrlRow.OrganizationId, true);
                     }
                 }
                 else
-                    organization = OrganizationProvider.GetOrganizationByPseudoId(segment);
+                    organization = OrganizationProvider.GetOrganizationByPseudoIdFromCache(segment);
 
                 if (organization == null)
                 {
                     customUrlRow = GetCustomUrl(segment);
                     if (customUrlRow != null)
                     {
-                        organization = OrganizationProvider.GetOrganization(customUrlRow.OrganizationId);
+                        organization = OrganizationProvider.GetOrganizationFromCache(customUrlRow.OrganizationId, true);
 
                         if (instance == null)
                         {
                             if (!customUrlRow.IsInstanceIdNull())
-                                instance = InstanceProvider.GetInstance(customUrlRow.InstanceId, customUrlRow.OrganizationId);
+                                instance = InstanceProvider.GetInstanceFromCache(customUrlRow.InstanceId, customUrlRow.OrganizationId, true);
                         }
                     }
                 }
@@ -567,9 +665,18 @@ namespace Micajah.Common.Bll.Providers
                     if (instance == null)
                     {
                         if (!string.IsNullOrEmpty(instPseudoId))
-                            instance = InstanceProvider.GetInstanceByPseudoId(instPseudoId, organization.OrganizationId);
+                            instance = InstanceProvider.GetInstanceByPseudoIdFromCache(instPseudoId, organization.OrganizationId);
                     }
                 }
+            }
+
+            if (organization != null)
+            {
+                if (instance == null)
+                    values = new Guid[] { organization.OrganizationId };
+                else
+                    values = new Guid[] { organization.OrganizationId, instance.InstanceId };
+                PutCustomUrlToCache(host, values);
             }
         }
 

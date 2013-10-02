@@ -91,10 +91,10 @@ namespace Micajah.Common.Security
         {
             get
             {
-                if (this.SelectedInstanceId == Guid.Empty)
+                if (this.SelectedInstanceId == Guid.Empty || (!FrameworkConfiguration.Current.Actions.EnableOverride))
                     return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator, true);
                 else
-                    return ActionProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, this.SelectedInstanceId, this.SelectedOrganizationId, this.IsOrganizationAdministrator);
+                    return GroupProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, this.SelectedInstanceId, this.SelectedOrganizationId, this.IsOrganizationAdministrator);
             }
         }
 
@@ -510,7 +510,7 @@ namespace Micajah.Common.Security
         /// </summary>
         public Organization SelectedOrganization
         {
-            get { return OrganizationProvider.GetOrganization(this.SelectedOrganizationId); }
+            get { return OrganizationProvider.GetOrganizationFromCache(this.SelectedOrganizationId, true); }
         }
 
         /// <summary>
@@ -529,11 +529,12 @@ namespace Micajah.Common.Security
             get
             {
                 Instance inst = null;
+
                 Guid organizationId = this.SelectedOrganizationId;
                 Guid instanceId = this.SelectedInstanceId;
 
                 if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
-                    inst = InstanceProvider.GetInstance(instanceId, organizationId);
+                    inst = InstanceProvider.GetInstanceFromCache(instanceId, organizationId, true);
 
                 return inst;
             }
@@ -674,7 +675,7 @@ namespace Micajah.Common.Security
 
         #region Private Methods
 
-        private void SelectedInstanceChange(Instance newInstance, bool setAuthCookie, bool? isPersistent)
+        private void SelectedInstanceChange(Instance newInstance, bool setAuthCookie, bool? isPersistent, bool putToCache)
         {
             ArrayList groupIdList = new ArrayList();
             ArrayList roleIdList = new ArrayList();
@@ -686,6 +687,9 @@ namespace Micajah.Common.Security
 
             if (roleIdList.Count == 0)
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, newInstance.Name));
+
+            if (putToCache)
+                InstanceProvider.PutInstanceToCache(newInstance);
 
             if (SelectedInstanceChanging != null)
             {
@@ -714,7 +718,7 @@ namespace Micajah.Common.Security
                 SelectedInstanceChanged(this, EventArgs.Empty);
         }
 
-        private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool setAuthCookie, bool? isPersistent, Guid? instanceId)
+        private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool setAuthCookie, bool? isPersistent, Guid? instanceId, bool putToCache)
         {
             if (this.SelectedOrganizationId != newOrganization.OrganizationId)
                 CheckWebSite(newOrganization.OrganizationId, instanceId);
@@ -730,26 +734,18 @@ namespace Micajah.Common.Security
             Guid roleId = Guid.Empty;
             string startUrl = null;
 
-            // Looks up roles in all instances.
             if (userGroupIdList.Count > 0)
             {
-                InstanceCollection newOrganizationInstances = InstanceProvider.GetInstances(newOrganization.OrganizationId, false);
-                foreach (Guid groupId in userGroupIdList)
+                // Looks up roles in all instances.
+                foreach (ClientDataSet.GroupsInstancesRolesRow row in GroupProvider.GetGroupsInstancesRolesByGroups(newOrganization.OrganizationId, userGroupIdList))
                 {
-                    if (!groupIdList.Contains(groupId))
-                        groupIdList.Add(groupId);
+                    if (!groupIdList.Contains(row.GroupId))
+                        groupIdList.Add(row.GroupId);
 
-                    foreach (Instance instance in newOrganizationInstances)
+                    if (!roleIdList.Contains(row.RoleId))
                     {
-                        if (instance.GroupIdRoleIdList.Contains(groupId))
-                        {
-                            roleId = (Guid)instance.GroupIdRoleIdList[groupId];
-                            if (!roleIdList.Contains(roleId))
-                            {
-                                if (RoleProvider.GetRoleRow(roleId) != null)
-                                    roleIdList.Add(roleId);
-                            }
-                        }
+                        if (RoleProvider.GetRoleRow(row.RoleId) != null) // Validates if this role still defined in the configuration file.
+                            roleIdList.Add(row.RoleId);
                     }
                 }
             }
@@ -758,6 +754,9 @@ namespace Micajah.Common.Security
 
             if (roleIdList.Count == 0)
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstancesRoles, newOrganization.Name));
+
+            if (putToCache)
+                OrganizationProvider.PutOrganizationToCache(newOrganization);
 
             if (SelectedOrganizationChanging != null)
                 SelectedOrganizationChanging(this, new UserContextSelectedOrganizationChangingEventArgs() { Organization = newOrganization });
@@ -824,8 +823,8 @@ namespace Micajah.Common.Security
                     return;
             }
 
-            Guid webSiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
-            if (WebsiteProvider.GetWebsiteIdByUrl(WebApplication.Hosts) != webSiteId)
+            Guid webSiteId = OrganizationProvider.GetWebsiteIdFromCache(organizationId);
+            if (WebsiteProvider.GetWebsiteIdByUrlFromCache(WebApplication.Hosts) != webSiteId)
             {
                 (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
             }
@@ -876,11 +875,20 @@ namespace Micajah.Common.Security
 
         internal void SelectOrganization(Guid organizationId, bool setAuthCookie, bool? isPersistent, Guid? instanceId)
         {
-            if (organizationId == Guid.Empty) return;
+            if (organizationId == Guid.Empty)
+                return;
 
-            Organization newOrganization = new Organization();
-            if (!newOrganization.Load(organizationId))
-                throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_NoOrganization, organizationId));
+            bool putToCache = false;
+            Organization newOrganization = OrganizationProvider.GetOrganizationFromCache(organizationId);
+
+            if (newOrganization == null)
+            {
+                newOrganization = OrganizationProvider.GetOrganization(organizationId);
+                if (newOrganization == null)
+                    throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_NoOrganization, organizationId));
+
+                putToCache = true;
+            }
 
             if (newOrganization.Deleted)
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationIsDeleted, newOrganization.Name));
@@ -916,7 +924,7 @@ namespace Micajah.Common.Security
             else
                 throw new AuthenticationException(FrameworkConfiguration.Current.WebApplication.Login.FailureText);
 
-            this.SelectedOrganizationChange(newOrganization, isOrganizationAdministrator, userGroupIdList, setAuthCookie, isPersistent, instanceId);
+            this.SelectedOrganizationChange(newOrganization, isOrganizationAdministrator, userGroupIdList, setAuthCookie, isPersistent, instanceId, putToCache);
 
             RefreshDetails(this, userRow);
 
@@ -928,28 +936,35 @@ namespace Micajah.Common.Security
 
         internal void SelectInstance(Guid instanceId, bool setAuthCookie, bool? isPersistent)
         {
-            if (instanceId == Guid.Empty) return;
+            if (instanceId == Guid.Empty)
+                return;
 
             Guid organizationId = this.SelectedOrganizationId;
             if (organizationId != Guid.Empty)
             {
-                Instance instance = InstanceProvider.GetInstance(instanceId, organizationId);
-                if (instance != null)
+                bool putToCache = false;
+                Instance instance = InstanceProvider.GetInstanceFromCache(instanceId, organizationId);
+
+                if (instance == null)
                 {
-                    if (!instance.Active)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_InstanceIsInactive, instance.Name));
-                    else if (instance.GroupIdRoleIdList.Count == 0)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, instance.Name));
-                    else
-                    {
-                        if (UserProvider.UserIsActiveInInstance(this.UserId, instanceId, organizationId))
-                            this.SelectedInstanceChange(instance, setAuthCookie, isPersistent);
-                        else
-                            throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInInstanceIsInactivated, instance.Name));
-                    }
+                    instance = InstanceProvider.GetInstance(instanceId, organizationId);
+                    if (instance == null)
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoInstance, instanceId, this.SelectedOrganization.Name));
+
+                    putToCache = true;
                 }
+
+                if (!instance.Active)
+                    throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_InstanceIsInactive, instance.Name));
+                else if (GroupProvider.GetGroupIdRoleIdList(organizationId, instanceId).Count == 0)
+                    throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroupsInstanceRoles, instance.Name));
                 else
-                    throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoInstance, instanceId, this.SelectedOrganization.Name));
+                {
+                    if (UserProvider.UserIsActiveInInstance(this.UserId, instanceId, organizationId))
+                        this.SelectedInstanceChange(instance, setAuthCookie, isPersistent, putToCache);
+                    else
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInInstanceIsInactivated, instance.Name));
+                }
             }
             else
                 throw new AuthenticationException(Resources.UserContext_ErrorMessage_NoSelectedOrganization);

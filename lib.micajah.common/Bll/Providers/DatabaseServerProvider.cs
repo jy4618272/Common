@@ -2,7 +2,6 @@ using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
 using System.ComponentModel;
-using System.Data;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -12,9 +11,9 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class DatabaseServerProvider
     {
-        #region Private Methods
+        #region Internal Methods
 
-        private static MasterDataSet.DatabaseServerRow GetDatabaseServerRowByDatabaseId(Guid databaseId)
+        internal static MasterDataSet.DatabaseServerRow GetDatabaseServerRowByDatabaseId(Guid databaseId)
         {
             using (DatabaseServerTableAdapter adapter = new DatabaseServerTableAdapter())
             {
@@ -22,10 +21,6 @@ namespace Micajah.Common.Bll.Providers
                 return ((table.Count > 0) ? table[0] : null);
             }
         }
-
-        #endregion
-
-        #region Internal Methods
 
         /// <summary>
         /// Returns the full name of the specified SQL-server, incuding instance name and port.
@@ -37,7 +32,6 @@ namespace Micajah.Common.Bll.Providers
             MasterDataSet.DatabaseServerRow row = GetDatabaseServerRow(databaseServerId);
             return ((row == null) ? string.Empty : row.FullName);
         }
-
 
         /// <summary>
         /// Returns the SQL-server full name, where the specified database is placed.

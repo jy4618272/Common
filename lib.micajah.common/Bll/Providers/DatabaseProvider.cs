@@ -1,11 +1,9 @@
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
-using Micajah.Common.Properties;
 using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Text;
 
 namespace Micajah.Common.Bll.Providers
@@ -36,6 +34,24 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Private Methods
+
+        private static MasterDataSet.DatabaseRow GetDatabaseRowByDatabaseId(Guid databaseId)
+        {
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                MasterDataSet.DatabaseDataTable table = adapter.GetDatabaseByDatabaseId(databaseId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
+        }
+
+        private static MasterDataSet.DatabaseRow GetDatabaseRowByOrganizationId(Guid organizationId)
+        {
+            using (DatabaseTableAdapter adapter = new DatabaseTableAdapter())
+            {
+                MasterDataSet.DatabaseDataTable table = adapter.GetDatabaseByOrganizationId(organizationId);
+                return ((table.Count > 0) ? table[0] : null);
+            }
+        }
 
         private static void IncludeAdditionalInfo(ref DataTable table)
         {
@@ -297,28 +313,23 @@ namespace Micajah.Common.Bll.Providers
 
         /// <summary>
         /// Returns the connection string to the specified database.
-        /// Generates an System.Data.DataException exception if error occured.
         /// </summary>
         /// <param name="databaseId">The identifier of the database.</param>
         /// <returns>The connection string to the specified database.</returns>
         public static string GetConnectionString(Guid databaseId)
         {
-            string connectionString = string.Empty;
+            MasterDataSet.DatabaseRow row = GetDatabaseRowByDatabaseId(databaseId);
+            if (row != null)
+                return CreateConnectionString(row.Name, row.UserName, row.Password, row["DatabaseServerName"].ToString(), row["InstanceName"].ToString(), (int)row["Port"]);
+            return string.Empty;
+        }
 
-            MasterDataSet.DatabaseRow db = GetDatabaseRow(databaseId);
-            if ((db != null) && (!db.Deleted))
-            {
-                Guid databaseServerId = db.DatabaseServerId;
-                MasterDataSet.DatabaseServerRow server = DatabaseServerProvider.GetDatabaseServerRow(databaseServerId);
-                if ((server != null) && (!server.Deleted))
-                    connectionString = CreateConnectionString(db.Name, db.UserName, db.Password, server.Name, server.InstanceName, server.Port);
-                else
-                    throw new DataException(string.Format(CultureInfo.CurrentCulture, Resources.DatabaseServerProvider_ErrorMessage_NoDatabaseServer, databaseServerId));
-            }
-            else
-                throw new DataException(string.Format(CultureInfo.CurrentCulture, Resources.DatabaseProvider_ErrorMessage_NoDatabase, databaseId));
-
-            return connectionString;
+        public static string GetConnectionStringByOrganizationId(Guid organizationId)
+        {
+            MasterDataSet.DatabaseRow row = GetDatabaseRowByOrganizationId(organizationId);
+            if (row != null)
+                return CreateConnectionString(row.Name, row.UserName, row.Password, row["DatabaseServerName"].ToString(), row["InstanceName"].ToString(), (int)row["Port"]);
+            return string.Empty;
         }
 
         #endregion

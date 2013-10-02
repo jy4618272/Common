@@ -161,11 +161,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             Guid orgId = this.OrganizationId;
             if (orgId != Guid.Empty)
-            {
-                m_Organization = new Organization();
-                if (!m_Organization.Load(orgId))
-                    m_Organization = null;
-            }
+                m_Organization = OrganizationProvider.GetOrganization(orgId);
             if (m_Organization == null)
                 this.RedirectToLoginPage();
         }

@@ -5,7 +5,6 @@ using Micajah.Common.Dal.ClientDataSetTableAdapters;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,6 +27,9 @@ namespace Micajah.Common.Bll.Providers
 
         internal const string DefaultTimeZoneId = "Eastern Standard Time";
         internal const string DefaultWorkingDays = "1111100";
+
+        private const string InstanceKeyFormat = "mc.Instance.{0:N}";
+        private const string InstanceByPseudoIdKeyFormat = "mc.Instance.{0}.{1:N}";
 
         #endregion
 
@@ -173,8 +175,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
-            Instance inst = new Instance();
-            inst.Load(row);
+            Instance inst = CreateInstance(row);
 
             // Creates the built-in group for the Administrators of this Instance.
             Guid groupId = GroupProvider.InsertGroup(string.Format(CultureInfo.InvariantCulture, Resources.GroupProvider_InstanceAdministratorGroup_Name, name), Resources.GroupProvider_InstanceAdministratorGroup_Description, organizationId, true);
@@ -245,6 +246,93 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
+        internal static Instance CreateInstance(ClientDataSet.InstanceRow row)
+        {
+            if (row != null)
+            {
+                Instance instance = new Instance();
+
+                instance.InstanceId = row.InstanceId;
+                instance.PseudoId = row.PseudoId;
+                instance.OrganizationId = row.OrganizationId;
+                instance.Name = row.Name;
+                instance.Description = row.Description;
+                instance.EnableSignupUser = row.EnableSignUpUser;
+                instance.ExternalId = row.ExternalId;
+                instance.TimeZoneId = row.TimeZoneId;
+                instance.TimeFormat = row.TimeFormat;
+                instance.DateFormat = row.DateFormat;
+                instance.WorkingDays = row.WorkingDays;
+                instance.Active = row.Active;
+                if (!row.IsCanceledTimeNull()) instance.CanceledTime = new DateTime?(row.CanceledTime);
+                instance.Trial = row.Trial;
+                instance.Beta = row.Beta;
+                if (!row.IsCreatedTimeNull()) instance.CreatedTime = new DateTime?(row.CreatedTime);
+                instance.BillingPlan = (BillingPlan)row.BillingPlan;
+                instance.CreditCardStatus = (CreditCardStatus)row.CreditCardStatus;
+
+                return instance;
+            }
+
+            return null;
+        }
+
+        #region Cache Methods
+
+        internal static Instance GetInstanceFromCache(Guid instanceId, Guid organizationId)
+        {
+            return GetInstanceFromCache(instanceId, organizationId, false);
+        }
+
+        internal static Instance GetInstanceFromCache(Guid instanceId, Guid organizationId, bool putToCacheIfNotExists)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceKeyFormat, instanceId);
+            Instance instance = CacheManager.Current.Get(key) as Instance;
+
+            if (instance == null)
+            {
+                if (putToCacheIfNotExists)
+                {
+                    instance = GetInstance(instanceId, organizationId);
+
+                    if (instance != null)
+                        CacheManager.Current.PutWithDefaultTimeout(key, instance);
+                }
+            }
+
+            return instance;
+        }
+
+        internal static Instance GetInstanceByPseudoIdFromCache(string pseudoId, Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceByPseudoIdKeyFormat, pseudoId, organizationId);
+            Instance instance = CacheManager.Current.Get(key) as Instance;
+
+            if (instance == null)
+            {
+                instance = GetInstanceByPseudoId(pseudoId, organizationId);
+
+                if (instance != null)
+                    CacheManager.Current.PutWithDefaultTimeout(key, instance);
+            }
+
+            return instance;
+        }
+
+        internal static void PutInstanceToCache(Instance instance)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceKeyFormat, instance.InstanceId);
+            CacheManager.Current.PutWithDefaultTimeout(key, instance);
+        }
+
+        internal static void RemoveInstanceFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceKeyFormat, instanceId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
+
         internal static Guid InsertFirstInstance(string timeZoneId, Guid? templateInstanceId, Guid organizationId
             , string adminEmail, string adminPassword, string partialCustomUrl
             , bool sendNotificationEmail)
@@ -265,9 +353,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    Instance inst = new Instance();
-                    inst.Load(row as ClientDataSet.InstanceRow);
-                    coll.Add(inst);
+                    coll.Add(CreateInstance(row as ClientDataSet.InstanceRow));
                 }
 
                 if (sort)
@@ -292,8 +378,7 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (row.Active)
                     {
-                        inst = new Instance();
-                        inst.Load(row);
+                        inst = CreateInstance(row);
                         break;
                     }
                 }
@@ -332,7 +417,7 @@ namespace Micajah.Common.Bll.Providers
 
                 using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                 {
-                    foreach (ClientDataSet.InstanceRow row in adapter.GetInstancesByGroups(organizationId, sb.ToString()))
+                    foreach (ClientDataSet.InstanceRow row in adapter.GetInstancesByGroups(organizationId, sb.ToString().ToUpperInvariant()))
                     {
                         if (!instanceIdList.Contains(row.InstanceId))
                             instanceIdList.Add(row.InstanceId);
@@ -351,49 +436,25 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The organization's instances which this user have access to.</returns>
         internal static InstanceCollection GetUserInstances(Guid userId, Guid organizationId, bool isOrgAdmin)
         {
-            InstanceCollection coll = new InstanceCollection();
+            InstanceCollection coll = null;
 
             if ((userId != Guid.Empty) && (organizationId != Guid.Empty))
             {
-                ArrayList userGroupIdList = UserProvider.GetUserGroupIdList(organizationId, userId);
-                if (userGroupIdList.Count > 0)
-                {
-                    foreach (Guid groupId in userGroupIdList)
-                    {
-                        foreach (Instance instance in GetInstances(organizationId, false))
-                        {
-                            if (instance.GroupIdRoleIdList.Contains(groupId))
-                            {
-                                if (!coll.Contains(instance))
-                                {
-                                    if (UserProvider.UserIsActiveInInstance(userId, instance.InstanceId, organizationId))
-                                        coll.Add(instance);
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (isOrgAdmin)
+                Guid? roleId = null;
+                if (isOrgAdmin)
                 {
                     bool isInstanceAdmin = false;
-                    Guid roleId = RoleProvider.AssumeRole(isOrgAdmin, null, ref isInstanceAdmin);
-                    if (roleId != Guid.Empty)
-                    {
-                        foreach (Instance instance in GetInstances(organizationId, false))
-                        {
-                            if (instance.GroupIdRoleIdList.ContainsValue(roleId))
-                            {
-                                if (!coll.Contains(instance))
-                                {
-                                    if (UserProvider.UserIsActiveInInstance(userId, instance.InstanceId, organizationId))
-                                        coll.Add(instance);
-                                }
-                            }
-                        }
-                    }
+                    roleId = RoleProvider.AssumeRole(isOrgAdmin, null, ref isInstanceAdmin);
                 }
-                coll.Sort();
+
+                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+                {
+                    ClientDataSet.InstanceDataTable table = adapter.GetInstancesByUserIdRoleId(organizationId, userId, roleId);
+                    coll = CreateInstanceCollection(table, false);
+                }
             }
+            else
+                coll = new InstanceCollection();
 
             return coll;
         }
@@ -488,6 +549,8 @@ namespace Micajah.Common.Bll.Providers
 
                     instances = coll;
                 }
+
+                instances.Sort();
             }
             else
             {
@@ -496,8 +559,6 @@ namespace Micajah.Common.Bll.Providers
                 if (inst != null)
                     instances.Add(inst);
             }
-
-            instances.Sort();
 
             return instances;
         }
@@ -562,19 +623,21 @@ namespace Micajah.Common.Bll.Providers
         /// </returns>
         public static Instance GetInstance(Guid instanceId, Guid organizationId)
         {
-            Instance instance = new Instance();
-            bool loaded = false;
+            Instance instance = null;
+
             if (organizationId == Guid.Empty)
             {
                 foreach (MasterDataSet.OrganizationRow row in OrganizationProvider.GetOrganizations(null))
                 {
-                    loaded = instance.Load(row.OrganizationId, instanceId);
-                    if (loaded) break;
+                    instance = CreateInstance(GetInstanceRow(row.OrganizationId, instanceId));
+                    if (instance != null)
+                        break;
                 }
             }
             else
-                loaded = instance.Load(organizationId, instanceId);
-            return (loaded ? instance : null);
+                instance = CreateInstance(GetInstanceRow(organizationId, instanceId));
+
+            return instance;
         }
 
         /// <summary>
@@ -585,21 +648,17 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The Micajah.Common.Bll.Instance object populated with information of the specified instance in specified organization. If the instance is not found, the method returns null reference.</returns>
         public static Instance GetInstanceByPseudoId(string pseudoId, Guid organizationId)
         {
-            Instance instance = null;
             if (!string.IsNullOrEmpty(pseudoId))
             {
                 using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                 {
                     ClientDataSet.InstanceDataTable table = adapter.GetInstanceByPseudoId(pseudoId);
                     if (table.Count > 0)
-                    {
-                        instance = new Instance();
-                        instance.Load(table[0]);
-                    }
+                        return CreateInstance(table[0]);
 
                 }
             }
-            return instance;
+            return null;
         }
 
         /// <summary>
@@ -857,8 +916,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(row);
             }
 
-            Instance inst = new Instance();
-            inst.Load(row);
+            Instance instance = CreateInstance(row);
 
             if (nameIsModified)
                 GroupProvider.UpdateInstanceAdministratorGroup(organizationId, instanceId, name);
@@ -867,13 +925,15 @@ namespace Micajah.Common.Bll.Providers
             {
                 EmailSuffixProvider.UpdateEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
 
-                inst.EmailSuffixes = emailSuffixes;
+                instance.EmailSuffixes = emailSuffixes;
             }
+
+            PutInstanceToCache(instance);
 
             UserContext.RefreshCurrent();
 
             if (raiseEvent)
-                RaiseInstanceUpdated(inst);
+                RaiseInstanceUpdated(instance);
         }
 
         /// <summary>
@@ -937,12 +997,13 @@ namespace Micajah.Common.Bll.Providers
                     adapter.Update(row);
                 }
 
-                // Looks for built-in group for the instance's administators.
-                ClientDataSet.GroupsInstancesRolesDataTable table = GroupProvider.GetGroupsInstancesRolesByRoleId(user.SelectedOrganizationId, RoleProvider.InstanceAdministratorRoleId);
-                if (table.Count > 0)
-                    GroupProvider.DeleteGroup(table[0].GroupId);
+                GroupProvider.DeleteInstanceAdministratorGroup(user.SelectedOrganizationId);
 
                 EmailSuffixProvider.DeleteEmailSuffixes(user.SelectedOrganizationId, instanceId);
+
+                RemoveInstanceFromCache(instanceId);
+                SettingProvider.RemoveInstanceSettingsValuesFromCache(instanceId);
+                CustomUrlProvider.RemoveInstanceCustomUrlFromCache(instanceId);
 
                 user.Refresh();
             }

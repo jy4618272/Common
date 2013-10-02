@@ -1174,7 +1174,7 @@ namespace Micajah.Common.Bll
 
                 adapter.Fill(table);
 
-                if (command.Connection!=null && command.Connection.State == ConnectionState.Open) command.Connection.Close();
+                if (command.Connection != null && command.Connection.State == ConnectionState.Open) command.Connection.Close();
 
                 return table;
             }
@@ -1335,6 +1335,18 @@ namespace Micajah.Common.Bll
                 }
             }
             return value;
+        }
+
+        public static void RemoveDuplicates(ref ArrayList value)
+        {
+            ArrayList list = new ArrayList(value);
+            value.Clear();
+
+            foreach (object obj in list)
+            {
+                if (!value.Contains(obj))
+                    value.Add(obj);
+            }
         }
 
         /// <summary>

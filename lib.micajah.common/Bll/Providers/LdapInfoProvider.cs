@@ -47,7 +47,7 @@ namespace Micajah.Common.Bll.Providers
                             if (list == null)
                             {
                                 list = new List<LdapProcess>();
-                                CacheManager.Current.AddWithDefaultExpiration("mc.LdapProcesses", list);
+                                CacheManager.Current.PutWithDefaultTimeout("mc.LdapProcesses", list);
                             }
                         }
                     }

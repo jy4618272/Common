@@ -630,12 +630,6 @@
   <data name="DatabaseServersControl_EditForm_PortField_HeaderText" xml:space="preserve">
     <value>Port</value>
   </data>
-  <data name="FrameworkControl_ClearApplicationDataLink_Text" xml:space="preserve">
-    <value>Clear all data cached by application</value>
-  </data>
-  <data name="FrameworkControl_TitleLabel1_Text" xml:space="preserve">
-    <value>Framework management</value>
-  </data>
   <data name="FrameworkControl_TitleLabel2_Text" xml:space="preserve">
     <value>Framework information</value>
   </data>
@@ -774,17 +768,8 @@
   <data name="CheckBoxList_RequiredValidator_ErrorMessage" xml:space="preserve">
     <value>You must check an item</value>
   </data>
-  <data name="DatabaseProvider_ErrorMessage_NoDatabase" xml:space="preserve">
-    <value>The Database with Id={0} doesn't exist</value>
-  </data>
   <data name="OrganizationProvider_ErrorMessage_NoOrganization" xml:space="preserve">
     <value>The Organization with Id={0} doesn't exist.</value>
-  </data>
-  <data name="DatabaseServerProvider_ErrorMessage_NoDatabaseServer" xml:space="preserve">
-    <value>The Database Server with Id={0} doesn't exist</value>
-  </data>
-  <data name="WebsiteProvider_ErrorMessage_NoWebsite" xml:space="preserve">
-    <value>The Website with Id={0} doesn't exist</value>
   </data>
   <data name="NoticeMessageBox_ErrorTitle" xml:space="preserve">
     <value>Oops!</value>

@@ -1,7 +1,6 @@
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Dal;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -32,9 +31,7 @@ namespace Micajah.Common.Bll
         private bool m_Beta;
         private DateTime? m_CreatedTime;
         private bool m_LogoImageResourceIdLoaded;
-        private Organization m_Organization;
         private SettingCollection m_Settings;
-        private SortedList m_GroupIdRoleIdList;
         private string m_EmailSuffixes;
         private BillingPlan m_BillingPlan;
         private CreditCardStatus m_CreditCardStatus;
@@ -68,23 +65,6 @@ namespace Micajah.Common.Bll
 
         #endregion
 
-        #region Internal Properties
-
-        /// <summary>
-        /// Gets the collection of group/role identifiers pairs for this instance.
-        /// </summary>
-        public SortedList GroupIdRoleIdList
-        {
-            get
-            {
-                if (m_GroupIdRoleIdList == null)
-                    m_GroupIdRoleIdList = GroupProvider.GetGroupIdRoleIdList(this.OrganizationId, this.InstanceId);
-                return m_GroupIdRoleIdList;
-            }
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -111,11 +91,7 @@ namespace Micajah.Common.Bll
         public Guid OrganizationId
         {
             get { return m_OrganizationId; }
-            set
-            {
-                m_OrganizationId = value;
-                m_Organization = null;
-            }
+            set { m_OrganizationId = value; }
         }
 
         /// <summary>
@@ -272,22 +248,6 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets the organization which this instance belong to.
-        /// </summary>
-        public Organization Organization
-        {
-            get
-            {
-                if (m_Organization == null)
-                {
-                    m_Organization = new Organization();
-                    m_Organization.Load(OrganizationId);
-                }
-                return m_Organization;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the email suffixes for the instance.
         /// </summary>
         public string EmailSuffixes
@@ -399,74 +359,6 @@ namespace Micajah.Common.Bll
                     }
                 }
             }
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        /// <summary>
-        /// Loads the data of specified instance into Micajah.Common.Bll.Instance class from CommonDataSet.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization that the instance belong to.</param>
-        /// <param name="instanceId">The identifier of the instance to load.</param>
-        /// <returns>true, if the specified instance is found; otherwise, false.</returns>
-        internal bool Load(Guid organizationId, Guid instanceId)
-        {
-            ClientDataSet.InstanceRow instanceRow = InstanceProvider.GetInstanceRow(organizationId, instanceId);
-            if (instanceRow != null)
-            {
-                Load(instanceRow);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Loads the data of specified instance into Micajah.Common.Bll.Instance class from CommonDataSet.
-        /// </summary>
-        /// <param name="row">The data row of the instance to load.</param>
-        internal void Load(ClientDataSet.InstanceRow row)
-        {
-            if (row != null)
-            {
-                m_InstanceId = row.InstanceId;
-                m_PseudoId = row.PseudoId;
-                m_OrganizationId = row.OrganizationId;
-                m_Name = row.Name;
-                m_Description = row.Description;
-                m_EnableSignupUser = row.EnableSignUpUser;
-
-                m_ExternalId = row.ExternalId;
-                this.TimeZoneId = row.TimeZoneId;
-                this.TimeFormat = row.TimeFormat;
-                this.DateFormat = row.DateFormat;
-                m_WorkingDays = row.WorkingDays;
-                m_Active = row.Active;
-                m_CanceledTime = (row.IsCanceledTimeNull() ? null : new DateTime?(row.CanceledTime));
-                m_Trial = row.Trial;
-                m_Beta = row.Beta;
-                m_CreatedTime = (row.IsCreatedTimeNull() ? null : new DateTime?(row.CreatedTime));
-
-                m_LogoImageResourceIdLoaded = false;
-                m_LogoImageResourceId = null;
-                m_Organization = null;
-                m_Settings = null;
-                m_GroupIdRoleIdList = null;
-                m_EmailSuffixes = null;
-                m_EmailSuffixesList = null;
-
-                m_BillingPlan = (BillingPlan)row.BillingPlan;
-                m_CreditCardStatus = (CreditCardStatus)row.CreditCardStatus;
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the instance level settings.
-        /// </summary>
-        internal void Refresh()
-        {
-            m_Settings = null;
         }
 
         #endregion

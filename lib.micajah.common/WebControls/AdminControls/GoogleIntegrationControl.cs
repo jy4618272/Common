@@ -1,20 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Text;
-using System.Threading;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll.Handlers;
+﻿using Google.GData.Apps;
+using Google.GData.Apps.Groups;
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
-
-using Google.GData.Apps;
-using Google.GData.Apps.Groups;
-using Google.GData.Extensions;
+using System;
+using System.Data;
+using System.Globalization;
+using System.Text;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -154,68 +148,11 @@ namespace Micajah.Common.WebControls.AdminControls
             try
             {
                 AppsService service = new AppsService(txtGoogleDomain.Text, txtGoogleEmail.Text, txtGooglePassword.Text);
-                UserFeed userFeed = service.RetrieveAllUsers();
+
+                int count = 0;
                 int failed = 0;
-                int count = userFeed.Entries.Count;
 
-                for (int i = 0; i < userFeed.Entries.Count; i++)
-                {
-                    try
-                    {
-                        UserEntry userEntry = userFeed.Entries[i] as UserEntry;
-                        if (userEntry != null)
-                        {
-                            Guid instanceId = InstanceProvider.GetFirstInstanceId(UserContext.Current.SelectedOrganizationId);
-                            Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(UserContext.Current.SelectedOrganizationId, instanceId);
-
-                            string groups = groupId.ToString();
-
-                            if (userEntry.Login.Admin)
-                            {
-                                groups = Guid.Empty.ToString();
-
-                                Bll.Instance inst = new Bll.Instance();
-                                if (inst.Load(UserContext.Current.SelectedOrganizationId, instanceId))
-                                {
-                                    System.Collections.IList roleIdList = inst.GroupIdRoleIdList.GetValueList();
-                                    if (roleIdList != null)
-                                    {
-                                        Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
-                                        if (roleId != Guid.Empty)
-                                        {
-                                            int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
-                                            if (idx > -1)
-                                            {
-                                                groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
-                                                groups = string.Format("{0}, {1}", groups, groupId.ToString());
-                                            }
-                                        }
-
-                                        roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
-                                        if (roleId != Guid.Empty)
-                                        {
-                                            int idx = inst.GroupIdRoleIdList.IndexOfValue(roleId);
-                                            if (idx > -1)
-                                            {
-                                                groupId = (Guid)inst.GroupIdRoleIdList.GetKey(idx);
-                                                groups = string.Format("{0}, {1}", groups, groupId.ToString());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            Guid loginId = UserProvider.AddUserToOrganization(string.Format("{0}@{1}", userEntry.Login.UserName, txtGoogleDomain.Text), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
-                            , null, null, null, null, null
-                            , null, null, null, null, null, null
-                            , groups, UserContext.Current.SelectedOrganizationId
-                            , Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(), false, true);
-
-                            UserProvider.RaiseUserInserted(loginId, UserContext.Current.SelectedOrganizationId, null, Bll.Support.ConvertStringToGuidList(groups));
-                        }
-                    }
-                    catch { failed++; }
-                }
+                GoogleProvider.ImportUsers(UserContext.Current.SelectedOrganizationId, service, out count, out failed);
 
                 lbImportUsers.Enabled = false;
                 lbImportUsers.Enabled = false;

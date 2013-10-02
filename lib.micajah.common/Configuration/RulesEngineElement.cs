@@ -95,7 +95,7 @@ namespace Micajah.Common.Configuration
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the vale whether the rules engine is enabled in the application.
+        /// Gets or sets the value whether the rules engine is enabled in the application.
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true)]
         public bool Enabled

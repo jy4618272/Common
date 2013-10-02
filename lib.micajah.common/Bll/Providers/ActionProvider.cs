@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
-using System.Text;
 using System.Web.UI.WebControls;
 
 namespace Micajah.Common.Bll.Providers
@@ -68,29 +67,9 @@ namespace Micajah.Common.Bll.Providers
 
         // The objects which are used to synchronize access to the cached collections and lists.
         private static readonly object s_PagesAndControlsSyncRoot = new object();
-        private static readonly object s_GroupsInstanceActionIdListSyncRoot = new object();
-        private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
 
         private static ActionCollection s_GlobalNavigationLinks;
         private static ActionCollection s_PagesAndControls;
-
-        #endregion
-
-        #region Private Properties
-
-        private static List<string> GroupsInstanceActionIdListKeys
-        {
-            get
-            {
-                List<string> list = CacheManager.Current.Get("mc.GroupsInstanceActionIdListKeys") as List<string>;
-                if (list == null)
-                {
-                    list = new List<string>();
-                    CacheManager.Current.AddWithDefaultExpiration("mc.GroupsInstanceActionIdListKeys", list);
-                }
-                return list;
-            }
-        }
 
         #endregion
 
@@ -333,99 +312,6 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        private static string GetActionIdListKey(ArrayList groupIdList, Guid instanceId)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (Guid groupId in groupIdList)
-            {
-                sb.AppendFormat(CultureInfo.InvariantCulture, ",{0:N}", groupId);
-            }
-            sb.Remove(0, 1);
-            sb.AppendFormat(CultureInfo.InvariantCulture, "].{0:N}", instanceId);
-            sb.Insert(0, "mc.GroupsInstanceActionIdList.[");
-
-            return sb.ToString();
-        }
-
-        private static SortedList GetGroupInstanceActionIdList(Guid organizationId, Guid groupId, Guid instanceId)
-        {
-            string key = string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId);
-
-            SortedList list = CacheManager.Current.Get(key) as SortedList;
-            if (list == null)
-            {
-                lock (s_GroupInstanceActionIdListSyncRoot)
-                {
-                    list = CacheManager.Current.Get(key) as SortedList;
-                    if (list == null)
-                    {
-                        list = new SortedList();
-
-                        // Overrides the access to the actions by the values for the group in the instance.
-                        foreach (ClientDataSet.GroupsInstancesActionsRow actionRow in GroupProvider.GetGroupsInstancesActionsByGroupIdInstanceId(organizationId, groupId, instanceId))
-                        {
-                            if (list.Contains(actionRow.ActionId))
-                                list[actionRow.ActionId] = actionRow.Enabled;
-                            else
-                                list.Add(actionRow.ActionId, actionRow.Enabled);
-                        }
-
-                        CacheManager.Current.AddWithDefaultExpiration(key, list);
-                    }
-                }
-            }
-
-            if (list != null)
-                return (SortedList)list.Clone();
-
-            return list;
-        }
-
-        private static SortedList GetGroupsInstanceActionIdList(Guid organizationId, ArrayList groupIdList, Guid instanceId)
-        {
-            string key = GetActionIdListKey(groupIdList, instanceId);
-
-            SortedList list = CacheManager.Current.Get(key) as SortedList;
-            if (list == null)
-            {
-                lock (s_GroupsInstanceActionIdListSyncRoot)
-                {
-                    list = CacheManager.Current.Get(key) as SortedList;
-                    if (list == null)
-                    {
-                        list = new SortedList();
-
-                        foreach (Guid groupId in groupIdList)
-                        {
-                            SortedList list2 = GetGroupInstanceActionIdList(organizationId, groupId, instanceId);
-                            if (list2 != null)
-                            {
-                                foreach (Guid actionId in list2.Keys)
-                                {
-                                    if (list.Contains(actionId))
-                                    {
-                                        if ((bool)list[actionId])
-                                            list[actionId] = (bool)list2[actionId];
-                                    }
-                                    else
-                                        list.Add(actionId, (bool)list2[actionId]);
-                                }
-                            }
-                        }
-
-                        CacheManager.Current.AddWithDefaultExpiration(key, list);
-
-                        GroupsInstanceActionIdListKeys.Add(key);
-                    }
-                }
-            }
-
-            if (list != null)
-                return (SortedList)list.Clone();
-
-            return list;
-        }
-
         /// <summary>
         /// Loads the collection from configuration data set.
         /// </summary>
@@ -606,50 +492,7 @@ namespace Micajah.Common.Bll.Providers
                 list.AddRange(GetActionIdListByRoleId(RoleProvider.InstanceAdministratorRoleId));
 
             if (removeDuplicates)
-                RemoveDuplicates(ref list);
-
-            return list;
-        }
-
-        internal static ArrayList GetActionIdList(ArrayList groupIdList, ArrayList roleIdList, Guid instanceId, Guid organizationId, bool isOrgAdmin)
-        {
-            ArrayList list = new ArrayList();
-
-            list.AddRange(GetActionIdList(roleIdList, false, false));
-
-            if (groupIdList.Count > 0)
-            {
-                groupIdList.Sort();
-
-                foreach (Guid roleId in roleIdList)
-                {
-                    list.AddRange(GetActionIdListByRoleId(roleId));
-                }
-
-                if (roleIdList.Count > 0)
-                    RemoveDuplicates(ref list);
-
-                SortedList list2 = GetGroupsInstanceActionIdList(organizationId, groupIdList, instanceId);
-
-                if (list2 != null)
-                {
-                    foreach (Guid actionId in list2.Keys)
-                    {
-                        if ((bool)list2[actionId])
-                        {
-                            if (!list.Contains(actionId))
-                                list.Add(actionId);
-                        }
-                        else if (list.Contains(actionId))
-                            list.Remove(actionId);
-                    }
-                }
-            }
-
-            if (isOrgAdmin)
-                list.AddRange(GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
-
-            RemoveDuplicates(ref list);
+                Support.RemoveDuplicates(ref list);
 
             return list;
         }
@@ -814,61 +657,6 @@ namespace Micajah.Common.Bll.Providers
                     return ResourceProvider.IsSetupPageUrl(action.NavigateUrl);
             }
             return false;
-        }
-
-        internal static void Refresh()
-        {
-            lock (s_PagesAndControlsSyncRoot)
-            {
-                s_GlobalNavigationLinks = null;
-                s_PagesAndControls = null;
-            }
-        }
-
-        internal static void Refresh(Guid groupId, Guid instanceId)
-        {
-            lock (s_GroupInstanceActionIdListSyncRoot)
-            {
-                CacheManager.Current.Remove(string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId));
-            }
-
-            lock (s_GroupsInstanceActionIdListSyncRoot)
-            {
-                string keyToRemove = null;
-                string g = groupId.ToString("N");
-                foreach (string key in GroupsInstanceActionIdListKeys)
-                {
-                    string[] parts = key.Split('[');
-                    if (parts.Length > 0)
-                    {
-                        parts = parts[1].Split(']')[0].Split(',');
-                        foreach (string p in parts)
-                        {
-                            if (string.Compare(p, g, StringComparison.OrdinalIgnoreCase) == 0)
-                            {
-                                CacheManager.Current.Remove(key);
-                                keyToRemove = key;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(keyToRemove))
-                    GroupsInstanceActionIdListKeys.Remove(keyToRemove);
-            }
-        }
-
-        internal static void RemoveDuplicates(ref ArrayList actionIdList)
-        {
-            ArrayList list = new ArrayList(actionIdList);
-            actionIdList.Clear();
-
-            foreach (Guid actionId in list)
-            {
-                if (!actionIdList.Contains(actionId))
-                    actionIdList.Add(actionId);
-            }
         }
 
         internal static bool ShowAction(Action action, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)

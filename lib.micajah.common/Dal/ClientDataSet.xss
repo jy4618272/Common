@@ -7,24 +7,24 @@
 <DiagramLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ex:showrelationlabel="False" ViewPortX="-10" ViewPortY="-59" xmlns:ex="urn:schemas-microsoft-com:xml-msdatasource-layout-extended" xmlns="urn:schemas-microsoft-com:xml-msdatasource-layout">
   <Shapes>
     <Shape ID="DesignTable:UsersInstances" ZOrder="19" X="9" Y="192" Height="75" Width="273" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="83" SplitterPosition="24" />
-    <Shape ID="DesignTable:Group" ZOrder="4" X="313" Y="57" Height="132" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="140" SplitterPosition="25" />
-    <Shape ID="DesignTable:GroupsInstancesActions" ZOrder="2" X="315" Y="397" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="102" SplitterPosition="24" />
-    <Shape ID="DesignTable:GroupsInstancesRoles" ZOrder="3" X="315" Y="198" Height="190" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="83" SplitterPosition="25" />
-    <Shape ID="DesignTable:Instance" ZOrder="7" X="9" Y="283" Height="151" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="387" SplitterPosition="25" />
-    <Shape ID="DesignTable:Message" ZOrder="1" X="316" Y="498" Height="75" Width="298" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="197" SplitterPosition="24" />
+    <Shape ID="DesignTable:Group" ZOrder="5" X="313" Y="57" Height="132" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="140" SplitterPosition="25" />
+    <Shape ID="DesignTable:GroupsInstancesActions" ZOrder="3" X="315" Y="397" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="102" SplitterPosition="24" />
+    <Shape ID="DesignTable:GroupsInstancesRoles" ZOrder="4" X="315" Y="198" Height="190" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="83" SplitterPosition="25" />
+    <Shape ID="DesignTable:Instance" ZOrder="8" X="9" Y="278" Height="171" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="387" SplitterPosition="25" />
+    <Shape ID="DesignTable:Message" ZOrder="2" X="316" Y="498" Height="75" Width="298" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="197" SplitterPosition="24" />
     <Shape ID="DesignTable:OrganizationsUsers" ZOrder="18" X="9" Y="110" Height="74" Width="280" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="102" SplitterPosition="24" />
-    <Shape ID="DesignTable:RecurringSchedule" ZOrder="12" X="936" Y="343" Height="189" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="254" SplitterPosition="24" />
-    <Shape ID="DesignTable:SettingsValues" ZOrder="14" X="12" Y="443" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="140" SplitterPosition="25" />
-    <Shape ID="DesignTable:User" ZOrder="6" X="5" Y="-48" Height="150" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="558" SplitterPosition="24" />
-    <Shape ID="DesignTable:UsersGroups" ZOrder="5" X="314" Y="-47" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="83" SplitterPosition="24" />
+    <Shape ID="DesignTable:RecurringSchedule" ZOrder="13" X="936" Y="343" Height="189" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="254" SplitterPosition="24" />
+    <Shape ID="DesignTable:SettingsValues" ZOrder="1" X="12" Y="458" Height="132" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="140" SplitterPosition="25" />
+    <Shape ID="DesignTable:User" ZOrder="7" X="5" Y="-48" Height="150" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="558" SplitterPosition="24" />
+    <Shape ID="DesignTable:UsersGroups" ZOrder="6" X="314" Y="-47" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="83" SplitterPosition="24" />
     <Shape ID="DesignTable:EntityField" ZOrder="17" X="617" Y="-46" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="349" SplitterPosition="24" />
     <Shape ID="DesignTable:EntityFieldListsValues" ZOrder="16" X="618" Y="55" Height="93" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="140" SplitterPosition="24" />
     <Shape ID="DesignTable:EntityFieldsValues" ZOrder="15" X="619" Y="156" Height="93" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="102" SplitterPosition="24" />
-    <Shape ID="DesignTable:EntityNode" ZOrder="13" X="933" Y="-44" Height="150" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="254" SplitterPosition="24" />
-    <Shape ID="DesignTable:EntityNodeType" ZOrder="11" X="933" Y="112" Height="113" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="159" SplitterPosition="24" />
-    <Shape ID="DesignTable:EntityNodesRelatedEntityNodes" ZOrder="10" X="935" Y="237" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="121" SplitterPosition="25" />
-    <Shape ID="DesignTable:Rule" ZOrder="9" X="620" Y="259" Height="151" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="273" SplitterPosition="25" />
-    <Shape ID="DesignTable:RuleParameters" ZOrder="8" X="623" Y="418" Height="93" Width="249" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="216" SplitterPosition="24" />
+    <Shape ID="DesignTable:EntityNode" ZOrder="14" X="933" Y="-44" Height="150" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="254" SplitterPosition="24" />
+    <Shape ID="DesignTable:EntityNodeType" ZOrder="12" X="933" Y="112" Height="113" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="159" SplitterPosition="24" />
+    <Shape ID="DesignTable:EntityNodesRelatedEntityNodes" ZOrder="11" X="935" Y="237" Height="94" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="121" SplitterPosition="25" />
+    <Shape ID="DesignTable:Rule" ZOrder="10" X="620" Y="259" Height="151" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="273" SplitterPosition="25" />
+    <Shape ID="DesignTable:RuleParameters" ZOrder="9" X="623" Y="418" Height="93" Width="249" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="216" SplitterPosition="24" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

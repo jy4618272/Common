@@ -907,15 +907,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Database with Id={0} doesn&apos;t exist.
-        /// </summary>
-        internal static string DatabaseProvider_ErrorMessage_NoDatabase {
-            get {
-                return ResourceManager.GetString("DatabaseProvider_ErrorMessage_NoDatabase", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Database Server.
         /// </summary>
         internal static string DatabasesControl_EditForm_DatabaseServerIdField_HeaderText {
@@ -1029,15 +1020,6 @@ namespace Micajah.Common.Properties {
         internal static string DatabasesControl_List_NameColumn_HeaderText {
             get {
                 return ResourceManager.GetString("DatabasesControl_List_NameColumn_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Database Server with Id={0} doesn&apos;t exist.
-        /// </summary>
-        internal static string DatabaseServerProvider_ErrorMessage_NoDatabaseServer {
-            get {
-                return ResourceManager.GetString("DatabaseServerProvider_ErrorMessage_NoDatabaseServer", resourceCulture);
             }
         }
         
@@ -2049,15 +2031,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear all data cached by application.
-        /// </summary>
-        internal static string FrameworkControl_ClearApplicationDataLink_Text {
-            get {
-                return ResourceManager.GetString("FrameworkControl_ClearApplicationDataLink_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The current version of the database is {0}..
         /// </summary>
         internal static string FrameworkControl_DbInfoLabel_Text {
@@ -2090,15 +2063,6 @@ namespace Micajah.Common.Properties {
         internal static string FrameworkControl_ErrorMesage_InvalidDatabaseVersion {
             get {
                 return ResourceManager.GetString("FrameworkControl_ErrorMesage_InvalidDatabaseVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Framework management.
-        /// </summary>
-        internal static string FrameworkControl_TitleLabel1_Text {
-            get {
-                return ResourceManager.GetString("FrameworkControl_TitleLabel1_Text", resourceCulture);
             }
         }
         
@@ -7715,15 +7679,6 @@ namespace Micajah.Common.Properties {
         internal static string UsersControl_UserDetailMenu_TitleFormatString {
             get {
                 return ResourceManager.GetString("UsersControl_UserDetailMenu_TitleFormatString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Website with Id={0} doesn&apos;t exist.
-        /// </summary>
-        internal static string WebsiteProvider_ErrorMessage_NoWebsite {
-            get {
-                return ResourceManager.GetString("WebsiteProvider_ErrorMessage_NoWebsite", resourceCulture);
             }
         }
         

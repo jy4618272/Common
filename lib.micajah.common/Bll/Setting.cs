@@ -508,8 +508,8 @@ namespace Micajah.Common.Bll
         /// <returns>The Micajah.Common.Bll.Instance object that represents the first instance in which the specified setting with specified value exists.</returns>
         public static Instance GetInstanceBySettingValue(Guid organizationId, string shortName, string value)
         {
-            Organization org = new Organization();
-            if (org.Load(organizationId))
+            Organization org = OrganizationProvider.GetOrganization(organizationId);
+            if (org != null)
                 return GetInstanceBySettingValue(org, shortName, value);
             return null;
         }

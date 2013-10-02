@@ -1,8 +1,10 @@
+using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.ClientDataSetTableAdapters;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -18,6 +20,10 @@ namespace Micajah.Common.Bll.Providers
     public static class SettingProvider
     {
         #region Members
+
+        private const string OrganizationSettingsValuesKeyFromat = "mc.OrganizationSettingsValues.{0:N}";
+        private const string InstanceSettingsValuesKeyFromat = "mc.InstanceSettingsValues.{0:N}";
+        private const string GroupSettingsValuesKeyFromat = "mc.GroupSettingsValues.{0:N}.{1:N}";
 
         /// <summary>
         /// The identifier of the master page's custom style sheet.
@@ -48,7 +54,7 @@ namespace Micajah.Common.Bll.Providers
                     {
                         if (s_GlobalSettings == null)
                         {
-                            s_GlobalSettings = SettingProvider.GetSettings(SettingLevels.Global, null);
+                            s_GlobalSettings = GetSettings(SettingLevels.Global, null);
                         }
                     }
                 }
@@ -79,11 +85,163 @@ namespace Micajah.Common.Bll.Providers
 
         #region Private Methods
 
-        private static ClientDataSet.SettingsValuesDataTable GetSettingsValues(Guid organizationId, Guid? instanceId, Guid? groupId)
+        #region Cache Methods
+
+        private static Dictionary<Guid, string> GetOrganizationSettingsValuesFromCache(Guid organizationId, bool putToCacheIfNotExists)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
+            Dictionary<Guid, string> dict = CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+
+            if (dict == null)
+            {
+                if (putToCacheIfNotExists)
+                {
+                    dict = ConvertTableToDictionary(GetSettingsValuesByOrganizationId(organizationId));
+
+                    CacheManager.Current.PutWithDefaultTimeout(key, dict);
+                }
+            }
+
+            return dict;
+        }
+
+        private static Dictionary<Guid, string> GetInstanceSettingsValuesFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
+            return CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+        }
+
+        private static Dictionary<Guid, string> GetGroupSettingsValuesFromCache(Guid instanceId, Guid groupId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, GroupSettingsValuesKeyFromat, instanceId, groupId);
+            return CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+        }
+
+        private static Dictionary<Guid, string> PutOrganizationSettingsValuesToCache(DataTable table, Guid organizationId)
+        {
+            Dictionary<Guid, string> dict = ConvertTableToDictionary(table);
+
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
+            CacheManager.Current.PutWithDefaultTimeout(key, dict);
+
+            return dict;
+        }
+
+        private static Dictionary<Guid, string> PutInstanceSettingsValuesToCache(DataTable table, Guid instanceId)
+        {
+            Dictionary<Guid, string> dict = ConvertTableToDictionary(table);
+
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
+            CacheManager.Current.PutWithDefaultTimeout(key, dict);
+
+            return dict;
+        }
+
+        private static Dictionary<Guid, string> PutGroupSettingsValuesToCache(DataTable table, Guid instanceId, Guid groupId)
+        {
+            Dictionary<Guid, string> dict = ConvertTableToDictionary(table);
+
+            string key = string.Format(CultureInfo.InvariantCulture, GroupSettingsValuesKeyFromat, instanceId, groupId);
+            CacheManager.Current.PutWithDefaultTimeout(key, dict);
+
+            return dict;
+        }
+
+        private static void RemoveGroupSettingsValuesFromCache(Guid instanceId, Guid groupId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, GroupSettingsValuesKeyFromat, instanceId, groupId);
+            CacheManager.Current.Remove(key);
+        }
+
+        private static void RemoveSettingsValuesFromCache(Guid organizationId, Guid? instanceId, Guid? groupId)
+        {
+            if (instanceId.HasValue)
+            {
+                if (groupId.HasValue)
+                    RemoveGroupSettingsValuesFromCache(instanceId.Value, groupId.Value);
+                else
+                    RemoveInstanceSettingsValuesFromCache(instanceId.Value);
+            }
+            else
+                RemoveOrganizationSettingsValuesFromCache(organizationId);
+        }
+
+        #endregion
+
+        private static Dictionary<Guid, string> ConvertTableToDictionary(DataTable table)
+        {
+            Dictionary<Guid, string> dict = new Dictionary<Guid, string>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                dict.Add((Guid)row["SettingId"], (string)row["Value"]);
+            }
+
+            return dict;
+        }
+
+        private static ClientDataSet.SettingsValuesDataTable GetSettingsValuesByOrganizationId(Guid organizationId)
         {
             using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                return adapter.GetSettingsValues(organizationId, instanceId, groupId);
+                return adapter.GetSettingsValuesByOrganizationId(organizationId);
+            }
+        }
+
+        private static ClientDataSet.SettingsValuesDataTable GetSettingsValuesByOrganizationIdInstanceId(Guid organizationId, Guid instanceId)
+        {
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetSettingsValuesByOrganizationIdInstanceId(organizationId, instanceId);
+            }
+        }
+
+        private static ClientDataSet.SettingsValuesDataTable GetSettingsValuesByOrganizationIdInstanceIdGroups(Guid organizationId, Guid instanceId, string groups)
+        {
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetSettingsValuesByOrganizationIdInstanceIdGroups(organizationId, instanceId, groups);
+            }
+        }
+
+        private static void FillSettingsByOrganizationValues(ref SettingCollection settings, Dictionary<Guid, string> values)
+        {
+            foreach (Setting setting in settings)
+            {
+                if (values.ContainsKey(setting.SettingId))
+                    setting.Value = values[setting.SettingId];
+                else
+                    setting.Value = setting.DefaultValue;
+            }
+        }
+
+        private static void FillSettingsByInstanceValues(ref SettingCollection settings, Dictionary<Guid, string> values)
+        {
+            foreach (Setting setting in settings)
+            {
+                if (values.ContainsKey(setting.SettingId))
+                {
+                    if (setting.EnableOrganization)
+                        setting.DefaultValue = setting.Value;
+                    setting.Value = values[setting.SettingId];
+                }
+                else if (!setting.EnableOrganization)
+                    setting.Value = setting.DefaultValue;
+            }
+        }
+
+        private static void FillSettingsByGroupValues(ref SettingCollection settings, Dictionary<Guid, string> values)
+        {
+            foreach (Setting setting in settings)
+            {
+                if (values.ContainsKey(setting.SettingId))
+                {
+                    if (setting.EnableOrganization || setting.EnableInstance)
+                        setting.DefaultValue = setting.Value;
+                    setting.Value = values[setting.SettingId];
+                }
+                else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
+                    setting.Value = setting.DefaultValue;
             }
         }
 
@@ -123,6 +281,22 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Internal Methods
+
+        #region Cache Methods
+
+        internal static void RemoveInstanceSettingsValuesFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
+            CacheManager.Current.Remove(key);
+        }
+
+        internal static void RemoveOrganizationSettingsValuesFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
 
         internal static Setting CreateSetting(ConfigurationDataSet.SettingRow row)
         {
@@ -319,16 +493,7 @@ namespace Micajah.Common.Bll.Providers
             if (settings == null)
                 return;
 
-            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, null, null);
-
-            foreach (Setting setting in settings)
-            {
-                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
-                if (rows.Length > 0)
-                    setting.Value = rows[0][table.ValueColumn.ColumnName].ToString();
-                else
-                    setting.Value = setting.DefaultValue;
-            }
+            FillSettingsByOrganizationValues(ref settings, GetOrganizationSettingsValuesFromCache(organizationId, true));
         }
 
         /// <summary>
@@ -342,22 +507,28 @@ namespace Micajah.Common.Bll.Providers
             if (settings == null)
                 return;
 
-            FillSettingsByOrganizationValues(ref settings, organizationId);
+            Dictionary<Guid, string> organizationSettingsValues = GetOrganizationSettingsValuesFromCache(organizationId, false);
+            Dictionary<Guid, string> instanceSettingsValues = GetInstanceSettingsValuesFromCache(instanceId);
 
-            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, instanceId, null);
-
-            foreach (Setting setting in settings)
+            if ((organizationSettingsValues == null) || (instanceSettingsValues == null))
             {
-                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
-                if (rows.Length > 0)
+                ClientDataSet.SettingsValuesDataTable table = GetSettingsValuesByOrganizationIdInstanceId(organizationId, instanceId);
+
+                if (organizationSettingsValues == null)
                 {
-                    if (setting.EnableOrganization)
-                        setting.DefaultValue = setting.Value;
-                    setting.Value = rows[0][table.ValueColumn.ColumnName].ToString();
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} IS NULL", table.InstanceIdColumn.ColumnName);
+                    organizationSettingsValues = PutOrganizationSettingsValuesToCache(table.DefaultView.ToTable(), organizationId);
                 }
-                else if (!setting.EnableOrganization)
-                    setting.Value = setting.DefaultValue;
+
+                if (instanceSettingsValues == null)
+                {
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.InstanceIdColumn.ColumnName, instanceId);
+                    instanceSettingsValues = PutInstanceSettingsValuesToCache(table.DefaultView.ToTable(), instanceId);
+                }
             }
+
+            FillSettingsByOrganizationValues(ref settings, organizationSettingsValues);
+            FillSettingsByInstanceValues(ref settings, instanceSettingsValues);
         }
 
         /// <summary>
@@ -372,22 +543,36 @@ namespace Micajah.Common.Bll.Providers
             if (settings == null)
                 return;
 
-            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+            Dictionary<Guid, string> organizationSettingsValues = GetOrganizationSettingsValuesFromCache(organizationId, false);
+            Dictionary<Guid, string> instanceSettingsValues = GetInstanceSettingsValuesFromCache(instanceId);
+            Dictionary<Guid, string> groupSettingsValues = GetGroupSettingsValuesFromCache(instanceId, groupId);
 
-            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, instanceId, groupId);
-
-            foreach (Setting setting in settings)
+            if ((organizationSettingsValues == null) || (instanceSettingsValues == null) || (groupSettingsValues == null))
             {
-                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
-                if (rows.Length > 0)
+                ClientDataSet.SettingsValuesDataTable table = GetSettingsValuesByOrganizationIdInstanceIdGroups(organizationId, instanceId, groupId.ToString().ToUpperInvariant());
+
+                if (organizationSettingsValues == null)
                 {
-                    if (setting.EnableOrganization || setting.EnableInstance)
-                        setting.DefaultValue = setting.Value;
-                    setting.Value = rows[0][table.ValueColumn.ColumnName].ToString();
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} IS NULL AND {1} IS NULL", table.InstanceIdColumn.ColumnName, table.GroupIdColumn.ColumnName);
+                    organizationSettingsValues = PutOrganizationSettingsValuesToCache(table.DefaultView.ToTable(), organizationId);
                 }
-                else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
-                    setting.Value = setting.DefaultValue;
+
+                if (instanceSettingsValues == null)
+                {
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} IS NULL", table.InstanceIdColumn.ColumnName, instanceId, table.GroupIdColumn.ColumnName);
+                    instanceSettingsValues = PutInstanceSettingsValuesToCache(table.DefaultView.ToTable(), instanceId);
+                }
+
+                if (groupSettingsValues == null)
+                {
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'", table.InstanceIdColumn.ColumnName, instanceId, table.GroupIdColumn.ColumnName, groupId);
+                    groupSettingsValues = PutGroupSettingsValuesToCache(table.DefaultView.ToTable(), instanceId, groupId);
+                }
             }
+
+            FillSettingsByOrganizationValues(ref settings, organizationSettingsValues);
+            FillSettingsByInstanceValues(ref settings, instanceSettingsValues);
+            FillSettingsByGroupValues(ref settings, groupSettingsValues);
         }
 
         /// <summary>
@@ -402,64 +587,99 @@ namespace Micajah.Common.Bll.Providers
             if ((settings == null) || (groupIdList == null))
                 return;
 
-            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+            Dictionary<Guid, string> organizationSettingsValues = GetOrganizationSettingsValuesFromCache(organizationId, false);
+            Dictionary<Guid, string> instanceSettingsValues = GetInstanceSettingsValuesFromCache(instanceId);
+
+            List<Guid> listToGetFromDatabase = new List<Guid>();
+            Dictionary<Guid, Dictionary<Guid, string>> dict = new Dictionary<Guid, Dictionary<Guid, string>>();
+            foreach (Guid groupId in groupIdList)
+            {
+                Dictionary<Guid, string> groupSettingsValues = GetGroupSettingsValuesFromCache(instanceId, groupId);
+                if (groupSettingsValues == null)
+                    listToGetFromDatabase.Add(groupId);
+                else
+                    dict.Add(groupId, groupSettingsValues);
+            }
+
+            if ((organizationSettingsValues == null) || (instanceSettingsValues == null) || (listToGetFromDatabase.Count > 0))
+            {
+                ClientDataSet.SettingsValuesDataTable table = GetSettingsValuesByOrganizationIdInstanceIdGroups(organizationId, instanceId, Support.ConvertListToString(listToGetFromDatabase).ToUpperInvariant());
+
+                if (organizationSettingsValues == null)
+                {
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} IS NULL AND {1} IS NULL", table.InstanceIdColumn.ColumnName, table.GroupIdColumn.ColumnName);
+                    organizationSettingsValues = PutOrganizationSettingsValuesToCache(table.DefaultView.ToTable(), organizationId);
+                }
+
+                if (instanceSettingsValues == null)
+                {
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} IS NULL", table.InstanceIdColumn.ColumnName, instanceId, table.GroupIdColumn.ColumnName);
+                    instanceSettingsValues = PutInstanceSettingsValuesToCache(table.DefaultView.ToTable(), instanceId);
+                }
+
+                foreach (Guid groupId in listToGetFromDatabase)
+                {
+                    table.DefaultView.RowFilter = string.Format(CultureInfo.InvariantCulture, "{0} = '{1}' AND {2} = '{3}'", table.InstanceIdColumn.ColumnName, instanceId, table.GroupIdColumn.ColumnName, groupId);
+                    Dictionary<Guid, string> groupSettingsValues = PutGroupSettingsValuesToCache(table.DefaultView.ToTable(), instanceId, groupId);
+                    dict.Add(groupId, groupSettingsValues);
+                }
+            }
+
+            FillSettingsByOrganizationValues(ref settings, organizationSettingsValues);
+            FillSettingsByInstanceValues(ref settings, instanceSettingsValues);
 
             Type booleanType = typeof(bool);
 
-            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            foreach (Guid groupId in dict.Keys)
             {
-                foreach (Guid groupId in groupIdList)
+                Dictionary<Guid, string> values = dict[groupId];
+
+                foreach (Setting setting in settings)
                 {
-                    ClientDataSet.SettingsValuesDataTable table = adapter.GetSettingsValues(organizationId, instanceId, groupId);
-
-                    foreach (Setting setting in settings)
+                    string newValue = null;
+                    if (values.ContainsKey(setting.SettingId))
                     {
-                        string newValue = null;
-                        DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
-                        if (rows.Length > 0)
-                        {
-                            if (setting.Values.Count == 0)
-                            {
-                                if (setting.EnableOrganization || setting.EnableInstance)
-                                    setting.DefaultValue = setting.Value;
-                            }
-                            newValue = rows[0][table.ValueColumn.ColumnName].ToString();
-                        }
-                        else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
-                            newValue = setting.DefaultValue;
-
-                        if (newValue == null)
-                            continue;
-
                         if (setting.Values.Count == 0)
                         {
-                            setting.Value = newValue;
-                            setting.Values.Add(newValue);
+                            if (setting.EnableOrganization || setting.EnableInstance)
+                                setting.DefaultValue = setting.Value;
                         }
-                        else if (!setting.Values.Contains(newValue))
+                        newValue = values[setting.SettingId];
+                    }
+                    else if ((!setting.EnableOrganization) && (!setting.EnableInstance))
+                        newValue = setting.DefaultValue;
+
+                    if (newValue == null)
+                        continue;
+
+                    if (setting.Values.Count == 0)
+                    {
+                        setting.Value = newValue;
+                        setting.Values.Add(newValue);
+                    }
+                    else if (!setting.Values.Contains(newValue))
+                    {
+                        if ((setting.SettingType == SettingType.CheckBox) || (setting.SettingType == SettingType.OnOffSwitch))
                         {
-                            if ((setting.SettingType == SettingType.CheckBox) || (setting.SettingType == SettingType.OnOffSwitch))
+                            object value1 = null;
+                            object value2 = null;
+
+                            bool val = false;
+                            if (bool.TryParse(setting.Value, out val))
+                                value1 = val;
+
+                            if (bool.TryParse(newValue, out val))
+                                value2 = val;
+
+                            if (!((value1 == null) || (value2 == null)))
                             {
-                                object value1 = null;
-                                object value2 = null;
-
-                                bool val = false;
-                                if (bool.TryParse(setting.Value, out val))
-                                    value1 = val;
-
-                                if (bool.TryParse(newValue, out val))
-                                    value2 = val;
-
-                                if (!((value1 == null) || (value2 == null)))
-                                {
-                                    newValue = ((((bool)value1) && ((bool)value2)) ? "true" : "false");
-                                    setting.Value = newValue;
-                                    setting.Values.Add((bool)value2 ? "true" : "false");
-                                }
+                                newValue = ((((bool)value1) && ((bool)value2)) ? "true" : "false");
+                                setting.Value = newValue;
+                                setting.Values.Add((bool)value2 ? "true" : "false");
                             }
-                            else
-                                setting.Values.Add(newValue);
                         }
+                        else
+                            setting.Values.Add(newValue);
                     }
                 }
             }
@@ -695,12 +915,6 @@ namespace Micajah.Common.Bll.Providers
             return settings;
         }
 
-        internal static void Refresh()
-        {
-            s_GlobalSettings = null;
-            s_GroupSettingsExist = null;
-        }
-
         /// <summary>
         /// Updates the values of the specified settings.
         /// </summary>
@@ -713,7 +927,17 @@ namespace Micajah.Common.Bll.Providers
             if (settings == null)
                 return;
 
-            ClientDataSet.SettingsValuesDataTable table = GetSettingsValues(organizationId, instanceId, groupId);
+            ClientDataSet.SettingsValuesDataTable table = null;
+            if (instanceId.HasValue)
+            {
+                if (groupId.HasValue)
+                    table = GetSettingsValuesByOrganizationIdInstanceIdGroups(organizationId, instanceId.Value, groupId.Value.ToString().ToUpperInvariant());
+                else
+                    table = GetSettingsValuesByOrganizationIdInstanceId(organizationId, instanceId.Value);
+            }
+            else
+                table = GetSettingsValuesByOrganizationId(organizationId);
+
             Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
             Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
             ClientDataSet.SettingsValuesRow row = null;
@@ -763,7 +987,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(table);
             }
 
-            Refresh();
+            RemoveSettingsValuesFromCache(organizationId, instanceId, groupId);
         }
 
         #endregion
@@ -772,8 +996,8 @@ namespace Micajah.Common.Bll.Providers
 
         public static void CopySettingValues(Guid fromOrganizationId, Guid fromInstanceId, Guid toOrganizationId, Guid toInstanceId)
         {
-            ClientDataSet.SettingsValuesDataTable fromTable = GetSettingsValues(fromOrganizationId, fromInstanceId, null);
-            ClientDataSet.SettingsValuesDataTable toTable = GetSettingsValues(toOrganizationId, toInstanceId, null);
+            ClientDataSet.SettingsValuesDataTable fromTable = GetSettingsValuesByOrganizationIdInstanceId(fromOrganizationId, fromInstanceId);
+            ClientDataSet.SettingsValuesDataTable toTable = GetSettingsValuesByOrganizationIdInstanceId(toOrganizationId, toInstanceId);
 
             foreach (ClientDataSet.SettingsValuesRow fromRow in fromTable)
             {
@@ -802,8 +1026,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(toTable);
             }
 
-            // TODO: Refresh cached org data.
-            //WebApplication.RefreshOrganizationDataSetByOrganizationId(toOrganizationId);
+            RemoveInstanceSettingsValuesFromCache(toInstanceId);
         }
 
         /// <summary>
@@ -993,7 +1216,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(table);
             }
 
-            Refresh();
+            RemoveSettingsValuesFromCache(organizationId, instanceId, groupId);
         }
 
         #endregion

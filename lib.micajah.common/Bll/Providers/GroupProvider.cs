@@ -20,6 +20,14 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public static class GroupProvider
     {
+        #region Members
+
+        private const string GroupInstanceActionIdListKeyFormat = "mc.GroupInstanceActionIdList.{0:N}.{1:N}";
+
+        private static readonly object s_GroupInstanceActionIdListSyncRoot = new object();
+
+        #endregion
+
         #region Internal Properties
 
         internal static bool GroupsExist
@@ -45,6 +53,52 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Private Methods
+
+        #region Cache Methods
+
+        private static SortedList GetGroupInstanceActionIdListFromCache(Guid organizationId, Guid groupId, Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, GroupInstanceActionIdListKeyFormat, groupId, instanceId);
+
+            SortedList list = CacheManager.Current.Get(key) as SortedList;
+            if (list == null)
+            {
+                lock (s_GroupInstanceActionIdListSyncRoot)
+                {
+                    list = CacheManager.Current.Get(key) as SortedList;
+                    if (list == null)
+                    {
+                        list = new SortedList();
+
+                        // Overrides the access to the actions by the values for the group in the instance.
+                        foreach (ClientDataSet.GroupsInstancesActionsRow actionRow in GroupProvider.GetGroupsInstancesActionsByGroupIdInstanceId(organizationId, groupId, instanceId))
+                        {
+                            if (list.Contains(actionRow.ActionId))
+                                list[actionRow.ActionId] = actionRow.Enabled;
+                            else
+                                list.Add(actionRow.ActionId, actionRow.Enabled);
+                        }
+
+                        CacheManager.Current.PutWithDefaultTimeout(key, list);
+                    }
+                }
+            }
+
+            if (list != null)
+                return (SortedList)list.Clone();
+
+            return list;
+        }
+
+        private static void RemoveGroupInstanceActionIdListFromCache(Guid groupId, Guid instanceId)
+        {
+            lock (s_GroupInstanceActionIdListSyncRoot)
+            {
+                CacheManager.Current.Remove(string.Format(CultureInfo.InvariantCulture, "mc.GroupInstanceActionIdList.{0:N}.{1:N}", groupId, instanceId));
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Returns the list of the groups wich have the specified roles in the specified instance.
@@ -72,7 +126,7 @@ namespace Micajah.Common.Bll.Providers
 
                         using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                         {
-                            foreach (ClientDataSet.GroupRow row in adapter.GetGroupsByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), sb.ToString()))
+                            foreach (ClientDataSet.GroupRow row in adapter.GetGroupsByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), sb.ToString().ToUpperInvariant()))
                             {
                                 if (!groupIdList.Contains(row.GroupId))
                                     groupIdList.Add(row.GroupId);
@@ -84,25 +138,50 @@ namespace Micajah.Common.Bll.Providers
             return groupIdList;
         }
 
-        private static ClientDataSet.GroupsInstancesRolesDataTable GetGroupsInstancesRolesByGroups(Guid organizationId, List<Guid> groupIds)
+        private static SortedList GetGroupsInstanceActionIdList(Guid organizationId, ArrayList groupIdList, Guid instanceId)
         {
-            using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            SortedList list = new SortedList();
+
+            foreach (Guid groupId in groupIdList)
             {
-                return adapter.GetGroupsInstancesRolesByGroups(organizationId, Support.ConvertListToString(groupIds));
+                SortedList list2 = GetGroupInstanceActionIdListFromCache(organizationId, groupId, instanceId);
+                if (list2 != null)
+                {
+                    foreach (Guid actionId in list2.Keys)
+                    {
+                        if (list.Contains(actionId))
+                        {
+                            if ((bool)list[actionId])
+                                list[actionId] = (bool)list2[actionId];
+                        }
+                        else
+                            list.Add(actionId, (bool)list2[actionId]);
+                    }
+                }
             }
+
+            return list;
         }
 
         private static ClientDataSet.GroupsInstancesRolesDataTable GetGroupsInstancesRolesByGroupsInstanceId(Guid organizationId, IEnumerable groupIds, Guid instanceId)
         {
             using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                return adapter.GetGroupsInstancesRolesByGroupsInstanceId(organizationId, Support.ConvertListToString(groupIds), instanceId);
+                return adapter.GetGroupsInstancesRolesByGroupsInstanceId(organizationId, Support.ConvertListToString(groupIds).ToUpperInvariant(), instanceId);
             }
         }
 
         #endregion
 
         #region Internal Methods
+
+        internal static void DeleteInstanceAdministratorGroup(Guid organizationId)
+        {
+            // Looks for built-in group for the instance's administators.
+            ClientDataSet.GroupsInstancesRolesDataTable table = GetGroupsInstancesRolesByRoleId(organizationId, RoleProvider.InstanceAdministratorRoleId);
+            if (table.Count > 0)
+                DeleteGroup(table[0].GroupId);
+        }
 
         /// <summary>
         /// Gets the identifiers of actions associated with specified group role in specified instance.
@@ -127,28 +206,68 @@ namespace Micajah.Common.Bll.Providers
             return list;
         }
 
-        internal static Guid GetGroupIdOfLowestRoleInInstance(Guid organizationId, Guid instanceId)
+        // TODO: Needs the improvement - to get existing items from cache and the rest from the database using one call.
+        internal static ArrayList GetActionIdList(ArrayList groupIdList, ArrayList roleIdList, Guid instanceId, Guid organizationId, bool isOrgAdmin)
         {
-            Instance inst = new Instance();
-            if (inst.Load(organizationId, instanceId))
-                return GetGroupIdOfLowestRoleInInstance(inst);
-            return Guid.Empty;
-        }
+            ArrayList list = new ArrayList();
 
-        internal static Guid GetGroupIdOfLowestRoleInInstance(Instance instance)
-        {
-            Guid groupId = Guid.Empty;
-            if (instance != null)
+            list.AddRange(ActionProvider.GetActionIdList(roleIdList, false, false));
+
+            if (groupIdList.Count > 0)
             {
-                Guid lowestRoleId = RoleProvider.GetLowestNonBuiltInRoleId(instance.GroupIdRoleIdList.GetValueList());
-                if (lowestRoleId != Guid.Empty)
+                groupIdList.Sort();
+
+                foreach (Guid roleId in roleIdList)
                 {
-                    int idx = instance.GroupIdRoleIdList.IndexOfValue(lowestRoleId);
-                    if (idx > -1)
-                        groupId = (Guid)instance.GroupIdRoleIdList.GetKey(idx);
+                    list.AddRange(ActionProvider.GetActionIdListByRoleId(roleId));
+                }
+
+                if (roleIdList.Count > 0)
+                    Support.RemoveDuplicates(ref list);
+
+                SortedList list2 = GetGroupsInstanceActionIdList(organizationId, groupIdList, instanceId);
+
+                if (list2 != null)
+                {
+                    foreach (Guid actionId in list2.Keys)
+                    {
+                        if ((bool)list2[actionId])
+                        {
+                            if (!list.Contains(actionId))
+                                list.Add(actionId);
+                        }
+                        else if (list.Contains(actionId))
+                            list.Remove(actionId);
+                    }
                 }
             }
+
+            if (isOrgAdmin)
+                list.AddRange(ActionProvider.GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
+
+            Support.RemoveDuplicates(ref list);
+
+            return list;
+        }
+
+        internal static Guid GetGroupIdOfLowestRoleInInstance(SortedList list)
+        {
+            Guid groupId = Guid.Empty;
+
+            Guid lowestRoleId = RoleProvider.GetLowestNonBuiltInRoleId(list.GetValueList());
+            if (lowestRoleId != Guid.Empty)
+            {
+                int idx = list.IndexOfValue(lowestRoleId);
+                if (idx > -1)
+                    groupId = (Guid)list.GetKey(idx);
+            }
+
             return groupId;
+        }
+
+        internal static Guid GetGroupIdOfLowestRoleInInstance(Guid organizationId, Guid instanceId)
+        {
+            return GetGroupIdOfLowestRoleInInstance(GetGroupIdRoleIdList(organizationId, instanceId));
         }
 
         /// <summary>
@@ -162,7 +281,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 foreach (ClientDataSet.GroupsInstancesRolesRow row in adapter.GetGroupsInstancesRolesByInstanceId(organizationId, instanceId))
                 {
-                    if ((RoleProvider.GetRoleRow(row.RoleId) != null) && (!list.Contains(row.GroupId)))
+                    if ((!list.Contains(row.GroupId) && (RoleProvider.GetRoleRow(row.RoleId) != null)))
                         list.Add(row.GroupId, row.RoleId);
                 }
             }
@@ -191,6 +310,14 @@ namespace Micajah.Common.Bll.Providers
             using (GroupsInstancesActionsTableAdapter adapter = new GroupsInstancesActionsTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
                 return adapter.GetGroupsInstancesActionsByGroupIdInstanceId(organizationId, groupId, instanceId);
+            }
+        }
+
+        internal static ClientDataSet.GroupsInstancesRolesDataTable GetGroupsInstancesRolesByGroups(Guid organizationId, IList groupIds)
+        {
+            using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetGroupsInstancesRolesByGroups(organizationId, Support.ConvertListToString(groupIds).ToUpperInvariant());
             }
         }
 
@@ -292,7 +419,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Update(giaTable);
             }
 
-            ActionProvider.Refresh(groupId, instanceId);
+            RemoveGroupInstanceActionIdListFromCache(groupId, instanceId);
         }
 
         /// <summary>
@@ -368,7 +495,7 @@ namespace Micajah.Common.Bll.Providers
         {
             using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                ClientDataSet.GroupDataTable table = adapter.GetGroupsByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), RoleProvider.InstanceAdministratorRoleId.ToString());
+                ClientDataSet.GroupDataTable table = adapter.GetGroupsByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), RoleProvider.InstanceAdministratorRoleId.ToString().ToUpperInvariant());
                 if (table.Count > 0)
                 {
                     ClientDataSet.GroupRow row = table[0];
