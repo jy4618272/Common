@@ -1,6 +1,5 @@
 <%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.AdminControls.LogosControl" %>
 <%@ Register TagPrefix="mits" Namespace="Micajah.Common.WebControls" %>
-<%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <%@ Register Src="~/Resources.Micajah.Common/Controls/Security/ChangePassword.ascx"
     TagName="ChangePassword" TagPrefix="uc" %>
 <mits:CommonGridView ID="List" runat="server" Width="700px" DataKeyNames="ObjectId,ObjectType"
@@ -11,7 +10,7 @@
         <mits:ImageField DataImageUrlField="Logo" SortExpression="Logo" />
     </columns>
 </mits:CommonGridView>
-<mits:magicform id="EditForm" runat="server" datakeynames="ObjectId" width="550px"
+<mits:magicform id="EditForm" runat="server" DataKeyNames="ObjectId" Width="550px"
     OnDataBinding="EditForm_DataBinding" OnModeChanging="EditForm_ModeChanging" OnItemUpdating="EditForm_ItemUpdating">
     <fields>
         <mits:TemplateField>

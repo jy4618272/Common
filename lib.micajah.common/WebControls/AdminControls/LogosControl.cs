@@ -201,6 +201,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void EditForm_ItemCommand(object sender, CommandEventArgs e)
         {
+            if (e == null) return;
+
             if (!string.IsNullOrEmpty(e.CommandName))
             {
                 ImageUpload logoImageUpload = (ImageUpload)EditForm.FindControl("LogoImageUpload");
@@ -209,6 +211,12 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (e.CommandName == "Update")
                     {
                         logoImageUpload.AcceptChanges();
+
+                        if (logoImageUpload.LocalObjectType == ResourceProvider.OrganizationLogoLocalObjectType)
+                            ResourceProvider.RemoveOrganizationLogoImageUrlFromCache(new Guid(logoImageUpload.LocalObjectId));
+                        else if (logoImageUpload.LocalObjectType == ResourceProvider.InstanceLogoLocalObjectType)
+                            ResourceProvider.RemoveInstanceLogoImageUrlFromCache(new Guid(logoImageUpload.LocalObjectId));
+
                         this.BackToList();
 
                         if (List.Rows.Count == 1)
@@ -220,17 +228,11 @@ namespace Micajah.Common.WebControls.AdminControls
                             }
                         }
                     }
-
-                    if ((e != null) && (e.CommandName == "Cancel"))
+                    else if (e.CommandName == "Cancel")
                     {
                         logoImageUpload.RejectChanges();
                         this.BackToList();
                     }
-
-                    if (this.SelectedObjectType == ResourceProvider.OrganizationLogoLocalObjectType)
-                        ResourceProvider.RemoveOrganizationLogoImageUrlFromCache(this.SelectedObjectId);
-                    else if (this.SelectedObjectType == ResourceProvider.InstanceLogoLocalObjectType)
-                        ResourceProvider.RemoveInstanceLogoImageUrlFromCache(this.SelectedObjectId);
                 }
             }
         }
