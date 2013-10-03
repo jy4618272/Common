@@ -14,8 +14,11 @@
                 <mits:TextBoxField DataField="Name" MaxLength="255" Columns="65" ControlStyle-Width="350px" HeaderStyle-Width="120px" Required="True" />
                 <mits:TextBoxField DataField="Description" MaxLength="1024" Columns="65" ControlStyle-Width="350px" Rows="3"
                     TextMode="MultiLine" />
-                <mits:TextBoxField DataField="EmailSuffixes" MaxLength="1024" Columns="65" ControlStyle-Width="350px" Rows="3"
-                    TextMode="MultiLine" />                
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <mits:TextBox ID="EmailSuffixes" runat="server" MaxLength="1024" Columns="65" Rows="3" Width="350px" TextMode="MultiLine" />
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
                         <mits:CheckBoxList ID="WorkingDaysList" runat="server" RepeatColumns="3" />

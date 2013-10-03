@@ -1,4 +1,6 @@
-﻿namespace Micajah.Common.Bll.Handlers
+﻿using System;
+
+namespace Micajah.Common.Bll.Handlers
 {
     /// <summary>
     /// The class that provides a mechanism to get the name and description of the settings.
@@ -72,11 +74,10 @@
         /// </summary>
         /// <param name="setting">The setting to get decription of.</param>
         /// <returns>The System.String that represents the description of the setting.</returns>
-        public virtual int GetUsedItemsCount(Setting setting, System.Guid OrganizationId, System.Guid InstanceId)
+        public virtual int GetUsedItemsCount(Setting setting, Guid organizationId, Guid instanceId)
         {
             return -1;
         }
-
 
         #endregion
     }

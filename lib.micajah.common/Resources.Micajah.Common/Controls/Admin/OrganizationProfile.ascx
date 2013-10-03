@@ -2,7 +2,7 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-    <ContentTemplate>
+    <contenttemplate>
         <mits:MagicForm ID="EditForm" runat="server" OnDataBound="EditForm_DataBound" DataSourceID="EntityDataSource"
             DataKeyNames="OrganizationId" Width="550px">
             <fields>
@@ -26,8 +26,11 @@
                         <mits:ComboBox ID="WeekStartsDayList" runat="server" DataTextField="Name" DataValueField="Value" Required="false" />
                     </ItemTemplate>
                 </mits:TemplateField>
-                <mits:TextBoxField DataField="EmailSuffixes" MaxLength="1024" Columns="65" Rows="3" ControlStyle-Width="350px" 
-                    TextMode="MultiLine" />
+                <mits:TemplateField PaddingLeft="false">
+                    <ItemTemplate>
+                        <mits:TextBox ID="EmailSuffixes" runat="server" MaxLength="1024" Columns="65" Rows="3" Width="350px" TextMode="MultiLine" />
+                    </ItemTemplate>
+                </mits:TemplateField>
                 <mits:TextBoxField DataField="LdapDomains" MaxLength="2048" Columns="65" Rows="3" ControlStyle-Width="350px" 
                     TextMode="MultiLine" />               
                 <mits:CheckBoxField DataField="Beta" DefaultChecked="False" />
@@ -57,5 +60,5 @@
                 <asp:Parameter Name="organizationId" Type="Object" />
             </SelectParameters>
         </asp:ObjectDataSource>
-    </ContentTemplate>
+    </contenttemplate>
 </asp:UpdatePanel>

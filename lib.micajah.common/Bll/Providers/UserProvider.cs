@@ -513,7 +513,10 @@ namespace Micajah.Common.Bll.Providers
             bool enableNotification = FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification;
             Organization org = OrganizationProvider.GetOrganization(organizationId);
             if (org != null)
-                enableNotification = org.EmailSettings.EnableChangeLoginNotification;
+            {
+                EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
+                enableNotification = settings.EnableChangeLoginNotification;
+            }
 
             if (!enableNotification)
                 return false;
@@ -553,7 +556,10 @@ namespace Micajah.Common.Bll.Providers
             bool enableNotification = FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification;
             Organization org = OrganizationProvider.GetOrganization(organizationId);
             if (org != null)
-                enableNotification = org.EmailSettings.EnableChangeLoginNotification;
+            {
+                EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
+                enableNotification = settings.EnableChangeLoginNotification;
+            }
 
             if (!enableNotification)
                 return false;
@@ -600,14 +606,20 @@ namespace Micajah.Common.Bll.Providers
                 reason = EmailSendingReason.CreateNewLogin;
                 enableNotification = FrameworkConfiguration.Current.WebApplication.Email.EnableCreateNewLoginNotification;
                 if (org != null)
-                    enableNotification = org.EmailSettings.EnableCreateNewLoginNotification;
+                {
+                    EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
+                    enableNotification = settings.EnableCreateNewLoginNotification;
+                }
             }
             else
             {
                 reason = EmailSendingReason.ChangeLogin;
                 enableNotification = FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification;
                 if (org != null)
-                    enableNotification = org.EmailSettings.EnableChangeLoginNotification;
+                {
+                    EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
+                    enableNotification = settings.EnableChangeLoginNotification;
+                }
             }
 
             if (!enableNotification)

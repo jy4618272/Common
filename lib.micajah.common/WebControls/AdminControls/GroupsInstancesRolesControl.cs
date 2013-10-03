@@ -204,7 +204,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
                     List.Columns[0].Visible = EditForm.Fields[0].Visible = FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances;
 
-                    if (ActionProvider.OnlyBuiltInActionsAvailable) List.Columns[2].Visible = false;
+                    if ((!FrameworkConfiguration.Current.Actions.EnableOverride) || ActionProvider.OnlyBuiltInActionsAvailable)
+                        List.Columns[2].Visible = false;
                 }
                 else Response.Redirect(ResourceProvider.GroupsPageVirtualPath);
             }

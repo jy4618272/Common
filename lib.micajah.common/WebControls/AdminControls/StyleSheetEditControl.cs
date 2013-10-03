@@ -1,4 +1,3 @@
-using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
@@ -45,16 +44,12 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!IsPostBack)
             {
-                LoadResources();
+                this.LoadResources();
 
                 UserContext user = UserContext.Current;
                 if (user != null)
                 {
-                    Organization org = user.SelectedOrganization;
-                    if (org != null)
-                    {
-                        if (!string.IsNullOrEmpty(org.CustomStyleSheet)) StyleSheetText.Text = HttpUtility.HtmlDecode(org.CustomStyleSheet);
-                    }
+                    StyleSheetText.Text = HttpUtility.HtmlDecode(SettingProvider.GetCustomStyleSheet(user.SelectedOrganizationId));
                 }
 
                 Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.ConfigurationPageActionId);
@@ -73,18 +68,14 @@ namespace Micajah.Common.WebControls.AdminControls
             UserContext user = UserContext.Current;
             if (user != null)
             {
-                Organization org = user.SelectedOrganization;
-                if (org != null)
-                {
-                    org.CustomStyleSheet = HttpUtility.HtmlEncode(StyleSheetText.Text);
+                SettingProvider.UpdateCustomStyleSheet(user.SelectedOrganizationId, HttpUtility.HtmlEncode(StyleSheetText.Text));
 
-                    if (m_IsModernTheme)
+                if (m_IsModernTheme)
+                {
+                    if (this.MasterPage != null)
                     {
-                        if (this.MasterPage != null)
-                        {
-                            this.MasterPage.MessageType = NoticeMessageType.Success;
-                            this.MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
-                        }
+                        this.MasterPage.MessageType = NoticeMessageType.Success;
+                        this.MasterPage.Message = Resources.BaseEditFormControl_SuccessMessage;
                     }
                 }
             }

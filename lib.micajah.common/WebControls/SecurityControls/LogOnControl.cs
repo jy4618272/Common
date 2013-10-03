@@ -610,9 +610,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     if (inst != null)
                     {
                         headerLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(inst.InstanceId);
-
-                        if (org.Instances.Count > 1)
-                            headerLogoText = inst.Name;
+                        headerLogoText = inst.Name;
                     }
                 }
 
@@ -760,15 +758,12 @@ namespace Micajah.Common.WebControls.SecurityControls
                             setting = SettingProvider.GetOrganizationSetting(org.OrganizationId, setting.SettingId);
                             if (setting != null && (string.Compare(setting.Value, "google", StringComparison.OrdinalIgnoreCase) == 0))
                             {
-                                if (org.EmailSuffixesList != null && org.EmailSuffixesList.Count > 0)
+                                foreach (string domain in EmailSuffixProvider.GetEmailSuffixesList(org.OrganizationId))
                                 {
-                                    foreach (string domain in org.EmailSuffixesList)
+                                    if (LoginTextBox.Text.IndexOf(domain) != -1)
                                     {
-                                        if (LoginTextBox.Text.IndexOf(domain) != -1)
-                                        {
-                                            message = Resources.LoginElement_GoogleFailureText;
-                                            break;
-                                        }
+                                        message = Resources.LoginElement_GoogleFailureText;
+                                        break;
                                     }
                                 }
                             }

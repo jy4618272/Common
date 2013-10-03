@@ -8,17 +8,14 @@
         <asp:LinkButton ID="UpgradeLink" runat="server" Visible="false" OnClick="UpgradeLink_Click" />
     </asp:PlaceHolder>
 </div>
-<p>
-    <asp:Label ID="TitleLabel2" runat="server" Font-Bold="true" />
-    <div style="padding-top: 7px;">
-        <mits:CommonGridView ID="AssemblyList" runat="server" AutoGenerateColumns="False"
-            Width="960px">
-            <columns>
+<div style="padding-top: 7px;">
+    <mits:CommonGridView ID="AssemblyList" runat="server" AutoGenerateColumns="False"
+        Width="960px">
+        <columns>
                 <mits:TextBoxField DataField="Name" />
                 <mits:TextBoxField DataField="Version" HeaderStyle-Width="90px" />
                 <mits:TextBoxField DataField="Culture" HeaderStyle-Width="250px" />
                 <mits:TextBoxField DataField="PublicKeyToken" HeaderStyle-Width="110px" />
             </columns>
-        </mits:CommonGridView>
-    </div>
-</p>
+    </mits:CommonGridView>
+</div>

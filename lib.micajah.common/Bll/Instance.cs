@@ -1,8 +1,6 @@
 using Micajah.Common.Bll.Providers;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
 using System.Text;
 
 namespace Micajah.Common.Bll
@@ -28,15 +26,8 @@ namespace Micajah.Common.Bll
         private bool m_Trial;
         private bool m_Beta;
         private DateTime? m_CreatedTime;
-        private SettingCollection m_Settings;
-        private string m_EmailSuffixes;
         private BillingPlan m_BillingPlan;
         private CreditCardStatus m_CreditCardStatus;
-        private Collection<string> m_EmailSuffixesList;
-
-        // The objects which are used to synchronize access to the cached objects.
-        private object m_SettingsSyncRoot = new object();
-        private object m_EmailSuffixSyncRoot = new object();
 
         #endregion
 
@@ -214,54 +205,6 @@ namespace Micajah.Common.Bll
             set { m_CreditCardStatus = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the email suffixes for the instance.
-        /// </summary>
-        public string EmailSuffixes
-        {
-            get
-            {
-                EnsureEmailSuffixesIsLoaded();
-                return m_EmailSuffixes;
-            }
-            set
-            {
-                m_EmailSuffixes = value;
-                m_EmailSuffixesList = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the list of email suffixes for the instance.
-        /// </summary>
-        public Collection<string> EmailSuffixesList
-        {
-            get
-            {
-                EnsureEmailSuffixesIsLoaded();
-                return m_EmailSuffixesList;
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection that contains the instance level settings.
-        /// </summary>
-        public SettingCollection Settings
-        {
-            get
-            {
-                if (m_Settings == null)
-                {
-                    lock (m_SettingsSyncRoot)
-                    {
-                        if (m_Settings == null)
-                            m_Settings = SettingProvider.GetInstanceSettings(OrganizationId, InstanceId);
-                    }
-                }
-                return m_Settings;
-            }
-        }
-
         #endregion
 
         #region Operators
@@ -290,42 +233,6 @@ namespace Micajah.Common.Bll
         public static bool operator >(Instance instance1, Instance instance2)
         {
             return (instance1.CompareTo(instance2) > 0);
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void EnsureEmailSuffixesIsLoaded()
-        {
-            if (m_EmailSuffixesList == null)
-            {
-                lock (m_EmailSuffixSyncRoot)
-                {
-                    if (m_EmailSuffixesList == null)
-                    {
-                        m_EmailSuffixesList = new Collection<string>();
-
-                        if (m_EmailSuffixes == null)
-                        {
-                            DataTable table = EmailSuffixProvider.GetEmailSuffixesByInstanceId(this.InstanceId);
-                            if (table.Rows.Count > 0)
-                                m_EmailSuffixes = (string)table.Rows[0]["EmailSuffixName"];
-                            else
-                                m_EmailSuffixes = string.Empty;
-                        }
-
-                        if (!string.IsNullOrEmpty(m_EmailSuffixes))
-                        {
-                            foreach (string suffix in m_EmailSuffixes.Split(','))
-                            {
-                                string val = suffix.Trim();
-                                if (val.Length > 0) m_EmailSuffixesList.Add(val);
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         #endregion

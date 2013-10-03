@@ -1,8 +1,8 @@
+using Micajah.Common.Bll.Providers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Micajah.Common.Bll.Providers;
 
 namespace Micajah.Common.Bll
 {
@@ -492,88 +492,6 @@ namespace Micajah.Common.Bll
                 if (result == 0) result += string.Compare(this.Name, other.Name, StringComparison.CurrentCultureIgnoreCase);
             }
             return result;
-        }
-
-        public int GetCounterValue(Guid organizationId, Guid instanceId)
-        {
-            return Handlers.SettingHandler.Current.GetUsedItemsCount(this, organizationId, instanceId);
-        }
-
-        /// <summary>
-        /// Returns an first instance in which the specified setting with specified value exists.
-        /// </summary>
-        /// <param name="organizationId">The organization's identifier to search the instance in.</param>
-        /// <param name="shortName">The short name of the setting to search for.</param>
-        /// <param name="value">The value of the setting to search for.</param>
-        /// <returns>The Micajah.Common.Bll.Instance object that represents the first instance in which the specified setting with specified value exists.</returns>
-        public static Instance GetInstanceBySettingValue(Guid organizationId, string shortName, string value)
-        {
-            Organization org = OrganizationProvider.GetOrganization(organizationId);
-            if (org != null)
-                return GetInstanceBySettingValue(org, shortName, value);
-            return null;
-        }
-
-        /// <summary>
-        /// Returns an first instance in which the specified setting with specified value exists.
-        /// </summary>
-        /// <param name="organization">The organization to search the instance in.</param>
-        /// <param name="shortName">The short name of the setting to search for.</param>
-        /// <param name="value">The value of the setting to search for.</param>
-        /// <returns>The Micajah.Common.Bll.Instance object that represents the first instance in which the specified setting with specified value exists.</returns>
-        public static Instance GetInstanceBySettingValue(Organization organization, string shortName, string value)
-        {
-            if (organization != null)
-            {
-                foreach (Instance instance in organization.Instances)
-                {
-                    Setting setting = instance.Settings.FindByShortName(shortName);
-                    if ((setting != null) && (string.Compare(value, setting.Value, StringComparison.Ordinal) == 0))
-                        return instance;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns an first organization in which the specified setting with specified value exists.
-        /// </summary>
-        /// <param name="shortName">The short name of the setting to search for.</param>
-        /// <param name="value">The value of the setting to search for.</param>
-        /// <returns>The Micajah.Common.Bll.Organization object that represents the first organization in which the specified setting with specified value exists;</returns>
-        public static Organization GetOrganizationBySettingValue(string shortName, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                OrganizationCollection orgs = OrganizationProvider.CreateOrganizationCollection(OrganizationProvider.GetOrganizations());
-                foreach (Organization org in orgs)
-                {
-                    Setting setting = org.Settings.FindByShortName(shortName);
-                    if ((setting != null) && (string.Compare(value, setting.Value, StringComparison.Ordinal) == 0)) return org;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the organizations in which the specified setting with specified value exists.
-        /// </summary>
-        /// <param name="shortName">The short name of the setting to search for.</param>
-        /// <param name="value">The value of the setting to search for.</param>
-        /// <returns>The Micajah.Common.Bll.OrganizationCollection object that represents the collection of the organizations in which the specified setting with specified value exists.</returns>
-        public static Organization GetOrganizationsBySettingValue(string shortName, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                OrganizationCollection coll = new OrganizationCollection();
-                OrganizationCollection orgs = OrganizationProvider.CreateOrganizationCollection(OrganizationProvider.GetOrganizations());
-                foreach (Organization org in orgs)
-                {
-                    Setting setting = org.Settings.FindByShortName(shortName);
-                    if ((setting != null) && (string.Compare(value, setting.Value, StringComparison.Ordinal) == 0)) coll.Add(org);
-                }
-            }
-            return null;
         }
 
         /// <summary>

@@ -459,9 +459,6 @@
   <data name="WebsitesControl_List_NameColumn_HeaderText" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="UsersControl_NoGroupError_Message" xml:space="preserve">
-    <value>No active Groups.</value>
-  </data>
   <data name="RoleEditControl_EditForm_RankField_HeaderText" xml:space="preserve">
     <value>Rank</value>
   </data>
@@ -629,9 +626,6 @@
   </data>
   <data name="DatabaseServersControl_EditForm_PortField_HeaderText" xml:space="preserve">
     <value>Port</value>
-  </data>
-  <data name="FrameworkControl_TitleLabel2_Text" xml:space="preserve">
-    <value>Framework information</value>
   </data>
   <data name="ActiveInstanceControl_LogoffDescriptionLabel_Text" xml:space="preserve">
     <value>Or</value>
@@ -2403,9 +2397,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="GroupsControl_NoInstanceError_Description" xml:space="preserve">
     <value>Please &lt;a href="{0}"&gt;click here&lt;/a&gt; to add an Instance.</value>
-  </data>
-  <data name="UsersControl_NoGroupError_Description" xml:space="preserve">
-    <value>Please &lt;a href="{0}"&gt;click here&lt;/a&gt; to add a Group.</value>
   </data>
   <data name="NoticeMessageBox_CloseLink_ToolTip" xml:space="preserve">
     <value>Close this notification</value>

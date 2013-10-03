@@ -1,12 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
+﻿using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Globalization;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -18,6 +18,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private ComboBox m_MonthList;
         private ComboBox m_DayList;
         private ComboBox m_WeekStartsDayList;
+        private TextBox m_EmailSuffixes;
 
         #endregion
 
@@ -50,6 +51,15 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
+        private TextBox EmailSuffixes
+        {
+            get
+            {
+                if (m_EmailSuffixes == null) m_EmailSuffixes = EditForm.FindControl("EmailSuffixes") as TextBox;
+                return m_EmailSuffixes;
+            }
+        }
+
         #endregion
 
         #region Protected Methods
@@ -72,23 +82,27 @@ namespace Micajah.Common.WebControls.AdminControls
             WeekStartsDayList.Items.Add(new RadComboBoxItem(Resources.OrganizationProfileControl_WeekStartsDayList_Sunday, ((int)FirstDayOfWeek.Sunday).ToString(CultureInfo.InvariantCulture)));
             WeekStartsDayList.Items.Add(new RadComboBoxItem(Resources.OrganizationProfileControl_WeekStartsDayList_Monday, ((int)FirstDayOfWeek.Monday).ToString(CultureInfo.InvariantCulture)));
 
-            Organization org = UserContext.Current.SelectedOrganization;
+            UserContext user = UserContext.Current;
+
+            Organization org = user.SelectedOrganization;
             if (org.FiscalYearStartMonth.HasValue)
                 MonthList.SelectedValue = org.FiscalYearStartMonth.Value.ToString(CultureInfo.InvariantCulture);
             if (org.FiscalYearStartDay.HasValue)
                 DayList.SelectedValue = org.FiscalYearStartDay.Value.ToString(CultureInfo.InvariantCulture);
             if (org.WeekStartsDay.HasValue)
                 WeekStartsDayList.SelectedValue = (org.WeekStartsDay.Value).ToString(CultureInfo.InvariantCulture);
+
+            EmailSuffixes.Text = EmailSuffixProvider.GetEmailSuffixName(user.SelectedOrganizationId);
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
 
-            int value = 0;
             string ldapDomains = (EditForm.Rows[7].Cells[1].Controls[0] as TextBox).Text;
-            e.InputParameters["ldapDomains"] = ldapDomains.Replace(" ", "").Trim();
+            e.InputParameters["ldapDomains"] = ldapDomains.Replace(" ", string.Empty).Trim();
 
+            int value = 0;
             if (int.TryParse(this.MonthList.SelectedValue, out value))
                 e.InputParameters["fiscalYearStartMonth"] = value;
             else
@@ -104,6 +118,7 @@ namespace Micajah.Common.WebControls.AdminControls
             else
                 e.InputParameters["weekStartsDay"] = null;
 
+            e.InputParameters["emailSuffixes"] = EmailSuffixes.Text;
         }
 
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
@@ -123,6 +138,7 @@ namespace Micajah.Common.WebControls.AdminControls
             EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_FiscalYearStartMonth_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_FiscalYearStartDay_HeaderText;
             EditForm.Fields[5].HeaderText = Resources.OrganizationsControl_EditForm_WeekStartsDay_HeaderText;
+            EditForm.Fields[6].HeaderText = Resources.OrganizationsControl_EditForm_EmailSuffixesField_HeaderText;
         }
 
         protected override void OnLoad(EventArgs e)

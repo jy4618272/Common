@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
+﻿using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Globalization;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -21,6 +21,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private DropDownList m_TimeFormatList;
         private DropDownList m_DateFormatList;
         private CheckBoxList m_WorkingDays;
+        private TextBox m_EmailSuffixes;
 
         #endregion
 
@@ -62,6 +63,15 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
+        private TextBox EmailSuffixes
+        {
+            get
+            {
+                if (m_EmailSuffixes == null) m_EmailSuffixes = EditForm.FindControl("EmailSuffixes") as TextBox;
+                return m_EmailSuffixes;
+            }
+        }
+
         #endregion
 
         #region Protected Methods
@@ -100,6 +110,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 e.InputParameters["dateFormat"] = null;
 
             e.InputParameters["workingDays"] = BaseControl.GetWorkingDays(EditForm.FindControl("WorkingDaysList") as CheckBoxList);
+
+            e.InputParameters["emailSuffixes"] = EmailSuffixes.Text;
         }
 
         protected void EditForm_DataBound(object sender, EventArgs e)
@@ -117,6 +129,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 timeZoneId = inst.TimeZoneId;
                 timeFormat = inst.TimeFormat.ToString(CultureInfo.InvariantCulture);
                 dateFormat = inst.DateFormat.ToString(CultureInfo.InvariantCulture);
+
+                EmailSuffixes.Text = EmailSuffixProvider.GetEmailSuffixNameByInstanceId(inst.InstanceId);
             }
 
             BaseControl.WorkingDaysListDataBind(WorkingDays, workingDays);
@@ -133,6 +147,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             BaseControl.LoadResources(EditForm, this.GetType().BaseType.Name);
 
+            EditForm.Fields[2].HeaderText = Resources.InstanceProfileControl_EditForm_EmailSuffixesField_HeaderText;
             EditForm.Fields[3].HeaderText = Resources.InstanceProfileControl_EditForm_WorkingDaysField_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.InstanceProfileControl_EditForm_TimeZoneField_HeaderText;
             EditForm.Fields[5].HeaderText = Resources.InstanceProfileControl_EditForm_TimeFormatField_HeaderText;

@@ -167,7 +167,7 @@ namespace Micajah.Common.Bll.Providers
                         name = org.Name;
                     else
                     {
-                        Instance inst = org.Instances.FindByInstanceId(row.InstanceId);
+                        Instance inst = InstanceProvider.GetInstance(row.InstanceId);
                         if (inst != null)
                             name = inst.Name;
                     }

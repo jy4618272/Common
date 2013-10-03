@@ -24,6 +24,7 @@ namespace Micajah.Common.Bll.Providers
         private const string OrganizationSettingsValuesKeyFromat = "mc.OrganizationSettingsValues.{0:N}";
         private const string InstanceSettingsValuesKeyFromat = "mc.InstanceSettingsValues.{0:N}";
         private const string GroupSettingsValuesKeyFromat = "mc.GroupSettingsValues.{0:N}.{1:N}";
+        private const string OrganizationEmailSettingsKeyFromat = "mc.OrganizationEmailSettings.{0:N}";
 
         /// <summary>
         /// The identifier of the master page's custom style sheet.
@@ -87,24 +88,6 @@ namespace Micajah.Common.Bll.Providers
 
         #region Cache Methods
 
-        private static Dictionary<Guid, string> GetOrganizationSettingsValuesFromCache(Guid organizationId, bool putToCacheIfNotExists)
-        {
-            string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
-            Dictionary<Guid, string> dict = CacheManager.Current.Get(key) as Dictionary<Guid, string>;
-
-            if (dict == null)
-            {
-                if (putToCacheIfNotExists)
-                {
-                    dict = ConvertTableToDictionary(GetSettingsValuesByOrganizationId(organizationId));
-
-                    CacheManager.Current.PutWithDefaultTimeout(key, dict);
-                }
-            }
-
-            return dict;
-        }
-
         private static Dictionary<Guid, string> GetInstanceSettingsValuesFromCache(Guid instanceId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
@@ -119,7 +102,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static Dictionary<Guid, string> PutOrganizationSettingsValuesToCache(DataTable table, Guid organizationId)
         {
-            Dictionary<Guid, string> dict = ConvertTableToDictionary(table);
+            Dictionary<Guid, string> dict = ConvertSettingsValuesTableToDictionary(table);
 
             string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
             CacheManager.Current.PutWithDefaultTimeout(key, dict);
@@ -129,7 +112,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static Dictionary<Guid, string> PutInstanceSettingsValuesToCache(DataTable table, Guid instanceId)
         {
-            Dictionary<Guid, string> dict = ConvertTableToDictionary(table);
+            Dictionary<Guid, string> dict = ConvertSettingsValuesTableToDictionary(table);
 
             string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
             CacheManager.Current.PutWithDefaultTimeout(key, dict);
@@ -139,7 +122,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static Dictionary<Guid, string> PutGroupSettingsValuesToCache(DataTable table, Guid instanceId, Guid groupId)
         {
-            Dictionary<Guid, string> dict = ConvertTableToDictionary(table);
+            Dictionary<Guid, string> dict = ConvertSettingsValuesTableToDictionary(table);
 
             string key = string.Format(CultureInfo.InvariantCulture, GroupSettingsValuesKeyFromat, instanceId, groupId);
             CacheManager.Current.PutWithDefaultTimeout(key, dict);
@@ -163,29 +146,25 @@ namespace Micajah.Common.Bll.Providers
                     RemoveInstanceSettingsValuesFromCache(instanceId.Value);
             }
             else
+            {
                 RemoveOrganizationSettingsValuesFromCache(organizationId);
+                RemoveOrganizationEmailSettingsFromCache(organizationId);
+            }
         }
 
         #endregion
 
-        private static Dictionary<Guid, string> ConvertTableToDictionary(DataTable table)
+        internal static SettingCollection CreateSettingCollection(DataRow[] rows)
         {
-            Dictionary<Guid, string> dict = new Dictionary<Guid, string>();
-
-            foreach (DataRow row in table.Rows)
+            SettingCollection coll = new SettingCollection();
+            if (rows != null)
             {
-                dict.Add((Guid)row["SettingId"], (string)row["Value"]);
+                foreach (ConfigurationDataSet.SettingRow row in rows)
+                {
+                    coll.Add(CreateSetting(row));
+                }
             }
-
-            return dict;
-        }
-
-        private static ClientDataSet.SettingsValuesDataTable GetSettingsValuesByOrganizationId(Guid organizationId)
-        {
-            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
-            {
-                return adapter.GetSettingsValuesByOrganizationId(organizationId);
-            }
+            return coll;
         }
 
         private static ClientDataSet.SettingsValuesDataTable GetSettingsValuesByOrganizationIdInstanceId(Guid organizationId, Guid instanceId)
@@ -245,6 +224,25 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
+        private static SettingCollection GetInstanceSettingsByFilter(Guid organizationId, Guid instanceId, string filter)
+        {
+            SettingCollection settings = CreateSettingCollection(ConfigurationDataSet.Current.Setting.Select(filter));
+
+            if (settings.Count > 0)
+            {
+                FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+
+                settings.Sort();
+            }
+
+            return settings;
+        }
+
+        private static SettingCollection GetPricedSettings(Guid organizationId, Guid instanceId)
+        {
+            return GetInstanceSettingsByFilter(organizationId, instanceId, "Price > 0");
+        }
+
         private static void LoadSettingAttributes(ConfigurationDataSet.SettingRow row, SettingElement setting, SettingLevels? levels)
         {
             row.SettingId = setting.Id;
@@ -284,6 +282,39 @@ namespace Micajah.Common.Bll.Providers
 
         #region Cache Methods
 
+        internal static Dictionary<Guid, string> GetOrganizationSettingsValuesFromCache(Guid organizationId, bool putToCacheIfNotExists)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
+            Dictionary<Guid, string> dict = CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+
+            if (dict == null)
+            {
+                if (putToCacheIfNotExists)
+                {
+                    dict = ConvertSettingsValuesTableToDictionary(GetSettingsValuesByOrganizationId(organizationId));
+
+                    CacheManager.Current.PutWithDefaultTimeout(key, dict);
+                }
+            }
+
+            return dict;
+        }
+
+        internal static EmailElement GetOrganizationEmailSettingsFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationEmailSettingsKeyFromat, organizationId);
+            EmailElement settings = CacheManager.Current.Get(key) as EmailElement;
+
+            if (settings == null)
+            {
+                settings = new EmailElement();
+
+                FillSettingsClass(settings, GetOrganizationSettings(organizationId));
+            }
+
+            return settings;
+        }
+
         internal static void RemoveInstanceSettingsValuesFromCache(Guid instanceId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
@@ -296,7 +327,68 @@ namespace Micajah.Common.Bll.Providers
             CacheManager.Current.Remove(key);
         }
 
+        internal static void RemoveOrganizationEmailSettingsFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationEmailSettingsKeyFromat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
         #endregion
+
+        internal static string GetCustomStyleSheet(Guid organizationId)
+        {
+            Dictionary<Guid, string> dict = GetOrganizationSettingsValuesFromCache(organizationId, true);
+            if (dict.ContainsKey(CustomStyleSheetSettingId))
+                return dict[CustomStyleSheetSettingId];
+            return null;
+        }
+
+        internal static void UpdateCustomStyleSheet(Guid organizationId, string value)
+        {
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                ClientDataSet.SettingsValuesDataTable table = adapter.GetSettingValue(CustomStyleSheetSettingId, organizationId, null, null);
+                ClientDataSet.SettingsValuesRow row = null;
+                if (table.Count > 0)
+                    row = table[0];
+
+                if (row != null)
+                {
+                    if (Support.StringIsNullOrEmpty(value))
+                        row.Delete();
+                    else
+                        row.Value = value;
+                }
+                else if (!Support.StringIsNullOrEmpty(value))
+                {
+                    row = table.NewSettingsValuesRow();
+                    row.SettingValueId = Guid.NewGuid();
+                    row.SettingId = CustomStyleSheetSettingId;
+                    row.Value = value;
+
+                    if (organizationId != Guid.Empty)
+                        row.OrganizationId = organizationId;
+
+                    table.AddSettingsValuesRow(row);
+                }
+
+                adapter.Update(table);
+            }
+
+            RemoveSettingsValuesFromCache(organizationId, null, null);
+        }
+
+        internal static Dictionary<Guid, string> ConvertSettingsValuesTableToDictionary(DataTable table)
+        {
+            Dictionary<Guid, string> dict = new Dictionary<Guid, string>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                dict.Add((Guid)row["SettingId"], (string)row["Value"]);
+            }
+
+            return dict;
+        }
 
         internal static Setting CreateSetting(ConfigurationDataSet.SettingRow row)
         {
@@ -685,6 +777,14 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
+        internal static ClientDataSet.SettingsValuesDataTable GetSettingsValuesByOrganizationId(Guid organizationId)
+        {
+            using (SettingsValuesTableAdapter adapter = new SettingsValuesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                return adapter.GetSettingsValuesByOrganizationId(organizationId);
+            }
+        }
+
         /// <summary>
         /// Returns the rows array of the root settings by specified levels.
         /// </summary>
@@ -794,58 +894,52 @@ namespace Micajah.Common.Bll.Providers
 
         internal static SettingCollection GetPaidSettings(Guid organizationId, Guid instanceId)
         {
-            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
-            string filter = string.Format(CultureInfo.InvariantCulture, "{0} = 1", table.PaidColumn.ColumnName);
-            SettingCollection settings = new SettingCollection();
-            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
-            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
-            settings.Sort();
-            return settings;
+            return GetInstanceSettingsByFilter(organizationId, instanceId, "Paid = 1");
         }
 
         internal static SettingCollection GetCounterSettings(Guid organizationId, Guid instanceId)
         {
-            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
-            string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
-            SettingCollection settings = new SettingCollection();
-            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
-            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
-            for (int i = 0; i < settings.Count; i++)
+            SettingCollection settings = GetPricedSettings(organizationId, instanceId);
+
+            if (settings.Count > 0)
             {
-                Setting setting = settings[i];
-                if (!setting.Paid)
+                Micajah.Common.Bll.Handlers.SettingHandler handler = Micajah.Common.Bll.Handlers.SettingHandler.Current;
+
+                for (int i = 0; i < settings.Count; i++)
                 {
-                    int _cval = setting.GetCounterValue(organizationId, instanceId);
-                    if (_cval < 0)
+                    Setting setting = settings[i];
+                    if (!setting.Paid)
                     {
-                        settings.RemoveAt(i);
-                        i--;
-                        continue;
+                        int value = handler.GetUsedItemsCount(setting, organizationId, instanceId);
+                        if (value < 0)
+                        {
+                            settings.RemoveAt(i);
+                            i--;
+                            continue;
+                        }
+                        setting.Value = value.ToString(CultureInfo.InvariantCulture);
                     }
-                    setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
                 }
             }
-            settings.Sort();
+
             return settings;
         }
 
         internal static SettingCollection GetAllPricedSettings(Guid organizationId, Guid instanceId)
         {
-            ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
-            string filter = string.Format(CultureInfo.InvariantCulture, "{0} > 0", table.PriceColumn.ColumnName);
-            SettingCollection settings = new SettingCollection();
-            foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter)) settings.Add(CreateSetting(_srow));
-            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
-            for (int i = 0; i < settings.Count; i++)
+            SettingCollection settings = GetPricedSettings(organizationId, instanceId);
+
+            if (settings.Count > 0)
             {
-                Setting setting = settings[i];
-                if (!setting.Paid)
+                Micajah.Common.Bll.Handlers.SettingHandler handler = Micajah.Common.Bll.Handlers.SettingHandler.Current;
+
+                foreach (Setting setting in settings)
                 {
-                    int _cval = setting.GetCounterValue(organizationId, instanceId);
-                    setting.Value = _cval.ToString(CultureInfo.InvariantCulture);
+                    if (!setting.Paid)
+                        setting.Value = handler.GetUsedItemsCount(setting, organizationId, instanceId).ToString(CultureInfo.InvariantCulture);
                 }
             }
-            settings.Sort();
+
             return settings;
         }
 

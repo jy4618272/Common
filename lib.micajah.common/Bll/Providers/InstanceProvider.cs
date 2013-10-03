@@ -201,11 +201,7 @@ namespace Micajah.Common.Bll.Providers
             }
 
             if (emailSuffixes != null)
-            {
                 EmailSuffixProvider.InsertEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
-
-                inst.EmailSuffixes = emailSuffixes;
-            }
 
             if (configure) ConfigureInstance(instanceId, organizationId);
 
@@ -662,6 +658,27 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Returns an first instance in which the specified setting with specified value exists.
+        /// </summary>
+        /// <param name="organizationId">The organization's identifier to search the instance in.</param>
+        /// <param name="shortName">The short name of the setting to search for.</param>
+        /// <param name="value">The value of the setting to search for.</param>
+        /// <returns>The Micajah.Common.Bll.Instance object that represents the first instance in which the specified setting with specified value exists.</returns>
+        public static Instance GetInstanceBySettingValue(Guid organizationId, string shortName, string value)
+        {
+            foreach (ClientDataSet.InstanceRow row in GetInstances(organizationId))
+            {
+                SettingCollection settings = SettingProvider.GetInstanceSettings(organizationId, row.InstanceId);
+                Setting setting = settings.FindByShortName(shortName);
+                if ((setting != null) && (string.Compare(value, setting.Value, StringComparison.Ordinal) == 0))
+                    return CreateInstance(row);
+            }
+
+            return null;
+        }
+
+
+        /// <summary>
         /// Returns the identifier of the specified instance in specified organization.
         /// </summary>
         /// <param name="organizationName">The name of the organization.</param>
@@ -922,11 +939,7 @@ namespace Micajah.Common.Bll.Providers
                 GroupProvider.UpdateInstanceAdministratorGroup(organizationId, instanceId, name);
 
             if (emailSuffixes != null)
-            {
                 EmailSuffixProvider.UpdateEmailSuffixName(organizationId, instanceId, ref emailSuffixes);
-
-                instance.EmailSuffixes = emailSuffixes;
-            }
 
             PutInstanceToCache(instance);
 
@@ -953,7 +966,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateInstance(Instance instance, bool raiseEvent)
         {
             if (instance != null)
-                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, raiseEvent, -1, -1);
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, null, instance.OrganizationId, raiseEvent, -1, -1);
         }
 
         /// <summary>
@@ -964,7 +977,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateInstance(Instance instance, BillingPlan billingPlan)
         {
             if (instance != null)
-                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, false, (int)billingPlan, -1);
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, null, instance.OrganizationId, false, (int)billingPlan, -1);
         }
 
         /// <summary>
@@ -975,7 +988,7 @@ namespace Micajah.Common.Bll.Providers
         public static void UpdateInstance(Instance instance, CreditCardStatus creditCardStatus)
         {
             if (instance != null)
-                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, instance.EmailSuffixes, instance.OrganizationId, false, -1, (int)creditCardStatus);
+                UpdateInstance(instance.InstanceId, instance.Name, instance.Description, instance.EnableSignupUser, instance.ExternalId, instance.TimeZoneId, instance.TimeFormat, instance.DateFormat, instance.WorkingDays, instance.Active, instance.CanceledTime, instance.Trial, instance.Beta, null, instance.OrganizationId, false, -1, (int)creditCardStatus);
         }
 
         /// <summary>

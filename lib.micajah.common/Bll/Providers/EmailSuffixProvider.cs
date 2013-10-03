@@ -1,8 +1,8 @@
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 
 namespace Micajah.Common.Bll.Providers
 {
@@ -36,7 +36,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="organizationId">Organization Id.</param>
         /// <returns>The System.Data.DataTable object that contains the email suffixes.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataTable GetEmailSuffixes(Guid organizationId)
+        public static MasterDataSet.EmailSuffixDataTable GetEmailSuffixes(Guid organizationId)
         {
             using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
             {
@@ -50,12 +50,62 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="instanceId">Instance Id.</param>
         /// <returns>The System.Data.DataTable object that contains the email suffixes.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataTable GetEmailSuffixesByInstanceId(Guid instanceId)
+        public static MasterDataSet.EmailSuffixDataTable GetEmailSuffixesByInstanceId(Guid instanceId)
         {
             using (EmailSuffixTableAdapter adapter = new EmailSuffixTableAdapter())
             {
                 return adapter.GetEmailSuffixesByInstanceId(instanceId);
             }
+        }
+
+        public static string GetEmailSuffixName(Guid organizationId)
+        {
+            MasterDataSet.EmailSuffixDataTable table = GetEmailSuffixes(organizationId);
+            return ((table.Count > 0) ? table[0].EmailSuffixName : null);
+        }
+
+        public static string GetEmailSuffixNameByInstanceId(Guid instanceId)
+        {
+            MasterDataSet.EmailSuffixDataTable table = GetEmailSuffixesByInstanceId(instanceId);
+            return ((table.Count > 0) ? table[0].EmailSuffixName : null);
+        }
+
+        public static Collection<string> GetEmailSuffixesList(Guid organizationId)
+        {
+            Collection<string> coll = new Collection<string>();
+
+            string emailSuffixName = GetEmailSuffixName(organizationId);
+
+            if (!string.IsNullOrEmpty(emailSuffixName))
+            {
+                foreach (string suffix in emailSuffixName.Split(','))
+                {
+                    string val = suffix.Trim();
+                    if (val.Length > 0)
+                        coll.Add(val);
+                }
+            }
+
+            return coll;
+        }
+
+        public static Collection<string> GetEmailSuffixesListByInstanceId(Guid instanceId)
+        {
+            Collection<string> coll = new Collection<string>();
+
+            string emailSuffixName = GetEmailSuffixNameByInstanceId(instanceId);
+
+            if (!string.IsNullOrEmpty(emailSuffixName))
+            {
+                foreach (string suffix in emailSuffixName.Split(','))
+                {
+                    string val = suffix.Trim();
+                    if (val.Length > 0)
+                        coll.Add(val);
+                }
+            }
+
+            return coll;
         }
 
         public static Guid GetOrganizationId(string emailSuffixName)

@@ -213,15 +213,18 @@ namespace Micajah.Common.Bll.Providers
             if (resourceName.EndsWith(CustomStyleSheet, StringComparison.OrdinalIgnoreCase))
             {
                 cacheable = false;
-                Setting setting = null;
+
+                string styleSheet = null;
+
                 if (parts.Length > 0)
                 {
                     object obj = Support.ConvertStringToType(parts[1], typeof(Guid));
                     if (obj != null)
-                        setting = SettingProvider.GetOrganizationSetting((Guid)obj, SettingProvider.CustomStyleSheetSettingId);
+                        styleSheet = SettingProvider.GetCustomStyleSheet((Guid)obj);
                 }
-                if (setting != null && (!Support.StringIsNullOrEmpty(setting.Value)))
-                    content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(setting.Value, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme, FrameworkConfiguration.Current.WebApplication.MasterPage.ThemeColor));
+
+                if (!Support.StringIsNullOrEmpty(styleSheet))
+                    content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(styleSheet, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme, FrameworkConfiguration.Current.WebApplication.MasterPage.ThemeColor));
                 else
                     content = new byte[] { };
             }

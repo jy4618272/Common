@@ -28,30 +28,6 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
-        #region Internal Properties
-
-        internal static bool GroupsExist
-        {
-            get
-            {
-                bool groupsExist = false;
-                UserContext user = UserContext.Current;
-                if (user != null)
-                {
-                    if (user.SelectedOrganizationId != Guid.Empty)
-                    {
-                        using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(user.SelectedOrganizationId)))
-                        {
-                            groupsExist = (adapter.GetGroups(user.SelectedOrganizationId).Count > 0);
-                        }
-                    }
-                }
-                return groupsExist;
-            }
-        }
-
-        #endregion
-
         #region Private Methods
 
         #region Cache Methods

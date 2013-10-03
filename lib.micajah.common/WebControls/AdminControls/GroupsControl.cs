@@ -1,13 +1,12 @@
-using System;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Globalization;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -33,7 +32,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (!IsPostBack)
             {
-                if (UserContext.Current.SelectedOrganization.Instances.Count == 0)
+                if (InstanceProvider.GetInstances(UserContext.Current.SelectedOrganizationId, true).Count == 0)
                 {
                     MasterPage.Message = Resources.GroupsControl_NoInstanceError_Message;
                     MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.GroupsControl_NoInstanceError_Description, CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.InstancePageVirtualPath));

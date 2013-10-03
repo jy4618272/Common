@@ -958,7 +958,7 @@ namespace Micajah.Common.Pages
                 {
                     if ((m_UserContext != null) && (m_UserContext.SelectedOrganizationId != Guid.Empty))
                     {
-                        if (!string.IsNullOrEmpty(m_UserContext.SelectedOrganization.CustomStyleSheet))
+                        if (!string.IsNullOrEmpty(SettingProvider.GetCustomStyleSheet(m_UserContext.SelectedOrganizationId)))
                             this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.CustomStyleSheet + "?" + m_UserContext.SelectedOrganizationId.ToString("N"), true)));
                     }
                 }
@@ -984,11 +984,8 @@ namespace Micajah.Common.Pages
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
                         m_HeaderLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(m_UserContext.SelectedInstanceId);
 
-                    if (m_UserContext.SelectedOrganization.Instances.Count > 1)
-                    {
-                        if (string.IsNullOrEmpty(m_HeaderLogoText))
-                            m_HeaderLogoText = m_UserContext.SelectedInstance.Name;
-                    }
+                    if (string.IsNullOrEmpty(m_HeaderLogoText))
+                        m_HeaderLogoText = m_UserContext.SelectedInstance.Name;
                 }
 
                 if (m_UserContext.SelectedOrganizationId != Guid.Empty)

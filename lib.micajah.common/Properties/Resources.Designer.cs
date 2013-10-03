@@ -2067,15 +2067,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Framework information.
-        /// </summary>
-        internal static string FrameworkControl_TitleLabel2_Text {
-            get {
-                return ResourceManager.GetString("FrameworkControl_TitleLabel2_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Database version.
         /// </summary>
         internal static string FrameworkControl_TitleLabel3_Text {
@@ -7643,24 +7634,6 @@ namespace Micajah.Common.Properties {
         internal static string UsersControl_List_NameColumn_HeaderText {
             get {
                 return ResourceManager.GetString("UsersControl_List_NameColumn_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please &lt;a href=&quot;{0}&quot;&gt;click here&lt;/a&gt; to add a Group..
-        /// </summary>
-        internal static string UsersControl_NoGroupError_Description {
-            get {
-                return ResourceManager.GetString("UsersControl_NoGroupError_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No active Groups..
-        /// </summary>
-        internal static string UsersControl_NoGroupError_Message {
-            get {
-                return ResourceManager.GetString("UsersControl_NoGroupError_Message", resourceCulture);
             }
         }
         

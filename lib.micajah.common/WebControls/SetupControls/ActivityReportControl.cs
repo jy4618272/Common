@@ -4,6 +4,7 @@ using Micajah.Common.Dal;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
@@ -130,8 +131,10 @@ namespace Micajah.Common.WebControls.SetupControls
                         if (col.ColumnName == "OrganizationId") continue;
                         if (col.ColumnName == "InstanceId") continue;
                         worksheet.Cells[i, j].Value = row[col];
-                        if (col.DataType == Type.GetType("System.Decimal")) worksheet.Cells[i, j].Style.Numberformat.Format = "$#,##0.00";
-                        else if (col.DataType == Type.GetType("System.DateTime")) worksheet.Cells[i, j].Style.Numberformat.Format = "d-MMM-yyyy";
+                        if (col.DataType == typeof(decimal))
+                            worksheet.Cells[i, j].Style.Numberformat.Format = "$#,##0.00";
+                        else if (col.DataType == typeof(DateTime))
+                            worksheet.Cells[i, j].Style.Numberformat.Format = "d-MMM-yyyy";
                         j++;
                     }
                     i++;
@@ -184,17 +187,17 @@ namespace Micajah.Common.WebControls.SetupControls
         private DataTable BuildReport()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add(new DataColumn("OrganizationId", Type.GetType("System.Guid")));
-            dt.Columns.Add(new DataColumn("InstanceId", Type.GetType("System.Guid")));
-            dt.Columns.Add(new DataColumn("InstanceName", Type.GetType("System.String")));
-            dt.Columns.Add(new DataColumn("CreationDate", Type.GetType("System.DateTime")));
-            dt.Columns.Add(new DataColumn("AdminFullName", Type.GetType("System.String")));
-            dt.Columns.Add(new DataColumn("AdminEmail", Type.GetType("System.String")));
-            dt.Columns.Add(new DataColumn("AdminPhone", Type.GetType("System.String")));
+            dt.Columns.Add(new DataColumn("OrganizationId", typeof(Guid)));
+            dt.Columns.Add(new DataColumn("InstanceId", typeof(Guid)));
+            dt.Columns.Add(new DataColumn("InstanceName", typeof(string)));
+            dt.Columns.Add(new DataColumn("CreationDate", typeof(DateTime)));
+            dt.Columns.Add(new DataColumn("AdminFullName", typeof(string)));
+            dt.Columns.Add(new DataColumn("AdminEmail", typeof(string)));
+            dt.Columns.Add(new DataColumn("AdminPhone", typeof(string)));
 
             foreach (Setting setting in counterSettings)
             {
-                DataColumn dtCol = new DataColumn(setting.ShortName, Type.GetType("System.Int32"));
+                DataColumn dtCol = new DataColumn(setting.ShortName, typeof(int));
                 dtCol.DefaultValue = -1;
                 dt.Columns.Add(dtCol);
             }
@@ -206,18 +209,18 @@ namespace Micajah.Common.WebControls.SetupControls
                 if (setting.ShortName == "Training3Hours") continue;
                 if (setting.ShortName == "Training8Hours") continue;
 
-                if (setting.Paid) dt.Columns.Add(new DataColumn(setting.ShortName, Type.GetType("System.Boolean")));
+                if (setting.Paid) dt.Columns.Add(new DataColumn(setting.ShortName, typeof(bool)));
                 else
                 {
-                    DataColumn dtCol = new DataColumn(setting.ShortName, Type.GetType("System.Int32"));
+                    DataColumn dtCol = new DataColumn(setting.ShortName, typeof(int));
                     dtCol.DefaultValue = -1;
                     dt.Columns.Add(dtCol);
                 }
             }
 
-            dt.Columns.Add(new DataColumn("MonthlyBillable", Type.GetType("System.Decimal")));
-            dt.Columns.Add(new DataColumn("CreditCardStatus", Type.GetType("System.String")));
-            dt.Columns.Add(new DataColumn("HowYouHearAboutUs", Type.GetType("System.String")));
+            dt.Columns.Add(new DataColumn("MonthlyBillable", typeof(decimal)));
+            dt.Columns.Add(new DataColumn("CreditCardStatus", typeof(string)));
+            dt.Columns.Add(new DataColumn("HowYouHearAboutUs", typeof(string)));
 
             OrganizationCollection orgs = OrganizationProvider.GetOrganizations(false, false);
 
@@ -228,25 +231,33 @@ namespace Micajah.Common.WebControls.SetupControls
                 string aEmail = string.Empty;
                 string aPhone = string.Empty;
                 ClientDataSet.UserRow orgAdmin = null;
-                if (orgAdmins.Count == 1) orgAdmin = orgAdmins[0];
+
+                if (orgAdmins.Count == 1)
+                    orgAdmin = orgAdmins[0];
                 else
                 {
-                    if (!string.IsNullOrEmpty(org.EmailSuffixes))
+                    Collection<string> emailSuffixes = EmailSuffixProvider.GetEmailSuffixesList(org.OrganizationId);
+                    if (emailSuffixes.Count > 0)
                     {
                         foreach (ClientDataSet.UserRow admin in orgAdmins)
                         {
-                            if (string.IsNullOrEmpty(admin.Email)) continue;
+                            if (string.IsNullOrEmpty(admin.Email))
+                                continue;
+
                             string[] arr = admin.Email.Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries);
                             string eSuffix = arr.Length > 1 ? arr[1] : arr[0];
-                            if (!string.IsNullOrEmpty(org.EmailSuffixes) && org.EmailSuffixes.Contains(eSuffix))
+
+                            if (emailSuffixes.Contains(eSuffix))
                             {
                                 orgAdmin = admin;
                                 break;
                             }
                         }
-                        if (orgAdmin == null && orgAdmins.Count > 0) orgAdmin = orgAdmins[0];
+                        if (orgAdmin == null && orgAdmins.Count > 0)
+                            orgAdmin = orgAdmins[0];
                     }
-                    else if (orgAdmins.Count > 0) orgAdmin = orgAdmins[0];
+                    else if (orgAdmins.Count > 0)
+                        orgAdmin = orgAdmins[0];
                 }
                 if (orgAdmin != null)
                 {
@@ -254,52 +265,61 @@ namespace Micajah.Common.WebControls.SetupControls
                     aEmail = !string.IsNullOrEmpty(orgAdmin.Email) ? orgAdmin.Email : string.Empty;
                     aPhone = !string.IsNullOrEmpty(orgAdmin.Phone) ? orgAdmin.Phone : string.Empty;
                 }
+
                 InstanceCollection insts = InstanceProvider.GetInstances(org.OrganizationId, false);
-                foreach (Instance inst in insts)
+                if (insts.Count > 0)
                 {
-                    decimal monthlySum = 0;
-                    DataRow row = dt.NewRow();
-                    row["OrganizationId"] = org.OrganizationId;
-                    row["InstanceId"] = inst.InstanceId;
-                    row["InstanceName"] = insts.Count > 1 ? org.Name + " " + inst.Name : org.Name;
-                    if (inst.CreatedTime.HasValue) row["CreationDate"] = inst.CreatedTime;
-                    else row["CreationDate"] = DBNull.Value;
-                    row["AdminFullName"] = afName;
-                    row["AdminEmail"] = aEmail;
-                    row["AdminPhone"] = aPhone;
-                    foreach (Setting setting in counterSettings)
-                        row[setting.ShortName] = setting.GetCounterValue(org.OrganizationId, inst.InstanceId);
+                    Micajah.Common.Bll.Handlers.SettingHandler handler = Micajah.Common.Bll.Handlers.SettingHandler.Current;
 
-                    SettingCollection settings = SettingProvider.GetCounterSettings(org.OrganizationId, inst.InstanceId);
-                    foreach (Setting setting in settings)
+                    foreach (Instance inst in insts)
                     {
-                        if (setting.ShortName == "PhoneSupport") continue;
-                        if (setting.ShortName == "Training1Hour") continue;
-                        if (setting.ShortName == "Training3Hours") continue;
-                        if (setting.ShortName == "Training8Hours") continue;
+                        decimal monthlySum = 0;
+                        DataRow row = dt.NewRow();
+                        row["OrganizationId"] = org.OrganizationId;
+                        row["InstanceId"] = inst.InstanceId;
+                        row["InstanceName"] = insts.Count > 1 ? org.Name + " " + inst.Name : org.Name;
+                        if (inst.CreatedTime.HasValue) row["CreationDate"] = inst.CreatedTime;
+                        else row["CreationDate"] = DBNull.Value;
+                        row["AdminFullName"] = afName;
+                        row["AdminEmail"] = aEmail;
+                        row["AdminPhone"] = aPhone;
 
-                        if (setting.Paid)
+                        foreach (Setting setting in counterSettings)
                         {
-                            bool enabled = false;
-                            if (!Boolean.TryParse(setting.Value, out enabled))
-                            {
-                                if (!Boolean.TryParse(setting.DefaultValue, out enabled)) enabled = false;
-                            }
-                            row[setting.ShortName] = enabled;
-                            if (enabled) monthlySum += setting.Price;
-                            continue;
+                            row[setting.ShortName] = handler.GetUsedItemsCount(setting, org.OrganizationId, inst.InstanceId);
                         }
-                        int usageCount = 0;
-                        int.TryParse(setting.Value, out usageCount);
-                        int paidQty = usageCount - setting.UsageCountLimit;
-                        decimal priceMonth = paidQty > 0 ? paidQty * setting.Price : 0;
-                        monthlySum += priceMonth;
-                        row[setting.ShortName] = usageCount;
+
+                        SettingCollection settings = SettingProvider.GetCounterSettings(org.OrganizationId, inst.InstanceId);
+                        foreach (Setting setting in settings)
+                        {
+                            if (setting.ShortName == "PhoneSupport") continue;
+                            if (setting.ShortName == "Training1Hour") continue;
+                            if (setting.ShortName == "Training3Hours") continue;
+                            if (setting.ShortName == "Training8Hours") continue;
+
+                            if (setting.Paid)
+                            {
+                                bool enabled = false;
+                                if (!Boolean.TryParse(setting.Value, out enabled))
+                                {
+                                    if (!Boolean.TryParse(setting.DefaultValue, out enabled)) enabled = false;
+                                }
+                                row[setting.ShortName] = enabled;
+                                if (enabled) monthlySum += setting.Price;
+                                continue;
+                            }
+                            int usageCount = 0;
+                            int.TryParse(setting.Value, out usageCount);
+                            int paidQty = usageCount - setting.UsageCountLimit;
+                            decimal priceMonth = paidQty > 0 ? paidQty * setting.Price : 0;
+                            monthlySum += priceMonth;
+                            row[setting.ShortName] = usageCount;
+                        }
+                        row["MonthlyBillable"] = monthlySum;
+                        row["CreditCardStatus"] = inst.CreditCardStatus.ToString();
+                        row["HowYouHearAboutUs"] = org.HowYouHearAboutUs;
+                        dt.Rows.Add(row);
                     }
-                    row["MonthlyBillable"] = monthlySum;
-                    row["CreditCardStatus"] = inst.CreditCardStatus.ToString();
-                    row["HowYouHearAboutUs"] = org.HowYouHearAboutUs;
-                    dt.Rows.Add(row);
                 }
             }
 

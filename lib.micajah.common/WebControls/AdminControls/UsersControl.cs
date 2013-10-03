@@ -594,17 +594,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void OnLoad(EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                if (!GroupProvider.GroupsExist)
-                {
-                    MasterPage.Message = Resources.UsersControl_NoGroupError_Message;
-                    MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.UsersControl_NoGroupError_Description, CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.GroupsPageVirtualPath));
-                    UpdatePanel1.Visible = false;
-                    return;
-                }
-            }
-
             m_UserContext = UserContext.Current;
 
             base.OnLoad(e);

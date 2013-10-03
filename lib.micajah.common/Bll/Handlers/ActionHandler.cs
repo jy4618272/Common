@@ -61,7 +61,10 @@ namespace Micajah.Common.Bll.Handlers
             if (action != null)
             {
                 if (action.ActionId == ActionProvider.SettingsDiagnosticPageActionId)
-                    accessDenied = ActionProvider.AccessDeniedToSettingsDiagnosticPage();
+                {
+                    UserContext user = UserContext.Current;
+                    accessDenied = (!(SettingProvider.GroupSettingsExist && (user.GroupIdList.Count > 0)));
+                }
                 else if ((action.ActionId == ActionProvider.SetupEntitiesPageActionId)
                     || (action.ActionId == ActionProvider.EntitiesFieldsPageActionId)
                     || (action.ActionId == ActionProvider.EntityFieldsPageActionId)

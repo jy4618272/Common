@@ -193,11 +193,7 @@ namespace Micajah.Common.Bll.Providers
             }
 
             if (!string.IsNullOrEmpty(domain))
-            {
                 EmailSuffixProvider.InsertEmailSuffixName(organizationId, null, ref domain);
-
-                org.EmailSuffixes = domain;
-            }
 
             RaiseOrganizationInserted(org);
 
@@ -351,11 +347,7 @@ namespace Micajah.Common.Bll.Providers
             Organization organization = CreateOrganization(row);
 
             if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
-            {
                 EmailSuffixProvider.UpdateEmailSuffixName(organizationId, null, ref emailSuffixes);
-
-                organization.EmailSuffixes = emailSuffixes;
-            }
 
             RemoveConnectionStringFromCache(organizationId);
             RemoveWebsiteIdFromCache(organizationId);
@@ -566,7 +558,7 @@ namespace Micajah.Common.Bll.Providers
             OrganizationCollection coll = new OrganizationCollection();
             if (table != null)
             {
-                foreach (MasterDataSet.OrganizationRow row in table.Rows)
+                foreach (MasterDataSet.OrganizationRow row in table)
                 {
                     coll.Add(CreateOrganization(row));
                 }
@@ -754,6 +746,54 @@ namespace Micajah.Common.Bll.Providers
         public static Organization GetOrganization(Guid organizationId)
         {
             return CreateOrganization(GetOrganizationRow(organizationId));
+        }
+
+        /// <summary>
+        /// Returns an first organization in which the specified setting with specified value exists.
+        /// </summary>
+        /// <param name="shortName">The short name of the setting to search for.</param>
+        /// <param name="value">The value of the setting to search for.</param>
+        /// <returns>The Micajah.Common.Bll.Organization object that represents the first organization in which the specified setting with specified value exists;</returns>
+        public static Organization GetOrganizationBySettingValue(string shortName, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                foreach (MasterDataSet.OrganizationRow row in GetOrganizations())
+                {
+                    SettingCollection settings = SettingProvider.GetOrganizationSettings(row.OrganizationId);
+                    Setting setting = settings.FindByShortName(shortName);
+
+                    if ((setting != null) && (string.Compare(value, setting.Value, StringComparison.Ordinal) == 0))
+                        return CreateOrganization(row);
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the organizations in which the specified setting with specified value exists.
+        /// </summary>
+        /// <param name="shortName">The short name of the setting to search for.</param>
+        /// <param name="value">The value of the setting to search for.</param>
+        /// <returns>The Micajah.Common.Bll.OrganizationCollection object that represents the collection of the organizations in which the specified setting with specified value exists.</returns>
+        public static OrganizationCollection GetOrganizationsBySettingValue(string shortName, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                OrganizationCollection coll = new OrganizationCollection();
+
+                foreach (MasterDataSet.OrganizationRow row in GetOrganizations())
+                {
+                    SettingCollection settings = SettingProvider.GetOrganizationSettings(row.OrganizationId);
+                    Setting setting = settings.FindByShortName(shortName);
+
+                    if ((setting != null) && (string.Compare(value, setting.Value, StringComparison.Ordinal) == 0))
+                        coll.Add(CreateOrganization(row));
+                }
+
+                return coll;
+            }
+            return null;
         }
 
         /// <summary>
@@ -1202,6 +1242,7 @@ namespace Micajah.Common.Bll.Providers
                 RemoveWebsiteIdFromCache(organizationId);
                 RemoveOrganizationFromCache(organizationId);
                 SettingProvider.RemoveOrganizationSettingsValuesFromCache(organizationId);
+                SettingProvider.RemoveOrganizationEmailSettingsFromCache(organizationId);
                 CustomUrlProvider.RemoveOrganizationCustomUrlFromCache(organizationId);
                 ResourceProvider.RemoveOrganizationLogoImageUrlFromCache(organizationId);
             }

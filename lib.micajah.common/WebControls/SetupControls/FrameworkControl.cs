@@ -26,7 +26,6 @@ namespace Micajah.Common.WebControls.SetupControls
         protected Label DbNeedUpgradeLabel;
         protected Label DbNeedUpgradeNotesLabel;
         protected LinkButton UpgradeLink;
-        protected Label TitleLabel2;
         protected CommonGridView AssemblyList;
 
         private bool m_IsFrameworkAdministrator;
@@ -37,7 +36,6 @@ namespace Micajah.Common.WebControls.SetupControls
 
         private void LoadResources()
         {
-            TitleLabel2.Text = Resources.FrameworkControl_TitleLabel2_Text;
             TitleLabel3.Text = Resources.FrameworkControl_TitleLabel3_Text;
 
             BaseControl.LoadResources(AssemblyList, this.GetType().BaseType.Name);

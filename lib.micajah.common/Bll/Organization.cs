@@ -1,10 +1,6 @@
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
 using System.Text;
 using System.Web.UI.WebControls;
 
@@ -42,12 +38,6 @@ namespace Micajah.Common.Bll
         private bool m_Trial;
         private bool m_Beta;
         private DateTime? m_CreatedTime;
-        private SettingCollection m_Settings;
-        private InstanceCollection m_Instances;
-        private EmailElement m_EmailSettings;
-        private string m_EmailSuffixes;
-        private Collection<string> m_EmailSuffixesList;
-        private string m_CustomStyleSheet;
         private bool m_Deleted;
         private bool m_Visible;
         private string m_Street;
@@ -57,11 +47,6 @@ namespace Micajah.Common.Bll
         private string m_PostalCode;
         private string m_Country;
         private string m_Currency;
-
-        // The objects which are used to synchronize access to the cached objects.
-        private object m_SettingsSyncRoot = new object();
-        private object m_EmailSettingsSyncRoot = new object();
-        private object m_EmailSuffixSyncRoot = new object();
 
         #endregion
 
@@ -93,38 +78,6 @@ namespace Micajah.Common.Bll
             m_Country = string.Empty;
             m_Currency = string.Empty;
             HowYouHearAboutUs = string.Empty;
-        }
-
-        #endregion
-
-        #region Internal Properties
-
-        internal string CustomStyleSheet
-        {
-            get
-            {
-                if (m_CustomStyleSheet == null)
-                {
-                    m_CustomStyleSheet = string.Empty;
-                    Setting setting = this.Settings.FindBySettingId(SettingProvider.CustomStyleSheetSettingId);
-                    if (setting != null)
-                    {
-                        if (!Support.StringIsNullOrEmpty(setting.Value))
-                            m_CustomStyleSheet = setting.Value;
-                    }
-                }
-                return m_CustomStyleSheet;
-            }
-            set
-            {
-                Setting setting = this.Settings.FindBySettingId(SettingProvider.CustomStyleSheetSettingId);
-                if (setting != null)
-                {
-                    setting.Value = value;
-                    this.Settings.UpdateValues(this.OrganizationId);
-                    m_CustomStyleSheet = null;
-                }
-            }
         }
 
         #endregion
@@ -284,35 +237,6 @@ namespace Micajah.Common.Bll
         }
 
         /// <summary>
-        /// Gets or sets the email suffixes for the organization.
-        /// </summary>
-        public string EmailSuffixes
-        {
-            get
-            {
-                EnsureEmailSuffixesIsLoaded();
-                return m_EmailSuffixes;
-            }
-            set
-            {
-                m_EmailSuffixes = value;
-                m_EmailSuffixesList = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the list of email suffixes for the organization.
-        /// </summary>
-        public Collection<string> EmailSuffixesList
-        {
-            get
-            {
-                EnsureEmailSuffixesIsLoaded();
-                return m_EmailSuffixesList;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the expiration date and time of the organization.
         /// </summary>
         public DateTime? ExpirationTime
@@ -382,57 +306,6 @@ namespace Micajah.Common.Bll
         {
             get { return m_CreatedTime; }
             set { m_CreatedTime = value; }
-        }
-
-        /// <summary>
-        /// Gets a collection that contains the organization level settings.
-        /// </summary>
-        public SettingCollection Settings
-        {
-            get
-            {
-                if (m_Settings == null)
-                {
-                    lock (m_SettingsSyncRoot)
-                    {
-                        if (m_Settings == null)
-                            m_Settings = SettingProvider.GetOrganizationSettings(OrganizationId);
-                    }
-                }
-                return m_Settings;
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection that contains the organization instances.
-        /// </summary>
-        public InstanceCollection Instances
-        {
-            get
-            {
-                if (m_Instances == null) m_Instances = InstanceProvider.GetInstances(this.OrganizationId, true);
-                return m_Instances;
-            }
-        }
-
-        public EmailElement EmailSettings
-        {
-            get
-            {
-                if (m_EmailSettings == null)
-                {
-                    lock (m_EmailSettingsSyncRoot)
-                    {
-                        if (m_EmailSettings == null)
-                        {
-                            EmailElement settings = new EmailElement();
-                            SettingProvider.FillSettingsClass(settings, this.Settings);
-                            m_EmailSettings = settings;
-                        }
-                    }
-                }
-                return m_EmailSettings;
-            }
         }
 
         /// <summary>
@@ -582,42 +455,6 @@ namespace Micajah.Common.Bll
         public static bool operator >(Organization organization1, Organization organization2)
         {
             return (organization1.CompareTo(organization2) > 0);
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void EnsureEmailSuffixesIsLoaded()
-        {
-            if (m_EmailSuffixesList == null)
-            {
-                lock (m_EmailSuffixSyncRoot)
-                {
-                    if (m_EmailSuffixesList == null)
-                    {
-                        m_EmailSuffixesList = new Collection<string>();
-
-                        if (m_EmailSuffixes == null)
-                        {
-                            DataTable table = EmailSuffixProvider.GetEmailSuffixes(this.OrganizationId);
-                            if (table.Rows.Count > 0)
-                                m_EmailSuffixes = (string)table.Rows[0]["EmailSuffixName"];
-                            else
-                                m_EmailSuffixes = string.Empty;
-                        }
-
-                        if (!string.IsNullOrEmpty(m_EmailSuffixes))
-                        {
-                            foreach (string suffix in m_EmailSuffixes.Split(','))
-                            {
-                                string val = suffix.Trim();
-                                if (val.Length > 0) m_EmailSuffixesList.Add(val);
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         #endregion

@@ -917,7 +917,7 @@ namespace Micajah.Common.Security
                 {
                     if (userGroupIdList.Count == 0)
                         throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_NoGroups, newOrganization.Name));
-                    else if (newOrganization.Instances.Count == 0)
+                    else if (InstanceProvider.GetInstances(newOrganization.OrganizationId, false).Count == 0)
                         throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoActiveInstances, newOrganization.Name));
                 }
             }

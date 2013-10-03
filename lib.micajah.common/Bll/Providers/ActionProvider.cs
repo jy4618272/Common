@@ -366,11 +366,6 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
-        internal static bool AccessDeniedToSettingsDiagnosticPage()
-        {
-            return (!(SettingProvider.GroupSettingsExist && GroupProvider.GroupsExist));
-        }
-
         internal static Action CreateAction(ConfigurationDataSet.ActionRow row)
         {
             if (row != null)
