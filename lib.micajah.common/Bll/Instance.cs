@@ -1,5 +1,4 @@
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.Dal;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,7 +20,6 @@ namespace Micajah.Common.Bll
         private Guid m_OrganizationId;
         private string m_Name;
         private string m_Description;
-        private Guid? m_LogoImageResourceId;
         private bool m_EnableSignupUser;
         private string m_ExternalId;
         private string m_WorkingDays;
@@ -30,7 +28,6 @@ namespace Micajah.Common.Bll
         private bool m_Trial;
         private bool m_Beta;
         private DateTime? m_CreatedTime;
-        private bool m_LogoImageResourceIdLoaded;
         private SettingCollection m_Settings;
         private string m_EmailSuffixes;
         private BillingPlan m_BillingPlan;
@@ -110,36 +107,6 @@ namespace Micajah.Common.Bll
         {
             get { return m_Description; }
             set { m_Description = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the identifier of the logo image.
-        /// </summary>
-        public Guid? LogoImageResourceId
-        {
-            get
-            {
-                if (!m_LogoImageResourceIdLoaded)
-                {
-                    MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow("InstanceLogo", m_InstanceId.ToString("N"));
-                    if (resourceRow != null) m_LogoImageResourceId = resourceRow.ResourceId;
-                    m_LogoImageResourceIdLoaded = true;
-                }
-                return m_LogoImageResourceId;
-            }
-            set
-            {
-                m_LogoImageResourceId = value;
-                m_LogoImageResourceIdLoaded = false;
-            }
-        }
-
-        /// <summary>
-        /// Gets the URL of the logo image.
-        /// </summary>
-        public string LogoImageUrl
-        {
-            get { return (this.LogoImageResourceId.HasValue ? ResourceProvider.GetResourceUrl(this.LogoImageResourceId.Value, 300, 45, true) : null); }
         }
 
         /// <summary>

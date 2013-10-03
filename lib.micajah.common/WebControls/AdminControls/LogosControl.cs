@@ -1,4 +1,5 @@
 using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
@@ -46,10 +47,9 @@ namespace Micajah.Common.WebControls.AdminControls
             dt.Columns.Add("Logo");
             dt.Columns.Add("ObjectType");
 
-            UserContext userContext = UserContext.Current;
-
-            Organization org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(userContext.SelectedOrganizationId);
-            InstanceCollection instances = Micajah.Common.Bll.Providers.InstanceProvider.GetInstances(userContext.SelectedOrganizationId, false);
+            UserContext user = UserContext.Current;
+            Organization org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(user.SelectedOrganizationId);
+            InstanceCollection instances = Micajah.Common.Bll.Providers.InstanceProvider.GetInstances(user.SelectedOrganizationId, false);
 
             if (instances.Count == 1)
             {
@@ -57,20 +57,20 @@ namespace Micajah.Common.WebControls.AdminControls
                 dr["ObjectId"] = instances[0].InstanceId;
                 dr["Name"] = instances[0].Name;
                 dr["Type"] = Resources.LogosControl_List_InstanceType_Text;
-                dr["Logo"] = instances[0].LogoImageUrl;
-                dr["ObjectType"] = "InstanceLogo";
+                dr["Logo"] = ResourceProvider.GetInstanceLogoImageUrl(instances[0].InstanceId);
+                dr["ObjectType"] = ResourceProvider.InstanceLogoLocalObjectType;
                 dt.Rows.Add(dr);
             }
             else
             {
-                if (UserContext.Current.IsInRole("OrgAdmin"))
+                if (user.IsOrganizationAdministrator)
                 {
                     DataRow dr = dt.NewRow();
                     dr["ObjectId"] = org.OrganizationId;
                     dr["Name"] = org.Name;
                     dr["Type"] = Resources.LogosControl_List_OrganisationType_Text;
-                    dr["Logo"] = org.LogoImageUrl;
-                    dr["ObjectType"] = "OrganizationLogo";
+                    dr["Logo"] = ResourceProvider.GetOrganizationLogoImageUrl(org.OrganizationId);
+                    dr["ObjectType"] = ResourceProvider.OrganizationLogoLocalObjectType;
                     dt.Rows.Add(dr);
                 }
 
@@ -80,8 +80,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     dr["ObjectId"] = instance.InstanceId;
                     dr["Name"] = instance.Name;
                     dr["Type"] = Resources.LogosControl_List_InstanceType_Text;
-                    dr["Logo"] = instance.LogoImageUrl;
-                    dr["ObjectType"] = "InstanceLogo";
+                    dr["Logo"] = ResourceProvider.GetInstanceLogoImageUrl(instance.InstanceId);
+                    dr["ObjectType"] = ResourceProvider.InstanceLogoLocalObjectType;
                     dt.Rows.Add(dr);
                 }
 
@@ -135,16 +135,15 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void EditForm_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
         {
-
         }
 
         protected void EditForm_DataBinding(object sender, EventArgs e)
         {
             if (List.Rows.Count == 1)
                 EditForm.ObjectName = Resources.LogosControl_EditForm_ObjectName;
-            else if (this.SelectedObjectType == "OrganizationLogo")
+            else if (this.SelectedObjectType == ResourceProvider.OrganizationLogoLocalObjectType)
                 EditForm.ObjectName = Resources.LogosControl_EditForm_ObjectName_Organzation;
-            else
+            else if (this.SelectedObjectType == ResourceProvider.InstanceLogoLocalObjectType)
                 EditForm.ObjectName = Resources.LogosControl_EditForm_ObjectName_Instance;
         }
 
@@ -227,7 +226,11 @@ namespace Micajah.Common.WebControls.AdminControls
                         logoImageUpload.RejectChanges();
                         this.BackToList();
                     }
-                    UserContext.RefreshCurrent();
+
+                    if (this.SelectedObjectType == ResourceProvider.OrganizationLogoLocalObjectType)
+                        ResourceProvider.RemoveOrganizationLogoImageUrlFromCache(this.SelectedObjectId);
+                    else if (this.SelectedObjectType == ResourceProvider.InstanceLogoLocalObjectType)
+                        ResourceProvider.RemoveInstanceLogoImageUrlFromCache(this.SelectedObjectId);
                 }
             }
         }

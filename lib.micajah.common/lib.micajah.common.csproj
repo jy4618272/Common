@@ -1952,9 +1952,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Logos.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Logos.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Logos.ascx" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v91.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v92.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v93.sql" />

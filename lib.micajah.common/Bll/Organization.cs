@@ -1,6 +1,5 @@
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Dal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +24,6 @@ namespace Micajah.Common.Bll
         private string m_Name;
         private string m_Description;
         private string m_WebsiteUrl;
-        private Guid? m_LogoImageResourceId;
         private Guid? m_DatabaseId;
         private int? m_FiscalYearStartMonth;
         private int? m_FiscalYearStartDay;
@@ -44,7 +42,6 @@ namespace Micajah.Common.Bll
         private bool m_Trial;
         private bool m_Beta;
         private DateTime? m_CreatedTime;
-        private bool m_LogoImageResourceIdLoaded;
         private SettingCollection m_Settings;
         private InstanceCollection m_Instances;
         private EmailElement m_EmailSettings;
@@ -186,32 +183,6 @@ namespace Micajah.Common.Bll
         {
             get { return m_WebsiteUrl; }
             set { m_WebsiteUrl = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the identifier of the logo image.
-        /// </summary>
-        public Guid? LogoImageResourceId
-        {
-            get
-            {
-                if (!m_LogoImageResourceIdLoaded)
-                {
-                    MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow("OrganizationLogo", m_OrganizationId.ToString("N"));
-                    if (resourceRow != null) m_LogoImageResourceId = resourceRow.ResourceId;
-                    m_LogoImageResourceIdLoaded = true;
-                }
-                return m_LogoImageResourceId;
-            }
-            set { m_LogoImageResourceId = value; }
-        }
-
-        /// <summary>
-        /// Gets the URL of the logo image.
-        /// </summary>
-        public string LogoImageUrl
-        {
-            get { return (this.LogoImageResourceId.HasValue ? ResourceProvider.GetResourceUrl(this.LogoImageResourceId.Value, 300, 45, true) : null); }
         }
 
         /// <summary>

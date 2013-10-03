@@ -609,7 +609,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (inst != null)
                     {
-                        headerLogoImageUrl = inst.LogoImageUrl;
+                        headerLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(inst.InstanceId);
 
                         if (org.Instances.Count > 1)
                             headerLogoText = inst.Name;
@@ -617,7 +617,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 }
 
                 if (string.IsNullOrEmpty(headerLogoImageUrl))
-                    headerLogoImageUrl = org.LogoImageUrl;
+                    headerLogoImageUrl = ResourceProvider.GetOrganizationLogoImageUrlFromCache(org.OrganizationId);
 
                 if (string.IsNullOrEmpty(headerLogoText))
                     headerLogoText = org.Name;

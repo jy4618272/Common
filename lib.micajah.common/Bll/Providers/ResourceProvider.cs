@@ -1,4 +1,5 @@
-﻿using Micajah.Common.Configuration;
+﻿using Micajah.Common.Application;
+using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.Pages;
@@ -97,6 +98,12 @@ namespace Micajah.Common.Bll.Providers
         internal const string DetailMenuPageVirtualPath = VirtualRootShortPath + "detailmenu.aspx";
         internal const string ImageUploadPageVirtualPath = VirtualRootShortPath + "imageupload.aspx";
         internal const string SupportPageVirtualPath = VirtualRootShortPath + "support.aspx";
+
+        internal const string OrganizationLogoLocalObjectType = "OrganizationLogo";
+        internal const string InstanceLogoLocalObjectType = "InstanceLogo";
+
+        private const string OrganizationLogoImageUrlKeyFormat = "mc.OrganizationLogoImageUrl.{0:N}";
+        private const string InstanceLogoImageUrlKeyFormat = "mc.InstanceLogoImageUrl.{0:N}";
 
         #endregion
 
@@ -423,6 +430,52 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Internal Methods
+
+        #region Cache Methods
+
+        internal static string GetOrganizationLogoImageUrlFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationLogoImageUrlKeyFormat, organizationId);
+            string url = CacheManager.Current.Get(key) as string;
+
+            if (url == null)
+            {
+                url = GetOrganizationLogoImageUrl(organizationId);
+
+                CacheManager.Current.PutWithDefaultTimeout(key, url);
+            }
+
+            return url;
+        }
+
+        internal static string GetInstanceLogoImageUrlFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceLogoImageUrlKeyFormat, instanceId);
+            string url = CacheManager.Current.Get(key) as string;
+
+            if (url == null)
+            {
+                url = GetInstanceLogoImageUrl(instanceId);
+
+                CacheManager.Current.PutWithDefaultTimeout(key, url);
+            }
+
+            return url;
+        }
+
+        internal static void RemoveOrganizationLogoImageUrlFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationLogoImageUrlKeyFormat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        internal static void RemoveInstanceLogoImageUrlFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceLogoImageUrlKeyFormat, instanceId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
 
         internal static string GetActiveOrganizationUrl(string returnUrl, bool anotherOrganizationIsRequired)
         {
@@ -771,6 +824,24 @@ namespace Micajah.Common.Bll.Providers
             }
             list.Sort();
             return list;
+        }
+
+        public static string GetOrganizationLogoImageUrl(Guid organizationId)
+        {
+            MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow(OrganizationLogoLocalObjectType, organizationId.ToString("N"));
+            if (resourceRow != null)
+                return GetResourceUrl(resourceRow.ResourceId, 300, 45, true);
+
+            return string.Empty;
+        }
+
+        public static string GetInstanceLogoImageUrl(Guid instanceId)
+        {
+            MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow(InstanceLogoLocalObjectType, instanceId.ToString("N"));
+            if (resourceRow != null)
+                return GetResourceUrl(resourceRow.ResourceId, 300, 45, true);
+
+            return string.Empty;
         }
 
         /// <summary>

@@ -1004,6 +1004,7 @@ namespace Micajah.Common.Bll.Providers
                 RemoveInstanceFromCache(instanceId);
                 SettingProvider.RemoveInstanceSettingsValuesFromCache(instanceId);
                 CustomUrlProvider.RemoveInstanceCustomUrlFromCache(instanceId);
+                ResourceProvider.RemoveInstanceLogoImageUrlFromCache(instanceId);
 
                 user.Refresh();
             }

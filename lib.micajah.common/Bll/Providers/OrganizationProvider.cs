@@ -1203,6 +1203,7 @@ namespace Micajah.Common.Bll.Providers
                 RemoveOrganizationFromCache(organizationId);
                 SettingProvider.RemoveOrganizationSettingsValuesFromCache(organizationId);
                 CustomUrlProvider.RemoveOrganizationCustomUrlFromCache(organizationId);
+                ResourceProvider.RemoveOrganizationLogoImageUrlFromCache(organizationId);
             }
         }
 
