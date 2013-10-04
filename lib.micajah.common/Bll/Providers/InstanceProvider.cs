@@ -211,7 +211,7 @@ namespace Micajah.Common.Bll.Providers
             RaiseInstanceInserted(inst, userId, templateInstance);
 
             if (sendNotificationEmail && (!string.IsNullOrEmpty(adminEmail)))
-                UserProvider.SendUserEmail(adminEmail, password, organizationId, Support.ConvertListToString(UserProvider.GetUserGroupIdList(organizationId, userId.Value)), (!string.IsNullOrEmpty(password)), newOrg, (!string.IsNullOrEmpty(password)));
+                UserProvider.SendUserEmail(adminEmail, password, organizationId, Support.ConvertListToString(UserProvider.GetUserGroupIdList(organizationId, userId.Value, true)), (!string.IsNullOrEmpty(password)), newOrg, (!string.IsNullOrEmpty(password)));
 
             return instanceId;
         }

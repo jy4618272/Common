@@ -895,20 +895,21 @@ namespace Micajah.Common.Security
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_OrganizationHasExpired, newOrganization.Name));
 
             Guid userId = this.UserId;
-            if (!WebApplication.LoginProvider.LoginIsActiveInOrganization(userId, organizationId))
+            bool active = false;
+            bool isOrganizationAdministrator = false;
+            bool loginInOrganization = WebApplication.LoginProvider.LoginInOrganization(userId, organizationId, out active, out isOrganizationAdministrator);
+
+            if (!(loginInOrganization && active))
             {
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated
                     , newOrganization.Name, CustomUrlProvider.CreateApplicationUri(WebApplication.LoginProvider.GetLoginUrl(false))));
             }
 
-            bool isOrganizationAdministrator = false;
             ArrayList userGroupIdList = null;
-
             ClientDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
             if (userRow != null)
             {
-                isOrganizationAdministrator = WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId);
-                userGroupIdList = UserProvider.GetUserGroupIdList(organizationId, userId);
+                userGroupIdList = UserProvider.GetUserGroupIdList(organizationId, userId, isOrganizationAdministrator);
 
                 if (!isOrganizationAdministrator)
                 {

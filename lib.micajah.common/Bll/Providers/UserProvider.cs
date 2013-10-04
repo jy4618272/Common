@@ -390,6 +390,21 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
+        internal static ArrayList GetUserGroupIdList(Guid organizationId, Guid userId, bool organizationAdministrator)
+        {
+            ArrayList list = new ArrayList();
+
+            foreach (ClientDataSet.UsersGroupsRow row in GetUserGroups(userId, organizationId))
+            {
+                list.Add(row.GroupId);
+            }
+
+            if (organizationAdministrator)
+                list.Add(Guid.Empty);
+
+            return list;
+        }
+
         internal static bool UserIsInstanceAdministrator(Guid organizationId, Guid instanceId, Guid userId)
         {
             foreach (ClientDataSet.UsersGroupsRow row in GetUsersGroupsByInstanceId(organizationId, instanceId, userId))
@@ -832,17 +847,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The collection that contains the groups identifiers list which the specified user belong to in the specified organization.</returns>
         public static ArrayList GetUserGroupIdList(Guid organizationId, Guid userId)
         {
-            ArrayList list = new ArrayList();
-
-            foreach (ClientDataSet.UsersGroupsRow row in GetUserGroups(userId, organizationId))
-            {
-                list.Add(row.GroupId);
-            }
-
-            if (WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId))
-                list.Add(Guid.Empty);
-
-            return list;
+            return GetUserGroupIdList(organizationId, userId, WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId));
         }
 
         /// <summary>

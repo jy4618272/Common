@@ -1605,6 +1605,23 @@ namespace Micajah.Common.Bll.Providers
             return (GetOrganizationsLoginsDataRow(loginId, organizationId) != null);
         }
 
+        public virtual bool LoginInOrganization(Guid loginId, Guid organizationId, out bool active, out bool organizationAdministrator)
+        {
+            active = false;
+            organizationAdministrator = false;
+
+            DataRow row = GetOrganizationsLoginsDataRow(loginId, organizationId);
+            if (row != null)
+            {
+                active = Convert.ToBoolean(row["Active"], CultureInfo.InvariantCulture);
+                organizationAdministrator = Convert.ToBoolean(row["OrganizationAdministrator"], CultureInfo.CurrentCulture); ;
+
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Verifies that the specified login exists in the specified organization. 
         /// </summary>
