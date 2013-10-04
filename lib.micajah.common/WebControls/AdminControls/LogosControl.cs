@@ -48,8 +48,8 @@ namespace Micajah.Common.WebControls.AdminControls
             dt.Columns.Add("ObjectType");
 
             UserContext user = UserContext.Current;
-            Organization org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(user.SelectedOrganizationId);
-            InstanceCollection instances = Micajah.Common.Bll.Providers.InstanceProvider.GetInstances(user.SelectedOrganizationId, false);
+            Organization org = Micajah.Common.Bll.Providers.OrganizationProvider.GetOrganization(user.OrganizationId);
+            InstanceCollection instances = Micajah.Common.Bll.Providers.InstanceProvider.GetInstances(user.OrganizationId, false);
 
             if (instances.Count == 1)
             {

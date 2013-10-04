@@ -61,10 +61,10 @@ namespace Micajah.Common.WebControls
                 this.Controls.Add(m_ProfileLink);
 
                 string name = string.Empty;
-                if (user.SelectedInstanceId != System.Guid.Empty)
-                    name = user.SelectedInstance.Name;
-                else if (user.SelectedOrganizationId != System.Guid.Empty)
-                    name = user.SelectedOrganization.Name;
+                if (user.InstanceId != System.Guid.Empty)
+                    name = user.Instance.Name;
+                else if (user.OrganizationId != System.Guid.Empty)
+                    name = user.Organization.Name;
 
                 m_RoleLabel = new HtmlGenericControl("div");
                 m_RoleLabel.ID = "RoleLabel";

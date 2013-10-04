@@ -170,7 +170,7 @@ namespace Micajah.Common.Bll.Providers
         {
             ArrayList list = ActionProvider.GetActionIdListByRoleId(roleId);
 
-            foreach (ClientDataSet.GroupsInstancesActionsRow actionRow in GetGroupsInstancesActionsByGroupIdInstanceId(UserContext.Current.SelectedOrganizationId, groupId, instanceId))
+            foreach (ClientDataSet.GroupsInstancesActionsRow actionRow in GetGroupsInstancesActionsByGroupIdInstanceId(UserContext.Current.OrganizationId, groupId, instanceId))
             {
                 Guid actionId = actionRow.ActionId;
                 if (!actionRow.Enabled)
@@ -319,7 +319,7 @@ namespace Micajah.Common.Bll.Providers
         {
             UserContext user = UserContext.Current;
 
-            Guid roleId = GetGroupInstanceRole(user.SelectedOrganizationId, groupId, instanceId);
+            Guid roleId = GetGroupInstanceRole(user.OrganizationId, groupId, instanceId);
 
             if (roleId == Guid.Empty)
                 return;
@@ -327,9 +327,9 @@ namespace Micajah.Common.Bll.Providers
             ArrayList list = ActionProvider.GetActionIdListByRoleId(roleId);
 
             ClientDataSet.GroupsInstancesActionsDataTable giaTable = null;
-            using (GroupsInstancesActionsTableAdapter adapter = new GroupsInstancesActionsTableAdapter(OrganizationProvider.GetConnectionString(user.SelectedOrganizationId)))
+            using (GroupsInstancesActionsTableAdapter adapter = new GroupsInstancesActionsTableAdapter(OrganizationProvider.GetConnectionString(user.OrganizationId)))
             {
-                giaTable = adapter.GetGroupsInstancesActionsByGroupIdInstanceId(user.SelectedOrganizationId, groupId, instanceId);
+                giaTable = adapter.GetGroupsInstancesActionsByGroupIdInstanceId(user.OrganizationId, groupId, instanceId);
 
                 foreach (ClientDataSet.GroupsInstancesActionsRow actionRow in giaTable)
                 {
@@ -503,7 +503,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetGroups()
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
                 return GetGroups(organizationId);
@@ -567,7 +567,7 @@ namespace Micajah.Common.Bll.Providers
                         ClientDataSet.GroupRow row = table.NewGroupRow();
 
                         row.GroupId = Guid.Empty;
-                        row.OrganizationId = UserContext.Current.SelectedOrganizationId;
+                        row.OrganizationId = UserContext.Current.OrganizationId;
                         row.Name = Resources.GroupProvider_OrganizationAdministratorGroupName;
                         row.Description = Resources.GroupProvider_OrganizationAdministratorGroupDescription;
                         row.BuiltIn = true;
@@ -632,7 +632,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.GroupRow GetGroupRow(Guid groupId)
         {
-            using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 ClientDataSet.GroupDataTable table = adapter.GetGroup(groupId);
                 return ((table.Count > 0) ? table[0] : null);
@@ -648,7 +648,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertGroup(string name, string description)
         {
-            return InsertGroup(name, description, UserContext.Current.SelectedOrganizationId, false);
+            return InsertGroup(name, description, UserContext.Current.OrganizationId, false);
         }
 
         /// <summary>
@@ -673,7 +673,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateGroup(Guid groupId, string name, string description)
         {
-            UpdateGroup(groupId, name, description, UserContext.Current.SelectedOrganizationId);
+            UpdateGroup(groupId, name, description, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -713,20 +713,16 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteGroup(Guid groupId)
         {
-            UserContext ctx = UserContext.Current;
-
             ClientDataSet.GroupRow row = GetGroupRow(groupId);
             if (row != null)
             {
                 row.Deleted = true;
 
-                using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(ctx.SelectedOrganizationId)))
+                using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
                 {
                     adapter.Update(row);
                 }
             }
-
-            ctx.Refresh();
         }
 
         /// <summary>
@@ -737,7 +733,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetGroupInstancesRoles(Guid groupId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.GroupsInstancesRolesDataTable table = null;
             using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
@@ -781,7 +777,7 @@ namespace Micajah.Common.Bll.Providers
 
             try
             {
-                Guid organizationId = UserContext.Current.SelectedOrganizationId;
+                Guid organizationId = UserContext.Current.OrganizationId;
                 Instance firstInstance = InstanceProvider.GetFirstInstance();
 
                 ClientDataSet.GroupsInstancesRolesDataTable girTable = GetGroupsInstancesRolesByGroups(organizationId, groupIds);
@@ -831,9 +827,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertGroupInstanceRole(Guid groupId, Guid instanceId, Guid roleId)
         {
-            UserContext user = UserContext.Current;
-            InsertGroupInstanceRole(groupId, instanceId, roleId, user.SelectedOrganizationId);
-            user.Refresh();
+            InsertGroupInstanceRole(groupId, instanceId, roleId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -844,14 +838,10 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteGroupInstanceRoles(Guid groupId, Guid instanceId)
         {
-            UserContext ctx = UserContext.Current;
-
-            using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(ctx.SelectedOrganizationId)))
+            using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 adapter.Delete(groupId, instanceId);
             }
-
-            ctx.Refresh();
         }
 
         /// <summary>

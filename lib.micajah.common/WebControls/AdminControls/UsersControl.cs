@@ -236,7 +236,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (WebApplication.LoginProvider.LoginNameExists(loginName))
                 {
-                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.SelectedOrganizationId))
+                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.OrganizationId))
                     {
                         ErrorDiv.InnerHtml = Resources.UsersControl_ErrorMessage_UserInOrganizationExists;
                         ErrorDiv.Visible = true;
@@ -426,7 +426,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void AppGroupDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
-            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
         }
 
         protected void InvitedUsersListDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
@@ -438,7 +438,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InvitedUsersListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
-            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
         }
 
         protected virtual void InvitedUsersListDataSource_Selected(object sender, ObjectDataSourceStatusEventArgs e)
@@ -483,7 +483,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 checkBoxList.Items.Insert(0, new ListItem(Resources.UsersControl_EditUserActiveForm_Organization, Guid.Empty.ToString()));
 
-                ArrayList list = UserProvider.GetInstanceIdListWhereUserIsInactive((Guid)EditUserActiveForm.DataKey[0], UserContext.Current.SelectedOrganizationId);
+                ArrayList list = UserProvider.GetInstanceIdListWhereUserIsInactive((Guid)EditUserActiveForm.DataKey[0], UserContext.Current.OrganizationId);
                 foreach (ListItem item in checkBoxList.Items)
                 {
                     item.Selected = true;
@@ -520,7 +520,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
 
             CheckBoxList instanceList = EditUserActiveForm.FindControl("InstanceList") as CheckBoxList;
             if (instanceList != null)

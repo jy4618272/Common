@@ -237,7 +237,7 @@ namespace Micajah.Common.Bll
             {
                 actionIdList = user.ActionIdList;
                 isAuthenticated = true;
-                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.SelectedOrganizationId == Guid.Empty));
+                isFrameworkAdmin = (user.IsFrameworkAdministrator && (user.OrganizationId == Guid.Empty));
             }
 
             Action item = action;

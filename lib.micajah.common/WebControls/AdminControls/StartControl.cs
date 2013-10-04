@@ -72,9 +72,9 @@ namespace Micajah.Common.WebControls.AdminControls
                         setting.Value += "," + value;
 
                     if ((ActionProvider.StartPageSettingsLevels & SettingLevels.Instance) == SettingLevels.Instance)
-                        settings.UpdateValues(user.SelectedOrganizationId, user.SelectedInstanceId);
+                        settings.UpdateValues(user.OrganizationId, user.InstanceId);
                     else
-                        settings.UpdateValues(user.SelectedOrganizationId);
+                        settings.UpdateValues(user.OrganizationId);
                 }
             }
         }

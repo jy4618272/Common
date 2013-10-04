@@ -799,7 +799,7 @@ namespace Micajah.Common.Bll.Providers
                         if (user == null)
                             UserProvider.SendChangeLoginEmail(GetEmail(loginId), Guid.Empty, null);
                         else
-                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), user.SelectedOrganizationId, user.Email);
+                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), user.OrganizationId, user.Email);
                     }
                 }
             }
@@ -852,7 +852,7 @@ namespace Micajah.Common.Bll.Providers
                     if (user == null)
                         UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, Guid.Empty, null);
                     else
-                        UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, user.SelectedOrganizationId, user.Email);
+                        UserProvider.SendChangePasswordEmail(GetEmail(loginId), password, user.OrganizationId, user.Email);
                 }
                 return true;
             }

@@ -84,7 +84,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             UserContext user = UserContext.Current;
 
-            Organization org = user.SelectedOrganization;
+            Organization org = user.Organization;
             if (org.FiscalYearStartMonth.HasValue)
                 MonthList.SelectedValue = org.FiscalYearStartMonth.Value.ToString(CultureInfo.InvariantCulture);
             if (org.FiscalYearStartDay.HasValue)
@@ -92,7 +92,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (org.WeekStartsDay.HasValue)
                 WeekStartsDayList.SelectedValue = (org.WeekStartsDay.Value).ToString(CultureInfo.InvariantCulture);
 
-            EmailSuffixes.Text = EmailSuffixProvider.GetEmailSuffixName(user.SelectedOrganizationId);
+            EmailSuffixes.Text = EmailSuffixProvider.GetEmailSuffixName(user.OrganizationId);
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
@@ -124,7 +124,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
         }
 
         #endregion

@@ -55,11 +55,11 @@ namespace Micajah.Common.Bll.Providers
             {
                 StringBuilder sb = new StringBuilder();
                 UserContext user = UserContext.Current;
-                if ((user != null) && (user.SelectedOrganizationId != Guid.Empty))
+                if ((user != null) && (user.OrganizationId != Guid.Empty))
                 {
                     if (!user.IsOrganizationAdministrator)
                     {
-                        foreach (ClientDataSet.InstanceRow instanceRow in GetInstances(user.SelectedOrganizationId))
+                        foreach (ClientDataSet.InstanceRow instanceRow in GetInstances(user.OrganizationId))
                         {
                             if (!user.IsInstanceAdministrator(instanceRow.InstanceId))
                                 sb.AppendFormat(",'{0}'", instanceRow.InstanceId);
@@ -360,7 +360,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static Instance GetFirstInstance()
         {
-            return GetFirstInstance(UserContext.Current.SelectedOrganizationId);
+            return GetFirstInstance(UserContext.Current.OrganizationId);
         }
 
         internal static Instance GetFirstInstance(Guid organizationId)
@@ -502,7 +502,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetInstances()
         {
-            return GetInstances(UserContext.Current.SelectedOrganizationId);
+            return GetInstances(UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -602,8 +602,8 @@ namespace Micajah.Common.Bll.Providers
         public static Instance GetInstance(Guid instanceId)
         {
             UserContext user = UserContext.Current;
-            if (user != null && user.SelectedOrganizationId != Guid.Empty)
-                return GetInstance(instanceId, user.SelectedOrganizationId);
+            if (user != null && user.OrganizationId != Guid.Empty)
+                return GetInstance(instanceId, user.OrganizationId);
             else
                 return null;
         }
@@ -746,9 +746,9 @@ namespace Micajah.Common.Bll.Providers
         public static Guid InsertInstance(string name, string description, bool active, bool beta, string vanityUrl, Guid templateInstanceId)
         {
             UserContext user = UserContext.Current;
-            Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, user.SelectedOrganizationId, user.Email, null, true, false, false, templateInstanceId, null);
+            Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, user.OrganizationId, user.Email, null, true, false, false, templateInstanceId, null);
             if (!string.IsNullOrEmpty(vanityUrl))
-                CustomUrlProvider.InsertCustomUrl(user.SelectedOrganizationId, instanceId, null, vanityUrl.ToLowerInvariant());
+                CustomUrlProvider.InsertCustomUrl(user.OrganizationId, instanceId, null, vanityUrl.ToLowerInvariant());
             return instanceId;
         }
 
@@ -770,7 +770,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertInstance(string name, string description, bool enableSignupUser, string timeZoneId, int timeFormat, int dateFormat, string workingDays, bool active, bool beta, string emailSuffixes, string adminEmail)
         {
-            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.SelectedOrganizationId, adminEmail, null, true, false, false, null, null);
+            return InsertInstance(name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, false, beta, emailSuffixes, UserContext.Current.OrganizationId, adminEmail, null, true, false, false, null, null);
         }
 
         /// <summary>
@@ -813,7 +813,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateInstance(Guid instanceId, string name, string description, bool enableSignupUser, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? beta, string emailSuffixes)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, null, null, null, beta, emailSuffixes, UserContext.Current.SelectedOrganizationId);
+            UpdateInstance(instanceId, name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, null, null, null, beta, emailSuffixes, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -847,7 +847,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateInstance(Guid instanceId, string name, string description, bool? enableSignupUser, string timeZoneId, int? timeFormat, int? dateFormat, string workingDays, bool? active, bool? beta, string emailSuffixes)
         {
-            UpdateInstance(instanceId, name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, null, beta, emailSuffixes, UserContext.Current.SelectedOrganizationId);
+            UpdateInstance(instanceId, name, description, enableSignupUser, null, timeZoneId, timeFormat, dateFormat, workingDays, active, null, null, beta, emailSuffixes, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -943,8 +943,6 @@ namespace Micajah.Common.Bll.Providers
 
             PutInstanceToCache(instance);
 
-            UserContext.RefreshCurrent();
-
             if (raiseEvent)
                 RaiseInstanceUpdated(instance);
         }
@@ -1000,26 +998,24 @@ namespace Micajah.Common.Bll.Providers
         {
             UserContext user = UserContext.Current;
 
-            ClientDataSet.InstanceRow row = GetInstanceRow(user.SelectedOrganizationId, instanceId);
+            ClientDataSet.InstanceRow row = GetInstanceRow(user.OrganizationId, instanceId);
             if (row != null)
             {
                 row.Deleted = true;
 
-                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(user.SelectedOrganizationId)))
+                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(user.OrganizationId)))
                 {
                     adapter.Update(row);
                 }
 
-                GroupProvider.DeleteInstanceAdministratorGroup(user.SelectedOrganizationId);
+                GroupProvider.DeleteInstanceAdministratorGroup(user.OrganizationId);
 
-                EmailSuffixProvider.DeleteEmailSuffixes(user.SelectedOrganizationId, instanceId);
+                EmailSuffixProvider.DeleteEmailSuffixes(user.OrganizationId, instanceId);
 
                 RemoveInstanceFromCache(instanceId);
                 SettingProvider.RemoveInstanceSettingsValuesFromCache(instanceId);
                 CustomUrlProvider.RemoveInstanceCustomUrlFromCache(instanceId);
                 ResourceProvider.RemoveInstanceLogoImageUrlFromCache(instanceId);
-
-                user.Refresh();
             }
         }
 

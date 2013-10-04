@@ -209,7 +209,7 @@ namespace Micajah.Common.WebControls.AdminControls
             m_InstanceList = sender as ComboBox;
             if (m_InstanceList != null)
             {
-                using (RadComboBoxItem item = new RadComboBoxItem(m_UserContext.SelectedOrganization.Name, string.Empty))
+                using (RadComboBoxItem item = new RadComboBoxItem(m_UserContext.Organization.Name, string.Empty))
                 {
                     m_InstanceList.Items.Insert(0, item);
                 }
@@ -220,20 +220,20 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InstanceListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
         }
 
         protected void EntityListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
         }
 
         protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
 
                 Guid? instanceId = null;
                 if (this.InstanceList != null)
@@ -269,7 +269,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSourceSimpleView_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
         }
 
         protected void EntityDataSourceSimpleView_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
@@ -277,10 +277,10 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e != null)
             {
                 UserContext user = m_UserContext;
-                e.InputParameters["organizationId"] = user.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = user.OrganizationId;
 
-                if (user.SelectedInstanceId != Guid.Empty)
-                    e.InputParameters["instanceId"] = user.SelectedInstanceId;
+                if (user.InstanceId != Guid.Empty)
+                    e.InputParameters["instanceId"] = user.InstanceId;
                 else
                     e.InputParameters["instanceId"] = null;
 
@@ -300,10 +300,10 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 try
                 {
-                    Guid orgId = m_UserContext.SelectedOrganizationId;
+                    Guid orgId = m_UserContext.OrganizationId;
                     Guid? instId = null;
-                    if (m_UserContext.SelectedInstanceId != Guid.Empty)
-                        instId = m_UserContext.SelectedInstanceId;
+                    if (m_UserContext.InstanceId != Guid.Empty)
+                        instId = m_UserContext.InstanceId;
 
                     MasterDataSet.CustomUrlRow row = null;
 
@@ -397,11 +397,11 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 MasterDataSet.CustomUrlRow row = null;
 
-                if (m_UserContext.SelectedInstanceId != Guid.Empty)
-                    row = CustomUrlProvider.GetCustomUrl(m_UserContext.SelectedOrganizationId, m_UserContext.SelectedInstanceId);
+                if (m_UserContext.InstanceId != Guid.Empty)
+                    row = CustomUrlProvider.GetCustomUrl(m_UserContext.OrganizationId, m_UserContext.InstanceId);
 
                 if (row == null)
-                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(m_UserContext.SelectedOrganizationId);
+                    row = CustomUrlProvider.GetCustomUrlByOrganizationId(m_UserContext.OrganizationId);
 
                 if (row != null)
                     VanityUrlTextbox.Text = row.PartialCustomUrl.ToLowerInvariant();

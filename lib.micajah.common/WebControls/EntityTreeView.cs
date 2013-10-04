@@ -365,7 +365,7 @@ namespace Micajah.Common.WebControls
                 Entity entity = EntityFieldProvider.Entities[EntityId.ToString()];
                 Guid? instanceId = new Guid?();
                 if (entity.HierarchyStartLevel == EntityLevel.Instance)
-                    instanceId = new Guid?(UserContext.Current.SelectedInstanceId);
+                    instanceId = new Guid?(UserContext.Current.InstanceId);
                 ClientDataSet.EntityNodeDataTable dt = new ClientDataSet.EntityNodeDataTable();
                 if (UserContext.Current != null)
                 {
@@ -375,7 +375,7 @@ namespace Micajah.Common.WebControls
                     base.DataFieldParentID = dt.ParentEntityNodeIdColumn.ColumnName;
                     base.DataTextField = dt.NameColumn.ColumnName;
                     base.DataValueField = dt.EntityNodeIdColumn.ColumnName;
-                    this.DataSource = EntityNodeProvider.GetEntityNodesTree(UserContext.Current.SelectedOrganizationId, instanceId, EntityId, entity.Name);
+                    this.DataSource = EntityNodeProvider.GetEntityNodesTree(UserContext.Current.OrganizationId, instanceId, EntityId, entity.Name);
                     this.DataBind();
                     if (this.Nodes.Count > 0)
                     {
@@ -392,7 +392,7 @@ namespace Micajah.Common.WebControls
                 }
             }
 
-            ClientDataSet.EntityNodesRelatedEntityNodesDataTable t = EntityNodeProvider.GetAllEntityNodesRelatedEntityNodes(UserContext.Current.SelectedOrganizationId, EntityNodeId, EntityId);
+            ClientDataSet.EntityNodesRelatedEntityNodesDataTable t = EntityNodeProvider.GetAllEntityNodesRelatedEntityNodes(UserContext.Current.OrganizationId, EntityNodeId, EntityId);
             RadTreeNode rtn;
             foreach (ClientDataSet.EntityNodesRelatedEntityNodesRow row in t.Rows)
             {
@@ -430,7 +430,7 @@ namespace Micajah.Common.WebControls
 
         public void SaveTree()
         {
-            EntityNodeProvider.DeleteAllEntityNodesRelatedEntityNodes(UserContext.Current.SelectedOrganizationId, EntityNodeId, EntityId);
+            EntityNodeProvider.DeleteAllEntityNodesRelatedEntityNodes(UserContext.Current.OrganizationId, EntityNodeId, EntityId);
             RelationType rt;
             foreach (RadTreeNode rtn in this.CheckedNodes)
             {
@@ -441,7 +441,7 @@ namespace Micajah.Common.WebControls
                 else
                     rt = RelationType.Checked;
 
-                EntityNodeProvider.InsertEntityNodesRelatedEntityNodes(EntityNodeId, new Guid(rtn.Value), EntityId, rt, UserContext.Current.SelectedOrganizationId);
+                EntityNodeProvider.InsertEntityNodesRelatedEntityNodes(EntityNodeId, new Guid(rtn.Value), EntityId, rt, UserContext.Current.OrganizationId);
             }
             if (OnSaved != null)
                 OnSaved(this, new EventArgs());

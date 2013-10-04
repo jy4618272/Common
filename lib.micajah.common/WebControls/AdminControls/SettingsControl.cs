@@ -161,8 +161,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     if (obj == null)
                     {
 
-                        if ((m_UserContext != null) && (m_UserContext.SelectedInstanceId != Guid.Empty))
-                            obj = m_UserContext.SelectedInstanceId;
+                        if ((m_UserContext != null) && (m_UserContext.InstanceId != Guid.Empty))
+                            obj = m_UserContext.InstanceId;
                     }
                 }
 
@@ -228,17 +228,17 @@ namespace Micajah.Common.WebControls.AdminControls
                     switch (this.DisplayedSettingLevel)
                     {
                         case SettingLevels.Organization:
-                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.SelectedOrganizationId, null, true);
+                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.OrganizationId, null, true);
                             break;
                         case SettingLevels.Instance:
-                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.SelectedOrganizationId, this.InstanceId, true);
+                            m_Settings = SettingProvider.GetSettings(((this.Action == null) ? Guid.Empty : m_Action.ActionId), m_UserContext.OrganizationId, this.InstanceId, true);
                             break;
                         case SettingLevels.Group:
                             SettingCollection settings = null;
                             if (this.DiagnoseConflictingSettings)
-                                settings = SettingProvider.GetGroupSettings(m_UserContext.SelectedOrganizationId, this.InstanceId, this.GroupIdList);
+                                settings = SettingProvider.GetGroupSettings(m_UserContext.OrganizationId, this.InstanceId, this.GroupIdList);
                             else if (this.GroupId != Guid.Empty)
-                                settings = SettingProvider.GetGroupSettings(m_UserContext.SelectedOrganizationId, this.InstanceId, this.GroupId, true);
+                                settings = SettingProvider.GetGroupSettings(m_UserContext.OrganizationId, this.InstanceId, this.GroupId, true);
 
                             if (settings.Count > 0)
                             {
@@ -561,18 +561,16 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 case SettingLevels.Organization:
                     if (this.Action != null)
-                        settings.UpdateValues(m_UserContext.SelectedOrganizationId);
+                        settings.UpdateValues(m_UserContext.OrganizationId);
                     break;
                 case SettingLevels.Instance:
                     if (this.Action != null)
-                        settings.UpdateValues(m_UserContext.SelectedOrganizationId, m_UserContext.SelectedInstanceId);
+                        settings.UpdateValues(m_UserContext.OrganizationId, m_UserContext.InstanceId);
                     break;
                 case SettingLevels.Group:
-                    settings.UpdateValues(m_UserContext.SelectedOrganizationId, this.InstanceId, this.GroupId);
+                    settings.UpdateValues(m_UserContext.OrganizationId, this.InstanceId, this.GroupId);
                     break;
             }
-
-            m_UserContext.Refresh();
 
             if (this.ValuesUpdated != null)
                 this.ValuesUpdated(this, EventArgs.Empty);
@@ -631,7 +629,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     UserContext user = UserContext.Current;
                     if (user != null)
                     {
-                        if (user.SelectedInstanceId == Guid.Empty)
+                        if (user.InstanceId == Guid.Empty)
                             Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery));
                     }
                 }

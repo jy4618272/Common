@@ -86,7 +86,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                if (m_OrgId == Guid.Empty) m_OrgId = UserContext.Current.SelectedOrganizationId;
+                if (m_OrgId == Guid.Empty) m_OrgId = UserContext.Current.OrganizationId;
                 return m_OrgId;
             }
         }
@@ -95,7 +95,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                if (m_InstId == Guid.Empty) m_InstId = UserContext.Current.SelectedInstanceId;
+                if (m_InstId == Guid.Empty) m_InstId = UserContext.Current.InstanceId;
                 return m_InstId;
             }
         }
@@ -122,7 +122,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             get
             {
-                return UserContext.Current.SelectedInstance.BillingPlan;
+                return UserContext.Current.Instance.BillingPlan;
             }
         }
 
@@ -182,7 +182,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 UserContext user = UserContext.Current;
                 if (user != null)
                 {
-                    if (user.SelectedInstanceId == Guid.Empty)
+                    if (user.InstanceId == Guid.Empty)
                         Response.Redirect(ResourceProvider.GetActiveInstanceUrl(Request.Url.PathAndQuery, false));
                 }
             }
@@ -352,25 +352,25 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (TotalAmount > 0)
                 {
                     lBillingPlanName.Text = "$" + TotalAmount.ToString("0.00");
-                    if (CurrentBillingPlan == BillingPlan.Free) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Paid);
+                    if (CurrentBillingPlan == BillingPlan.Free) InstanceProvider.UpdateInstance(UserContext.Current.Instance, BillingPlan.Paid);
                 }
                 else
                 {
                     lBillingPlanName.Text = "FREE";
-                    if (CurrentBillingPlan == BillingPlan.Paid) InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, BillingPlan.Free);
+                    if (CurrentBillingPlan == BillingPlan.Paid) InstanceProvider.UpdateInstance(UserContext.Current.Instance, BillingPlan.Free);
                 }
             }
         }
 
         private void InitBillingControls(bool updateUsage)
         {
-            DateTime? _expDate = UserContext.Current.SelectedOrganization.ExpirationTime;
+            DateTime? _expDate = UserContext.Current.Organization.ExpirationTime;
 
             ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(Chargify, OrganizationId, InstanceId);
             if (_custSubscr != null && _custSubscr.CreditCard != null)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
-                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.SelectedInstance);
+                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.Instance);
                 TotalAmount = m_TotalSum;
                 SubscriptionId = _custSubscr.SubscriptionID;
                 lCCStatus.Text = "Credit Card Registered and " + _custSubscr.State.ToString() + ".";
@@ -473,7 +473,7 @@ namespace Micajah.Common.WebControls.AdminControls
                                  " proccessed successfully! You will receive confirmation email.";
             UserContext usr = UserContext.Current;
             string _usrFullName = usr.FirstName + " " + usr.LastName;
-            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) + _usrFullName + " from " + usr.SelectedOrganization.Name + " " + usr.SelectedInstance.Name + " purchased " + trainingName + ".";
+            string _subject = (!string.IsNullOrEmpty(usr.Title) ? usr.Title + " " : string.Empty) + _usrFullName + " from " + usr.Organization.Name + " " + usr.Instance.Name + " purchased " + trainingName + ".";
             string _body1 = "Hi, " + _usrFullName + "\r\n\r\nYou purchased " +
                             FrameworkConfiguration.Current.WebApplication.Name + " " + trainingName +
                             ".\r\nOur support team will contact with you ASAP to schedule a time when we can do a training for you.\r\n\r\nThanks.";
@@ -579,7 +579,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 settings[settingId].Value = chk.Checked.ToString();
             }
             settings.UpdateValues(OrganizationId, InstanceId);
-            UserContext.Current.Refresh();
+
             this.List_DataBind();
         }
 
@@ -587,7 +587,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (ChargifyProvider.DeleteCustomerSubscription(Chargify, OrganizationId, InstanceId))
             {
-                InstanceProvider.UpdateInstance(UserContext.Current.SelectedInstance, CreditCardStatus.NotRegistered);
+                InstanceProvider.UpdateInstance(UserContext.Current.Instance, CreditCardStatus.NotRegistered);
                 Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=cancel");
             }
             else
@@ -615,16 +615,16 @@ namespace Micajah.Common.WebControls.AdminControls
                     msgStatus.Message = "Can't create Chargify Customer!";
                     _cust = new Customer();
                     _cust.SystemID = _CustSystemId;
-                    _cust.Organization = _uctx.SelectedOrganization.Name + " " + _uctx.SelectedInstance.Name;
+                    _cust.Organization = _uctx.Organization.Name + " " + _uctx.Instance.Name;
                     _cust.Email = _uctx.Email;
                     _cust.FirstName = _uctx.FirstName;
                     _cust.LastName = _uctx.LastName;
                     _cust = Chargify.CreateCustomer(_cust);
                 }
-                else if (_cust.Organization != _uctx.SelectedOrganization.Name + " " + _uctx.SelectedInstance.Name || _cust.Email != _uctx.Email || _cust.FirstName != _uctx.FirstName || _cust.LastName != _uctx.LastName)
+                else if (_cust.Organization != _uctx.Organization.Name + " " + _uctx.Instance.Name || _cust.Email != _uctx.Email || _cust.FirstName != _uctx.FirstName || _cust.LastName != _uctx.LastName)
                 {
                     msgStatus.Message = "Can't update Chargify Customer!";
-                    _cust.Organization = _uctx.SelectedOrganization.Name + " " + _uctx.SelectedInstance.Name;
+                    _cust.Organization = _uctx.Organization.Name + " " + _uctx.Instance.Name;
                     _cust.Email = _uctx.Email;
                     _cust.FirstName = _uctx.FirstName;
                     _cust.LastName = _uctx.LastName;
@@ -693,7 +693,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 return;
             }
 
-            InstanceProvider.UpdateInstance(_uctx.SelectedInstance, CreditCardStatus.Registered);
+            InstanceProvider.UpdateInstance(_uctx.Instance, CreditCardStatus.Registered);
 
             if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value != "0")
             {

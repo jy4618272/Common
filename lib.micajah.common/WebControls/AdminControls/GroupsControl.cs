@@ -32,7 +32,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (!IsPostBack)
             {
-                if (InstanceProvider.GetInstances(UserContext.Current.SelectedOrganizationId, true).Count == 0)
+                if (InstanceProvider.GetInstances(UserContext.Current.OrganizationId, true).Count == 0)
                 {
                     MasterPage.Message = Resources.GroupsControl_NoInstanceError_Message;
                     MasterPage.MessageDescription = string.Format(CultureInfo.CurrentCulture, Resources.GroupsControl_NoInstanceError_Description, CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.InstancePageVirtualPath));

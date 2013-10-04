@@ -205,7 +205,7 @@ namespace Micajah.Common.Bll
             ClientDataSet.RuleParametersDataTable table = RuleEngineProvider.GetRuleParameters(this.RuleId);
             this.LastUsedUserId = UserContext.Current.UserId;
             RuleEngineProvider.UpdateRuleUses(
-                UserContext.Current.SelectedOrganizationId,
+                UserContext.Current.OrganizationId,
                 this.RuleId,
                 UserContext.Current.UserId,
                 DateTime.UtcNow);
@@ -569,11 +569,11 @@ namespace Micajah.Common.Bll
 
         public static RuleCollection GetRules(Guid ruleEngineId)
         {
-            Guid? instanceId = UserContext.Current.SelectedInstanceId;
+            Guid? instanceId = UserContext.Current.InstanceId;
             if (instanceId.Value == Guid.Empty) instanceId = null;
 
             RuleCollection coll = new RuleCollection();
-            foreach (ClientDataSet.RuleRow row in RuleEngineProvider.GetRules(ruleEngineId, UserContext.Current.SelectedOrganizationId, instanceId))
+            foreach (ClientDataSet.RuleRow row in RuleEngineProvider.GetRules(ruleEngineId, UserContext.Current.OrganizationId, instanceId))
             {
                 coll.Add(Rule.Create(row));
             }

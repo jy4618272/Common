@@ -82,21 +82,21 @@ namespace Micajah.Common.WebControls
                         leftDiv = new HtmlGenericControl("div");
                         ul1 = new HtmlGenericControl("ul");
 
-                        if (m_UserContext.SelectedOrganizationId != Guid.Empty)
+                        if (m_UserContext.OrganizationId != Guid.Empty)
                         {
                             li = new HtmlGenericControl("li");
-                            li.InnerHtml = m_UserContext.SelectedOrganization.Name;
+                            li.InnerHtml = m_UserContext.Organization.Name;
                             ul1.Controls.Add(li);
                         }
 
-                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstanceId != Guid.Empty))
+                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
                         {
                             li = new HtmlGenericControl("li");
                             li.InnerHtml = "|";
                             ul1.Controls.Add(li);
 
                             li = new HtmlGenericControl("li");
-                            li.InnerHtml = m_UserContext.SelectedInstance.Name;
+                            li.InnerHtml = m_UserContext.Instance.Name;
                             ul1.Controls.Add(li);
                         }
 
@@ -159,13 +159,13 @@ namespace Micajah.Common.WebControls
                         leftDiv = new HtmlGenericControl("div");
                         StringBuilder sb = new StringBuilder();
 
-                        if (m_UserContext.SelectedOrganizationId != Guid.Empty)
-                            sb.Append(m_UserContext.SelectedOrganization.Name);
+                        if (m_UserContext.OrganizationId != Guid.Empty)
+                            sb.Append(m_UserContext.Organization.Name);
 
-                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.SelectedInstanceId != Guid.Empty))
+                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
                         {
                             if (sb.Length > 0) sb.Append("<br />");
-                            sb.Append(m_UserContext.SelectedInstance.Name);
+                            sb.Append(m_UserContext.Instance.Name);
                         }
 
                         string roleName = RoleProvider.GetRoleName(m_UserContext.RoleId);

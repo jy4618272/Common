@@ -279,11 +279,11 @@ namespace Micajah.Common.Bll.Providers.OAuth
                 if (user != null)
                 {
                     row.LoginId = user.UserId;
-                    if (user.SelectedOrganizationId != Guid.Empty)
+                    if (user.OrganizationId != Guid.Empty)
                     {
-                        row.OrganizationId = user.SelectedOrganizationId;
-                        if (user.SelectedInstanceId != Guid.Empty)
-                            row.InstanceId = user.SelectedInstanceId;
+                        row.OrganizationId = user.OrganizationId;
+                        if (user.InstanceId != Guid.Empty)
+                            row.InstanceId = user.InstanceId;
                     }
                 }
 

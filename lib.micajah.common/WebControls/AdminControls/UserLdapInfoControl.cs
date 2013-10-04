@@ -86,7 +86,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e != null)
             {
-                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
                 e.InputParameters["loginId"] = this.UserId;
             }
         }
@@ -95,7 +95,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
             e.InputParameters["loginId"] = this.UserId;
             e.InputParameters["firstName"] = (EditForm.Rows[0].Cells[1].Controls[0] as TextBox).Text;
             e.InputParameters["lastName"] = (EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text;
@@ -123,7 +123,7 @@ namespace Micajah.Common.WebControls.AdminControls
             thread.CurrentUICulture = CultureInfo.CurrentUICulture;
             thread.Priority = ThreadPriority.Lowest;
             thread.IsBackground = true;
-            thread.Start(UserContext.Current.SelectedOrganizationId.ToString());
+            thread.Start(UserContext.Current.OrganizationId.ToString());
 
             GetUserGroupsButton.Enabled = false;
         }
@@ -170,7 +170,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsGetUserGroups()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format("GetUserGroups_{0}_{1}", UserContext.Current.SelectedOrganizationId, this.UserId);
+            string processId = string.Format("GetUserGroups_{0}_{1}", UserContext.Current.OrganizationId, this.UserId);
             try
             {
                 GetUserGroupsTimer.Enabled = false;
@@ -219,7 +219,7 @@ namespace Micajah.Common.WebControls.AdminControls
             UserContext user = UserContext.Current;
             if (user != null)
             {
-                WebApplication.LoginProvider.UpdateUserLdapInfo(user.SelectedOrganizationId, this.UserId, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Guid.Empty, string.Empty);
+                WebApplication.LoginProvider.UpdateUserLdapInfo(user.OrganizationId, this.UserId, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Guid.Empty, string.Empty);
                 EmailProvider.DeleteEmails(this.UserId, string.Empty);
                 EditForm.DataBind();
             }
@@ -258,7 +258,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 userContext = arg as UserContext;
                 if (userContext != null)
                 {
-                    processId = string.Format("ReconnectUserToLdap_{0}_{1}", userContext.SelectedOrganizationId, this.UserId);
+                    processId = string.Format("ReconnectUserToLdap_{0}_{1}", userContext.OrganizationId, this.UserId);
 
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
@@ -275,11 +275,11 @@ namespace Micajah.Common.WebControls.AdminControls
                     log = new ApplicationLogger();
                     ldap = new LdapIntegration(log);
                     loginName = WebApplication.LoginProvider.GetLoginName(this.UserId);
-                    ldapUser = LdapInfoProvider.GetLdapUser(userContext.SelectedOrganizationId, loginName);
+                    ldapUser = LdapInfoProvider.GetLdapUser(userContext.OrganizationId, loginName);
                     if (ldapUser != null)
                     {
-                        ldap.CreateUserEmails(LdapInfoProvider.GetLdapUserAltEmails(userContext.SelectedOrganizationId, ldapUser.UserId, false), ldapUser);
-                        WebApplication.LoginProvider.UpdateUserLdapInfo(userContext.SelectedOrganizationId, this.UserId, ldapUser.FirstName, ldapUser.LastName, ldapUser.LdapDomain, ldapUser.LdapDomainFull, ldapUser.LdapUserAlias, ldapUser.LdapUserPrinciple, ldapUser.UserSid, ldapUser.UserId, ldapUser.LdapOUPath);
+                        ldap.CreateUserEmails(LdapInfoProvider.GetLdapUserAltEmails(userContext.OrganizationId, ldapUser.UserId, false), ldapUser);
+                        WebApplication.LoginProvider.UpdateUserLdapInfo(userContext.OrganizationId, this.UserId, ldapUser.FirstName, ldapUser.LastName, ldapUser.LdapDomain, ldapUser.LdapDomainFull, ldapUser.LdapUserAlias, ldapUser.LdapUserPrinciple, ldapUser.UserSid, ldapUser.UserId, ldapUser.LdapOUPath);
                     }
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
                 }
@@ -311,7 +311,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsReconnectUserToLdap()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format("ReconnectUserToLdap_{0}_{1}", UserContext.Current.SelectedOrganizationId, this.UserId);
+            string processId = string.Format("ReconnectUserToLdap_{0}_{1}", UserContext.Current.OrganizationId, this.UserId);
             try
             {
                 ReconnectUserToLdapTimer.Enabled = false;

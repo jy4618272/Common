@@ -64,14 +64,14 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
         }
 
         protected void EntityDataSource_Inserting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+            e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
             e.InputParameters["active"] = true;
         }
 

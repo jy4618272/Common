@@ -342,9 +342,9 @@ namespace Micajah.Common.Application
                                 LoginProvider.SignOut(true, Request.Url.PathAndQuery);
                         }
                     }
-                    else if (!LoginProvider.ValidateSession(user.UserId, http.Session.SessionID))
+                    else if (!customUrlSettings.Enabled)
                     {
-                        if (!customUrlSettings.Enabled)
+                        if (!LoginProvider.ValidateSession(user.UserId, http.Session.SessionID))
                             LoginProvider.SignOut(true, true, true);
                     }
                 }
@@ -407,12 +407,12 @@ namespace Micajah.Common.Application
                         {
                             try
                             {
-                                if (user.SelectedOrganizationId != organizationId)
+                                if (user.OrganizationId != organizationId)
                                 {
                                     user.SelectOrganization(organizationId, setAuthCookie, null, null);
                                     user.SelectInstance(instanceId, setAuthCookie, null);
                                 }
-                                else if (user.SelectedInstanceId != instanceId)
+                                else if (user.InstanceId != instanceId)
                                     user.SelectInstance(instanceId, setAuthCookie, null);
                             }
                             catch (AuthenticationException)
@@ -441,15 +441,15 @@ namespace Micajah.Common.Application
                 {
                     CustomUrlProvider.ParseHost(host, ref organizationId, ref instanceId);
 
-                    if (user.SelectedOrganizationId != Guid.Empty)
+                    if (user.OrganizationId != Guid.Empty)
                     {
-                        if (user.SelectedOrganizationId != organizationId)
+                        if (user.OrganizationId != organizationId)
                             redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                         else
                         {
                             if (instanceId == Guid.Empty)
                             {
-                                if (user.SelectedInstanceId != Guid.Empty)
+                                if (user.InstanceId != Guid.Empty)
                                 {
                                     try
                                     {
@@ -461,7 +461,7 @@ namespace Micajah.Common.Application
                                     }
                                 }
                             }
-                            else if (user.SelectedInstanceId != instanceId)
+                            else if (user.InstanceId != instanceId)
                                 redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
                         }
                     }

@@ -63,7 +63,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static void UpdateEntityNodePath(Guid entityNodeId, string fullPath)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, organizationId);
             if (row != null)
             {
@@ -78,7 +78,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static void MergeEntityNode(Guid sourceId, Guid targetId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeRow sourceRow = GetEntityNode(sourceId, organizationId);
             ClientDataSet.EntityNodeRow destRow = GetEntityNode(targetId, organizationId);
@@ -104,7 +104,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="parentEntityNodeId">The identifier of new parent of the entity node.</param>
         public static void ChangeParentEntityNode(Guid entityNodeId, Guid? parentEntityNodeId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, organizationId);
             if (row != null)
@@ -123,7 +123,7 @@ namespace Micajah.Common.Bll.Providers
 
         public static void ChangeParentEntityNodeType(Guid entityId, Guid sourceId, Guid destinationId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             EntityNodeType source = EntityFieldProvider.Entities[entityId.ToString("N")].CustomNodeTypes[sourceId.ToString("N")];
             EntityNodeType dest = EntityFieldProvider.Entities[entityId.ToString("N")].CustomNodeTypes[destinationId.ToString("N")];
@@ -150,7 +150,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityNodeRow GetEntityNode(Guid entityNodeId)
         {
-            return GetEntityNode(entityNodeId, UserContext.Current.SelectedOrganizationId);
+            return GetEntityNode(entityNodeId, UserContext.Current.OrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -166,7 +166,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityNodeTypeRow GetCustomEntityNodeType(Guid entityNodeTypeId)
         {
-            return GetEntityNodeType(entityNodeTypeId, UserContext.Current.SelectedOrganizationId);
+            return GetEntityNodeType(entityNodeTypeId, UserContext.Current.OrganizationId);
         }
 
         public static string GetEntityValueAndName(Guid entityNodeTypeId, string fieldName, object value)
@@ -206,7 +206,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityType(Guid entityNodeId, Guid entityNodeTypeId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, organizationId);
             if (row != null)
@@ -223,7 +223,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityName(Guid entityNodeId, string name)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, organizationId);
             if (row != null)
@@ -240,7 +240,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityNodeTypeName(Guid entityId, Guid entityNodeTypeId, string name)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeTypeRow row = GetEntityNodeType(entityNodeTypeId, organizationId);
             if (row != null)
@@ -334,7 +334,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityNodeType(Guid entityNodeTypeId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeTypeRow row = GetEntityNodeType(entityNodeTypeId, organizationId);
             if (row != null)
@@ -351,7 +351,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityNode(Guid entityNodeId)
         {
-            Guid organizationId = UserContext.Current.SelectedOrganizationId;
+            Guid organizationId = UserContext.Current.OrganizationId;
 
             ClientDataSet.EntityNodeRow row = GetEntityNode(entityNodeId, organizationId);
             if (row != null)
@@ -432,7 +432,7 @@ namespace Micajah.Common.Bll.Providers
             ClientDataSet.EntityNodeRow rootRow = table.NewEntityNodeRow();
             rootRow.EntityNodeId = Guid.Empty;
             if (!string.IsNullOrEmpty(customRootNodeText))
-                rootRow.Name = customRootNodeText.Replace("#organizationName#", UserContext.Current.SelectedOrganization.Name);
+                rootRow.Name = customRootNodeText.Replace("#organizationName#", UserContext.Current.Organization.Name);
             else
                 rootRow.Name = entityName;
             rootRow.EntityId = entityId;

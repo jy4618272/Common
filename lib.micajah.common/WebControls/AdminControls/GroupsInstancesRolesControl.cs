@@ -145,7 +145,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private void Atv_DataBind(Guid groupId, Guid instanceId)
         {
-            Guid roleId = GroupProvider.GetGroupInstanceRole(UserContext.Current.SelectedOrganizationId, groupId, instanceId);
+            Guid roleId = GroupProvider.GetGroupInstanceRole(UserContext.Current.OrganizationId, groupId, instanceId);
 
             m_ActionIdList = GroupProvider.GetActionIdList(groupId, instanceId, roleId);
             m_StartActionId = RoleProvider.GetStartActionId(roleId);

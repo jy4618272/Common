@@ -3,7 +3,6 @@ using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.Properties;
-using Micajah.Common.Security;
 using System;
 using System.ComponentModel;
 using System.Data;
@@ -353,8 +352,6 @@ namespace Micajah.Common.Bll.Providers
             RemoveWebsiteIdFromCache(organizationId);
             PutOrganizationToCache(organization);
 
-            UserContext.RefreshCurrent();
-
             RaiseOrganizationUpdated(organization);
         }
 
@@ -370,8 +367,6 @@ namespace Micajah.Common.Bll.Providers
             RemoveConnectionStringFromCache(organization.OrganizationId);
             RemoveWebsiteIdFromCache(organization.OrganizationId);
             PutOrganizationToCache(organization);
-
-            UserContext.RefreshCurrent();
 
             RaiseOrganizationUpdated(organization);
         }

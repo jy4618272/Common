@@ -62,7 +62,7 @@ namespace Micajah.Common.WebControls
             {
                 m_ActionIdList = m_UserContext.ActionIdList;
                 m_IsAuthenticated = true;
-                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganizationId == Guid.Empty));
+                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.OrganizationId == Guid.Empty));
             }
         }
 

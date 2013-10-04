@@ -46,13 +46,12 @@ namespace Micajah.Common.Security
         private const string TimeFormatKey = "mc.TimeFormat";
         private const string DateFormatKey = "mc.DateFormat";
         private const string RoleIdListKey = "mc.RoleIdList";
-        private const string SelectedInstanceIdKey = "mc.SelectedInstanceId";
-        private const string SelectedOrganizationIdKey = "mc.SelectedOrganizationId";
+        private const string InstanceIdKey = "mc.InstanceId";
+        private const string OrganizationIdKey = "mc.OrganizationId";
         private const string StartPageUrlKey = "mc.StartPageUrl";
         private const string UserContextKey = "mc.UserContext";
         private const string UserIdKey = "mc.UserId";
         private const string VanityUrlKey = "mc.VanityUrl";
-        private const string OAuthPendingUserAuthorizationRequestKey = "mc.OAuthPendingUserAuth";
         private const string OAuthAuthorizationSecretKey = "mc.OAuthAutSecret";
 
         private static ArrayList s_ReservedKeys;
@@ -73,8 +72,8 @@ namespace Micajah.Common.Security
             base[MiddleNameKey] = string.Empty;
             base[RoleIdListKey] = new ArrayList();
             base[RoleIdKey] = Guid.Empty;
-            base[SelectedOrganizationIdKey] = Guid.Empty;
-            base[SelectedInstanceIdKey] = Guid.Empty;
+            base[OrganizationIdKey] = Guid.Empty;
+            base[InstanceIdKey] = Guid.Empty;
             base[StartPageUrlKey] = string.Empty;
             base[UserIdKey] = Guid.Empty;
             base[LoginNameKey] = string.Empty;
@@ -91,10 +90,10 @@ namespace Micajah.Common.Security
         {
             get
             {
-                if (this.SelectedInstanceId == Guid.Empty || (!FrameworkConfiguration.Current.Actions.EnableOverride))
+                if (this.InstanceId == Guid.Empty || (!FrameworkConfiguration.Current.Actions.EnableOverride))
                     return ActionProvider.GetActionIdList(this.RoleIdList, this.IsOrganizationAdministrator, true);
                 else
-                    return GroupProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, this.SelectedInstanceId, this.SelectedOrganizationId, this.IsOrganizationAdministrator);
+                    return GroupProvider.GetActionIdList(this.GroupIdList, this.RoleIdList, this.InstanceId, this.OrganizationId, this.IsOrganizationAdministrator);
             }
         }
 
@@ -161,8 +160,8 @@ namespace Micajah.Common.Security
                     s_ReservedKeys.Add(DateFormatKey);
                     s_ReservedKeys.Add(RoleIdListKey);
                     s_ReservedKeys.Add(RoleIdKey);
-                    s_ReservedKeys.Add(SelectedInstanceIdKey);
-                    s_ReservedKeys.Add(SelectedOrganizationIdKey);
+                    s_ReservedKeys.Add(InstanceIdKey);
+                    s_ReservedKeys.Add(OrganizationIdKey);
                     s_ReservedKeys.Add(StartPageUrlKey);
                     s_ReservedKeys.Add(UserIdKey);
                     s_ReservedKeys.Add(LoginNameKey);
@@ -428,7 +427,7 @@ namespace Micajah.Common.Security
                 string value = InstanceProvider.DefaultTimeZoneId;
                 if (base[TimeZoneIdKey] == null)
                 {
-                    Instance inst = this.SelectedInstance;
+                    Instance inst = this.Instance;
                     if (inst != null)
                         value = inst.TimeZoneId;
                 }
@@ -449,7 +448,7 @@ namespace Micajah.Common.Security
                 int value = 0;
                 if (base[TimeFormatKey] == null)
                 {
-                    Instance inst = this.SelectedInstance;
+                    Instance inst = this.Instance;
                     if (inst != null)
                         value = inst.TimeFormat;
                 }
@@ -470,7 +469,7 @@ namespace Micajah.Common.Security
                 int value = 0;
                 if (base[DateFormatKey] == null)
                 {
-                    Instance inst = this.SelectedInstance;
+                    Instance inst = this.Instance;
                     if (inst != null)
                         value = inst.DateFormat;
                 }
@@ -508,30 +507,30 @@ namespace Micajah.Common.Security
         /// <summary>
         /// Gets the selected organization.
         /// </summary>
-        public Organization SelectedOrganization
+        public Organization Organization
         {
-            get { return OrganizationProvider.GetOrganizationFromCache(this.SelectedOrganizationId, true); }
+            get { return OrganizationProvider.GetOrganizationFromCache(this.OrganizationId, true); }
         }
 
         /// <summary>
         /// Gets the unique identifier of the selected organization.
         /// </summary>
-        public Guid SelectedOrganizationId
+        public Guid OrganizationId
         {
-            get { return (Guid)base[SelectedOrganizationIdKey]; }
+            get { return (Guid)base[OrganizationIdKey]; }
         }
 
         /// <summary>
         /// Gets the selected instance.
         /// </summary>
-        public Instance SelectedInstance
+        public Instance Instance
         {
             get
             {
                 Instance inst = null;
 
-                Guid organizationId = this.SelectedOrganizationId;
-                Guid instanceId = this.SelectedInstanceId;
+                Guid organizationId = this.OrganizationId;
+                Guid instanceId = this.InstanceId;
 
                 if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
                     inst = InstanceProvider.GetInstanceFromCache(instanceId, organizationId, true);
@@ -543,9 +542,9 @@ namespace Micajah.Common.Security
         /// <summary>
         /// Gets the unique identifier of the selected instance.
         /// </summary>
-        public Guid SelectedInstanceId
+        public Guid InstanceId
         {
-            get { return (Guid)base[SelectedInstanceIdKey]; }
+            get { return (Guid)base[InstanceIdKey]; }
         }
 
         /// <summary>
@@ -591,8 +590,8 @@ namespace Micajah.Common.Security
             {
                 SettingCollection settings = null;
 
-                Guid organizationId = this.SelectedOrganizationId;
-                Guid instanceId = this.SelectedInstanceId;
+                Guid organizationId = this.OrganizationId;
+                Guid instanceId = this.InstanceId;
 
                 if (instanceId != Guid.Empty)
                 {
@@ -654,22 +653,22 @@ namespace Micajah.Common.Security
         /// <summary>
         /// Raises when the selected instance is changing.
         /// </summary>
-        public static event EventHandler<UserContextSelectedInstanceChangingEventArgs> SelectedInstanceChanging;
+        public static event EventHandler<UserContextInstanceChangingEventArgs> InstanceChanging;
 
         /// <summary>
         /// Raises when the selected instance is changed.
         /// </summary>
-        public static event EventHandler SelectedInstanceChanged;
+        public static event EventHandler InstanceChanged;
 
         /// <summary>
         /// Raises when the selected organization is changing.
         /// </summary>
-        public static event EventHandler<UserContextSelectedOrganizationChangingEventArgs> SelectedOrganizationChanging;
+        public static event EventHandler<UserContextOrganizationChangingEventArgs> OrganizationChanging;
 
         /// <summary>
         /// Raises when the selected organization is changed.
         /// </summary>
-        public static event EventHandler SelectedOrganizationChanged;
+        public static event EventHandler OrganizationChanged;
 
         #endregion
 
@@ -691,7 +690,7 @@ namespace Micajah.Common.Security
             if (putToCache)
                 InstanceProvider.PutInstanceToCache(newInstance);
 
-            if (SelectedInstanceChanging != null)
+            if (InstanceChanging != null)
             {
                 if (string.IsNullOrEmpty(this.Email))
                 {
@@ -699,14 +698,14 @@ namespace Micajah.Common.Security
                     if (userRow != null)
                         RefreshDetails(this, userRow);
                 }
-                SelectedInstanceChanging(this, new UserContextSelectedInstanceChangingEventArgs() { Instance = newInstance });
+                InstanceChanging(this, new UserContextInstanceChangingEventArgs() { Instance = newInstance });
             }
 
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
             base[StartPageUrlKey] = CustomUrlProvider.CreateApplicationAbsoluteUrl(startUrl);
-            base[SelectedInstanceIdKey] = newInstance.InstanceId;
+            base[InstanceIdKey] = newInstance.InstanceId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
@@ -714,20 +713,20 @@ namespace Micajah.Common.Security
                     LoginProvider.SetAuthCookie(this.UserId, newInstance.OrganizationId, newInstance.InstanceId, isPersistent);
             }
 
-            if (SelectedInstanceChanged != null)
-                SelectedInstanceChanged(this, EventArgs.Empty);
+            if (InstanceChanged != null)
+                InstanceChanged(this, EventArgs.Empty);
         }
 
         private void SelectedOrganizationChange(Organization newOrganization, bool isOrgAdmin, ArrayList userGroupIdList, bool setAuthCookie, bool? isPersistent, Guid? instanceId, bool putToCache)
         {
-            if (this.SelectedOrganizationId != newOrganization.OrganizationId)
+            if (this.OrganizationId != newOrganization.OrganizationId)
                 CheckWebSite(newOrganization.OrganizationId, instanceId);
 
             Guid currentInstanceId = instanceId.GetValueOrDefault();
 
             Breadcrumbs.Clear();
 
-            base[SelectedInstanceIdKey] = Guid.Empty;
+            base[InstanceIdKey] = Guid.Empty;
 
             ArrayList groupIdList = new ArrayList();
             ArrayList roleIdList = new ArrayList();
@@ -758,13 +757,13 @@ namespace Micajah.Common.Security
             if (putToCache)
                 OrganizationProvider.PutOrganizationToCache(newOrganization);
 
-            if (SelectedOrganizationChanging != null)
-                SelectedOrganizationChanging(this, new UserContextSelectedOrganizationChangingEventArgs() { Organization = newOrganization });
+            if (OrganizationChanging != null)
+                OrganizationChanging(this, new UserContextOrganizationChangingEventArgs() { Organization = newOrganization });
 
             base[TimeZoneIdKey] = null;
             base[TimeFormatKey] = null;
             base[DateFormatKey] = null;
-            base[SelectedOrganizationIdKey] = newOrganization.OrganizationId;
+            base[OrganizationIdKey] = newOrganization.OrganizationId;
             base[GroupIdListKey] = groupIdList;
             base[RoleIdListKey] = roleIdList;
             base[RoleIdKey] = roleId;
@@ -930,8 +929,8 @@ namespace Micajah.Common.Security
 
             UserProvider.UpdateLastLoginDate(userRow, newOrganization.OrganizationId);
 
-            if (SelectedOrganizationChanged != null)
-                SelectedOrganizationChanged(this, EventArgs.Empty);
+            if (OrganizationChanged != null)
+                OrganizationChanged(this, EventArgs.Empty);
         }
 
         internal void SelectInstance(Guid instanceId, bool setAuthCookie, bool? isPersistent)
@@ -939,7 +938,7 @@ namespace Micajah.Common.Security
             if (instanceId == Guid.Empty)
                 return;
 
-            Guid organizationId = this.SelectedOrganizationId;
+            Guid organizationId = this.OrganizationId;
             if (organizationId != Guid.Empty)
             {
                 bool putToCache = false;
@@ -949,7 +948,7 @@ namespace Micajah.Common.Security
                 {
                     instance = InstanceProvider.GetInstance(instanceId, organizationId);
                     if (instance == null)
-                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoInstance, instanceId, this.SelectedOrganization.Name));
+                        throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.InstanceProvider_ErrorMessage_NoInstance, instanceId, this.Organization.Name));
 
                     putToCache = true;
                 }
@@ -1134,11 +1133,11 @@ namespace Micajah.Common.Security
         /// <returns>true if the current user is a member of the specified roles in specified instance of the selected organization; otherwise, false.</returns>
         public bool IsInRole(Guid instanceId, params string[] shortName)
         {
-            if (this.SelectedOrganizationId != Guid.Empty)
+            if (this.OrganizationId != Guid.Empty)
             {
                 ArrayList roleIdList = RoleProvider.GetRoleIdListByShortNames(shortName);
 
-                return GroupProvider.GroupsInstanceHasRole(this.SelectedOrganizationId, this.GroupIdList, instanceId, roleIdList);
+                return GroupProvider.GroupsInstanceHasRole(this.OrganizationId, this.GroupIdList, instanceId, roleIdList);
             }
             return false;
         }
@@ -1159,29 +1158,10 @@ namespace Micajah.Common.Security
         /// <returns>true, if the user is administrator of specified instance in selected organization; otherwise, false.</returns>
         public bool IsInstanceAdministrator(Guid instanceId)
         {
-            Guid organizationId = this.SelectedOrganizationId;
+            Guid organizationId = this.OrganizationId;
             if (organizationId != Guid.Empty)
                 return UserProvider.UserIsInstanceAdministrator(organizationId, instanceId, this.UserId);
             return false;
-        }
-
-        /// <summary>
-        /// Refreshes the cached data for the current user.
-        /// </summary>
-        public static void RefreshCurrent()
-        {
-            UserContext ctx = Current;
-            if (ctx != null) ctx.Refresh();
-        }
-
-        /// <summary>
-        /// Refreshes the cached data for this user.
-        /// </summary>
-        public void Refresh()
-        {
-            Guid organizationId = this.SelectedOrganizationId;
-            if (organizationId != Guid.Empty)
-                this.SelectOrganization(organizationId, false, null, this.SelectedInstanceId);
         }
 
         /// <summary>
@@ -1224,7 +1204,7 @@ namespace Micajah.Common.Security
         #endregion
     }
 
-    public class UserContextSelectedInstanceChangingEventArgs : EventArgs
+    public class UserContextInstanceChangingEventArgs : EventArgs
     {
         #region Public Properties
 
@@ -1233,7 +1213,7 @@ namespace Micajah.Common.Security
         #endregion
     }
 
-    public class UserContextSelectedOrganizationChangingEventArgs : EventArgs
+    public class UserContextOrganizationChangingEventArgs : EventArgs
     {
         #region Public Properties
 

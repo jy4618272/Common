@@ -64,15 +64,15 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!IsPostBack)
             {
-                if (m_UserContext == null || m_UserContext.SelectedOrganizationId == Guid.Empty)
+                if (m_UserContext == null || m_UserContext.OrganizationId == Guid.Empty)
                 {
                     this.Visible = false;
                     return;
                 }
 
-                RecurrenceScheduleControl.OrganizationId = m_UserContext.SelectedOrganizationId;
-                if (m_UserContext.SelectedInstanceId != Guid.Empty)
-                    RecurrenceScheduleControl.InstanceId = m_UserContext.SelectedInstanceId;
+                RecurrenceScheduleControl.OrganizationId = m_UserContext.OrganizationId;
+                if (m_UserContext.InstanceId != Guid.Empty)
+                    RecurrenceScheduleControl.InstanceId = m_UserContext.InstanceId;
                 RecurrenceScheduleControl.DateFormat = Support.GetLongDateTimeFormat(m_UserContext.TimeFormat, m_UserContext.DateFormat);
             }
 
@@ -90,13 +90,13 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (e == null) return;
 
-            e.InputParameters["organizationId"] = m_UserContext.SelectedOrganizationId;
-            e.InputParameters["instanceId"] = m_UserContext.SelectedInstanceId;
+            e.InputParameters["organizationId"] = m_UserContext.OrganizationId;
+            e.InputParameters["instanceId"] = m_UserContext.InstanceId;
         }
 
         protected void List_Action(object sender, CommonGridViewActionEventArgs e)
         {
-            Guid organizationId = m_UserContext.SelectedOrganizationId;
+            Guid organizationId = m_UserContext.OrganizationId;
             Guid recurringScheduleId = Guid.Empty;
 
             if (e == null) return;

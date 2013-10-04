@@ -171,14 +171,14 @@ namespace Micajah.Common.WebControls.AdminControls
             if (e != null)
             {
                 e.InputParameters["entityId"] = this.EntityId;
-                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
             }
         }
 
         protected void InstancesDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
         }
 
         protected void EntityDataSource_Selected(object sender, ObjectDataSourceStatusEventArgs e)

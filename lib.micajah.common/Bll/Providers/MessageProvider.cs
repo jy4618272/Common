@@ -29,7 +29,7 @@ namespace Micajah.Common.Bll.Providers
         public static Guid InsertMessage(Guid? parentMessageId, string localObjectType, string localObjectId, Guid fromUserId, Guid? toUserId, string subject, string text)
         {
             Guid messageId = Guid.NewGuid();
-            using (MessageTableAdapter adapter = new MessageTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (MessageTableAdapter adapter = new MessageTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 adapter.Insert(messageId, parentMessageId, localObjectType, localObjectId, fromUserId, toUserId, subject, text, DateTime.UtcNow);
             }
@@ -45,7 +45,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.MessageDataTable GetMessages(string localObjectType, string localObjectId)
         {
-            using (MessageTableAdapter adapter = new MessageTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (MessageTableAdapter adapter = new MessageTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 return adapter.GetMessages(localObjectType, localObjectId);
             }

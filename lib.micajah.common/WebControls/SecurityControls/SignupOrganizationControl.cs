@@ -724,7 +724,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 if (user != null)
                 {
                     if (string.Compare(user.Email, Email2.Text, StringComparison.OrdinalIgnoreCase) == 0)
-                        Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), user.SelectedOrganizationId, user.SelectedInstanceId, false, null));
+                        Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), user.OrganizationId, user.InstanceId, false, null));
                 }
 
                 Response.Redirect(WebApplication.LoginProvider.GetLoginUrl());

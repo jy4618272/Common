@@ -108,7 +108,7 @@ namespace Micajah.Common.WebControls.SetupControls
 
         private void Redirect()
         {
-            if (UserContext.Current.SelectedOrganizationId == (Guid)EditForm.DataKey[0])
+            if (UserContext.Current.OrganizationId == (Guid)EditForm.DataKey[0])
             {
                 Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.OrganizationsPageActionId);
                 if (action != null)

@@ -956,10 +956,10 @@ namespace Micajah.Common.Pages
             {
                 if (this.Page.Header != null)
                 {
-                    if ((m_UserContext != null) && (m_UserContext.SelectedOrganizationId != Guid.Empty))
+                    if ((m_UserContext != null) && (m_UserContext.OrganizationId != Guid.Empty))
                     {
-                        if (!string.IsNullOrEmpty(SettingProvider.GetCustomStyleSheet(m_UserContext.SelectedOrganizationId)))
-                            this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.CustomStyleSheet + "?" + m_UserContext.SelectedOrganizationId.ToString("N"), true)));
+                        if (!string.IsNullOrEmpty(SettingProvider.GetCustomStyleSheet(m_UserContext.OrganizationId)))
+                            this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.CustomStyleSheet + "?" + m_UserContext.OrganizationId.ToString("N"), true)));
                     }
                 }
             }
@@ -979,23 +979,23 @@ namespace Micajah.Common.Pages
                 else if (string.IsNullOrEmpty(m_HeaderLogoTarget))
                     m_HeaderLogoTarget = "_blank";
 
-                if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && (m_UserContext.SelectedInstanceId != Guid.Empty))
+                if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
                 {
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
-                        m_HeaderLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(m_UserContext.SelectedInstanceId);
+                        m_HeaderLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(m_UserContext.InstanceId);
 
                     if (string.IsNullOrEmpty(m_HeaderLogoText))
-                        m_HeaderLogoText = m_UserContext.SelectedInstance.Name;
+                        m_HeaderLogoText = m_UserContext.Instance.Name;
                 }
 
-                if (m_UserContext.SelectedOrganizationId != Guid.Empty)
+                if (m_UserContext.OrganizationId != Guid.Empty)
                 {
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
-                        m_HeaderLogoImageUrl = ResourceProvider.GetOrganizationLogoImageUrlFromCache(m_UserContext.SelectedOrganizationId);
+                        m_HeaderLogoImageUrl = ResourceProvider.GetOrganizationLogoImageUrlFromCache(m_UserContext.OrganizationId);
                     if (string.IsNullOrEmpty(m_HeaderLogoText))
-                        m_HeaderLogoText = m_UserContext.SelectedOrganization.Name;
+                        m_HeaderLogoText = m_UserContext.Organization.Name;
                     else
-                        m_HeaderLogoText = m_UserContext.SelectedOrganization.Name + " " + m_HeaderLogoText;
+                        m_HeaderLogoText = m_UserContext.Organization.Name + " " + m_HeaderLogoText;
                 }
             }
 
@@ -1509,11 +1509,11 @@ namespace Micajah.Common.Pages
             {
                 m_ActionIdList = m_UserContext.ActionIdList;
                 m_IsAuthenticated = true;
-                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.SelectedOrganizationId == Guid.Empty));
-                if (m_UserContext.SelectedOrganizationId != Guid.Empty)
-                    m_OrganizationId = m_UserContext.SelectedOrganizationId;
-                if (m_UserContext.SelectedInstanceId != Guid.Empty)
-                    m_InstanceId = m_UserContext.SelectedInstanceId;
+                m_IsFrameworkAdmin = (m_UserContext.IsFrameworkAdministrator && (m_UserContext.OrganizationId == Guid.Empty));
+                if (m_UserContext.OrganizationId != Guid.Empty)
+                    m_OrganizationId = m_UserContext.OrganizationId;
+                if (m_UserContext.InstanceId != Guid.Empty)
+                    m_InstanceId = m_UserContext.InstanceId;
             }
 
             if (!IsPostBack)

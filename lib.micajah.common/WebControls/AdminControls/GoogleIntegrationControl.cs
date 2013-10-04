@@ -152,7 +152,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 int count = 0;
                 int failed = 0;
 
-                GoogleProvider.ImportUsers(UserContext.Current.SelectedOrganizationId, service, out count, out failed);
+                GoogleProvider.ImportUsers(UserContext.Current.OrganizationId, service, out count, out failed);
 
                 lbImportUsers.Enabled = false;
                 lbImportUsers.Enabled = false;

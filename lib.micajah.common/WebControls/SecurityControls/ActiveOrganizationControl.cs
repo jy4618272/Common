@@ -209,9 +209,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                         count = coll.Count;
                         if (count == 1)
                         {
-                            if (user.SelectedOrganizationId != Guid.Empty)
+                            if (user.OrganizationId != Guid.Empty)
                             {
-                                if (coll[0].OrganizationId != user.SelectedOrganizationId)
+                                if (coll[0].OrganizationId != user.OrganizationId)
                                     count = 2;
                             }
                         }

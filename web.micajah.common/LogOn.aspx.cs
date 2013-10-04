@@ -16,7 +16,7 @@ public partial class LogOn : System.Web.UI.Page
 
     void InnerControl_Init(object sender, EventArgs e)
     {
-        UserContext.SelectedInstanceChanged += new EventHandler(UserContext_SelectedInstanceChanged);
+        UserContext.InstanceChanged += new EventHandler(UserContext_SelectedInstanceChanged);
     }
 
     void UserContext_SelectedInstanceChanged(object sender, EventArgs e)

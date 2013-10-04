@@ -165,7 +165,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static MasterDataSet.UnitsOfMeasureDataTable GetMeasureUnits()
         {
-            return GetMeasureUnits(UserContext.Current.SelectedOrganizationId);
+            return GetMeasureUnits(UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static MasterDataSet.UnitsOfMeasureRow GetMeasureUnitRow(Guid unitsOfMeasureId)
         {
-            return GetMeasureUnitRow(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId);
+            return GetMeasureUnitRow(unitsOfMeasureId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The System.Guid that represents the identifier of the newly created measure unit.</returns>
         public static Guid InsertMeasureUnit(string singularName, string singularAbbrv, string pluralName, string pluralAbbrv, string groupName, string localName)
         {
-            return InsertMeasureUnit(singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName, UserContext.Current.SelectedOrganizationId);
+            return InsertMeasureUnit(singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static void InsertMeasureUnitsConversion(Guid sourceUnitsOfMeasureId, Guid targetUnitsOfMeasureId, double factor)
         {
-            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.SelectedOrganizationId, factor, false);
+            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.OrganizationId, factor, false);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="groupName">Group Name</param>
         public static void UpdateMeasureUnit(Guid unitsOfMeasureId, string singularName, string singularAbbrv, string pluralName, string pluralAbbrv, string groupName, string localName)
         {
-            UpdateMeasureUnit(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId, singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName);
+            UpdateMeasureUnit(unitsOfMeasureId, UserContext.Current.OrganizationId, singularName, singularAbbrv, pluralName, pluralAbbrv, groupName, localName);
         }
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="pluralAbbreviation">Plural  Abbreviation</param>
         public static void UpdateMeasureUnit(Guid unitsOfMeasureId, string singularName, string singularAbbrv, string pluralName, string pluralAbbrv)
         {
-            UpdateMeasureUnit(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId, singularName, singularAbbrv, pluralName, pluralAbbrv, null, null);
+            UpdateMeasureUnit(unitsOfMeasureId, UserContext.Current.OrganizationId, singularName, singularAbbrv, pluralName, pluralAbbrv, null, null);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateMeasureUnitsConversion(Guid sourceUnitsOfMeasureId, Guid targetUnitsOfMeasureId, double factor)
         {
-            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.SelectedOrganizationId, factor, false);
+            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.OrganizationId, factor, false);
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteMeasureUnits(Guid unitsOfMeasureId)
         {
-            DeleteMeasureUnits(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId);
+            DeleteMeasureUnits(unitsOfMeasureId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -412,7 +412,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteMeasureUnitsConversion(Guid sourceUnitsOfMeasureId, Guid targetUnitsOfMeasureId)
         {
-            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.SelectedOrganizationId, 1, true);
+            UpdateMeasureUnitsConversion(sourceUnitsOfMeasureId, targetUnitsOfMeasureId, UserContext.Current.OrganizationId, 1, true);
         }
 
         /// <summary>
@@ -429,7 +429,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DataTable GetConvertedMeasureUnits(Guid unitsOfMeasureId)
         {
-            return GetConvertedMeasureUnits(unitsOfMeasureId, UserContext.Current.SelectedOrganizationId);
+            return GetConvertedMeasureUnits(unitsOfMeasureId, UserContext.Current.OrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]

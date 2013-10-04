@@ -71,7 +71,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 UserContext user = UserContext.Current;
 
-                if (user.SelectedOrganizationId == null)
+                if (user.OrganizationId == null)
                     Response.Redirect(ResourceProvider.GetActiveOrganizationUrl(Request.Url.PathAndQuery));
 
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.LogOffGlobalNavigationLinkActionId));
@@ -79,7 +79,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 OrganizationArea.Visible = false;
                 InstanceArea.Visible = false;
 
-                InstanceCollection instances = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.SelectedOrganizationId);
+                InstanceCollection instances = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.OrganizationId);
                 OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
                 int instCount = instances.Count;
                 int orgsCount = 0;
@@ -92,13 +92,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                         orgsCount = orgs.Count;
                         if (orgsCount == 1)
                         {
-                            if (orgs[0].OrganizationId != user.SelectedOrganizationId)
+                            if (orgs[0].OrganizationId != user.OrganizationId)
                                 orgsCount = 2;
                         }
                     }
                 }
 
-                if (user.SelectedInstanceId == Guid.Empty)
+                if (user.InstanceId == Guid.Empty)
                     instCount = 0;
                 else
                 {

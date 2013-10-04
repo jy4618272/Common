@@ -730,7 +730,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.UserDataTable GetUsers()
         {
-            return GetUsers(UserContext.Current.SelectedOrganizationId);
+            return GetUsers(UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -878,7 +878,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The object populated with information of the specified user. If the user is not found, the method returns null reference.</returns>
         public static ClientDataSet.UserRow GetUserRow(Guid userId, bool includeGroups)
         {
-            return GetUserRow(userId, UserContext.Current.SelectedOrganizationId, includeGroups);
+            return GetUserRow(userId, UserContext.Current.OrganizationId, includeGroups);
         }
 
         /// <summary>
@@ -1014,7 +1014,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid InsertUser(string email, string firstName, string lastName, string middleName, string groupId)
         {
-            return InsertUser(email, firstName, lastName, middleName, groupId, UserContext.Current.SelectedOrganizationId);
+            return InsertUser(email, firstName, lastName, middleName, groupId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -1264,7 +1264,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The unique identifier of the newly created user or of the updated user if it already exists.</returns>
         public static Guid AddUserToOrganization(string email, string groupId)
         {
-            return AddUserToOrganization(email, groupId, UserContext.Current.SelectedOrganizationId);
+            return AddUserToOrganization(email, groupId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -1307,7 +1307,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Insert)]
         public static Guid AddUserToOrganization(string email, string firstName, string lastName, string middleName, string groupId)
         {
-            return AddUserToOrganization(email, firstName, lastName, middleName, groupId, UserContext.Current.SelectedOrganizationId);
+            return AddUserToOrganization(email, firstName, lastName, middleName, groupId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -1347,7 +1347,7 @@ namespace Micajah.Common.Bll.Providers
                  , street, street2, city, state, postalCode, country
                  , timeZoneId, timeFormat, dateFormat
                  , groupId, false
-                 , UserContext.Current.SelectedOrganizationId, false
+                 , UserContext.Current.OrganizationId, false
                  , true
                  , 0, 0, out password);
         }
@@ -1389,7 +1389,7 @@ namespace Micajah.Common.Bll.Providers
                  , phone, mobilePhone, fax, title, department
                  , street, street2, city, state, postalCode, country
                  , timeZoneId, timeFormat, dateFormat
-                 , groupId, false, UserContext.Current.SelectedOrganizationId
+                 , groupId, false, UserContext.Current.OrganizationId
                  , false, true, 0, 0, out password);
 
             UpdateUserSecondaryEmails(userId, secondaryEmails);
@@ -1743,7 +1743,7 @@ namespace Micajah.Common.Bll.Providers
             ClientDataSet.UserRow lastUpdatedRow = null;
             ArrayList list = new ArrayList();
 
-            using (UserTableAdapter adapter = new UserTableAdapter(OrganizationProvider.GetConnectionString(user.SelectedOrganizationId)))
+            using (UserTableAdapter adapter = new UserTableAdapter(OrganizationProvider.GetConnectionString(user.OrganizationId)))
             {
                 foreach (Organization organization in loginProvider.GetOrganizationsByLoginId(userId))
                 {
@@ -1835,7 +1835,7 @@ namespace Micajah.Common.Bll.Providers
             UpdateUser(userId, email, firstName, lastName, middleName
                 , phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
                 , null, null, null
-                , (string)null, UserContext.Current.SelectedOrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
+                , (string)null, UserContext.Current.OrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
         }
 
         /// <summary>
@@ -1871,7 +1871,7 @@ namespace Micajah.Common.Bll.Providers
             UpdateUser(userId, email, firstName, lastName, middleName
                 , phone, mobilePhone, fax, title, department, street, street2, city, state, postalCode, country
                 , timeZoneId, timeFormat, dateFormat
-                , (string)null, UserContext.Current.SelectedOrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
+                , (string)null, UserContext.Current.OrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
 
             UpdateUserSecondaryEmails(userId, secondaryEmails);
         }
@@ -1924,7 +1924,7 @@ namespace Micajah.Common.Bll.Providers
         {
             UpdateUser(userId, email, firstName, lastName, middleName, null, null, null, null, null, null, null, null, null, null, null
                 , null, null, null
-                , groupId, UserContext.Current.SelectedOrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
+                , groupId, UserContext.Current.OrganizationId, FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification);
         }
 
         /// <summary>
@@ -2045,8 +2045,8 @@ namespace Micajah.Common.Bll.Providers
             UserContext user = UserContext.Current;
             if (user != null)
             {
-                if (user.SelectedOrganizationId != Guid.Empty)
-                    UpdateUser(userId, groupId, user.SelectedOrganizationId);
+                if (user.OrganizationId != Guid.Empty)
+                    UpdateUser(userId, groupId, user.OrganizationId);
             }
         }
 
@@ -2204,7 +2204,7 @@ namespace Micajah.Common.Bll.Providers
         {
             UserContext user = UserContext.Current;
             if (user != null)
-                RemoveUserFromOrganization(userId, user.SelectedOrganizationId);
+                RemoveUserFromOrganization(userId, user.OrganizationId);
         }
 
         /// <summary>

@@ -354,7 +354,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityFieldDataTable GetEntityField(Guid entityFieldId)
         {
-            return GetEntityField(entityFieldId, UserContext.Current.SelectedOrganizationId);
+            return GetEntityField(entityFieldId, UserContext.Current.OrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -390,7 +390,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityFieldListsValuesDataTable GetEntityFieldListValues(Guid entityFieldId, bool? active)
         {
-            return GetEntityFieldListValues(entityFieldId, UserContext.Current.SelectedOrganizationId, active);
+            return GetEntityFieldListValues(entityFieldId, UserContext.Current.OrganizationId, active);
         }
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -405,7 +405,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.EntityFieldListsValuesDataTable GetEntityFieldListValue(Guid entityFieldListValueId)
         {
-            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 return adapter.GetEntityFieldListValue(entityFieldListValueId);
             }
@@ -414,7 +414,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityField(Guid entityFieldId)
         {
-            DeleteEntityField(entityFieldId, UserContext.Current.SelectedOrganizationId);
+            DeleteEntityField(entityFieldId, UserContext.Current.OrganizationId);
         }
 
         [DataObjectMethod(DataObjectMethodType.Delete)]
@@ -431,7 +431,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteEntityFieldListValue(Guid entityFieldListValueId)
         {
-            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 adapter.Delete(entityFieldListValueId);
             }
@@ -493,7 +493,7 @@ namespace Micajah.Common.Bll.Providers
 
             table.AddEntityFieldListsValuesRow(row);
 
-            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 adapter.Update(row);
             }
@@ -520,7 +520,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static void UpdateEntityFieldListValue(Guid entityFieldListValueId, Guid entityFieldId, string name, string value, bool Default, bool active)
         {
-            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.SelectedOrganizationId)))
+            using (EntityFieldListsValuesTableAdapter adapter = new EntityFieldListsValuesTableAdapter(OrganizationProvider.GetConnectionString(UserContext.Current.OrganizationId)))
             {
                 adapter.Update(entityFieldListValueId, entityFieldId, name, value, Default, active);
             }

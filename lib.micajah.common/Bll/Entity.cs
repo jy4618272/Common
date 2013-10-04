@@ -122,10 +122,10 @@ namespace Micajah.Common.Bll
                 {
                     Guid? instanceId = null;
                     if (this.HierarchyStartLevel == EntityLevel.Instance)
-                        instanceId = user.SelectedInstanceId;
+                        instanceId = user.InstanceId;
                     if (UserContext.Current != null)
                     {
-                        m_CustomNodeTypes = GetCustomNodeTypes(user.SelectedOrganizationId, instanceId);
+                        m_CustomNodeTypes = GetCustomNodeTypes(user.OrganizationId, instanceId);
                     }
                 }
                 return m_CustomNodeTypes;

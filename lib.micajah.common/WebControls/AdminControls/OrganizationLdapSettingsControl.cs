@@ -388,7 +388,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 userContext = arg as UserContext;
                 if (userContext != null)
                 {
-                    processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", userContext.SelectedOrganizationId);
+                    processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", userContext.OrganizationId);
 
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
@@ -461,7 +461,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 userContext = arg as UserContext;
                 if (userContext != null)
                 {
-                    processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", userContext.SelectedOrganizationId);
+                    processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", userContext.OrganizationId);
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
                         LdapInfoProvider.LdapProcesses.Remove(ldapProcess);
@@ -488,9 +488,9 @@ namespace Micajah.Common.WebControls.AdminControls
                     ldapDomain = (EditForm.Rows[3].Cells[1].Controls[0] as TextBox).Text;
 
                     ldapHandler = new Bll.Handlers.LdapHandler();
-                    ldapHandler.ImportLdapGroups(userContext.SelectedOrganizationId);
+                    ldapHandler.ImportLdapGroups(userContext.OrganizationId);
 
-                    ldapProcess.Data = LdapInfoProvider.GetGroups(ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, DomainsComboBox.SelectedItem.Text, userContext.SelectedOrganizationId);
+                    ldapProcess.Data = LdapInfoProvider.GetGroups(ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, DomainsComboBox.SelectedItem.Text, userContext.OrganizationId);
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
 
                 }
@@ -524,19 +524,19 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void LdapProcessTestADReplication(object arg)
         {
             LdapHandler ldap = new LdapHandler();
-            ldap.RunADReplication((arg as UserContext).SelectedOrganizationId, false);
+            ldap.RunADReplication((arg as UserContext).OrganizationId, false);
         }
 
         protected void LdapProcessRealADReplication(object arg)
         {
             LdapHandler ldap = new LdapHandler();
-            ldap.RunADReplication((arg as UserContext).SelectedOrganizationId, true);
+            ldap.RunADReplication((arg as UserContext).OrganizationId, true);
         }
 
         protected void ShowResultsGetDomains()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", UserContext.Current.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", UserContext.Current.OrganizationId);
             try
             {
                 GetDomainsTimer.Enabled = false;
@@ -582,7 +582,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsGetGroups()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", UserContext.Current.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "GetGroups_{0}", UserContext.Current.OrganizationId);
             try
             {
                 GetGroupsTimer.Enabled = false;
@@ -627,7 +627,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsTestADReplication()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "TestADReplication_{0}", UserContext.Current.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "TestADReplication_{0}", UserContext.Current.OrganizationId);
             try
             {
                 TestADReplicationTimer.Enabled = false;
@@ -732,7 +732,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void ShowResultsRealADReplication()
         {
             Bll.LdapProcess ldapProcess = null;
-            string processId = string.Format(CultureInfo.InvariantCulture, "RealADReplication_{0}", UserContext.Current.SelectedOrganizationId);
+            string processId = string.Format(CultureInfo.InvariantCulture, "RealADReplication_{0}", UserContext.Current.OrganizationId);
             try
             {
                 RealADReplicationTimer.Enabled = false;
@@ -838,7 +838,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["organizationId"] = UserContext.Current.SelectedOrganizationId;
+                e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)

@@ -139,7 +139,7 @@ namespace Micajah.Common.WebControls.AdminControls
             if (int.TryParse(e.CommandArgument.ToString(), out index) &&
                 e.CommandName.Equals("Add"))
             {
-                MeasureUnitsProvider.OverrideMeasureUnit((Guid)GlobalList.DataKeys[index]["UnitsOfMeasureId"], UserContext.Current.SelectedOrganizationId);
+                MeasureUnitsProvider.OverrideMeasureUnit((Guid)GlobalList.DataKeys[index]["UnitsOfMeasureId"], UserContext.Current.OrganizationId);
                 LinkButtonBack_OnClick(LinkButtonBack, EventArgs.Empty);
                 List.DataBind();
             }

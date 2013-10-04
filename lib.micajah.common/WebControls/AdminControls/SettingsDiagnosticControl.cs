@@ -73,13 +73,13 @@ namespace Micajah.Common.WebControls.AdminControls
             StringBuilder sb2 = new StringBuilder();
 
             UserContext user = UserContext.Current;
-            if ((user != null) && (user.SelectedOrganizationId != Guid.Empty))
+            if ((user != null) && (user.OrganizationId != Guid.Empty))
             {
                 if (!user.IsOrganizationAdministrator)
                 {
                     ArrayList userGroups = user.GroupIdList;
 
-                    foreach (ClientDataSet.GroupsInstancesRolesRow row in GroupProvider.GetGroupsInstancesRolesByRoleId(user.SelectedOrganizationId, RoleProvider.InstanceAdministratorRoleId))
+                    foreach (ClientDataSet.GroupsInstancesRolesRow row in GroupProvider.GetGroupsInstancesRolesByRoleId(user.OrganizationId, RoleProvider.InstanceAdministratorRoleId))
                     {
                         if (!userGroups.Contains(row.GroupId))
                         {
@@ -191,7 +191,7 @@ namespace Micajah.Common.WebControls.AdminControls
             else if (UserListRow.Visible)
             {
                 obj = Support.ConvertStringToType(UserList.SelectedValue, typeof(Guid));
-                list = UserProvider.GetUserGroupIdList(UserContext.Current.SelectedOrganizationId, ((obj == null) ? Guid.Empty : (Guid)obj));
+                list = UserProvider.GetUserGroupIdList(UserContext.Current.OrganizationId, ((obj == null) ? Guid.Empty : (Guid)obj));
             }
 
             Settings.GroupIdList.Clear();

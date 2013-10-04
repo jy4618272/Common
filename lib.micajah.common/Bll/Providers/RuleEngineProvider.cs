@@ -83,7 +83,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteRule(Guid ruleId)
         {
-            DeleteRule(ruleId, UserContext.Current.SelectedOrganizationId);
+            DeleteRule(ruleId, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Update)]
         public static int UpdateOrderNumber(Guid ruleId, int orderNumber)
         {
-            return UpdateOrderNumber(UserContext.Current.SelectedOrganizationId, ruleId, orderNumber);
+            return UpdateOrderNumber(UserContext.Current.OrganizationId, ruleId, orderNumber);
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleRow GetRuleRow(string ruleName)
         {
-            return GetRuleRow(ruleName, UserContext.Current.SelectedOrganizationId);
+            return GetRuleRow(ruleName, UserContext.Current.OrganizationId);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleRow GetRuleRow(Guid ruleId)
         {
-            return GetRuleRow(ruleId, UserContext.Current.SelectedOrganizationId);
+            return GetRuleRow(ruleId, UserContext.Current.OrganizationId);
         }
 
         #endregion
@@ -313,7 +313,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Delete)]
         public static void DeleteRuleParameter(Guid ruleParameterId)
         {
-            DeleteRuleParameter(UserContext.Current.SelectedOrganizationId, ruleParameterId);
+            DeleteRuleParameter(UserContext.Current.OrganizationId, ruleParameterId);
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace Micajah.Common.Bll.Providers
             bool isInputParameter, bool isEntity, string fieldName, string fullName, string typeName
             , string term, object value)
         {
-            UpdateRuleParameter(UserContext.Current.SelectedOrganizationId, ruleParameterId,
+            UpdateRuleParameter(UserContext.Current.OrganizationId, ruleParameterId,
                 ruleId, entityNodeTypeId, isInputParameter, isEntity, fieldName, fullName, typeName, term, value);
         }
 
@@ -459,7 +459,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleParametersDataTable GetRuleParameters(Guid ruleId)
         {
-            return GetRuleParameters(UserContext.Current.SelectedOrganizationId, ruleId);
+            return GetRuleParameters(UserContext.Current.OrganizationId, ruleId);
         }
 
         /// <summary>
@@ -486,7 +486,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static ClientDataSet.RuleParametersRow GetRuleParameterRow(Guid ruleParameterId)
         {
-            return GetRuleParameterRow(ruleParameterId, UserContext.Current.SelectedOrganizationId);
+            return GetRuleParameterRow(ruleParameterId, UserContext.Current.OrganizationId);
         }
 
         #endregion

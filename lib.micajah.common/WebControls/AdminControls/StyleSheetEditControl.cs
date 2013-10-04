@@ -49,7 +49,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 UserContext user = UserContext.Current;
                 if (user != null)
                 {
-                    StyleSheetText.Text = HttpUtility.HtmlDecode(SettingProvider.GetCustomStyleSheet(user.SelectedOrganizationId));
+                    StyleSheetText.Text = HttpUtility.HtmlDecode(SettingProvider.GetCustomStyleSheet(user.OrganizationId));
                 }
 
                 Micajah.Common.Bll.Action action = ActionProvider.PagesAndControls.FindByActionId(ActionProvider.ConfigurationPageActionId);
@@ -68,7 +68,7 @@ namespace Micajah.Common.WebControls.AdminControls
             UserContext user = UserContext.Current;
             if (user != null)
             {
-                SettingProvider.UpdateCustomStyleSheet(user.SelectedOrganizationId, HttpUtility.HtmlEncode(StyleSheetText.Text));
+                SettingProvider.UpdateCustomStyleSheet(user.OrganizationId, HttpUtility.HtmlEncode(StyleSheetText.Text));
 
                 if (m_IsModernTheme)
                 {
