@@ -879,13 +879,11 @@ namespace Micajah.Common.Security
 
             bool putToCache = false;
             Organization newOrganization = OrganizationProvider.GetOrganizationFromCache(organizationId);
-
             if (newOrganization == null)
             {
                 newOrganization = OrganizationProvider.GetOrganization(organizationId);
                 if (newOrganization == null)
                     throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.OrganizationProvider_ErrorMessage_NoOrganization, organizationId));
-
                 putToCache = true;
             }
 

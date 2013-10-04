@@ -510,12 +510,20 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the e-mail was sent successfully; otherwise, false.</returns>
         internal static bool SendChangeLoginEmail(string email, Guid organizationId, string modifiedByEmail)
         {
+            Organization org = null;
             bool enableNotification = FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification;
-            Organization org = OrganizationProvider.GetOrganization(organizationId);
-            if (org != null)
+
+            if (organizationId != Guid.Empty)
             {
-                EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
-                enableNotification = settings.EnableChangeLoginNotification;
+                org = OrganizationProvider.GetOrganizationFromCache(organizationId);
+                if (org == null)
+                    org = OrganizationProvider.GetOrganization(organizationId);
+
+                if (org != null)
+                {
+                    EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
+                    enableNotification = settings.EnableChangeLoginNotification;
+                }
             }
 
             if (!enableNotification)
@@ -553,12 +561,21 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true, if the e-mail was sent successfully; otherwise, false.</returns>
         internal static bool SendChangePasswordEmail(string email, string password, Guid organizationId, string modifiedByEmail)
         {
+            Organization org = null;
+
             bool enableNotification = FrameworkConfiguration.Current.WebApplication.Email.EnableChangeLoginNotification;
-            Organization org = OrganizationProvider.GetOrganization(organizationId);
-            if (org != null)
+
+            if (organizationId != Guid.Empty)
             {
-                EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
-                enableNotification = settings.EnableChangeLoginNotification;
+                org = OrganizationProvider.GetOrganizationFromCache(organizationId);
+                if (org == null)
+                    org = OrganizationProvider.GetOrganization(organizationId);
+
+                if (org != null)
+                {
+                    EmailElement settings = SettingProvider.GetOrganizationEmailSettingsFromCache(organizationId);
+                    enableNotification = settings.EnableChangeLoginNotification;
+                }
             }
 
             if (!enableNotification)
@@ -599,7 +616,10 @@ namespace Micajah.Common.Bll.Providers
         {
             bool enableNotification = false;
             EmailSendingReason reason = EmailSendingReason.Undefined;
-            Organization org = OrganizationProvider.GetOrganization(organizationId);
+
+            Organization org = OrganizationProvider.GetOrganizationFromCache(organizationId);
+            if (org == null)
+                org = OrganizationProvider.GetOrganization(organizationId);
 
             if (newUser)
             {
