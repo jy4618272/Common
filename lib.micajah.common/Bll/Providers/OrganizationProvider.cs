@@ -462,18 +462,19 @@ namespace Micajah.Common.Bll.Providers
         {
             string key = string.Format(CultureInfo.InvariantCulture, WebsiteIdKeyFormat, organizationId);
             object value = CacheManager.Current.Get(key);
+            Guid websiteId = Guid.Empty;
 
             if (value == null)
             {
-                Guid websiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
+                websiteId = WebsiteProvider.GetWebsiteIdByOrganizationId(organizationId);
 
                 if (websiteId != Guid.Empty)
                     CacheManager.Current.PutWithDefaultTimeout(key, websiteId);
             }
             else
-                return (Guid)value;
+                websiteId = (Guid)value;
 
-            return Guid.Empty;
+            return websiteId;
         }
 
         internal static void PutOrganizationToCache(Organization organization)

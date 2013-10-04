@@ -35,28 +35,20 @@ namespace Micajah.Common.Bll.Providers
         {
             get
             {
-                List<LdapProcess> list = null;
-                try
+                List<LdapProcess> list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
+                if (list == null)
                 {
-                    list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
-                    if (list == null)
+                    lock (s_LdapProcessesSyncRoot)
                     {
-                        lock (s_LdapProcessesSyncRoot)
+                        list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
+                        if (list == null)
                         {
-                            list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
-                            if (list == null)
-                            {
-                                list = new List<LdapProcess>();
-                                CacheManager.Current.PutWithDefaultTimeout("mc.LdapProcesses", list);
-                            }
+                            list = new List<LdapProcess>();
+                            CacheManager.Current.PutWithDefaultTimeout("mc.LdapProcesses", list);
                         }
                     }
-                    return list;
                 }
-                finally
-                {
-                    list = null;
-                }
+                return list;
             }
         }
 
