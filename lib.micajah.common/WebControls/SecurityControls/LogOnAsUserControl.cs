@@ -138,7 +138,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             if (this.IsPostBack)
                 BaseControl.LoadResources(List, this.GetType().BaseType.Name);
             else
+            {
                 InstanceListRow.Visible = FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances;
+                InstanceList.Required = (m_RoleId != RoleProvider.OrganizationAdministratorRoleId);
+            }
         }
 
         protected void ComboBox_DataBound(object sender, EventArgs e)
