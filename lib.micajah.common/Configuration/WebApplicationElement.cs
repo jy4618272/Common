@@ -18,7 +18,7 @@ namespace Micajah.Common.Configuration
         /// <summary>
         /// The required schema version of the database.
         /// </summary>
-        internal const int RequiredDatabaseVersion = 117;
+        internal const int RequiredDatabaseVersion = 118;
 
         internal const string MasterConnectionStringName = "Micajah.Common.Properties.Settings.MasterConnectionString";
 

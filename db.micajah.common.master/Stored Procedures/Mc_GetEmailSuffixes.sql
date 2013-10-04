@@ -13,6 +13,6 @@ BEGIN
 	WHERE  
 		((@OrganizationId IS NULL) OR (OrganizationId = @OrganizationId)) AND  
 		((@InstanceId IS NULL) OR (InstanceId = @InstanceId)) AND 
-		((@EmailSuffixName IS NOT NULL) AND (',' + EmailSuffixName + ',' like '%,' + @EmailSuffixName + ',%'))
+		((@EmailSuffixName IS NOT NULL) AND (',' + EmailSuffixName + ',' LIKE '%,' + @EmailSuffixName + ',%'))
 	ORDER BY EmailSuffixName;
 END

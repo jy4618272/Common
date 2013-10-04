@@ -1,14 +1,14 @@
-﻿CREATE procedure [dbo].[Mc_GetRecurringScheduleByEntityType]
+﻿CREATE PROCEDURE [dbo].[Mc_GetRecurringScheduleByEntityType]
 (
 	@OrganizationId uniqueidentifier,
-	@InstanceId uniqueidentifier=null,
+	@InstanceId uniqueidentifier = null,
 	@LocalEntityType nvarchar(50)
 )
-as
-begin
-	set NOCOUNT OFF;
+AS
+BEGIN
+	SET NOCOUNT OFF;
 
-	select [RecurringScheduleId]
+	SELECT [RecurringScheduleId]
 		  ,[OrganizationId]
 		  ,[InstanceId]
 		  ,[LocalEntityType]
@@ -20,12 +20,8 @@ begin
 		  ,[UpdatedTime]
 		  ,[UpdatedBy]
 		  ,[Deleted]
-	from [Mc_RecurringSchedule] as RS
-	where RS.OrganizationId = @OrganizationId
-	and RS.Deleted = 0
-	and (	@InstanceId is null 
-			or RS.InstanceId is null 
-			or RS.InstanceId = @InstanceId)
-	and RS.LocalEntityType = @LocalEntityType;
-	
+	FROM [Mc_RecurringSchedule] AS RS
+	WHERE RS.OrganizationId = @OrganizationId AND RS.Deleted = 0
+		AND (@InstanceId IS NULL OR RS.InstanceId IS NULL OR RS.InstanceId = @InstanceId)
+		AND RS.LocalEntityType = @LocalEntityType;
 END
