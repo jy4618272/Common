@@ -7,7 +7,7 @@
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="MasterConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="MasterConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Properties.Settings.GlobalReference.Default.MasterConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="CountryTableAdapter" GeneratorDataComponentClassName="CountryTableAdapter" Name="Country" UserDataComponentName="CountryTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="CountryTableAdapter" GeneratorDataComponentClassName="CountryTableAdapter" Name="Country" UserDataComponentName="CountryTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetCountries" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetCountries" GetMethodModifier="Public" GetMethodName="GetCountries" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetCountries" UserSourceName="GetCountries">
                 <InsertCommand>
@@ -36,7 +36,7 @@
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="CustomUrlTableAdapter" GeneratorDataComponentClassName="CustomUrlTableAdapter" Name="CustomUrl" UserDataComponentName="CustomUrlTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="CustomUrlTableAdapter" GeneratorDataComponentClassName="CustomUrlTableAdapter" Name="CustomUrl" UserDataComponentName="CustomUrlTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetCustomUrls" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetCustomUrls" GetMethodModifier="Public" GetMethodName="GetCustomUrls" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetCustomUrls" UserSourceName="GetCustomUrls">
                 <DeleteCommand>
@@ -118,7 +118,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EmailTableAdapter" GeneratorDataComponentClassName="EmailTableAdapter" Name="Email" UserDataComponentName="EmailTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EmailTableAdapter" GeneratorDataComponentClassName="EmailTableAdapter" Name="Email" UserDataComponentName="EmailTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetEmails" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEmails" GetMethodModifier="Public" GetMethodName="GetEmails" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEmails" UserSourceName="GetEmails">
                 <DeleteCommand>
@@ -170,7 +170,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EmailSuffixTableAdapter" GeneratorDataComponentClassName="EmailSuffixTableAdapter" Name="EmailSuffix" UserDataComponentName="EmailSuffixTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EmailSuffixTableAdapter" GeneratorDataComponentClassName="EmailSuffixTableAdapter" Name="EmailSuffix" UserDataComponentName="EmailSuffixTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetEmailSuffixes" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEmailSuffixes" GetMethodModifier="Public" GetMethodName="GetEmailSuffixes" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEmailSuffixes" UserSourceName="GetEmailSuffixes">
                 <DeleteCommand>
@@ -249,7 +249,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GroupMappingsTableAdapter" GeneratorDataComponentClassName="GroupMappingsTableAdapter" Name="GroupMappings" UserDataComponentName="GroupMappingsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="GroupMappingsTableAdapter" GeneratorDataComponentClassName="GroupMappingsTableAdapter" Name="GroupMappings" UserDataComponentName="GroupMappingsTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetGroupMappings" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetGroupMappings" GetMethodModifier="Public" GetMethodName="GetGroupMappings" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetGroupMappings" UserSourceName="GetGroupMappings">
                 <DeleteCommand>
@@ -315,7 +315,7 @@
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="InvitedLoginTableAdapter" GeneratorDataComponentClassName="InvitedLoginTableAdapter" Name="InvitedLogin" UserDataComponentName="InvitedLoginTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="InvitedLoginTableAdapter" GeneratorDataComponentClassName="InvitedLoginTableAdapter" Name="InvitedLogin" UserDataComponentName="InvitedLoginTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetInvitedLogin" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetInvitedLogin" GetMethodModifier="Public" GetMethodName="GetInvitedLogin" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetInvitedLogin" UserSourceName="GetInvitedLogin">
                 <DeleteCommand>
@@ -374,7 +374,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OrganizationsLdapGroupsTableAdapter" GeneratorDataComponentClassName="OrganizationsLdapGroupsTableAdapter" Name="OrganizationsLdapGroups" UserDataComponentName="OrganizationsLdapGroupsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="OrganizationsLdapGroupsTableAdapter" GeneratorDataComponentClassName="OrganizationsLdapGroupsTableAdapter" Name="OrganizationsLdapGroups" UserDataComponentName="OrganizationsLdapGroupsTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetOrganizationsLdapGroups" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetOrganizationsLdapGroups" GetMethodModifier="Public" GetMethodName="GetOrganizationsLdapGroups" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetOrganizationsLdapGroups" UserSourceName="GetOrganizationsLdapGroups">
                 <DeleteCommand>
@@ -462,7 +462,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ResetPasswordRequestTableAdapter" GeneratorDataComponentClassName="ResetPasswordRequestTableAdapter" Name="ResetPasswordRequest" UserDataComponentName="ResetPasswordRequestTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="ResetPasswordRequestTableAdapter" GeneratorDataComponentClassName="ResetPasswordRequestTableAdapter" Name="ResetPasswordRequest" UserDataComponentName="ResetPasswordRequestTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetResetPasswordRequest" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetResetPasswordRequest" GetMethodModifier="Public" GetMethodName="GetResetPasswordRequest" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetResetPasswordRequest" UserSourceName="GetResetPasswordRequest">
                 <DeleteCommand>
@@ -515,7 +515,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ResourceTableAdapter" GeneratorDataComponentClassName="ResourceTableAdapter" Name="Resource" UserDataComponentName="ResourceTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="ResourceTableAdapter" GeneratorDataComponentClassName="ResourceTableAdapter" Name="Resource" UserDataComponentName="ResourceTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetResources" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetResources" GetMethodModifier="Public" GetMethodName="GetResources" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetResources" UserSourceName="GetResources">
                 <DeleteCommand>
@@ -602,7 +602,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="UnitsOfMeasureTableAdapter" GeneratorDataComponentClassName="UnitsOfMeasureTableAdapter" Name="UnitsOfMeasure" UserDataComponentName="UnitsOfMeasureTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="UnitsOfMeasureTableAdapter" GeneratorDataComponentClassName="UnitsOfMeasureTableAdapter" Name="UnitsOfMeasure" UserDataComponentName="UnitsOfMeasureTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetUnitsOfMeasure" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetUnitsOfMeasure" GetMethodModifier="Public" GetMethodName="GetUnitsOfMeasure" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetUnitsOfMeasure" UserSourceName="GetUnitsOfMeasure">
                 <DeleteCommand>
@@ -705,7 +705,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="UnitsOfMeasureConversionTableAdapter" GeneratorDataComponentClassName="UnitsOfMeasureConversionTableAdapter" Name="UnitsOfMeasureConversion" UserDataComponentName="UnitsOfMeasureConversionTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="UnitsOfMeasureConversionTableAdapter" GeneratorDataComponentClassName="UnitsOfMeasureConversionTableAdapter" Name="UnitsOfMeasureConversion" UserDataComponentName="UnitsOfMeasureConversionTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetUnitsOfMeasureConversion" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetUnitsOfMeasureConversion" GetMethodModifier="Public" GetMethodName="GetUnitsOfMeasureConversion" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetUnitsOfMeasureConversion" UserSourceName="GetUnitsOfMeasureConversion">
                 <DeleteCommand>
@@ -789,7 +789,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="DatabaseTableAdapter" GeneratorDataComponentClassName="DatabaseTableAdapter" Name="Database" UserDataComponentName="DatabaseTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="DatabaseTableAdapter" GeneratorDataComponentClassName="DatabaseTableAdapter" Name="Database" UserDataComponentName="DatabaseTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetDatabases" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetDatabases" GetMethodModifier="Public" GetMethodName="GetDatabases" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDatabases" UserSourceName="GetDatabases">
                 <InsertCommand>
@@ -890,7 +890,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="DatabaseServerTableAdapter" GeneratorDataComponentClassName="DatabaseServerTableAdapter" Name="DatabaseServer" UserDataComponentName="DatabaseServerTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="DatabaseServerTableAdapter" GeneratorDataComponentClassName="DatabaseServerTableAdapter" Name="DatabaseServer" UserDataComponentName="DatabaseServerTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetDatabaseServers" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetDatabaseServers" GetMethodModifier="Public" GetMethodName="GetDatabaseServers" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDatabaseServers" UserSourceName="GetDatabaseServers">
                 <InsertCommand>
@@ -967,7 +967,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="WebsiteTableAdapter" GeneratorDataComponentClassName="WebsiteTableAdapter" Name="Website" UserDataComponentName="WebsiteTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="WebsiteTableAdapter" GeneratorDataComponentClassName="WebsiteTableAdapter" Name="Website" UserDataComponentName="WebsiteTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetWebsites" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetWebsites" GetMethodModifier="Public" GetMethodName="GetWebsites" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetWebsites" UserSourceName="GetWebsites">
                 <InsertCommand>
@@ -1041,7 +1041,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OrganizationTableAdapter" GeneratorDataComponentClassName="OrganizationTableAdapter" Name="Organization" UserDataComponentName="OrganizationTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="OrganizationTableAdapter" GeneratorDataComponentClassName="OrganizationTableAdapter" Name="Organization" UserDataComponentName="OrganizationTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetOrganizations" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetOrganizations" GetMethodModifier="Public" GetMethodName="GetOrganizations" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetOrganizations" UserSourceName="GetOrganizations">
                 <InsertCommand>
@@ -1230,7 +1230,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="LoginTableAdapter" GeneratorDataComponentClassName="LoginTableAdapter" Name="Login" UserDataComponentName="LoginTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="LoginTableAdapter" GeneratorDataComponentClassName="LoginTableAdapter" Name="Login" UserDataComponentName="LoginTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetLogin" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetLogin" GetMethodModifier="Public" GetMethodName="GetLogin" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetLogin" UserSourceName="GetLogin">
                 <InsertCommand>
@@ -1343,7 +1343,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OrganizationsLoginsTableAdapter" GeneratorDataComponentClassName="OrganizationsLoginsTableAdapter" Name="OrganizationsLogins" UserDataComponentName="OrganizationsLoginsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="OrganizationsLoginsTableAdapter" GeneratorDataComponentClassName="OrganizationsLoginsTableAdapter" Name="OrganizationsLogins" UserDataComponentName="OrganizationsLoginsTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetOrganizationLogin" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetOrganizationLogin" GetMethodModifier="Public" GetMethodName="GetOrganizationLogin" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetOrganizationLogin" UserSourceName="GetOrganizationLogin">
                 <DeleteCommand>
@@ -1460,7 +1460,7 @@
   <xs:element name="MasterDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_DataSetName="MasterDataSet" msprop:Generator_UserDSName="MasterDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Country" msprop:Generator_TableClassName="CountryDataTable" msprop:Generator_TableVarName="tableCountry" msprop:Generator_TablePropName="Country" msprop:Generator_RowDeletingName="CountryRowDeleting" msprop:Generator_RowChangingName="CountryRowChanging" msprop:Generator_RowEvHandlerName="CountryRowChangeEventHandler" msprop:Generator_RowDeletedName="CountryRowDeleted" msprop:Generator_UserTableName="Country" msprop:Generator_RowChangedName="CountryRowChanged" msprop:Generator_RowEvArgName="CountryRowChangeEvent" msprop:Generator_RowClassName="CountryRow">
+        <xs:element name="Country" msprop:Generator_TableClassName="CountryDataTable" msprop:Generator_TableVarName="tableCountry" msprop:Generator_RowChangedName="CountryRowChanged" msprop:Generator_TablePropName="Country" msprop:Generator_RowDeletingName="CountryRowDeleting" msprop:Generator_RowChangingName="CountryRowChanging" msprop:Generator_RowEvHandlerName="CountryRowChangeEventHandler" msprop:Generator_RowDeletedName="CountryRowDeleted" msprop:Generator_RowClassName="CountryRow" msprop:Generator_UserTableName="Country" msprop:Generator_RowEvArgName="CountryRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="CountryId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnCountryId" msprop:Generator_ColumnPropNameInRow="CountryId" msprop:Generator_ColumnPropNameInTable="CountryIdColumn" msprop:Generator_UserColumnName="CountryId" type="xs:string" />
@@ -1474,7 +1474,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="CustomUrl" msprop:Generator_TableClassName="CustomUrlDataTable" msprop:Generator_TableVarName="tableCustomUrl" msprop:Generator_TablePropName="CustomUrl" msprop:Generator_RowDeletingName="CustomUrlRowDeleting" msprop:Generator_RowChangingName="CustomUrlRowChanging" msprop:Generator_RowEvHandlerName="CustomUrlRowChangeEventHandler" msprop:Generator_RowDeletedName="CustomUrlRowDeleted" msprop:Generator_UserTableName="CustomUrl" msprop:Generator_RowChangedName="CustomUrlRowChanged" msprop:Generator_RowEvArgName="CustomUrlRowChangeEvent" msprop:Generator_RowClassName="CustomUrlRow">
+        <xs:element name="CustomUrl" msprop:Generator_TableClassName="CustomUrlDataTable" msprop:Generator_TableVarName="tableCustomUrl" msprop:Generator_RowChangedName="CustomUrlRowChanged" msprop:Generator_TablePropName="CustomUrl" msprop:Generator_RowDeletingName="CustomUrlRowDeleting" msprop:Generator_RowChangingName="CustomUrlRowChanging" msprop:Generator_RowEvHandlerName="CustomUrlRowChangeEventHandler" msprop:Generator_RowDeletedName="CustomUrlRowDeleted" msprop:Generator_RowClassName="CustomUrlRow" msprop:Generator_UserTableName="CustomUrl" msprop:Generator_RowEvArgName="CustomUrlRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="CustomUrlId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnCustomUrlId" msprop:Generator_ColumnPropNameInRow="CustomUrlId" msprop:Generator_ColumnPropNameInTable="CustomUrlIdColumn" msprop:Generator_UserColumnName="CustomUrlId" type="xs:string" />
@@ -1497,7 +1497,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Email" msprop:Generator_TableClassName="EmailDataTable" msprop:Generator_TableVarName="tableEmail" msprop:Generator_TablePropName="Email" msprop:Generator_RowDeletingName="EmailRowDeleting" msprop:Generator_RowChangingName="EmailRowChanging" msprop:Generator_RowEvHandlerName="EmailRowChangeEventHandler" msprop:Generator_RowDeletedName="EmailRowDeleted" msprop:Generator_UserTableName="Email" msprop:Generator_RowChangedName="EmailRowChanged" msprop:Generator_RowEvArgName="EmailRowChangeEvent" msprop:Generator_RowClassName="EmailRow">
+        <xs:element name="Email" msprop:Generator_TableClassName="EmailDataTable" msprop:Generator_TableVarName="tableEmail" msprop:Generator_RowChangedName="EmailRowChanged" msprop:Generator_TablePropName="Email" msprop:Generator_RowDeletingName="EmailRowDeleting" msprop:Generator_RowChangingName="EmailRowChanging" msprop:Generator_RowEvHandlerName="EmailRowChangeEventHandler" msprop:Generator_RowDeletedName="EmailRowDeleted" msprop:Generator_RowClassName="EmailRow" msprop:Generator_UserTableName="Email" msprop:Generator_RowEvArgName="EmailRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Email" msprop:Generator_ColumnVarNameInTable="columnEmail" msprop:Generator_ColumnPropNameInRow="Email" msprop:Generator_ColumnPropNameInTable="EmailColumn" msprop:Generator_UserColumnName="Email">
@@ -1511,7 +1511,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="EmailSuffix" msprop:Generator_TableClassName="EmailSuffixDataTable" msprop:Generator_TableVarName="tableEmailSuffix" msprop:Generator_TablePropName="EmailSuffix" msprop:Generator_RowDeletingName="EmailSuffixRowDeleting" msprop:Generator_RowChangingName="EmailSuffixRowChanging" msprop:Generator_RowEvHandlerName="EmailSuffixRowChangeEventHandler" msprop:Generator_RowDeletedName="EmailSuffixRowDeleted" msprop:Generator_UserTableName="EmailSuffix" msprop:Generator_RowChangedName="EmailSuffixRowChanged" msprop:Generator_RowEvArgName="EmailSuffixRowChangeEvent" msprop:Generator_RowClassName="EmailSuffixRow">
+        <xs:element name="EmailSuffix" msprop:Generator_TableClassName="EmailSuffixDataTable" msprop:Generator_TableVarName="tableEmailSuffix" msprop:Generator_RowChangedName="EmailSuffixRowChanged" msprop:Generator_TablePropName="EmailSuffix" msprop:Generator_RowDeletingName="EmailSuffixRowDeleting" msprop:Generator_RowChangingName="EmailSuffixRowChanging" msprop:Generator_RowEvHandlerName="EmailSuffixRowChangeEventHandler" msprop:Generator_RowDeletedName="EmailSuffixRowDeleted" msprop:Generator_RowClassName="EmailSuffixRow" msprop:Generator_UserTableName="EmailSuffix" msprop:Generator_RowEvArgName="EmailSuffixRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="EmailSuffixId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnEmailSuffixId" msprop:Generator_ColumnPropNameInRow="EmailSuffixId" msprop:Generator_ColumnPropNameInTable="EmailSuffixIdColumn" msprop:Generator_UserColumnName="EmailSuffixId" type="xs:string" />
@@ -1527,7 +1527,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="GroupMappings" msprop:Generator_TableClassName="GroupMappingsDataTable" msprop:Generator_TableVarName="tableGroupMappings" msprop:Generator_TablePropName="GroupMappings" msprop:Generator_RowDeletingName="GroupMappingsRowDeleting" msprop:Generator_RowChangingName="GroupMappingsRowChanging" msprop:Generator_RowEvHandlerName="GroupMappingsRowChangeEventHandler" msprop:Generator_RowDeletedName="GroupMappingsRowDeleted" msprop:Generator_UserTableName="GroupMappings" msprop:Generator_RowChangedName="GroupMappingsRowChanged" msprop:Generator_RowEvArgName="GroupMappingsRowChangeEvent" msprop:Generator_RowClassName="GroupMappingsRow">
+        <xs:element name="GroupMappings" msprop:Generator_TableClassName="GroupMappingsDataTable" msprop:Generator_TableVarName="tableGroupMappings" msprop:Generator_RowChangedName="GroupMappingsRowChanged" msprop:Generator_TablePropName="GroupMappings" msprop:Generator_RowDeletingName="GroupMappingsRowDeleting" msprop:Generator_RowChangingName="GroupMappingsRowChanging" msprop:Generator_RowEvHandlerName="GroupMappingsRowChangeEventHandler" msprop:Generator_RowDeletedName="GroupMappingsRowDeleted" msprop:Generator_RowClassName="GroupMappingsRow" msprop:Generator_UserTableName="GroupMappings" msprop:Generator_RowEvArgName="GroupMappingsRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="GroupId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnGroupId" msprop:Generator_ColumnPropNameInRow="GroupId" msprop:Generator_ColumnPropNameInTable="GroupIdColumn" msprop:Generator_UserColumnName="GroupId" type="xs:string" />
@@ -1558,7 +1558,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="InvitedLogin" msprop:Generator_TableClassName="InvitedLoginDataTable" msprop:Generator_TableVarName="tableInvitedLogin" msprop:Generator_TablePropName="InvitedLogin" msprop:Generator_RowDeletingName="InvitedLoginRowDeleting" msprop:Generator_RowChangingName="InvitedLoginRowChanging" msprop:Generator_RowEvHandlerName="InvitedLoginRowChangeEventHandler" msprop:Generator_RowDeletedName="InvitedLoginRowDeleted" msprop:Generator_UserTableName="InvitedLogin" msprop:Generator_RowChangedName="InvitedLoginRowChanged" msprop:Generator_RowEvArgName="InvitedLoginRowChangeEvent" msprop:Generator_RowClassName="InvitedLoginRow">
+        <xs:element name="InvitedLogin" msprop:Generator_TableClassName="InvitedLoginDataTable" msprop:Generator_TableVarName="tableInvitedLogin" msprop:Generator_RowChangedName="InvitedLoginRowChanged" msprop:Generator_TablePropName="InvitedLogin" msprop:Generator_RowDeletingName="InvitedLoginRowDeleting" msprop:Generator_RowChangingName="InvitedLoginRowChanging" msprop:Generator_RowEvHandlerName="InvitedLoginRowChangeEventHandler" msprop:Generator_RowDeletedName="InvitedLoginRowDeleted" msprop:Generator_RowClassName="InvitedLoginRow" msprop:Generator_UserTableName="InvitedLogin" msprop:Generator_RowEvArgName="InvitedLoginRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="InvitedLoginId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnInvitedLoginId" msprop:Generator_ColumnPropNameInRow="InvitedLoginId" msprop:Generator_ColumnPropNameInTable="InvitedLoginIdColumn" msprop:Generator_UserColumnName="InvitedLoginId" type="xs:string" />
@@ -1582,7 +1582,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="OrganizationsLdapGroups" msprop:Generator_TableClassName="OrganizationsLdapGroupsDataTable" msprop:Generator_TableVarName="tableOrganizationsLdapGroups" msprop:Generator_TablePropName="OrganizationsLdapGroups" msprop:Generator_RowDeletingName="OrganizationsLdapGroupsRowDeleting" msprop:Generator_RowChangingName="OrganizationsLdapGroupsRowChanging" msprop:Generator_RowEvHandlerName="OrganizationsLdapGroupsRowChangeEventHandler" msprop:Generator_RowDeletedName="OrganizationsLdapGroupsRowDeleted" msprop:Generator_UserTableName="OrganizationsLdapGroups" msprop:Generator_RowChangedName="OrganizationsLdapGroupsRowChanged" msprop:Generator_RowEvArgName="OrganizationsLdapGroupsRowChangeEvent" msprop:Generator_RowClassName="OrganizationsLdapGroupsRow">
+        <xs:element name="OrganizationsLdapGroups" msprop:Generator_TableClassName="OrganizationsLdapGroupsDataTable" msprop:Generator_TableVarName="tableOrganizationsLdapGroups" msprop:Generator_RowChangedName="OrganizationsLdapGroupsRowChanged" msprop:Generator_TablePropName="OrganizationsLdapGroups" msprop:Generator_RowDeletingName="OrganizationsLdapGroupsRowDeleting" msprop:Generator_RowChangingName="OrganizationsLdapGroupsRowChanging" msprop:Generator_RowEvHandlerName="OrganizationsLdapGroupsRowChangeEventHandler" msprop:Generator_RowDeletedName="OrganizationsLdapGroupsRowDeleted" msprop:Generator_RowClassName="OrganizationsLdapGroupsRow" msprop:Generator_UserTableName="OrganizationsLdapGroups" msprop:Generator_RowEvArgName="OrganizationsLdapGroupsRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Id" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:string" />
@@ -1614,7 +1614,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="ResetPasswordRequest" msprop:Generator_TableClassName="ResetPasswordRequestDataTable" msprop:Generator_TableVarName="tableResetPasswordRequest" msprop:Generator_TablePropName="ResetPasswordRequest" msprop:Generator_RowDeletingName="ResetPasswordRequestRowDeleting" msprop:Generator_RowChangingName="ResetPasswordRequestRowChanging" msprop:Generator_RowEvHandlerName="ResetPasswordRequestRowChangeEventHandler" msprop:Generator_RowDeletedName="ResetPasswordRequestRowDeleted" msprop:Generator_UserTableName="ResetPasswordRequest" msprop:Generator_RowChangedName="ResetPasswordRequestRowChanged" msprop:Generator_RowEvArgName="ResetPasswordRequestRowChangeEvent" msprop:Generator_RowClassName="ResetPasswordRequestRow">
+        <xs:element name="ResetPasswordRequest" msprop:Generator_TableClassName="ResetPasswordRequestDataTable" msprop:Generator_TableVarName="tableResetPasswordRequest" msprop:Generator_RowChangedName="ResetPasswordRequestRowChanged" msprop:Generator_TablePropName="ResetPasswordRequest" msprop:Generator_RowDeletingName="ResetPasswordRequestRowDeleting" msprop:Generator_RowChangingName="ResetPasswordRequestRowChanging" msprop:Generator_RowEvHandlerName="ResetPasswordRequestRowChangeEventHandler" msprop:Generator_RowDeletedName="ResetPasswordRequestRowDeleted" msprop:Generator_RowClassName="ResetPasswordRequestRow" msprop:Generator_UserTableName="ResetPasswordRequest" msprop:Generator_RowEvArgName="ResetPasswordRequestRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ResetPasswordRequestId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnResetPasswordRequestId" msprop:Generator_ColumnPropNameInRow="ResetPasswordRequestId" msprop:Generator_ColumnPropNameInTable="ResetPasswordRequestIdColumn" msprop:Generator_UserColumnName="ResetPasswordRequestId" type="xs:string" />
@@ -1623,7 +1623,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Resource" msprop:Generator_TableClassName="ResourceDataTable" msprop:Generator_TableVarName="tableResource" msprop:Generator_TablePropName="Resource" msprop:Generator_RowDeletingName="ResourceRowDeleting" msprop:Generator_RowChangingName="ResourceRowChanging" msprop:Generator_RowEvHandlerName="ResourceRowChangeEventHandler" msprop:Generator_RowDeletedName="ResourceRowDeleted" msprop:Generator_UserTableName="Resource" msprop:Generator_RowChangedName="ResourceRowChanged" msprop:Generator_RowEvArgName="ResourceRowChangeEvent" msprop:Generator_RowClassName="ResourceRow">
+        <xs:element name="Resource" msprop:Generator_TableClassName="ResourceDataTable" msprop:Generator_TableVarName="tableResource" msprop:Generator_RowChangedName="ResourceRowChanged" msprop:Generator_TablePropName="Resource" msprop:Generator_RowDeletingName="ResourceRowDeleting" msprop:Generator_RowChangingName="ResourceRowChanging" msprop:Generator_RowEvHandlerName="ResourceRowChangeEventHandler" msprop:Generator_RowDeletedName="ResourceRowDeleted" msprop:Generator_RowClassName="ResourceRow" msprop:Generator_UserTableName="Resource" msprop:Generator_RowEvArgName="ResourceRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ResourceId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnResourceId" msprop:Generator_ColumnPropNameInRow="ResourceId" msprop:Generator_ColumnPropNameInTable="ResourceIdColumn" msprop:Generator_UserColumnName="ResourceId" type="xs:string" />
@@ -1665,7 +1665,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="UnitsOfMeasure" msprop:Generator_TableClassName="UnitsOfMeasureDataTable" msprop:Generator_TableVarName="tableUnitsOfMeasure" msprop:Generator_TablePropName="UnitsOfMeasure" msprop:Generator_RowDeletingName="UnitsOfMeasureRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureRowChanging" msprop:Generator_RowEvHandlerName="UnitsOfMeasureRowChangeEventHandler" msprop:Generator_RowDeletedName="UnitsOfMeasureRowDeleted" msprop:Generator_UserTableName="UnitsOfMeasure" msprop:Generator_RowChangedName="UnitsOfMeasureRowChanged" msprop:Generator_RowEvArgName="UnitsOfMeasureRowChangeEvent" msprop:Generator_RowClassName="UnitsOfMeasureRow">
+        <xs:element name="UnitsOfMeasure" msprop:Generator_TableClassName="UnitsOfMeasureDataTable" msprop:Generator_TableVarName="tableUnitsOfMeasure" msprop:Generator_RowChangedName="UnitsOfMeasureRowChanged" msprop:Generator_TablePropName="UnitsOfMeasure" msprop:Generator_RowDeletingName="UnitsOfMeasureRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureRowChanging" msprop:Generator_RowEvHandlerName="UnitsOfMeasureRowChangeEventHandler" msprop:Generator_RowDeletedName="UnitsOfMeasureRowDeleted" msprop:Generator_RowClassName="UnitsOfMeasureRow" msprop:Generator_UserTableName="UnitsOfMeasure" msprop:Generator_RowEvArgName="UnitsOfMeasureRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="UnitsOfMeasureId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitsOfMeasureId" msprop:Generator_ColumnPropNameInRow="UnitsOfMeasureId" msprop:Generator_ColumnPropNameInTable="UnitsOfMeasureIdColumn" msprop:Generator_UserColumnName="UnitsOfMeasureId" type="xs:string" />
@@ -1729,7 +1729,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="UnitsOfMeasureConversion" msprop:Generator_TableClassName="UnitsOfMeasureConversionDataTable" msprop:Generator_TableVarName="tableUnitsOfMeasureConversion" msprop:Generator_TablePropName="UnitsOfMeasureConversion" msprop:Generator_RowDeletingName="UnitsOfMeasureConversionRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureConversionRowChanging" msprop:Generator_RowEvHandlerName="UnitsOfMeasureConversionRowChangeEventHandler" msprop:Generator_RowDeletedName="UnitsOfMeasureConversionRowDeleted" msprop:Generator_UserTableName="UnitsOfMeasureConversion" msprop:Generator_RowChangedName="UnitsOfMeasureConversionRowChanged" msprop:Generator_RowEvArgName="UnitsOfMeasureConversionRowChangeEvent" msprop:Generator_RowClassName="UnitsOfMeasureConversionRow">
+        <xs:element name="UnitsOfMeasureConversion" msprop:Generator_TableClassName="UnitsOfMeasureConversionDataTable" msprop:Generator_TableVarName="tableUnitsOfMeasureConversion" msprop:Generator_RowChangedName="UnitsOfMeasureConversionRowChanged" msprop:Generator_TablePropName="UnitsOfMeasureConversion" msprop:Generator_RowDeletingName="UnitsOfMeasureConversionRowDeleting" msprop:Generator_RowChangingName="UnitsOfMeasureConversionRowChanging" msprop:Generator_RowEvHandlerName="UnitsOfMeasureConversionRowChangeEventHandler" msprop:Generator_RowDeletedName="UnitsOfMeasureConversionRowDeleted" msprop:Generator_RowClassName="UnitsOfMeasureConversionRow" msprop:Generator_UserTableName="UnitsOfMeasureConversion" msprop:Generator_RowEvArgName="UnitsOfMeasureConversionRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="UnitOfMeasureFrom" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnUnitOfMeasureFrom" msprop:Generator_ColumnPropNameInRow="UnitOfMeasureFrom" msprop:Generator_ColumnPropNameInTable="UnitOfMeasureFromColumn" msprop:Generator_UserColumnName="UnitOfMeasureFrom" type="xs:string" />
@@ -1739,7 +1739,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Database" msprop:Generator_TableClassName="DatabaseDataTable" msprop:Generator_TableVarName="tableDatabase" msprop:Generator_TablePropName="Database" msprop:Generator_RowDeletingName="DatabaseRowDeleting" msprop:Generator_RowChangingName="DatabaseRowChanging" msprop:Generator_RowEvHandlerName="DatabaseRowChangeEventHandler" msprop:Generator_RowDeletedName="DatabaseRowDeleted" msprop:Generator_UserTableName="Database" msprop:Generator_RowChangedName="DatabaseRowChanged" msprop:Generator_RowEvArgName="DatabaseRowChangeEvent" msprop:Generator_RowClassName="DatabaseRow">
+        <xs:element name="Database" msprop:Generator_TableClassName="DatabaseDataTable" msprop:Generator_TableVarName="tableDatabase" msprop:Generator_RowChangedName="DatabaseRowChanged" msprop:Generator_TablePropName="Database" msprop:Generator_RowDeletingName="DatabaseRowDeleting" msprop:Generator_RowChangingName="DatabaseRowChanging" msprop:Generator_RowEvHandlerName="DatabaseRowChangeEventHandler" msprop:Generator_RowDeletedName="DatabaseRowDeleted" msprop:Generator_RowClassName="DatabaseRow" msprop:Generator_UserTableName="Database" msprop:Generator_RowEvArgName="DatabaseRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="DatabaseId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnDatabaseId" msprop:Generator_ColumnPropNameInRow="DatabaseId" msprop:Generator_ColumnPropNameInTable="DatabaseIdColumn" msprop:Generator_UserColumnName="DatabaseId" type="xs:string" />
@@ -1777,7 +1777,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="DatabaseServer" msprop:Generator_TableClassName="DatabaseServerDataTable" msprop:Generator_TableVarName="tableDatabaseServer" msprop:Generator_TablePropName="DatabaseServer" msprop:Generator_RowDeletingName="DatabaseServerRowDeleting" msprop:Generator_RowChangingName="DatabaseServerRowChanging" msprop:Generator_RowEvHandlerName="DatabaseServerRowChangeEventHandler" msprop:Generator_RowDeletedName="DatabaseServerRowDeleted" msprop:Generator_UserTableName="DatabaseServer" msprop:Generator_RowChangedName="DatabaseServerRowChanged" msprop:Generator_RowEvArgName="DatabaseServerRowChangeEvent" msprop:Generator_RowClassName="DatabaseServerRow">
+        <xs:element name="DatabaseServer" msprop:Generator_TableClassName="DatabaseServerDataTable" msprop:Generator_TableVarName="tableDatabaseServer" msprop:Generator_RowChangedName="DatabaseServerRowChanged" msprop:Generator_TablePropName="DatabaseServer" msprop:Generator_RowDeletingName="DatabaseServerRowDeleting" msprop:Generator_RowChangingName="DatabaseServerRowChanging" msprop:Generator_RowEvHandlerName="DatabaseServerRowChangeEventHandler" msprop:Generator_RowDeletedName="DatabaseServerRowDeleted" msprop:Generator_RowClassName="DatabaseServerRow" msprop:Generator_UserTableName="DatabaseServer" msprop:Generator_RowEvArgName="DatabaseServerRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="DatabaseServerId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnDatabaseServerId" msprop:Generator_ColumnPropNameInRow="DatabaseServerId" msprop:Generator_ColumnPropNameInTable="DatabaseServerIdColumn" msprop:Generator_UserColumnName="DatabaseServerId" type="xs:string" />
@@ -1809,7 +1809,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Website" msprop:Generator_TableClassName="WebsiteDataTable" msprop:Generator_TableVarName="tableWebsite" msprop:Generator_TablePropName="Website" msprop:Generator_RowDeletingName="WebsiteRowDeleting" msprop:Generator_RowChangingName="WebsiteRowChanging" msprop:Generator_RowEvHandlerName="WebsiteRowChangeEventHandler" msprop:Generator_RowDeletedName="WebsiteRowDeleted" msprop:Generator_UserTableName="Website" msprop:Generator_RowChangedName="WebsiteRowChanged" msprop:Generator_RowEvArgName="WebsiteRowChangeEvent" msprop:Generator_RowClassName="WebsiteRow">
+        <xs:element name="Website" msprop:Generator_TableClassName="WebsiteDataTable" msprop:Generator_TableVarName="tableWebsite" msprop:Generator_RowChangedName="WebsiteRowChanged" msprop:Generator_TablePropName="Website" msprop:Generator_RowDeletingName="WebsiteRowDeleting" msprop:Generator_RowChangingName="WebsiteRowChanging" msprop:Generator_RowEvHandlerName="WebsiteRowChangeEventHandler" msprop:Generator_RowDeletedName="WebsiteRowDeleted" msprop:Generator_RowClassName="WebsiteRow" msprop:Generator_UserTableName="Website" msprop:Generator_RowEvArgName="WebsiteRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="WebsiteId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnWebsiteId" msprop:Generator_ColumnPropNameInRow="WebsiteId" msprop:Generator_ColumnPropNameInTable="WebsiteIdColumn" msprop:Generator_UserColumnName="WebsiteId" type="xs:string" />
@@ -1845,7 +1845,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Organization" msprop:Generator_TableClassName="OrganizationDataTable" msprop:Generator_TableVarName="tableOrganization" msprop:Generator_TablePropName="Organization" msprop:Generator_RowDeletingName="OrganizationRowDeleting" msprop:Generator_RowChangingName="OrganizationRowChanging" msprop:Generator_RowEvHandlerName="OrganizationRowChangeEventHandler" msprop:Generator_RowDeletedName="OrganizationRowDeleted" msprop:Generator_UserTableName="Organization" msprop:Generator_RowChangedName="OrganizationRowChanged" msprop:Generator_RowEvArgName="OrganizationRowChangeEvent" msprop:Generator_RowClassName="OrganizationRow">
+        <xs:element name="Organization" msprop:Generator_TableClassName="OrganizationDataTable" msprop:Generator_TableVarName="tableOrganization" msprop:Generator_RowChangedName="OrganizationRowChanged" msprop:Generator_TablePropName="Organization" msprop:Generator_RowDeletingName="OrganizationRowDeleting" msprop:Generator_RowChangingName="OrganizationRowChanging" msprop:Generator_RowEvHandlerName="OrganizationRowChangeEventHandler" msprop:Generator_RowDeletedName="OrganizationRowDeleted" msprop:Generator_RowClassName="OrganizationRow" msprop:Generator_UserTableName="Organization" msprop:Generator_RowEvArgName="OrganizationRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />
@@ -1998,7 +1998,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Login" msprop:Generator_TableClassName="LoginDataTable" msprop:Generator_TableVarName="tableLogin" msprop:Generator_RowChangedName="LoginRowChanged" msprop:Generator_TablePropName="Login" msprop:Generator_RowDeletingName="LoginRowDeleting" msprop:Generator_RowChangingName="LoginRowChanging" msprop:Generator_RowEvHandlerName="LoginRowChangeEventHandler" msprop:Generator_RowDeletedName="LoginRowDeleted" msprop:Generator_RowClassName="LoginRow" msprop:Generator_UserTableName="Login" msprop:Generator_RowEvArgName="LoginRowChangeEvent">
+        <xs:element name="Login" msprop:Generator_TableClassName="LoginDataTable" msprop:Generator_TableVarName="tableLogin" msprop:Generator_TablePropName="Login" msprop:Generator_RowDeletingName="LoginRowDeleting" msprop:Generator_RowChangingName="LoginRowChanging" msprop:Generator_RowEvHandlerName="LoginRowChangeEventHandler" msprop:Generator_RowDeletedName="LoginRowDeleted" msprop:Generator_UserTableName="Login" msprop:Generator_RowChangedName="LoginRowChanged" msprop:Generator_RowEvArgName="LoginRowChangeEvent" msprop:Generator_RowClassName="LoginRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="LoginId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnLoginId" msprop:Generator_ColumnPropNameInRow="LoginId" msprop:Generator_ColumnPropNameInTable="LoginIdColumn" msprop:Generator_UserColumnName="LoginId" type="xs:string" />
@@ -2049,7 +2049,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="OrganizationsLogins" msprop:Generator_TableClassName="OrganizationsLoginsDataTable" msprop:Generator_TableVarName="tableOrganizationsLogins" msprop:Generator_RowChangedName="OrganizationsLoginsRowChanged" msprop:Generator_TablePropName="OrganizationsLogins" msprop:Generator_RowDeletingName="OrganizationsLoginsRowDeleting" msprop:Generator_RowChangingName="OrganizationsLoginsRowChanging" msprop:Generator_RowEvHandlerName="OrganizationsLoginsRowChangeEventHandler" msprop:Generator_RowDeletedName="OrganizationsLoginsRowDeleted" msprop:Generator_RowClassName="OrganizationsLoginsRow" msprop:Generator_UserTableName="OrganizationsLogins" msprop:Generator_RowEvArgName="OrganizationsLoginsRowChangeEvent">
+        <xs:element name="OrganizationsLogins" msprop:Generator_TableClassName="OrganizationsLoginsDataTable" msprop:Generator_TableVarName="tableOrganizationsLogins" msprop:Generator_TablePropName="OrganizationsLogins" msprop:Generator_RowDeletingName="OrganizationsLoginsRowDeleting" msprop:Generator_RowChangingName="OrganizationsLoginsRowChanging" msprop:Generator_RowEvHandlerName="OrganizationsLoginsRowChangeEventHandler" msprop:Generator_RowDeletedName="OrganizationsLoginsRowDeleted" msprop:Generator_UserTableName="OrganizationsLogins" msprop:Generator_RowChangedName="OrganizationsLoginsRowChanged" msprop:Generator_RowEvArgName="OrganizationsLoginsRowChangeEvent" msprop:Generator_RowClassName="OrganizationsLoginsRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />

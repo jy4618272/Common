@@ -982,7 +982,7 @@ namespace Micajah.Common.Pages
                 if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
                 {
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
-                        m_HeaderLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(m_UserContext.InstanceId);
+                        m_HeaderLogoImageUrl = m_UserContext.InstanceLogoImageUrl;
 
                     if (string.IsNullOrEmpty(m_HeaderLogoText))
                         m_HeaderLogoText = m_UserContext.Instance.Name;
@@ -991,7 +991,7 @@ namespace Micajah.Common.Pages
                 if (m_UserContext.OrganizationId != Guid.Empty)
                 {
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
-                        m_HeaderLogoImageUrl = ResourceProvider.GetOrganizationLogoImageUrlFromCache(m_UserContext.OrganizationId);
+                        m_HeaderLogoImageUrl = m_UserContext.OrganizationLogoImageUrl;
                     if (string.IsNullOrEmpty(m_HeaderLogoText))
                         m_HeaderLogoText = m_UserContext.Organization.Name;
                     else

@@ -246,25 +246,6 @@ namespace Micajah.Common.Bll.Providers
             return GetGroupIdOfLowestRoleInInstance(GetGroupIdRoleIdList(organizationId, instanceId));
         }
 
-        /// <summary>
-        /// Gets the collection of group/role identifiers pairs for the specified instance.
-        /// </summary>
-        internal static SortedList GetGroupIdRoleIdList(Guid organizationId, Guid instanceId)
-        {
-            SortedList list = new SortedList();
-
-            using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
-            {
-                foreach (ClientDataSet.GroupsInstancesRolesRow row in adapter.GetGroupsInstancesRolesByInstanceId(organizationId, instanceId))
-                {
-                    if ((!list.Contains(row.GroupId) && (RoleProvider.GetRoleRow(row.RoleId) != null)))
-                        list.Add(row.GroupId, row.RoleId);
-                }
-            }
-
-            return list;
-        }
-
         internal static ClientDataSet.GroupsInstancesRolesDataTable GetGroupsInstancesRoles(Guid organizationId)
         {
             using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
@@ -511,7 +492,7 @@ namespace Micajah.Common.Bll.Providers
             {
                 ClientDataSet.GroupDataTable table = GetGroups(organizationId);
 
-                Instance firstInstance = InstanceProvider.GetFirstInstance();
+                Instance firstInstance = InstanceProvider.GetFirstInstance(organizationId);
 
                 if (firstInstance != null)
                 {
@@ -622,6 +603,25 @@ namespace Micajah.Common.Bll.Providers
             if (roleIdList != null)
                 groupIdList = GetGroupIdList(organizationId, instanceId, new ArrayList(roleIdList));
             return groupIdList;
+        }
+
+        /// <summary>
+        /// Gets the collection of group/role identifiers pairs for the specified instance.
+        /// </summary>
+        public static SortedList GetGroupIdRoleIdList(Guid organizationId, Guid instanceId)
+        {
+            SortedList list = new SortedList();
+
+            using (GroupsInstancesRolesTableAdapter adapter = new GroupsInstancesRolesTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+            {
+                foreach (ClientDataSet.GroupsInstancesRolesRow row in adapter.GetGroupsInstancesRolesByInstanceId(organizationId, instanceId))
+                {
+                    if ((!list.Contains(row.GroupId) && (RoleProvider.GetRoleRow(row.RoleId) != null)))
+                        list.Add(row.GroupId, row.RoleId);
+                }
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -742,7 +742,7 @@ namespace Micajah.Common.Bll.Providers
             }
             table.Columns.Add("RoleName", typeof(string));
 
-            Instance firstInstance = InstanceProvider.GetFirstInstance();
+            Instance firstInstance = InstanceProvider.GetFirstInstance(organizationId);
 
             foreach (ClientDataSet.GroupsInstancesRolesRow row in table)
             {
@@ -778,7 +778,7 @@ namespace Micajah.Common.Bll.Providers
             try
             {
                 Guid organizationId = UserContext.Current.OrganizationId;
-                Instance firstInstance = InstanceProvider.GetFirstInstance();
+                Instance firstInstance = InstanceProvider.GetFirstInstance(organizationId);
 
                 ClientDataSet.GroupsInstancesRolesDataTable girTable = GetGroupsInstancesRolesByGroups(organizationId, groupIds);
 

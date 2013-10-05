@@ -358,37 +358,6 @@ namespace Micajah.Common.Bll.Providers
             return coll;
         }
 
-        internal static Instance GetFirstInstance()
-        {
-            return GetFirstInstance(UserContext.Current.OrganizationId);
-        }
-
-        internal static Instance GetFirstInstance(Guid organizationId)
-        {
-            Instance inst = null;
-            DataTable table = GetInstances(organizationId);
-
-            foreach (ClientDataSet.InstanceRow row in table.Rows)
-            {
-                if (row != null)
-                {
-                    if (row.Active)
-                    {
-                        inst = CreateInstance(row);
-                        break;
-                    }
-                }
-            }
-
-            return inst;
-        }
-
-        internal static Guid GetFirstInstanceId(Guid organizationId)
-        {
-            Instance inst = GetFirstInstance(organizationId);
-            return ((inst == null) ? Guid.Empty : inst.InstanceId);
-        }
-
         internal static ClientDataSet.InstanceRow GetInstanceRow(Guid organizationId, Guid instanceId)
         {
             using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
@@ -677,7 +646,6 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-
         /// <summary>
         /// Returns the identifier of the specified instance in specified organization.
         /// </summary>
@@ -732,6 +700,37 @@ namespace Micajah.Common.Bll.Providers
             }
 
             return names.ToArray();
+        }
+
+        public static Instance GetFirstInstance(Guid organizationId)
+        {
+            Instance inst = null;
+            DataTable table = GetInstances(organizationId);
+
+            foreach (ClientDataSet.InstanceRow row in table.Rows)
+            {
+                if (row != null)
+                {
+                    if (row.Active)
+                    {
+                        inst = CreateInstance(row);
+                        break;
+                    }
+                }
+            }
+
+            return inst;
+        }
+
+        public static Guid GetFirstInstanceId(Guid organizationId)
+        {
+            Instance inst = GetFirstInstance(organizationId);
+            return ((inst == null) ? Guid.Empty : inst.InstanceId);
+        }
+
+        public static string GetInstanceLogoImageUrl(Guid instanceId)
+        {
+            return ResourceProvider.GetInstanceLogoImageUrl(instanceId);
         }
 
         /// <summary>

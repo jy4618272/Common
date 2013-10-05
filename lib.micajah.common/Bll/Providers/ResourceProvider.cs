@@ -480,6 +480,24 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
+        internal static string GetOrganizationLogoImageUrl(Guid organizationId)
+        {
+            MasterDataSet.ResourceRow resourceRow = GetResourceRow(OrganizationLogoLocalObjectType, organizationId.ToString("N"));
+            if (resourceRow != null)
+                return GetResourceUrl(resourceRow.ResourceId, 300, 45, true);
+
+            return string.Empty;
+        }
+
+        internal static string GetInstanceLogoImageUrl(Guid instanceId)
+        {
+            MasterDataSet.ResourceRow resourceRow = GetResourceRow(InstanceLogoLocalObjectType, instanceId.ToString("N"));
+            if (resourceRow != null)
+                return GetResourceUrl(resourceRow.ResourceId, 300, 45, true);
+
+            return string.Empty;
+        }
+
         internal static string GetActiveOrganizationUrl(string returnUrl, bool anotherOrganizationIsRequired)
         {
             if (string.IsNullOrEmpty(returnUrl))
@@ -827,24 +845,6 @@ namespace Micajah.Common.Bll.Providers
             }
             list.Sort();
             return list;
-        }
-
-        public static string GetOrganizationLogoImageUrl(Guid organizationId)
-        {
-            MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow(OrganizationLogoLocalObjectType, organizationId.ToString("N"));
-            if (resourceRow != null)
-                return GetResourceUrl(resourceRow.ResourceId, 300, 45, true);
-
-            return string.Empty;
-        }
-
-        public static string GetInstanceLogoImageUrl(Guid instanceId)
-        {
-            MasterDataSet.ResourceRow resourceRow = ResourceProvider.GetResourceRow(InstanceLogoLocalObjectType, instanceId.ToString("N"));
-            if (resourceRow != null)
-                return GetResourceUrl(resourceRow.ResourceId, 300, 45, true);
-
-            return string.Empty;
         }
 
         /// <summary>

@@ -7,7 +7,7 @@
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="ClientConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ClientConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Properties.Settings.GlobalReference.Default.ClientConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="UsersInstancesTableAdapter" GeneratorDataComponentClassName="UsersInstancesTableAdapter" Name="UsersInstances" UserDataComponentName="UsersInstancesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="UsersInstancesTableAdapter" GeneratorDataComponentClassName="UsersInstancesTableAdapter" Name="UsersInstances" UserDataComponentName="UsersInstancesTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetUsersInstances" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetUsersInstances" GetMethodModifier="Public" GetMethodName="GetUsersInstances" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetUsersInstances" UserSourceName="GetUsersInstances">
                 <DeleteCommand>
@@ -61,7 +61,7 @@
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GroupTableAdapter" GeneratorDataComponentClassName="GroupTableAdapter" Name="Group" UserDataComponentName="GroupTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="GroupTableAdapter" GeneratorDataComponentClassName="GroupTableAdapter" Name="Group" UserDataComponentName="GroupTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetGroups" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetGroups" GetMethodModifier="Public" GetMethodName="GetGroups" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetGroups" UserSourceName="GetGroups">
                 <InsertCommand>
@@ -149,7 +149,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GroupsInstancesActionsTableAdapter" GeneratorDataComponentClassName="GroupsInstancesActionsTableAdapter" Name="GroupsInstancesActions" UserDataComponentName="GroupsInstancesActionsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="GroupsInstancesActionsTableAdapter" GeneratorDataComponentClassName="GroupsInstancesActionsTableAdapter" Name="GroupsInstancesActions" UserDataComponentName="GroupsInstancesActionsTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetGroupsInstancesActions" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetGroupsInstancesActions" GetMethodModifier="Public" GetMethodName="GetGroupsInstancesActions" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetGroupsInstancesActions" UserSourceName="GetGroupsInstancesActions">
                 <DeleteCommand>
@@ -220,7 +220,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GroupsInstancesRolesTableAdapter" GeneratorDataComponentClassName="GroupsInstancesRolesTableAdapter" Name="GroupsInstancesRoles" UserDataComponentName="GroupsInstancesRolesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="GroupsInstancesRolesTableAdapter" GeneratorDataComponentClassName="GroupsInstancesRolesTableAdapter" Name="GroupsInstancesRoles" UserDataComponentName="GroupsInstancesRolesTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetGroupsInstancesRoles" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetGroupsInstancesRoles" GetMethodModifier="Public" GetMethodName="GetGroupsInstancesRoles" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetGroupsInstancesRoles" UserSourceName="GetGroupsInstancesRoles">
                 <DeleteCommand>
@@ -348,7 +348,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="InstanceTableAdapter" GeneratorDataComponentClassName="InstanceTableAdapter" Name="Instance" UserDataComponentName="InstanceTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="InstanceTableAdapter" GeneratorDataComponentClassName="InstanceTableAdapter" Name="Instance" UserDataComponentName="InstanceTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetInstances" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetInstances" GetMethodModifier="Public" GetMethodName="GetInstances" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetInstances" UserSourceName="GetInstances">
                 <InsertCommand>
@@ -496,7 +496,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="MessageTableAdapter" GeneratorDataComponentClassName="MessageTableAdapter" Name="Message" UserDataComponentName="MessageTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="MessageTableAdapter" GeneratorDataComponentClassName="MessageTableAdapter" Name="Message" UserDataComponentName="MessageTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetMessages" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetMessages" GetMethodModifier="Public" GetMethodName="GetMessages" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetMessages" UserSourceName="GetMessages">
                 <InsertCommand>
@@ -541,7 +541,7 @@
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OrganizationsUsersTableAdapter" GeneratorDataComponentClassName="OrganizationsUsersTableAdapter" Name="OrganizationsUsers" UserDataComponentName="OrganizationsUsersTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="OrganizationsUsersTableAdapter" GeneratorDataComponentClassName="OrganizationsUsersTableAdapter" Name="OrganizationsUsers" UserDataComponentName="OrganizationsUsersTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_OrganizationsUsers" DbObjectType="Table" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="GetData">
                 <DeleteCommand>
@@ -599,7 +599,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RecurringScheduleTableAdapter" GeneratorDataComponentClassName="RecurringScheduleTableAdapter" Name="RecurringSchedule" UserDataComponentName="RecurringScheduleTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="RecurringScheduleTableAdapter" GeneratorDataComponentClassName="RecurringScheduleTableAdapter" Name="RecurringSchedule" UserDataComponentName="RecurringScheduleTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetRecurringSchedules" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetRecurringSchedules" GetMethodModifier="Public" GetMethodName="GetRecurringSchedules" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetRecurringSchedules" UserSourceName="GetRecurringSchedules">
                 <DeleteCommand>
@@ -756,7 +756,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="SettingsValuesTableAdapter" GeneratorDataComponentClassName="SettingsValuesTableAdapter" Name="SettingsValues" UserDataComponentName="SettingsValuesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="SettingsValuesTableAdapter" GeneratorDataComponentClassName="SettingsValuesTableAdapter" Name="SettingsValues" UserDataComponentName="SettingsValuesTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetSettingValue" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetSettingValue" GetMethodModifier="Public" GetMethodName="GetSettingValue" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetSettingValue" UserSourceName="GetSettingValue">
                 <DeleteCommand>
@@ -857,7 +857,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="UserTableAdapter" GeneratorDataComponentClassName="UserTableAdapter" Name="User" UserDataComponentName="UserTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="UserTableAdapter" GeneratorDataComponentClassName="UserTableAdapter" Name="User" UserDataComponentName="UserTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetUsers" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetUsers" GetMethodModifier="Public" GetMethodName="GetUsers" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetUsers" UserSourceName="GetUsers">
                 <InsertCommand>
@@ -1010,7 +1010,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="UsersGroupsTableAdapter" GeneratorDataComponentClassName="UsersGroupsTableAdapter" Name="UsersGroups" UserDataComponentName="UsersGroupsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="UsersGroupsTableAdapter" GeneratorDataComponentClassName="UsersGroupsTableAdapter" Name="UsersGroups" UserDataComponentName="UsersGroupsTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetUsersGroups" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetUsersGroups" GetMethodModifier="Public" GetMethodName="GetUsersGroups" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetUsersGroups" UserSourceName="GetUsersGroups">
                 <DeleteCommand>
@@ -1066,7 +1066,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EntityFieldTableAdapter" GeneratorDataComponentClassName="EntityFieldTableAdapter" Name="EntityField" UserDataComponentName="EntityFieldTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EntityFieldTableAdapter" GeneratorDataComponentClassName="EntityFieldTableAdapter" Name="EntityField" UserDataComponentName="EntityFieldTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetEntityFields" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEntityFields" GetMethodModifier="Public" GetMethodName="GetEntityFields" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEntityFields" UserSourceName="GetEntityFields">
                 <DeleteCommand>
@@ -1175,7 +1175,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EntityFieldListsValuesTableAdapter" GeneratorDataComponentClassName="EntityFieldListsValuesTableAdapter" Name="EntityFieldListsValues" UserDataComponentName="EntityFieldListsValuesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EntityFieldListsValuesTableAdapter" GeneratorDataComponentClassName="EntityFieldListsValuesTableAdapter" Name="EntityFieldListsValues" UserDataComponentName="EntityFieldListsValuesTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetEntityFieldListValues" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEntityFieldListValues" GetMethodModifier="Public" GetMethodName="GetEntityFieldListValues" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEntityFieldListValues" UserSourceName="GetEntityFieldListValues">
                 <DeleteCommand>
@@ -1249,7 +1249,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EntityFieldsValuesTableAdapter" GeneratorDataComponentClassName="EntityFieldsValuesTableAdapter" Name="EntityFieldsValues" UserDataComponentName="EntityFieldsValuesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EntityFieldsValuesTableAdapter" GeneratorDataComponentClassName="EntityFieldsValuesTableAdapter" Name="EntityFieldsValues" UserDataComponentName="EntityFieldsValuesTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetEntityFieldsValues" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEntityFieldsValues" GetMethodModifier="Public" GetMethodName="GetEntityFieldsValues" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEntityFieldsValues" UserSourceName="GetEntityFieldsValues">
                 <DeleteCommand>
@@ -1318,7 +1318,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EntityNodeTableAdapter" GeneratorDataComponentClassName="EntityNodeTableAdapter" Name="EntityNode" UserDataComponentName="EntityNodeTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EntityNodeTableAdapter" GeneratorDataComponentClassName="EntityNodeTableAdapter" Name="EntityNode" UserDataComponentName="EntityNodeTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetEntityNodes" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEntityNodes" GetMethodModifier="Public" GetMethodName="GetEntityNodes" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEntityNodes" UserSourceName="GetEntityNodes">
                 <InsertCommand>
@@ -1434,7 +1434,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EntityNodeTypeTableAdapter" GeneratorDataComponentClassName="EntityNodeTypeTableAdapter" Name="EntityNodeType" UserDataComponentName="EntityNodeTypeTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EntityNodeTypeTableAdapter" GeneratorDataComponentClassName="EntityNodeTypeTableAdapter" Name="EntityNodeType" UserDataComponentName="EntityNodeTypeTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetEntityNodeTypes" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEntityNodeTypes" GetMethodModifier="Public" GetMethodName="GetEntityNodeTypes" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEntityNodeTypes" UserSourceName="GetEntityNodeTypes">
                 <InsertCommand>
@@ -1513,7 +1513,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="EntityNodesRelatedEntityNodesTableAdapter" GeneratorDataComponentClassName="EntityNodesRelatedEntityNodesTableAdapter" Name="EntityNodesRelatedEntityNodes" UserDataComponentName="EntityNodesRelatedEntityNodesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="EntityNodesRelatedEntityNodesTableAdapter" GeneratorDataComponentClassName="EntityNodesRelatedEntityNodesTableAdapter" Name="EntityNodesRelatedEntityNodes" UserDataComponentName="EntityNodesRelatedEntityNodesTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetEntityNodesRelatedEntityNodes" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetEntityNodesRelatedEntityNodes" GetMethodModifier="Public" GetMethodName="GetEntityNodesRelatedEntityNodes" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetEntityNodesRelatedEntityNodes" UserSourceName="GetEntityNodesRelatedEntityNodes">
                 <DeleteCommand>
@@ -1585,7 +1585,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RuleTableAdapter" GeneratorDataComponentClassName="RuleTableAdapter" Name="Rule" UserDataComponentName="RuleTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="RuleTableAdapter" GeneratorDataComponentClassName="RuleTableAdapter" Name="Rule" UserDataComponentName="RuleTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetRule" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetRule" GetMethodModifier="Public" GetMethodName="GetRule" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetRule" UserSourceName="GetRule">
                 <DeleteCommand>
@@ -1718,7 +1718,7 @@ WHERE        (OrganizationId = @OrganizationId) AND (UserId = @UserId)</CommandT
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RuleParametersTableAdapter" GeneratorDataComponentClassName="RuleParametersTableAdapter" Name="RuleParameters" UserDataComponentName="RuleParametersTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="RuleParametersTableAdapter" GeneratorDataComponentClassName="RuleParametersTableAdapter" Name="RuleParameters" UserDataComponentName="RuleParametersTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_GetRuleParameter" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetRuleParameter" GetMethodModifier="Public" GetMethodName="GetRuleParameter" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetRuleParameter" UserSourceName="GetRuleParameter">
                 <DeleteCommand>

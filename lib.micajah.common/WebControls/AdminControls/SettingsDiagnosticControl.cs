@@ -186,12 +186,14 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             object obj = null;
             ArrayList list = null;
+            Guid organizationId = UserContext.Current.OrganizationId;
+
             if (GroupListRow.Visible)
                 list = GroupIdArrayList;
             else if (UserListRow.Visible)
             {
                 obj = Support.ConvertStringToType(UserList.SelectedValue, typeof(Guid));
-                list = UserProvider.GetUserGroupIdList(UserContext.Current.OrganizationId, ((obj == null) ? Guid.Empty : (Guid)obj));
+                list = UserProvider.GetUserGroupIdList(organizationId, ((obj == null) ? Guid.Empty : (Guid)obj));
             }
 
             Settings.GroupIdList.Clear();
@@ -203,7 +205,7 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             else
             {
-                Instance firstInstance = InstanceProvider.GetFirstInstance();
+                Instance firstInstance = InstanceProvider.GetFirstInstance(organizationId);
                 if (firstInstance != null) Settings.InstanceId = firstInstance.InstanceId;
             }
             Settings.Visible = true;

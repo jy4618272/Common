@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Micajah.Common.Dal
 {
-    public partial class OAuthDataSet
+    partial class OAuthDataSet
     {
         partial class OAuthConsumerRow : IConsumerDescription
         {

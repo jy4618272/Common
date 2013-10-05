@@ -167,6 +167,26 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Returns a navigate URL of the start page's action of the specified role.
+        /// </summary>
+        /// <param name="roleId">The role identifier.</param>
+        /// <param name="instanceRequired">The instance required flag of the start action.</param>
+        /// <returns>The System.String that represents the navigate URL of the start page's action or null reference, if the action was not found.</returns>
+        internal static string GetStartActionNavigateUrl(Guid roleId, out bool instanceRequired)
+        {
+            instanceRequired = false;
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
+            Action action = null;
+            if (row != null)
+            {
+                action = ActionProvider.PagesAndControls.FindByActionId(row.StartActionId);
+                if (row.ActionRow != null)
+                    instanceRequired = row.ActionRow.InstanceRequired;
+            }
+            return ((action == null) ? null : action.AbsoluteNavigateUrl);
+        }
+
+        /// <summary>
         /// Returns the highest by rank non built-in role.
         /// </summary>
         /// <returns>The role identifier.</returns>
@@ -187,39 +207,6 @@ namespace Micajah.Common.Bll.Providers
                 }
             }
             return ((searchedRoleRow != null) ? searchedRoleRow.RoleId : Guid.Empty);
-        }
-
-        /// <summary>
-        /// Returns the lowest by rank non built-in role from specified roles list.
-        /// </summary>
-        /// <param name="roleIdList">The array of roles identifiers.</param>
-        /// <returns>The role identifier.</returns>
-        internal static Guid GetLowestNonBuiltInRoleId(IList roleIdList)
-        {
-            ConfigurationDataSet.RoleRow searchedRoleRow = null;
-
-            if (roleIdList != null)
-            {
-                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
-                ConfigurationDataSet.RoleRow row = null;
-
-                foreach (Guid roleId in roleIdList)
-                {
-                    if (!IsBuiltIn(roleId))
-                    {
-                        row = table.FindByRoleId(roleId);
-                        if (row != null)
-                        {
-                            if (searchedRoleRow == null)
-                                searchedRoleRow = row;
-                            else if (row.Rank > searchedRoleRow.Rank)
-                                searchedRoleRow = row;
-                        }
-                    }
-                }
-            }
-
-            return ((searchedRoleRow == null) ? Guid.Empty : searchedRoleRow.RoleId);
         }
 
         /// <summary>
@@ -289,23 +276,36 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns a navigate URL of the start page's action of the specified role.
+        /// Returns the lowest by rank non built-in role from specified roles list.
         /// </summary>
-        /// <param name="roleId">The role identifier.</param>
-        /// <param name="instanceRequired">The instance required flag of the start action.</param>
-        /// <returns>The System.String that represents the navigate URL of the start page's action or null reference, if the action was not found.</returns>
-        internal static string GetStartActionNavigateUrl(Guid roleId, out bool instanceRequired)
+        /// <param name="roleIdList">The array of roles identifiers.</param>
+        /// <returns>The role identifier.</returns>
+        internal static Guid GetLowestNonBuiltInRoleId(IList roleIdList)
         {
-            instanceRequired = false;
-            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
-            Action action = null;
-            if (row != null)
+            ConfigurationDataSet.RoleRow searchedRoleRow = null;
+
+            if (roleIdList != null)
             {
-                action = ActionProvider.PagesAndControls.FindByActionId(row.StartActionId);
-                if (row.ActionRow != null)
-                    instanceRequired = row.ActionRow.InstanceRequired;
+                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+                ConfigurationDataSet.RoleRow row = null;
+
+                foreach (Guid roleId in roleIdList)
+                {
+                    if (!IsBuiltIn(roleId))
+                    {
+                        row = table.FindByRoleId(roleId);
+                        if (row != null)
+                        {
+                            if (searchedRoleRow == null)
+                                searchedRoleRow = row;
+                            else if (row.Rank > searchedRoleRow.Rank)
+                                searchedRoleRow = row;
+                        }
+                    }
+                }
             }
-            return ((action == null) ? null : action.AbsoluteNavigateUrl);
+
+            return ((searchedRoleRow == null) ? Guid.Empty : searchedRoleRow.RoleId);
         }
 
         /// <summary>
@@ -369,17 +369,6 @@ namespace Micajah.Common.Bll.Providers
             }
 
             return roleIdList;
-        }
-
-        /// <summary>
-        /// Returns the name of the specified role.
-        /// </summary>
-        /// <param name="roleId">Specifies the role's identifier.</param>
-        /// <returns>The System.String that represents the name of the specified role.</returns>
-        internal static string GetRoleName(Guid roleId)
-        {
-            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
-            return ((row == null) ? string.Empty : row.Name);
         }
 
         internal static bool IsBuiltIn(Guid roleId)
@@ -504,6 +493,58 @@ namespace Micajah.Common.Bll.Providers
                 if (rows.Length > 0) roleId = rows[0].RoleId;
             }
             return roleId;
+        }
+
+        /// <summary>
+        /// Returns the highest by rank role from specified roles list.
+        /// </summary>
+        /// <param name="roleIdList">The array of roles identifiers.</param>
+        /// <returns>The role identifier.</returns>
+        public static Guid GetHighestRoleId(IList roleIdList)
+        {
+            ConfigurationDataSet.RoleRow searchedRoleRow = null;
+
+            if (roleIdList != null)
+            {
+                ConfigurationDataSet.RoleDataTable table = ConfigurationDataSet.Current.Role;
+                ConfigurationDataSet.RoleRow row = null;
+
+                foreach (Guid roleId in roleIdList)
+                {
+                    row = table.FindByRoleId(roleId);
+                    if (row != null)
+                    {
+                        if (searchedRoleRow == null)
+                            searchedRoleRow = row;
+                        else if (row.Rank < searchedRoleRow.Rank)
+                            searchedRoleRow = row;
+                    }
+                }
+            }
+
+            return ((searchedRoleRow == null) ? Guid.Empty : searchedRoleRow.RoleId);
+        }
+
+        /// <summary>
+        /// Returns the name of the specified role.
+        /// </summary>
+        /// <param name="roleId">Specifies the role's identifier.</param>
+        /// <returns>The System.String that represents the name of the specified role.</returns>
+        public static string GetRoleName(Guid roleId)
+        {
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
+            return ((row == null) ? string.Empty : row.Name);
+        }
+
+        /// <summary>
+        /// Returns the short name of the specified role.
+        /// </summary>
+        /// <param name="roleId">Specifies the role's identifier.</param>
+        /// <returns>The System.String that represents the short name of the specified role.</returns>
+        public static string GetRoleShortName(Guid roleId)
+        {
+            ConfigurationDataSet.RoleRow row = ConfigurationDataSet.Current.Role.FindByRoleId(roleId);
+            return ((row == null) ? string.Empty : row.ShortName);
         }
 
         #endregion

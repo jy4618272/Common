@@ -2,12 +2,12 @@
 <xs:schema id="OAuthDataSet" targetNamespace="http://tempuri.org/OAuth.xsd" xmlns:mstns="http://tempuri.org/OAuth.xsd" xmlns="http://tempuri.org/OAuth.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="NotPublic" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="MasterConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="MasterConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Properties.Settings.GlobalReference.Default.MasterConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="NonceTableAdapter" GeneratorDataComponentClassName="NonceTableAdapter" Name="Nonce" UserDataComponentName="NonceTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="NonceTableAdapter" GeneratorDataComponentClassName="NonceTableAdapter" Name="Nonce" UserDataComponentName="NonceTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill" />
             </MainSource>
@@ -32,7 +32,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OAuthConsumerTableAdapter" GeneratorDataComponentClassName="OAuthConsumerTableAdapter" Name="OAuthConsumer" UserDataComponentName="OAuthConsumerTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="OAuthConsumerTableAdapter" GeneratorDataComponentClassName="OAuthConsumerTableAdapter" Name="OAuthConsumer" UserDataComponentName="OAuthConsumerTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetOAuthConsumer" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="false" GeneratorGetMethodName="GetOAuthConsumer" GetMethodModifier="Public" GetMethodName="GetOAuthConsumer" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetOAuthConsumer" UserSourceName="GetOAuthConsumer">
                 <SelectCommand>
@@ -69,7 +69,7 @@
               </DbSource>
             </Sources>
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OAuthTokenTableAdapter" GeneratorDataComponentClassName="OAuthTokenTableAdapter" Name="OAuthToken" UserDataComponentName="OAuthTokenTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="NotPublic" DataAccessorName="OAuthTokenTableAdapter" GeneratorDataComponentClassName="OAuthTokenTableAdapter" Name="OAuthToken" UserDataComponentName="OAuthTokenTableAdapter">
             <MainSource>
               <DbSource ConnectionRef="MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_GetOAuthTokenByToken" DbObjectType="StoredProcedure" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetOAuthTokenByToken" GetMethodModifier="Public" GetMethodName="GetOAuthTokenByToken" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetOAuthTokenByToken" UserSourceName="GetOAuthTokenByToken">
                 <DeleteCommand>

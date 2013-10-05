@@ -944,18 +944,6 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns a collection of the organization level settings.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization to get the values of the settings.</param>
-        /// <returns>The collection of the organization level settings.</returns>
-        internal static SettingCollection GetOrganizationSettings(Guid organizationId)
-        {
-            SettingCollection settings = GetSettings(SettingLevels.Organization, null);
-            FillSettingsByOrganizationValues(ref settings, organizationId);
-            return settings;
-        }
-
-        /// <summary>
         /// Returns the organization level setting.
         /// </summary>
         /// <param name="organizationId">The identifier of the organization to get the values of the settings.</param>
@@ -966,19 +954,6 @@ namespace Micajah.Common.Bll.Providers
             settings.Add(GetSetting(settingId));
             FillSettingsByOrganizationValues(ref settings, organizationId);
             return settings[0];
-        }
-
-        /// <summary>
-        /// Returns a collection of the instance level settings.
-        /// </summary>
-        /// <param name="organizationId">The identifier of the organization which the instance belong to.</param>
-        /// <param name="instanceId">The identifier of the instance to get the values of the settings.</param>
-        /// <returns>The collection of the instance level settings.</returns>
-        internal static SettingCollection GetInstanceSettings(Guid organizationId, Guid instanceId)
-        {
-            SettingCollection settings = GetSettings(SettingLevels.Instance, null);
-            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
-            return settings;
         }
 
         /// <summary>
@@ -1189,6 +1164,31 @@ namespace Micajah.Common.Bll.Providers
             }
 
             return newTable;
+        }
+
+        /// <summary>
+        /// Returns a collection of the organization level settings.
+        /// </summary>
+        /// <param name="organizationId">The identifier of the organization to get the values of the settings.</param>
+        /// <returns>The collection of the organization level settings.</returns>
+        public static SettingCollection GetOrganizationSettings(Guid organizationId)
+        {
+            SettingCollection settings = GetSettings(SettingLevels.Organization, null);
+            FillSettingsByOrganizationValues(ref settings, organizationId);
+            return settings;
+        }
+
+        /// <summary>
+        /// Returns a collection of the instance level settings.
+        /// </summary>
+        /// <param name="organizationId">The identifier of the organization which the instance belong to.</param>
+        /// <param name="instanceId">The identifier of the instance to get the values of the settings.</param>
+        /// <returns>The collection of the instance level settings.</returns>
+        public static SettingCollection GetInstanceSettings(Guid organizationId, Guid instanceId)
+        {
+            SettingCollection settings = GetSettings(SettingLevels.Instance, null);
+            FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+            return settings;
         }
 
         /// <summary>

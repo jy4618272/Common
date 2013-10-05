@@ -955,6 +955,11 @@ namespace Micajah.Common.Bll.Providers
             return Guid.Empty;
         }
 
+        public static string GetOrganizationLogoImageUrl(Guid organizationId)
+        {
+            return ResourceProvider.GetOrganizationLogoImageUrl(organizationId);
+        }
+
         /// <summary>
         /// Creates new organization with specified details and send a notification e-mail to administrator.
         /// </summary>

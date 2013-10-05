@@ -1,6 +1,6 @@
 ﻿namespace Micajah.Common.Dal.ClientDataSetTableAdapters
 {
-    public partial class UserTableAdapter
+    partial class UserTableAdapter
     {
         public UserTableAdapter(string connectionString)
             : base()
@@ -10,7 +10,7 @@
         }
     }
 
-    public partial class OrganizationsUsersTableAdapter
+    partial class OrganizationsUsersTableAdapter
     {
         public OrganizationsUsersTableAdapter(string connectionString)
             : base()
@@ -20,7 +20,7 @@
         }
     }
 
-    public partial class UsersInstancesTableAdapter
+    partial class UsersInstancesTableAdapter
     {
         public UsersInstancesTableAdapter(string connectionString)
             : base()
@@ -30,7 +30,7 @@
         }
     }
 
-    public partial class InstanceTableAdapter
+    partial class InstanceTableAdapter
     {
         public InstanceTableAdapter(string connectionString)
             : base()
@@ -40,7 +40,7 @@
         }
     }
 
-    public partial class SettingsValuesTableAdapter
+    partial class SettingsValuesTableAdapter
     {
         public SettingsValuesTableAdapter(string connectionString)
             : base()
@@ -50,7 +50,7 @@
         }
     }
 
-    public partial class UsersGroupsTableAdapter
+    partial class UsersGroupsTableAdapter
     {
         public UsersGroupsTableAdapter(string connectionString)
             : base()
@@ -60,7 +60,7 @@
         }
     }
 
-    public partial class GroupTableAdapter
+    partial class GroupTableAdapter
     {
         public GroupTableAdapter(string connectionString)
             : base()
@@ -70,7 +70,7 @@
         }
     }
 
-    public partial class GroupsInstancesRolesTableAdapter
+    partial class GroupsInstancesRolesTableAdapter
     {
         public GroupsInstancesRolesTableAdapter(string connectionString)
             : base()
@@ -80,7 +80,7 @@
         }
     }
 
-    public partial class GroupsInstancesActionsTableAdapter
+    partial class GroupsInstancesActionsTableAdapter
     {
         public GroupsInstancesActionsTableAdapter(string connectionString)
             : base()
@@ -90,7 +90,7 @@
         }
     }
 
-    public partial class EntityFieldTableAdapter
+    partial class EntityFieldTableAdapter
     {
         public EntityFieldTableAdapter(string connectionString)
             : base()
@@ -100,7 +100,7 @@
         }
     }
 
-    public partial class EntityFieldListsValuesTableAdapter
+    partial class EntityFieldListsValuesTableAdapter
     {
         public EntityFieldListsValuesTableAdapter(string connectionString)
             : base()
@@ -110,7 +110,7 @@
         }
     }
 
-    public partial class EntityFieldsValuesTableAdapter
+    partial class EntityFieldsValuesTableAdapter
     {
         public EntityFieldsValuesTableAdapter(string connectionString)
             : base()
@@ -120,7 +120,7 @@
         }
     }
 
-    public partial class EntityNodeTableAdapter
+    partial class EntityNodeTableAdapter
     {
         public EntityNodeTableAdapter(string connectionString)
             : base()
@@ -130,7 +130,7 @@
         }
     }
 
-    public partial class EntityNodeTypeTableAdapter
+    partial class EntityNodeTypeTableAdapter
     {
         public EntityNodeTypeTableAdapter(string connectionString)
             : base()
@@ -140,7 +140,7 @@
         }
     }
 
-    public partial class EntityNodesRelatedEntityNodesTableAdapter
+    partial class EntityNodesRelatedEntityNodesTableAdapter
     {
         public EntityNodesRelatedEntityNodesTableAdapter(string connectionString)
             : base()
@@ -150,7 +150,7 @@
         }
     }
 
-    public partial class MessageTableAdapter
+    partial class MessageTableAdapter
     {
         public MessageTableAdapter(string connectionString)
             : base()
@@ -160,7 +160,7 @@
         }
     }
 
-    public partial class RecurringScheduleTableAdapter
+    partial class RecurringScheduleTableAdapter
     {
         public RecurringScheduleTableAdapter(string connectionString)
             : base()
@@ -170,7 +170,7 @@
         }
     }
 
-    public partial class RuleTableAdapter
+    partial class RuleTableAdapter
     {
         public RuleTableAdapter(string connectionString)
             : base()
@@ -180,7 +180,7 @@
         }
     }
 
-    public partial class RuleParametersTableAdapter
+    partial class RuleParametersTableAdapter
     {
         public RuleParametersTableAdapter(string connectionString)
             : base()
@@ -188,12 +188,5 @@
             this.InitConnection();
             this._connection.ConnectionString = connectionString;
         }
-    }
-}
-
-namespace Micajah.Common.Dal
-{
-    public partial class ClientDataSet
-    {
     }
 }

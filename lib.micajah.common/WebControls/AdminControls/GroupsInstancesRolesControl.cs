@@ -282,7 +282,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 if (!FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances)
                 {
-                    Instance inst = InstanceProvider.GetFirstInstance();
+                    Instance inst = InstanceProvider.GetFirstInstance(UserContext.Current.OrganizationId);
                     if (inst != null)
                         e.InputParameters["instanceId"] = inst.InstanceId;
                 }

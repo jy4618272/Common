@@ -509,7 +509,15 @@ namespace Micajah.Common.Security
         /// </summary>
         public Organization Organization
         {
-            get { return OrganizationProvider.GetOrganizationFromCache(this.OrganizationId, true); }
+            get { return ((this.OrganizationId == Guid.Empty) ? null : OrganizationProvider.GetOrganizationFromCache(this.OrganizationId, true)); }
+        }
+
+        /// <summary>
+        /// Gets the logo image URL of the selected organization.
+        /// </summary>
+        public string OrganizationLogoImageUrl
+        {
+            get { return ((this.OrganizationId == Guid.Empty) ? string.Empty : ResourceProvider.GetOrganizationLogoImageUrlFromCache(this.OrganizationId)); }
         }
 
         /// <summary>
@@ -527,16 +535,18 @@ namespace Micajah.Common.Security
         {
             get
             {
-                Instance inst = null;
-
-                Guid organizationId = this.OrganizationId;
-                Guid instanceId = this.InstanceId;
-
-                if ((organizationId != Guid.Empty) && (instanceId != Guid.Empty))
-                    inst = InstanceProvider.GetInstanceFromCache(instanceId, organizationId, true);
-
-                return inst;
+                if ((this.OrganizationId != Guid.Empty) && (this.InstanceId != Guid.Empty))
+                    return InstanceProvider.GetInstanceFromCache(this.InstanceId, this.OrganizationId, true);
+                return null;
             }
+        }
+
+        /// <summary>
+        /// Gets the logo image URL of the selected instance.
+        /// </summary>
+        public string InstanceLogoImageUrl
+        {
+            get { return ((this.InstanceId == Guid.Empty) ? string.Empty : ResourceProvider.GetInstanceLogoImageUrlFromCache(this.InstanceId)); }
         }
 
         /// <summary>
