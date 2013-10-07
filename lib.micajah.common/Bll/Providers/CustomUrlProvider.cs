@@ -441,13 +441,13 @@ namespace Micajah.Common.Bll.Providers
                 MasterDataSet.CustomUrlRow row = null;
 
                 if (instanceId != Guid.Empty)
+                {
                     row = GetCustomUrl(organizationId, instanceId);
+                    inst = InstanceProvider.GetInstanceFromCache(instanceId, organizationId, true);
+                }
 
                 if (row == null)
                     row = GetCustomUrlByOrganizationId(organizationId);
-
-                if (instanceId != Guid.Empty)
-                    inst = InstanceProvider.GetInstanceFromCache(instanceId, organizationId, true);
 
                 CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
 
@@ -465,7 +465,10 @@ namespace Micajah.Common.Bll.Providers
                             ? row.FullCustomUrl
                             : row.PartialCustomUrl + "." + customUrlSettings.PartialCustomUrlRootAddressesFirst;
 
-                        PutOrganizationCustomUrlToCache(organizationId, customUrl);
+                        if (row.IsInstanceIdNull())
+                            PutOrganizationCustomUrlToCache(organizationId, customUrl);
+                        else
+                            PutInstanceCustomUrlToCache(row.InstanceId, customUrl);
                     }
                 }
                 else
