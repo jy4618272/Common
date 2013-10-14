@@ -24,15 +24,6 @@ body {
     color: #d4d4d4; /* Internet Explorer 10+ */
 }
 
-
-.content {
-    width: 100%;
-    min-width: 250px;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 ul, li {
     margin: 0;
     padding: 0;
@@ -40,7 +31,7 @@ ul, li {
 }
 
 form {
-    max-width: 850px;
+    max-width: 450px;
     margin: 0 auto;
 }
 
@@ -49,66 +40,43 @@ label {
     font-size: .85em;
 }
 
-.content {
-    margin: 0;
-    padding: 0 20px 50px;
-}
-
-    .content form {
-        margin-bottom: 50px;
-    }
-
-    .content input[type=text] {
-        -webkit-appearance: none;
-        width: 90%;
-        box-sizing: border-box;
-        padding: 12px;
-        margin: 0;
-        border: 1px solid #a7a7a7;
-        border-radius: 5px 5px 5px 5px;
-    }
-
-    .content input[type=password] {
-        -webkit-appearance: none;
-        width: 90%;
-        box-sizing: border-box;
-        padding: 12px;
-        margin: 0;
-        border: 1px solid #a7a7a7;
-        border-radius: 5px 5px 5px 5px;
-    }
-
-small.left {
-    text-align: left;
-    font-size: 11px;
-}
-
 .Error {
     float: left;
     position: relative;
 }
 
-.content div.LightBlue {
-    padding: 10px 0px 15px 0px;
+select {
     width: 90%;
 }
 
-.content select {
+input {
+    -webkit-appearance: none;
     width: 90%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 0;
+    border: 1px solid #a7a7a7;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 18px;
+    padding: 12px 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.Logo {
-    width: 90% !important;
-}
-
-.content .row {
+.row {
     padding: 10px;
     float: left;
     width: 100%;
     text-align: left;
 }
 
-.content .clear {
+    .row small {
+        text-align: left;
+        font-size: 11px;
+    }
+
+.clear {
     float: none;
     clear: both;
 }
@@ -119,7 +87,7 @@ span.Title {
     text-align: left;
 }
 
-div.title {
+div.SectionTitle {
     background-color: #EBEBEB;
     border: 0 none;
     border-radius: 5px 5px 5px 5px;
@@ -135,7 +103,7 @@ div.title {
 }
 
 #SignupOrg1_Step2Form .row {
-    width: 97%;
+    width: 100%;
 }
 
 #SignupOrg1_Step2Form {
@@ -144,24 +112,50 @@ div.title {
 }
 
 #SignupOrg1_Step2FormButton hr {
-    width: 93%;
+    width: 100%;
 }
 
 .Logo {
-    width: 100%;
+    width: 90%;
     padding-top: 50px;
     text-align: center;
 }
 
 .LightBlue {
     background-color: #e9eff5;
-    padding: 10px 20px 10px 15px;
     overflow: hidden;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
     float: left;
-    width: 372px;
+    position: relative;
+    width: 90%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #e9eff5;
+    padding: 10px 20px 10px 15px !important;
+    font-size: 16px;
+    line-height: 48px;
+}
+
+.LightBlueImg {
+    float: left;
+    margin-top: 15px;
+}
+
+.Left {
+    float: left;
+}
+
+.Right {
+    float: right;
+}
+
+.Step2ButtonContainer {
+    padding-top: 15px;
+    width: 95%;
+    clear: both;
 }
 
 .Agree {
@@ -170,6 +164,7 @@ div.title {
     font-size: 14px;
     color: #999999;
     text-align: center;
+    width: 95%;
 }
 
     .Agree a {
@@ -220,40 +215,13 @@ small {
         display: none;
     }
 
-.container {
-    width: 90%;
-    max-width: 700px;
-    min-width: 320px;
-    margin: 50px auto 0;
+.OrgUrl {
+    padding: 0 125px 0 60px;
 }
 
-.LightBlue {
-    position: relative;
-    width: 100%;
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box; /* Firefox, other Gecko */
-    box-sizing: border-box; /* Opera/IE 8+ */
-    background-color: #e9eff5;
-    padding: 10px 20px 10px 15px !important;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-}
-
-input {
-    -webkit-appearance: none;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    margin: 0;
-    border: 1px solid #a7a7a7;
-    border-radius: 5px 5px 5px 5px;
-    font-size: 18px;
-    padding: 12px 10px;
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box; /* Firefox, other Gecko */
-    box-sizing: border-box;
-}
+    .OrgUrl input {
+        width: 100%;
+    }
 
 .modal-window {
     background-color: #ffffff;
