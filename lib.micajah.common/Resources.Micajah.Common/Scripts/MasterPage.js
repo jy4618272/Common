@@ -147,7 +147,7 @@ function Mp_EncodeTextBoxes() {
             input.value = input.value.replace(new RegExp('&(?!\#?[a-z0-9]+;)', 'g'), '&amp;');
             input.value = input.value.replace(new RegExp('<', 'g'), '&lt;');
             input.value = input.value.replace(new RegExp('>', 'g'), '&gt;');
-            input.value = input.value.replace(new RegExp('"', 'g'), '&quot');
+            input.value = input.value.replace(new RegExp('"', 'g'), '&quot;');
             input.disabled = false;
         }
     }
@@ -159,7 +159,7 @@ function Mp_EncodeTextBoxes() {
         input.value = input.value.replace(new RegExp('&(?!\#?[a-z0-9]+;)', 'g'), '&amp;');
         input.value = input.value.replace(new RegExp('<', 'g'), '&lt;');
         input.value = input.value.replace(new RegExp('>', 'g'), '&gt;');
-        input.value = input.value.replace(new RegExp('"', 'g'), '&quot');
+        input.value = input.value.replace(new RegExp('"', 'g'), '&quot;');
     }
 }
 
