@@ -25,7 +25,7 @@ namespace Micajah.Common.Bll.Providers
 
         private static Dictionary<Guid, string> GetWebsiteUrlsFromCache()
         {
-            Dictionary<Guid, string> dict = CacheManager.Current.Get(WebsitesKey) as Dictionary<Guid, string>;
+            Dictionary<Guid, string> dict = CacheManager.Current.GetFromHttpContext(WebsitesKey) as Dictionary<Guid, string>;
 
             if (dict == null)
             {

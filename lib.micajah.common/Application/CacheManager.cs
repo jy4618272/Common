@@ -116,6 +116,43 @@ namespace Micajah.Common.Application
         }
 
         /// <summary>
+        /// Retrieves the specified item from System.Web.HttpContext object for the current HTTP request or from the cache.
+        /// </summary>
+        /// <param name="key">The identifier for the cache item to retrieve.</param>
+        /// <returns>The retrieved cache item, or null if the key is not found.</returns>
+        public object GetFromHttpContext(string key)
+        {
+            return this.GetFromHttpContext(key, HttpContext.Current);
+        }
+
+        /// <summary>
+        /// Retrieves the specified item from System.Web.HttpContext object for the HTTP request or from the cache.
+        /// </summary>
+        /// <param name="key">The identifier for the cache item to retrieve.</param>
+        /// <param name="http">The System.Web.HttpContext object for the HTTP request to retrieve the item from.</param>
+        /// <returns>The retrieved cache item, or null if the key is not found.</returns>
+        public virtual object GetFromHttpContext(string key, HttpContext http)
+        {
+            object value = null;
+
+            if (http != null)
+            {
+                if (http.Items.Contains(key))
+                    value = http.Items[key];
+                else
+                {
+                    value = this.Get(key);
+                    if (value != null)
+                        http.Items[key] = value;
+                }
+            }
+            else
+                value = this.Get(key);
+
+            return value;
+        }
+
+        /// <summary>
         ///  Removes the specified item from the cache.
         /// </summary>
         /// <param name="key">A System.String identifier for the cache item to remove.</param>

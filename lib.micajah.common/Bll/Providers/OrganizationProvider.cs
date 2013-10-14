@@ -400,7 +400,7 @@ namespace Micajah.Common.Bll.Providers
         internal static string GetConnectionStringFromCache(Guid organizationId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, ConnectionStringKeyFormat, organizationId);
-            string connectionString = CacheManager.Current.Get(key) as string;
+            string connectionString = CacheManager.Current.GetFromHttpContext(key) as string;
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -421,7 +421,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Organization GetOrganizationFromCache(Guid organizationId, bool putToCacheIfNotExists)
         {
             string key = string.Format(CultureInfo.InvariantCulture, OrganizationKeyFormat, organizationId);
-            Organization organization = CacheManager.Current.Get(key) as Organization;
+            Organization organization = CacheManager.Current.GetFromHttpContext(key) as Organization;
 
             if (organization == null)
             {
@@ -440,7 +440,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Organization GetOrganizationByPseudoIdFromCache(string pseudoId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, OrganizationByPseudoIdKeyFormat, pseudoId);
-            Organization organization = CacheManager.Current.Get(key) as Organization;
+            Organization organization = CacheManager.Current.GetFromHttpContext(key) as Organization;
 
             if (organization == null)
             {
@@ -456,7 +456,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Guid GetWebsiteIdFromCache(Guid organizationId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, WebsiteIdKeyFormat, organizationId);
-            object value = CacheManager.Current.Get(key);
+            object value = CacheManager.Current.GetFromHttpContext(key);
             Guid websiteId = Guid.Empty;
 
             if (value == null)

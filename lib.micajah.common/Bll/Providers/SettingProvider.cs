@@ -91,13 +91,13 @@ namespace Micajah.Common.Bll.Providers
         private static Dictionary<Guid, string> GetInstanceSettingsValuesFromCache(Guid instanceId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceSettingsValuesKeyFromat, instanceId);
-            return CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+            return CacheManager.Current.GetFromHttpContext(key) as Dictionary<Guid, string>;
         }
 
         private static Dictionary<Guid, string> GetGroupSettingsValuesFromCache(Guid instanceId, Guid groupId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, GroupSettingsValuesKeyFromat, instanceId, groupId);
-            return CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+            return CacheManager.Current.GetFromHttpContext(key) as Dictionary<Guid, string>;
         }
 
         private static Dictionary<Guid, string> PutOrganizationSettingsValuesToCache(DataTable table, Guid organizationId)
@@ -285,7 +285,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Dictionary<Guid, string> GetOrganizationSettingsValuesFromCache(Guid organizationId, bool putToCacheIfNotExists)
         {
             string key = string.Format(CultureInfo.InvariantCulture, OrganizationSettingsValuesKeyFromat, organizationId);
-            Dictionary<Guid, string> dict = CacheManager.Current.Get(key) as Dictionary<Guid, string>;
+            Dictionary<Guid, string> dict = CacheManager.Current.GetFromHttpContext(key) as Dictionary<Guid, string>;
 
             if (dict == null)
             {
