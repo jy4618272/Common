@@ -269,9 +269,13 @@ namespace Micajah.Common.Bll.Providers
                 }
 
                 Guid customUrlId = Guid.NewGuid();
-                if (!string.IsNullOrEmpty(fullCustomUrl))
+                if (string.IsNullOrEmpty(fullCustomUrl))
+                    fullCustomUrl = string.Empty;
+                else
                     fullCustomUrl = fullCustomUrl.ToLower(CultureInfo.CurrentCulture);
-                if (!string.IsNullOrEmpty(partialCustomUrl))
+                if (string.IsNullOrEmpty(partialCustomUrl))
+                    partialCustomUrl = string.Empty;
+                else
                     partialCustomUrl = partialCustomUrl.ToLower(CultureInfo.CurrentCulture);
 
                 adapter.Insert(customUrlId, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
