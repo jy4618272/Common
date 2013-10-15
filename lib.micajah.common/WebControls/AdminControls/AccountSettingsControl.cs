@@ -320,7 +320,9 @@ namespace Micajah.Common.WebControls.AdminControls
                             row["SettingName"] = setting.CustomName;
                             row["UsageCount"] = usageCount;
                             row["UsageCountLimit"] = setting.UsageCountLimit;
-                            row["UsagePersent"] = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * usageCount);
+                            if (setting.UsageCountLimit > 0) row["UsagePersent"] = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * usageCount);
+                            else if (usageCount > 0) row["UsagePersent"] = 100;
+                            else row["UsagePersent"] = 0;
                             dtFree.Rows.Add(row);
                         }
                     }
