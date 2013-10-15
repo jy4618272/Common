@@ -111,12 +111,8 @@ div.SectionTitle {
     margin-right: auto;
 }
 
-#SignupOrg1_Step2FormButton hr {
-    width: 100%;
-}
-
 .Logo {
-    width: 90%;
+    width: 94%;
     padding-top: 50px;
     text-align: center;
 }
@@ -137,6 +133,7 @@ div.SectionTitle {
     padding: 10px 20px 10px 15px !important;
     font-size: 16px;
     line-height: 48px;
+    white-space: nowrap;
 }
 
 .LightBlueImg {
@@ -154,7 +151,7 @@ div.SectionTitle {
 
 .Step2ButtonContainer {
     padding-top: 15px;
-    width: 95%;
+    width: 94%;
     clear: both;
 }
 
@@ -164,7 +161,7 @@ div.SectionTitle {
     font-size: 14px;
     color: #999999;
     text-align: center;
-    width: 95%;
+    width: 94%;
 }
 
     .Agree a {
