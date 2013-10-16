@@ -371,22 +371,12 @@ namespace Micajah.Common.Bll.Providers
         {
             List<Guid> instanceIdList = new List<Guid>();
 
-            StringBuilder sb = new StringBuilder();
-            foreach (string id in groupId.Split(','))
+            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
             {
-                sb.AppendFormat(CultureInfo.InvariantCulture, ",'{0}'", id);
-            }
-            if (sb.Length > 0)
-            {
-                sb.Remove(0, 1);
-
-                using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+                foreach (ClientDataSet.InstanceRow row in adapter.GetInstancesByGroups(organizationId, groupId.ToUpperInvariant()))
                 {
-                    foreach (ClientDataSet.InstanceRow row in adapter.GetInstancesByGroups(organizationId, sb.ToString().ToUpperInvariant()))
-                    {
-                        if (!instanceIdList.Contains(row.InstanceId))
-                            instanceIdList.Add(row.InstanceId);
-                    }
+                    if (!instanceIdList.Contains(row.InstanceId))
+                        instanceIdList.Add(row.InstanceId);
                 }
             }
 

@@ -90,23 +90,12 @@ namespace Micajah.Common.Bll.Providers
             {
                 if (roleIdList.Count > 0)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    foreach (Guid roleId in roleIdList)
+                    using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                     {
-                        sb.AppendFormat(CultureInfo.InvariantCulture, ",'{0}'", roleId);
-                    }
-
-                    if (sb.Length > 0)
-                    {
-                        sb.Remove(0, 1);
-
-                        using (GroupTableAdapter adapter = new GroupTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
+                        foreach (ClientDataSet.GroupRow row in adapter.GetGroupsByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), Support.ConvertListToString(roleIdList).ToUpperInvariant()))
                         {
-                            foreach (ClientDataSet.GroupRow row in adapter.GetGroupsByRoles(organizationId, ((instanceId == Guid.Empty) ? null : new Guid?(instanceId)), sb.ToString().ToUpperInvariant()))
-                            {
-                                if (!groupIdList.Contains(row.GroupId))
-                                    groupIdList.Add(row.GroupId);
-                            }
+                            if (!groupIdList.Contains(row.GroupId))
+                                groupIdList.Add(row.GroupId);
                         }
                     }
                 }
