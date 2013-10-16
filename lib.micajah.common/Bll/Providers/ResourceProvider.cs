@@ -439,7 +439,7 @@ namespace Micajah.Common.Bll.Providers
         internal static string GetOrganizationLogoImageUrlFromCache(Guid organizationId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, OrganizationLogoImageUrlKeyFormat, organizationId);
-            string url = CacheManager.Current.GetFromHttpContext(key) as string;
+            string url = CacheManager.Current.Get(key, true) as string;
 
             if (url == null)
             {
@@ -454,7 +454,7 @@ namespace Micajah.Common.Bll.Providers
         internal static string GetInstanceLogoImageUrlFromCache(Guid instanceId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceLogoImageUrlKeyFormat, instanceId);
-            string url = CacheManager.Current.GetFromHttpContext(key) as string;
+            string url = CacheManager.Current.Get(key, true) as string;
 
             if (url == null)
             {
