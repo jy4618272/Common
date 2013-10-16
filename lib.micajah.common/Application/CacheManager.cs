@@ -72,14 +72,42 @@ namespace Micajah.Common.Application
 
         #endregion
 
-        #region Public Methods
+        #region Private Methods
+
+        /// <summary>
+        /// Removes the specified item from System.Web.HttpContext object for the current HTTP request.
+        /// </summary>
+        /// <param name="key">A System.String identifier for the cache item to remove.</param>
+        private void RemoveFromHttpContext(string key)
+        {
+            HttpContext http = HttpContext.Current;
+            if (http != null)
+            {
+                if (http.Items.Contains(key))
+                    http.Items.Remove(key);
+            }
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Retrieves the specified item from the cache.
+        /// </summary>
+        /// <param name="key">The identifier for the cache item to retrieve.</param>
+        /// <returns>The retrieved cache item, or null if the key is not found.</returns>
+        protected virtual object GetFromCache(string key)
+        {
+            return HttpRuntime.Cache.Get(key);
+        }
 
         /// <summary>
         /// Adds or replaces an object in the cache.
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        public virtual void Put(string key, object value)
+        protected virtual void PutToCache(string key, object value)
         {
             HttpRuntime.Cache.Add(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
@@ -90,9 +118,45 @@ namespace Micajah.Common.Application
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
         /// <param name="timeout">The amount of time that the object should reside in the cache before expiration.</param>
-        public virtual void Put(string key, object value, TimeSpan timeout)
+        protected virtual void PutToCache(string key, object value, TimeSpan timeout)
         {
             HttpRuntime.Cache.Add(key, value, null, DateTime.UtcNow.Add(timeout), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+        }
+
+        /// <summary>
+        /// Removes the specified item from the cache.
+        /// </summary>
+        /// <param name="key">A System.String identifier for the cache item to remove.</param>
+        protected virtual void RemoveFromCache(string key)
+        {
+            HttpRuntime.Cache.Remove(key);
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Adds or replaces an object in the cache.
+        /// </summary>
+        /// <param name="key">The cache key used to reference the item.</param>
+        /// <param name="value">The item to be added to the cache.</param>
+        public void Put(string key, object value)
+        {
+            this.PutToCache(key, value);
+            this.RemoveFromHttpContext(key);
+        }
+
+        /// <summary>
+        /// Adds or replaces an object in the cache. Specifies the timeout value of the cached object.
+        /// </summary>
+        /// <param name="key">The cache key used to reference the item.</param>
+        /// <param name="value">The item to be added to the cache.</param>
+        /// <param name="timeout">The amount of time that the object should reside in the cache before expiration.</param>
+        public void Put(string key, object value, TimeSpan timeout)
+        {
+            this.PutToCache(key, value, timeout);
+            this.RemoveFromHttpContext(key);
         }
 
         /// <summary>
@@ -100,9 +164,9 @@ namespace Micajah.Common.Application
         /// </summary>
         /// <param name="key">The cache key used to reference the item.</param>
         /// <param name="value">The item to be added to the cache.</param>
-        public virtual void PutWithDefaultTimeout(string key, object value)
+        public void PutWithDefaultTimeout(string key, object value)
         {
-            this.Put(key, value, DefaultTimeout);
+            this.Put(key, value, this.DefaultTimeout);
         }
 
         /// <summary>
@@ -110,56 +174,52 @@ namespace Micajah.Common.Application
         /// </summary>
         /// <param name="key">The identifier for the cache item to retrieve.</param>
         /// <returns>The retrieved cache item, or null if the key is not found.</returns>
-        public virtual object Get(string key)
+        public object Get(string key)
         {
-            return HttpRuntime.Cache.Get(key);
+            return this.GetFromCache(key);
         }
 
         /// <summary>
         /// Retrieves the specified item from System.Web.HttpContext object for the current HTTP request or from the cache.
         /// </summary>
         /// <param name="key">The identifier for the cache item to retrieve.</param>
+        /// <param name="httpContext">Whether the item is cached in System.Web.HttpContext object and used to get the item.</param>
         /// <returns>The retrieved cache item, or null if the key is not found.</returns>
-        public object GetFromHttpContext(string key)
-        {
-            return this.GetFromHttpContext(key, HttpContext.Current);
-        }
-
-        /// <summary>
-        /// Retrieves the specified item from System.Web.HttpContext object for the HTTP request or from the cache.
-        /// </summary>
-        /// <param name="key">The identifier for the cache item to retrieve.</param>
-        /// <param name="http">The System.Web.HttpContext object for the HTTP request to retrieve the item from.</param>
-        /// <returns>The retrieved cache item, or null if the key is not found.</returns>
-        public virtual object GetFromHttpContext(string key, HttpContext http)
+        public object Get(string key, bool httpContext)
         {
             object value = null;
 
-            if (http != null)
+            if (httpContext)
             {
-                if (http.Items.Contains(key))
-                    value = http.Items[key];
-                else
+                HttpContext http = HttpContext.Current;
+                if (http != null)
                 {
-                    value = this.Get(key);
-                    if (value != null)
-                        http.Items[key] = value;
+                    if (http.Items.Contains(key))
+                        value = http.Items[key];
+                    else
+                    {
+                        value = this.Get(key);
+                        if (value != null)
+                            http.Items[key] = value;
+                    }
                 }
+                else
+                    value = this.GetFromCache(key);
             }
             else
-                value = this.Get(key);
+                value = this.GetFromCache(key);
 
             return value;
         }
 
         /// <summary>
-        ///  Removes the specified item from the cache.
+        /// Removes the specified item from the cache.
         /// </summary>
         /// <param name="key">A System.String identifier for the cache item to remove.</param>
-        /// <returns>The item removed from the Cache. If the value in the key parameter is not found, returns null.</returns>
-        public virtual void Remove(string key)
+        public void Remove(string key)
         {
-            HttpRuntime.Cache.Remove(key);
+            this.RemoveFromCache(key);
+            this.RemoveFromHttpContext(key);
         }
 
         #endregion

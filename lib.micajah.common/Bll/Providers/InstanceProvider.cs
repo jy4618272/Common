@@ -283,7 +283,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Instance GetInstanceFromCache(Guid instanceId, Guid organizationId, bool putToCacheIfNotExists)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceKeyFormat, instanceId);
-            Instance instance = CacheManager.Current.GetFromHttpContext(key) as Instance;
+            Instance instance = CacheManager.Current.Get(key, true) as Instance;
 
             if (instance == null)
             {
@@ -302,7 +302,7 @@ namespace Micajah.Common.Bll.Providers
         internal static Instance GetInstanceByPseudoIdFromCache(string pseudoId, Guid organizationId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceByPseudoIdKeyFormat, pseudoId, organizationId);
-            Instance instance = CacheManager.Current.GetFromHttpContext(key) as Instance;
+            Instance instance = CacheManager.Current.Get(key, true) as Instance;
 
             if (instance == null)
             {

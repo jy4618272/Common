@@ -36,7 +36,7 @@ namespace Micajah.Common.Bll.Providers
         {
             string key = string.Format(CultureInfo.InvariantCulture, GroupInstanceActionIdListKeyFormat, groupId, instanceId);
 
-            SortedList list = CacheManager.Current.GetFromHttpContext(key) as SortedList;
+            SortedList list = CacheManager.Current.Get(key, true) as SortedList;
             if (list == null)
             {
                 lock (s_GroupInstanceActionIdListSyncRoot)

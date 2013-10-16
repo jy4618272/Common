@@ -33,22 +33,22 @@ namespace Micajah.Common.TestSite
             get { return AzureCache; }
         }
 
-        public override void Put(string key, object value)
+        protected override void PutToCache(string key, object value)
         {
             AzureCache.Put(key, value);
         }
 
-        public override void Put(string key, object value, TimeSpan timeout)
+        protected override void PutToCache(string key, object value, TimeSpan timeout)
         {
             AzureCache.Put(key, value, timeout);
         }
 
-        public override object Get(string key)
+        protected override object GetFromCache(string key)
         {
             return AzureCache.Get(key);
         }
 
-        public override void Remove(string key)
+        protected override void RemoveFromCache(string key)
         {
             AzureCache.Remove(key);
         }

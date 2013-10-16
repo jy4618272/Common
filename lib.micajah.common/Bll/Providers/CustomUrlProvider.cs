@@ -33,19 +33,19 @@ namespace Micajah.Common.Bll.Providers
         private static Guid[] GetCustomUrlFromCache(string host)
         {
             string key = string.Format(CultureInfo.InvariantCulture, CustomUrlKeyFormat, host.ToLowerInvariant());
-            return CacheManager.Current.GetFromHttpContext(key) as Guid[];
+            return CacheManager.Current.Get(key, true) as Guid[];
         }
 
         private static string GetOrganizationCustomUrlFromCache(Guid organizationId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, OrganizationCustomUrlKeyFormat, organizationId);
-            return CacheManager.Current.GetFromHttpContext(key) as string;
+            return CacheManager.Current.Get(key, true) as string;
         }
 
         private static string GetInstanceCustomUrlFromCache(Guid instanceId)
         {
             string key = string.Format(CultureInfo.InvariantCulture, InstanceCustomUrlKeyFormat, instanceId);
-            return CacheManager.Current.GetFromHttpContext(key) as string;
+            return CacheManager.Current.Get(key, true) as string;
         }
 
         private static void PutCustomUrlToCache(string host, Guid[] values)
