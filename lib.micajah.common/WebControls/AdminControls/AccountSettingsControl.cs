@@ -323,6 +323,7 @@ namespace Micajah.Common.WebControls.AdminControls
                             if (setting.UsageCountLimit > 0) row["UsagePersent"] = (int)Math.Round(((100 / (decimal)setting.UsageCountLimit)) * usageCount);
                             else if (usageCount > 0) row["UsagePersent"] = 100;
                             else row["UsagePersent"] = 0;
+                                row["UsagePersent"] = 0;
                             dtFree.Rows.Add(row);
                         }
                     }
