@@ -1075,6 +1075,16 @@ namespace Micajah.Common.Security
         }
 
         /// <summary>
+        /// Refreshes the cached data for this user.
+        /// </summary>
+        public void Refresh()
+        {
+            ClientDataSet.UserRow userRow = UserProvider.GetUserRow(this.UserId, this.OrganizationId);
+            if (userRow != null)
+                RefreshDetails(this, userRow);
+        }
+
+        /// <summary>
         /// Sets the specified value to the OrganizationId element and gets related data.
         /// If an error occured during getting data process, the value isn't set and the Error property contains the error.
         /// </summary>
