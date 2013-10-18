@@ -21,6 +21,7 @@ namespace Micajah.Common.Bll.Handlers
 
         public ThreadStateType ThreadState { get; set; }
         public Exception ErrorException { get; set; }
+        private const string DEFAULT_PASSWORD = "12345";
 
         #endregion
 
@@ -258,7 +259,7 @@ namespace Micajah.Common.Bll.Handlers
                         if (!string.IsNullOrEmpty(user.EmailAddress) || !string.IsNullOrEmpty(user.PrincipalName))
                         {
                             row = ldapLogins.NewRow();
-                            row["LoginId"] = Guid.Empty;
+                            row["LoginId"] = Guid.NewGuid();
                             row["LoginName"] = (string.IsNullOrEmpty(user.EmailAddress)) ? user.PrincipalName : user.EmailAddress;
                             row["Name"] = string.Concat(user.FirstName, " ", user.LastName);
                             row["FirstName"] = user.FirstName;
@@ -266,6 +267,9 @@ namespace Micajah.Common.Bll.Handlers
                             row["Email"] = (string.IsNullOrEmpty(user.EmailAddress)) ? ((user.PrincipalName ?? string.Empty).Contains("@") ? user.PrincipalName : string.Empty) : user.EmailAddress;
                             row["LdapUserId"] = user.ObjectGuid;
                             row["Active"] = user.IsActive;
+                            row["Password"] = DEFAULT_PASSWORD;
+                            row["ProfileUpdated"] = DateTime.Now;
+                            row["Deleted"] = false;
                             ldapLogins.Rows.Add(row);
                         }
                     }
@@ -495,7 +499,6 @@ namespace Micajah.Common.Bll.Handlers
             Collection<string> altEmails;
             string ldapGroupIds = null;
             string localGroupIds = null;
-            string password = null;
             Guid loginId = Guid.Empty;
             IUser user = null;
             DataRow newRow = null;
@@ -569,8 +572,7 @@ namespace Micajah.Common.Bll.Handlers
 
                                             ldapGroupIds = (sb.Length > 0) ? sb.Remove(0, 1).ToString() : string.Empty;
                                             localGroupIds = LdapInfoProvider.GetAppGroupsByLdapGroups(organizationId, ldapGroupIds);
-                                            password = "12345";
-                                            loginId = UserProvider.AddUserToOrganization((string)dr["LoginName"], ((dr["Email"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["Email"], ((dr["FirstName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["FirstName"], ((dr["LastName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["LastName"], string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, localGroupIds, organizationId, password, false, false);
+                                            loginId = UserProvider.AddUserToOrganization((string)dr["LoginName"], ((dr["Email"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["Email"], ((dr["FirstName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["FirstName"], ((dr["LastName"]).GetType() == typeof(System.DBNull)) ? string.Empty : (string)dr["LastName"], string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, localGroupIds, organizationId, DEFAULT_PASSWORD, false, false);
                                             UserProvider.RaiseUserInserted(loginId, organizationId, null, Bll.Support.ConvertStringToGuidList(localGroupIds));
 
                                             user = LdapInfoProvider.GetLdapUser(organizationId, ldapUser);
@@ -638,7 +640,6 @@ namespace Micajah.Common.Bll.Handlers
                 drm2 = null;
                 ldapGroupIds = null;
                 localGroupIds = null;
-                password = null;
                 loginId = Guid.Empty;
                 user = null;
                 newRow = null;
@@ -655,9 +656,10 @@ namespace Micajah.Common.Bll.Handlers
             User ldapUser = null;
             DomainUser ldapDomainUser = null;
             LoginProvider provider = null;
-            string groupId = null;
+            String groupId = null;
             Guid ldapUserId = Guid.Empty;
             StringBuilder sb = null;
+            String email = null;
             try
             {
                 for (int i = 0; i < users.Count; i++)
@@ -719,13 +721,16 @@ namespace Micajah.Common.Bll.Handlers
                                         provider = new LoginProvider();
 
                                         if (!provider.LoginNameExists(ldapUser.EmailAddress))
+                                        {
+                                            email = userRow.Email;
                                             UserProvider.UpdateUser(userRow.UserId, ldapUser.EmailAddress, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, groupId, organizationId, false);
+                                        }
 
                                         if (provider != null) provider = null;
                                     }
                                 }
 
-                                UserProvider.RaiseUserUpdated(userRow.UserId, organizationId, Bll.Support.ConvertStringToGuidList(newUserGroups.ToString()));
+                                UserProvider.RaiseUserUpdated(userRow.UserId, organizationId, Bll.Support.ConvertStringToGuidList(newUserGroups.ToString()), email);
                                 break;
                             }
                         }
@@ -759,6 +764,7 @@ namespace Micajah.Common.Bll.Handlers
                 userRow = null;
                 provider = null;
                 groupId = null;
+                email = null;
             }
         }
 

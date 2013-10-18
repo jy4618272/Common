@@ -517,6 +517,19 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
+        /// Raises the UserUpdated event.
+        /// </summary>
+        /// <param name="userId">The unique identifier of user.</param>
+        /// <param name="organizationId">The unique identifier of the organization whereto the user is added.</param>
+        /// <param name="groupIdList">The list of the unique identifier of the user groups.</param>
+        /// <param name="email">Email of the user, in case it was changed</param>
+        internal static void RaiseUserUpdated(Guid userId, Guid? organizationId, ICollection<Guid> groupIdList, string email)
+        {
+            if (UserUpdated != null)
+                UserUpdated(null, new UserUpdatedEventArgs(userId, organizationId, groupIdList, email));
+        }
+
+        /// <summary>
         /// Sends an e-mail notification the the user with specified e-mail when login or email address is changed.
         /// </summary>
         /// <param name="email">The e-mail address of the user.</param>
@@ -2353,6 +2366,21 @@ namespace Micajah.Common.Bll.Providers
             m_GroupIdList = new List<Guid>(groupIdList);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        /// <param name="userId">The unique identifier of user</param>        
+        /// <param name="organizationId">The unique identifier of the user organization</param>
+        /// <param name="groupIdList">The list of the unique identifier of the user groups.</param>
+        /// <param name="email">User email.</param>
+        public UserUpdatedEventArgs(Guid userId, Guid? organizationId, ICollection<Guid> groupIdList, string email)
+        {
+            this.UserId = userId;
+            this.OrganizationId = organizationId;
+            m_GroupIdList = new List<Guid>(groupIdList);
+            this.Email = email;
+        }
+
         #endregion
 
         #region Public Properties
@@ -2379,6 +2407,11 @@ namespace Micajah.Common.Bll.Providers
                 return m_GroupIdList;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the email of the user.
+        /// </summary>
+        public string Email { get; set; }
 
         #endregion
     }
