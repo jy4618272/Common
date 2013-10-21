@@ -66,6 +66,16 @@ namespace Micajah.Common.Configuration
             set { m_ConnectionString = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value that indicates whether the expired view state is deleted on session or application end.
+        /// </summary>
+        [ConfigurationProperty("deleteExpiredViewState", DefaultValue = true)]
+        public bool DeleteExpiredViewState
+        {
+            get { return (bool)this["deleteExpiredViewState"]; }
+            set { this["deleteExpiredViewState"] = value; }
+        }
+
         #endregion
     }
 }

@@ -249,7 +249,7 @@ namespace Micajah.Common.Application
             RegisterResourceVirtualPathProvider();
             Resources.ResourceManager.IgnoreCase = true;
 
-            if (Micajah.Common.Pages.PageStatePersister.IsInUse)
+            if (Micajah.Common.Pages.PageStatePersister.IsInUse && FrameworkConfiguration.Current.WebApplication.ViewState.DeleteExpiredViewState)
                 ViewStateProvider.DeleteExpiredViewState();
 
             Thread MonitorThread = new Thread(MonitorStartThreadLoop);
@@ -266,7 +266,7 @@ namespace Micajah.Common.Application
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Application_End(object sender, EventArgs e)
         {
-            if (Micajah.Common.Pages.PageStatePersister.IsInUse)
+            if (Micajah.Common.Pages.PageStatePersister.IsInUse && FrameworkConfiguration.Current.WebApplication.ViewState.DeleteExpiredViewState)
                 ViewStateProvider.DeleteExpiredViewState();
         }
 
@@ -496,7 +496,7 @@ namespace Micajah.Common.Application
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected virtual void Session_End(object sender, EventArgs e)
         {
-            if (Micajah.Common.Pages.PageStatePersister.IsInUse)
+            if (Micajah.Common.Pages.PageStatePersister.IsInUse && FrameworkConfiguration.Current.WebApplication.ViewState.DeleteExpiredViewState)
                 ViewStateProvider.DeleteExpiredViewState();
         }
 
