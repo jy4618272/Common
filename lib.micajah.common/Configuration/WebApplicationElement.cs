@@ -318,8 +318,16 @@ namespace Micajah.Common.Configuration
         [ConfigurationProperty("viewState")]
         public ViewStateElement ViewState
         {
-            get { return (ViewStateElement)this["viewState"]; }
-            set { this["viewState"] = value; }
+            get
+            {
+                WebsiteConfiguration website = WebsiteConfiguration.Current;
+                if ((website != null) && website.ElementInformation.IsPresent)
+                {
+                    if (website.ViewState.ElementInformation.IsPresent)
+                        return website.ViewState;
+                }
+                return (ViewStateElement)this["customUrl"];
+            }
         }
 
         #endregion

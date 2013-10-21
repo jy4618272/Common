@@ -64,6 +64,16 @@ namespace Micajah.Common.Configuration
             get { return (IntegrationElement)this["integration"]; }
         }
 
+        /// <summary>
+        /// Gets the viewstate settings.
+        /// </summary>
+        [ConfigurationProperty("viewState")]
+        public ViewStateElement ViewState
+        {
+            get { return (ViewStateElement)this["viewState"]; }
+            set { this["viewState"] = value; }
+        }
+
         #endregion
     }
 }
