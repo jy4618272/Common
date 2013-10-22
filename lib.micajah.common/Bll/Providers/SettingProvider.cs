@@ -1045,8 +1045,7 @@ namespace Micajah.Common.Bll.Providers
                     row = (ClientDataSet.SettingsValuesRow)rows[0];
                     if (row != null)
                     {
-                        if (!setting.ValueIsDefault)
-                            row.Value = setting.Value;
+                        row.Value = setting.Value;
                     }
                 }
                 else
@@ -1301,8 +1300,7 @@ namespace Micajah.Common.Bll.Providers
 
                 if (row != null)
                 {
-                    if (!setting.ValueIsDefault)
-                        row.Value = setting.Value;
+                    row.Value = setting.Value;
                 }
                 else
                 {
