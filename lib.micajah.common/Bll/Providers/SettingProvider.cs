@@ -1045,13 +1045,11 @@ namespace Micajah.Common.Bll.Providers
                     row = (ClientDataSet.SettingsValuesRow)rows[0];
                     if (row != null)
                     {
-                        if (setting.ValueIsDefault)
-                            row.Delete();
-                        else
+                        if (!setting.ValueIsDefault)
                             row.Value = setting.Value;
                     }
                 }
-                else if (!setting.ValueIsDefault)
+                else
                 {
                     row = table.NewSettingsValuesRow();
                     row.SettingValueId = Guid.NewGuid();
@@ -1303,12 +1301,10 @@ namespace Micajah.Common.Bll.Providers
 
                 if (row != null)
                 {
-                    if (setting.ValueIsDefault)
-                        row.Delete();
-                    else
+                    if (!setting.ValueIsDefault)
                         row.Value = setting.Value;
                 }
-                else if (!setting.ValueIsDefault)
+                else
                 {
                     row = table.NewSettingsValuesRow();
                     row.SettingValueId = Guid.NewGuid();
