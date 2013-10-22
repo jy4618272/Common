@@ -997,23 +997,49 @@ namespace Micajah.Common.Bll.Providers
                 return;
 
             ClientDataSet.SettingsValuesDataTable table = null;
+            StringBuilder sb = new StringBuilder();
             if (instanceId.HasValue)
             {
                 if (groupId.HasValue)
+                {
                     table = GetSettingsValuesByOrganizationIdInstanceIdGroups(organizationId, instanceId.Value, groupId.Value.ToString().ToUpperInvariant());
+
+                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0} = '{{0}}' AND {1} = '{2}' AND {3} = '{4}' AND {5} = '{6}'"
+                        , table.SettingIdColumn.ColumnName
+                        , table.OrganizationIdColumn.ColumnName, organizationId
+                        , table.InstanceIdColumn.ColumnName, instanceId.Value
+                        , table.GroupIdColumn.ColumnName, groupId.Value);
+                }
                 else
+                {
                     table = GetSettingsValuesByOrganizationIdInstanceId(organizationId, instanceId.Value);
+
+                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0} = '{{0}}' AND {1} = '{2}' AND {3} = '{4}' AND {5} IS NULL"
+                        , table.SettingIdColumn.ColumnName
+                        , table.OrganizationIdColumn.ColumnName, organizationId
+                        , table.InstanceIdColumn.ColumnName, instanceId.Value
+                        , table.GroupIdColumn.ColumnName);
+                }
             }
             else
+            {
                 table = GetSettingsValuesByOrganizationId(organizationId);
+
+                sb.AppendFormat(CultureInfo.InvariantCulture, "{0} = '{{0}}' AND {1} = '{2}' AND {3} IS NULL AND {4} IS NULL"
+                    , table.SettingIdColumn.ColumnName
+                    , table.OrganizationIdColumn.ColumnName, organizationId
+                    , table.InstanceIdColumn.ColumnName
+                    , table.GroupIdColumn.ColumnName);
+            }
 
             Guid instId = instanceId.GetValueOrDefault(Guid.Empty);
             Guid grpId = groupId.GetValueOrDefault(Guid.Empty);
             ClientDataSet.SettingsValuesRow row = null;
+            string filter = sb.ToString();
 
             foreach (Setting setting in settings)
             {
-                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", table.SettingIdColumn.ColumnName, setting.SettingId));
+                DataRow[] rows = table.Select(string.Format(CultureInfo.InvariantCulture, filter, setting.SettingId));
                 if (rows.Length > 0)
                 {
                     row = (ClientDataSet.SettingsValuesRow)rows[0];
