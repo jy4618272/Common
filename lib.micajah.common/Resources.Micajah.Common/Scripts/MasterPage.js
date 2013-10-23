@@ -143,7 +143,7 @@ function Mp_EncodeTextBoxes() {
         input = inputs[i];
         if (input.type == "text") {
             input.disabled = true;
-            Encoder.htmlEncode(input);
+            input.value = Encoder.htmlEncode(input.value);
             input.disabled = false;
         }
     }
@@ -151,7 +151,7 @@ function Mp_EncodeTextBoxes() {
     inputs = document.body.getElementsByTagName("textarea");
     for (i = 0; i < inputs.length; i++) {
         input = inputs[i];
-        Encoder.htmlEncode(input);
+        input.value = Encoder.htmlEncode(input.value);
     }
 }
 
