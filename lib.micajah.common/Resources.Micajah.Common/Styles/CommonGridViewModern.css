@@ -363,10 +363,8 @@ div.Cgv_Hm a
     font-size: 12px;
     font-weight: bold;
     text-align: center;
-    border: 1px solid #b08357;
     background-color: #f9d08b;
     color: #633c16;
-    box-shadow: inset 0px 1px 1px 0px #fce6b6;
     display: inline-block;
 }
 
@@ -380,8 +378,6 @@ div.Cgv_Hm a
 {
     color: #ffffff;
     background-color: #2e7dba;
-    border-color: #045f86;
-    box-shadow: inset 0px 1px 0px 0px #63a8dd;
 }
 
 .Cgv_Filter ul
