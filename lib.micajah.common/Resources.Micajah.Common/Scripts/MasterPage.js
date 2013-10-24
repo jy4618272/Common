@@ -233,7 +233,7 @@ Encoder = {
 
         for (var i = 0; i < l; i++) {
             var c = s.charAt(i);
-            if (c < " " || c > "~") {
+            if (/*c < " " || */c > "~") {
                 a.push("&#");
                 a.push(c.charCodeAt()); //numeric value of code point 
                 a.push(";");
