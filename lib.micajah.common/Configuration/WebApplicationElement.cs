@@ -326,7 +326,7 @@ namespace Micajah.Common.Configuration
                     if (website.ViewState.ElementInformation.IsPresent)
                         return website.ViewState;
                 }
-                return (ViewStateElement)this["customUrl"];
+                return (ViewStateElement)this["viewState"];
             }
         }
 
