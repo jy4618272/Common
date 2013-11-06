@@ -109,7 +109,7 @@ namespace Micajah.Common.Application
         /// <param name="value">The item to be added to the cache.</param>
         protected virtual void PutToCache(string key, object value)
         {
-            HttpRuntime.Cache.Add(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            HttpRuntime.Cache.Insert(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Micajah.Common.Application
         /// <param name="timeout">The amount of time that the object should reside in the cache before expiration.</param>
         protected virtual void PutToCache(string key, object value, TimeSpan timeout)
         {
-            HttpRuntime.Cache.Add(key, value, null, DateTime.UtcNow.Add(timeout), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            HttpRuntime.Cache.Insert(key, value, null, DateTime.UtcNow.Add(timeout), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
         /// <summary>
