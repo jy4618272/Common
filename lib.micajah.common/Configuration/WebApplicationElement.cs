@@ -305,6 +305,10 @@ namespace Micajah.Common.Configuration
 
                         if (website.Integration.Chargify.ElementInformation.IsPresent)
                             elem.Chargify = website.Integration.Chargify;
+
+                        if (website.Integration.Webhook.ElementInformation.IsPresent)
+                            elem.Webhook = website.Integration.Webhook;
+
                     }
                 }
 

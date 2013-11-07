@@ -29,67 +29,12 @@ namespace Micajah.Common.Bll.Handlers
 
         public void Start()
         {
-            OrganizationCollection organizationCollection = null;
-            DataView dvDomains = null;
-            DataView dvGroups = null;
-
-            DataRow drDomain = null;
-            DataRow drGroup = null;
 
             try
             {
                 this.ThreadState = ThreadStateType.Running;
 
-                if (FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled)
-                {
-                    organizationCollection = OrganizationProvider.GetOrganizations(false, false);
-
-                    using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
-                    {
-                        foreach (Organization org in organizationCollection)
-                        {
-                            try
-                            {
-                                if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true || !org.Beta)
-                                    continue;
-
-                                //Get All Groups
-                                dvDomains = LdapInfoProvider.GetDomains(org.OrganizationId);
-                                if (dvDomains.Table.Rows.Count > 0)
-                                {
-                                    for (int i = 0; i < dvDomains.Table.Rows.Count; i++)
-                                    {
-                                        drDomain = dvDomains.Table.Rows[i];
-                                        dvGroups = LdapInfoProvider.GetGroupsByDomainDistinguishedName(org.OrganizationId, drDomain["DistinguishedName"].ToString());
-                                        if (dvGroups.Table.Rows.Count > 0)
-                                        {
-                                            adapter.Delete(org.OrganizationId, drDomain["DomainName"].ToString());
-                                            for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
-                                            {
-                                                drGroup = dvGroups.Table.Rows[j];
-                                                adapter.Insert(Guid.NewGuid(), org.OrganizationId, (Guid)drDomain["Id"], drDomain["DomainName"].ToString(), (Guid)drGroup["Id"], drGroup["GroupName"].ToString(), drGroup["DistinguishedName"].ToString(), DateTime.UtcNow);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                RunADReplication(org.OrganizationId, true);
-                            }
-                            catch (Exception ex)
-                            {
-                                this.ThreadState = ThreadStateType.Failed;
-                                this.ErrorException = ex;
-                                try
-                                {
-                                    if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
-                                        EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
-                                    EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method Start() for Organization: {0}; Error: {1} [{2}]", org.Name, ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                }
+                ReplicateAllOrganizations();
 
                 if (this.ThreadState == ThreadStateType.Running)
                     this.ThreadState = ThreadStateType.Finished;
@@ -106,13 +51,45 @@ namespace Micajah.Common.Bll.Handlers
                 }
                 catch { }
             }
-            finally
-            {
-                organizationCollection = null;
-                drDomain = null;
-                if (dvDomains != null) dvDomains.Dispose();
-                if (dvGroups != null) dvGroups.Dispose();
-            }
+        }
+
+        public void ReplicateAllOrganizations()
+        {
+           if (!FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled) throw new InvalidOperationException("Ldap integration is not enabled in the application configuration file.");
+
+           using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
+           {
+               OrganizationCollection organizationCollection = OrganizationProvider.GetOrganizations(false, false);
+
+               foreach (Organization org in organizationCollection)
+               {
+                   if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true || !org.Beta)
+                       continue;
+
+                   //Get All Groups
+                   DataView dvDomains = LdapInfoProvider.GetDomains(org.OrganizationId);
+                   if (dvDomains.Table.Rows.Count > 0)
+                   {
+                       for (int i = 0; i < dvDomains.Table.Rows.Count; i++)
+                       {
+                           DataRow drDomain = dvDomains.Table.Rows[i];
+                           DataView dvGroups = LdapInfoProvider.GetGroupsByDomainDistinguishedName(org.OrganizationId, drDomain["DistinguishedName"].ToString());
+                           if (dvGroups.Table.Rows.Count > 0)
+                           {
+                               adapter.Delete(org.OrganizationId, drDomain["DomainName"].ToString());
+                               for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
+                               {
+                                   DataRow drGroup = dvGroups.Table.Rows[j];
+                                   adapter.Insert(Guid.NewGuid(), org.OrganizationId, (Guid)drDomain["Id"], drDomain["DomainName"].ToString(), (Guid)drGroup["Id"], drGroup["GroupName"].ToString(), drGroup["DistinguishedName"].ToString(), DateTime.UtcNow);
+                               }
+                           }
+                       }
+                   }
+
+                   RunADReplication(org.OrganizationId, true);
+               }
+           }
+
         }
 
         public void ImportLdapGroups(Guid organizationId)

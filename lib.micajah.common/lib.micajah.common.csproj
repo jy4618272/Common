@@ -166,9 +166,11 @@
     <Compile Include="Bll\Handlers\ActionHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyHandler.cs" />
     <Compile Include="Bll\Handlers\ChargifyWebhookHandler.cs" />
+    <Compile Include="Bll\Handlers\WebhookAsyncOperation.cs" />
     <Compile Include="Bll\Handlers\OAuthHandler.cs" />
     <Compile Include="Bll\Handlers\SettingHandler.cs" />
     <Compile Include="Bll\Handlers\LdapHandler.cs" />
+    <Compile Include="Bll\Handlers\WebhookAsyncHandler.cs" />
     <Compile Include="Bll\LdapProcess.cs" />
     <Compile Include="Bll\Providers\ChargifyProvider.cs" />
     <Compile Include="Bll\Providers\EmailProvider.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="Configuration\BreadcrumbsElement.cs" />
     <Compile Include="Configuration\ChargifyIntegrationElement.cs" />
     <Compile Include="Configuration\BingIntegrationElement.cs" />
+    <Compile Include="Configuration\WebhookIntegrationElement.cs" />
     <Compile Include="Configuration\ViewStateElement.cs" />
     <Compile Include="Configuration\CurrencyElement.cs" />
     <Compile Include="Configuration\EntityEventElement.cs" />
@@ -417,9 +420,6 @@
     </Compile>
     <Compile Include="WebControls\Token.cs" />
     <Compile Include="WebControls\SecurityControls\TokenControl.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebControls\WebEventHandler.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebControls\CustomField.cs">
@@ -1994,12 +1994,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_over.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_right.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v98.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\WebEventHandler.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\WebEventHandler.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\GlobalModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\SignupOrganization.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicFormModern.css" />

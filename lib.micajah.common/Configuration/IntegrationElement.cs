@@ -64,6 +64,16 @@ namespace Micajah.Common.Configuration
             get { return (ChargifyIntegrationElement)this["chargify"]; }
             set { this["chargify"] = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the settings of the Webhook integration.
+        /// </summary>
+        [ConfigurationProperty("webhook")]
+        public WebhookIntegrationElement Webhook
+        {
+            get { return (WebhookIntegrationElement)this["webhook"]; }
+            set { this["webhook"] = value; }
+        }
         #endregion
     }
 }

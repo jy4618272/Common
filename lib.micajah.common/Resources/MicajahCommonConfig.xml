@@ -177,10 +177,6 @@
   <settings>
     <setting id="00000000-0000-0000-0000-000000000066" type="Value" name="The custom style sheet for the master page" shortName="CustomStyleSheet" levels="Organization" defaultValue="" />
   </settings>
-  <startThreads>
-    <startThread classFullName="Micajah.Common.Bll.Handlers.LdapHandler" startTime="06:30"/>
-    <startThread classFullName="Micajah.Common.Bll.Handlers.ChargifyHandler" startTime="08:30"/>
-  </startThreads>
   <security privateKey="&lt;RSAKeyValue&gt;&lt;Modulus&gt;ycM9HXG6Lq4FdLaGPEPuhkj0hvMyttzC3KFwhKgtaBZtjLj1cIEfAZb5qchy77V0zFp8tEmW7AxzDDYbE+cyQ5UtrKAUdc8P9L4SybZAHevJih4hhDGT0VcaPKj9Fr0bqbx0oxjpSR+veEipwe9GjLDOIW3NMu02pBo0w2iHAM8=&lt;/Modulus&gt;&lt;Exponent&gt;AQAB&lt;/Exponent&gt;&lt;P&gt;+FCTzgG1brXqDEmpOZ2S2y5x5CJx85BbflahDn/5NUCLAk1v4+dEhaU3/1o7Pst5++WyLPCA598FxfdYVrCQVQ==&lt;/P&gt;&lt;Q&gt;0AHTC2pxqhjd2Y3jwrQzU61Pz59o2kDxGSFTQxy4u9q6LDDLaE+Jp3JA9n8xcKom4h22vpg6wbDa4+cCbjOgkw==&lt;/Q&gt;&lt;DP&gt;eXgZRY4KbdTpYAdsk7WkUDnhFsNO0OHOD/haotgxVT50gbTVxjushl/zC6PdFXO+AV40kc04kbTEgzni6c1HXQ==&lt;/DP&gt;&lt;DQ&gt;dKPxQn+ICYg0L2C/jVkbRxrynEyZsXmlOSBU3ldmyACZUVpzVaT0Xe9VumQMx07Cyx06cppOqHqR5CaQWFee/Q==&lt;/DQ&gt;&lt;InverseQ&gt;KLwXu/REi9nsdeOktrlSG4irkl+vzj1be7ylfiOFoXe3Mp46h9SHXlNV4/RuCW+oNN6Bo9N0w8moQstYY5f6ww==&lt;/InverseQ&gt;&lt;D&gt;rDR3dSocPrtI7NTcvZM9gl/CVWw9XNYPe0BPSOpB1xVNa05yLhQG4tR5QvBTKUU26zRQO5CTv+TgTQvhEJvDyWWPwX5NKOFlv2DPLoWDaF9YlDY2b901qRfm6teo7l8v9qM0LGQJ8eYc1U9ZgWl2Z9ECNXj59tFHBIhdN/JyhAE=&lt;/D&gt;&lt;/RSAKeyValue&gt;" />
   <currencies>
     <currency code="USD" name="United States Dollar" />
