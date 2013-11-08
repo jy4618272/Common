@@ -24,6 +24,11 @@ namespace Micajah.Common.Bll.Handlers
             webhookData = whData;
         }
 
+        public HttpContext Context
+        {
+            get { return context; }
+        }
+
         public object AsyncState
         {
             get { return state; }
@@ -61,6 +66,13 @@ namespace Micajah.Common.Bll.Handlers
 
         private void StartAsyncTask(Object workItemState)
         {
+            if (state != null && state is Exception)
+            {
+                completed = true;
+                callback(this);
+                return;
+            }
+
             try
             {
                 if (webhookId == 0) //test webhook functionality
@@ -78,8 +90,8 @@ namespace Micajah.Common.Bll.Handlers
                     lh.ReplicateAllOrganizations();
                     context.Response.Write("Finished LDAP replication.\r\n");
                 }
-                else throw new InvalidOperationException("Unknown Webhook ID. ID=" + webhookId.ToString());
-                context.Response.Write(string.Format("<p>Completion Webhook request processing at {0:d-MMM-yyyy HH:mm}.</p>\r\n", DateTime.UtcNow));
+                else throw new HttpException(400, "Unknown Webhook ID. ID=" + webhookId.ToString());
+                context.Response.Write(string.Format("Completion Webhook request processing at {0:d-MMM-yyyy HH:mm}.\r\n", DateTime.UtcNow));
             }
             catch (Exception ex)
             {
