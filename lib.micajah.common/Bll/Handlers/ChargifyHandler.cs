@@ -70,6 +70,21 @@ namespace Micajah.Common.Bll.Handlers
             return updatedCount;
         }
 
+        public static SettingCollection RetrieveUpdatedPaidSettings(Guid OrgId, Guid InstId)
+        {
+            SettingCollection pricedSettings = SettingProvider.GetAllPricedSettings(OrgId, InstId);
+            string historyDbCnn = Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Integration.Chargify.HistoryConnectionStringName;
+
+            if (string.IsNullOrEmpty(historyDbCnn)) return pricedSettings;
+            if (System.Configuration.ConfigurationManager.ConnectionStrings[historyDbCnn] == null) return pricedSettings;
+            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.ConnectionStrings[historyDbCnn].ConnectionString)) return pricedSettings;
+
+            historyDbCnn = System.Configuration.ConfigurationManager.ConnectionStrings[historyDbCnn].ConnectionString;
+
+            return null;
+            
+        }
+
         #endregion
     }
 }

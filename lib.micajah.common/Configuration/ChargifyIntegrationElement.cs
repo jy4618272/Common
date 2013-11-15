@@ -35,6 +35,16 @@ namespace Micajah.Common.Configuration
             set { this["enabled"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the Connection String Name to Save Settings Values Update History 
+        /// </summary>
+        [ConfigurationProperty("historyConnectionStringName")]
+        public string HistoryConnectionStringName
+        {
+            get { return (string)this["historyConnectionStringName"]; }
+            set { this["historyConnectionStringName"] = value; }
+        }
+
         #endregion
     }
 }
