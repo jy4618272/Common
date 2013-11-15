@@ -2,6 +2,7 @@
 using System.IO;
 using System.Web;
 using System.Threading;
+using Micajah.Common.Configuration;
 
 namespace Micajah.Common.Bll.Handlers
 {
@@ -26,9 +27,9 @@ namespace Micajah.Common.Bll.Handlers
             WebhookAsyncOperation asyncOperation = null;
             int webhookID = -1;
 
-            if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Integration.Webhook == null)
+            if (FrameworkConfiguration.Current.WebApplication.Integration.Webhook == null)
                 asyncOperation = new WebhookAsyncOperation(cb, context, new HttpException(400, "Webhook integration section is not defined."), -1, string.Empty);
-            else if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Integration.Webhook.Secret != secret)
+            else if (FrameworkConfiguration.Current.WebApplication.Integration.Webhook.Secret != secret)
                 asyncOperation = new WebhookAsyncOperation(cb, context, new HttpException(400, "Webhook Request secret is not valid."), -1, string.Empty);
             else if (string.IsNullOrEmpty(context.Request.Headers[WebhookIdHandle]))
                 asyncOperation = new WebhookAsyncOperation(cb, context, new HttpException(400, "Webhook ID is not defined."), -1, string.Empty);
@@ -49,6 +50,8 @@ namespace Micajah.Common.Bll.Handlers
         {
             if (result != null && result.AsyncState != null && result.AsyncState is Exception)
             {
+                if (!FrameworkConfiguration.Current.WebApplication.Integration.Webhook.HandleErrors) throw (Exception)result.AsyncState;
+
                 HttpContext context = ((WebhookAsyncOperation)result).Context;
                 context.Response.Clear();
                 if (result.AsyncState is HttpException) context.Response.StatusCode = ((HttpException)result.AsyncState).GetHttpCode();

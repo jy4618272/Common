@@ -46,6 +46,15 @@ namespace Micajah.Common.Configuration
             set { this["path"] = value; }
         }
 
+        /// <summary>
+        /// Handle and process errors on http handler pages and return error information in a response body.
+        /// </summary>
+        [ConfigurationProperty("handleErrors")]
+        public bool HandleErrors
+        {
+            get { return (bool)this["handleErrors"]; }
+            set { this["handleErrors"] = value; }
+        }
 
         #endregion
     }
