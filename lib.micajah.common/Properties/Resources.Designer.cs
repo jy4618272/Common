@@ -4441,7 +4441,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To set up your system to replicate user data over LDAP please review the follow article. &lt;a style=&quot;font-size: medium;&quot; href=&quot;http://login.bigwebapps.com/portal/KBArticleView.aspx?dept=6f5bg5&amp;org=rn062f&amp;tkt=fvegqv&quot; target=&quot;_blank&quot;&gt;Setup LDAP Integration&lt;/a&gt;.
+        ///   Looks up a localized string similar to To set up your system to replicate user data over LDAP please review the follow article. &lt;a style=&quot;font-size: medium;&quot; href=&quot;http://app.bigwebapps.com/portal/KBArticleView.aspx?dept=6f5bg5&amp;org=rn062f&amp;tkt=fvegqv&quot; target=&quot;_blank&quot;&gt;Setup LDAP Integration&lt;/a&gt;.
         /// </summary>
         internal static string OrganizationLdapSettingsControl_Description_Text {
             get {
