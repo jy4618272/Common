@@ -106,6 +106,8 @@ namespace Micajah.Common.Bll
         {
             StartThreadCollection startThreads = new StartThreadCollection();
 
+            if (FrameworkConfiguration.Current.StartThreads == null) return startThreads;
+
             foreach (StartThreadElement element in FrameworkConfiguration.Current.StartThreads)
             {
                 StartThread startThread = StartThread.Create(element);
