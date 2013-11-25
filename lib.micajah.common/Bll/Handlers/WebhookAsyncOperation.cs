@@ -90,6 +90,12 @@ namespace Micajah.Common.Bll.Handlers
                     lh.ReplicateAllOrganizations();
                     context.Response.Write("Finished LDAP replication.\r\n");
                 }
+                else if (webhookId == 3) //calculate counter settings
+                {
+                    context.Response.Write("Executing Counter Settings Calculation.\r\n");
+                    Micajah.Common.Bll.Providers.CounterSettingProvider.CalculateCounterSettingsValues();
+                    context.Response.Write("Finished Counter Settings Calculation.\r\n");
+                }
                 else throw new HttpException(400, "Unknown Webhook ID. ID=" + webhookId.ToString());
                 context.Response.Write(string.Format("Completion Webhook request processing at {0:d-MMM-yyyy HH:mm}.\r\n", DateTime.UtcNow));
             }

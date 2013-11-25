@@ -37,6 +37,11 @@ namespace Micajah.Common.WebControls.SetupControls
 
             Micajah.Common.Pages.MasterPage.InitializeSetupPage(this.Page);
 
+            DateTime? onDate = CounterSettingProvider.GetLastCalculationDate();
+
+            if (onDate.HasValue) ((Micajah.Common.Pages.MasterPage)this.Page.Master).CustomName = "Activity Report on " + onDate.Value.ToString("dd-MMM-yyyy");
+            else ((Micajah.Common.Pages.MasterPage)this.Page.Master).CustomName = "Activity Report for Now";
+
             hlExcelFile.NavigateUrl = Request.Url.ToString() + "?file=excel";
             ConfigurationDataSet.SettingDataTable table = ConfigurationDataSet.Current.Setting;
             string filter = string.Format(CultureInfo.InvariantCulture, "{0} = " + ((int)SettingType.Counter).ToString(), table.SettingTypeIdColumn.ColumnName);
@@ -269,8 +274,6 @@ namespace Micajah.Common.WebControls.SetupControls
                 InstanceCollection insts = InstanceProvider.GetInstances(org.OrganizationId, false);
                 if (insts.Count > 0)
                 {
-                    Micajah.Common.Bll.Handlers.SettingHandler handler = Micajah.Common.Bll.Handlers.SettingHandler.Current;
-
                     foreach (Instance inst in insts)
                     {
                         decimal monthlySum = 0;
@@ -284,14 +287,16 @@ namespace Micajah.Common.WebControls.SetupControls
                         row["AdminEmail"] = aEmail;
                         row["AdminPhone"] = aPhone;
 
-                        foreach (Setting setting in counterSettings)
-                        {
-                            row[setting.ShortName] = handler.GetUsedItemsCount(setting, org.OrganizationId, inst.InstanceId);
-                        }
-
-                        SettingCollection settings = SettingProvider.GetCounterSettings(org.OrganizationId, inst.InstanceId);
+                        SettingCollection settings = CounterSettingProvider.GetCalculatedAllCounterSettings(org.OrganizationId, inst.InstanceId);
                         foreach (Setting setting in settings)
                         {
+                            if (setting.SettingType == SettingType.Counter)
+                            {
+                                int sVal = 0;
+                                if (!int.TryParse(setting.Value, out sVal)) sVal = -1;
+                                row[setting.ShortName] = sVal;
+                                continue;
+                            }
                             if (setting.ShortName == "PhoneSupport") continue;
                             if (setting.ShortName == "Training1Hour") continue;
                             if (setting.ShortName == "Training3Hours") continue;

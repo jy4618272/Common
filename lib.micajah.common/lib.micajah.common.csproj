@@ -173,6 +173,7 @@
     <Compile Include="Bll\Handlers\WebhookAsyncHandler.cs" />
     <Compile Include="Bll\LdapProcess.cs" />
     <Compile Include="Bll\Providers\ChargifyProvider.cs" />
+    <Compile Include="Bll\Providers\CounterSettingProvider.cs" />
     <Compile Include="Bll\Providers\EmailProvider.cs" />
     <Compile Include="Bll\Providers\GoogleProvider.cs" />
     <Compile Include="Bll\Providers\OAuth\HmacSigningBindingElement.cs" />

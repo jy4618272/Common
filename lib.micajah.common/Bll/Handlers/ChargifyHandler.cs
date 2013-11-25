@@ -48,17 +48,25 @@ namespace Micajah.Common.Bll.Handlers
             ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
             if (_chargify == null) throw new InvalidOperationException("No Chargify configuration settings found.");
 
+            DateTime? lastUpdatedAt = CounterSettingProvider.GetDateTimeMark(1);
+
             int updatedCount = 0;
             OrganizationCollection _orgs = OrganizationProvider.GetOrganizations(false, false);
 
             foreach (Organization _org in _orgs)
             {
                 InstanceCollection _insts = InstanceProvider.GetInstances(_org.OrganizationId, false);
+
                 foreach (Instance _inst in _insts)
                 {
                     if (_inst.BillingPlan == BillingPlan.Custom) continue;
+
+                    SettingCollection modifiedSettings = CounterSettingProvider.GetLastModifiedPaidSettings(_org.OrganizationId, _inst.InstanceId, lastUpdatedAt);
+                    if (modifiedSettings.Count == 0) continue;
+
                     ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, _org.OrganizationId, _inst.InstanceId);
-                    ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _inst);
+                    ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _inst, modifiedSettings);
+
                     if (_custSubscr != null) updatedCount++;
                     if (_custSubscr == null && _inst.CreditCardStatus != CreditCardStatus.NotRegistered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.NotRegistered);
                     else if (_custSubscr != null && _custSubscr.State == SubscriptionState.Expired && _inst.CreditCardStatus != CreditCardStatus.Expired) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.Expired);
@@ -67,22 +75,9 @@ namespace Micajah.Common.Bll.Handlers
                 }
             }
 
+            CounterSettingProvider.SetDateTimeMark(1);
+
             return updatedCount;
-        }
-
-        public static SettingCollection RetrieveUpdatedPaidSettings(Guid OrgId, Guid InstId)
-        {
-            SettingCollection pricedSettings = SettingProvider.GetAllPricedSettings(OrgId, InstId);
-            string historyDbCnn = Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Integration.Chargify.HistoryConnectionStringName;
-
-            if (string.IsNullOrEmpty(historyDbCnn)) return pricedSettings;
-            if (System.Configuration.ConfigurationManager.ConnectionStrings[historyDbCnn] == null) return pricedSettings;
-            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.ConnectionStrings[historyDbCnn].ConnectionString)) return pricedSettings;
-
-            historyDbCnn = System.Configuration.ConfigurationManager.ConnectionStrings[historyDbCnn].ConnectionString;
-
-            return null;
-            
         }
 
         #endregion

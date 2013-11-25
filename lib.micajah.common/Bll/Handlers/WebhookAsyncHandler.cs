@@ -50,7 +50,7 @@ namespace Micajah.Common.Bll.Handlers
         {
             if (result != null && result.AsyncState != null && result.AsyncState is Exception)
             {
-                if (!FrameworkConfiguration.Current.WebApplication.Integration.Webhook.HandleErrors) throw (Exception)result.AsyncState;
+                if (!FrameworkConfiguration.Current.WebApplication.Integration.Webhook.HandleErrors) throw new Exception("Webhooh Async Operation Error.", (Exception)result.AsyncState);
 
                 HttpContext context = ((WebhookAsyncOperation)result).Context;
                 context.Response.Clear();

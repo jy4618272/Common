@@ -63,13 +63,11 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst)
+        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst, SettingCollection modifiedSettings)
         {
             decimal monthlySum = 0;
 
-            SettingCollection pricedSettings = SettingProvider.GetAllPricedSettings(inst.OrganizationId, inst.InstanceId);
-
-            foreach (Setting setting in pricedSettings)
+            foreach (Setting setting in modifiedSettings)
             {
                 int extId = 0;
                 if (setting.Paid)
@@ -99,6 +97,32 @@ namespace Micajah.Common.Bll.Providers
 
             if (monthlySum>0 && inst.BillingPlan!=BillingPlan.Paid) InstanceProvider.UpdateInstance(inst, BillingPlan.Paid);
             else if (monthlySum==0 && inst.BillingPlan!=BillingPlan.Free) InstanceProvider.UpdateInstance(inst, BillingPlan.Free);
+
+            if (SubscriptionId == 0) return;
+
+            foreach (Setting setting in modifiedSettings)
+            {
+                int extId = 0;
+                if (setting.Paid)
+                {
+                    bool enabled = false;
+                    if (!Boolean.TryParse(setting.Value, out enabled))
+                    {
+                        if (!Boolean.TryParse(setting.DefaultValue, out enabled)) enabled = false;
+                    }
+                    if (string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out extId)) continue;
+                    if (extId == 0) continue;
+                    chargify.UpdateComponentAllocationForSubscription(SubscriptionId, extId, enabled ? 1 : 0);
+                    continue;
+                }
+
+                int usageCount = 0;
+                int.TryParse(setting.Value, out usageCount);
+
+                if (string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out extId)) continue;
+                if (extId == 0) continue;
+                chargify.UpdateComponentAllocationForSubscription(SubscriptionId, extId, usageCount < 0 ? 0 : usageCount);
+            }
         }
     }
 }
