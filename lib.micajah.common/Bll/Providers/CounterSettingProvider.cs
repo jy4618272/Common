@@ -244,7 +244,7 @@ namespace Micajah.Common.Bll.Providers
                     {
                         int settingVal = handler.GetUsedItemsCount(setting, org.OrganizationId, inst.InstanceId);
                         DataRow rowLastVal = dtLastValues.Rows.Find(setting.SettingId);
-                        if (rowLastVal == null || rowLastVal["Value"].ToString() != settingVal.ToString())
+                        if (rowLastVal == null || rowLastVal["SettingValue"].ToString() != settingVal.ToString())
                         {
                             DataRow rowNewVal = dtModifiedSettings.NewRow();
                             rowNewVal["OrganizationId"] = org.OrganizationId;
@@ -268,7 +268,7 @@ namespace Micajah.Common.Bll.Providers
                         
                         DataRow rowLastVal = dtLastValues.Rows.Find(setting.SettingId);
 
-                        if (rowLastVal == null || rowLastVal["Value"].ToString() != settingVal)
+                        if (rowLastVal == null || rowLastVal["SettingValue"].ToString() != settingVal)
                         {
                             DataRow rowNewVal = dtModifiedSettings.NewRow();
                             rowNewVal["OrganizationId"] = org.OrganizationId;
