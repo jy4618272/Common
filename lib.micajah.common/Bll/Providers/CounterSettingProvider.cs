@@ -258,10 +258,17 @@ namespace Micajah.Common.Bll.Providers
                     SettingCollection settings = SettingProvider.GetAllPricedSettings(org.OrganizationId, inst.InstanceId);
                     foreach (Setting setting in settings)
                     {
-                        int settingVal = handler.GetUsedItemsCount(setting, org.OrganizationId, inst.InstanceId);
+                        string settingVal = string.Empty;
+                        if (setting.Paid) 
+                        {
+                            if (string.IsNullOrEmpty(setting.Value)) settingVal = setting.DefaultValue;
+                            else settingVal = setting.Value;
+                        }
+                        else settingVal = handler.GetUsedItemsCount(setting, org.OrganizationId, inst.InstanceId).ToString();
+                        
                         DataRow rowLastVal = dtLastValues.Rows.Find(setting.SettingId);
 
-                        if (rowLastVal == null || rowLastVal["Value"].ToString() != settingVal.ToString())
+                        if (rowLastVal == null || rowLastVal["Value"].ToString() != settingVal)
                         {
                             DataRow rowNewVal = dtModifiedSettings.NewRow();
                             rowNewVal["OrganizationId"] = org.OrganizationId;

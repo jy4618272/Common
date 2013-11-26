@@ -63,11 +63,9 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
-        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst, SettingCollection modifiedSettings)
+        public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst, SettingCollection modifiedSettings, SettingCollection paidSettings)
         {
             decimal monthlySum = 0;
-
-            SettingCollection paidSettings = CounterSettingProvider.GetCalculatedPaidSettings(inst.OrganizationId, inst.InstanceId);
 
             foreach (Setting setting in paidSettings)
             {

@@ -372,7 +372,13 @@ namespace Micajah.Common.WebControls.AdminControls
             if (_custSubscr != null && _custSubscr.CreditCard != null)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
-                if (updateUsage) ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.Instance, CounterSettingProvider.GetLastModifiedPaidSettings(OrganizationId, InstanceId, CounterSettingProvider.GetDateTimeMark(1)));
+                if (updateUsage)
+                {
+                    DateTime? lastUpdatedAt = CounterSettingProvider.GetDateTimeMark(1);
+                    SettingCollection modifiedSettings=CounterSettingProvider.GetLastModifiedPaidSettings(OrganizationId, InstanceId, lastUpdatedAt);
+                    SettingCollection paidSettings=lastUpdatedAt.HasValue ?  CounterSettingProvider.GetCalculatedPaidSettings(OrganizationId, InstanceId) : modifiedSettings;
+                    ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.Instance, modifiedSettings, paidSettings);
+                }
                 TotalAmount = m_TotalSum;
                 SubscriptionId = _custSubscr.SubscriptionID;
                 lCCStatus.Text = "Credit Card Registered and " + _custSubscr.State.ToString() + ".";

@@ -64,8 +64,10 @@ namespace Micajah.Common.Bll.Handlers
                     SettingCollection modifiedSettings = CounterSettingProvider.GetLastModifiedPaidSettings(_org.OrganizationId, _inst.InstanceId, lastUpdatedAt);
                     if (modifiedSettings.Count == 0) continue;
 
+                    SettingCollection paidSettings = lastUpdatedAt.HasValue ? CounterSettingProvider.GetCalculatedPaidSettings(_org.OrganizationId, _inst.InstanceId) : modifiedSettings;
+
                     ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, _org.OrganizationId, _inst.InstanceId);
-                    ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _inst, modifiedSettings);
+                    ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, _inst, modifiedSettings, paidSettings);
 
                     if (_custSubscr != null) updatedCount++;
                     if (_custSubscr == null && _inst.CreditCardStatus != CreditCardStatus.NotRegistered) InstanceProvider.UpdateInstance(_inst, CreditCardStatus.NotRegistered);

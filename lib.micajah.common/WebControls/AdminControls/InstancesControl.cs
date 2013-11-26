@@ -116,7 +116,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     {
                         ChargifyNET.ChargifyConnect _chargify = ChargifyProvider.CreateChargify();
                         ChargifyNET.ISubscription _custSubscr = ChargifyProvider.GetCustomerSubscription(_chargify, inst.OrganizationId, inst.InstanceId);
-                        ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, inst, CounterSettingProvider.GetLastModifiedPaidSettings(inst.OrganizationId, inst.InstanceId, null));
+                        SettingCollection settings=CounterSettingProvider.GetLastModifiedPaidSettings(inst.OrganizationId, inst.InstanceId, null);
+                        ChargifyProvider.UpdateSubscriptionAllocations(_chargify, _custSubscr != null ? _custSubscr.SubscriptionID : 0, inst, settings, settings);
                     }
                 }
             }
