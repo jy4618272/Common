@@ -67,9 +67,15 @@ namespace Micajah.Common.Bll.Providers
         {
             decimal monthlySum = 0;
 
-            foreach (Setting setting in modifiedSettings)
+            SettingCollection paidSettings = CounterSettingProvider.GetCalculatedPaidSettings(inst.OrganizationId, inst.InstanceId);
+
+            foreach (Setting setting in paidSettings)
             {
-                int extId = 0;
+                if (setting.ShortName == "PhoneSupport") continue;
+                if (setting.ShortName == "Training1Hour") continue;
+                if (setting.ShortName == "Training3Hours") continue;
+                if (setting.ShortName == "Training8Hours") continue;
+
                 if (setting.Paid)
                 {
                     bool enabled = false;
@@ -78,10 +84,6 @@ namespace Micajah.Common.Bll.Providers
                         if (!Boolean.TryParse(setting.DefaultValue, out enabled)) enabled = false;
                     }
                     if (enabled) monthlySum += setting.Price;
-                    if (SubscriptionId == 0 || string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out extId)) continue;
-                    if (extId == 0) continue;
-                    chargify.UpdateComponentAllocationForSubscription(SubscriptionId, extId, enabled ? 1 : 0);
-                    continue;
                 }
 
                 int usageCount = 0;
@@ -89,10 +91,6 @@ namespace Micajah.Common.Bll.Providers
                 int paidQty = usageCount - setting.UsageCountLimit;
                 decimal priceMonth = paidQty > 0 ? paidQty * setting.Price : 0;
                 monthlySum += priceMonth;
-
-                if (SubscriptionId == 0 || string.IsNullOrEmpty(setting.ExternalId) || !int.TryParse(setting.ExternalId, out extId)) continue;
-                if (extId == 0) continue;
-                chargify.UpdateComponentAllocationForSubscription(SubscriptionId, extId, usageCount < 0 ? 0 : usageCount);
             }
 
             if (monthlySum>0 && inst.BillingPlan!=BillingPlan.Paid) InstanceProvider.UpdateInstance(inst, BillingPlan.Paid);
