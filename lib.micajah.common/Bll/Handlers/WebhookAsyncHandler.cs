@@ -37,7 +37,7 @@ namespace Micajah.Common.Bll.Handlers
                 asyncOperation = new WebhookAsyncOperation(cb, context, new HttpException(400, "Webhook ID is invalid. ID=" + context.Request.Headers[WebhookIdHandle]), -1, string.Empty);
             else
             {
-                context.Response.Write(string.Format("Begin Webhook request processing at {0:d-MMM-yyyy HH:mm}.\r\n", DateTime.UtcNow));
+                context.Response.Write(string.Format("Webhook request processing started at {0:d-MMM-yyyy HH:mm}.\r\n", DateTime.UtcNow));
                 asyncOperation = new WebhookAsyncOperation(cb, context, extraData, webhookID, possibleData);
             }
 
@@ -48,16 +48,18 @@ namespace Micajah.Common.Bll.Handlers
 
         public void EndProcessRequest(IAsyncResult result)
         {
+            HttpContext context = ((WebhookAsyncOperation)result).Context;
+
             if (result != null && result.AsyncState != null && result.AsyncState is Exception)
             {
                 if (!FrameworkConfiguration.Current.WebApplication.Integration.Webhook.HandleErrors) throw new Exception("Webhooh Async Operation Error.", (Exception)result.AsyncState);
 
-                HttpContext context = ((WebhookAsyncOperation)result).Context;
                 context.Response.Clear();
                 if (result.AsyncState is HttpException) context.Response.StatusCode = ((HttpException)result.AsyncState).GetHttpCode();
                 else context.Response.StatusCode = 500;
                 context.Response.Write(result.AsyncState.ToString());
             }
+            else context.Response.Write(string.Format("Webhook request processing completed at {0:d-MMM-yyyy HH:mm}.", DateTime.UtcNow));
         }
 
         public bool IsReusable

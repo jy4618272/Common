@@ -97,7 +97,6 @@ namespace Micajah.Common.Bll.Handlers
                     context.Response.Write("Finished Counter Settings Calculation.\r\n");
                 }
                 else throw new HttpException(400, "Unknown Webhook ID. ID=" + webhookId.ToString());
-                context.Response.Write(string.Format("Completion Webhook request processing at {0:d-MMM-yyyy HH:mm}.\r\n", DateTime.UtcNow));
             }
             catch (Exception ex)
             {
