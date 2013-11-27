@@ -260,7 +260,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 Repeater2.Visible = false;
                 InitPhoneSupport();
-                InitBillingControls(!IsPostBack);
+                InitBillingControls();
 
                 DataTable dtPaid = new DataTable();
                 dtPaid.Columns.Add(new DataColumn("SettingName", Type.GetType("System.String")));
@@ -364,7 +364,7 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-        private void InitBillingControls(bool updateUsage)
+        private void InitBillingControls()
         {
             DateTime? _expDate = UserContext.Current.Organization.ExpirationTime;
 
@@ -372,12 +372,10 @@ namespace Micajah.Common.WebControls.AdminControls
             if (_custSubscr != null && _custSubscr.CreditCard != null)
             {
                 _expDate = _custSubscr.CurrentPeriodEndsAt;
-                if (updateUsage)
+                if (!IsPostBack)
                 {
-                    DateTime? lastUpdatedAt = CounterSettingProvider.GetDateTimeMark(1);
-                    SettingCollection modifiedSettings=CounterSettingProvider.GetLastModifiedPaidSettings(OrganizationId, InstanceId, lastUpdatedAt);
-                    SettingCollection paidSettings=lastUpdatedAt.HasValue ?  CounterSettingProvider.GetCalculatedPaidSettings(OrganizationId, InstanceId) : modifiedSettings;
-                    ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.Instance, modifiedSettings, paidSettings);
+                    SettingCollection paidSettings=SettingProvider.GetAllPricedSettings(OrganizationId, InstanceId);
+                    ChargifyProvider.UpdateSubscriptionAllocations(Chargify, _custSubscr.SubscriptionID, UserContext.Current.Instance, paidSettings, paidSettings);
                 }
                 TotalAmount = m_TotalSum;
                 SubscriptionId = _custSubscr.SubscriptionID;
