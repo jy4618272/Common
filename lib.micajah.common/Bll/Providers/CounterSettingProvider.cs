@@ -15,7 +15,7 @@ namespace Micajah.Common.Bll.Providers
         {
             decimal? monthlySum = 0;
 
-            monthlySum = (decimal)Micajah.Common.Application.CacheManager.Current.Get(string.Format("MonthlyPaidSum{0}{1}",OrgId, InstId));
+            monthlySum = (decimal?)Micajah.Common.Application.CacheManager.Current.Get(string.Format("MonthlyPaidSum{0}{1}", OrgId, InstId));
 
             if (monthlySum.HasValue) return monthlySum.Value;
 
@@ -41,6 +41,10 @@ namespace Micajah.Common.Bll.Providers
                 int.TryParse(setting.Value, out usageCount);
                 int paidQty = usageCount - setting.UsageCountLimit;
                 decimal priceMonth = paidQty > 0 ? paidQty * setting.Price : 0;
+                if (!monthlySum.HasValue)
+                {
+                    monthlySum = 0;
+                }
                 monthlySum += priceMonth;
             }
 
@@ -53,7 +57,7 @@ namespace Micajah.Common.Bll.Providers
         {
             int? counterVal = null;
 
-            counterVal = (int)Micajah.Common.Application.CacheManager.Current.Get(string.Format("CounterSettingValue{0}{1}{2}", OrgId, InstId, SettingId));
+            counterVal = (int?)Micajah.Common.Application.CacheManager.Current.Get(string.Format("CounterSettingValue{0}{1}{2}", OrgId, InstId, SettingId));
 
             if (counterVal.HasValue) return counterVal.Value;
 
@@ -64,7 +68,7 @@ namespace Micajah.Common.Bll.Providers
                 DataTable dt = SelectByQuery(string.Format("SELECT TOP 1 SettingValue FROM SettingsValuesHistory WHERE OrganizationId='{0}' AND InstanceId='{1}' AND SettingId='{2}' ORDER BY Id DESC", OrgId, InstId, SettingId));
                 if (dt.Rows.Count > 0 && !dt.Rows[0].IsNull(0))
                 {
-                    int cVal=0;
+                    int cVal = 0;
                     if (int.TryParse(dt.Rows[0][0].ToString(), out cVal))
                     {
                         Micajah.Common.Application.CacheManager.Current.Put(string.Format("CounterSettingValue{0}{1}{2}", OrgId, InstId, SettingId), cVal, TimeSpan.FromMinutes(1440));
@@ -123,7 +127,7 @@ namespace Micajah.Common.Bll.Providers
             DataTable dtLastValues = SelectSettingsLastValues(OrgId, InstId);
 
             if (dtLastValues.Rows.Count == 0) return SettingProvider.GetAllPricedSettings(OrgId, InstId);
-            
+
             dtLastValues.PrimaryKey = new DataColumn[] { dtLastValues.Columns["SettingId"] };
 
             SettingCollection resCol = new SettingCollection();
@@ -157,7 +161,7 @@ namespace Micajah.Common.Bll.Providers
             DataTable dtLastValues = null;
 
             if (!string.IsNullOrEmpty(cnnString)) dtLastValues = SelectSettingsLastValues(OrgId, InstId);
-            if (dtLastValues==null || dtLastValues.Rows.Count==0)
+            if (dtLastValues == null || dtLastValues.Rows.Count == 0)
             {
                 foreach (ConfigurationDataSet.SettingRow _srow in table.Select(filter))
                 {
@@ -259,13 +263,13 @@ namespace Micajah.Common.Bll.Providers
                     foreach (Setting setting in settings)
                     {
                         string settingVal = string.Empty;
-                        if (setting.Paid) 
+                        if (setting.Paid)
                         {
                             if (string.IsNullOrEmpty(setting.Value)) settingVal = setting.DefaultValue;
                             else settingVal = setting.Value;
                         }
                         else settingVal = handler.GetUsedItemsCount(setting, org.OrganizationId, inst.InstanceId).ToString();
-                        
+
                         DataRow rowLastVal = dtLastValues.Rows.Find(setting.SettingId);
 
                         if (rowLastVal == null || rowLastVal["SettingValue"].ToString() != settingVal)
@@ -333,12 +337,12 @@ namespace Micajah.Common.Bll.Providers
             {
                 using (var cmd = GetInsertHistoryRecordCommand(connection))
                 {
-                    cmd.Parameters["@OrganizationId"].Value=Guid.Empty;
-                    cmd.Parameters["@InstanceId"].Value=Guid.Empty;
-                    byte[] g=Guid.Empty.ToByteArray();
-                    g[g.Length-1]=MarkType;
-                    cmd.Parameters["@SettingId"].Value=new Guid(g);
-                    cmd.Parameters["@SettingValue"].Value=DBNull.Value;
+                    cmd.Parameters["@OrganizationId"].Value = Guid.Empty;
+                    cmd.Parameters["@InstanceId"].Value = Guid.Empty;
+                    byte[] g = Guid.Empty.ToByteArray();
+                    g[g.Length - 1] = MarkType;
+                    cmd.Parameters["@SettingId"].Value = new Guid(g);
+                    cmd.Parameters["@SettingValue"].Value = DBNull.Value;
                     cmd.Connection.Open();
                     cmd.ExecuteNonQuery();
                     cmd.Connection.Close();
@@ -361,7 +365,7 @@ namespace Micajah.Common.Bll.Providers
 
             if (dt.Rows[0].IsNull(0)) return null;
 
-            return (DateTime)dt.Rows[0][0]; 
+            return (DateTime)dt.Rows[0][0];
         }
 
         internal static DateTime? GetLastCalculationDate()
