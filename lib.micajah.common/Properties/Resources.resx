@@ -2228,7 +2228,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Privacy Policy</value>
   </data>
   <data name="SignupOrganizationControl_Step1Button_Text" xml:space="preserve">
-    <value>Create Your Account</value>
+    <value>Create My Account</value>
   </data>
   <data name="SignupOrganizationControl_Step2Button_Text" xml:space="preserve">
     <value>Login to {0}</value>
