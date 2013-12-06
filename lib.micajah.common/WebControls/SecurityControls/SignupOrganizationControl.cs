@@ -709,7 +709,7 @@ function InstanceRequiredValidation(source, arguments) {{
             Step2Panel.Visible = false;
             Step3Panel.Visible = true;
 
-            this.NewPassword = Password.Text;
+            this.NewPassword = (string.IsNullOrWhiteSpace(Password.Text) ? null : Password.Text);
         }
 
         protected void Step3Button_Click(object sender, EventArgs e)
@@ -724,7 +724,9 @@ function InstanceRequiredValidation(source, arguments) {{
                 if (user != null)
                 {
                     if (string.Compare(user.Email, Email2.Text, StringComparison.OrdinalIgnoreCase) == 0)
-                        Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), user.OrganizationId, user.InstanceId, false, null));
+                    {
+                        Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, true, user.OrganizationId, user.InstanceId, null));
+                    }
                 }
 
                 Response.Redirect(WebApplication.LoginProvider.GetLoginUrl());
@@ -754,7 +756,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
                 }
 
-                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, WebApplication.LoginProvider.EncryptPassword(this.NewPassword), orgId, instId, true, null));
+                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, true, orgId, instId, null));
             }
         }
 

@@ -336,7 +336,7 @@ namespace Micajah.Common.Bll.Providers
             if (usePasswordEncryption) hashedPassword = EncryptPassword(password);
 
             Guid orgID = Guid.Empty;
-            string ldapServer = "";
+            string ldapServer = string.Empty;
             int ldapPort = 0;
             int orgLdapDetailsCount = 0;
 
@@ -846,7 +846,7 @@ namespace Micajah.Common.Bll.Providers
 
             if (UpdateLogin(loginId, null, EncryptPassword(password)))
             {
-                if (sendEmailNotification && GetEmail(loginId) != "")
+                if (sendEmailNotification && (!string.IsNullOrEmpty(GetEmail(loginId))))
                 {
                     UserContext user = UserContext.Current;
                     if (user == null)
@@ -1305,21 +1305,21 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Returns the URL for the login page, the text box of which to input login name will be filled by specified value.
+        /// Returns the URL for the login page.
         /// </summary>
-        /// <param name="loginName">The name for the login to fill the text box.</param>
-        /// <returns>The URL for the login page, the text box of which to input login name will be filled by specified value.</returns>
+        /// <param name="loginName">The name for the login.</param>
+        /// <returns>The URL for the login page.</returns>
         public string GetLoginUrl(string loginName)
         {
             return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, false, null);
         }
 
         /// <summary>
-        /// Returns the URL for the login page, the text box of which to input login name will be filled by specified value.
+        /// Returns the URL for the login page.
         /// </summary>
-        /// <param name="loginName">The name for the login to fill the text box.</param>
+        /// <param name="loginName">The name for the login.</param>
         /// <param name="absoluteUri">Whether the specified URL should be converted to the URI, if it is possible.</param>
-        /// <returns>The URL for the login page, the text box of which to input login name will be filled by specified value.</returns>
+        /// <returns>The URL for the login page.</returns>
         public virtual string GetLoginUrl(string loginName, bool absoluteUri)
         {
             if (absoluteUri)
@@ -1411,7 +1411,7 @@ namespace Micajah.Common.Bll.Providers
         }
 
         /// <summary>
-        /// Gets the password for the specified login from the data sourceRow.
+        /// Gets the password for the specified login.
         /// </summary>
         /// <param name="loginId">The unique identifier for the login to retrieve the password for.</param>
         /// <returns>The password for the specified login.</returns>
