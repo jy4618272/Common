@@ -417,7 +417,7 @@ namespace Micajah.Common.Application
                             }
                             catch (AuthenticationException)
                             {
-                                redirectUrl = LoginProvider.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.CreateApplicationUri(host, null));
+                                redirectUrl = LoginProvider.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.CreateApplicationUri(host, null));
                             }
                         }
                     }
@@ -444,7 +444,7 @@ namespace Micajah.Common.Application
                     if (user.OrganizationId != Guid.Empty)
                     {
                         if (user.OrganizationId != organizationId)
-                            redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
+                            redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, null);
                         else
                         {
                             if (instanceId == Guid.Empty)
@@ -457,12 +457,12 @@ namespace Micajah.Common.Application
                                     }
                                     catch (AuthenticationException)
                                     {
-                                        redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, false, null);
+                                        redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, null);
                                     }
                                 }
                             }
                             else if (user.InstanceId != instanceId)
-                                redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, false, null);
+                                redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, null);
                         }
                     }
                     else if (organizationId != Guid.Empty)

@@ -569,7 +569,7 @@ namespace Micajah.Common.Bll.Providers
             body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_YourNewLogin, email);
             body.AppendLine();
             body.AppendLine();
-            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.ApplicationUri));
+            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
 
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, null, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
@@ -623,7 +623,7 @@ namespace Micajah.Common.Bll.Providers
             body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_YourNewPassword, password);
             body.AppendLine();
             body.AppendLine();
-            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.ApplicationUri));
+            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
 
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, null, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
@@ -720,7 +720,7 @@ namespace Micajah.Common.Bll.Providers
                             body.AppendLine();
                         }
                         body.AppendLine();
-                        body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, organizationId, Guid.Empty, false, null, CustomUrlProvider.ApplicationUri));
+                        body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, organizationId, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
 
                         return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, bcc, subject, body.ToString(), false
                             , new EmailSendingEventArgs()
@@ -741,7 +741,7 @@ namespace Micajah.Common.Bll.Providers
                     body.AppendLine();
                 }
                 body.AppendLine();
-                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, organizationId, Guid.Empty, false, null, CustomUrlProvider.ApplicationUri));
+                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, organizationId, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
             }
             else
             {
@@ -756,7 +756,7 @@ namespace Micajah.Common.Bll.Providers
                 body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_YourPassword, password);
                 body.AppendLine();
                 body.AppendLine();
-                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, false, null, CustomUrlProvider.ApplicationUri));
+                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
             }
 
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, bcc, subject, body.ToString(), false

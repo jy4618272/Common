@@ -423,7 +423,7 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl, string applicationUrl)
+        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, string returnUrl, string applicationUrl)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -459,10 +459,10 @@ namespace Micajah.Common.Bll.Providers
             return applicationUrl.TrimEnd('/') + CustomUrlProvider.CreateApplicationRelativeUrl(GetLoginUrl(false)) + ((sb.Length > 0) ? "?" + sb.ToString().TrimStart('&') : string.Empty);
         }
 
-        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, bool newOrg, string returnUrl)
+        internal string GetLoginUrl(string loginName, string password, Guid organizationId, Guid instanceId, string returnUrl)
         {
             CustomUrlElement customUrlSettings = FrameworkConfiguration.Current.WebApplication.CustomUrl;
-            return GetLoginUrl(loginName, password, (customUrlSettings.Enabled ? Guid.Empty : organizationId), (customUrlSettings.Enabled ? Guid.Empty : instanceId), newOrg, returnUrl, CustomUrlProvider.GetVanityUri(organizationId, instanceId));
+            return GetLoginUrl(loginName, password, (customUrlSettings.Enabled ? Guid.Empty : organizationId), (customUrlSettings.Enabled ? Guid.Empty : instanceId), returnUrl, CustomUrlProvider.GetVanityUri(organizationId, instanceId));
         }
 
         internal static bool IsLoginUrl(string url)
@@ -1232,7 +1232,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The URL for the login page.</returns>
         public string GetLoginUrl()
         {
-            return GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null);
+            return GetLoginUrl(null, null, Guid.Empty, Guid.Empty, null);
         }
 
         /// <summary>
@@ -1243,7 +1243,7 @@ namespace Micajah.Common.Bll.Providers
         public virtual string GetLoginUrl(bool absoluteUri)
         {
             if (absoluteUri)
-                return GetLoginUrl(null, null, Guid.Empty, Guid.Empty, false, null);
+                return GetLoginUrl(null, null, Guid.Empty, Guid.Empty, null);
 
             return ((FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
                 ? FormsAuthentication.LoginUrl.ToLowerInvariant()
@@ -1299,9 +1299,9 @@ namespace Micajah.Common.Bll.Providers
         {
             DataRowView drv = GetLogin(loginId);
             if (drv != null)
-                return GetLoginUrl(drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, false, returnUrl);
+                return GetLoginUrl(drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, returnUrl);
 
-            return GetLoginUrl(null, null, organizationId, instanceId, false, returnUrl);
+            return GetLoginUrl(null, null, organizationId, instanceId, returnUrl);
         }
 
         /// <summary>
@@ -1311,7 +1311,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The URL for the login page.</returns>
         public string GetLoginUrl(string loginName)
         {
-            return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, false, null);
+            return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, null);
         }
 
         /// <summary>
@@ -1323,7 +1323,7 @@ namespace Micajah.Common.Bll.Providers
         public virtual string GetLoginUrl(string loginName, bool absoluteUri)
         {
             if (absoluteUri)
-                return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, false, null);
+                return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, null);
 
             return GetLoginUrl(false) + "?l=" + HttpUtility.UrlEncodeUnicode(loginName);
         }
@@ -1377,9 +1377,9 @@ namespace Micajah.Common.Bll.Providers
         {
             DataRowView drv = GetLogin(loginName);
             if (drv != null)
-                return GetLoginUrl(drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, false, returnUrl);
+                return GetLoginUrl(drv["LoginName"].ToString(), (addPassword ? drv["Password"].ToString() : null), organizationId, instanceId, returnUrl);
 
-            return GetLoginUrl(null, null, organizationId, instanceId, false, returnUrl);
+            return GetLoginUrl(null, null, organizationId, instanceId, returnUrl);
         }
 
         /// <summary>
@@ -1390,7 +1390,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns></returns>
         public virtual string GetCreateLoginUrl(Guid organizationId, Guid instanceId)
         {
-            return GetLoginUrl(null, null, organizationId, instanceId, false, null);
+            return GetLoginUrl(null, null, organizationId, instanceId, null);
         }
 
         public string GetPasswordRecoveryUrl(string loginName)
