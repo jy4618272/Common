@@ -429,7 +429,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     ldapProcess.ProcessId = processId;
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Failed;
-                    ldapProcess.MessageError = Session[processId] as string; 
+                    ldapProcess.MessageError = Session[processId] as string;
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                 }
@@ -576,9 +576,19 @@ namespace Micajah.Common.WebControls.AdminControls
                 }
                 else if (showIfNull)
                 {
-                    GetDomainsMultiView.SetActiveView(GetDomainsViewError);
-                    GetDomainsViewErrorLiteral.Text = Session[processId] as string;                    
-                    GetDomainsButton.Enabled = true;             
+                    string error = Session[processId] as string;
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        GetDomainsMultiView.SetActiveView(GetDomainsViewError);
+                        GetDomainsViewErrorLiteral.Text = error;
+                    }
+                    else
+                    {
+                        GetDomainsMultiView.SetActiveView(GetDomainsViewResult);
+                        DomainsComboBox.DataSource = null;
+                        DomainsComboBox.DataBind();
+                    }
+                    GetDomainsButton.Enabled = true;
                 }
             }
             finally
