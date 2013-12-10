@@ -294,7 +294,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void GetDomainsTimer_Tick(object sender, EventArgs e)
         {
-            ShowResultsGetDomains();
+            ShowResultsGetDomains(true);
         }
 
         protected void GetGroupsButton_Click(object sender, EventArgs e)
@@ -390,6 +390,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", userContext.OrganizationId);
 
+                    Session[processId] = string.Empty;
+
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
                         LdapInfoProvider.LdapProcesses.Remove(ldapProcess);
@@ -421,12 +423,13 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             catch (Exception ex)
             {
+                Session[processId] = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
                 ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                 if (ldapProcess != null)
                 {
                     ldapProcess.ProcessId = processId;
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Failed;
-                    ldapProcess.MessageError = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                    ldapProcess.MessageError = Session[processId] as string; 
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                 }
@@ -533,7 +536,7 @@ namespace Micajah.Common.WebControls.AdminControls
             ldap.RunADReplication((arg as UserContext).OrganizationId, true);
         }
 
-        protected void ShowResultsGetDomains()
+        protected void ShowResultsGetDomains(bool showIfNull)
         {
             Bll.LdapProcess ldapProcess = null;
             string processId = string.Format(CultureInfo.InvariantCulture, "GetDomains_{0}", UserContext.Current.OrganizationId);
@@ -571,12 +574,11 @@ namespace Micajah.Common.WebControls.AdminControls
                             break;
                     }
                 }
-                else 
+                else if (showIfNull)
                 {
-                    GetDomainsMultiView.SetActiveView(GetDomainsViewResult);
-                    DomainsComboBox.DataSource = null;
-                    DomainsComboBox.DataBind();
-                    GetDomainsButton.Enabled = true;                 
+                    GetDomainsMultiView.SetActiveView(GetDomainsViewError);
+                    GetDomainsViewErrorLiteral.Text = Session[processId] as string;                    
+                    GetDomainsButton.Enabled = true;             
                 }
             }
             finally
@@ -970,7 +972,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (!IsPostBack)
             {
-                ShowResultsGetDomains();
+                ShowResultsGetDomains(false);
                 ShowResultsGetGroups();
                 ShowResultsTestADReplication();
                 ShowResultsRealADReplication();
