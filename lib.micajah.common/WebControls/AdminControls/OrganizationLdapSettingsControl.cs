@@ -571,6 +571,13 @@ namespace Micajah.Common.WebControls.AdminControls
                             break;
                     }
                 }
+                else 
+                {
+                    GetDomainsMultiView.SetActiveView(GetDomainsViewResult);
+                    DomainsComboBox.DataSource = null;
+                    DomainsComboBox.DataBind();
+                    GetDomainsButton.Enabled = true;                 
+                }
             }
             finally
             {
