@@ -238,9 +238,9 @@ namespace Micajah.Common.Bll.Handlers
                             row = ldapLogins.NewRow();
                             row["LoginId"] = Guid.NewGuid();
                             row["LoginName"] = (string.IsNullOrEmpty(user.EmailAddress)) ? user.PrincipalName : user.EmailAddress;
-                            row["Name"] = string.Concat(user.FirstName, " ", user.LastName);
-                            row["FirstName"] = user.FirstName;
-                            row["LastName"] = user.LastName;
+                            row["Name"] = (string.Concat(user.FirstName, " ", user.LastName)) ?? string.Empty;
+                            row["FirstName"] = user.FirstName ?? string.Empty;
+                            row["LastName"] = user.LastName ?? string.Empty;
                             row["Email"] = (string.IsNullOrEmpty(user.EmailAddress)) ? ((user.PrincipalName ?? string.Empty).Contains("@") ? user.PrincipalName : string.Empty) : user.EmailAddress;
                             row["LdapUserId"] = user.ObjectGuid;
                             row["Active"] = user.IsActive;
@@ -250,16 +250,6 @@ namespace Micajah.Common.Bll.Handlers
                             ldapLogins.Rows.Add(row);
                         }
                     }
-
-                    //// Get mapped local users
-                    //localMappedLogins = localLogins.Clone();
-                    ////foreach (DataRow localLogin in localLogins.Select(string.Format(CultureInfo.InvariantCulture, "(LdapUserId IS NOT NULL) AND (LdapUserId <> '{0}')", Guid.Empty)))
-                    //foreach (DataRow localLogin in localLogins.Rows)
-                    //{
-                    //    newRow = localMappedLogins.NewRow();
-                    //    newRow.ItemArray = localLogin.ItemArray;
-                    //    localMappedLogins.Rows.Add(newRow);
-                    //}
 
                     // Get active mapped local users
                     activeLMLogins = localLogins.Clone();
@@ -357,7 +347,6 @@ namespace Micajah.Common.Bll.Handlers
                 users = null;
                 if (localLogins != null) localLogins.Dispose();
                 if (ldapLogins != null) ldapLogins.Dispose();
-                //if (localMappedLogins != null) localMappedLogins.Dispose();
                 if (activeLMLogins != null) activeLMLogins.Dispose();
                 if (inactiveLMLogins != null) inactiveLMLogins.Dispose();
                 if (ldapActiveLogins != null) ldapActiveLogins.Dispose();
