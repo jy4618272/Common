@@ -153,7 +153,7 @@
                 <div class="clear"></div>
                 <div class="row">
                     <asp:Label ID="CaptchaLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <telerik:RadCaptcha id="Captcha1" runat="server" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" errormessage="" validationgroup="Step2" />
+                    <telerik:RadCaptcha id="Captcha1" runat="server" ImageStorageLocation="Session" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" errormessage="" validationgroup="Step2" />
                     <asp:CustomValidator ID="CaptchaValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="Step2" CssClass="Error" OnServerValidate="CaptchaValidator_ServerValidate" />
                 </div>
             </div>
