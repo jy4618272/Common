@@ -1209,8 +1209,28 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The collection of the instance level settings.</returns>
         public static SettingCollection GetInstanceSettings(Guid organizationId, Guid instanceId)
         {
+            return GetInstanceSettings(organizationId, instanceId, false);
+        }
+
+        /// <summary>
+        /// Returns a collection of the instance level settings.
+        /// </summary>
+        /// <param name="organizationId">The identifier of the organization which the instance belong to.</param>
+        /// <param name="instanceId">The identifier of the instance to get the values of the settings.</param>
+        /// <param name="refreshCache">Whether the cache of the setting values should be refreshed.</param>
+        /// <returns>The collection of the instance level settings.</returns>
+        public static SettingCollection GetInstanceSettings(Guid organizationId, Guid instanceId, bool refreshCache)
+        {
             SettingCollection settings = GetSettings(SettingLevels.Instance, null);
+
+            if (refreshCache)
+            {
+                RemoveSettingsValuesFromCache(organizationId, null, null);
+                RemoveSettingsValuesFromCache(organizationId, instanceId, null);
+            }
+
             FillSettingsByInstanceValues(ref settings, organizationId, instanceId);
+
             return settings;
         }
 
