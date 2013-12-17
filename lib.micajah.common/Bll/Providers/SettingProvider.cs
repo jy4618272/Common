@@ -1093,7 +1093,7 @@ namespace Micajah.Common.Bll.Providers
 
             foreach (ClientDataSet.SettingsValuesRow fromRow in fromTable)
             {
-                DataRow[] rows = fromTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", fromTable.SettingIdColumn.ColumnName, fromRow.SettingId));
+                DataRow[] rows = toTable.Select(string.Format(CultureInfo.InvariantCulture, "{0} = '{1}'", fromTable.SettingIdColumn.ColumnName, fromRow.SettingId));
 
                 ClientDataSet.SettingsValuesRow toRow = null;
                 if (rows.Length > 0)
