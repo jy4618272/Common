@@ -24,6 +24,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected LinkButton GetRealAdReplicationInfo;
         protected LinkButton PingLdapServerButton;
         protected HyperLink GoToGroupMapprings;
+        protected HyperLink GoToLdapLogs;
         protected CommonGridView GroupsCommonGridView;
         protected CommonGridView TestDeactivatedLoginsCommonGridView;
         protected CommonGridView TestActivatedLoginsCommonGridView;
@@ -46,6 +47,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Label PingLdapServerResultLabel;
         protected UpdateProgress PingLdapServerUpdateProgress;
         protected UpdateProgress GoToGroupMappringsUpdateProgress;
+        protected UpdateProgress GoToLdapLogsUpdateProgress;
         protected Label TestDeactivatedLoginsLabel;
         protected Label TestActivatedLoginsLabel;
         protected Label TestCreatedLoginsLabel;
@@ -125,7 +127,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected Label Step5Label;
         protected Label Step6Label;
         protected Label Step7Label;
-
+        protected Label Step8Label;
 
         #endregion
 
@@ -394,7 +396,9 @@ namespace Micajah.Common.WebControls.AdminControls
 
                     ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                     if (ldapProcess != null)
+                    {
                         LdapInfoProvider.LdapProcesses.Remove(ldapProcess);
+                    }
 
                     ldapProcess = new Bll.LdapProcess();
                     ldapProcess.ProcessId = processId;
@@ -406,30 +410,41 @@ namespace Micajah.Common.WebControls.AdminControls
 
                     ldapServerAddress = (EditForm.Rows[0].Cells[1].Controls[0] as TextBox).Text;
                     if (string.IsNullOrEmpty((EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text) == true)
+                    {
                         ldapServerPort = 0;
-                    else
-                        if (!int.TryParse((EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text, out ldapServerPort))
-                            ldapServerPort = 0;
+                    }
+                    else if (!int.TryParse((EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text, out ldapServerPort))
+                    {
+                        ldapServerPort = 0;
+                    }
+
                     ldapUserName = (EditForm.Rows[2].Cells[1].Controls[0] as TextBox).Text;
                     if (string.IsNullOrEmpty(LdapUpdatePassword.Text) == false && string.IsNullOrEmpty(LdapConfirmNewPassword.Text) == false && LdapUpdatePassword.Text == LdapConfirmNewPassword.Text)
+                    {
                         ldapPassword = LdapUpdatePassword.Text;
+                    }
                     else
+                    {
                         ldapPassword = OldPassword.Text.ToString();
+                    }
                     ldapDomain = (EditForm.Rows[3].Cells[1].Controls[0] as TextBox).Text;
 
-                    ldapProcess.Data = LdapInfoProvider.GetDomains(ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain);
+                    ldapProcess.Data = LdapInfoProvider.GetDomains(ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, userContext.OrganizationId);
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
                 }
             }
             catch (Exception ex)
             {
-                Session[processId] = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                string error = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                LdapInfoProvider.InsertLdapLog(userContext.OrganizationId, true, error);
+                Session[processId] = error;
+
                 ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                 if (ldapProcess != null)
                 {
                     ldapProcess.ProcessId = processId;
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Failed;
-                    ldapProcess.MessageError = Session[processId] as string;
+                    ldapProcess.MessageError = error;
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                 }
@@ -500,12 +515,15 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             catch (Exception ex)
             {
+                string error = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                LdapInfoProvider.InsertLdapLog(userContext.OrganizationId, true, error);
+
                 ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                 if (ldapProcess != null)
                 {
                     ldapProcess.ProcessId = processId;
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Failed;
-                    ldapProcess.MessageError = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                    ldapProcess.MessageError = error;
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                 }
@@ -833,14 +851,12 @@ namespace Micajah.Common.WebControls.AdminControls
                             rtsRealReplicationProcess.Tabs[1].Enabled = false;
                             rtsRealReplicationProcess.SelectedIndex = 0;
                             RealADReplicationViewProcessResultLabel.Text = "";
+                            
                             foreach (LdapProcessLog log in ldapProcess.Logs)
                             {
                                 RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.CurrentCulture, "{0} - {1}<br/>", log.Date, log.Message);
                             }
-                            //RealADReplicationViewProcessResultLabel.Text = string.Format(CultureInfo.InvariantCulture, "<br/>{0}<br/><br/>", ldapProcess.MessageDeactivatedLogins);
-                            //RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.InvariantCulture, "{0}<br/><br/>", ldapProcess.MessageActivatedLogins);
-                            //RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.InvariantCulture, "{0}<br/>", ldapProcess.MessageCreatedLogins);
-                            //RealADReplicationViewProcessResultLabel.Font.Size = FontUnit.Medium;
+
                             RealADReplicationTimer.Enabled = true;
                             GetRealAdReplicationInfo.Enabled = false;
                             break;
@@ -857,7 +873,9 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EntityDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
+            {
                 e.InputParameters["organizationId"] = UserContext.Current.OrganizationId;
+            }
         }
 
         protected void EntityDataSource_Updating(object sender, ObjectDataSourceMethodEventArgs e)
@@ -897,6 +915,12 @@ namespace Micajah.Common.WebControls.AdminControls
             GoToGroupMappringsUpdateProgress.ShowSuccessText = false;
             GoToGroupMappringsUpdateProgress.PostBackControlId = this.GoToGroupMapprings.ClientID;
 
+            GoToLdapLogsUpdateProgress.ProgressText = Resources.OrganizationLdapSettingsControl_UpdateProgress_Text;
+            GoToLdapLogsUpdateProgress.Timeout = int.MaxValue;
+            GoToLdapLogsUpdateProgress.HideAfter = -1;
+            GoToLdapLogsUpdateProgress.ShowSuccessText = false;
+            GoToLdapLogsUpdateProgress.PostBackControlId = this.GoToLdapLogs.ClientID;
+
             CheckPortUpdateProgress.ProgressText = Resources.OrganizationLdapSettingsControl_UpdateProgress_Text;
             CheckPortUpdateProgress.Timeout = int.MaxValue;
             CheckPortUpdateProgress.HideAfter = int.MaxValue;
@@ -912,6 +936,18 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             else
                 GoToGroupMapprings.Visible = false;
+
+            action = ActionProvider.FindAction(ActionProvider.LdapLogsPageActionId);
+            if (action != null)
+            {
+                GoToLdapLogs.Visible = true;
+                GoToLdapLogs.Text = action.Name;
+                GoToLdapLogs.NavigateUrl = ResolveUrl(string.Format(CultureInfo.InvariantCulture, "~{0}", action.NavigateUrl));
+            }
+            else
+            {
+                GoToLdapLogs.Visible = false;
+            }
 
             TestDeactivatedLoginsLabel.Text = Resources.OrganizationLdapSettingsControl_LimitGridLabel_Text;
             TestActivatedLoginsLabel.Text = Resources.OrganizationLdapSettingsControl_LimitGridLabel_Text;
@@ -952,6 +988,7 @@ namespace Micajah.Common.WebControls.AdminControls
             Step5Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep5_Text;
             Step6Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep6_Text;
             Step7Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep7_Text;
+            Step8Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep8_Text;
         }
 
         protected override void EditForm_ItemCommand(object sender, CommandEventArgs e)

@@ -150,12 +150,15 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             catch (Exception ex)
             {
+                string error = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                LdapInfoProvider.InsertLdapLog((Guid)organizationId, true, error);
+
                 ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                 if (ldapProcess != null)
                 {
                     ldapProcess.ProcessId = processId;
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Failed;
-                    ldapProcess.MessageError = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                    ldapProcess.MessageError = error;
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                 }
@@ -286,12 +289,15 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             catch (Exception ex)
             {
+                string error = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                LdapInfoProvider.InsertLdapLog(userContext.OrganizationId, true, error);
+                
                 ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                 if (ldapProcess != null)
                 {
                     ldapProcess.ProcessId = processId;
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Failed;
-                    ldapProcess.MessageError = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
+                    ldapProcess.MessageError = error;
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                 }

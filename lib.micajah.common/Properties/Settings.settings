@@ -18,5 +18,13 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=(local);Initial Catalog=Mc_Client;Integrated Security=True</Value>
     </Setting>
+    <Setting Name="LogConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Server=tcp:zllql46xaz.database.windows.net,1433;Database=BWA_SherpaDesk_Log;User ID=jvickers@zllql46xaz;Password=Micajah88;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Server=tcp:zllql46xaz.database.windows.net,1433;Database=BWA_SherpaDesk_Log;User ID=jvickers@zllql46xaz;Password=Micajah88;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

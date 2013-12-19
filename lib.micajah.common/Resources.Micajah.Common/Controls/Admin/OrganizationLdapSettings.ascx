@@ -350,3 +350,12 @@
         <asp:Timer ID="RealADReplicationTimer" runat="server" Interval="10000" OnTick="RealADReplicationTimer_Tick" Enabled="false" /> 
     </ContentTemplate>
 </asp:UpdatePanel>
+<asp:UpdatePanel ID="GoToLdapLogsUpdatePanel" runat="server" RenderMode="Inline">
+    <ContentTemplate>
+        <br />
+        <b><asp:Label ID="Step8Label" runat="server" Font-Size="Medium"  /></b>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="GoToLdapLogs" Font-Size="Medium" runat="server" />        
+        <br />
+        <br />
+        <mits:UpdateProgress ID="GoToLdapLogsUpdateProgress" runat="server" AssociatedUpdatePanelID="GoToLdapLogsUpdatePanel" />
+    </ContentTemplate>
+</asp:UpdatePanel>

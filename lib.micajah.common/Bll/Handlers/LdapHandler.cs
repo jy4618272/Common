@@ -43,53 +43,64 @@ namespace Micajah.Common.Bll.Handlers
             {
                 this.ThreadState = ThreadStateType.Failed;
                 this.ErrorException = ex;
-                try
-                {
-                    if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
-                        EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
-                    EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method Start() Error: {0} [{1}]", ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
-                }
-                catch { }
             }
         }
 
         public void ReplicateAllOrganizations()
         {
-           if (!FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled) throw new InvalidOperationException("Ldap integration is not enabled in the application configuration file.");
+            if (!FrameworkConfiguration.Current.WebApplication.Integration.Ldap.Enabled) throw new InvalidOperationException("Ldap integration is not enabled in the application configuration file.");
+            int replicated = 0;
+            int errors = 0;
+            int count = 0;
+            using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
+            {
+                OrganizationCollection organizationCollection = OrganizationProvider.GetOrganizations(false, false);
 
-           using (OrganizationsLdapGroupsTableAdapter adapter = new OrganizationsLdapGroupsTableAdapter())
-           {
-               OrganizationCollection organizationCollection = OrganizationProvider.GetOrganizations(false, false);
+                DateTime startDate = DateTime.UtcNow;
+                LdapInfoProvider.InsertLdapLog(null, false, Resources.LdapProcessLog_ReplicationAllStarted);
 
-               foreach (Organization org in organizationCollection)
-               {
-                   if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true || !org.Beta)
-                       continue;
+                foreach (Organization org in organizationCollection)
+                {
+                    if (String.IsNullOrEmpty(org.LdapServerAddress) == true || String.IsNullOrEmpty(org.LdapServerPort) == true || String.IsNullOrEmpty(org.LdapUserName) == true || String.IsNullOrEmpty(org.LdapPassword) == true || String.IsNullOrEmpty(org.LdapDomain) == true || !org.Beta)
+                        continue;
 
-                   //Get All Groups
-                   DataView dvDomains = LdapInfoProvider.GetDomains(org.OrganizationId);
-                   if (dvDomains.Table.Rows.Count > 0)
-                   {
-                       for (int i = 0; i < dvDomains.Table.Rows.Count; i++)
-                       {
-                           DataRow drDomain = dvDomains.Table.Rows[i];
-                           DataView dvGroups = LdapInfoProvider.GetGroupsByDomainDistinguishedName(org.OrganizationId, drDomain["DistinguishedName"].ToString());
-                           if (dvGroups.Table.Rows.Count > 0)
-                           {
-                               adapter.Delete(org.OrganizationId, drDomain["DomainName"].ToString());
-                               for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
-                               {
-                                   DataRow drGroup = dvGroups.Table.Rows[j];
-                                   adapter.Insert(Guid.NewGuid(), org.OrganizationId, (Guid)drDomain["Id"], drDomain["DomainName"].ToString(), (Guid)drGroup["Id"], drGroup["GroupName"].ToString(), drGroup["DistinguishedName"].ToString(), DateTime.UtcNow);
-                               }
-                           }
-                       }
-                   }
+                    //Get All Groups
+                    DataView dvDomains = LdapInfoProvider.GetDomains(org.OrganizationId);
+                    if (dvDomains.Table.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dvDomains.Table.Rows.Count; i++)
+                        {
+                            DataRow drDomain = dvDomains.Table.Rows[i];
+                            DataView dvGroups = LdapInfoProvider.GetGroupsByDomainDistinguishedName(org.OrganizationId, drDomain["DistinguishedName"].ToString());
+                            if (dvGroups.Table.Rows.Count > 0)
+                            {
+                                adapter.Delete(org.OrganizationId, drDomain["DomainName"].ToString());
+                                for (int j = 0; j < dvGroups.Table.Rows.Count; j++)
+                                {
+                                    DataRow drGroup = dvGroups.Table.Rows[j];
+                                    adapter.Insert(Guid.NewGuid(), org.OrganizationId, (Guid)drDomain["Id"], drDomain["DomainName"].ToString(), (Guid)drGroup["Id"], drGroup["GroupName"].ToString(), drGroup["DistinguishedName"].ToString(), DateTime.UtcNow);
+                                }
+                            }
+                        }
+                    }
+                    count++;
+                    RunADReplication(org.OrganizationId, true);
 
-                   RunADReplication(org.OrganizationId, true);
-               }
-           }
-
+                    Bll.LdapProcess ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == string.Format(CultureInfo.InvariantCulture, "RealADReplication_{0}", org.OrganizationId));
+                    if (ldapProcess != null)
+                    {
+                        if (ldapProcess.ThreadStateType == ThreadStateType.Failed)
+                        {
+                            replicated++;
+                        }
+                        else
+                        {
+                            errors++;
+                        }
+                    }
+                }
+                LdapInfoProvider.InsertLdapLog(null, false, string.Format(Resources.LdapProcessLog_ReplicationAllFinished, Math.Round((DateTime.UtcNow - startDate).TotalMinutes, 1), count, replicated, errors));
+            }
         }
 
         public void ImportLdapGroups(Guid organizationId)
@@ -143,13 +154,6 @@ namespace Micajah.Common.Bll.Handlers
             {
                 this.ThreadState = ThreadStateType.Failed;
                 this.ErrorException = ex;
-                try
-                {
-                    if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
-                        EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
-                    EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method ImportLdapGroups() for organizationId: {0}; Error: {1} [{2}]", organizationId, ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
-                }
-                catch { }
             }
             finally
             {
@@ -177,6 +181,7 @@ namespace Micajah.Common.Bll.Handlers
             MasterDataSet.OrganizationsLdapGroupsDataTable orgTable = null;
             MasterDataSet.GroupMappingsDataTable groupMappings = null;
             Bll.Handlers.LdapHandler ldapHendler = null;
+            string logMessage = null;
             try
             {
 
@@ -215,8 +220,10 @@ namespace Micajah.Common.Bll.Handlers
                     ldapProcess.MessageCreatedLogins = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationLdapSettingsControl_TestCreatedLogins_Text, 0);
                 }
 
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationStarted) });
                 DateTime startDate = DateTime.UtcNow;
+                logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationStarted);
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = startDate, Message = logMessage });
+                LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
 
                 // Get all mapped ldap groups users
                 users = LdapInfoProvider.GetMappedGroupsUsers(organizationId, ref ldapProcess);
@@ -238,7 +245,7 @@ namespace Micajah.Common.Bll.Handlers
                             row = ldapLogins.NewRow();
                             row["LoginId"] = Guid.NewGuid();
                             row["LoginName"] = (string.IsNullOrEmpty(user.EmailAddress)) ? user.PrincipalName : user.EmailAddress;
-                            row["Name"] = (string.Concat(user.FirstName, " ", user.LastName)) ?? string.Empty;
+                            row["Name"] = string.Concat(user.FirstName, " ", user.LastName);
                             row["FirstName"] = user.FirstName ?? string.Empty;
                             row["LastName"] = user.LastName ?? string.Empty;
                             row["Email"] = (string.IsNullOrEmpty(user.EmailAddress)) ? ((user.PrincipalName ?? string.Empty).Contains("@") ? user.PrincipalName : string.Empty) : user.EmailAddress;
@@ -305,16 +312,22 @@ namespace Micajah.Common.Bll.Handlers
 
                     if (isRealReplication)
                     {
-                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdatingUserAccounts, users.Count) });
+                        logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdatingUserAccounts, users.Count);
+                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                        LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
                         LocalUsersCheckGroups(organizationId, activeLMLogins, users, orgTable, groupMappings);
-                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdateFinished) });
+                        logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_UpdateFinished);
+                        ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                        LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
                     }
 
                     LocalUsersCreate(localLogins, ldapActiveLogins, organizationId, ref ldapProcess, users, orgTable, groupMappings, isRealReplication);
                 }
 
                 ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationFinished, Math.Round((DateTime.UtcNow - startDate).TotalMinutes, 1)) });
+                logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ReplicationFinished, Math.Round((DateTime.UtcNow - startDate).TotalMinutes, 1));
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
             }
             catch (Exception ex)
             {
@@ -330,15 +343,9 @@ namespace Micajah.Common.Bll.Handlers
                     ldapProcess.DataCreatedLogins = null;
                     ldapProcess.DataActivatedLogins = null;
                     ldapProcess.DataDeactivatedLogins = null;
-                }
 
-                try
-                {
-                    if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
-                        EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
-                    EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method RunADReplication() Error: {0} [{1}]", ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, ldapProcess.MessageError);
                 }
-                catch { }
             }
             finally
             {
@@ -347,6 +354,7 @@ namespace Micajah.Common.Bll.Handlers
                 users = null;
                 if (localLogins != null) localLogins.Dispose();
                 if (ldapLogins != null) ldapLogins.Dispose();
+                //if (localMappedLogins != null) localMappedLogins.Dispose();
                 if (activeLMLogins != null) activeLMLogins.Dispose();
                 if (inactiveLMLogins != null) inactiveLMLogins.Dispose();
                 if (ldapActiveLogins != null) ldapActiveLogins.Dispose();
@@ -356,6 +364,7 @@ namespace Micajah.Common.Bll.Handlers
                 newRow = null;
                 if (groupMappings != null) groupMappings.Dispose();
                 ldapHendler = null;
+                logMessage = null;
             }
         }
 
@@ -365,6 +374,7 @@ namespace Micajah.Common.Bll.Handlers
             DataTable newTable = null;
             DataRow[] drm = null;
             DataRow newRow = null;
+            string logMessage = null;
             try
             {
                 count = 0;
@@ -397,8 +407,9 @@ namespace Micajah.Common.Bll.Handlers
                     newTable.DefaultView.Sort = "LoginName";
                     ldapProcess.DataDeactivatedLogins = Micajah.Common.Bll.Support.TrimDataView(newTable.DefaultView, 25);
                 }
-
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersInactivated : Resources.LdapProcessLog_TestReplicationUsersInactivated, count) });
+                logMessage = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersInactivated : Resources.LdapProcessLog_TestReplicationUsersInactivated, count);
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
             }
             finally
             {
@@ -406,6 +417,7 @@ namespace Micajah.Common.Bll.Handlers
                 if (newTable != null) newTable.Dispose();
                 drm = null;
                 newRow = null;
+                logMessage = null;
             }
         }
 
@@ -415,6 +427,7 @@ namespace Micajah.Common.Bll.Handlers
             DataTable newTable = null;
             DataRow[] drm = null;
             DataRow newRow = null;
+            string logMessage = null;
             try
             {
                 count = 0;
@@ -445,13 +458,16 @@ namespace Micajah.Common.Bll.Handlers
                     newTable.DefaultView.Sort = "LoginName";
                     ldapProcess.DataActivatedLogins = Micajah.Common.Bll.Support.TrimDataView(newTable.DefaultView, 25);
                 }
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersActivated : Resources.LdapProcessLog_TestReplicationUsersActivated, count) });
+                logMessage = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersActivated : Resources.LdapProcessLog_TestReplicationUsersActivated, count);
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
             }
             finally
             {
                 if (newTable != null) newTable.Dispose();
                 drm = null;
                 newRow = null;
+                logMessage = null;
             }
         }
 
@@ -470,6 +486,7 @@ namespace Micajah.Common.Bll.Handlers
             DataRow newRow = null;
             DomainUser ldapUser = null;
             string email = null;
+            string logMessage = null;
             try
             {
                 count = 0;
@@ -571,15 +588,8 @@ namespace Micajah.Common.Bll.Handlers
                     }
                     catch (Exception ex)
                     {
-                        try
-                        {
-                            dr["Processed"] = true;
-
-                            if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
-                                EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
-                            EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method LocalUsersCreate() Error: {0} [{1}]", ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
-                        }
-                        catch { }
+                        dr["Processed"] = true;
+                        LdapInfoProvider.InsertLdapLog(organizationId, true, string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>")));
                     }
                 }
 
@@ -590,8 +600,9 @@ namespace Micajah.Common.Bll.Handlers
                     newTable.DefaultView.Sort = "LoginName";
                     ldapProcess.DataCreatedLogins = Micajah.Common.Bll.Support.TrimDataView(newTable.DefaultView, 25);
                 }
-
-                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersCreated : Resources.LdapProcessLog_TestReplicationUsersCreated, count) });
+                logMessage = string.Format(CultureInfo.CurrentCulture, isRealReplication ? Resources.LdapProcessLog_RealReplicationUsersCreated : Resources.LdapProcessLog_TestReplicationUsersCreated, count);
+                ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
             }
             finally
             {
@@ -611,6 +622,7 @@ namespace Micajah.Common.Bll.Handlers
                 newRow = null;
                 ldapUser = null;
                 email = null;
+                logMessage = null;
             }
         }
 
@@ -702,13 +714,7 @@ namespace Micajah.Common.Bll.Handlers
                         }
                         catch (Exception ex)
                         {
-                            try
-                            {
-                                if (!EventLog.SourceExists("Micajah.Common.Bll.Handlers.LdapHandler"))
-                                    EventLog.CreateEventSource("Micajah.Common.Bll.Handlers.LdapHandler", "Application");
-                                EventLog.WriteEntry("Micajah.Common.Bll.Handlers.LdapHandler", string.Format(CultureInfo.InvariantCulture, "Error in method LocalUsersCheckGroups() Error: {0} [{1}]", ex.Message, ex.ToString()), System.Diagnostics.EventLogEntryType.Error);
-                            }
-                            catch { }
+                            LdapInfoProvider.InsertLdapLog(organizationId, true, string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>")));
                         }
                     }
                 }

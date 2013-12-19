@@ -2676,4 +2676,22 @@ Do you want to link email "{1}" to this account?</value>
   <data name="SignupOrganizationControl_ModalTitleLiteral_Text" xml:space="preserve">
     <value>Wait. Haven't I seen you?</value>
   </data>
+  <data name="LdapProcessLog_ReplicationAllFinished" xml:space="preserve">
+    <value>Replication of all organizations finished. Replication process took {0} minutes. Result: Total: {1}; Success: {2}; Errors: {3}</value>
+  </data>
+  <data name="LdapProcessLog_ReplicationAllStarted" xml:space="preserve">
+    <value>Replication of all organizations started.</value>
+  </data>
+  <data name="LdapLogsControl_List_CreatedTimeColumn_HeaderText" xml:space="preserve">
+    <value>Created Time</value>
+  </data>
+  <data name="LdapLogsControl_List_IsErrorColumn_HeaderText" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="LdapLogsControl_List_MessageColumn_HeaderText" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="OrganizationLdapSettingsControl_LdapSetupStep8_Text" xml:space="preserve">
+    <value>Step 8</value>
+  </data>
 </root>

@@ -227,8 +227,12 @@ namespace Micajah.Common.Bll.Providers
                 else
                 {
                     server = new LdapProvider(orgId, ldi, log);
-                    if (!server.Initialize())
+                    string error = string.Empty;
+                    if (!server.Initialize(ref error))
+                    {
+                        LdapInfoProvider.InsertLdapLog(org.OrganizationId, true, error);
                         throw new AuthenticationException(Resources.LoginProvider_ErrorMessage_LDAPConnectionError);
+                    }
                 }
             }
             else

@@ -1,6 +1,7 @@
 using Micajah.Common.Application;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
+using Micajah.Common.Dal.LogDataSetTableAdapters;
 using Micajah.Common.LdapAdapter;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
@@ -137,7 +138,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="ldapDomain">Server Domain.</param>
         /// <returns>The System.Data.DataView that contains domains.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static DataView GetDomains(string ldapServerAddress, Int32 ldapServerPort, string ldapUserName, string ldapPassword, string ldapDomain)
+        public static DataView GetDomains(string ldapServerAddress, Int32 ldapServerPort, string ldapUserName, string ldapPassword, string ldapDomain, Guid organizationId)
         {
             DataTable table = new DataTable("Domains");
             table.Locale = CultureInfo.CurrentCulture;
@@ -149,7 +150,8 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(Guid.NewGuid(), ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
                 {
                     var domains = server.GetDomains();
                     if (domains != null)
@@ -161,6 +163,10 @@ namespace Micajah.Common.Bll.Providers
                                 table.Rows.Add(domains[i].Guid, domains[i].Name);
                         }
                     }
+                }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
                 }
             }
             table.DefaultView.Sort = "[DomainName] asc";
@@ -189,7 +195,8 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
                 {
                     var domains = server.GetDomains();
                     if (domains != null)
@@ -204,6 +211,10 @@ namespace Micajah.Common.Bll.Providers
                             domain = null;
                         }
                     }
+                }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
                 }
             }
             table.DefaultView.Sort = "[DomainName] asc";
@@ -257,7 +268,8 @@ namespace Micajah.Common.Bll.Providers
 
                     using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
                     {
-                        if (server.Initialize())
+                        string error = string.Empty;
+                        if (server.Initialize(ref error))
                         {
                             var domains = server.GetDomains();
                             if (domains != null)
@@ -272,6 +284,10 @@ namespace Micajah.Common.Bll.Providers
                                     domain = null;
                                 }
                             }
+                        }
+                        else 
+                        {
+                            LdapInfoProvider.InsertLdapLog(organizationId, true, error);
                         }
                     }
                     table.DefaultView.Sort = "[DomainName] asc";
@@ -331,7 +347,8 @@ namespace Micajah.Common.Bll.Providers
 
                     using (var server = new LdapProvider(Guid.NewGuid(), ldapServerAddress, ldapServerPort, ldapUserName, ldapPassword, ldapDomain, "Default", null, null))
                     {
-                        if (server.Initialize())
+                        string error = string.Empty;
+                        if (server.Initialize(ref error))
                         {
                             var domain = server.GetDomainByName(selectedDomain);
                             if (domain != null)
@@ -347,6 +364,10 @@ namespace Micajah.Common.Bll.Providers
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            LdapInfoProvider.InsertLdapLog(organizationId, true, error);
                         }
                     }
                     table.DefaultView.Sort = "[GroupName] asc";
@@ -412,7 +433,8 @@ namespace Micajah.Common.Bll.Providers
 
                     using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
                     {
-                        if (server.Initialize())
+                        string error = string.Empty;
+                        if (server.Initialize(ref error))
                         {
                             domain = server.GetDomainByName(domainName);
                             if (domain != null)
@@ -429,6 +451,10 @@ namespace Micajah.Common.Bll.Providers
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            LdapInfoProvider.InsertLdapLog(organizationId, true, error);
                         }
                     }
                     if (table.Rows.Count == 0)
@@ -481,7 +507,8 @@ namespace Micajah.Common.Bll.Providers
 
                 using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
                 {
-                    if (server.Initialize())
+                    string error = string.Empty;
+                    if (server.Initialize(ref error))
                     {
                         // output list of groups
                         groups = server.GetGroups(distinguishedName);
@@ -493,6 +520,10 @@ namespace Micajah.Common.Bll.Providers
                                 table.Rows.Add(group.GroupGuid, group.Name, group.DistinguishedName);
                             }
                         }
+                    }
+                    else
+                    {
+                        LdapInfoProvider.InsertLdapLog(organizationId, true, error);
                     }
                 }
                 if (table.Rows.Count == 0)
@@ -519,6 +550,7 @@ namespace Micajah.Common.Bll.Providers
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static DomainUserCollection GetMappedGroupsUsers(Guid organizationId, ref LdapProcess ldapProcess)
         {
+            string logMessage = null;
             DomainUserCollection users = null;
             Organization org = OrganizationProvider.GetOrganization(organizationId);
 
@@ -535,20 +567,33 @@ namespace Micajah.Common.Bll.Providers
                 groupNames[i] = (string)drv["LdapGroupName"];
                 i++;
             }
-
-            ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundMappedGroups, i) });
+            logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundMappedGroups, i);
+            ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+            LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
                 {
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ConnectedToLDAP, i) });
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_GettingUsersFromMappedGroups, i) });
+                    logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_ConnectedToLDAP, i);
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                    LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
+                    logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_GettingUsersFromMappedGroups, i);
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                    LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
                     users = server.GetUsers(groupNames);
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundUsers, users.Count) });
+                    logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_FoundUsers, users.Count);
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                    LdapInfoProvider.InsertLdapLog(organizationId, false, logMessage);
                 }
                 else
-                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_CantConnectToLDAP, i) });
+                {
+                    logMessage = string.Format(CultureInfo.CurrentCulture, Resources.LdapProcessLog_CantConnectToLDAP, i);
+                    ldapProcess.Logs.Add(new LdapProcessLog() { Date = DateTime.UtcNow, Message = logMessage });
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, logMessage);
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+                }
             }
 
             return users;
@@ -757,7 +802,8 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
                 {
                     Dictionary<Guid, GroupListItemValue> ldapGroups = null;
 
@@ -821,6 +867,10 @@ namespace Micajah.Common.Bll.Providers
                             }
                         }
                 }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+                }
             }
 
             if (resultTable != null)
@@ -846,13 +896,23 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
                 {
                     Dictionary<Guid, GroupListItemValue> ldapGroups = server.GetUserGroupsById(userId);
 
                     if (ldapGroups != null)
+                    {
                         foreach (Guid key in ldapGroups.Keys)
+                        {
                             sb.AppendFormat(CultureInfo.CurrentCulture, ",{0}", key);
+                        }
+                    }
+                }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+
                 }
             }
 
@@ -876,8 +936,15 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
+                {
                     user = server.GetIUser(userId);
+                }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+                }
             }
 
             return user;
@@ -926,8 +993,15 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", ldi, log))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
+                {
                     user = server.GetIUser(userName);
+                }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+                }
             }
 
             return user;
@@ -950,8 +1024,15 @@ namespace Micajah.Common.Bll.Providers
 
             using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
             {
-                if (server.Initialize())
+                string error = string.Empty;
+                if (server.Initialize(ref error))
+                {
                     list = server.GetUserAltEmails(userId, includeMainEmail);
+                }
+                else
+                {
+                    LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+                }
             }
 
             return list;
@@ -970,7 +1051,8 @@ namespace Micajah.Common.Bll.Providers
             {
                 using (var server = new LdapProvider(organizationId, org.LdapServerAddress, Convert.ToInt32(org.LdapServerPort, CultureInfo.InvariantCulture), org.LdapUserName, org.LdapPassword, org.LdapDomain, "Default", null, null))
                 {
-                    if (server.Initialize())
+                    string error = string.Empty;
+                    if (server.Initialize(ref error))
                     {
                         string newList = org.LdapDomains;
                         List<string> currentList = new List<string>();
@@ -994,8 +1076,63 @@ namespace Micajah.Common.Bll.Providers
                             OrganizationProvider.UpdateOrganization(organizationId, newList);
                         }
                     }
+                    else
+                    {
+                        LdapInfoProvider.InsertLdapLog(organizationId, true, error);
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Inserts the ldap log.
+        /// </summary>
+        /// <param name="organizationId">Organization Id.</param>
+        /// <param name="isError">Is Error.</param>
+        /// <param name="message">Message.</param>        
+        [DataObjectMethod(DataObjectMethodType.Insert)]
+        public static void InsertLdapLog(Guid? organizationId, bool isError, string message)
+        {
+            try
+            {
+                using (LdapLogsTableAdapter adapter = new LdapLogsTableAdapter())
+                {
+                    adapter.Insert(organizationId, isError, message);
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Gets the ldap logs.
+        /// </summary>
+        /// <param name="organizationId">OrganizationId.</param>
+        /// <returns>The table object that contains the ldap logs.</returns>s
+        [DataObjectMethod(DataObjectMethodType.Select)]
+        public static LogDataSet.LdapLogsDataTable GetLdapLogs(Guid organizationId)
+        {
+            try
+            {
+                using (LdapLogsTableAdapter adapter = new LdapLogsTableAdapter())
+                {
+                    return adapter.GetLdapLogs(organizationId);
+                }
+            }
+            catch { return new LogDataSet.LdapLogsDataTable(); }
+        }
+
+        /// <summary>
+        /// Gets the ldap logs.
+        /// </summary>
+        /// <returns>The table object that contains the ldap logs.</returns>s
+        [DataObjectMethod(DataObjectMethodType.Select)]
+        public static LogDataSet.LdapLogsDataTable GetLdapLogs()
+        {
+            try
+            {
+                return GetLdapLogs(UserContext.Current.OrganizationId);
+            }
+            catch { return new LogDataSet.LdapLogsDataTable();}
         }
 
         #endregion

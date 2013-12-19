@@ -42,5 +42,17 @@ namespace Micajah.Common.Properties {
                 return ((string)(this["ClientConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=tcp:zllql46xaz.database.windows.net,1433;Database=BWA_SherpaDesk_Log;User " +
+            "ID=jvickers@zllql46xaz;Password=Micajah88;Trusted_Connection=False;Encrypt=True;" +
+            "Connection Timeout=30;")]
+        public string LogConnectionString {
+            get {
+                return ((string)(this["LogConnectionString"]));
+            }
+        }
     }
 }

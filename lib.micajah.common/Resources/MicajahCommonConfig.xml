@@ -62,6 +62,7 @@
             <action id="A3223AB8-D9E7-437A-AE0E-14164C0F90B7" type="Page" name="Ldap Integration" orderNumber="1" description="Setup LDAP integration to manage all login accounts" navigateUrl="/mc/admin/organizationldapsettings.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
               <actions>
                 <action id="72B411D0-FB81-4444-B217-AFC4416A5319" type="Page" name="Ldap Group Mappings" description="Ldap Group Mappings" navigateUrl="/mc/admin/ldapgroupmappings.aspx" orderNumber="2" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" alternativeParents="00000000-0000-0000-0000-000000000011" visible="false" />
+				<action id="B39050DE-9B13-43D2-8382-48E92435C46A" type="Page" name="View Ldap Logs" description="View Ldap Logs" navigateUrl="/mc/admin/ldaplogs.aspx" orderNumber="3" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" visible="false" />
               </actions>
             </action>
             <action id="D79FFA5D-54C2-4EB0-AB47-42DDA41C1380" type="Page" name="Google Integration" orderNumber="2" description="Setup Google integration to manage all login accounts" navigateUrl="/mc/admin/googleintegration.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" />

@@ -58,6 +58,7 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid LdapServerSettingsPageActionId = new Guid("F53C5189-BD4D-47E5-88EF-58B81178F7EF");
         internal readonly static Guid LdapGroupMappingsPageActionId = new Guid("72B411D0-FB81-4444-B217-AFC4416A5319");
         internal readonly static Guid LdapUserInfoPageActionId = new Guid("5749FF70-4592-4B91-8579-5E7E203C0410");
+        internal readonly static Guid LdapLogsPageActionId = new Guid("B39050DE-9B13-43D2-8382-48E92435C46A");                
         internal readonly static Guid SignUpOrganizationPageActionId = new Guid("3E9E3609-7F2A-4DF2-92DF-DFFBD6978E84");
         internal readonly static Guid StartPageActionId = new Guid("4CB3BB95-A829-4DF7-BAD8-05FB38FF019A");
         internal readonly static Guid GoogleIntegrationPageActionId = new Guid("D79FFA5D-54C2-4EB0-AB47-42DDA41C1380");
