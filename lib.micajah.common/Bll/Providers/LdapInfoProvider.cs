@@ -156,6 +156,8 @@ namespace Micajah.Common.Bll.Providers
                     var domains = server.GetDomains();
                     if (domains != null)
                     {
+                        LdapInfoProvider.InsertLdapLog(organizationId, true, string.Format(Resources.LdapInfoProvider_DomainsFound_Text, domains.Count));
+
                         // output list of domains
                         for (int i = 0; i < domains.Count; i++)
                         {

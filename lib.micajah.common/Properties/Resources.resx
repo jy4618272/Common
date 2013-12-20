@@ -2694,4 +2694,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="OrganizationLdapSettingsControl_LdapSetupStep8_Text" xml:space="preserve">
     <value>Step 8</value>
   </data>
+  <data name="LdapInfoProvider_DomainsFound_Text" xml:space="preserve">
+    <value>Received {0} domains.</value>
+  </data>
 </root>

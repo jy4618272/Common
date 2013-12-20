@@ -154,6 +154,8 @@ namespace Micajah.Common.Bll.Handlers
             {
                 this.ThreadState = ThreadStateType.Failed;
                 this.ErrorException = ex;
+
+                LdapInfoProvider.InsertLdapLog(organizationId, true, ex.Message);
             }
             finally
             {

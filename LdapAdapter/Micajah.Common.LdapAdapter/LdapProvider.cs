@@ -353,7 +353,7 @@ namespace Micajah.Common.LdapAdapter
         public Response<AuthenticationStatus> CheckUserLDAPPasswordAndActive(User user, string password)
         {
             string responseMessage = null;
-            
+
             if (string.IsNullOrEmpty(this.AuthenticationTypeString))
                 this.AuthenticationTypeString = "Default";
 
@@ -832,7 +832,7 @@ namespace Micajah.Common.LdapAdapter
         public DomainCollection GetDomains()
         {
             if (isConnectionOK == false) return null;
-            
+
             List<SearchResultEntry> result = PerformPagedSearch(ldapConn, RootDN, "(&(objectClass=Domain))", new string[] { "name", "DistinguishedName", "objectGuid" });
 
             if (result.Count > 0)
@@ -929,22 +929,18 @@ namespace Micajah.Common.LdapAdapter
         {
             if (isConnectionOK == false) return null;
 
-            var request = new SearchRequest(domain.DistinguishedName, "(&(objectClass=Group))", System.DirectoryServices.Protocols.SearchScope.Subtree, new string[] { "objectGuid", "name" });
-            var response = (SearchResponse)ldapConn.SendRequest(request, new TimeSpan(1, 0, 0));
+            List<SearchResultEntry> result = PerformPagedSearch(ldapConn, domain.DistinguishedName, "(&(objectClass=Group))", new string[] { "objectGuid", "name" });
 
-            if (response.Entries.Count > 0)
+            if (result.Count > 0)
             {
                 var list = new DomainUserGroupCollection();
-                foreach (SearchResultEntry resultEntry in response.Entries)
+                foreach (SearchResultEntry resultEntry in result)
                 {
                     list.Add(new DomainUserGroup()
                     {
                         Domain = domain,
                         GroupGuid = new Guid(getAttributeByteArrayValue(resultEntry.Attributes, "objectGuid")),
-                        Name = getAttributeStringValue(resultEntry.Attributes, "name")//,
-                        //DistinguishedName = getAttributeStringValue(resultEntry.Attributes, "DistinguishedName"),
-                        //SamAccountName = getAttributeStringValue(resultEntry.Attributes, "sAMAccountName"),
-                        //PrimaryGroupToken = ((resultEntry.Attributes["objectSid"][0]).GetType() == typeof(byte[])) ? BitConverter.ToInt32(getAttributeByteArrayValue(resultEntry.Attributes, "objectSid"), 24) : -1
+                        Name = getAttributeStringValue(resultEntry.Attributes, "name")
                     });
                 }
                 return list;
@@ -1227,71 +1223,6 @@ namespace Micajah.Common.LdapAdapter
             }
         }
 
-        //public DomainUserCollection GetUsers(DomainUserGroup group, List<string> selectedGroups, List<string> selectedUsers)
-        //{
-        //    if (isConnectionOK == false) return null;
-
-        //    SearchRequest sR = new SearchRequest(group.DistinguishedName, "(&(objectClass=Group))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //    SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR);
-
-        //    //SearchResultAttributeCollection attrs = sResp.Entries[0].Attributes;
-        //    //showAllAttributes(attrs);
-
-        //    if (sResp.Entries.Count > 0)
-        //    {
-        //        DomainUserCollection memberList = new DomainUserCollection();
-        //        RecursiveGetGroupMembers(group, ref memberList, ref selectedGroups, ref selectedUsers);
-        //        GetGroupMembersByPrimaryGroupToken(group, ref memberList, ref selectedUsers);
-
-        //        return memberList;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-
-        //protected void RecursiveGetGroupMembers(DomainUserGroup group, ref DomainUserCollection memberList, ref List<string> selectedGroups, ref List<string> selectedUsers)
-        //{
-        //    if (selectedGroups.Contains(group.SamAccountName))
-        //        return;
-
-        //    selectedGroups.Add(group.SamAccountName);
-
-        //    SearchRequest sR = new SearchRequest(group.DistinguishedName, "(&(objectClass=Group))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //    SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR);
-
-        //    SearchResultAttributeCollection attrs = sResp.Entries[0].Attributes;
-        //    //showAllAttributes(attrs);
-
-        //    if (attrs["member"] != null)
-        //    {
-        //        for (int i = 0; i < attrs["member"].Count; i++)
-        //        {
-        //            SearchRequest sRG = new SearchRequest(RootDN, "(&(DistinguishedName=" + (string)attrs["member"][i] + "))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //            SearchResponse sRespG = (SearchResponse)ldapConn.SendRequest(sRG);
-
-        //            //showAllAttributes(sRespG.Entries[0].Attributes);
-
-        //            if (isGroupEntity(sRespG.Entries[0].Attributes))
-        //            {
-        //                RecursiveGetGroupMembers(new DomainUserGroup() { Domain = group.Domain, GroupGuid = new Guid(getAttributeByteArrayValue(sRespG.Entries[0].Attributes, "objectGuid")), Name = getAttributeStringValue(sRespG.Entries[0].Attributes, "name"), DistinguishedName = getAttributeStringValue(sRespG.Entries[0].Attributes, "DistinguishedName"), SamAccountName = getAttributeStringValue(sRespG.Entries[0].Attributes, "sAMAccountName"), PrimaryGroupToken = ((sRespG.Entries[0].Attributes["objectSid"][0]).GetType() == typeof(byte[])) ? BitConverter.ToInt32(getAttributeByteArrayValue(sRespG.Entries[0].Attributes, "objectSid"), 24) : -1 }, ref memberList, ref selectedGroups, ref selectedUsers);
-        //            }
-        //            else
-        //            {
-        //                // add new user
-        //                if (!selectedUsers.Contains(getAttributeStringValue(sRespG.Entries[0].Attributes, "sAMAccountName")))
-        //                {
-        //                    memberList.Add(createDomainUser(sRespG.Entries[0]));
-
-        //                    selectedUsers.Add(getAttributeStringValue(sRespG.Entries[0].Attributes, "sAMAccountName"));
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //}
-
         protected void GetGroupMembersByPrimaryGroupToken(DomainUserGroup group, ref DomainUserCollection memberList, ref List<string> selectedUsers)
         {
             SearchRequest sR = new SearchRequest(RootDN, "(&(objectClass=User)(primaryGroupID=" + group.PrimaryGroupToken.ToString(CultureInfo.CurrentCulture) + "))", System.DirectoryServices.Protocols.SearchScope.Subtree, new string[] { "cn", "DistinguishedName", "givenName", "mail", "mobile", "objectCategory", "objectGUID", "objectSid", "sAMAccountName", "sn", "userAccountControl", "userPrincipalName", "memberOf", "primaryGroupID", "idautoPersonPreferredName", "proxyAddresses" });
@@ -1310,61 +1241,7 @@ namespace Micajah.Common.LdapAdapter
                     }
                 }
             }
-
         }
-
-        //public DomainUserGroupCollection GetGroupSubgroups(string groupName)
-        //{
-        //    if (isConnectionOK == false) return null;
-        //    if (String.IsNullOrEmpty(groupName) == true)
-        //        return null;
-
-        //    Domain domain = GetGroupDomain(groupName);
-        //    DomainUserGroupCollection list = new DomainUserGroupCollection();
-
-        //    SearchRequest sR = new SearchRequest(groupName, "(&(objectClass=Group))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //    SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR);
-
-        //    SearchResultAttributeCollection attrs = sResp.Entries[0].Attributes;
-        //    //showAllAttributes(attrs);
-
-        //    list.Add(new DomainUserGroup()
-        //    {
-        //        Domain = domain,
-        //        GroupGuid = new Guid(getAttributeByteArrayValue(sResp.Entries[0].Attributes, "objectGuid")),
-        //        Name = getAttributeStringValue(sResp.Entries[0].Attributes, "name"),
-        //        DistinguishedName = getAttributeStringValue(sResp.Entries[0].Attributes, "DistinguishedName"),
-        //        SamAccountName = getAttributeStringValue(sResp.Entries[0].Attributes, "sAMAccountName"),
-        //        PrimaryGroupToken = ((attrs["objectSid"][0]).GetType() == typeof(byte[])) ? BitConverter.ToInt32(getAttributeByteArrayValue(sResp.Entries[0].Attributes, "objectSid"), 24) : -1
-        //    });
-
-        //    if (attrs["member"] != null)
-        //    {
-        //        for (int i = 0; i < attrs["member"].Count; i++)
-        //        {
-        //            SearchRequest sRG = new SearchRequest(RootDN, "(&(objectClass=Group)(DistinguishedName=" + (string)attrs["member"][i] + "))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //            SearchResponse sRespG = (SearchResponse)ldapConn.SendRequest(sRG);
-
-        //            if (sRespG.Entries.Count > 0)
-        //            {
-        //                if (isGroupEntity(sRespG.Entries[0].Attributes))
-        //                {
-        //                    list.Add(new DomainUserGroup()
-        //                    {
-        //                        Domain = domain,
-        //                        GroupGuid = new Guid(getAttributeByteArrayValue(sRespG.Entries[0].Attributes, "objectGuid")),
-        //                        Name = getAttributeStringValue(sRespG.Entries[0].Attributes, "name"),
-        //                        DistinguishedName = getAttributeStringValue(sRespG.Entries[0].Attributes, "DistinguishedName"),
-        //                        SamAccountName = getAttributeStringValue(sRespG.Entries[0].Attributes, "sAMAccountName"),
-        //                        PrimaryGroupToken = ((sRespG.Entries[0].Attributes["objectSid"][0]).GetType() == typeof(byte[])) ? BitConverter.ToInt32(getAttributeByteArrayValue(sRespG.Entries[0].Attributes, "objectSid"), 24) : -1
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return list;
-        //}
 
         private static bool isGroupEntity(SearchResultAttributeCollection curAttr)
         {
@@ -1401,7 +1278,7 @@ namespace Micajah.Common.LdapAdapter
 
             string gid = Helper.ConvertObjectGuidToString(objectId);
 
-            SearchRequest sR = new SearchRequest(RootDN, "(&(objectClass=User)(objectGUID=" + gid + "))", System.DirectoryServices.Protocols.SearchScope.Subtree, new string[] { "userAccountControl"});
+            SearchRequest sR = new SearchRequest(RootDN, "(&(objectClass=User)(objectGUID=" + gid + "))", System.DirectoryServices.Protocols.SearchScope.Subtree, new string[] { "userAccountControl" });
             SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR, new TimeSpan(1, 0, 0));
 
             if (sResp.Entries.Count > 0)
@@ -1416,7 +1293,6 @@ namespace Micajah.Common.LdapAdapter
                 return null;
             }
         }
-
 
         public DomainUser GetUser(Guid objectId)
         {
@@ -1470,8 +1346,6 @@ namespace Micajah.Common.LdapAdapter
 
             if (sResp.Entries.Count > 0)
             {
-                //SearchResultAttributeCollection attrs = sResp.Entries[0].Attributes;
-                //showAllAttributes(attrs);
                 return createDomainUser(sResp.Entries[0]);
             }
             else
@@ -1504,8 +1378,6 @@ namespace Micajah.Common.LdapAdapter
 
             if (sResp.Entries.Count > 0)
             {
-                //SearchResultAttributeCollection attrs = sResp.Entries[0].Attributes;
-                //showAllAttributes(attrs);
                 return createDomainUser(sResp.Entries[0]);
             }
             else
@@ -1593,7 +1465,6 @@ namespace Micajah.Common.LdapAdapter
         private DomainUser createDomainUser(SearchResultEntry rez)
         {
             string domainFull = GetDomainFullByUserDN(getAttributeStringValue(rez.Attributes, "DistinguishedName"));
-            //Domain domain = GetDomainByDistinguishedName(ConvertDomainNameToLdapForm(domainFull));
 
             return new DomainUser()
             {
@@ -1602,7 +1473,6 @@ namespace Micajah.Common.LdapAdapter
                 ObjectSid = ((rez.Attributes["objectSid"][0]).GetType() == typeof(byte[])) ? (new SecurityIdentifier(getAttributeByteArrayValue(rez.Attributes, "objectSid"), 0)).ToString() : string.Empty,
                 AccountName = getAttributeStringValue(rez.Attributes, "sAMAccountName"),
                 PrincipalName = getAttributeStringValue(rez.Attributes, "userPrincipalName"),
-                //DomainName = domain.Name,
                 DomainName = domainFull.Contains(".") ? domainFull.Split('.')[0] : domainFull,
                 DomainFullName = domainFull,
                 FirstName = getAttributeStringValue(rez.Attributes, "idautoPersonPreferredName") != null ? getAttributeStringValue(rez.Attributes, "idautoPersonPreferredName") : getAttributeStringValue(rez.Attributes, "givenName"),
@@ -1618,47 +1488,7 @@ namespace Micajah.Common.LdapAdapter
                 PrimaryGroupId = getAttributeStringValue(rez.Attributes, "primaryGroupID"),
                 AltEmails = getAttributeStringArrayValue(rez.Attributes, "proxyAddresses")
             };
-        }
-
-        //public DomainUserGroupCollection GetMemberOfGroups(DomainUser user)
-        //{
-        //    if (isConnectionOK == false) return null;
-        //    string gid = Helper.ConvertObjectGuidToString(user.ObjectGuid);
-
-        //    SearchRequest sR = new SearchRequest(RootDN, "(&(objectClass=User)(objectGUID=" + gid + "))", System.DirectoryServices.Protocols.SearchScope.Subtree, );
-        //    SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR);
-
-        //    if (sResp.Entries[0].Attributes["memberOf"].Count > 0)
-        //    {
-        //        DomainUserGroupCollection list = new DomainUserGroupCollection();
-
-        //        for (int i = 0; i < sResp.Entries[0].Attributes["memberOf"].Count; i++)
-        //        {
-        //            string memberOfName = (string)sResp.Entries[0].Attributes["memberOf"][i];
-        //            SearchRequest sRloop = new SearchRequest(RootDN, "(&(objectClass=Group)(distinguishedName=" + memberOfName + "))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //            SearchResponse sRespLoop = (SearchResponse)ldapConn.SendRequest(sRloop);
-
-        //            if (sRespLoop.Entries.Count > 0)
-        //            {
-        //                list.Add(new DomainUserGroup()
-        //                {
-        //                    Domain = GetGroupDomain(memberOfName),
-        //                    GroupGuid = new Guid(getAttributeByteArrayValue(sRespLoop.Entries[0].Attributes, "objectGuid")),
-        //                    Name = getAttributeStringValue(sRespLoop.Entries[0].Attributes, "name"),
-        //                    DistinguishedName = getAttributeStringValue(sRespLoop.Entries[0].Attributes, "DistinguishedName"),
-        //                    SamAccountName = getAttributeStringValue(sRespLoop.Entries[0].Attributes, "sAMAccountName"),
-        //                    PrimaryGroupToken = ((sRespLoop.Entries[0].Attributes["objectSid"][0]).GetType() == typeof(byte[])) ? BitConverter.ToInt32(getAttributeByteArrayValue(sRespLoop.Entries[0].Attributes, "objectSid"), 24) : -1
-        //                });
-        //            }
-        //        }
-
-        //        return list;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
+        }      
 
         public Dictionary<Guid, GroupListItemValue> GetUserGroupsById(Guid userId)
         {
@@ -1764,53 +1594,6 @@ namespace Micajah.Common.LdapAdapter
                 list.Add(objectGuid, new GroupListItemValue(name, isDirect));
             }
         }
-
-        //protected void GetRecursiveGroupList(string groupDN, ref Dictionary<Guid, GroupListItemValue> list, ref List<string> selectedGroups, bool isDirect)
-        //{
-        //    if (selectedGroups.Contains(groupDN))
-        //        return;
-
-        //    selectedGroups.Add(groupDN);
-
-        //    SearchRequest sR = new SearchRequest(RootDN, "(&(objectClass=Group)(distinguishedName=" + groupDN + "))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //    SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR);
-
-        //    if (sResp.Entries.Count > 0)
-        //    {
-        //        list.Add(new Guid(getAttributeByteArrayValue(sResp.Entries[0].Attributes, "objectGuid")), new GroupListItemValue(getAttributeStringValue(sResp.Entries[0].Attributes, "name"), isDirect));
-
-        //        if (sResp.Entries[0].Attributes["memberOf"] != null)
-        //        {
-        //            for (int i = 0; i < sResp.Entries[0].Attributes["memberOf"].Count; i++)
-        //            {
-        //                GetRecursiveGroupList((string)sResp.Entries[0].Attributes["memberOf"][i], ref list, ref selectedGroups, false);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //protected void GetListOfGroupsByPrimaryGroupId(string groupId, ref Dictionary<Guid, GroupListItemValue> list, ref List<string> selectedGroups)
-        //{
-        //    SearchRequest sR = new SearchRequest(RootDN, "(&(objectClass=Group))", System.DirectoryServices.Protocols.SearchScope.Subtree);
-        //    SearchResponse sResp = (SearchResponse)ldapConn.SendRequest(sR);
-
-        //    if (sResp.Entries.Count > 0)
-        //    {
-        //        foreach (SearchResultEntry resultEntry in sResp.Entries)
-        //        {
-        //            if ((resultEntry.Attributes["objectSid"][0]).GetType() == typeof(byte[]))
-        //            {
-        //                if (!selectedGroups.Contains(getAttributeStringValue(resultEntry.Attributes, "DistinguishedName")))
-        //                {
-        //                    if (groupId == BitConverter.ToInt32(getAttributeByteArrayValue(resultEntry.Attributes, "objectSid"), 24).ToString(CultureInfo.CurrentCulture))
-        //                    {
-        //                        GetRecursiveGroupList(getAttributeStringValue(resultEntry.Attributes, "DistinguishedName"), ref list, ref selectedGroups, true);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
 
         public bool IsUserInGroup(string accountName, string groupName)
         {

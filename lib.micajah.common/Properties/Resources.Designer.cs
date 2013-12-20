@@ -3210,6 +3210,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Received {0} domains..
+        /// </summary>
+        internal static string LdapInfoProvider_DomainsFound_Text {
+            get {
+                return ResourceManager.GetString("LdapInfoProvider_DomainsFound_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;b&gt;LDAP Error:&lt;/b&gt;&lt;br/&gt;Error Code: {0} &lt;br/&gt;Message: {1}&lt;br/&gt;.
         /// </summary>
         internal static string LdapInfoProvider_LdapError_Text {

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Micajah.Common.LdapAdapter
 {
+    [Serializable]
     public class LdapProcessLog
     {
         public DateTime Date { get; set; }
