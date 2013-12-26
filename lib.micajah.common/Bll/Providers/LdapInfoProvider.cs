@@ -52,10 +52,8 @@ namespace Micajah.Common.Bll.Providers
                             }
                         }
                     }
-
                     m_LdapProcesses = list;
                 }
-
                 return m_LdapProcesses;
             }
         }
