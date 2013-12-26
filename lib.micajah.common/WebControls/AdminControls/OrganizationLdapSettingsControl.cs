@@ -407,7 +407,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                     LdapInfoProvider.LdapProcesses.Add(ldapProcess);
-
+                    
                     ldapServerAddress = (EditForm.Rows[0].Cells[1].Controls[0] as TextBox).Text;
                     if (string.IsNullOrEmpty((EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text) == true)
                     {
