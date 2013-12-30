@@ -2,6 +2,16 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 
+<% if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Micajah.Common.Pages.MasterPageTheme.Modern)
+   {%>
+<style type="text/css">
+    .RadTabStrip .rtsLevel, .RadTabStrip:after, .RadTabStripVertical:after, .RadTabStrip .rtsLevel:after, .RadTabStripVertical .rtsLevel:after, .RadTabStrip .rtsScroll:after, .RadTabStripVertical .rtsScroll:after, .RadTabStrip .rtsUL:after, .RadTabStripVertical .rtsUL:after, .RadTabStrip .rtsLI:after, .RadTabStripVertical .rtsLI:after
+    {
+     clear: none;
+    }
+
+</style>
+<% } %>
 <script language="javascript" type="text/javascript">
 <!--
     var instance = Sys.WebForms.PageRequestManager.getInstance();
