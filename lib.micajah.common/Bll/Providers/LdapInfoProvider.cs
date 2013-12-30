@@ -25,6 +25,7 @@ namespace Micajah.Common.Bll.Providers
         #region Members
         // The objects which are used to synchronize access to the cached objects.
         private static object s_LdapProcessesSyncRoot = new object();
+        private static List<LdapProcess> m_LdapProcesses = null;
         #endregion
 
         #region Internal Properties
@@ -32,24 +33,28 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Gets the instance of the Micajah.Common.Dal.MasterDataSet class that contains common data of application.
         /// </summary>
-        internal static List<LdapProcess> LdapProcesses
+        public static List<LdapProcess> LdapProcesses
         {
             get
             {
-                List<LdapProcess> list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
-                if (list == null)
+                if (m_LdapProcesses == null)
                 {
-                    lock (s_LdapProcessesSyncRoot)
+                    List<LdapProcess> list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
+                    if (list == null)
                     {
-                        list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
-                        if (list == null)
+                        lock (s_LdapProcessesSyncRoot)
                         {
-                            list = new List<LdapProcess>();
-                            CacheManager.Current.PutWithDefaultTimeout("mc.LdapProcesses", list);
+                            list = CacheManager.Current.Get("mc.LdapProcesses") as List<LdapProcess>;
+                            if (list == null)
+                            {
+                                list = new List<LdapProcess>();
+                                CacheManager.Current.PutWithDefaultTimeout("mc.LdapProcesses", list);
+                            }
                         }
                     }
+                    m_LdapProcesses = list;
                 }
-                return list;
+                return m_LdapProcesses;
             }
         }
 
@@ -156,7 +161,7 @@ namespace Micajah.Common.Bll.Providers
                     var domains = server.GetDomains();
                     if (domains != null)
                     {
-                        LdapInfoProvider.InsertLdapLog(organizationId, true, string.Format(Resources.LdapInfoProvider_DomainsFound_Text, domains.Count));
+                        LdapInfoProvider.InsertLdapLog(organizationId, false, string.Format(Resources.LdapInfoProvider_DomainsFound_Text, domains.Count));
 
                         // output list of domains
                         for (int i = 0; i < domains.Count; i++)
