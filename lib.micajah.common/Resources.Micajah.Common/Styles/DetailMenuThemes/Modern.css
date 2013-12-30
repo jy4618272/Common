@@ -57,7 +57,7 @@
     border-bottom: 1px solid #ffffb8;
 }
 
-.Mp_Dm li h2
+li h2
 {
     margin-bottom: 5px;
     margin-right: 15px;
@@ -121,14 +121,23 @@
 }
 
 /* ------------ Detail menu checkbox item ------------ */
-.Mp_Dm li.Cb
+li.Cb
 {
     background-image: url($CheckBox.png$);
     background-position: 5px 5px;
 }
 
-.Mp_Dm li.Cbc
+li.Cbc
 {
     background-image: url($CheckBoxChecked.png$);
     background-position: 5px 5px;
 }
+
+ul.cards {height: 32px; padding: 0 10px 10px;}
+ul.cards li {float: left; list-style-type: none; margin: 0 7px 0 0 !important;}
+ul.cards .card.visa {background-image: url("$visa.png$");}
+ul.cards .card.master {background-image: url("$mastercard.png$");}
+ul.cards .card.american-express {background-image: url("$amex.png$");}
+ul.cards .card.discover {background-image: url("$discover.png$");}
+ul.cards .card {background-position: 0 0; background-repeat: no-repeat; float: left; height: 32px; text-indent: -9999px; width: 51px;}
+ul.cards li.text {color: #999999; font-size: 11px; position: relative; top: 9px;}

@@ -389,7 +389,7 @@ namespace Micajah.Common.Bll.Providers
         private static string ProcessStyleSheet(string styleSheetContent, DetailMenuTheme theme)
         {
             if (theme == DetailMenuTheme.Modern)
-                return ProcessStyleSheet(styleSheetContent, new string[] { "Arrow.png", "CheckBox.png", "CheckBoxChecked.png" }, ResourceProvider.GetDetailMenuThemeResource(theme, "{0}"));
+                return ProcessStyleSheet(styleSheetContent, new string[] { "Arrow.png", "CheckBox.png", "CheckBoxChecked.png", "visa.png", "mastercard.png", "amex.png", "discover.png" }, ResourceProvider.GetDetailMenuThemeResource(theme, "{0}"));
             return styleSheetContent;
         }
 

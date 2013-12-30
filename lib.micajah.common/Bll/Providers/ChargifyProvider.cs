@@ -63,6 +63,110 @@ namespace Micajah.Common.Bll.Providers
             return null;
         }
 
+        public static bool RegisterCreditCard(ChargifyConnect chargify, Guid OrgId, Guid InstId, string OrgName, string InstName, string UserEmail, string UserFirstName, string UserLastName, string CardNumber, string CardExprMonth, string CardExprYear, int GraceDays, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            string _CustSystemId = OrgId.ToString() + "," + InstId.ToString();
+
+            ICustomer _cust = chargify.LoadCustomer(_CustSystemId);
+            ISubscription _subscr = null;
+
+            try
+            {
+                if (_cust == null)
+                {
+                    errorMessage = "Can't create Chargify Customer!";
+                    _cust = new Customer();
+                    _cust.SystemID = _CustSystemId;
+                    _cust.Organization = OrgName + " " + InstName;
+                    _cust.Email = UserEmail;
+                    _cust.FirstName = UserFirstName;
+                    _cust.LastName = UserLastName;
+                    _cust = chargify.CreateCustomer(_cust);
+                }
+                else if (_cust.Organization != OrgName + " " + InstName || _cust.Email != UserEmail || _cust.FirstName != UserFirstName || _cust.LastName != UserLastName)
+                {
+                    errorMessage = "Can't update Chargify Customer!";
+                    _cust.Organization = OrgName + " " + InstName;
+                    _cust.Email = UserEmail;
+                    _cust.FirstName = UserFirstName;
+                    _cust.LastName = UserLastName;
+                    _cust = chargify.UpdateCustomer(_cust);
+                    errorMessage = "Can't get Chargify Customer Substriction!";
+                    _subscr = ChargifyProvider.GetCustomerSubscription(chargify, _cust.ChargifyID);
+                }
+                else
+                {
+                    errorMessage = "Can't get Chargify Customer Substriction!";
+                    _subscr = ChargifyProvider.GetCustomerSubscription(chargify, _cust.ChargifyID);
+                }
+            }
+            catch (ChargifyException cex)
+            {
+                if ((int)cex.StatusCode != 422) errorMessage += " " + cex.Message;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                errorMessage += " " + ex.Message;
+                return false;
+            }
+
+            errorMessage = string.Empty;
+
+            if (CardNumber.Contains("XXXX"))
+            {
+                if (_subscr != null && _subscr.CreditCard != null && _subscr.State != SubscriptionState.Active)
+                {
+                    try
+                    {
+                        chargify.ReactivateSubscription(_subscr.SubscriptionID);
+                    }
+                    catch (Exception ex)
+                    {
+                        errorMessage = "Can't reactivate Customer Subscription! " + ex.Message;
+                        return false;
+                    }
+                    return true;
+                }
+                errorMessage = "Invalid Credit Card Information!";
+                return false;
+            }
+
+            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, CardNumber, 2000 + int.Parse(CardExprYear), int.Parse(CardExprMonth), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+
+            try
+            {
+                if (_subscr == null)
+                {
+                    errorMessage = "Can't create Chargify Subscription!";
+                    _subscr = chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
+                    chargify.UpdateBillingDateForSubscription(_subscr.SubscriptionID, DateTime.UtcNow.AddDays(GraceDays));
+                }
+                else
+                {
+                    errorMessage = "Can't update Chargify Subscription!";
+                    chargify.UpdateSubscriptionCreditCard(_subscr, _ccattr);
+                    if (_subscr.State != SubscriptionState.Active) chargify.ReactivateSubscription(_subscr.SubscriptionID);
+                }
+            }
+            catch (ChargifyException cex)
+            {
+                if ((int)cex.StatusCode == 422) errorMessage += " Invalid Credit Card Information!";
+                else errorMessage += " " + cex.Message;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                errorMessage += " " + ex.Message;
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+
+        }
+
         public static void UpdateSubscriptionAllocations(ChargifyConnect chargify, int SubscriptionId, Instance inst, SettingCollection modifiedSettings, SettingCollection paidSettings)
         {
             decimal monthlySum = 0;

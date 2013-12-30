@@ -605,101 +605,27 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void btnUpdateCC_Click(object sender, EventArgs e)
         {
-            string _CustSystemId = OrganizationId.ToString() + "," + InstanceId.ToString();
-
-            ICustomer _cust = Chargify.LoadCustomer(_CustSystemId);
-            ISubscription _subscr = null;
-            UserContext _uctx = UserContext.Current;
-
             msgStatus.Visible = true;
             msgStatus.MessageType = NoticeMessageType.Error;
+            UserContext _uctx = UserContext.Current;
+            string err=string.Empty;
 
-            try
+            if (!ChargifyProvider.RegisterCreditCard(Chargify, OrganizationId, InstanceId, _uctx.Organization.Name, _uctx.Instance.Name, _uctx.Email, _uctx.FirstName, _uctx.LastName, txtCCNumber.Text, txtCCExpMonth.Text, txtCCExpYear.Text, 1, out err))
             {
-                if (_cust == null)
+                if (txtCCNumber.Text.Contains("XXXX"))
                 {
-                    msgStatus.Message = "Can't create Chargify Customer!";
-                    _cust = new Customer();
-                    _cust.SystemID = _CustSystemId;
-                    _cust.Organization = _uctx.Organization.Name + " " + _uctx.Instance.Name;
-                    _cust.Email = _uctx.Email;
-                    _cust.FirstName = _uctx.FirstName;
-                    _cust.LastName = _uctx.LastName;
-                    _cust = Chargify.CreateCustomer(_cust);
+                    txtCCNumber.Text = string.Empty;
+                    txtCCExpMonth.Text = string.Empty;
+                    txtCCExpYear.Text = string.Empty;
+                    msgStatus.Description = "Please, input correct data.";
                 }
-                else if (_cust.Organization != _uctx.Organization.Name + " " + _uctx.Instance.Name || _cust.Email != _uctx.Email || _cust.FirstName != _uctx.FirstName || _cust.LastName != _uctx.LastName)
-                {
-                    msgStatus.Message = "Can't update Chargify Customer!";
-                    _cust.Organization = _uctx.Organization.Name + " " + _uctx.Instance.Name;
-                    _cust.Email = _uctx.Email;
-                    _cust.FirstName = _uctx.FirstName;
-                    _cust.LastName = _uctx.LastName;
-                    _cust = Chargify.UpdateCustomer(_cust);
-                    msgStatus.Message = "Can't get Chargify Customer Substriction!";
-                    _subscr = ChargifyProvider.GetCustomerSubscription(Chargify, _cust.ChargifyID);
-                }
-                else
-                {
-                    msgStatus.Message = "Can't get Chargify Customer Substriction!";
-                    _subscr = ChargifyProvider.GetCustomerSubscription(Chargify, _cust.ChargifyID);
-                }
-            }
-            catch (ChargifyException cex)
-            {
-                if ((int)cex.StatusCode != 422) msgStatus.Message += " " + cex.Message;
-                return;
-            }
-            catch (Exception ex)
-            {
-                msgStatus.Message += " " + ex.Message;
-                return;
-            }
-
-            if (txtCCNumber.Text.Contains("XXXX"))
-            {
-                if (_subscr != null && _subscr.CreditCard != null && _subscr.State != SubscriptionState.Active)
-                {
-                    Chargify.ReactivateSubscription(_subscr.SubscriptionID);
-                    Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=reactivated");
-                }
-                txtCCNumber.Text = string.Empty;
-                txtCCExpMonth.Text = string.Empty;
-                txtCCExpYear.Text = string.Empty;
-                msgStatus.Message = "Invalid Credit Card Information!";
-                msgStatus.Description = "Please, input correct data.";
-                return;
-            }
-
-            CreditCardAttributes _ccattr = new CreditCardAttributes(_cust.FirstName, _cust.LastName, txtCCNumber.Text, 2000 + int.Parse(txtCCExpYear.Text), int.Parse(txtCCExpMonth.Text), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
-
-            try
-            {
-                if (_subscr == null)
-                {
-                    msgStatus.Message = "Can't create Chargify Subscription!";
-                    _subscr = Chargify.CreateSubscription(ChargifyProvider.GetProductHandle(), _cust.ChargifyID, _ccattr);
-                    Chargify.UpdateBillingDateForSubscription(_subscr.SubscriptionID, DateTime.UtcNow.AddDays(1));
-                }
-                else
-                {
-                    msgStatus.Message = "Can't update Chargify Subscription!";
-                    Chargify.UpdateSubscriptionCreditCard(_subscr, _ccattr);
-                    if (_subscr.State != SubscriptionState.Active) Chargify.ReactivateSubscription(_subscr.SubscriptionID);
-                }
-            }
-            catch (ChargifyException cex)
-            {
-                if ((int)cex.StatusCode == 422) msgStatus.Message += " Invalid Credit Card Information!";
-                else msgStatus.Message += " " + cex.Message;
-                return;
-            }
-            catch (Exception ex)
-            {
-                msgStatus.Message += " " + ex.Message;
+                msgStatus.Message = err;
                 return;
             }
 
             InstanceProvider.UpdateInstance(_uctx.Instance, CreditCardStatus.Registered);
+
+            if (txtCCNumber.Text.Contains("XXXX")) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=reactivated");
 
             if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value != "0")
             {

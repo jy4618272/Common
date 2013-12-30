@@ -237,7 +237,7 @@
                 <span data-name="discover" title="Discover" class="card discover">Discover</span>
                 </li>
             </ul>
-        </div>
+            </div>
             <dl class="form">
             <dt><label>Card Number</label></dt>
             <dd><mits:TextBox runat="server" ID="txtCCNumber" Required="True" Width="300"/></dd>

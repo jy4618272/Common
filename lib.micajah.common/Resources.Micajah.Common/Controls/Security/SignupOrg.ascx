@@ -171,7 +171,7 @@
 </div>
 <div id="Step3Panel" runat="server" style="margin-top: 100px;">
     <div>
-        <div class="Mp_Dm">
+        <asp:Panel CssClass="Mp_Dm" ID="pnlOrgTemplates" runat="server">
             <h1>
                 <asp:Literal ID="CustomizeLiteral" runat="server"></asp:Literal></h1>
             <asp:Repeater ID="InstanceList" runat="server" DataSourceID="InstanceListDataSource">
@@ -193,15 +193,65 @@
                     </ul><br />
                 </FooterTemplate>
             </asp:Repeater>
-            <div id="Step3Form" runat="server">
-                <asp:Button ID="Step3Button" runat="server" CssClass="Green Large" ValidationGroup="Step3"
-                    Style="float: left;" OnClick="Step3Button_Click"></asp:Button>
-                <asp:CustomValidator ID="InstanceRequiredValidator" runat="server" Display="Dynamic" ValidationGroup="Step3"
-                    CssClass="Error Step3Val" ClientValidationFunction="InstanceRequiredValidation" OnServerValidate="InstanceRequiredValidator_ServerValidate" /><asp:CustomValidator
-                        ID="UniqueDataValidator" runat="server" Display="Dynamic" EnableClientScript="false"
-                        ValidationGroup="Step3" CssClass="Error Step3Val" OnServerValidate="UniqueDataValidator_ServerValidate" /><asp:TextBox
-                            ID="SelectedInstance" runat="server" ValidationGroup="Step3" Style="display: none;"></asp:TextBox>
+        </asp:Panel>
+        <asp:Panel ID="pnlCreditCardInfo" runat="server">
+            <asp:Panel ID="pnlCreditCardError" runat="server" Visible="false">
+                <div style="padding-bottom: 20px;">
+                    <asp:Label ID="lblCCErrorMessage" runat="server" CssClass="Error Block"></asp:Label>
+                </div>
+                <div style="text-align: center;">
+                    <p>
+                        <asp:Label ID="lblCCErrorDescr" runat="server" Text="To skip Credit Card registration, please select &quot;Will Register Credit Card Later&quot; checkbox and click &quot;Continue&quot; button"></asp:Label>
+                    </p>
+                </div>
+            </asp:Panel>
+            <div class="SectionTitle">
+                <asp:Literal ID="ltrlCreditCardTitle" runat="server" Text="Credit Card Information"></asp:Literal>
             </div>
+            <div class="cards_select">  
+                <ul class="cards">
+                    <li>
+                        <span title="Visa" class="card visa">Visa</span>
+                    </li>    
+                    <li>
+                        <span title="Mastercard" class="card master">Mastercard</span>
+                    </li>    
+                    <li>
+                        <span title="American Express" class="card american-express">American Express</span>
+                    </li>    
+                    <li>
+                        <span title="Discover" class="card discover">Discover</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <asp:Label ID="lblCardNumber" runat="server" CssClass="Large Title" Text="Number"></asp:Label>
+                <mits:TextBox ID="txtCardNumber" runat="server" Required="true" ValidationGroup="Step3" MaxLength="20" />
+            </div>
+            <div class="row">
+                <asp:Label ID="lblCardExpiration" runat="server" CssClass="Large Title" Text="Expiration"></asp:Label>
+                <mits:TextBox runat="server" ID="txtCardExprMonth" ValidationType="Integer" ValidationGroup="Step3" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True" Width="50" />
+                <span>&nbsp;/&nbsp;</span>
+                <mits:TextBox runat="server" ID="txtCardExprYear" ValidationType="Integer" ValidationGroup="Step3" MinimumValue="13" MaximumValue="23" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True" Width="50" />
+            </div>
+            <div>
+                <ul style="float: left; list-style-type: none; margin: 0 0 30px;">
+                    <li onclick="SelectRegisterCreditCardLater(this);" class="Cb" style="cursor: pointer; background-repeat: no-repeat; padding: 10px 0 10px 45px;">
+                        <a><h2>Will register Credit Card later</h2></a>
+                    </li>
+                </ul>
+                <asp:HiddenField ID="hfRegisterCreditCardLater" runat="server" />
+                <asp:HiddenField ID="hfOrganizationId" runat="server" />
+            </div>
+        </asp:Panel>
+        <div id="Step3Form" runat="server">
+            <asp:Button ID="Step3Button" runat="server" CssClass="Green Large" ValidationGroup="Step3"
+                Style="float: left;" OnClick="Step3Button_Click"></asp:Button>
+            <asp:CustomValidator ID="InstanceRequiredValidator" runat="server" Display="Dynamic" ValidationGroup="Step3"
+                CssClass="Error Step3Val" ClientValidationFunction="InstanceRequiredValidation" OnServerValidate="InstanceRequiredValidator_ServerValidate" /><asp:CustomValidator
+                    ID="UniqueDataValidator" runat="server" Display="Dynamic" EnableClientScript="false"
+                    ValidationGroup="Step3" CssClass="Error Step3Val" OnServerValidate="UniqueDataValidator_ServerValidate" /><asp:TextBox
+                        ID="SelectedInstance" runat="server" ValidationGroup="Step3" Style="display: none;"></asp:TextBox>
         </div>
     </div>
 </div>

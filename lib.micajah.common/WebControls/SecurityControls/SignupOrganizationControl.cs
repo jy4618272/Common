@@ -103,6 +103,17 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected Button Step3Button;
         protected System.Web.UI.WebControls.TextBox SelectedInstance;
 
+        protected Panel pnlOrgTemplates;
+        protected Panel pnlCreditCardInfo;
+        protected TextBox txtCardNumber;
+        protected TextBox txtCardExprMonth;
+        protected TextBox txtCardExprYear;
+        protected HiddenField hfRegisterCreditCardLater;
+        protected HiddenField hfOrganizationId;
+        protected Panel pnlCreditCardError;
+        protected Label lblCCErrorMessage;
+        protected Label lblCCErrorDescr;
+
         protected HtmlGenericControl ErrorPanel;
         protected Image LogoImage3;
         protected Label ErrorLabel;
@@ -110,6 +121,8 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HyperLink ErrorContinueLink;
 
         protected ObjectDataSource InstanceListDataSource;
+        protected bool ChargifyEnabled = FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled;
+
 
         #endregion
 
@@ -167,7 +180,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             get
             {
-                return string.Format(CultureInfo.InvariantCulture, @"function SelectItem(elem, value) {{
+                string script = string.Format(CultureInfo.InvariantCulture, @"function SelectItem(elem, value) {{
     var items = elem.parentNode.getElementsByTagName('li');
     for (var y = 0; y < items.length; y++) {{
         if (items[y] != elem)
@@ -202,6 +215,56 @@ function InstanceRequiredValidation(source, arguments) {{
 }}
 "
                     , SelectedInstance.ClientID);
+                if (!ChargifyEnabled) return script;
+                RequiredFieldValidator rfvCardNumber = null;
+                foreach(Control ctl in txtCardNumber.Controls)
+                {
+                    if (ctl is RequiredFieldValidator)
+                    {
+                        rfvCardNumber = (RequiredFieldValidator)ctl;
+                        break;
+                    }
+                }
+
+                RequiredFieldValidator rfvCardExprMonth = null;
+                foreach (Control ctl in txtCardExprMonth.Controls)
+                {
+                    if (ctl is RequiredFieldValidator)
+                    {
+                        rfvCardExprMonth = (RequiredFieldValidator)ctl;
+                        break;
+                    }
+                }
+
+                RequiredFieldValidator rfvCardExprYear = null;
+                foreach (Control ctl in txtCardExprYear.Controls)
+                {
+                    if (ctl is RequiredFieldValidator)
+                    {
+                        rfvCardExprYear = (RequiredFieldValidator)ctl;
+                        break;
+                    }
+                }
+
+                script += string.Format(CultureInfo.InvariantCulture, @"function SelectRegisterCreditCardLater(elem) {{
+    var inp = document.getElementById('{0}');
+    if (elem.className.indexOf('Cbc') > -1) {{
+        elem.className = 'Cb';
+        inp.value = '';
+        ValidatorEnable({1}, true);
+        ValidatorEnable({2}, true);
+        ValidatorEnable({3}, true);
+    }}
+    else {{
+        elem.className = 'Cbc';
+        inp.value = 'On';
+        ValidatorEnable({1}, false);
+        ValidatorEnable({2}, false);
+        ValidatorEnable({3}, false);
+    }}
+}}", hfRegisterCreditCardLater.ClientID, rfvCardNumber.ClientID, rfvCardExprMonth.ClientID, rfvCardExprYear.ClientID);
+
+                return script;
             }
         }
 
@@ -338,11 +401,11 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (Step3Panel.Visible)
             {
+                ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(DetailMenuTheme.Modern), DetailMenuTheme.Modern.ToString());
+
                 InstanceList.DataBind();
                 if (InstanceList.Items.Count > 0)
                 {
-                    ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(DetailMenuTheme.Modern), DetailMenuTheme.Modern.ToString());
-
                     ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SelectItemClientScript", this.SelectItemClientScript, true);
 
                     string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
@@ -405,6 +468,7 @@ function InstanceRequiredValidation(source, arguments) {{
                 Step2Panel.Visible = false;
                 Step3Panel.Visible = false;
                 ErrorPanel.Visible = false;
+                pnlCreditCardInfo.Visible = ChargifyEnabled;
 
                 if (GoogleProvider.IsGoogleProviderRequest(this.Request))
                 {
@@ -714,9 +778,25 @@ function InstanceRequiredValidation(source, arguments) {{
 
         protected void Step3Button_Click(object sender, EventArgs e)
         {
-            Page.Validate("Step3");
-            if (!Page.IsValid)
-                return;
+            if (ChargifyEnabled && !string.IsNullOrEmpty(hfOrganizationId.Value))
+            {
+                if (string.IsNullOrEmpty(hfRegisterCreditCardLater.Value))
+                {
+                    Guid orgId = Guid.Parse(hfOrganizationId.Value);
+                    Instance inst = InstanceProvider.GetFirstInstance(orgId);
+                    string err = string.Empty;
+
+                    if (!ChargifyProvider.RegisterCreditCard(ChargifyProvider.CreateChargify(), orgId, inst.InstanceId, OrganizationName2.Text, inst.Name, Email2.Text, FirstName.Text, LastName.Text, txtCardNumber.Text, txtCardExprMonth.Text, txtCardExprYear.Text, 15, out err))
+                    {
+                        lblCCErrorMessage.Text = err;
+                        return;
+                    }
+
+                    InstanceProvider.UpdateInstance(inst, CreditCardStatus.Registered);
+                }
+
+                Response.Redirect(ErrorContinueLink.NavigateUrl);
+            }
 
             if (string.Compare((string)Session["NewOrg"], "1", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -746,7 +826,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
                 Session["NewOrg"] = "1";
 
-                Guid instId = InstanceProvider.GetFirstInstanceId(orgId);
+                Instance inst = InstanceProvider.GetFirstInstance(orgId);
 
                 if (GoogleProvider.IsGoogleProviderRequest(this.Request))
                 {
@@ -756,7 +836,22 @@ function InstanceRequiredValidation(source, arguments) {{
                     GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
                 }
 
-                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, true, orgId, instId, null));
+                if (ChargifyEnabled && string.IsNullOrEmpty(hfRegisterCreditCardLater.Value))
+                {
+                    string err=string.Empty;
+                    if (!ChargifyProvider.RegisterCreditCard(ChargifyProvider.CreateChargify(), orgId, inst.InstanceId, OrganizationName2.Text, inst.Name, Email2.Text, FirstName.Text, LastName.Text, txtCardNumber.Text, txtCardExprMonth.Text, txtCardExprYear.Text, 15, out err))
+                    {
+                        pnlOrgTemplates.Visible = false;
+                        pnlCreditCardError.Visible = true;
+                        lblCCErrorMessage.Text = err;
+                        ErrorContinueLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(Email2.Text, true, orgId, inst.InstanceId, null);
+                        hfOrganizationId.Value = orgId.ToString();
+                        return;
+                    }
+                    InstanceProvider.UpdateInstance(inst, CreditCardStatus.Registered);
+                }
+
+                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, true, orgId, inst.InstanceId, null));
             }
         }
 
