@@ -723,14 +723,19 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (!string.IsNullOrEmpty(this.EmailToLink))
                     {
-                        LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, LoginTextBox.Text, this.EmailToLink);
+                        if (!EmailProvider.IsEmailExists(this.EmailToLink))
+                        {
+                            LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, LoginTextBox.Text, this.EmailToLink);
 
-                        LinkEmailPanel.Visible = true;
-                        FormTable.Visible = false;
-                        if (LogoImagePanel != null)
-                            LogoImagePanel.Visible = false;
+                            LinkEmailPanel.Visible = true;
+                            FormTable.Visible = false;
+                            if (LogoImagePanel != null)
+                                LogoImagePanel.Visible = false;
 
-                        m_MainContainerHeight = 150;
+                            m_MainContainerHeight = 150;
+                        }
+                        else
+                            this.RedirectAfterLogOn();
                     }
                     else
                         this.RedirectAfterLogOn();
