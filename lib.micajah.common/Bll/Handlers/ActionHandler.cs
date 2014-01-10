@@ -87,8 +87,7 @@ namespace Micajah.Common.Bll.Handlers
                 else if (action.ActionId == ActionProvider.StartPageActionId)
                     Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(UserContext.Current, out accessDenied);
                 else if ((action.ActionId == ActionProvider.LdapIntegrationPageActionId)
-                    || (action.ActionId == ActionProvider.LdapGroupMappingsPageActionId)
-                    || (action.ActionId == ActionProvider.LdapMappingsPageActionId)
+                    || (action.ActionId == ActionProvider.LdapGroupMappingsPageActionId)                    
                     || (action.ActionId == ActionProvider.LdapServerSettingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
                 {

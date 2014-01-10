@@ -89,10 +89,7 @@
                   <actions>
                     <action id="00000000-0000-0000-0000-000000000017" type="Page" name="Settings" description="Manage the Settings of the Group" navigateUrl="/mc/admin/groupsettingsininstance.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
                   </actions>
-                </action>
-                <action id="14C1A008-D65D-40BB-BFF8-D077BA1DE995" type="Page" name="Ldap Mappings" description="Ldap Mappings" navigateUrl="/mc/admin/ldapgroupmappings.aspx" handle="true" authenticationRequired="true" instanceRequired="false" visible="false" roles="OrgAdmin">
-                  <detailMenu show="false" />
-                </action>
+                </action>                
               </actions>
             </action>
             <action id="00000000-0000-0000-0000-000000000010" type="Page" name="Instances" description="Manage the Instances" navigateUrl="/mc/admin/instance.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin"/>
