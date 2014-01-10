@@ -6,6 +6,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
+using Micajah.Common.WebControls.SetupControls;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls.AdminControls
@@ -13,7 +14,7 @@ namespace Micajah.Common.WebControls.AdminControls
     /// <summary>
     /// The control to manage the application group roles and actions in instances.
     /// </summary>
-    public class LdapGroupMappingsControl : UserControl
+    public class LdapGroupMappingsControl : MasterControl
     {
         #region Members
 
@@ -56,6 +57,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            this.MasterPage.VisibleBreadcrumbs = false;
+
             if (!IsPostBack)
             {
                 CommonGridView1.DeleteButtonCaption = DeleteButtonCaptionType.Remove;
