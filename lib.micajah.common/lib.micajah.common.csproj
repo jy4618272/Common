@@ -335,6 +335,9 @@
     <Compile Include="Security\LdapAdapter\ApplicationLogger.cs" />
     <Compile Include="Security\LdapAdapter\LdapIntegration.cs" />
     <Compile Include="Security\LdapAdapter\LdapServer.cs" />
+    <Compile Include="WebControls\CreditCardRegistrationControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="WebControls\AdminControls\AccountSettingsControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -2058,15 +2061,11 @@
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v102.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v103.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v104.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\amex.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\credit_card.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\discover.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\email.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\help.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\mastercard.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\paypal.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\phone.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\visa.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v105.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v105.sql" />
@@ -2322,16 +2321,24 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\amex.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\CreditCardRegistrationControl.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\discover.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\amex.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\visa.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\discover.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\mastercard.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\mastercard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\visa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\CreditCardRegistration.css" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -421,6 +421,11 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
+        /// Gets or sets to display credit card registration modal window on page load
+        /// </summary>
+        public bool ShowCreditCardRegistrationWindow { get; set; }
+
+        /// <summary>
         /// Gets or sets the message to be shown on the page at the header.
         /// </summary>
         public string HeaderMessage { get; set; }
@@ -854,6 +859,23 @@ namespace Micajah.Common.Pages
             m_BreadCrumbs = new Breadcrumbs(this);
             m_BreadCrumbs.ShowBreadcrumbs = showBreadCrumbs;
             Controls.Add(m_BreadCrumbs);
+        }
+
+        private void CreateCreditCardRegistrationWindow()
+        {
+            if (!ShowCreditCardRegistrationWindow || !FrameworkConfiguration.Current.WebApplication.Integration.Chargify.Enabled) return;
+            if (Request.Path.Contains(ResourceProvider.AccountSettingsVirtualPath.TrimStart('~'))) return;
+            CreditCardRegistrationControl ccrControl = (CreditCardRegistrationControl)Page.LoadControl("~/Resources.Micajah.Common/Controls/CreditCardRegistrationControl.ascx");
+            HtmlAnchor a = new HtmlAnchor();
+            a.ID = "ccr_hidden_link";
+            a.HRef = "#credit_card_form";
+            a.Attributes.Add("rel", "facebox1");
+            a.Style.Add(HtmlTextWriterStyle.Display, "none");
+            Page.Form.Controls.Add(a);
+            ccrControl.FancyboxHyperlinkRel = "facebox1";
+            ccrControl.ShowMissingCardTitle = true;
+            Page.Form.Controls.Add(ccrControl);
+            ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "CreditCardRegistrationLaunchScript", "$(document).ready(function() {$(\"#" + a.ClientID + "\").trigger('click');});", true);
         }
 
         private void CreateHeaderMessageBox()
@@ -1556,6 +1578,8 @@ namespace Micajah.Common.Pages
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            this.CreateCreditCardRegistrationWindow();
 
             if (this.IsPostBack)
                 this.HandleSearchEvent();

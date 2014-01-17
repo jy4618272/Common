@@ -1,19 +1,8 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.AdminControls.AccountSettingsControl" %>
+<%@ Register Src="~/Resources.Micajah.Common/Controls/CreditCardRegistrationControl.ascx" TagName="CreditCardRegistration" TagPrefix="uc" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 
 <asp:PlaceHolder ID="PageContent" runat="server">
-<script type="text/javascript">
-
-    // Override $.fancybox.init to fix ASP.NET PostBack bug;
-    var fancyboxInitOld = $.fancybox.init;
-    $.fancybox.init = function () {
-        fancyboxInitOld.apply(arguments);
-        $("#fancybox-tmp, #fancybox-loading, #fancybox-overlay, #fancybox-wrap").appendTo("form:first");
-    };
-
-    // Your code ...
-
-</script>
 <div class="planinfo">
     <div class="account-head" id="divAccountHead" runat="server">
         <div class="account-type" id="divAccountType" runat="server">
@@ -156,6 +145,7 @@
     </div>
     <div class="account-heading" id="divTrainingHeader" runat="server"><h2>Training and Consulting</h2></div>
     <div id="divTraining" runat="server">
+        <asp:HiddenField runat="server" ID="hfPurchaseTrainingHours" Value="0"/>
         <p>Choose one of our training packages for a comprehensive set up and training session, including configuring your emails, setting up your business rules (SLA's), and creating your custom searches. Plus we'll help you make basic changes to your customer portal to reflect your brand, as well as walk you through the crucial parts of your SherpaDesk admin.</p>
         <table>
             <tr>
@@ -213,55 +203,5 @@
         </columns>
     </mits:CommonGridView>
 </div>
-
-<!-- Pop ups from here down -->
-<div style="display: none;">
-    <div id="credit_card_form">    
-    <div class="content">
-        <asp:UpdatePanel runat="server" ID="UpdatePanel3">
-        <ContentTemplate>
-        <mits:NoticeMessageBox runat="server" ID="msgStatus" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
-        <asp:HiddenField runat="server" ID="hfPurchaseTrainingHours" Value="0"/>
-            <div class="cards_select">  
-            <ul class="cards">
-                <li>
-                <span data-name="visa" title="Visa" class="card visa">Visa</span>
-                </li>    
-                <li>
-                <span data-name="master" title="Mastercard" class="card master">Mastercard</span>
-                </li>    
-                <li>
-                <span data-name="american-express" title="American Express" class="card american-express">American Express</span>
-                </li>    
-                <li>
-                <span data-name="discover" title="Discover" class="card discover">Discover</span>
-                </li>
-            </ul>
-            </div>
-            <dl class="form">
-            <dt><label>Card Number</label></dt>
-            <dd><mits:TextBox runat="server" ID="txtCCNumber" Required="True" Width="300"/></dd>
-            </dl>
-            <dl class="form expiration">
-            <dt><label>Expiration</label></dt>
-            <dd>
-                <mits:TextBox runat="server" ID="txtCCExpMonth" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
-                <span>&nbsp;/&nbsp;</span>
-                <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="13" MaximumValue="23" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
-            </dd>
-            </dl>
-            <div class="ccformsubmit">
-                <asp:Button runat="server" ID="btnUpdateCC" CssClass="Large Green" Text="Update Credit Card" OnClick="btnUpdateCC_Click"/>
-	        </div>
-        </ContentTemplate>
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnUpdateCC" EventName="Click"/>
-            <asp:PostBackTrigger ControlID="btnPurchase1Hour"/>
-            <asp:PostBackTrigger ControlID="btnPurchase3Hours"/>
-            <asp:PostBackTrigger ControlID="btnPurchase8Hours"/>
-        </Triggers>
-        </asp:UpdatePanel>    
-    </div>
-    </div>
-</div>
+<uc:CreditCardRegistration ID="ccrControl" runat="server" FancyboxHyperlinkRel="facebox"></uc:CreditCardRegistration>
 </asp:PlaceHolder>

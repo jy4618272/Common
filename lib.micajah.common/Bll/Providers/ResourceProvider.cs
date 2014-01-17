@@ -87,6 +87,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-1.3.4.css";
         internal const string CommonGridViewModernStyleSheet = "Styles.CommonGridViewModern.css";
         internal const string AccountSettingsStyleSheet = "Styles.AccountSettings.css";
+        internal const string CreditCardRegistrationStyleSheet = "Styles.CreditCardRegistration.css";
         internal const string GlobalModernStyleSheet = "Styles.GlobalModern.css";
         internal const string GlobalStyleSheet = "Styles.Global.css";
         internal const string LogOnStyleSheet = "Styles.LogOn.css";
@@ -242,6 +243,8 @@ namespace Micajah.Common.Bll.Providers
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessCommonGridViewModernStyleSheet(GetManifestResourceString(resourceName)));
             else if (resourceName.EndsWith(AccountSettingsStyleSheet, StringComparison.OrdinalIgnoreCase))
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessAccountSettingsStyleSheet(GetManifestResourceString(resourceName)));
+            else if (resourceName.EndsWith(CreditCardRegistrationStyleSheet, StringComparison.OrdinalIgnoreCase))
+                content = UnicodeEncoding.UTF8.GetBytes(ProcessCreditCardRegistrationStyleSheet(GetManifestResourceString(resourceName)));
             else if (resourceName.EndsWith(OnOffSwitchStyleSheet, StringComparison.OrdinalIgnoreCase))
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessOnOffSwitchStyleSheet(GetManifestResourceString(resourceName)));
             else if (resourceName.EndsWith(NoticeMessageBoxStyleSheet, StringComparison.OrdinalIgnoreCase))
@@ -389,7 +392,7 @@ namespace Micajah.Common.Bll.Providers
         private static string ProcessStyleSheet(string styleSheetContent, DetailMenuTheme theme)
         {
             if (theme == DetailMenuTheme.Modern)
-                return ProcessStyleSheet(styleSheetContent, new string[] { "Arrow.png", "CheckBox.png", "CheckBoxChecked.png", "visa.png", "mastercard.png", "amex.png", "discover.png" }, ResourceProvider.GetDetailMenuThemeResource(theme, "{0}"));
+                return ProcessStyleSheet(styleSheetContent, new string[] { "Arrow.png", "CheckBox.png", "CheckBoxChecked.png" }, ResourceProvider.GetDetailMenuThemeResource(theme, "{0}"));
             return styleSheetContent;
         }
 
@@ -422,7 +425,11 @@ namespace Micajah.Common.Bll.Providers
 
         private static string ProcessAccountSettingsStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "assets.png", "billing.png", "credit_card.png", "discover.png", "email.png", "help.png", "ldap.png", "mastercard.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "visa.png", "fancy_close.png" }, "Images.Micajah.Common.WebControls.AdminControls.AccountSettings.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "assets.png", "billing.png", "credit_card.png", "email.png", "help.png", "ldap.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "fancy_close.png" }, "Images.Micajah.Common.WebControls.AdminControls.AccountSettings.{0}");
+        }
+        private static string ProcessCreditCardRegistrationStyleSheet(string styleSheetContent)
+        {
+            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "discover.png", "mastercard.png", "visa.png"}, "Images.Micajah.Common.WebControls.CreditCardRegistration.{0}");
         }
 
         private static string ProcessComboBoxModernStyleSheet(string styleSheetContent)

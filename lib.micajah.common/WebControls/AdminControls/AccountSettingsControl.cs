@@ -60,10 +60,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected HtmlContainerControl divTrainingHeader;
         protected HtmlContainerControl divTraining;
 
-        protected TextBox txtCCNumber;
-        protected TextBox txtCCExpMonth;
-        protected TextBox txtCCExpYear;
-        protected NoticeMessageBox msgStatus;
+        protected CreditCardRegistrationControl ccrControl;
 
         protected CommonGridView cgvTransactList;
 
@@ -159,17 +156,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private void DisablePurchaseButtons()
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxPurchaseInitScript", @"$(""input[value=Purchase]"").fancybox({
-                    'type': 'inline',
-                    'href': '#credit_card_form',
-                    'width': '400',
-                    'height': 'auto',
-                    'showNavArrows': false,
-                    'titlePosition': 'inside',
-                    'transitionIn': 'none',
-                    'transitionOut': 'none'
-                });", true);
-
+            ccrControl.FancyboxInputValue = "Purchase";
             btnPurchase1Hour.OnClientClick = "$(\"#" + btnPurchase1Hour.ClientID + "\").value=\"1\"; return false;";
             btnPurchase3Hours.OnClientClick = "$(\"#" + btnPurchase3Hours.ClientID + "\").value=\"3\"; return false;";
             btnPurchase8Hours.OnClientClick = "$(\"#" + btnPurchase8Hours.ClientID + "\").value=\"8\"; return false;";
@@ -505,21 +492,6 @@ namespace Micajah.Common.WebControls.AdminControls
             this.List_DataBind();
         }
 
-        private void RegisterFancyBoxInitScript()
-        {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInitScript", @"$(""a[rel=facebox]"").fancybox({
-                    'type': 'inline',
-                    'width': '400',
-                    'height': 'auto',
-                    'showNavArrows': false,
-                    'titlePosition': 'inside',
-                    'transitionIn': 'none',
-                    'transitionOut': 'none'
-                });
-                "
-                , true);
-        }
-
         #endregion
 
         #region Protected Methods
@@ -603,30 +575,10 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-        protected void btnUpdateCC_Click(object sender, EventArgs e)
+        void ccrControl_UpdateClick(object sender, EventArgs e)
         {
-            msgStatus.Visible = true;
-            msgStatus.MessageType = NoticeMessageType.Error;
-            UserContext _uctx = UserContext.Current;
-            string err=string.Empty;
-
-            if (!ChargifyProvider.RegisterCreditCard(Chargify, OrganizationId, InstanceId, _uctx.Organization.Name, _uctx.Instance.Name, _uctx.Email, _uctx.FirstName, _uctx.LastName, txtCCNumber.Text, txtCCExpMonth.Text, txtCCExpYear.Text, 1, out err))
-            {
-                if (txtCCNumber.Text.Contains("XXXX"))
-                {
-                    txtCCNumber.Text = string.Empty;
-                    txtCCExpMonth.Text = string.Empty;
-                    txtCCExpYear.Text = string.Empty;
-                    msgStatus.Description = "Please, input correct data.";
-                }
-                msgStatus.Message = err;
-                return;
-            }
-
-            InstanceProvider.UpdateInstance(_uctx.Instance, CreditCardStatus.Registered);
-
-            if (txtCCNumber.Text.Contains("XXXX")) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=reactivated");
-
+            if (ccrControl.Status == CreditCardRegistrationControl.CreditCardRegistrationStatus.Error) return;
+            if (ccrControl.Status == CreditCardRegistrationControl.CreditCardRegistrationStatus.Reactivated) Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=reactivated");
             if (!string.IsNullOrEmpty(hfPurchaseTrainingHours.Value) && hfPurchaseTrainingHours.Value != "0")
             {
                 switch (hfPurchaseTrainingHours.Value)
@@ -645,9 +597,16 @@ namespace Micajah.Common.WebControls.AdminControls
             Response.Redirect(ResourceProvider.AccountSettingsVirtualPath + "?st=ok" + (!string.IsNullOrEmpty(this.MasterPage.Message) ? "&msg=" + HttpUtility.UrlEncode(this.MasterPage.Message) : string.Empty));
         }
 
+
         #endregion
 
         #region Overriden Methods
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            ccrControl.UpdateClick += ccrControl_UpdateClick;
+        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -659,13 +618,9 @@ namespace Micajah.Common.WebControls.AdminControls
 
             this.MasterPage.VisibleBreadcrumbs = false;
 
-            if (ChargifyEnabled && CurrentBillingPlan != BillingPlan.Custom)
-            {
-                this.MasterPage.EnableFancyBox = true;
-                this.RegisterFancyBoxInitScript();
-            }
-
             if (IsPostBack) return;
+
+            if (!ChargifyEnabled || CurrentBillingPlan == BillingPlan.Custom) ccrControl.Visible = false;
 
             this.List_DataBind();
 
@@ -706,11 +661,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 ICreditCardView _cc = _subscription.CreditCard;
                 if (_cc != null)
                 {
-                    txtCCNumber.Text = _cc.FullNumber;
-                    txtCCExpMonth.Text = _cc.ExpirationMonth.ToString();
-                    txtCCExpYear.Text = _cc.ExpirationYear.ToString().Length > 2
-                                            ? _cc.ExpirationYear.ToString().Substring(2)
-                                            : _cc.ExpirationYear.ToString();
+                    ccrControl.SetCreditCardInformation(_cc.FullNumber, _cc.ExpirationMonth.ToString(), _cc.ExpirationYear.ToString().Length > 2 ? _cc.ExpirationYear.ToString().Substring(2) : _cc.ExpirationYear.ToString());
                     IsNewSubscription = false;
                 }
                 divCancelAccountHeader.Visible = _cc != null && _subscription.State != SubscriptionState.Canceled;
