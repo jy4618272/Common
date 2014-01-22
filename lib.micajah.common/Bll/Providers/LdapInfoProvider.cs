@@ -697,16 +697,6 @@ namespace Micajah.Common.Bll.Providers
             if (!table.Columns.Contains("SortNumber"))
             {
                 table.Columns.Add("SortNumber", typeof(int), "IIF((GroupId = '00000000-0000-0000-0000-000000000000'), 0, 1)");
-
-                DataRow row = table.NewRow();
-                row["GroupId"] = Guid.Empty;
-                row["OrganizationId"] = UserContext.Current.OrganizationId;
-                row["Name"] = Resources.GroupProvider_OrganizationAdministratorGroupName;
-                row["Description"] = Resources.GroupProvider_OrganizationAdministratorGroupDescription;
-                row["BuiltIn"] = true;
-
-                table.Rows.Add(row);
-                table.AcceptChanges();
             }
 
             table.DefaultView.Sort = "BuiltIn DESC, SortNumber, Name";
@@ -717,8 +707,20 @@ namespace Micajah.Common.Bll.Providers
             {
                 groupIds.Add(new Guid(row["GroupId"].ToString()));
             }
+                        
+            table = GroupProvider.GetGroupsInstancesRoles(groupIds);
 
-            return (GroupProvider.GetGroupsInstancesRoles(groupIds) ?? new DataTable()).DefaultView;
+            if (table != null)
+            {
+                DataRow row = table.NewRow();
+                row["GroupId"] = Guid.Empty;
+                row["Name"] = Resources.GroupProvider_OrganizationAdministratorGroupName;                
+
+                table.Rows.InsertAt(row, 0);
+                table.AcceptChanges();
+            }
+            
+            return table.DefaultView;
         }
 
         /// <summary>
