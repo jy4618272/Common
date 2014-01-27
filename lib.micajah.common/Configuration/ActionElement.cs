@@ -348,6 +348,7 @@ namespace Micajah.Common.Configuration
         {
             this.EnsureIsLoaded();
 
+            this.BuiltIn = action.BuiltIn;
             this.ActionType = action.ActionType;
             this.Name = action.Name;
             this.Description = action.Description;

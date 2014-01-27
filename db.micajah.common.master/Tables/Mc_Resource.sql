@@ -15,3 +15,10 @@
     CONSTRAINT [FK_Mc_Resource_Mc_Resource] FOREIGN KEY ([ParentResourceId]) REFERENCES [dbo].[Mc_Resource] ([ResourceId])
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Mc_Resource_LocalObjectType_LocalObjectId]
+    ON [dbo].[Mc_Resource]([LocalObjectType] ASC, [LocalObjectId] ASC);
+

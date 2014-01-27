@@ -16,7 +16,24 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_Mc_OrganizationsLogins_LoginId]
     ON [dbo].[Mc_OrganizationsLogins]([LoginId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Mc_OrganizationsLogins_LdapUserAlias]
+    ON [dbo].[Mc_OrganizationsLogins]([LdapUserAlias] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Mc_OrganizationsLogins_LdapUPN]
+    ON [dbo].[Mc_OrganizationsLogins]([LdapUPN] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Mc_OrganizationsLogins_LdapDomain]
+    ON [dbo].[Mc_OrganizationsLogins]([LdapDomain] ASC);
 
