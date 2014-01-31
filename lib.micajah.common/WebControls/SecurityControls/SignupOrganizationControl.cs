@@ -49,70 +49,16 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HyperLink ModalLoginLink;
         protected Literal ModalSelectActionSeparatorLiteral;
         protected Button ModalStep1Button;
-
-        protected HtmlGenericControl Step2Panel;
-        protected HtmlGenericControl Step2Form;
-        protected HtmlGenericControl Step2FormButton;
-        protected Image LogoImage2;
-        protected Label OrganizationNameLabel2;
-        protected TextBox OrganizationName2;
-        protected Image OrganizationNameTick2;
-        protected Label HowYouHearAboutUsLabel;
-        protected TextBox HowYouHearAboutUs;
-
-        protected Literal PersonalInformationLabel;
-        protected Label FirstNameLabel;
-        protected TextBox FirstName;
-        protected Label LastNameLabel;
-        protected TextBox LastName;
-
-        protected Literal LocalSettingsLabel;
-        protected Label TimeZoneLabel;
-        protected DropDownList TimeZoneList;
-        protected Label CurrencyLabel;
-        protected DropDownList CurrencyList;
-
-        protected HtmlGenericControl EmailAndPasswordGroupRow;
-        protected Literal EmailAndPasswordLabel;
-        protected HtmlGenericControl Email2Row;
-        protected Label EmailLabel2;
-        protected TextBox Email2;
-        protected CustomValidator EmailValidator2;
-        protected Image EmailTick2;
-        protected Label PasswordLabel;
-        protected HtmlGenericControl PasswordRow;
-        protected TextBox Password;
-        protected CustomValidator PasswordValidator;
-        protected HtmlGenericControl ConfirmPasswordRow;
-        protected Label ConfirmPasswordLabel;
-        protected TextBox ConfirmPassword;
-        protected CustomValidator PasswordCompareValidator;
+        protected Literal AgreeLabel;
         protected Label CaptchaLabel;
         protected Telerik.Web.UI.RadCaptcha Captcha1;
         protected CustomValidator CaptchaValidator;
-        protected ValidationSummary Step2ValidationSummary;
-        protected Button Step2Button;
-        protected Literal AgreeLabel;
-
-        protected HtmlGenericControl Step3Panel;
-        protected Literal CustomizeLiteral;
-        protected Repeater InstanceList;
-        protected CustomValidator InstanceRequiredValidator;
-        protected CustomValidator UniqueDataValidator;
-        protected HtmlGenericControl Step3Form;
-        protected Button Step3Button;
-        protected System.Web.UI.WebControls.TextBox SelectedInstance;
-
-        protected Panel pnlOrgTemplates;
 
         protected HtmlGenericControl ErrorPanel;
         protected Image LogoImage3;
         protected Label ErrorLabel;
         protected Label ErrorContinueLabel;
         protected HyperLink ErrorContinueLink;
-
-        protected ObjectDataSource InstanceListDataSource;
-
 
         #endregion
 
@@ -146,78 +92,28 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
         }
 
-        private string PasswordCompareValidationClientScript
-        {
-            get
-            {
-                return string.Format(CultureInfo.InvariantCulture, @"function PasswordCompareValidation(source, arguments) {{
-    arguments.IsValid = true;
-    var elem1 = document.getElementById('{0}_txt');
-    var elem2 = document.getElementById('{1}_txt');
-    if (elem1 && elem2) {{
-        if ((elem1.value.replace(/^\s+$/gm, '').length == 0) || (elem2.value.replace(/^\s+$/gm, '').length == 0))
-            arguments.IsValid = true;
-        else
-            arguments.IsValid = (elem2.value == elem1.value);
-    }}
-}}
-"
-                    , Password.ClientID, ConfirmPassword.ClientID);
-            }
-        }
-
-        private string SelectItemClientScript
-        {
-            get
-            {
-                return string.Format(CultureInfo.InvariantCulture, @"function SelectItem(elem, value) {{
-    var items = elem.parentNode.getElementsByTagName('li');
-    for (var y = 0; y < items.length; y++) {{
-        if (items[y] != elem)
-            items[y].className = 'Cb';
-    }}
-    var inp = document.getElementById('{0}');
-    if (elem.className.indexOf('Cbc') > -1) {{
-        elem.className = 'Cb';
-        inp.value = '';
-    }}
-    else {{
-        elem.className = 'Cbc';
-        inp.value = value;
-    }}
-}}
-
-function InstanceRequiredValidation(source, arguments) {{
-    arguments.IsValid = false;
-    var itemSelected = false;
-    var elem = document.getElementById('InstanceList');
-    var items = elem.getElementsByTagName('li');
-    for (var y = 0; y < items.length; y++) {{
-        if (items[y].className == 'Cbc') {{
-            itemSelected = true;
-            break;
-        }}
-    }}
-    if (itemSelected) {{
-        elem = document.getElementById('{0}');
-        arguments.IsValid = (elem.value.replace(/^\s+$/gm, '').length > 0);
-    }}
-}}
-"
-                    , SelectedInstance.ClientID);
-            }
-        }
-
-        private string NewPassword
-        {
-            get { return (string)this.ViewState["NewPassword"]; }
-            set { this.ViewState["NewPassword"] = value; }
-        }
-
         private string OAuth2Parameters
         {
             get { return (string)this.ViewState["OAuth2Parameters"]; }
             set { this.ViewState["OAuth2Parameters"] = value; }
+        }
+
+        private string UserFirstName
+        {
+            get { return ViewState["UserFirstName"] != null ? (string)ViewState["UserFirstName"] : "Organization"; }
+            set { ViewState["UserFirstName"] = value; }
+        }
+
+        private string UserLastName
+        {
+            get { return ViewState["UserLastName"] != null ? (string)ViewState["UserLastName"] : "Administrator"; }
+            set { ViewState["UserLastName"] = value; }
+        }
+
+        private string HowYouHearAboutUs
+        {
+            get { return ViewState["HowYouHearAboutUs"] != null ? (string)ViewState["HowYouHearAboutUs"] : string.Empty; }
+            set { ViewState["HowYouHearAboutUs"] = value; }
         }
 
         #endregion
@@ -226,12 +122,12 @@ function InstanceRequiredValidation(source, arguments) {{
 
         private void LoadResources()
         {
-            OrganizationName1.ErrorMessage = OrganizationName2.ErrorMessage = Resources.SignupOrganizationControl_OrganizationName1_ErrorMessage;
+            OrganizationName1.ErrorMessage = Resources.SignupOrganizationControl_OrganizationName1_ErrorMessage;
             OrganizationNameLabel1.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
             OrganizationNameHelpText1.Text = Resources.SignupOrganizationControl_OrganizationNameHelpText1_Text;
-            OrganizationNameTick1.ImageUrl = OrganizationNameTick2.ImageUrl = EmailTick1.ImageUrl = EmailTick2.ImageUrl = OrganizationUrlTick.ImageUrl
+            OrganizationNameTick1.ImageUrl = EmailTick1.ImageUrl = OrganizationUrlTick.ImageUrl
                 = ResourceProvider.GetImageUrl(typeof(SignupOrganizationControl), "Tick.png", true);
-            Email1.ErrorMessage = Email2.ErrorMessage = Resources.SignupOrganizationControl_Email1_ErrorMessage;
+            Email1.ErrorMessage = Resources.SignupOrganizationControl_Email1_ErrorMessage;
             EmailLabel1.Text = Resources.SignupOrganizationControl_EmailLabel1_Text;
             OrganizationUrlLabel.Text = Resources.SignupOrganizationControl_OrganizationUrlLabel_Text;
             Schema.Text = Uri.UriSchemeHttps + Uri.SchemeDelimiter;
@@ -253,68 +149,21 @@ function InstanceRequiredValidation(source, arguments) {{
                 ModalWindowHeader.Style[HtmlTextWriterStyle.BackgroundImage] = "url(" + CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.SmallLogoImageUrl) + ")";
             }
 
-            OrganizationNameLabel2.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
-            HowYouHearAboutUsLabel.Text = Resources.SignupOrganizationControl_HowYouHearAboutUsLabel_Text;
 
-            PersonalInformationLabel.Text = Resources.SignupOrganizationControl_PersonalInformationLabel_Text;
-            FirstName.ErrorMessage = Resources.SignupOrganizationControl_FirstName_ErrorMessage;
-            FirstNameLabel.Text = Resources.SignupOrganizationControl_FirstNameLabel_Text;
-            LastName.ErrorMessage = Resources.SignupOrganizationControl_LastName_ErrorMessage;
-            LastNameLabel.Text = Resources.SignupOrganizationControl_LastNameLabel_Text;
-
-            LocalSettingsLabel.Text = Resources.SignupOrganizationControl_LocalSettingsLabel_Text;
-            TimeZoneLabel.Text = Resources.SignupOrganizationControl_TimeZoneLabel_Text;
-            CurrencyLabel.Text = Resources.SignupOrganizationControl_CurrencyLabel_Text;
-
-            EmailAndPasswordLabel.Text = Resources.SignupOrganizationControl_EmailAndPasswordLabel_Text;
-            EmailLabel2.Text = Resources.SignupOrganizationControl_EmailLabel1_Text;
-            Password.ErrorMessage = Resources.SignupOrganizationControl_Password_ErrorMessage;
-            PasswordLabel.Text = Resources.SignupOrganizationControl_PasswordLabel_Text;
-            ConfirmPassword.ErrorMessage = Resources.SignupOrganizationControl_ConfirmPassword_ErrorMessage;
-            ConfirmPasswordLabel.Text = Resources.SignupOrganizationControl_ConfirmPasswordLabel_Text;
-            PasswordCompareValidator.ErrorMessage = Resources.SignupOrganizationControl_PasswordCompareValidator_ErrorMessage;
             CaptchaLabel.Text = Resources.SignupOrganizationControl_CaptchaLabel_Text;
-            Step2ValidationSummary.HeaderText = Resources.SignupOrganizationControl_Step2ValidationSummary_HeaderText;
-            Step2ValidationSummary.ForeColor = System.Drawing.Color.Empty;
-            Step2Button.Text = string.Format(CultureInfo.InvariantCulture, Resources.SignupOrganizationControl_Step2Button_Text, FrameworkConfiguration.Current.WebApplication.Name);
             AgreeLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.SignupOrganizationControl_AgreeLabel_Text
                 , BaseControl.GetHyperlink(FrameworkConfiguration.Current.WebApplication.Support.TermsUrl, Resources.SignupOrganizationControl_TermsLink_Text)
                 , BaseControl.GetHyperlink(FrameworkConfiguration.Current.WebApplication.Support.PrivacyPolicyUrl, Resources.SignupOrganizationControl_PrivacyPolicyLink_Text));
-
-            InstanceRequiredValidator.ErrorMessage = Resources.CheckBoxList_RequiredValidator_ErrorMessage;
-
-            CustomizeLiteral.Text = Resources.SignupOrganizationControl_CustomizeLiteral_Text;
-            Step3Button.Text = Resources.SignupOrganizationControl_Step3Button_Text;
 
             ErrorContinueLabel.Text = Resources.SignupOrganizationControl_ErrorContinueLabel_Text;
             ErrorContinueLink.Text = Resources.SignupOrganizationControl_ErrorContinueLink_Text;
 
             if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
-                LogoImage1.Visible = LogoImage2.Visible = LogoImage3.Visible = false;
+                LogoImage1.Visible = LogoImage3.Visible = false;
             else
-                LogoImage1.ImageUrl = LogoImage2.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                LogoImage1.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
         }
 
-        private void FillCurrencyList()
-        {
-            CurrencyList.Items.Add(string.Empty);
-            foreach (CurrencyElement e in FrameworkConfiguration.Current.Currencies)
-            {
-                CurrencyList.Items.Add(new ListItem(e.Name, e.Code));
-            }
-        }
-
-        private void ShowStep2()
-        {
-            Step1Panel.Visible = false;
-            Step2Panel.Visible = true;
-
-            Email2.Text = Email1.Text;
-
-            OrganizationName2.Text = OrganizationName1.Text;
-
-            HowYouHearAboutUs.Focus();
-        }
 
         private static bool ValidateEmail(string email, out string errorMessage)
         {
@@ -339,62 +188,28 @@ function InstanceRequiredValidation(source, arguments) {{
             if (!this.IsPostBack)
                 this.Page.Form.Attributes["onsubmit"] += " return true;";
 
-            if (Step3Panel.Visible)
+            string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
+            if (!string.IsNullOrEmpty(code))
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
+
+            code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
+            if (!string.IsNullOrEmpty(code))
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
+
+            code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
+            if (!string.IsNullOrEmpty(code))
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "BingConversionClientScript", code, false);
+
+            this.Page.Form.Target = "_parent";
+
+            LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ShowLogoImage", this.ShowLogoImageClientScript, true);
+
+            if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.GetDetailMenuThemeStyleSheet(DetailMenuTheme.Modern), DetailMenuTheme.Modern.ToString());
+                OrganizationName1.Attributes["onchange"] = "SetOrganizationUrl(this);";
 
-                InstanceList.DataBind();
-                if (InstanceList.Items.Count > 1)
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SelectItemClientScript", this.SelectItemClientScript, true);
-
-                    string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
-                    if (!string.IsNullOrEmpty(code))
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
-
-                    code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
-                    if (!string.IsNullOrEmpty(code))
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
-
-                    code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
-                    if (!string.IsNullOrEmpty(code))
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "BingConversionClientScript", code, false);
-                }
-                else if (InstanceList.Items.Count == 1)
-                {
-                    SelectedInstance.Text = InstanceProvider.GetTemplateInstances()[0].InstanceId.ToString();
-                    Step2Panel.Visible = true;
-                    Step3Panel.Visible = false;
-
-                    Step3Button_Click(Step3Button, EventArgs.Empty);
-                }
-                else
-                {
-                    Step2Panel.Visible = true;
-                    Step3Panel.Visible = false;
-
-                    Step3Button_Click(Step3Button, EventArgs.Empty);
-                }
-            }
-
-            if (Step1Panel.Visible)
-            {
-                this.Page.Form.Target = "_parent";
-
-                LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ShowLogoImage", this.ShowLogoImageClientScript, true);
-
-                if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
-                {
-                    OrganizationName1.Attributes["onchange"] = "SetOrganizationUrl(this);";
-
-                    ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SetOrganizationUrlClientScript", this.SetOrganizationUrlClientScript, true);
-                }
-            }
-
-            if (Step2Panel.Visible)
-            {
-                ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "PasswordCompareValidationClientScript", this.PasswordCompareValidationClientScript, true);
+                ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SetOrganizationUrlClientScript", this.SetOrganizationUrlClientScript, true);
             }
 
             this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl("Styles.SignupOrganization.css", true)));
@@ -412,9 +227,6 @@ function InstanceRequiredValidation(source, arguments) {{
             {
                 this.LoadResources();
 
-                Step1Panel.Visible = false;
-                Step2Panel.Visible = false;
-                Step3Panel.Visible = false;
                 ErrorPanel.Visible = false;
 
                 if (GoogleProvider.IsGoogleProviderRequest(this.Request))
@@ -450,27 +262,17 @@ function InstanceRequiredValidation(source, arguments) {{
                     }
 
                     if (!string.IsNullOrEmpty(firstName))
-                        FirstName.Text = firstName;
+                        UserFirstName = firstName;
 
                     if (!string.IsNullOrEmpty(lastName))
-                        LastName.Text = lastName;
+                        UserLastName = lastName;
 
-                    HowYouHearAboutUs.Text = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
-
-                    EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
-                    EmailAndPasswordGroupRow.Visible = Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
+                    HowYouHearAboutUs = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
                 }
-
-                // Use this hack for CustomValidator for Modern theme.
-                PasswordCompareValidator.Attributes["controltovalidate2"] = ConfirmPassword.ClientID;
-                InstanceRequiredValidator.Attributes["controltovalidate2"] = SelectedInstance.ClientID;
 
                 OrganizationUrlRow.Visible = FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled;
 
                 Step1Panel.Visible = true;
-
-                BaseControl.TimeZoneListDataBind(TimeZoneList, null, false);
-                this.FillCurrencyList();
 
                 OrganizationName1.Focus();
 
@@ -491,8 +293,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
             if (textBox.ID == OrganizationName1.ID)
                 OrganizationNameTick1.Visible = (!isEmpty);
-            else if (textBox.ID == OrganizationName2.ID)
-                OrganizationNameTick2.Visible = (!isEmpty);
         }
 
         protected void Email1_TextChanged(object sender, EventArgs e)
@@ -504,8 +304,6 @@ function InstanceRequiredValidation(source, arguments) {{
             {
                 if (textBox.ID == Email1.ID)
                     EmailValidator1.Validate();
-                else if (textBox.ID == Email2.ID)
-                    EmailValidator2.Validate();
             }
         }
 
@@ -523,11 +321,6 @@ function InstanceRequiredValidation(source, arguments) {{
                 textBox = Email1;
                 tickImage = EmailTick1;
             }
-            else if (val.ID == EmailValidator2.ID)
-            {
-                textBox = Email2;
-                tickImage = EmailTick2;
-            }
 
             bool isValid = ValidateEmail(textBox.Text, out errorMessage);
             tickImage.Visible = textBox.IsValid = args.IsValid = isValid;
@@ -538,25 +331,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
                 textBox.Attributes["validatorId"] = val.ClientID;
                 textBox.Focus();
-            }
-        }
-
-        protected void PasswordValidator_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (args == null) return;
-
-            Password.IsValid = args.IsValid = false;
-
-            try
-            {
-                Password.IsValid = args.IsValid = WebApplication.LoginProvider.ValidatePassword(Password.Text);
-            }
-            catch (ArgumentException ex)
-            {
-                PasswordValidator.ErrorMessage = ex.Message;
-
-                Password.Attributes["validatorId"] = PasswordValidator.ClientID;
-                Password.Focus();
             }
         }
 
@@ -580,43 +354,6 @@ function InstanceRequiredValidation(source, arguments) {{
                 textBox.Attributes["validatorId"] = CaptchaValidator.ClientID;
                 textBox.Focus();
             }
-        }
-
-        protected void UniqueDataValidator_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (args == null) return;
-
-            string errorMessage = null;
-
-            args.IsValid = ValidateEmail(Email2.Text, out errorMessage);
-
-            if (args.IsValid)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(OrganizationUrl.Text))
-                    {
-                        CustomUrlProvider.ValidatePartialCustomUrl(OrganizationUrl.Text);
-                        args.IsValid = CustomUrlProvider.ValidateCustomUrl(OrganizationUrl.Text);
-                    }
-                }
-                catch (Exception ex) { errorMessage = ex.Message; }
-            }
-
-            SelectedInstance.CssClass = SelectedInstance.CssClass.Replace(" Invalid", string.Empty);
-
-            if (!args.IsValid)
-            {
-                UniqueDataValidator.ErrorMessage = errorMessage;
-
-                SelectedInstance.CssClass += " Invalid";
-                SelectedInstance.Attributes["validatorId"] = UniqueDataValidator.ClientID;
-            }
-        }
-
-        protected void InstanceRequiredValidator_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = (!string.IsNullOrEmpty(SelectedInstance.Text));
         }
 
         protected void OrganizationUrlValidator_ServerValidate(object source, ServerValidateEventArgs args)
@@ -684,71 +421,40 @@ function InstanceRequiredValidation(source, arguments) {{
 
 "
                     , true);
+                return;
             }
-            else
-            {
-                this.ShowStep2();
-            }
+
+            CreateNewOrganization();
         }
 
         protected void ModalStep1Button_Click(object sender, EventArgs e)
         {
-            EmailValidator2.Enabled = PasswordValidator.Enabled = PasswordCompareValidator.Enabled = false;
-            EmailAndPasswordGroupRow.Visible = Email2Row.Visible = PasswordRow.Visible = ConfirmPasswordRow.Visible = false;
-
-            this.ShowStep2();
+            CreateNewOrganization();
         }
 
-        protected void Step2Button_Click(object sender, EventArgs e)
+        protected void CreateNewOrganization()
         {
-            Page.Validate("Step2");
-            if (!Page.IsValid)
-            {
-                if (Email2.IsValid && (!EmailValidator2.IsValid))
-                {
-                    EmailValidator2.Enabled = false;
-                    Page.Validate("Step2");
-                    EmailValidator2.Enabled = true;
-
-                    if (!Page.IsValid)
-                        return;
-                }
-                else
-                    return;
-            }
-
-            Step2Panel.Visible = false;
-            Step3Panel.Visible = true;
-
-            this.NewPassword = (string.IsNullOrWhiteSpace(Password.Text) ? null : Password.Text);
-        }
-
-        protected void Step3Button_Click(object sender, EventArgs e)
-        {
-
             if (string.Compare((string)Session["NewOrg"], "1", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 UserContext user = UserContext.Current;
                 if (user != null)
                 {
-                    if (string.Compare(user.Email, Email2.Text, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(user.Email, Email1.Text, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, true, user.OrganizationId, user.InstanceId, null));
                     }
                 }
-
                 Response.Redirect(WebApplication.LoginProvider.GetLoginUrl());
             }
             else
             {
-                Guid? templateInstanceId = null;
-                if (!string.IsNullOrEmpty(SelectedInstance.Text))
-                    templateInstanceId = new Guid(SelectedInstance.Text);
+                InstanceCollection insts = Micajah.Common.Bll.Providers.InstanceProvider.GetTemplateInstances();
+                if (insts.Count == 0) throw new NotImplementedException("No Active Template Instances found to create new organization.");
 
-                Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName2.Text, null, null
-                    , null, null, null, null, null, null, CurrencyList.SelectedValue, HowYouHearAboutUs.Text
-                    , TimeZoneList.SelectedValue, templateInstanceId
-                    , Email2.Text, this.NewPassword, FirstName.Text, LastName.Text, null, null, null
+                Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName1.Text, null, null
+                    , null, null, null, null, null, null,string.Empty, HowYouHearAboutUs
+                    , insts[0].TimeZoneId, insts[0].InstanceId
+                    , Email1.Text, Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(3, 0).ToLower(), UserFirstName, UserLastName, null, null, null
                     , OrganizationUrl.Text, this.Request
                     , true);
 
@@ -764,7 +470,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
                 }
 
-                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, true, orgId, inst.InstanceId, null));
+                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email1.Text, true, orgId, inst.InstanceId, null));
             }
         }
 

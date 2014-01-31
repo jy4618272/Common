@@ -53,8 +53,17 @@
             </div>
             <div class="clear"></div>
             <div class="row">
+                <asp:Label ID="CaptchaLabel" runat="server" CssClass="Large Title"></asp:Label>
+                <telerik:RadCaptcha id="Captcha1" runat="server" ImageStorageLocation="Session" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" errormessage="" validationgroup="Step1" />
+                <asp:CustomValidator ID="CaptchaValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="Step1" CssClass="Error" OnServerValidate="CaptchaValidator_ServerValidate" />
+            </div>
+            <div class="clear"></div>
+            <div class="row">
                 <asp:Button ID="Step1Button" runat="server" CssClass="Green Large" TabIndex="4" ValidationGroup="Step1" OnClick="Step1Button_Click"></asp:Button>
             </div>
+        </div>
+        <div class="Agree">
+            <asp:Literal ID="AgreeLabel" runat="server"></asp:Literal>
         </div>
     </div>
     <div id="ModalWindow" class="modal-window" style="display: none;">
@@ -79,132 +88,6 @@
         </p>
     </div>
 </div>
-<div id="Step2Panel" runat="server">
-    <div class="Logo">
-        <asp:Image ID="LogoImage2" runat="server" />
-    </div>
-    <asp:UpdatePanel ID="UpdatePanel3" runat="server" RenderMode="Inline" UpdateMode="Always">
-        <contenttemplate>
-            <div id="Step2Form" runat="server">
-                <div class="row">
-                    <asp:Label ID="OrganizationNameLabel2" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="OrganizationName2" runat="server" Required="true" ValidationGroup="Step2"
-                        AutoPostBack="true" OnTextChanged="OrganizationName1_TextChanged" />
-                    <asp:Image ID="OrganizationNameTick2" runat="server" Visible="false" ImageAlign="AbsMiddle" />
-                </div>
-                <div class="row">
-                    <asp:Label ID="HowYouHearAboutUsLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="HowYouHearAboutUs" runat="server" ValidationGroup="Step2" MaxLength="255" />
-                </div>
-                <div class="clear"></div>
-                <div class="SectionTitle">
-                    <asp:Literal ID="PersonalInformationLabel" runat="server"></asp:Literal>
-                </div>
-                <div class="row">
-                    <asp:Label ID="FirstNameLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="FirstName" runat="server" Required="true" ValidationGroup="Step2"
-                        MaxLength="255" />
-                </div>
-                <div class="row">
-                    <asp:Label ID="LastNameLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="LastName" runat="server" Required="true" ValidationGroup="Step2" MaxLength="255" />
-                </div>
-                <div class="clear"></div>
-                <div class="SectionTitle">
-                    <asp:Literal ID="LocalSettingsLabel" runat="server"></asp:Literal>
-                </div>
-                <div class="clear"></div>
-                <div class="row">
-                    <asp:Label ID="TimeZoneLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <asp:DropDownList ID="TimeZoneList" runat="server" ValidationGroup="Step2">
-                    </asp:DropDownList>
-                </div>
-                <div class="clear"></div>
-                <div class="row">
-                    <asp:Label ID="CurrencyLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <asp:DropDownList ID="CurrencyList" runat="server" ValidationGroup="Step2">
-                    </asp:DropDownList>
-                </div>
-                <div class="clear"></div>
-                <div id="EmailAndPasswordGroupRow" runat="server">
-                    <div class="SectionTitle">
-                        <asp:Literal ID="EmailAndPasswordLabel" runat="server"></asp:Literal>
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="row" id="Email2Row" runat="server">
-                    <asp:Label ID="EmailLabel2" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="Email2" runat="server" Required="true" ValidationGroup="Step2" AutoPostBack="true" OnTextChanged="Email1_TextChanged" />
-                    <asp:Image ID="EmailTick2" runat="server" Visible="false" ImageAlign="AbsMiddle" />
-                    <asp:CustomValidator ID="EmailValidator2" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="Step2" CssClass="Error" OnServerValidate="EmailValidator1_ServerValidate" />
-                </div>
-                <div class="clear"></div>
-                <div class="row" id="PasswordRow" runat="server">
-                    <asp:Label ID="PasswordLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="Password" runat="server" Required="true" ValidationGroup="Step2" TextMode="Password" />
-                    <asp:CustomValidator ID="PasswordValidator" runat="server" Display="Dynamic" CssClass="Error" ValidationGroup="Step2" ValidateEmptyText="true" OnServerValidate="PasswordValidator_ServerValidate" />
-                </div>
-                <div class="clear"></div>
-                <div class="row" id="ConfirmPasswordRow" runat="server">
-                    <asp:Label ID="ConfirmPasswordLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <mits:TextBox ID="ConfirmPassword" runat="server" Required="true" ValidationGroup="Step2" TextMode="Password" />
-                    <asp:CustomValidator ID="PasswordCompareValidator" runat="server" Display="Dynamic" ValidationGroup="Step2" CssClass="Error" ClientValidationFunction="PasswordCompareValidation" />
-                </div>
-                <div class="clear"></div>
-                <div class="row">
-                    <asp:Label ID="CaptchaLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <telerik:RadCaptcha id="Captcha1" runat="server" ImageStorageLocation="Session" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" errormessage="" validationgroup="Step2" />
-                    <asp:CustomValidator ID="CaptchaValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="Step2" CssClass="Error" OnServerValidate="CaptchaValidator_ServerValidate" />
-                </div>
-            </div>
-        </contenttemplate>
-    </asp:UpdatePanel>
-    <div id="Step2FormButton" runat="server">
-        <asp:ValidationSummary ID="Step2ValidationSummary" runat="server" CssClass="Error Block Summary" DisplayMode="BulletList" ShowSummary="true" ValidationGroup="Step2" />
-        <div class="Step2ButtonContainer" align="center">
-            <asp:Button ID="Step2Button" runat="server" CssClass="Green X-Large" ValidationGroup="Step2" OnClick="Step2Button_Click"></asp:Button>
-        </div>
-    </div>
-    <div class="Agree">
-        <asp:Literal ID="AgreeLabel" runat="server"></asp:Literal>
-    </div>
-</div>
-<div id="Step3Panel" runat="server" style="margin-top: 100px;">
-    <div>
-        <asp:Panel CssClass="Mp_Dm" ID="pnlOrgTemplates" runat="server">
-            <h1>
-                <asp:Literal ID="CustomizeLiteral" runat="server"></asp:Literal></h1>
-            <asp:Repeater ID="InstanceList" runat="server" DataSourceID="InstanceListDataSource">
-                <HeaderTemplate>
-                    <ul id="InstanceList">
-                </HeaderTemplate>
-                <ItemTemplate>
-                    <li onclick="SelectItem(this, '<%# Eval("InstanceId") %>');" class='<%# Convert.ToString(Eval("InstanceId")) == SelectedInstance.Text ? "Cbc" : "Cb" %>'
-                        style="cursor: pointer;"><a>
-                            <h2>
-                                <%# Eval("Name") %></h2>
-                        </a>
-                        <p>
-                            <%# Eval("Description") %>
-                        </p>
-                    </li>
-                </ItemTemplate>
-                <FooterTemplate>
-                    </ul><br />
-                </FooterTemplate>
-            </asp:Repeater>
-        </asp:Panel>
-        <div id="Step3Form" runat="server">
-            <asp:Button ID="Step3Button" runat="server" CssClass="Green Large" ValidationGroup="Step3"
-                Style="float: left;" OnClick="Step3Button_Click"></asp:Button>
-            <asp:CustomValidator ID="InstanceRequiredValidator" runat="server" Display="Dynamic" ValidationGroup="Step3"
-                CssClass="Error Step3Val" ClientValidationFunction="InstanceRequiredValidation" OnServerValidate="InstanceRequiredValidator_ServerValidate" /><asp:CustomValidator
-                    ID="UniqueDataValidator" runat="server" Display="Dynamic" EnableClientScript="false"
-                    ValidationGroup="Step3" CssClass="Error Step3Val" OnServerValidate="UniqueDataValidator_ServerValidate" /><asp:TextBox
-                        ID="SelectedInstance" runat="server" ValidationGroup="Step3" Style="display: none;"></asp:TextBox>
-        </div>
-    </div>
-</div>
 <div id="ErrorPanel" runat="server">
     <div class="Logo">
         <asp:Image ID="LogoImage3" runat="server" />
@@ -224,5 +107,3 @@
         </div>
     </div>
 </div>
-<asp:ObjectDataSource ID="InstanceListDataSource" runat="server" SelectMethod="GetTemplateInstances"
-    TypeName="Micajah.Common.Bll.Providers.InstanceProvider"></asp:ObjectDataSource>
