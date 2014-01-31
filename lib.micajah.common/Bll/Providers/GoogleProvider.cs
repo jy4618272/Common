@@ -197,7 +197,18 @@ namespace Micajah.Common.Bll.Providers
                 string error = GetError(context.Request);
                 if (string.IsNullOrEmpty(error))
                 {
-                    string state = string.Format(CultureInfo.InvariantCulture, "{0:N}|{1:N}", organizationId, instanceId);
+                    string state = null;
+                    if (organizationId != Guid.Empty)
+                    {
+                        if (instanceId == Guid.Empty)
+                        {
+                            state = string.Format(CultureInfo.InvariantCulture, "{0:N}", organizationId);
+                        }
+                        else
+                        {
+                            state = string.Format(CultureInfo.InvariantCulture, "{0:N}|{1:N}", organizationId, instanceId);
+                        }
+                    }
 
                     RedirectToProvider(context, EmailScope, state, "online");
                 }
@@ -215,22 +226,24 @@ namespace Micajah.Common.Bll.Providers
                     OAuth2Parameters parameters = GetAccessToken(context, EmailScope);
 
                     string[] parts = ParseAuthorizationRequestState(context.Request);
-                    int length = parts.Length;
-
-                    if (length > 0)
+                    if (parts != null)
                     {
-                        object obj = Support.ConvertStringToType(parts[0], typeof(Guid));
-                        if (obj != null)
+                        int length = parts.Length;
+                        if (length > 0)
                         {
-                            organizationId = (Guid)obj;
-                        }
-
-                        if (length > 1)
-                        {
-                            obj = Support.ConvertStringToType(parts[1], typeof(Guid));
+                            object obj = Support.ConvertStringToType(parts[0], typeof(Guid));
                             if (obj != null)
                             {
-                                instanceId = (Guid)obj;
+                                organizationId = (Guid)obj;
+                            }
+
+                            if (length > 1)
+                            {
+                                obj = Support.ConvertStringToType(parts[1], typeof(Guid));
+                                if (obj != null)
+                                {
+                                    instanceId = (Guid)obj;
+                                }
                             }
                         }
                     }
