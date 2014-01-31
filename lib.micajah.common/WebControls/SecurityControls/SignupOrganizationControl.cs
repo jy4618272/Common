@@ -424,7 +424,7 @@ function InstanceRequiredValidation(source, arguments) {{
 
                     try
                     {
-                        GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
+                        GoogleProvider.ProcessAuthorization(this.Context, ref parameters, ref returnUrl);
                         this.OAuth2Parameters = JsonConvert.SerializeObject(parameters);
                     }
                     catch (System.Security.Authentication.AuthenticationException ex)
@@ -439,9 +439,8 @@ function InstanceRequiredValidation(source, arguments) {{
                     string email = null;
                     string firstName = null;
                     string lastName = null;
-                    string timeZone = null;
 
-                    GoogleProvider.GetUserProfile(parameters.AccessToken, out email, out firstName, out lastName, out timeZone);
+                    GoogleProvider.GetUserProfile(parameters.AccessToken, out email, out firstName, out lastName);
 
                     if (!string.IsNullOrEmpty(email))
                     {
@@ -725,7 +724,6 @@ function InstanceRequiredValidation(source, arguments) {{
 
         protected void Step3Button_Click(object sender, EventArgs e)
         {
-
             if (string.Compare((string)Session["NewOrg"], "1", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 UserContext user = UserContext.Current;
@@ -761,7 +759,7 @@ function InstanceRequiredValidation(source, arguments) {{
                     string returnUrl = null;
                     OAuth2Parameters parameters = JsonConvert.DeserializeObject<OAuth2Parameters>(this.OAuth2Parameters);
 
-                    GoogleProvider.ProcessOAuth2Authorization(this.Context, ref parameters, ref returnUrl);
+                    GoogleProvider.ProcessAuthorization(this.Context, ref parameters, ref returnUrl);
                 }
 
                 Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email2.Text, true, orgId, inst.InstanceId, null));

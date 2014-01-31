@@ -2497,14 +2497,8 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="LogOnAsUserControl_InjectButton_Text" xml:space="preserve">
     <value>Inject Me as Organization Administrator</value>
   </data>
-  <data name="GoogleProvider_AuthenticationCancelled" xml:space="preserve">
-    <value>Authentication via Google was cancelled by user.</value>
-  </data>
   <data name="GoogleProvider_AuthenticationFailed" xml:space="preserve">
     <value>Authentication via Google failed.</value>
-  </data>
-  <data name="GoogleProvider_AuthenticationFailedWithStatus" xml:space="preserve">
-    <value>Authentication via Google failed with status "{0}".</value>
   </data>
   <data name="LogOnControl_LogOnViaGoogleLink_Text" xml:space="preserve">
     <value>Google</value>
@@ -2696,5 +2690,8 @@ Do you want to link email "{1}" to this account?</value>
   </data>
   <data name="LdapInfoProvider_DomainsFound_Text" xml:space="preserve">
     <value>Received {0} domains.</value>
+  </data>
+  <data name="GoogleProvider_AuthenticationFailedWithError" xml:space="preserve">
+    <value>Authentication via Google failed with error "{0}".</value>
   </data>
 </root>

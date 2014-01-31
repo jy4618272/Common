@@ -1,7 +1,4 @@
-﻿using DotNetOpenAuth.OpenId;
-using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
-using DotNetOpenAuth.OpenId.RelyingParty;
-using Google.GData.Apps;
+﻿using Google.GData.Apps;
 using Google.GData.Client;
 using Micajah.Common.Application;
 using Micajah.Common.Configuration;
@@ -9,6 +6,7 @@ using Micajah.Common.Properties;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -18,19 +16,65 @@ namespace Micajah.Common.Bll.Providers
 {
     public static class GoogleProvider
     {
+        #region Constants
+
+        private const string EmailScope = "email";
+        private const string ProfileScope = "profile";
+        private const string UsersScope = "https://apps-apis.google.com/a/feeds/user/";
+
+        #endregion
+
         #region Private Methods
 
-        private static OpenIdRelyingParty CreateRelyingParty()
+        private static string CreateGoogleProvderRequestUrl(string url)
         {
-            HostMetaDiscoveryService googleAppsDiscovery = new HostMetaDiscoveryService
+            return url.Split('?')[0] + "?provider=google";
+        }
+
+        private static OAuth2Parameters CreateAuthorizationParameters(string scope)
+        {
+            GoogleIntegrationElement settings = FrameworkConfiguration.Current.WebApplication.Integration.Google;
+            return new OAuth2Parameters()
             {
-                UseGoogleHostedHostMeta = true
+                ClientId = settings.ClientId,
+                ClientSecret = settings.ClientSecret,
+                Scope = "openid " + scope
             };
+        }
 
-            OpenIdRelyingParty relyingParty = new OpenIdRelyingParty();
-            relyingParty.DiscoveryServices.Insert(0, googleAppsDiscovery);
+        private static string CreateAuthorizationUrl(string returnUrl, string scope, string state, string accessType)
+        {
+            OAuth2Parameters parameters = CreateAuthorizationParameters(scope);
+            parameters.RedirectUri = returnUrl;
 
-            return relyingParty;
+            if (!string.IsNullOrEmpty(accessType))
+            {
+                parameters.AccessType = accessType;
+            }
+
+            if (!string.IsNullOrEmpty(state))
+            {
+                parameters.State = System.Web.HttpUtility.UrlEncodeUnicode(state);
+            }
+
+            string url = OAuthUtil.CreateOAuth2AuthorizationUrl(parameters);
+
+            return url;
+        }
+
+        private static OAuth2Parameters GetAccessToken(HttpContext context, string scope)
+        {
+            string url = context.Request.Url.ToString();
+            string urlWithProvider = CreateGoogleProvderRequestUrl(url);
+            string accessCode = GetAccessCode(context.Request);
+
+            OAuth2Parameters parameters = CreateAuthorizationParameters(scope);
+            parameters.RedirectUri = urlWithProvider;
+            parameters.AccessCode = accessCode;
+
+            OAuthUtil.GetAccessToken(parameters);
+
+            return parameters;
         }
 
         private static string GetRequestValue(HttpRequest request, string name)
@@ -45,25 +89,44 @@ namespace Micajah.Common.Bll.Providers
             return value;
         }
 
+        private static string[] ParseAuthorizationRequestState(HttpRequest request)
+        {
+            string[] parts = null;
+
+            string state = GetRequestValue(request, "state");
+            if (!string.IsNullOrEmpty(state))
+            {
+                parts = System.Web.HttpUtility.UrlDecode(state).Split('|');
+            }
+
+            return parts;
+        }
+
+        private static void RedirectToProvider(HttpContext context, string scope, string state, string accessType)
+        {
+            string url = context.Request.Url.ToString();
+            string urlWithProvider = CreateGoogleProvderRequestUrl(url);
+            string authUrl = CreateAuthorizationUrl(urlWithProvider, scope, state, accessType);
+
+            context.Response.Redirect(authUrl);
+        }
+
         #endregion
 
         #region Internal Methods
 
-        internal static OAuth2Parameters CreateOAuth2Parameters(string returnUrl, string accessCode)
+        internal static string GetLoginUrl(Guid organizationId, Guid instanceId)
         {
-            OAuth2Parameters parameters = CreateOAuth2Parameters();
-
-            parameters.RedirectUri = returnUrl;
-            parameters.AccessCode = accessCode;
-
-            OAuthUtil.GetAccessToken(parameters);
-
-            return parameters;
-        }
-
-        internal static string GetLoginUrl()
-        {
-            return GetLoginUrl(null);
+            string url = WebApplication.LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, null, CustomUrlProvider.GetVanityUri(Guid.Empty, Guid.Empty));
+            if (url.IndexOf("?", StringComparison.OrdinalIgnoreCase) > -1)
+            {
+                url += "&provider=google";
+            }
+            else
+            {
+                url += "?provider=google";
+            }
+            return url;
         }
 
         internal static string GetLoginUrl(string domain)
@@ -71,35 +134,19 @@ namespace Micajah.Common.Bll.Providers
             return WebApplication.LoginProvider.GetLoginUrl(false) + "?provider=google" + (string.IsNullOrEmpty(domain) ? string.Empty : "&domain=" + domain);
         }
 
-        internal static string CreateGoogleProvderRequestUrl(string url)
+        internal static void ParseAuthorizationRequestState(HttpRequest request, ref string domain, ref string returnUrl)
         {
-            return url.Split('?')[0] + "?provider=google";
-        }
+            string[] parts = ParseAuthorizationRequestState(request);
+            int length = parts.Length;
 
-        internal static string CreateGoogleProvderRequestUrl(string url, string domain, string returnUrl)
-        {
-            string url2 = CreateGoogleProvderRequestUrl(url);
-            if (!string.IsNullOrEmpty(domain))
-                url2 += "&domain=" + domain;
-            if (!string.IsNullOrEmpty(returnUrl))
-                url2 += "&callback=" + returnUrl;
-            return url2;
-        }
-
-        internal static string CreateOAuth2AuthorizationRequestState(string domain, string returnUrl)
-        {
-            return string.Join("|", domain, returnUrl);
-        }
-
-        internal static void ParseOAuth2AuthorizationRequestState(HttpRequest request, ref string domain, ref string returnUrl)
-        {
-            string state = GetRequestValue(request, "state");
-            if (!string.IsNullOrEmpty(state))
+            if (length > 0)
             {
-                string[] parts = System.Web.HttpUtility.UrlDecode(state).Split('|');
                 domain = parts[0];
-                if (parts.Length > 1)
+
+                if (length > 1)
+                {
                     returnUrl = parts[1];
+                }
             }
         }
 
@@ -121,70 +168,94 @@ namespace Micajah.Common.Bll.Providers
             return false;
         }
 
-        public static string ProcessOpenIdAuthenticationRequest(HttpContext context)
+        public static bool IsGoogleProviderRequest(string url)
         {
-            OpenIdRelyingParty relyingParty = null;
-            Exception exception = null;
-
-            try
+            if (!string.IsNullOrEmpty(url))
             {
-                relyingParty = CreateRelyingParty();
-
-                IAuthenticationResponse authResponse = relyingParty.GetResponse(new HttpRequestWrapper(context.Request));
-                if (authResponse == null)
+                string[] parts = url.Split('?');
+                if (parts.Length > 1)
                 {
-                    string domain = GetDomain(context.Request);
-                    Identifier id = null;
-                    if (string.IsNullOrEmpty(domain) || (!Identifier.TryParse(domain, out id)))
-                        id = Identifier.Parse(FrameworkConfiguration.Current.WebApplication.Integration.Google.OpenIdProviderEndpointAddress);
+                    NameValueCollection query = System.Web.HttpUtility.ParseQueryString(parts[1]);
 
-                    IAuthenticationRequest request = relyingParty.CreateRequest(id);
+                    string provider = query["provider"];
+                    if (!string.IsNullOrEmpty(provider))
+                    {
+                        if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
 
-                    // Request access to e-mail address via OpenID Attribute Exchange (AX).
-                    FetchRequest fetch = new FetchRequest();
-                    fetch.Attributes.Add(new AttributeRequest(WellKnownAttributes.Contact.Email, true));
-                    request.AddExtension(fetch);
+        public static string ProcessAuthorization(HttpContext context, ref Guid organizationId, ref Guid instanceId)
+        {
+            string accessCode = GetAccessCode(context.Request);
 
-                    // Send a visitor to their Provider for the authentication.
-                    request.RedirectToProvider();
+            if (string.IsNullOrEmpty(accessCode))
+            {
+                string error = GetError(context.Request);
+                if (string.IsNullOrEmpty(error))
+                {
+                    string state = string.Format(CultureInfo.InvariantCulture, "{0:N}|{1:N}", organizationId, instanceId);
+
+                    RedirectToProvider(context, EmailScope, state, "online");
                 }
                 else
                 {
-                    if (authResponse.Status == AuthenticationStatus.Authenticated)
-                    {
-                        FetchResponse fetch = authResponse.GetExtension<FetchResponse>();
-                        if (fetch != null)
-                            return fetch.GetAttributeValue(WellKnownAttributes.Contact.Email);
-                    }
-                    else if (authResponse.Status == AuthenticationStatus.Canceled)
-                        exception = new System.Security.Authentication.AuthenticationException(Resources.GoogleProvider_AuthenticationCancelled);
-                    else
-                        exception = new System.Security.Authentication.AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.GoogleProvider_AuthenticationFailedWithStatus, authResponse.Status));
+                    string errorMessage = string.Format(CultureInfo.InvariantCulture, Resources.GoogleProvider_AuthenticationFailedWithError, error);
+
+                    throw new System.Security.Authentication.AuthenticationException(errorMessage);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                exception = new System.Security.Authentication.AuthenticationException(Resources.GoogleProvider_AuthenticationFailed, ex);
-            }
-            finally
-            {
-                if (relyingParty != null) relyingParty.Dispose();
-            }
+                try
+                {
+                    OAuth2Parameters parameters = GetAccessToken(context, EmailScope);
 
-            if (exception != null)
-                throw exception;
+                    string[] parts = ParseAuthorizationRequestState(context.Request);
+                    int length = parts.Length;
+
+                    if (length > 0)
+                    {
+                        object obj = Support.ConvertStringToType(parts[0], typeof(Guid));
+                        if (obj != null)
+                        {
+                            organizationId = (Guid)obj;
+                        }
+
+                        if (length > 1)
+                        {
+                            obj = Support.ConvertStringToType(parts[1], typeof(Guid));
+                            if (obj != null)
+                            {
+                                instanceId = (Guid)obj;
+                            }
+                        }
+                    }
+
+                    return parameters.AccessToken;
+                }
+                catch (WebException ex) // (400) Bad Request.
+                {
+                    throw new System.Security.Authentication.AuthenticationException(Resources.GoogleProvider_AuthenticationFailed, ex);
+                }
+            }
 
             return null;
         }
 
-        public static void ProcessOAuth2Authorization(HttpContext context, ref OAuth2Parameters parameters, ref string returnUrl)
+        public static void ProcessAuthorization(HttpContext context, ref OAuth2Parameters parameters, ref string returnUrl)
         {
             string domain = GetDomain(context.Request);
-            string accessCode = GetOAuth2AccessCode(context.Request);
+            string accessCode = GetAccessCode(context.Request);
             returnUrl = GetReturnUrl(context.Request);
 
             if (string.IsNullOrEmpty(domain))
-                GoogleProvider.ParseOAuth2AuthorizationRequestState(context.Request, ref domain, ref returnUrl);
+            {
+                ParseAuthorizationRequestState(context.Request, ref domain, ref returnUrl);
+            }
 
             Guid organizationId = EmailSuffixProvider.GetOrganizationId(domain);
 
@@ -195,14 +266,16 @@ namespace Micajah.Common.Bll.Providers
                 {
                     if (organizationId == Guid.Empty)
                     {
-                        // OAuth2 authorization request.
-                        context.Response.Redirect(CreateOAuth2AuthorizationUrl(CreateGoogleProvderRequestUrl(context.Request.Url.ToString())
-                            , CreateOAuth2AuthorizationRequestState(GetDomain(context.Request), GetReturnUrl(context.Request))));
+                        string state = string.Join("|", domain, returnUrl);
+
+                        RedirectToProvider(context, string.Join(" ", EmailScope, ProfileScope, UsersScope), state, "offline");
                     }
                     else // It means the organization is already registered.
                     {
                         if (string.IsNullOrEmpty(returnUrl))
+                        {
                             returnUrl = GetLoginUrl(domain);
+                        }
 
                         context.Response.Redirect(returnUrl);
                     }
@@ -210,19 +283,25 @@ namespace Micajah.Common.Bll.Providers
                 else
                 {
                     if (string.IsNullOrEmpty(returnUrl))
+                    {
                         returnUrl = "javascript:window.history.back();";
+                    }
 
-                    throw new System.Security.Authentication.AuthenticationException(GetErrorMessage(error));
+                    string errorMessage = string.Format(CultureInfo.InvariantCulture, Resources.GoogleProvider_ImportFailed, error);
+
+                    throw new System.Security.Authentication.AuthenticationException(errorMessage);
                 }
             }
             else
             {
                 if (parameters == null)
-                    parameters = CreateOAuth2Parameters(CreateGoogleProvderRequestUrl(context.Request.Url.ToString()), accessCode);
+                {
+                    parameters = GetAccessToken(context, string.Join(" ", EmailScope, ProfileScope, UsersScope));
+                }
 
                 if (organizationId != Guid.Empty)
                 {
-                    UpdateOAuth2RefreshToken(organizationId, parameters.RefreshToken);
+                    UpdateRefreshToken(organizationId, parameters.RefreshToken);
 
                     int totalcount = 0;
                     int failedCount = 0;
@@ -230,7 +309,9 @@ namespace Micajah.Common.Bll.Providers
                     ImportUsers(organizationId, domain, parameters, out totalcount, out failedCount);
 
                     if (string.IsNullOrEmpty(returnUrl))
+                    {
                         returnUrl = GetLoginUrl(domain);
+                    }
 
                     context.Response.Redirect(returnUrl);
                 }
@@ -252,27 +333,21 @@ namespace Micajah.Common.Bll.Providers
             return GetRequestValue(request, "error");
         }
 
-        public static string GetErrorMessage(string error)
-        {
-            return string.Format(CultureInfo.InvariantCulture, Resources.GoogleProvider_ImportFailed, error);
-        }
-
         public static string GetProviderName(HttpRequest request)
         {
             return GetRequestValue(request, "provider");
         }
 
-        public static string GetOAuth2AccessCode(HttpRequest request)
+        public static string GetAccessCode(HttpRequest request)
         {
             return GetRequestValue(request, "code");
         }
 
-        public static void GetUserProfile(string accessToken, out string email, out string firstName, out string lastName, out string timeZone)
+        public static void GetUserProfile(string accessToken, out string email, out string firstName, out string lastName)
         {
             email = null;
             firstName = null;
             lastName = null;
-            timeZone = null;
 
             HttpClient client = new HttpClient();
             try
@@ -280,32 +355,34 @@ namespace Micajah.Common.Bll.Providers
                 string json = client.GetStringAsync("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + accessToken).Result;
 
                 JObject obj = JObject.Parse(json);
-                email = obj["email"].ToString();
-                firstName = obj["given_name"].ToString();
-                lastName = obj["family_name"].ToString();
+
+                object value = obj["email"];
+                if (value != null)
+                {
+                    email = value.ToString();
+                }
+
+                value = obj["given_name"];
+                if (value != null)
+                {
+                    firstName = value.ToString();
+                }
+
+                value = obj["family_name"];
+                if (value != null)
+                {
+                    lastName = value.ToString();
+                }
             }
             catch (WebException) { } // 401 (Unauthorized).
             catch (HttpRequestException) { } // 401 (Unauthorized).
             finally
             {
-                if (client != null) client.Dispose();
+                if (client != null)
+                {
+                    client.Dispose();
+                }
             }
-        }
-
-        public static OAuth2Parameters CreateOAuth2Parameters()
-        {
-            GoogleIntegrationElement settings = FrameworkConfiguration.Current.WebApplication.Integration.Google;
-            return new OAuth2Parameters() { ClientId = settings.ClientId, ClientSecret = settings.ClientSecret, Scope = settings.Scope };
-        }
-
-        public static string CreateOAuth2AuthorizationUrl(string returnUrl, string state)
-        {
-            OAuth2Parameters parameters = CreateOAuth2Parameters();
-
-            parameters.RedirectUri = returnUrl;
-            parameters.State = System.Web.HttpUtility.UrlEncodeUnicode(state);
-
-            return OAuthUtil.CreateOAuth2AuthorizationUrl(parameters);
         }
 
         public static AppsService CreateAppsService(string domain, OAuth2Parameters parameters)
@@ -397,7 +474,7 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        public static void UpdateOAuth2RefreshToken(Guid organizationId, string refreshToken)
+        public static void UpdateRefreshToken(Guid organizationId, string refreshToken)
         {
             if (!string.IsNullOrEmpty(refreshToken))
             {

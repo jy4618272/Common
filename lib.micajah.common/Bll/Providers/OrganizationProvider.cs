@@ -188,7 +188,7 @@ namespace Micajah.Common.Bll.Providers
             if (string.IsNullOrEmpty(domain))
             {
                 string returnUrl = null;
-                GoogleProvider.ParseOAuth2AuthorizationRequestState(request, ref domain, ref returnUrl);
+                GoogleProvider.ParseAuthorizationRequestState(request, ref domain, ref returnUrl);
             }
 
             if (!string.IsNullOrEmpty(domain))
