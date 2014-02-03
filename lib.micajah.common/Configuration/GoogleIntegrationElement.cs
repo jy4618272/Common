@@ -80,20 +80,6 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the space delimited set of permissions the application requests.
-        /// </summary>
-        [ConfigurationProperty("scope")]
-        public string Scope
-        {
-            get
-            {
-                string value = (string)this["scope"];
-                return (string.IsNullOrEmpty(value) ? "https://apps-apis.google.com/a/feeds/user/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile" : value);
-            }
-            set { this["scope"] = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the code for Google AdWords conversion tracking.
         /// </summary>
         [ConfigurationProperty("conversionCode")]

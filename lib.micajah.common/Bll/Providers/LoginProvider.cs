@@ -786,28 +786,41 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>true if the login name was updated successfully; otherwise, false.</returns>
         public virtual bool ChangeLoginName(Guid loginId, string loginName, bool sendEmailNotification)
         {
-            bool success = false;
-            if (string.IsNullOrEmpty(loginName)) return false;
-
-            string originalLoginName = GetLoginName(loginId);
-            if (string.Compare(loginName, originalLoginName, StringComparison.OrdinalIgnoreCase) != 0)
+            if (!string.IsNullOrEmpty(loginName))
             {
-                if (LoginNameExists(loginName))
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, Resources.LoginProvider_ErrorMessage_LoginAlreadyExists, loginName, originalLoginName));
-                else
+                string originalLoginName = GetLoginName(loginId);
+                if (string.Compare(loginName, originalLoginName, StringComparison.OrdinalIgnoreCase) != 0)
                 {
-                    success = UpdateLogin(loginId, loginName);
-                    if (sendEmailNotification)
+                    DataRowView drv = GetLogin(loginName);
+                    if (drv != null)
                     {
-                        UserContext user = UserContext.Current;
-                        if (user == null)
-                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), Guid.Empty, null);
-                        else
-                            UserProvider.SendChangeLoginEmail(GetEmail(loginId), user.OrganizationId, user.Email);
+                        Guid existingLoginId = (Guid)drv["LoginId"];
+                        if (loginId == existingLoginId)
+                        {
+                            return false;
+                        }
+
+                        throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, Resources.LoginProvider_ErrorMessage_LoginAlreadyExists, loginName, originalLoginName));
+                    }
+                    else
+                    {
+                        bool result = UpdateLogin(loginId, loginName);
+
+                        if (sendEmailNotification)
+                        {
+                            UserContext user = UserContext.Current;
+                            if (user == null)
+                                UserProvider.SendChangeLoginEmail(GetEmail(loginId), Guid.Empty, null);
+                            else
+                                UserProvider.SendChangeLoginEmail(GetEmail(loginId), user.OrganizationId, user.Email);
+                        }
+
+                        return result;
                     }
                 }
             }
-            return success;
+
+            return false;
         }
 
         /// <summary>

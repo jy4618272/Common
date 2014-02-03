@@ -823,19 +823,32 @@ namespace Micajah.Common.Security
             if (http != null)
             {
                 if (http.Request != null)
+                {
                     returnUrl = http.Request.Url.PathAndQuery;
+                }
             }
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
                 if (!CustomUrlProvider.IsDefaultVanityUrl(http))
+                {
                     return;
+                }
             }
 
             Guid webSiteId = OrganizationProvider.GetWebsiteIdFromCache(organizationId);
-            if (WebsiteProvider.GetWebsiteIdByUrlFromCache(WebApplication.Hosts) != webSiteId)
+            Guid webSiteIdByUrl = WebsiteProvider.GetWebsiteIdByUrlFromCache(WebApplication.Hosts);
+            if (webSiteIdByUrl != webSiteId)
             {
-                (new LoginProvider()).SignOut(false, WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl));
+                if (GoogleProvider.IsGoogleProviderRequest(returnUrl))
+                {
+                    returnUrl = null;
+                }
+
+                string url = WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl);
+
+                LoginProvider loginProvider = new LoginProvider();
+                loginProvider.SignOut(false, url);
             }
         }
 
