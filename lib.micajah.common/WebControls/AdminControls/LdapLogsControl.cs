@@ -1,11 +1,7 @@
+using Micajah.Common.Properties;
+using Micajah.Common.WebControls.SetupControls;
 using System;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -14,12 +10,6 @@ namespace Micajah.Common.WebControls.AdminControls
     /// </summary>
     public class LdapLogsControl : BaseControl
     {
-        #region Members
-
-        private UserContext m_UserContext;
-
-        #endregion
-        
         #region Overriden Methods
 
         protected override void ListInitialize()
@@ -37,13 +27,6 @@ namespace Micajah.Common.WebControls.AdminControls
             List.Columns[0].HeaderText = Resources.LdapLogsControl_List_CreatedTimeColumn_HeaderText;
             List.Columns[1].HeaderText = Resources.LdapLogsControl_List_MessageColumn_HeaderText;
             List.Columns[2].HeaderText = Resources.LdapLogsControl_List_IsErrorColumn_HeaderText;
-        }
-
-        protected override void OnInit(EventArgs e)
-        {
-            m_UserContext = UserContext.Current;
-
-            base.OnInit(e);
         }
 
         #endregion

@@ -128,15 +128,6 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
-        /// Gets the threads, which are started when the web application starts.
-        /// </summary>
-        [ConfigurationProperty("startThreads", IsDefaultCollection = true)]
-        public StartThreadElementCollection StartThreads
-        {
-            get { return (StartThreadElementCollection)this["startThreads"]; }
-        }
-
-        /// <summary>
         /// The security settings.
         /// </summary>
         [ConfigurationProperty("security")]
@@ -160,7 +151,6 @@ namespace Micajah.Common.Configuration
             this.Settings.AddRange(section.Settings);
             this.Entities.AddRange(section.Entities);
             this.RulesEngines.AddRange(section.RulesEngines);
-            this.StartThreads.AddRange(section.StartThreads);
             if (string.IsNullOrEmpty(section.Security.PrivateKey))
                 this.Security.PrivateKey = section.Security.PrivateKey;
         }

@@ -6,6 +6,7 @@ using Micajah.Common.Dal;
 using Micajah.Common.Dal.OAuthDataSetTableAdapters;
 using Micajah.Common.Security;
 using System;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -60,7 +61,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
             return ((OAuthDataSet.OAuthConsumerRow)GetConsumer(consumerKey)).ConsumerId;
         }
 
-        private OAuthDataSet.OAuthTokenRow GetOAuthTokenRow(string token)
+        private static OAuthDataSet.OAuthTokenRow GetOAuthTokenRow(string token)
         {
             using (OAuthTokenTableAdapter adapter = new OAuthTokenTableAdapter())
             {
@@ -317,7 +318,7 @@ namespace Micajah.Common.Bll.Providers.OAuth
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < randomData.Length; i++)
             {
-                sb.Append(randomData[i].ToString("x2"));
+                sb.Append(randomData[i].ToString("x2", CultureInfo.CurrentCulture));
             }
 
             return sb.ToString();

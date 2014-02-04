@@ -168,10 +168,10 @@ namespace Micajah.Common.WebControls.SetupControls
         private void EditForm_ChangeType(RadTreeNode editedNode)
         {
             object obj = Support.ConvertStringToType(editedNode.Value, typeof(Guid));
-            EditForm_ChangeType((ActionType)Enum.Parse(typeof(ActionType), editedNode.Category), ((obj == null) ? Guid.Empty : (Guid)obj), null);
+            EditForm_ChangeType((ActionType)Enum.Parse(typeof(ActionType), editedNode.Category), ((obj == null) ? Guid.Empty : (Guid)obj));
         }
 
-        private void EditForm_ChangeType(ActionType type, Guid actionId, Guid? parentActionId)
+        private void EditForm_ChangeType(ActionType type, Guid actionId)
         {
             EditForm.Fields[2].Visible = true; // NavigateUrl
             EditForm.Fields[3].Visible = true; // OrderNumber

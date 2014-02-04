@@ -130,34 +130,6 @@ namespace Micajah.Common.Bll
 
         #region Internal Methods
 
-        /// <summary>
-        /// Creates the instance of the specified class.
-        /// </summary>
-        /// <param name="classFullName">The System.Type.FullName of the type to create.</param>
-        /// <returns>The instance of the specified class.</returns>
-        internal static object CreateInstance(string classFullName)
-        {
-            return CreateInstance(classFullName, null);
-        }
-
-        /// <summary>
-        /// Creates the instance of the specified class.
-        /// </summary>
-        /// <param name="classFullName">The System.Type.FullName of the type to create.</param>
-        /// <param name="args">An array of type Object containing the arguments to be passed to the constructor of the class.</param>
-        /// <returns>The instance of the specified class.</returns>
-        internal static object CreateInstance(string classFullName, object[] args)
-        {
-            object classInstance = null;
-            if (!string.IsNullOrEmpty(classFullName))
-            {
-                Type type = BuildManager.GetType(classFullName, false);
-                if ((type != null) && type.IsClass)
-                    classInstance = type.Assembly.CreateInstance(classFullName, false, BindingFlags.Public | BindingFlags.Instance, null, args, null, null);
-            }
-            return classInstance;
-        }
-
         internal static HtmlLink CreateStyleSheetLink(string styleSheetUrl)
         {
             return CreateStyleSheetLink(styleSheetUrl, null);
@@ -700,7 +672,7 @@ namespace Micajah.Common.Bll
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hash.Length; i++)
             {
-                sb.Append(hash[i].ToString("x2"));
+                sb.Append(hash[i].ToString("x2", CultureInfo.CurrentCulture));
             }
 
             return sb.ToString();

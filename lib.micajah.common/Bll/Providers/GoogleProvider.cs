@@ -454,7 +454,7 @@ namespace Micajah.Common.Bll.Providers
                                     if (idx > -1)
                                     {
                                         groupId = (Guid)list.GetKey(idx);
-                                        groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                        groups = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", groups, groupId.ToString());
                                     }
                                 }
 
@@ -465,13 +465,13 @@ namespace Micajah.Common.Bll.Providers
                                     if (idx > -1)
                                     {
                                         groupId = (Guid)list.GetKey(idx);
-                                        groups = string.Format("{0}, {1}", groups, groupId.ToString());
+                                        groups = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", groups, groupId.ToString());
                                     }
                                 }
                             }
                         }
 
-                        Guid loginId = UserProvider.AddUserToOrganization(string.Format("{0}@{1}", userEntry.Login.UserName, service.Domain), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
+                        Guid loginId = UserProvider.AddUserToOrganization(string.Format(CultureInfo.InvariantCulture, "{0}@{1}", userEntry.Login.UserName, service.Domain), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
                             , null, null, null, null, null
                             , null, null, null, null, null, null
                             , groups, organizationId

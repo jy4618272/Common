@@ -255,7 +255,7 @@ namespace Micajah.Common.Bll.Providers
             return drv;
         }
 
-        private List<IUser> FindLocalUsers(string userName)
+        private static List<IUser> FindLocalUsers(string userName)
         {
             List<IUser> users = new List<IUser>();
             bool isDomainSearhed = false;

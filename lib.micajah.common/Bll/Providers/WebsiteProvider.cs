@@ -55,7 +55,7 @@ namespace Micajah.Common.Bll.Providers
 
         #region Cache Methods
 
-        internal static Guid GetWebsiteIdByUrlFromCache(params string[] urls)
+        internal static Guid GetWebsiteIdByUrlFromCache(IList<string> urls)
         {
             Dictionary<Guid, string> dict = GetWebsiteUrlsFromCache();
 

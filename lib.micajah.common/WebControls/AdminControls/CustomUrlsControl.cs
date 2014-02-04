@@ -170,7 +170,6 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void EditForm_DataBound(object sender, System.EventArgs e)
         {
             Guid? instanceId = null;
-            string partialCustomUrl = string.Empty;
             if (EditForm.CurrentMode == DetailsViewMode.Edit)
             {
                 MasterDataSet.CustomUrlRow row = EditForm.DataItem as MasterDataSet.CustomUrlRow;
@@ -188,7 +187,6 @@ namespace Micajah.Common.WebControls.AdminControls
                         NameLabel.Text = OrganizationProvider.GetName(row.OrganizationId);
                         EditForm.ObjectName = Resources.CustomUrlsControl_EditForm_ObjectName_Organization;
                     }
-                    partialCustomUrl = row.PartialCustomUrl;
                     this.SelectInstance(instanceId);
                 }
             }

@@ -1,13 +1,13 @@
-using System;
-using System.Data;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
+using System;
+using System.Data;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -174,7 +174,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void LogOnPageButton_Click(object sender, EventArgs e)
         {
             string url = null;
-            if (ReturnUrl != "")
+            if (!string.IsNullOrEmpty(ReturnUrl))
             {
                 url = ReturnUrl;
             }

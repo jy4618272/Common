@@ -272,11 +272,11 @@ namespace Micajah.Common.Bll.Providers
                 if (string.IsNullOrEmpty(fullCustomUrl))
                     fullCustomUrl = string.Empty;
                 else
-                    fullCustomUrl = fullCustomUrl.ToLower(CultureInfo.CurrentCulture);
+                    fullCustomUrl = fullCustomUrl.ToLowerInvariant();
                 if (string.IsNullOrEmpty(partialCustomUrl))
                     partialCustomUrl = string.Empty;
                 else
-                    partialCustomUrl = partialCustomUrl.ToLower(CultureInfo.CurrentCulture);
+                    partialCustomUrl = partialCustomUrl.ToLowerInvariant();
 
                 adapter.Insert(customUrlId, organizationId, instanceId, fullCustomUrl, partialCustomUrl);
 
@@ -318,10 +318,10 @@ namespace Micajah.Common.Bll.Providers
                     if (row == null)
                         row = GetCustomUrl(customUrlId);
 
-                    if (!ValidateCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl) && (row != null && string.Compare(row.FullCustomUrl, fullCustomUrl, true) != 0))
+                    if (!ValidateCustomUrl(fullCustomUrl) && !string.IsNullOrEmpty(fullCustomUrl) && (row != null && string.Compare(row.FullCustomUrl, fullCustomUrl, StringComparison.OrdinalIgnoreCase) != 0))
                         throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
-                    if (!ValidateCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl) && (row != null && string.Compare(row.PartialCustomUrl, partialCustomUrl, true) != 0))
+                    if (!ValidateCustomUrl(partialCustomUrl) && !string.IsNullOrEmpty(partialCustomUrl) && (row != null && string.Compare(row.PartialCustomUrl, partialCustomUrl, StringComparison.OrdinalIgnoreCase) != 0))
                         throw new ConstraintException(Resources.CustomUrlProvider_CustomUrlAlreadyExists);
 
                     if (string.IsNullOrEmpty(fullCustomUrl))

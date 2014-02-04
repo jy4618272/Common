@@ -737,7 +737,7 @@ namespace Micajah.Common.Bll.Providers
             UserContext user = UserContext.Current;
             Guid instanceId = InsertInstance(name, description, false, null, null, 0, 0, null, active, null, false, beta, null, user.OrganizationId, user.Email, null, true, false, false, templateInstanceId, null);
             if (!string.IsNullOrEmpty(vanityUrl))
-                CustomUrlProvider.InsertCustomUrl(user.OrganizationId, instanceId, null, vanityUrl.ToLowerInvariant());
+                CustomUrlProvider.InsertCustomUrl(user.OrganizationId, instanceId, null, vanityUrl);
             return instanceId;
         }
 

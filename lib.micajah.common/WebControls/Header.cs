@@ -157,7 +157,7 @@ namespace Micajah.Common.WebControls
             }
             finally
             {
-                if (div != null) ul.Dispose();
+                if (div != null) div.Dispose();
                 if (ul != null) ul.Dispose();
                 if (li != null) li.Dispose();
                 if (link != null) link.Dispose();

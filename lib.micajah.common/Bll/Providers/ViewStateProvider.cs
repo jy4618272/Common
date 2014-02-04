@@ -27,7 +27,6 @@ namespace Micajah.Common.Bll.Providers
                     command.Parameters.Add("@Now", SqlDbType.DateTime).Value = DateTime.UtcNow;
                     connection.Open();
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
         }
@@ -65,7 +64,7 @@ namespace Micajah.Common.Bll.Providers
                             sr = new StreamReader(stream);
                             statePair = (stateFormatter.Deserialize(sr.ReadToEnd()) as Pair);
                         }
-                        connection.Close();
+
                         return statePair;
                     }
                 }
@@ -94,7 +93,6 @@ namespace Micajah.Common.Bll.Providers
                     command.Parameters.Add("@ExpirationTime", SqlDbType.DateTime).Value = DateTime.UtcNow.AddMinutes(FrameworkConfiguration.Current.WebApplication.ViewState.ExpirationTimeout);
                     connection.Open();
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
             }
         }

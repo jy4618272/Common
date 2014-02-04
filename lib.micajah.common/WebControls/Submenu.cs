@@ -2,7 +2,7 @@ using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
-using Micajah.Common.Security;
+using Micajah.Common.Properties;
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
@@ -267,7 +267,7 @@ namespace Micajah.Common.WebControls
                         liMain = new HtmlGenericControl("li");
                         liMain.Attributes["class"] = "L";
                         lbl = new Label();
-                        lbl.Text = "&nbsp;";
+                        lbl.Text = Resources.NonBreakingSpace;
                         liMain.Controls.Add(lbl);
                         ulMain.Controls.Add(liMain);
                     }
@@ -404,7 +404,7 @@ namespace Micajah.Common.WebControls
                     if (!string.IsNullOrEmpty(descr))
                         btn.Attributes["title"] = descr;
                     if (action.SubmenuItemWidth > 0)
-                        btn.Style[HtmlTextWriterStyle.Width] = action.SubmenuItemWidth.ToString() + "px";
+                        btn.Style[HtmlTextWriterStyle.Width] = action.SubmenuItemWidth.ToString(CultureInfo.InvariantCulture) + "px";
                     btn.Attributes["onclick"] = string.Format(CultureInfo.InvariantCulture, "location.href=\"{0}\";return false;", action.CustomAbsoluteNavigateUrl);
                     return btn;
                 }

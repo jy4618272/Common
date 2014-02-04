@@ -348,11 +348,11 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             base.LoadResources();
             List.Columns[0].HeaderText = Resources.OrganizationsControl_List_NameColumn_HeaderText;
-            List.Columns[1].HeaderText = "Parent";
-            List.Columns[2].HeaderText = "Expiration";
+            List.Columns[1].HeaderText = Resources.OrganizationsControl_List_ParentColumn_HeaderText;
+            List.Columns[2].HeaderText = Resources.OrganizationsControl_List_ExpirationColumn_HeaderText;
             EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_LogoImageField_HeaderText;
             EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_DatabaseIdField_HeaderText;
-            EditForm.Fields[5].HeaderText = "Parent Organization";
+            EditForm.Fields[5].HeaderText = Resources.OrganizationsControl_EditForm_ParentOrganizationField_HeaderText;
             EditForm.Fields[12].HeaderText = Resources.OrganizationsControl_EditForm_CreatedTimeField_HeaderText;
         }
 

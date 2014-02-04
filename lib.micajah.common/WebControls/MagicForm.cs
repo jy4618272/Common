@@ -1,3 +1,8 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -8,11 +13,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls
 {
@@ -719,22 +719,31 @@ namespace Micajah.Common.WebControls
                     writer.RenderBeginTag(HtmlTextWriterTag.Td);
 
                     int count = m_CaptionControlsContainer.Controls.Count;
+
                     StringBuilder sb = new StringBuilder();
-                    using (StringWriter sw = new StringWriter(sb, CultureInfo.InvariantCulture))
+                    StringWriter sw = null;
+                    try
                     {
-                        using (HtmlTextWriter wr = new HtmlTextWriter(sw))
+                        sw = new StringWriter(sb, CultureInfo.InvariantCulture);
+                        HtmlTextWriter wr = new HtmlTextWriter(sw);
+
+                        foreach (Control ctl in m_CaptionControlsContainer.Controls)
                         {
-                            foreach (Control ctl in m_CaptionControlsContainer.Controls)
+                            count--;
+                            ctl.RenderControl(wr);
+                            if (!Support.StringIsNullOrEmpty(sb.ToString()))
                             {
-                                count--;
-                                ctl.RenderControl(wr);
-                                if (!Support.StringIsNullOrEmpty(sb.ToString()))
-                                {
-                                    writer.Write(sb.ToString());
-                                    if (count > 1) writer.Write("&nbsp;&nbsp;&nbsp;&nbsp;");
-                                }
-                                sb.Remove(0, sb.Length);
+                                writer.Write(sb.ToString());
+                                if (count > 1) writer.Write("&nbsp;&nbsp;&nbsp;&nbsp;");
                             }
+                            sb.Remove(0, sb.Length);
+                        }
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Dispose();
                         }
                     }
 
@@ -1262,7 +1271,7 @@ namespace Micajah.Common.WebControls
         /// <param name="topLabels">Whether the text labels are placed above the control.</param>
         public static void ApplyStyle(Table table, ColorScheme scheme, bool applyToRowsOnly, bool topLabels)
         {
-            ApplyStyle(table, scheme, false, false, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme);
+            ApplyStyle(table, scheme, applyToRowsOnly, topLabels, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme);
         }
 
         /// <summary>
@@ -1363,7 +1372,7 @@ namespace Micajah.Common.WebControls
         /// <param name="topLabels">Whether the text labels are placed above the control.</param>
         public static void ApplyStyle(HtmlTable table, ColorScheme scheme, bool applyToRowsOnly, bool topLabels)
         {
-            ApplyStyle(table, scheme, false, false, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme);
+            ApplyStyle(table, scheme, applyToRowsOnly, topLabels, FrameworkConfiguration.Current.WebApplication.MasterPage.Theme);
         }
 
         /// <summary>

@@ -448,12 +448,15 @@ namespace Micajah.Common.WebControls.SecurityControls
             else
             {
                 InstanceCollection insts = Micajah.Common.Bll.Providers.InstanceProvider.GetTemplateInstances();
-                if (insts.Count == 0) throw new NotImplementedException("No Active Template Instances found to create new organization.");
+                if (insts.Count == 0)
+                    throw new NotImplementedException("No Active Template Instances found to create new organization.");
+
+                string pwd = Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(3, 0).ToLowerInvariant();
 
                 Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName1.Text, null, null
-                    , null, null, null, null, null, null,string.Empty, HowYouHearAboutUs
+                    , null, null, null, null, null, null, string.Empty, HowYouHearAboutUs
                     , insts[0].TimeZoneId, insts[0].InstanceId
-                    , Email1.Text, Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(3, 0).ToLower(), UserFirstName, UserLastName, null, null, null
+                    , Email1.Text, pwd, UserFirstName, UserLastName, null, null, null
                     , OrganizationUrl.Text, this.Request
                     , true);
 

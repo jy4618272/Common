@@ -1,15 +1,15 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Threading;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Micajah.Common.Application;
+﻿using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
+using System;
+using System.Data;
+using System.Globalization;
+using System.Threading;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -123,14 +123,14 @@ namespace Micajah.Common.WebControls.AdminControls
             thread.CurrentUICulture = CultureInfo.CurrentUICulture;
             thread.Priority = ThreadPriority.Lowest;
             thread.IsBackground = true;
-            thread.Start(UserContext.Current.OrganizationId.ToString());
+            thread.Start(UserContext.Current.OrganizationId);
 
             GetUserGroupsButton.Enabled = false;
         }
 
         protected void LdapProcessGetUserGroups(object organizationId)
         {
-            string processId = string.Format("GetUserGroups_{0}_{1}", (string)organizationId, this.UserId);
+            string processId = string.Format("GetUserGroups_{0}_{1}", organizationId, this.UserId);
             Bll.LdapProcess ldapProcess = null;
             try
             {
@@ -145,7 +145,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 ldapProcess.Message = string.Empty;
                 ldapProcess.Data = null;
                 LdapInfoProvider.LdapProcesses.Add(ldapProcess);
-                ldapProcess.Data = LdapInfoProvider.GetUserLdapGroups(new Guid((string)organizationId), this.UserId);
+                ldapProcess.Data = LdapInfoProvider.GetUserLdapGroups((Guid)organizationId, this.UserId);
                 ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
             }
             catch (Exception ex)
@@ -291,7 +291,7 @@ namespace Micajah.Common.WebControls.AdminControls
             {
                 string error = string.Format(CultureInfo.InvariantCulture, "<br/>{0}", ex.ToString().Replace("\r\n", "<br/>"));
                 LdapInfoProvider.InsertLdapLog(userContext.OrganizationId, true, error);
-                
+
                 ldapProcess = LdapInfoProvider.LdapProcesses.Find(x => x.ProcessId == processId);
                 if (ldapProcess != null)
                 {

@@ -175,9 +175,6 @@
     <Compile Include="Bll\Providers\OAuth\TokenProvider.cs" />
     <Compile Include="Bll\Providers\VersionProvider.cs" />
     <Compile Include="Bll\Providers\ViewStateProvider.cs" />
-    <Compile Include="Bll\StartThread.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Bll\Entity.cs" />
     <Compile Include="Bll\EntityEvent.cs" />
     <Compile Include="Bll\EntityField.cs" />
@@ -268,7 +265,6 @@
     <Compile Include="Configuration\TextConfigurationElement.cs" />
     <Compile Include="Configuration\ValidationElement.cs" />
     <Compile Include="Configuration\SettingValueElement.cs" />
-    <Compile Include="Configuration\StartThreadElement.cs" />
     <Compile Include="Configuration\SubmenuElement.cs" />
     <Compile Include="Configuration\SupportElement.cs" />
     <Compile Include="Configuration\WebApplicationElement.cs" />

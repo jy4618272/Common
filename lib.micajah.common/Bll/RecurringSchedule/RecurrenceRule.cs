@@ -1,10 +1,10 @@
+using Micajah.Common.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.Bll.RecurringSchedule
 {
@@ -1337,7 +1337,6 @@ namespace Micajah.Common.Bll.RecurringSchedule
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> to populate with data.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) for this serialization.</param>
-        [System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.LinkDemand, Flags = System.Security.Permissions.SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info != null)

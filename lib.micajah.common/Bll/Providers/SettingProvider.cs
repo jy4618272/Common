@@ -720,8 +720,6 @@ namespace Micajah.Common.Bll.Providers
             FillSettingsByOrganizationValues(ref settings, organizationSettingsValues);
             FillSettingsByInstanceValues(ref settings, instanceSettingsValues);
 
-            Type booleanType = typeof(bool);
-
             foreach (Guid groupId in dict.Keys)
             {
                 Dictionary<Guid, string> values = dict[groupId];

@@ -1,6 +1,5 @@
 using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.Dal.MasterDataSetTableAdapters;
 using Micajah.Common.LdapAdapter;
@@ -15,26 +14,12 @@ namespace Micajah.Common.Security
     /// <summary>
     /// The class that works with local application login tables.
     /// </summary>
-    class LdapIntegration : ILdapIntegration, IDisposable
+    public class LdapIntegration : ILdapIntegration, IDisposable
     {
         #region Members
 
         private SqlConnection m_Connection;
         ILogger ApplicationLogger;
-
-        #endregion
-
-        #region Private Properties
-
-        private SqlConnection Connection
-        {
-            get
-            {
-                if ((m_Connection == null) || (string.IsNullOrEmpty(m_Connection.ConnectionString)))
-                    m_Connection = new SqlConnection(FrameworkConfiguration.Current.WebApplication.ConnectionString);
-                return m_Connection;
-            }
-        }
 
         #endregion
 

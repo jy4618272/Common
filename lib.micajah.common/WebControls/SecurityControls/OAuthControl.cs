@@ -122,7 +122,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void AllowAccessButton_Click(object sender, EventArgs e)
         {
             if (UserContext.OAuthAuthorizationSecret != OAuthAuthorizationSecToken.Value)
-                throw new ArgumentException(); // Probably someone trying to hack in.
+                throw new ArgumentException(Resources.OAuthControl_InvalidAuthorizationSecret); // Probably someone trying to hack in.
 
             string token = ((ITokenContainingMessage)m_PendingRequest).Token;
 

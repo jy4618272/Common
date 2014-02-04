@@ -4325,6 +4325,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;nbsp;.
+        /// </summary>
+        internal static string NonBreakingSpace {
+            get {
+                return ResourceManager.GetString("NonBreakingSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close this notification.
         /// </summary>
         internal static string NoticeMessageBox_CloseLink_ToolTip {
@@ -4420,6 +4429,15 @@ namespace Micajah.Common.Properties {
         internal static string OAuthControl_DenyAccessButton_Text {
             get {
                 return ResourceManager.GetString("OAuthControl_DenyAccessButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid authorization secret.
+        /// </summary>
+        internal static string OAuthControl_InvalidAuthorizationSecret {
+            get {
+                return ResourceManager.GetString("OAuthControl_InvalidAuthorizationSecret", resourceCulture);
             }
         }
         
@@ -5054,6 +5072,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parent Organization.
+        /// </summary>
+        internal static string OrganizationsControl_EditForm_ParentOrganizationField_HeaderText {
+            get {
+                return ResourceManager.GetString("OrganizationsControl_EditForm_ParentOrganizationField_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trial.
         /// </summary>
         internal static string OrganizationsControl_EditForm_TrialField_Text {
@@ -5117,11 +5144,29 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expiration.
+        /// </summary>
+        internal static string OrganizationsControl_List_ExpirationColumn_HeaderText {
+            get {
+                return ResourceManager.GetString("OrganizationsControl_List_ExpirationColumn_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string OrganizationsControl_List_NameColumn_HeaderText {
             get {
                 return ResourceManager.GetString("OrganizationsControl_List_NameColumn_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent.
+        /// </summary>
+        internal static string OrganizationsControl_List_ParentColumn_HeaderText {
+            get {
+                return ResourceManager.GetString("OrganizationsControl_List_ParentColumn_HeaderText", resourceCulture);
             }
         }
         
@@ -6814,6 +6859,15 @@ namespace Micajah.Common.Properties {
         internal static string StartControl_WatchLink_Text {
             get {
                 return ResourceManager.GetString("StartControl_WatchLink_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

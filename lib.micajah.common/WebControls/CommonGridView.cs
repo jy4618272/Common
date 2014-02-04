@@ -1961,10 +1961,8 @@ namespace Micajah.Common.WebControls
             StringBuilder sb = new StringBuilder();
             using (StringWriter sw = new StringWriter(sb, CultureInfo.InvariantCulture))
             {
-                using (HtmlTextWriter wr = new HtmlTextWriter(sw))
-                {
-                    this.FilterRow.RenderControl(wr);
-                }
+                HtmlTextWriter wr = new HtmlTextWriter(sw);
+                this.FilterRow.RenderControl(wr);
             }
 
             string filterString = sb.ToString();

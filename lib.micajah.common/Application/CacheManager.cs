@@ -68,7 +68,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Gets or sets the default timeout for the cache. By default it is 23.5 hours.
         /// </summary>
-        public virtual TimeSpan DefaultTimeout { get; set; }
+        public TimeSpan DefaultTimeout { get; set; }
 
         #endregion
 
@@ -78,7 +78,7 @@ namespace Micajah.Common.Application
         /// Removes the specified item from System.Web.HttpContext object for the current HTTP request.
         /// </summary>
         /// <param name="key">A System.String identifier for the cache item to remove.</param>
-        private void RemoveFromHttpContext(string key)
+        private static void RemoveFromHttpContext(string key)
         {
             HttpContext http = HttpContext.Current;
             if (http != null)
@@ -144,7 +144,7 @@ namespace Micajah.Common.Application
         public void Put(string key, object value)
         {
             this.PutToCache(key, value);
-            this.RemoveFromHttpContext(key);
+            RemoveFromHttpContext(key);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace Micajah.Common.Application
         public void Put(string key, object value, TimeSpan timeout)
         {
             this.PutToCache(key, value, timeout);
-            this.RemoveFromHttpContext(key);
+            RemoveFromHttpContext(key);
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Micajah.Common.Application
         public void Remove(string key)
         {
             this.RemoveFromCache(key);
-            this.RemoveFromHttpContext(key);
+            RemoveFromHttpContext(key);
         }
 
         #endregion

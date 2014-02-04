@@ -780,7 +780,7 @@ namespace Micajah.Common.WebControls
                     for (var idx = 0; idx < (this.RepeatColumnsInternal - cellsCount); idx++)
                     {
                         TableCell td = new TableCell();
-                        td.Text = "&nbsp;";
+                        td.Text = Resources.NonBreakingSpace;
                         row.Cells.Add(td);
                     }
 

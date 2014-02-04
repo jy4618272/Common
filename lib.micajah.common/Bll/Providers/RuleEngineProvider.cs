@@ -45,18 +45,6 @@ namespace Micajah.Common.Bll.Providers
 
         #endregion
 
-        #region Private Methods
-
-        private static void RemoveFromCache()
-        {
-            lock (s_RulesEnginesSyncRoot)
-            {
-                CacheManager.Current.Remove("mc.RulesEngines");
-            }
-        }
-
-        #endregion
-
         #region Rule Methods
 
         /// <summary>

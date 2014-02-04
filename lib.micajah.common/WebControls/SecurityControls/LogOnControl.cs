@@ -766,7 +766,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                             {
                                 foreach (string domain in EmailSuffixProvider.GetEmailSuffixesList(org.OrganizationId))
                                 {
-                                    if (LoginTextBox.Text.IndexOf(domain) != -1)
+                                    if (LoginTextBox.Text.IndexOf(domain, StringComparison.OrdinalIgnoreCase) != -1)
                                     {
                                         message = Resources.LoginElement_GoogleFailureText;
                                         break;

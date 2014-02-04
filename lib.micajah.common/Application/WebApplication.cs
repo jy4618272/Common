@@ -5,12 +5,11 @@ using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Collections.ObjectModel;
 using System.Net.Mail;
 using System.Reflection;
 using System.Security.Authentication;
 using System.Security.Principal;
-using System.Threading;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
@@ -28,9 +27,6 @@ namespace Micajah.Common.Application
 
         private static LoginProvider s_LoginProvider;
 
-        // The objects which are used to synchronize access to the cached objects.
-        private static object s_StartThreadsSyncRoot = new object();
-
         #endregion
 
         #region Events
@@ -47,7 +43,7 @@ namespace Micajah.Common.Application
         /// <summary>
         /// Gets the hosts adresses of the current web application.
         /// </summary>
-        public static string[] Hosts
+        public static ReadOnlyCollection<string> Hosts
         {
             get
             {
@@ -57,7 +53,7 @@ namespace Micajah.Common.Application
                 list.Add(string.Concat(request.Url.Scheme, Uri.SchemeDelimiter, request.Url.Host));
                 list.Add(string.Concat(request.Url.Scheme, Uri.SchemeDelimiter, request.UserHostAddress, ':', request.Url.Port));
                 list.Add(string.Concat(request.Url.Scheme, Uri.SchemeDelimiter, request.Url.Host, ':', request.Url.Port));
-                return list.ToArray();
+                return list.AsReadOnly();
             }
         }
 
@@ -84,27 +80,6 @@ namespace Micajah.Common.Application
                 return s_LoginProvider;
             }
             set { s_LoginProvider = value; }
-        }
-
-        public static StartThreadCollection StartThreads
-        {
-            get
-            {
-                StartThreadCollection coll = CacheManager.Current.Get("mc.StartThreads") as StartThreadCollection;
-                if (coll == null)
-                {
-                    lock (s_StartThreadsSyncRoot)
-                    {
-                        coll = CacheManager.Current.Get("mc.StartThreads") as StartThreadCollection;
-                        if (coll == null)
-                        {
-                            coll = StartThreadCollection.Load();
-                            CacheManager.Current.PutWithDefaultTimeout("mc.StartThreads", coll);
-                        }
-                    }
-                }
-                return coll;
-            }
         }
 
         #endregion
@@ -135,62 +110,6 @@ namespace Micajah.Common.Application
                 mi.Invoke(null, new object[] { new ResourceVirtualPathProvider() });
             else
                 HostingEnvironment.RegisterVirtualPathProvider(new ResourceVirtualPathProvider());
-        }
-
-        /// <summary>
-        /// Starts all start thead and rerun it.
-        /// </summary>
-        private void MonitorStartThreadLoop()
-        {
-            StartThreadCollection startThreads = WebApplication.StartThreads;
-            if (startThreads.Count > 0)
-            {
-                foreach (StartThread startThread in startThreads)
-                {
-                    DateTime now = DateTime.UtcNow;
-                    int startHour = 0;
-                    int startMinute = 0;
-                    DateTime startDate = DateTime.UtcNow;
-                    string[] startTime = startThread.StartTime.Split(':');
-
-                    if (startTime.Length == 2)
-                    {
-                        startHour = startTime[0].StartsWith("0", StringComparison.OrdinalIgnoreCase) ? Convert.ToInt32(startTime[0].Substring(1, startTime[0].Length - 1), CultureInfo.InvariantCulture) : Convert.ToInt32(startTime[0], CultureInfo.InvariantCulture);
-                        startMinute = Convert.ToInt32(startTime[1], CultureInfo.InvariantCulture);
-
-                        if ((now.Hour > startHour) || ((now.Hour == startHour) && (now.Minute >= startMinute)))
-                            startDate = DateTime.UtcNow.Date.AddDays(1).AddHours(startHour);
-                        else
-                            startDate = DateTime.UtcNow.Date.AddHours(startHour);
-
-                        startDate = startDate.AddMinutes(startMinute);
-
-                        StartThreadTimer timer = new StartThreadTimer();
-                        timer.StartThread = startThread;
-                        timer.Elapsed += new System.Timers.ElapsedEventHandler(StartThreadTimer_Elapsed);
-                        timer.Interval = startDate.Subtract(now).TotalMilliseconds;
-                        timer.AutoReset = true;
-                        timer.Enabled = true;
-                        timer.Start();
-                    }
-                }
-            }
-        }
-
-        private void StartThreadTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            StartThreadTimer timer = sender as StartThreadTimer;
-            if (timer != null)
-            {
-                IThreadStateProvider threadProvider = timer.StartThread.GetStartThreadClassInstance();
-                Thread workerThread = new Thread(threadProvider.Start);
-                workerThread.CurrentCulture = CultureInfo.CurrentCulture;
-                workerThread.CurrentUICulture = CultureInfo.CurrentUICulture;
-                workerThread.Priority = ThreadPriority.Lowest;
-                workerThread.Start();
-
-                timer.Interval = 24 * 60 * 60 * 1000; //24 hours
-            }
         }
 
         #endregion
@@ -251,12 +170,6 @@ namespace Micajah.Common.Application
 
             if (Micajah.Common.Pages.PageStatePersister.IsInUse && FrameworkConfiguration.Current.WebApplication.ViewState.DeleteExpiredViewState)
                 ViewStateProvider.DeleteExpiredViewState();
-
-            Thread MonitorThread = new Thread(MonitorStartThreadLoop);
-            MonitorThread.CurrentCulture = CultureInfo.CurrentCulture;
-            MonitorThread.CurrentUICulture = CultureInfo.CurrentUICulture;
-            MonitorThread.Priority = ThreadPriority.Lowest;
-            MonitorThread.Start();
         }
 
         /// <summary>
