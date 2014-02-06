@@ -575,7 +575,8 @@ namespace Micajah.Common.Bll.Providers
                 , new EmailSendingEventArgs()
                 {
                     Reason = EmailSendingReason.ChangeLogin,
-                    Organization = org
+                    Organization = org,
+                    Email=email
                 });
         }
 
@@ -629,7 +630,9 @@ namespace Micajah.Common.Bll.Providers
                 , new EmailSendingEventArgs()
                 {
                     Reason = EmailSendingReason.ChangePassword,
-                    Organization = org
+                    Organization = org,
+                    Email=email,
+                    Password=password
                 });
         }
 
@@ -726,7 +729,9 @@ namespace Micajah.Common.Bll.Providers
                             , new EmailSendingEventArgs()
                             {
                                 Reason = reason,
-                                Organization = org
+                                Organization = org,
+                                Email=email,
+                                Password=password
                             });
                     }
                 }
@@ -763,7 +768,9 @@ namespace Micajah.Common.Bll.Providers
                 , new EmailSendingEventArgs()
                 {
                     Reason = reason,
-                    Organization = org
+                    Organization = org,
+                    Email=email,
+                    Password=password
                 });
         }
 

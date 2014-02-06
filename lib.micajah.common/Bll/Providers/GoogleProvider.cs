@@ -137,6 +137,9 @@ namespace Micajah.Common.Bll.Providers
         internal static void ParseAuthorizationRequestState(HttpRequest request, ref string domain, ref string returnUrl)
         {
             string[] parts = ParseAuthorizationRequestState(request);
+
+            if (parts == null) return;
+
             int length = parts.Length;
 
             if (length > 0)

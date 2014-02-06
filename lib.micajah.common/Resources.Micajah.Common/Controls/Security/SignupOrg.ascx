@@ -2,12 +2,12 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" TagPrefix="telerik" %>
 
-<div id="Step1Panel" runat="server">
+<div id="Step1Panel">
     <div class="Logo">
         <asp:Image ID="LogoImage1" runat="server" />
     </div>
     <div style="padding-top: 20px;">
-        <div id="Step1Form" runat="server">
+        <div id="Step1Form">
             <div class="row">
                 <asp:Label ID="OrganizationNameLabel1" runat="server" CssClass="Large Title"></asp:Label>
                 <small>
@@ -54,12 +54,12 @@
             <div class="clear"></div>
             <div class="row">
                 <asp:Label ID="CaptchaLabel" runat="server" CssClass="Large Title"></asp:Label>
-                <telerik:RadCaptcha id="Captcha1" runat="server" ImageStorageLocation="Session" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" errormessage="" validationgroup="Step1" />
+                <telerik:RadCaptcha id="Captcha1" runat="server" ImageStorageLocation="Session" MinTimeout="15" CaptchaMaxTimeout="30" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" ErrorMessage="" ValidationGroup="Step1" />
                 <asp:CustomValidator ID="CaptchaValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="Step1" CssClass="Error" OnServerValidate="CaptchaValidator_ServerValidate" />
             </div>
             <div class="clear"></div>
             <div class="row">
-                <asp:Button ID="Step1Button" runat="server" CssClass="Green Large" TabIndex="4" ValidationGroup="Step1" OnClick="Step1Button_Click"></asp:Button>
+                <asp:Button ID="Step1Button" runat="server" CssClass="Green Large" TabIndex="4" CausesValidation="true" ValidationGroup="Step1" OnClick="Step1Button_Click"></asp:Button>
             </div>
         </div>
         <div class="Agree">

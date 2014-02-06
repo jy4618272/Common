@@ -21,9 +21,7 @@ namespace Micajah.Common.WebControls.SecurityControls
     {
         #region Members
 
-        protected HtmlGenericControl Step1Panel;
         protected Image LogoImage1;
-        protected HtmlGenericControl Step1Form;
         protected Label OrganizationNameLabel1;
         protected Literal OrganizationNameHelpText1;
         protected TextBox OrganizationName1;
@@ -185,22 +183,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
             Micajah.Common.Pages.MasterPage.RegisterClientEncodingScript(this.Page);
 
-            if (!this.IsPostBack)
-                this.Page.Form.Attributes["onsubmit"] += " return true;";
+//            if (!this.IsPostBack)
+//                this.Page.Form.Attributes["onsubmit"] += " return true;";
 
-            string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
-            if (!string.IsNullOrEmpty(code))
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
-
-            code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
-            if (!string.IsNullOrEmpty(code))
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
-
-            code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
-            if (!string.IsNullOrEmpty(code))
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "BingConversionClientScript", code, false);
-
-            this.Page.Form.Target = "_parent";
+ //           this.Page.Form.Target = "_parent";
 
             LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ShowLogoImage", this.ShowLogoImageClientScript, true);
@@ -271,8 +257,6 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 OrganizationUrlRow.Visible = FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled;
 
-                Step1Panel.Visible = true;
-
                 OrganizationName1.Focus();
 
                 Control captchaTextBoxLabel = Captcha1.FindControl("CaptchaTextBoxLabel");
@@ -281,6 +265,20 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
 
             ResourceProvider.RegisterValidatorScriptResource(this.Page);
+
+            string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
+            ClientScriptManager csm = Page.ClientScript;
+            if (!string.IsNullOrEmpty(code) && !csm.IsStartupScriptRegistered("GoogleAnalyticsClientScript"))
+                csm.RegisterStartupScript(this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
+
+            code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
+            if (!string.IsNullOrEmpty(code) && !csm.IsStartupScriptRegistered("GoogleConversionClientScript"))
+                csm.RegisterStartupScript(this.Page.GetType(), "GoogleConversionClientScript", code, false);
+
+            code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
+            if (!string.IsNullOrEmpty(code) && !csm.IsStartupScriptRegistered("BingConversionClientScript"))
+                csm.RegisterStartupScript(this.Page.GetType(), "BingConversionClientScript", code, false);
+
         }
 
         protected void OrganizationName1_TextChanged(object sender, EventArgs e)
@@ -337,6 +335,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (args == null) return;
 
+            Captcha1.Validate();
             args.IsValid = Captcha1.IsValid;
 
             System.Web.UI.WebControls.TextBox textBox = (System.Web.UI.WebControls.TextBox)Captcha1.FindControl("CaptchaTextBox");
@@ -471,7 +470,6 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                     GoogleProvider.ProcessAuthorization(this.Context, ref parameters, ref returnUrl);
                 }
-
                 Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email1.Text, true, orgId, inst.InstanceId, null));
             }
         }
