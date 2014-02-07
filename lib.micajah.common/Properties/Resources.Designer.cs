@@ -6197,74 +6197,47 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password confirmation is required.
+        ///   Looks up a localized string similar to Create My Account.
         /// </summary>
-        internal static string SignupOrganizationControl_ConfirmPassword_ErrorMessage {
+        internal static string SignupOrganizationControl_CreateMyAccountButton_Text {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_ConfirmPassword_ErrorMessage", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_CreateMyAccountButton_Text", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm Password.
+        ///   Looks up a localized string similar to Create a new Organization.
         /// </summary>
-        internal static string SignupOrganizationControl_ConfirmPasswordLabel_Text {
+        internal static string SignupOrganizationControl_CreateMyAccountModalButton_Text {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_ConfirmPasswordLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Currency.
-        /// </summary>
-        internal static string SignupOrganizationControl_CurrencyLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_CurrencyLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select best initial setup. Easily modified later..
-        /// </summary>
-        internal static string SignupOrganizationControl_CustomizeLiteral_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_CustomizeLiteral_Text", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_CreateMyAccountModalButton_Text", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to A valid email is required.
         /// </summary>
-        internal static string SignupOrganizationControl_Email1_ErrorMessage {
+        internal static string SignupOrganizationControl_Email_ErrorMessage {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_Email1_ErrorMessage", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_Email_ErrorMessage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Invalid email.
         /// </summary>
-        internal static string SignupOrganizationControl_Email1_ValidationErrorMessage {
+        internal static string SignupOrganizationControl_Email_ValidationErrorMessage {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_Email1_ValidationErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email and Password.
-        /// </summary>
-        internal static string SignupOrganizationControl_EmailAndPasswordLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_EmailAndPasswordLabel_Text", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_Email_ValidationErrorMessage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to E-mail.
         /// </summary>
-        internal static string SignupOrganizationControl_EmailLabel1_Text {
+        internal static string SignupOrganizationControl_EmailLabel_Text {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_EmailLabel1_Text", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_EmailLabel_Text", resourceCulture);
             }
         }
         
@@ -6287,65 +6260,11 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First name is required.
-        /// </summary>
-        internal static string SignupOrganizationControl_FirstName_ErrorMessage {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_FirstName_ErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to First Name.
-        /// </summary>
-        internal static string SignupOrganizationControl_FirstNameLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_FirstNameLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Google Apps Marketplace.
         /// </summary>
         internal static string SignupOrganizationControl_HowYouHearAboutUs_Text {
             get {
                 return ResourceManager.GetString("SignupOrganizationControl_HowYouHearAboutUs_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to How&apos;d You Hear About Us.
-        /// </summary>
-        internal static string SignupOrganizationControl_HowYouHearAboutUsLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_HowYouHearAboutUsLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last name is required.
-        /// </summary>
-        internal static string SignupOrganizationControl_LastName_ErrorMessage {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_LastName_ErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last Name.
-        /// </summary>
-        internal static string SignupOrganizationControl_LastNameLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_LastNameLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Local Settings.
-        /// </summary>
-        internal static string SignupOrganizationControl_LocalSettingsLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_LocalSettingsLabel_Text", resourceCulture);
             }
         }
         
@@ -6386,15 +6305,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new Organization.
-        /// </summary>
-        internal static string SignupOrganizationControl_ModalStep1Button_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_ModalStep1Button_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Wait. Haven&apos;t I seen you?.
         /// </summary>
         internal static string SignupOrganizationControl_ModalTitleLiteral_Text {
@@ -6404,29 +6314,38 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Active Template Instances found to create new organization..
+        /// </summary>
+        internal static string SignupOrganizationControl_NoActiveTemplateInstances {
+            get {
+                return ResourceManager.GetString("SignupOrganizationControl_NoActiveTemplateInstances", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company name is required.
         /// </summary>
-        internal static string SignupOrganizationControl_OrganizationName1_ErrorMessage {
+        internal static string SignupOrganizationControl_OrganizationName_ErrorMessage {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_OrganizationName1_ErrorMessage", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_OrganizationName_ErrorMessage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Acme Inc. or Your Name.
         /// </summary>
-        internal static string SignupOrganizationControl_OrganizationNameHelpText1_Text {
+        internal static string SignupOrganizationControl_OrganizationNameHelpText_Text {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_OrganizationNameHelpText1_Text", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_OrganizationNameHelpText_Text", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Company Name.
         /// </summary>
-        internal static string SignupOrganizationControl_OrganizationNameLabel1_Text {
+        internal static string SignupOrganizationControl_OrganizationNameLabel_Text {
             get {
-                return ResourceManager.GetString("SignupOrganizationControl_OrganizationNameLabel1_Text", resourceCulture);
+                return ResourceManager.GetString("SignupOrganizationControl_OrganizationNameLabel_Text", resourceCulture);
             }
         }
         
@@ -6449,42 +6368,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password is required.
-        /// </summary>
-        internal static string SignupOrganizationControl_Password_ErrorMessage {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_Password_ErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Passwords do not match.
-        /// </summary>
-        internal static string SignupOrganizationControl_PasswordCompareValidator_ErrorMessage {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_PasswordCompareValidator_ErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password.
-        /// </summary>
-        internal static string SignupOrganizationControl_PasswordLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_PasswordLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Personal Information.
-        /// </summary>
-        internal static string SignupOrganizationControl_PersonalInformationLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_PersonalInformationLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Privacy Policy.
         /// </summary>
         internal static string SignupOrganizationControl_PrivacyPolicyLink_Text {
@@ -6494,56 +6377,11 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create My Account.
-        /// </summary>
-        internal static string SignupOrganizationControl_Step1Button_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_Step1Button_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login to {0}.
-        /// </summary>
-        internal static string SignupOrganizationControl_Step2Button_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_Step2Button_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please correct all fields marked in red.
-        /// </summary>
-        internal static string SignupOrganizationControl_Step2ValidationSummary_HeaderText {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_Step2ValidationSummary_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Continue &gt;.
-        /// </summary>
-        internal static string SignupOrganizationControl_Step3Button_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_Step3Button_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Terms of Use.
         /// </summary>
         internal static string SignupOrganizationControl_TermsLink_Text {
             get {
                 return ResourceManager.GetString("SignupOrganizationControl_TermsLink_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Time Zone.
-        /// </summary>
-        internal static string SignupOrganizationControl_TimeZoneLabel_Text {
-            get {
-                return ResourceManager.GetString("SignupOrganizationControl_TimeZoneLabel_Text", resourceCulture);
             }
         }
         

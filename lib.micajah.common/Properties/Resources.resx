@@ -2179,68 +2179,26 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="SignupOrganizationControl_AgreeLabel_Text" xml:space="preserve">
     <value>By clicking the button above I agree to {0} and {1}.</value>
   </data>
-  <data name="SignupOrganizationControl_ConfirmPasswordLabel_Text" xml:space="preserve">
-    <value>Confirm Password</value>
-  </data>
-  <data name="SignupOrganizationControl_CurrencyLabel_Text" xml:space="preserve">
-    <value>Currency</value>
-  </data>
-  <data name="SignupOrganizationControl_CustomizeLiteral_Text" xml:space="preserve">
-    <value>Select best initial setup. Easily modified later.</value>
-  </data>
-  <data name="SignupOrganizationControl_EmailAndPasswordLabel_Text" xml:space="preserve">
-    <value>Email and Password</value>
-  </data>
-  <data name="SignupOrganizationControl_EmailLabel1_Text" xml:space="preserve">
+  <data name="SignupOrganizationControl_EmailLabel_Text" xml:space="preserve">
     <value>E-mail</value>
   </data>
-  <data name="SignupOrganizationControl_FirstNameLabel_Text" xml:space="preserve">
-    <value>First Name</value>
-  </data>
-  <data name="SignupOrganizationControl_HowYouHearAboutUsLabel_Text" xml:space="preserve">
-    <value>How'd You Hear About Us</value>
-  </data>
-  <data name="SignupOrganizationControl_LastNameLabel_Text" xml:space="preserve">
-    <value>Last Name</value>
-  </data>
-  <data name="SignupOrganizationControl_LocalSettingsLabel_Text" xml:space="preserve">
-    <value>Local Settings</value>
-  </data>
-  <data name="SignupOrganizationControl_OrganizationNameHelpText1_Text" xml:space="preserve">
+  <data name="SignupOrganizationControl_OrganizationNameHelpText_Text" xml:space="preserve">
     <value>Acme Inc. or Your Name</value>
   </data>
-  <data name="SignupOrganizationControl_OrganizationNameLabel1_Text" xml:space="preserve">
+  <data name="SignupOrganizationControl_OrganizationNameLabel_Text" xml:space="preserve">
     <value>Company Name</value>
   </data>
   <data name="SignupOrganizationControl_OrganizationUrlLabel_Text" xml:space="preserve">
     <value>Company URL</value>
   </data>
-  <data name="SignupOrganizationControl_PasswordCompareValidator_ErrorMessage" xml:space="preserve">
-    <value>Passwords do not match</value>
-  </data>
-  <data name="SignupOrganizationControl_PasswordLabel_Text" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="SignupOrganizationControl_PersonalInformationLabel_Text" xml:space="preserve">
-    <value>Personal Information</value>
-  </data>
   <data name="SignupOrganizationControl_PrivacyPolicyLink_Text" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
-  <data name="SignupOrganizationControl_Step1Button_Text" xml:space="preserve">
+  <data name="SignupOrganizationControl_CreateMyAccountButton_Text" xml:space="preserve">
     <value>Create My Account</value>
-  </data>
-  <data name="SignupOrganizationControl_Step2Button_Text" xml:space="preserve">
-    <value>Login to {0}</value>
-  </data>
-  <data name="SignupOrganizationControl_Step3Button_Text" xml:space="preserve">
-    <value>Continue &gt;</value>
   </data>
   <data name="SignupOrganizationControl_TermsLink_Text" xml:space="preserve">
     <value>Terms of Use</value>
-  </data>
-  <data name="SignupOrganizationControl_TimeZoneLabel_Text" xml:space="preserve">
-    <value>Time Zone</value>
   </data>
   <data name="DatabasesControl_EditForm_PrivateField_Text" xml:space="preserve">
     <value>Private</value>
@@ -2323,35 +2281,20 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   <data name="LoginProvider_ErrorMessage_FoundMoreThanOneLDAPConnection" xml:space="preserve">
     <value>User found in more than one organizations with different LDAP settings. Please login using your email and local password.  &lt;br/&gt;If you do not remember your password please use the Forget Password link for retrieval.</value>
   </data>
-  <data name="SignupOrganizationControl_Email1_ErrorMessage" xml:space="preserve">
+  <data name="SignupOrganizationControl_Email_ErrorMessage" xml:space="preserve">
     <value>A valid email is required</value>
   </data>
-  <data name="SignupOrganizationControl_Email1_ValidationErrorMessage" xml:space="preserve">
+  <data name="SignupOrganizationControl_Email_ValidationErrorMessage" xml:space="preserve">
     <value>Invalid email</value>
   </data>
-  <data name="SignupOrganizationControl_FirstName_ErrorMessage" xml:space="preserve">
-    <value>First name is required</value>
-  </data>
-  <data name="SignupOrganizationControl_LastName_ErrorMessage" xml:space="preserve">
-    <value>Last name is required</value>
-  </data>
-  <data name="SignupOrganizationControl_OrganizationName1_ErrorMessage" xml:space="preserve">
+  <data name="SignupOrganizationControl_OrganizationName_ErrorMessage" xml:space="preserve">
     <value>Company name is required</value>
-  </data>
-  <data name="SignupOrganizationControl_Password_ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
-  </data>
-  <data name="SignupOrganizationControl_ConfirmPassword_ErrorMessage" xml:space="preserve">
-    <value>Password confirmation is required</value>
   </data>
   <data name="SignupOrganizationControl_CaptchaLabel_Text" xml:space="preserve">
     <value>Input code</value>
   </data>
   <data name="SignupOrganizationControl_CaptchaValidator_ErrorMessage" xml:space="preserve">
     <value>The code you entered is not valid</value>
-  </data>
-  <data name="SignupOrganizationControl_Step2ValidationSummary_HeaderText" xml:space="preserve">
-    <value>Please correct all fields marked in red</value>
   </data>
   <data name="ActionsControl_EditForm_IconUrlField_HeaderText" xml:space="preserve">
     <value>Icon URL</value>
@@ -2664,7 +2607,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="SignupOrganizationControl_ModalSelectActionSeparatorLiteral_Text" xml:space="preserve">
     <value>or</value>
   </data>
-  <data name="SignupOrganizationControl_ModalStep1Button_Text" xml:space="preserve">
+  <data name="SignupOrganizationControl_CreateMyAccountModalButton_Text" xml:space="preserve">
     <value>Create a new Organization</value>
   </data>
   <data name="SignupOrganizationControl_ModalTitleLiteral_Text" xml:space="preserve">
@@ -2711,5 +2654,8 @@ Do you want to link email "{1}" to this account?</value>
   </data>
   <data name="OAuthControl_InvalidAuthorizationSecret" xml:space="preserve">
     <value>Invalid authorization secret</value>
+  </data>
+  <data name="SignupOrganizationControl_NoActiveTemplateInstances" xml:space="preserve">
+    <value>No Active Template Instances found to create new organization.</value>
   </data>
 </root>

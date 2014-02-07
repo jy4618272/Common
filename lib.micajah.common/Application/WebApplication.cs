@@ -449,12 +449,12 @@ namespace Micajah.Common.Application
         public Organization Organization { get; set; }
 
         /// <summary>
-        /// Gets or sets the user email
+        /// Gets or sets the user email.
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the user password
+        /// Gets or sets the user password.
         /// </summary>
         public string Password { get; set; }
 

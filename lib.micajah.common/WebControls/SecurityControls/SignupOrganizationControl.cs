@@ -21,35 +21,34 @@ namespace Micajah.Common.WebControls.SecurityControls
     {
         #region Members
 
-        protected Image LogoImage1;
-        protected Label OrganizationNameLabel1;
-        protected Literal OrganizationNameHelpText1;
-        protected TextBox OrganizationName1;
-        protected Image OrganizationNameTick1;
-        protected Label EmailLabel1;
-        protected TextBox Email1;
-        protected CustomValidator EmailValidator1;
-        protected Image EmailTick1;
+        protected Image LogoImage;
+        protected Label OrganizationNameLabel;
+        protected Literal OrganizationNameHelpText;
+        protected TextBox OrganizationName;
+        protected Image OrganizationNameTick;
+        protected Label EmailLabel;
+        protected TextBox Email;
+        protected CustomValidator EmailValidator;
+        protected Image EmailTick;
         protected Label EmailInUseLabel;
         protected HtmlGenericControl OrganizationUrlRow;
         protected Label OrganizationUrlLabel;
         protected Literal Schema;
         protected TextBox OrganizationUrl;
         protected Literal PartialCustomUrlRootAddress;
-        protected Button Step1Button;
+        protected Button CreateMyAccountButton;
         protected CustomValidator OrganizationUrlValidator;
         protected Image OrganizationUrlTick;
-        protected UpdatePanel UpdatePanelOrganizationUrl;
         protected HtmlGenericControl ModalWindowHeader;
         protected Literal ModalTitleLiteral;
         protected Literal ModalMessageLiteral;
         protected Literal ModalSelectActionLiteral;
         protected HyperLink ModalLoginLink;
         protected Literal ModalSelectActionSeparatorLiteral;
-        protected Button ModalStep1Button;
+        protected Button CreateMyAccountModalButton;
         protected Literal AgreeLabel;
         protected Label CaptchaLabel;
-        protected Telerik.Web.UI.RadCaptcha Captcha1;
+        protected Telerik.Web.UI.RadCaptcha Captcha;
         protected CustomValidator CaptchaValidator;
 
         protected HtmlGenericControl ErrorPanel;
@@ -86,7 +85,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         elem.style.display = 'inline';
 }}
 "
-                    , LogoImage1.ClientID);
+                    , LogoImage.ClientID);
             }
         }
 
@@ -108,45 +107,38 @@ namespace Micajah.Common.WebControls.SecurityControls
             set { ViewState["UserLastName"] = value; }
         }
 
-        private string HowYouHearAboutUs
-        {
-            get { return ViewState["HowYouHearAboutUs"] != null ? (string)ViewState["HowYouHearAboutUs"] : string.Empty; }
-            set { ViewState["HowYouHearAboutUs"] = value; }
-        }
-
         #endregion
 
         #region Private Methods
 
         private void LoadResources()
         {
-            OrganizationName1.ErrorMessage = Resources.SignupOrganizationControl_OrganizationName1_ErrorMessage;
-            OrganizationNameLabel1.Text = Resources.SignupOrganizationControl_OrganizationNameLabel1_Text;
-            OrganizationNameHelpText1.Text = Resources.SignupOrganizationControl_OrganizationNameHelpText1_Text;
-            OrganizationNameTick1.ImageUrl = EmailTick1.ImageUrl = OrganizationUrlTick.ImageUrl
+            OrganizationName.ErrorMessage = Resources.SignupOrganizationControl_OrganizationName_ErrorMessage;
+            OrganizationNameLabel.Text = Resources.SignupOrganizationControl_OrganizationNameLabel_Text;
+            OrganizationNameHelpText.Text = Resources.SignupOrganizationControl_OrganizationNameHelpText_Text;
+            OrganizationNameTick.ImageUrl = EmailTick.ImageUrl = OrganizationUrlTick.ImageUrl
                 = ResourceProvider.GetImageUrl(typeof(SignupOrganizationControl), "Tick.png", true);
-            Email1.ErrorMessage = Resources.SignupOrganizationControl_Email1_ErrorMessage;
-            EmailLabel1.Text = Resources.SignupOrganizationControl_EmailLabel1_Text;
+            Email.ErrorMessage = Resources.SignupOrganizationControl_Email_ErrorMessage;
+            EmailLabel.Text = Resources.SignupOrganizationControl_EmailLabel_Text;
             OrganizationUrlLabel.Text = Resources.SignupOrganizationControl_OrganizationUrlLabel_Text;
             Schema.Text = Uri.UriSchemeHttps + Uri.SchemeDelimiter;
             PartialCustomUrlRootAddress.Text = "." + FrameworkConfiguration.Current.WebApplication.CustomUrl.PartialCustomUrlRootAddressesFirst;
             OrganizationUrl.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
             OrganizationUrlValidator.ErrorMessage = Resources.CustomUrlProvider_CustomUrlAlreadyExists;
-            Step1Button.Text = Resources.SignupOrganizationControl_Step1Button_Text;
+            CreateMyAccountButton.Text = Resources.SignupOrganizationControl_CreateMyAccountButton_Text;
 
             ModalTitleLiteral.Text = Resources.SignupOrganizationControl_ModalTitleLiteral_Text;
             ModalMessageLiteral.Text = Resources.SignupOrganizationControl_ModalMessageLiteral_Text;
             ModalSelectActionLiteral.Text = Resources.SignupOrganizationControl_ModalSelectActionLiteral_Text;
             ModalLoginLink.Text = Resources.SignupOrganizationControl_ModalLoginLink_Text;
             ModalSelectActionSeparatorLiteral.Text = Resources.SignupOrganizationControl_ModalSelectActionSeparatorLiteral_Text;
-            ModalStep1Button.Text = Resources.SignupOrganizationControl_ModalStep1Button_Text;
+            CreateMyAccountModalButton.Text = Resources.SignupOrganizationControl_CreateMyAccountModalButton_Text;
 
             if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.SmallLogoImageUrl))
             {
                 ModalWindowHeader.Attributes["class"] += " bg";
                 ModalWindowHeader.Style[HtmlTextWriterStyle.BackgroundImage] = "url(" + CustomUrlProvider.CreateApplicationAbsoluteUrl(FrameworkConfiguration.Current.WebApplication.SmallLogoImageUrl) + ")";
             }
-
 
             CaptchaLabel.Text = Resources.SignupOrganizationControl_CaptchaLabel_Text;
             AgreeLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.SignupOrganizationControl_AgreeLabel_Text
@@ -157,19 +149,88 @@ namespace Micajah.Common.WebControls.SecurityControls
             ErrorContinueLink.Text = Resources.SignupOrganizationControl_ErrorContinueLink_Text;
 
             if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
-                LogoImage1.Visible = LogoImage3.Visible = false;
+                LogoImage.Visible = LogoImage3.Visible = false;
             else
-                LogoImage1.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                LogoImage.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
         }
-
 
         private static bool ValidateEmail(string email, out string errorMessage)
         {
             errorMessage = null;
             bool isValid = Support.ValidateEmail(email, false);
             if (!isValid)
-                errorMessage = Resources.SignupOrganizationControl_Email1_ValidationErrorMessage;
+                errorMessage = Resources.SignupOrganizationControl_Email_ValidationErrorMessage;
             return isValid;
+        }
+
+        private void CreateNewOrganization()
+        {
+            if (string.Compare((string)Session["NewOrg"], "1", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                string url = null;
+
+                UserContext user = UserContext.Current;
+                if (user != null)
+                {
+                    if (string.Compare(user.Email, Email.Text, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        url = WebApplication.LoginProvider.GetLoginUrl(user.Email, true, user.OrganizationId, user.InstanceId, null);
+
+                        Response.Redirect(url);
+                    }
+                }
+
+                url = WebApplication.LoginProvider.GetLoginUrl();
+
+                Response.Redirect(url);
+            }
+            else
+            {
+                Instance templateInstance = null;
+                InstanceCollection insts = Micajah.Common.Bll.Providers.InstanceProvider.GetTemplateInstances();
+
+                if (insts.Count == 0)
+                {
+                    throw new NotImplementedException(Resources.SignupOrganizationControl_NoActiveTemplateInstances);
+                }
+                else
+                {
+                    templateInstance = insts[0];
+                }
+
+                string howYouHearAboutUs = null;
+
+                bool isGoogleProviderRequest = GoogleProvider.IsGoogleProviderRequest(this.Request);
+                if (isGoogleProviderRequest)
+                {
+                    howYouHearAboutUs = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
+                }
+
+                string password = Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(3, 0).ToLowerInvariant();
+
+                Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName.Text, null, null
+                    , null, null, null, null, null, null, string.Empty, howYouHearAboutUs
+                    , templateInstance.TimeZoneId, templateInstance.InstanceId
+                    , Email.Text, password, this.UserFirstName, this.UserLastName, null, null, null
+                    , OrganizationUrl.Text, this.Request
+                    , true);
+
+                Session["NewOrg"] = "1";
+
+                Instance inst = InstanceProvider.GetFirstInstance(orgId);
+
+                if (isGoogleProviderRequest)
+                {
+                    string returnUrl = null;
+                    OAuth2Parameters parameters = JsonConvert.DeserializeObject<OAuth2Parameters>(this.OAuth2Parameters);
+
+                    GoogleProvider.ProcessAuthorization(this.Context, ref parameters, ref returnUrl);
+                }
+
+                string url = WebApplication.LoginProvider.GetLoginUrl(Email.Text, true, orgId, inst.InstanceId, null);
+
+                Response.Redirect(url);
+            }
         }
 
         #endregion
@@ -183,17 +244,31 @@ namespace Micajah.Common.WebControls.SecurityControls
             Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
             Micajah.Common.Pages.MasterPage.RegisterClientEncodingScript(this.Page);
 
-//            if (!this.IsPostBack)
-//                this.Page.Form.Attributes["onsubmit"] += " return true;";
+            if (!this.IsPostBack)
+            {
+                this.Page.Form.Attributes["onsubmit"] += " return true;";
 
- //           this.Page.Form.Target = "_parent";
+                string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
+                if (!string.IsNullOrEmpty(code))
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
 
-            LogoImage1.Style[HtmlTextWriterStyle.Display] = "none";
+                code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
+                if (!string.IsNullOrEmpty(code))
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "GoogleConversionClientScript", code, false);
+
+                code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
+                if (!string.IsNullOrEmpty(code))
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "BingConversionClientScript", code, false);
+            }
+
+            this.Page.Form.Target = "_parent";
+
+            LogoImage.Style[HtmlTextWriterStyle.Display] = "none";
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ShowLogoImage", this.ShowLogoImageClientScript, true);
 
             if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
             {
-                OrganizationName1.Attributes["onchange"] = "SetOrganizationUrl(this);";
+                OrganizationName.Attributes["onchange"] = "SetOrganizationUrl(this);";
 
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "SetOrganizationUrlClientScript", this.SetOrganizationUrlClientScript, true);
             }
@@ -242,69 +317,53 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                     if (!string.IsNullOrEmpty(email))
                     {
-                        Email1.Text = email;
-                        Email1.ReadOnly = true;
+                        Email.Text = email;
+                        Email.ReadOnly = true;
                     }
 
                     if (!string.IsNullOrEmpty(firstName))
-                        UserFirstName = firstName;
+                        this.UserFirstName = firstName;
 
                     if (!string.IsNullOrEmpty(lastName))
-                        UserLastName = lastName;
-
-                    HowYouHearAboutUs = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
+                        this.UserLastName = lastName;
                 }
 
                 OrganizationUrlRow.Visible = FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled;
 
-                OrganizationName1.Focus();
+                OrganizationName.Focus();
 
-                Control captchaTextBoxLabel = Captcha1.FindControl("CaptchaTextBoxLabel");
+                Control captchaTextBoxLabel = Captcha.FindControl("CaptchaTextBoxLabel");
                 if (captchaTextBoxLabel != null)
                     captchaTextBoxLabel.Visible = false;
             }
 
             ResourceProvider.RegisterValidatorScriptResource(this.Page);
-
-            string code = FrameworkConfiguration.Current.WebApplication.Integration.Google.AnalyticsCode.Value;
-            ClientScriptManager csm = Page.ClientScript;
-            if (!string.IsNullOrEmpty(code) && !csm.IsStartupScriptRegistered("GoogleAnalyticsClientScript"))
-                csm.RegisterStartupScript(this.Page.GetType(), "GoogleAnalyticsClientScript", code, false);
-
-            code = FrameworkConfiguration.Current.WebApplication.Integration.Google.ConversionCode.Value;
-            if (!string.IsNullOrEmpty(code) && !csm.IsStartupScriptRegistered("GoogleConversionClientScript"))
-                csm.RegisterStartupScript(this.Page.GetType(), "GoogleConversionClientScript", code, false);
-
-            code = FrameworkConfiguration.Current.WebApplication.Integration.Bing.ConversionCode.Value;
-            if (!string.IsNullOrEmpty(code) && !csm.IsStartupScriptRegistered("BingConversionClientScript"))
-                csm.RegisterStartupScript(this.Page.GetType(), "BingConversionClientScript", code, false);
-
         }
 
-        protected void OrganizationName1_TextChanged(object sender, EventArgs e)
+        protected void OrganizationName_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             textBox.IsValid = true;
 
             bool isEmpty = string.IsNullOrEmpty(textBox.Text);
 
-            if (textBox.ID == OrganizationName1.ID)
-                OrganizationNameTick1.Visible = (!isEmpty);
+            if (textBox.ID == OrganizationName.ID)
+                OrganizationNameTick.Visible = (!isEmpty);
         }
 
-        protected void Email1_TextChanged(object sender, EventArgs e)
+        protected void Email_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             if (string.IsNullOrEmpty(textBox.Text))
                 textBox.IsValid = true;
             else
             {
-                if (textBox.ID == Email1.ID)
-                    EmailValidator1.Validate();
+                if (textBox.ID == Email.ID)
+                    EmailValidator.Validate();
             }
         }
 
-        protected void EmailValidator1_ServerValidate(object source, ServerValidateEventArgs args)
+        protected void EmailValidator_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (args == null) return;
 
@@ -313,10 +372,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             Image tickImage = null;
             string errorMessage = null;
 
-            if (val.ID == EmailValidator1.ID)
+            if (val.ID == EmailValidator.ID)
             {
-                textBox = Email1;
-                tickImage = EmailTick1;
+                textBox = Email;
+                tickImage = EmailTick;
             }
 
             bool isValid = ValidateEmail(textBox.Text, out errorMessage);
@@ -335,11 +394,10 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (args == null) return;
 
-            Captcha1.Validate();
-            args.IsValid = Captcha1.IsValid;
+            args.IsValid = Captcha.IsValid;
 
-            System.Web.UI.WebControls.TextBox textBox = (System.Web.UI.WebControls.TextBox)Captcha1.FindControl("CaptchaTextBox");
-            Captcha1.CaptchaTextBoxCssClass = Captcha1.CaptchaTextBoxCssClass.Replace(" Invalid", string.Empty);
+            System.Web.UI.WebControls.TextBox textBox = (System.Web.UI.WebControls.TextBox)Captcha.FindControl("CaptchaTextBox");
+            Captcha.CaptchaTextBoxCssClass = Captcha.CaptchaTextBoxCssClass.Replace(" Invalid", string.Empty);
 
             if (args.IsValid)
                 textBox.Attributes.Remove("validatorId");
@@ -348,7 +406,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 CaptchaValidator.ErrorMessage = Resources.SignupOrganizationControl_CaptchaValidator_ErrorMessage;
                 CaptchaValidator.ForeColor = System.Drawing.Color.Empty;
 
-                Captcha1.CaptchaTextBoxCssClass += " Invalid";
+                Captcha.CaptchaTextBoxCssClass += " Invalid";
                 textBox.Attributes["validatorId"] = CaptchaValidator.ClientID;
                 textBox.Focus();
             }
@@ -385,23 +443,24 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             TextBox textBox = (TextBox)sender;
             if (string.IsNullOrEmpty(textBox.Text))
+            {
                 textBox.IsValid = true;
+            }
             else
             {
                 OrganizationUrlValidator.Validate();
-                UpdatePanelOrganizationUrl.Update();
             }
         }
 
-        protected void Step1Button_Click(object sender, EventArgs e)
+        protected void CreateMyAccountButton_Click(object sender, EventArgs e)
         {
-            Page.Validate("Step1");
+            Page.Validate("MainForm");
             if (!Page.IsValid)
                 return;
 
-            if (WebApplication.LoginProvider.ValidateLogin(Email1.Text, null))
+            if (WebApplication.LoginProvider.ValidateLogin(Email.Text, null))
             {
-                ModalLoginLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(Email1.Text, false);
+                ModalLoginLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(Email.Text, false);
 
                 ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryScript", ResourceProvider.JQueryScriptUrl);
                 ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryEasyModalScript", ResourceProvider.GetResourceUrl("Scripts.jquery.easyModal.js", true));
@@ -419,59 +478,16 @@ namespace Micajah.Common.WebControls.SecurityControls
 
 "
                     , true);
+
                 return;
             }
 
-            CreateNewOrganization();
+            this.CreateNewOrganization();
         }
 
-        protected void ModalStep1Button_Click(object sender, EventArgs e)
+        protected void CreateMyAccountModalButton_Click(object sender, EventArgs e)
         {
-            CreateNewOrganization();
-        }
-
-        protected void CreateNewOrganization()
-        {
-            if (string.Compare((string)Session["NewOrg"], "1", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                UserContext user = UserContext.Current;
-                if (user != null)
-                {
-                    if (string.Compare(user.Email, Email1.Text, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(user.Email, true, user.OrganizationId, user.InstanceId, null));
-                    }
-                }
-                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl());
-            }
-            else
-            {
-                InstanceCollection insts = Micajah.Common.Bll.Providers.InstanceProvider.GetTemplateInstances();
-                if (insts.Count == 0)
-                    throw new NotImplementedException("No Active Template Instances found to create new organization.");
-
-                string pwd = Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(3, 0).ToLowerInvariant();
-
-                Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName1.Text, null, null
-                    , null, null, null, null, null, null, string.Empty, HowYouHearAboutUs
-                    , insts[0].TimeZoneId, insts[0].InstanceId
-                    , Email1.Text, pwd, UserFirstName, UserLastName, null, null, null
-                    , OrganizationUrl.Text, this.Request
-                    , true);
-
-                Session["NewOrg"] = "1";
-
-                Instance inst = InstanceProvider.GetFirstInstance(orgId);
-
-                if (GoogleProvider.IsGoogleProviderRequest(this.Request))
-                {
-                    string returnUrl = null;
-                    OAuth2Parameters parameters = JsonConvert.DeserializeObject<OAuth2Parameters>(this.OAuth2Parameters);
-
-                    GoogleProvider.ProcessAuthorization(this.Context, ref parameters, ref returnUrl);
-                }
-                Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(Email1.Text, true, orgId, inst.InstanceId, null));
-            }
+            this.CreateNewOrganization();
         }
 
         #endregion

@@ -138,17 +138,18 @@ namespace Micajah.Common.Bll.Providers
         {
             string[] parts = ParseAuthorizationRequestState(request);
 
-            if (parts == null) return;
-
-            int length = parts.Length;
-
-            if (length > 0)
+            if (parts != null)
             {
-                domain = parts[0];
+                int length = parts.Length;
 
-                if (length > 1)
+                if (length > 0)
                 {
-                    returnUrl = parts[1];
+                    domain = parts[0];
+
+                    if (length > 1)
+                    {
+                        returnUrl = parts[1];
+                    }
                 }
             }
         }
@@ -176,6 +177,7 @@ namespace Micajah.Common.Bll.Providers
             if (!string.IsNullOrEmpty(url))
             {
                 string[] parts = url.Split('?');
+
                 if (parts.Length > 1)
                 {
                     NameValueCollection query = System.Web.HttpUtility.ParseQueryString(parts[1]);
@@ -229,6 +231,7 @@ namespace Micajah.Common.Bll.Providers
                     OAuth2Parameters parameters = GetAccessToken(context, EmailScope);
 
                     string[] parts = ParseAuthorizationRequestState(context.Request);
+
                     if (parts != null)
                     {
                         int length = parts.Length;
