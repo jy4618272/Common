@@ -545,16 +545,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 value = GetSettingValue(setting.SettingId, setting.SettingType);
                 if (value != null)
                     setting.Value = value;
-
-                if (setting.ParentSetting != null)
-                {
-                    if ((setting.ParentSetting.SettingType == SettingType.CheckBox) || (setting.ParentSetting.SettingType == SettingType.OnOffSwitch))
-                    {
-                        bool boolValue = false;
-                        if ((!bool.TryParse(setting.ParentSetting.Value, out boolValue)) || (!boolValue))
-                            setting.Value = setting.DefaultValue;
-                    }
-                }
             }
 
             switch (this.DisplayedSettingLevel)
