@@ -10,3 +10,13 @@
     CONSTRAINT [FK_Mc_SettingsValues_Mc_Instance] FOREIGN KEY ([InstanceId]) REFERENCES [dbo].[Mc_Instance] ([InstanceId])
 );
 
+
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Mc_SettingsValues_InstanceId_SettingId]
+    ON [dbo].[Mc_SettingsValues]([InstanceId] ASC, [SettingId] ASC);
+
+
