@@ -96,4 +96,7 @@
             </div>
         </div>
     </contenttemplate>
+    <Triggers>
+        <asp:PostBackTrigger ControlID="CreateMyAccountButton" />
+    </Triggers>
 </asp:UpdatePanel>
