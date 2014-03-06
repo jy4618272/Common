@@ -564,6 +564,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (this.ValuesUpdated != null)
                 this.ValuesUpdated(this, EventArgs.Empty);
+
+            m_Settings = null;
         }
 
         private void CreateSettingControl(Setting setting, Control container, int visibleChildSettingsCount)
