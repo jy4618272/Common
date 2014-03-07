@@ -14,28 +14,11 @@ namespace Micajah.Common.Security
     /// <summary>
     /// The class that works with local application login tables.
     /// </summary>
-    public class LdapIntegration : ILdapIntegration, IDisposable
+    public class LdapIntegration : ILdapIntegration
     {
         #region Members
 
-        private SqlConnection m_Connection;
         ILogger ApplicationLogger;
-
-        #endregion
-
-        #region Protected Methods
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (m_Connection != null)
-                {
-                    m_Connection.Close();
-                    m_Connection.Dispose();
-                }
-            }
-        }
 
         #endregion
 
@@ -44,12 +27,6 @@ namespace Micajah.Common.Security
         public LdapIntegration(ILogger applicationLogger)
         {
             ApplicationLogger = applicationLogger;
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         #endregion

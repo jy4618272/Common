@@ -379,9 +379,9 @@ namespace Micajah.Common.WebControls
                 if (!string.IsNullOrEmpty(this.ObjectId))
                 {
                     if (url.Contains("?"))
-                        url += "&ObjectId=" + HttpUtility.UrlEncodeUnicode(this.ObjectId);
+                        url += "&ObjectId=" + HttpUtility.UrlEncode(this.ObjectId);
                     else
-                        url += "?ObjectId=" + HttpUtility.UrlEncodeUnicode(this.ObjectId);
+                        url += "?ObjectId=" + HttpUtility.UrlEncode(this.ObjectId);
                 }
                 return url;
             }

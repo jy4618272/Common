@@ -54,7 +54,7 @@ namespace Micajah.Common.Bll.Providers
 
             if (!string.IsNullOrEmpty(state))
             {
-                parameters.State = System.Web.HttpUtility.UrlEncodeUnicode(state);
+                parameters.State = System.Web.HttpUtility.UrlEncode(state);
             }
 
             string url = OAuthUtil.CreateOAuth2AuthorizationUrl(parameters);

@@ -265,72 +265,65 @@ namespace Micajah.Common.Bll.Providers
             ApplicationLogger log = new ApplicationLogger();
             LdapIntegration ldi = new LdapIntegration(log);
 
-            try
+            if (userName.Contains("@"))
             {
-                if (userName.Contains("@"))
-                {
-                    // check email and domain login
-                    users = (List<IUser>)ldi.GetUsersByEmail(userName);
-                    if (users.Count == 0)
-                    {
-                        domainName = userName.Split('@')[1];
-                        userAlias = userName.Split('@')[0];
-                        if (string.IsNullOrEmpty(domainName) == false && string.IsNullOrEmpty(userAlias) == false)
-                            users = (List<IUser>)ldi.GetUsersByDomainLogin(domainName, userAlias, (userAlias.Contains(".")) ? userAlias.Split('.')[0] : null, (userAlias.Contains(".")) ? userAlias.Split('.')[1] : null);
-                        isDomainSearhed = true;
-                    }
-                }
-                if (users.Count == 0 && userName.Contains("\\"))
-                {
-                    // check domain login and email
-                    if (isDomainSearhed == false)
-                    {
-                        domainName = userName.Split('\\')[0];
-                        userAlias = userName.Split('\\')[1];
-                        if (string.IsNullOrEmpty(domainName) == false && string.IsNullOrEmpty(userAlias) == false)
-                            users = (List<IUser>)ldi.GetUsersByDomainLogin(domainName, userAlias, (userAlias.Contains(".")) ? userAlias.Split('.')[0] : null, (userAlias.Contains(".")) ? userAlias.Split('.')[1] : null);
-                        isDomainSearhed = true;
-                    }
-                    /*if (users.Count == 0)
-                    {
-                        parts = userName.Split('\\');
-                        if (string.IsNullOrEmpty(parts[0]) == false && string.IsNullOrEmpty(parts[1]) == false)
-                            users = ApplicationProvider.GetUsersByEmail(parts[1] + '@' + parts[0]);
-                    }*/
-                }
-                if (users.Count == 0 && isDomainSearhed == false && userName.Contains("."))
-                {
-                    // check user alias and principal without domain
-                    parts = userName.Split('.');
-                    if (string.IsNullOrEmpty(parts[0]) == false && string.IsNullOrEmpty(parts[1]) == false)
-                        users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, parts[0], parts[1]);
-                }
-                if (users.Count == 0 && userName.Contains(","))
-                {
-                    // check user alias and principal without domain
-                    parts = userName.Split(',');
-                    if (string.IsNullOrEmpty(parts[0].Trim()) == false && string.IsNullOrEmpty(parts[1].Trim()) == false)
-                        users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, parts[1].Trim(), parts[0].Trim());
-                }
-                if (users.Count == 0 && userName.Contains(" "))
-                {
-                    // check user alias and principal without domain
-                    parts = userName.Split(' ');
-                    if (string.IsNullOrEmpty(parts[0].Trim()) == false && string.IsNullOrEmpty(parts[1].Trim()) == false)
-                        users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, parts[0].Trim(), parts[1].Trim());
-                }
+                // check email and domain login
+                users = (List<IUser>)ldi.GetUsersByEmail(userName);
                 if (users.Count == 0)
                 {
-                    // check user alias without domain
-                    users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, null, null);
+                    domainName = userName.Split('@')[1];
+                    userAlias = userName.Split('@')[0];
+                    if (string.IsNullOrEmpty(domainName) == false && string.IsNullOrEmpty(userAlias) == false)
+                        users = (List<IUser>)ldi.GetUsersByDomainLogin(domainName, userAlias, (userAlias.Contains(".")) ? userAlias.Split('.')[0] : null, (userAlias.Contains(".")) ? userAlias.Split('.')[1] : null);
+                    isDomainSearhed = true;
                 }
-
-                return users;
             }
-            finally
+            if (users.Count == 0 && userName.Contains("\\"))
             {
-                if (ldi != null) ldi.Dispose();
+                // check domain login and email
+                if (isDomainSearhed == false)
+                {
+                    domainName = userName.Split('\\')[0];
+                    userAlias = userName.Split('\\')[1];
+                    if (string.IsNullOrEmpty(domainName) == false && string.IsNullOrEmpty(userAlias) == false)
+                        users = (List<IUser>)ldi.GetUsersByDomainLogin(domainName, userAlias, (userAlias.Contains(".")) ? userAlias.Split('.')[0] : null, (userAlias.Contains(".")) ? userAlias.Split('.')[1] : null);
+                    isDomainSearhed = true;
+                }
+                /*if (users.Count == 0)
+                {
+                    parts = userName.Split('\\');
+                    if (string.IsNullOrEmpty(parts[0]) == false && string.IsNullOrEmpty(parts[1]) == false)
+                        users = ApplicationProvider.GetUsersByEmail(parts[1] + '@' + parts[0]);
+                }*/
             }
+            if (users.Count == 0 && isDomainSearhed == false && userName.Contains("."))
+            {
+                // check user alias and principal without domain
+                parts = userName.Split('.');
+                if (string.IsNullOrEmpty(parts[0]) == false && string.IsNullOrEmpty(parts[1]) == false)
+                    users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, parts[0], parts[1]);
+            }
+            if (users.Count == 0 && userName.Contains(","))
+            {
+                // check user alias and principal without domain
+                parts = userName.Split(',');
+                if (string.IsNullOrEmpty(parts[0].Trim()) == false && string.IsNullOrEmpty(parts[1].Trim()) == false)
+                    users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, parts[1].Trim(), parts[0].Trim());
+            }
+            if (users.Count == 0 && userName.Contains(" "))
+            {
+                // check user alias and principal without domain
+                parts = userName.Split(' ');
+                if (string.IsNullOrEmpty(parts[0].Trim()) == false && string.IsNullOrEmpty(parts[1].Trim()) == false)
+                    users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, parts[0].Trim(), parts[1].Trim());
+            }
+            if (users.Count == 0)
+            {
+                // check user alias without domain
+                users = (List<IUser>)ldi.GetUsersByDomainLogin(null, userName, null, null);
+            }
+
+            return users;
         }
 
         private IUser GetUserFromUsersList(List<IUser> users, string password, bool usePasswordEncryption)
@@ -432,11 +425,11 @@ namespace Micajah.Common.Bll.Providers
             StringBuilder sb = new StringBuilder();
 
             if (!string.IsNullOrEmpty(loginName))
-                sb.AppendFormat(CultureInfo.InvariantCulture, "&l={0}", HttpUtility.UrlEncodeUnicode(loginName));
+                sb.AppendFormat(CultureInfo.InvariantCulture, "&l={0}", HttpUtility.UrlEncode(loginName));
 
             if (!string.IsNullOrEmpty(password))
             {
-                sb.AppendFormat(CultureInfo.InvariantCulture, "&p={0}", HttpUtility.UrlEncodeUnicode(Support.Encrypt(password)));
+                sb.AppendFormat(CultureInfo.InvariantCulture, "&p={0}", HttpUtility.UrlEncode(Support.Encrypt(password)));
 
                 bool isPersistent = true;
                 if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
@@ -454,7 +447,7 @@ namespace Micajah.Common.Bll.Providers
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 sb.Append("&returnurl=");
-                sb.Append(HttpUtility.UrlEncodeUnicode(CustomUrlProvider.CreateApplicationAbsoluteUrl(returnUrl)));
+                sb.Append(HttpUtility.UrlEncode(CustomUrlProvider.CreateApplicationAbsoluteUrl(returnUrl)));
             }
 
             if (applicationUrl == null)
@@ -734,7 +727,7 @@ namespace Micajah.Common.Bll.Providers
                         if (string.Compare(CustomUrlProvider.CreateApplicationAbsoluteUrl(loginUrl), redirectUrl, StringComparison.OrdinalIgnoreCase) == 0) // Checks if the current page is not login page.
                             redirectUrl = loginUrl;
                         else
-                            redirectUrl = loginUrl + "?returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl);
+                            redirectUrl = loginUrl + "?returnurl=" + HttpUtility.UrlEncode(redirectUrl);
                     }
                 }
 
@@ -1342,7 +1335,7 @@ namespace Micajah.Common.Bll.Providers
             if (absoluteUri)
                 return GetLoginUrl(loginName, null, Guid.Empty, Guid.Empty, null);
 
-            return GetLoginUrl(false) + "?l=" + HttpUtility.UrlEncodeUnicode(loginName);
+            return GetLoginUrl(false) + "?l=" + HttpUtility.UrlEncode(loginName);
         }
 
         /// <summary>
@@ -1423,7 +1416,7 @@ namespace Micajah.Common.Bll.Providers
             else
                 url = ResourceProvider.PasswordRecoveryPageVirtualPath;
             if (!string.IsNullOrEmpty(loginName))
-                url += "?l=" + HttpUtility.UrlEncodeUnicode(loginName);
+                url += "?l=" + HttpUtility.UrlEncode(loginName);
             return url;
         }
 

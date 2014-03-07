@@ -1,4 +1,7 @@
-﻿namespace Micajah.Common.Dal.ClientDataSetTableAdapters
+﻿namespace Micajah.Common.Dal
+{
+}
+namespace Micajah.Common.Dal.ClientDataSetTableAdapters
 {
     partial class UserTableAdapter
     {

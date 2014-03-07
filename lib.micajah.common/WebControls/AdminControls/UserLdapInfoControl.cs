@@ -308,7 +308,6 @@ namespace Micajah.Common.WebControls.AdminControls
                 processId = null;
                 ldapProcess = null;
                 log = null;
-                if (ldap != null) ldap.Dispose();
                 loginName = null;
                 ldapUser = null;
             }

@@ -26,7 +26,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -59,6 +59,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -72,6 +73,7 @@
     </CodeAnalysisRules>
     <DocumentationFile>
     </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChargifyNET, Version=1.0.7.1, Culture=neutral, PublicKeyToken=a614d333e4502959, processorArchitecture=MSIL">
@@ -110,8 +112,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin Shared\Google.GData.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Micajah.Common.LdapAdapter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5584840979da6ebb, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Micajah.Common.LdapAdapter">
       <HintPath>..\bin Shared\Micajah.Common.LdapAdapter.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -287,12 +288,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Dal\LogDataSet.cs">
-      <DependentUpon>LogDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Dal\LogDataSet.Designer.cs">
-      <DependentUpon>LogDataSet.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Dal\MasterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -607,7 +606,7 @@
     </None>
     <None Include="Dal\LogDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>LogDataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>LogDataSet.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="Dal\LogDataSet.xss">

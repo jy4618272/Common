@@ -207,7 +207,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 this.ShowDescription(string.Format(CultureInfo.CurrentCulture
                        , Resources.SignupUserControl_DescriptionLabel_Text_UserExists
-                       , string.Concat(CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.PasswordRecoveryPageVirtualPath), "?l=", HttpUtility.UrlEncodeUnicode(loginName))));
+                       , string.Concat(CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.PasswordRecoveryPageVirtualPath), "?l=", HttpUtility.UrlEncode(loginName))));
 
                 returnValue = 2;
             }

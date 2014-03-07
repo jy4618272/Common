@@ -698,7 +698,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     {
                         redirectUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(Request.Url.PathAndQuery)
                             + ((Request.QueryString["returnurl"] == null)
-                                ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncodeUnicode(redirectUrl)
+                                ? ((Request.Url.PathAndQuery.IndexOf("&", StringComparison.OrdinalIgnoreCase) > -1) ? "&" : "?") + "returnurl=" + HttpUtility.UrlEncode(redirectUrl)
                                 : string.Empty);
                     }
 

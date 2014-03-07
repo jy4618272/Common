@@ -509,14 +509,14 @@ namespace Micajah.Common.Bll.Providers
         {
             if (string.IsNullOrEmpty(returnUrl))
                 return ResourceProvider.ActiveOrganizationPageVirtualPath;
-            return string.Concat(ResourceProvider.ActiveOrganizationPageVirtualPath, "?returnurl=", HttpUtility.UrlEncodeUnicode(returnUrl), (anotherOrganizationIsRequired ? "&ao=1" : string.Empty));
+            return string.Concat(ResourceProvider.ActiveOrganizationPageVirtualPath, "?returnurl=", HttpUtility.UrlEncode(returnUrl), (anotherOrganizationIsRequired ? "&ao=1" : string.Empty));
         }
 
         internal static string GetActiveInstanceUrl(string returnUrl, bool anotherInstanceIsRequired)
         {
             if (string.IsNullOrEmpty(returnUrl))
                 return ResourceProvider.ActiveInstancePageVirtualPath;
-            return string.Concat(ResourceProvider.ActiveInstancePageVirtualPath, "?returnurl=", HttpUtility.UrlEncodeUnicode(returnUrl), (anotherInstanceIsRequired ? "&ai=1" : string.Empty));
+            return string.Concat(ResourceProvider.ActiveInstancePageVirtualPath, "?returnurl=", HttpUtility.UrlEncode(returnUrl), (anotherInstanceIsRequired ? "&ai=1" : string.Empty));
         }
 
         internal static string GetDetailMenuThemeStyleSheet(DetailMenuTheme theme)

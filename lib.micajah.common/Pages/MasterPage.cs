@@ -242,7 +242,7 @@ namespace Micajah.Common.Pages
             {
                 return string.Format(CultureInfo.InvariantCulture
                     , "window.open(\"{0}\", '_blank', 'location=0,menubar=0,resizable=1,scrollbars=1,status=0,titlebar=0,toolbar=0,top=' + Mp_GetPopupPositionY(event) + ',left=' + Mp_GetPopupPositionX({1})  + ',width={1},height={2}');return false;"
-                    , Support.PreserveDoubleQuote(string.Format(CultureInfo.InvariantCulture, FrameworkConfiguration.Current.WebApplication.MasterPage.HelpLink.UrlFormat, HttpUtility.UrlEncodeUnicode(Page.Request.Url.PathAndQuery)))
+                    , Support.PreserveDoubleQuote(string.Format(CultureInfo.InvariantCulture, FrameworkConfiguration.Current.WebApplication.MasterPage.HelpLink.UrlFormat, HttpUtility.UrlEncode(Page.Request.Url.PathAndQuery)))
                     , FrameworkConfiguration.Current.WebApplication.MasterPage.HelpLink.WindowWidth
                     , FrameworkConfiguration.Current.WebApplication.MasterPage.HelpLink.WindowHeight);
             }
@@ -1335,7 +1335,7 @@ namespace Micajah.Common.Pages
                 if (isAuthenticated)
                     throw new HttpException(403, Resources.Error_403);
                 else
-                    redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncodeUnicode(returnUrl);
+                    redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncode(returnUrl);
             }
 
             if (!string.IsNullOrEmpty(redirectUrl))
