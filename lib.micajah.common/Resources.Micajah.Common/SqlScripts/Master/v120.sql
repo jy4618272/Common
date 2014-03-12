@@ -7,13 +7,6 @@ IF @@ERROR <> 0
    IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
 
 IF @@TRANCOUNT = 1
-	CREATE NONCLUSTERED INDEX [IX_Mc_OrganizationsLogins_LoginId]
-		ON [dbo].[Mc_OrganizationsLogins]([LoginId] ASC);
-
-IF @@ERROR <> 0
-   IF @@TRANCOUNT = 1 ROLLBACK TRANSACTION
-
-IF @@TRANCOUNT = 1
 	CREATE NONCLUSTERED INDEX [IX_Mc_Resource_LocalObjectType_LocalObjectId]
 		ON [dbo].[Mc_Resource]([LocalObjectType] ASC, [LocalObjectId] ASC);
 
