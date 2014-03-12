@@ -414,22 +414,6 @@ namespace Micajah.Common.Bll.Providers
             return coll;
         }
 
-        internal static void UpdateInstancesPseudoId(Guid organizationId)
-        {
-            using (InstanceTableAdapter adapter = new InstanceTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
-            {
-                ClientDataSet.InstanceDataTable table = adapter.GetInstances(organizationId);
-
-                foreach (ClientDataSet.InstanceRow instanceRow in table)
-                {
-                    if (string.IsNullOrEmpty(instanceRow.PseudoId))
-                        instanceRow.PseudoId = Support.GeneratePseudoUnique();
-                }
-
-                adapter.Update(table);
-            }
-        }
-
         #endregion
 
         #region Public Methods

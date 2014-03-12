@@ -19,7 +19,6 @@
     <action id="00000000-0000-0000-0000-000000000027" type="Page" name="MC Setup" description="Micajah.Common Setup" navigateUrl="" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" visible="false">
       <detailMenu show="false" />
       <actions>
-        <action id="00000000-0000-0000-0000-000000000028" type="Page" name="Framework" description="Framework information and management" navigateUrl="/mc/setup/framework.aspx" orderNumber="1" organizationRequired="false" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000008" type="Page" name="Entities" description="The Entities which are registered in the Framework" navigateUrl="/mc/setup/entities.aspx" orderNumber="3" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000030" type="Page" name="Actions" description="View the Actions" navigateUrl="/mc/setup/actions.aspx" orderNumber="4" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false" />
         <action id="00000000-0000-0000-0000-000000000031" type="Page" name="Roles" description="View the Roles" navigateUrl="/mc/setup/roles.aspx" orderNumber="5" handle="true" authenticationRequired="true" organizationRequired="false" instanceRequired="false">

@@ -56,7 +56,6 @@ namespace Micajah.Common.Bll.Providers
 
         #region Setup pages
 
-        internal const string FrameworkPageVirtualPath = VirtualRootShortPath + "setup/framework.aspx";
         internal const string RolesPageVirtualPath = VirtualRootShortPath + "setup/roles.aspx";
         internal const string RoleEditPageVirtualPath = VirtualRootShortPath + "setup/roleedit.aspx";
         internal const string DatabaseServersPageVirtualPath = VirtualRootShortPath + "setup/databaseservers.aspx";
@@ -429,7 +428,7 @@ namespace Micajah.Common.Bll.Providers
         }
         private static string ProcessCreditCardRegistrationStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "discover.png", "mastercard.png", "visa.png"}, "Images.Micajah.Common.WebControls.CreditCardRegistration.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "discover.png", "mastercard.png", "visa.png" }, "Images.Micajah.Common.WebControls.CreditCardRegistration.{0}");
         }
 
         private static string ProcessComboBoxModernStyleSheet(string styleSheetContent)
@@ -584,16 +583,6 @@ namespace Micajah.Common.Bll.Providers
         internal static string GetResourceUrl(string resourceName, bool createApplicationAbsoluteUrl)
         {
             return string.Format(CultureInfo.InvariantCulture, GetResourceUrlFormat(createApplicationAbsoluteUrl), GetResourceName(resourceName));
-        }
-
-        internal static string GetSqlScript(int version, string dbType)
-        {
-            return GetManifestResourceString(string.Concat(ResourceProvider.ManifestResourceNamePrefix, ".SqlScripts.", dbType, ".v", version, ".sql"));
-        }
-
-        internal static string GetSqlScript(string sqlScriptName, string dbType)
-        {
-            return GetManifestResourceString(string.Concat(ResourceProvider.ManifestResourceNamePrefix, ".SqlScripts.", dbType, ".", sqlScriptName, ".sql"));
         }
 
         internal static string GetJavaScript(string src)

@@ -174,7 +174,6 @@
     <Compile Include="Bll\Providers\OAuth\ServiceProvider.cs" />
     <Compile Include="Bll\Providers\OAuth\NonceProvider.cs" />
     <Compile Include="Bll\Providers\OAuth\TokenProvider.cs" />
-    <Compile Include="Bll\Providers\VersionProvider.cs" />
     <Compile Include="Bll\Providers\ViewStateProvider.cs" />
     <Compile Include="Bll\Entity.cs" />
     <Compile Include="Bll\EntityEvent.cs" />
@@ -477,9 +476,6 @@
     <Compile Include="WebControls\SetupControls\EntitiesControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\SetupControls\FrameworkControl.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="WebControls\SetupControls\RoleEditControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -634,88 +630,6 @@
     <None Include="Dal\MasterDataSet.xss">
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </None>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v65.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v66.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v67.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v68.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v69.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v71.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v72.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v73.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v74.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v63.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v74.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v62.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v61.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v60.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v59.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v58.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v57.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v56.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v56.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v55.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v54.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v53.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v52.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v51.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v50.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v49.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v48.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v47.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v47.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v46.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v45.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v44.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v43.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v42.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v41.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v40.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v39.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v39.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v38.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v37.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v36.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v35.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v34.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v33.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v33.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v32.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v31.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v31.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v30.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v29.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v27.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v28.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v27.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v25.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v26.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v26.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v24.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v24.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v19.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v18.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v17.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v15.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v16.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v14.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v13.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v12.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v12.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v11.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v11.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v10.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v9.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v9.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v8.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v7.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v6.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v5.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\v.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v4.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\post.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Common\pre.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v3.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v3.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\OAuth.ashx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -724,21 +638,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v106.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v107.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v108.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.GoogleIntegrationControl\GoogleApps.jpg" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v109.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v110.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v111.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v112.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v113.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v114.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.easyModal.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v115.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientRed.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemLeft.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemRight.gif" />
@@ -1822,12 +1726,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\InviteUsers.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v21.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v21.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v22.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v23.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v16.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v20.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Rules.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -1846,7 +1744,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\RulesEngine.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v22.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\EntitiesFields.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -1925,10 +1822,6 @@
     <EmbeddedResource Include="Resources\MicajahCommonConfig.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v75.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v75.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v76.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v76.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\Settings.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Settings.ascx">
       <SubType>ASPXCodeBehind</SubType>
@@ -1936,50 +1829,23 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Settings.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v77.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v77.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v78.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v78.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v79.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v80.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v80.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v81.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\CommonGridView.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicForm.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v82.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v83.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v84.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v84.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v85.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v86.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v87.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v88.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v89.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v89.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.Pages.MasterPage\Overlay.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Decorated.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v90.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Logos.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Logos.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v91.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v92.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v93.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v95.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v94.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\AccountSettings.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\AccountSettings.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v96.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\NotificationCross.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v97.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v97.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SecurityControls.SignupOrganizationControl\Tick.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\blank.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox.png" />
@@ -2003,7 +1869,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_main.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_over.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancy_title_right.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v98.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\GlobalModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\SignupOrganization.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicFormModern.css" />
@@ -2030,9 +1895,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\InformationSmall.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\SuccessSmall.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\WarningSmall.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v99.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v99.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v100.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\AddNew.png" />
@@ -2041,21 +1903,15 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Cross.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Gear.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\Modern.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v101.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Token.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v102.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v103.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v104.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\credit_card.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\email.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\help.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\paypal.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\phone.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v105.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v105.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\GoogleIntegration.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -2148,9 +2004,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Databases.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Framework.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Organizations.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -2222,9 +2075,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Databases.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Framework.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Setup\Organizations.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -2243,8 +2093,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\MasterPage.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\TreeView.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\UpdateProgress.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v2.sql" />
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v64.sql" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Reflective.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Standard.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\Global.css" />
@@ -2280,21 +2128,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v116.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v117.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v118.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v118.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Client\v119.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\CustomUrls.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -2326,9 +2159,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\CreditCardRegistration.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\SqlScripts\Master\v120.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

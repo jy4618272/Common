@@ -15,11 +15,6 @@ namespace Micajah.Common.Configuration
     {
         #region Members
 
-        /// <summary>
-        /// The required schema version of the database.
-        /// </summary>
-        internal const int RequiredDatabaseVersion = 120;
-
         internal const string MasterConnectionStringName = "Micajah.Common.Properties.Settings.MasterConnectionString";
 
         private string m_ApplicationUrl;

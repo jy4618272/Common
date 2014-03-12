@@ -104,13 +104,10 @@
     <Folder Include="Sql Scripts\Change Scripts" />
     <Folder Include="Sql Scripts\Change Scripts\v99" />
     <Folder Include="Sql Scripts\Change Scripts\v74" />
+    <Folder Include="Sql Scripts\Change Scripts\Common" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Mc_DatabaseServer.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="Tables\Mc_Version.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -603,6 +600,107 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <None Include="Sql Scripts\Change Scripts\v2.sql" />
+    <None Include="Sql Scripts\Change Scripts\v3.sql" />
+    <None Include="Sql Scripts\Change Scripts\v4.sql" />
+    <None Include="Sql Scripts\Change Scripts\v5.sql" />
+    <None Include="Sql Scripts\Change Scripts\v6.sql" />
+    <None Include="Sql Scripts\Change Scripts\v7.sql" />
+    <None Include="Sql Scripts\Change Scripts\v8.sql" />
+    <None Include="Sql Scripts\Change Scripts\v9.sql" />
+    <None Include="Sql Scripts\Change Scripts\v10.sql" />
+    <None Include="Sql Scripts\Change Scripts\v11.sql" />
+    <None Include="Sql Scripts\Change Scripts\v12.sql" />
+    <None Include="Sql Scripts\Change Scripts\v13.sql" />
+    <None Include="Sql Scripts\Change Scripts\v14.sql" />
+    <None Include="Sql Scripts\Change Scripts\v16.sql" />
+    <None Include="Sql Scripts\Change Scripts\v17.sql" />
+    <None Include="Sql Scripts\Change Scripts\v18.sql" />
+    <None Include="Sql Scripts\Change Scripts\v19.sql" />
+    <None Include="Sql Scripts\Change Scripts\v20.sql" />
+    <None Include="Sql Scripts\Change Scripts\v21.sql" />
+    <None Include="Sql Scripts\Change Scripts\v22.sql" />
+    <None Include="Sql Scripts\Change Scripts\v23.sql" />
+    <None Include="Sql Scripts\Change Scripts\v24.sql" />
+    <None Include="Sql Scripts\Change Scripts\v25.sql" />
+    <None Include="Sql Scripts\Change Scripts\v26.sql" />
+    <None Include="Sql Scripts\Change Scripts\v27.sql" />
+    <None Include="Sql Scripts\Change Scripts\v28.sql" />
+    <None Include="Sql Scripts\Change Scripts\v29.sql" />
+    <None Include="Sql Scripts\Change Scripts\v31.sql" />
+    <None Include="Sql Scripts\Change Scripts\v32.sql" />
+    <None Include="Sql Scripts\Change Scripts\v33.sql" />
+    <None Include="Sql Scripts\Change Scripts\v34.sql" />
+    <None Include="Sql Scripts\Change Scripts\v36.sql" />
+    <None Include="Sql Scripts\Change Scripts\v37.sql" />
+    <None Include="Sql Scripts\Change Scripts\v39.sql" />
+    <None Include="Sql Scripts\Change Scripts\v40.sql" />
+    <None Include="Sql Scripts\Change Scripts\v41.sql" />
+    <None Include="Sql Scripts\Change Scripts\v42.sql" />
+    <None Include="Sql Scripts\Change Scripts\v45.sql" />
+    <None Include="Sql Scripts\Change Scripts\v46.sql" />
+    <None Include="Sql Scripts\Change Scripts\v47.sql" />
+    <None Include="Sql Scripts\Change Scripts\v49.sql" />
+    <None Include="Sql Scripts\Change Scripts\v53.sql" />
+    <None Include="Sql Scripts\Change Scripts\v55.sql" />
+    <None Include="Sql Scripts\Change Scripts\v56.sql" />
+    <None Include="Sql Scripts\Change Scripts\v57.sql" />
+    <None Include="Sql Scripts\Change Scripts\v58.sql" />
+    <None Include="Sql Scripts\Change Scripts\v59.sql" />
+    <None Include="Sql Scripts\Change Scripts\v60.sql" />
+    <None Include="Sql Scripts\Change Scripts\v61.sql" />
+    <None Include="Sql Scripts\Change Scripts\v62.sql" />
+    <None Include="Sql Scripts\Change Scripts\v63.sql" />
+    <None Include="Sql Scripts\Change Scripts\v64.sql" />
+    <None Include="Sql Scripts\Change Scripts\v65.sql" />
+    <None Include="Sql Scripts\Change Scripts\v66.sql" />
+    <None Include="Sql Scripts\Change Scripts\v67.sql" />
+    <None Include="Sql Scripts\Change Scripts\v68.sql" />
+    <None Include="Sql Scripts\Change Scripts\v69.sql" />
+    <None Include="Sql Scripts\Change Scripts\v71.sql" />
+    <None Include="Sql Scripts\Change Scripts\v72.sql" />
+    <None Include="Sql Scripts\Change Scripts\v73.sql" />
+    <None Include="Sql Scripts\Change Scripts\v74.sql" />
+    <None Include="Sql Scripts\Change Scripts\v75.sql" />
+    <None Include="Sql Scripts\Change Scripts\v76.sql" />
+    <None Include="Sql Scripts\Change Scripts\v77.sql" />
+    <None Include="Sql Scripts\Change Scripts\v78.sql" />
+    <None Include="Sql Scripts\Change Scripts\v79.sql" />
+    <None Include="Sql Scripts\Change Scripts\v80.sql" />
+    <None Include="Sql Scripts\Change Scripts\v82.sql" />
+    <None Include="Sql Scripts\Change Scripts\v84.sql" />
+    <None Include="Sql Scripts\Change Scripts\v85.sql" />
+    <None Include="Sql Scripts\Change Scripts\v86.sql" />
+    <None Include="Sql Scripts\Change Scripts\v87.sql" />
+    <None Include="Sql Scripts\Change Scripts\v89.sql" />
+    <None Include="Sql Scripts\Change Scripts\v90.sql" />
+    <None Include="Sql Scripts\Change Scripts\v91.sql" />
+    <None Include="Sql Scripts\Change Scripts\v92.sql" />
+    <None Include="Sql Scripts\Change Scripts\v93.sql" />
+    <None Include="Sql Scripts\Change Scripts\v95.sql" />
+    <None Include="Sql Scripts\Change Scripts\v96.sql" />
+    <None Include="Sql Scripts\Change Scripts\v97.sql" />
+    <None Include="Sql Scripts\Change Scripts\v99.sql" />
+    <None Include="Sql Scripts\Change Scripts\v102.sql" />
+    <None Include="Sql Scripts\Change Scripts\v103.sql" />
+    <None Include="Sql Scripts\Change Scripts\v104.sql" />
+    <None Include="Sql Scripts\Change Scripts\v105.sql" />
+    <None Include="Sql Scripts\Change Scripts\v106.sql" />
+    <None Include="Sql Scripts\Change Scripts\v107.sql" />
+    <None Include="Sql Scripts\Change Scripts\v108.sql" />
+    <None Include="Sql Scripts\Change Scripts\v109.sql" />
+    <None Include="Sql Scripts\Change Scripts\v110.sql" />
+    <None Include="Sql Scripts\Change Scripts\v111.sql" />
+    <None Include="Sql Scripts\Change Scripts\v112.sql" />
+    <None Include="Sql Scripts\Change Scripts\v113.sql" />
+    <None Include="Sql Scripts\Change Scripts\v114.sql" />
+    <None Include="Sql Scripts\Change Scripts\v115.sql" />
+    <None Include="Sql Scripts\Change Scripts\v117.sql" />
+    <None Include="Sql Scripts\Change Scripts\v118.sql" />
+    <None Include="Sql Scripts\Change Scripts\v120.sql" />
+    <None Include="Sql Scripts\Change Scripts\Common\post.sql" />
+    <None Include="Sql Scripts\Change Scripts\Common\pre.sql" />
+    <None Include="Sql Scripts\Change Scripts\Common\v.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompareToLocal.scmp" />

@@ -1,7 +1,4 @@
-﻿INSERT INTO [dbo].[Mc_Version] ([Version]) VALUES (120)
-GO
-
-INSERT INTO [dbo].[Mc_Country] ([CountryId], [Name]) VALUES ('{00A20781-E4F4-4D01-9BD7-0063C9322D84}', N'Barbados')
+﻿INSERT INTO [dbo].[Mc_Country] ([CountryId], [Name]) VALUES ('{00A20781-E4F4-4D01-9BD7-0063C9322D84}', N'Barbados')
 INSERT INTO [dbo].[Mc_Country] ([CountryId], [Name]) VALUES ('{00E3B9E4-5DF2-4F2D-A814-77B01920A614}', N'Argentina')
 INSERT INTO [dbo].[Mc_Country] ([CountryId], [Name]) VALUES ('{02E55972-E0C9-481C-9C12-190F4E8D7AC9}', N'Comoros')
 INSERT INTO [dbo].[Mc_Country] ([CountryId], [Name]) VALUES ('{053C3314-CA71-4E35-B60A-9A1F6C1D6E57}', N'Svalbard')

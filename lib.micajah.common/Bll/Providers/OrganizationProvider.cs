@@ -571,24 +571,6 @@ namespace Micajah.Common.Bll.Providers
             }
         }
 
-        internal static void UpdateOrganizationsPseudoId()
-        {
-            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
-            {
-                MasterDataSet.OrganizationDataTable table = adapter.GetOrganizations(null);
-
-                foreach (MasterDataSet.OrganizationRow organizationRow in table)
-                {
-                    if (string.IsNullOrEmpty(organizationRow.PseudoId))
-                        organizationRow.PseudoId = Support.GeneratePseudoUnique();
-
-                    InstanceProvider.UpdateInstancesPseudoId(organizationRow.OrganizationId);
-                }
-
-                adapter.Update(table);
-            }
-        }
-
         #endregion
 
         #region Public Methods
