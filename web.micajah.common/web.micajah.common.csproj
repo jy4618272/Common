@@ -199,8 +199,6 @@
     <Compile Include="App_Code\ActionCustomHandler.cs" />
     <Compile Include="App_Code\CustomLoginProvider.cs" />
     <Compile Include="App_Code\SettingCustomHandler.cs" />
-    <Compile Include="App_Code\TestThread1CustomHandler.cs" />
-    <Compile Include="App_Code\TestThread2CustomHandler.cs" />
     <Compile Include="BwdTime.aspx.cs">
       <DependentUpon>BwdTime.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
