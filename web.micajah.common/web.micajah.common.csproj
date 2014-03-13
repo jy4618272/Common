@@ -146,12 +146,6 @@
     <Content Include="Images\tickets_small.png" />
     <Content Include="LogOn.aspx" />
     <Content Include="LogOn2.aspx" />
-    <None Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Microsoft.WindowsAzure.Caching\PerformanceCounters.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="Pages1\CheckBoxList.aspx" />
     <Content Include="Pages1\CommonGridView.aspx" />
     <Content Include="Pages1\CustomFieldsForm.aspx" />
@@ -371,9 +365,6 @@
     <Content Include="App_Browsers\Default.browser" />
     <Content Include="MasterPage.master" />
     <Content Include="Micajah.Common.config" />
-    <None Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
