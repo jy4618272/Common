@@ -10,4 +10,16 @@
 
 
 public partial class Help {
+    
+    /// <summary>
+    /// Master property.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated property.
+    /// </remarks>
+    public new Micajah.Common.Pages.MasterPage Master {
+        get {
+            return ((Micajah.Common.Pages.MasterPage)(base.Master));
+        }
+    }
 }

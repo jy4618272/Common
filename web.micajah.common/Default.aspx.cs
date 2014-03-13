@@ -25,10 +25,6 @@ public partial class _Default : System.Web.UI.Page
 
         //Response.Write(Support.ToShortTimeString(date, 1) + "<br />");
         //Response.Write(Support.ToLongDateTimeString(date, 1) + "<br />");
-
-        this.Master.HeaderMessage = "No Credit Card on File.";
-        this.Master.HeaderMessageDescription = "<a href='/mc/admin/accountsettings.aspx'>Click Here</a> to update your account.";
-        this.Master.HeaderMessageType = Micajah.Common.WebControls.NoticeMessageType.Warning;
     }
 
     #endregion
