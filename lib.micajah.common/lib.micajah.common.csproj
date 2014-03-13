@@ -1951,7 +1951,6 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\CustomStyleSheetEdit.ascx">
       <SubType>ASPXCodeBehind</SubType>

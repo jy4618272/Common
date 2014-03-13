@@ -1,6 +1,7 @@
 ﻿using Google.GData.Apps;
 using Google.GData.Apps.Groups;
 using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
@@ -49,7 +50,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected Image imgGoogleAppsLogo;
         protected HyperLink hlGoogleAppsForBusiness;
-        protected HyperLink hlAddSherpaDesk;
+        protected HyperLink hlAddApplication;
         protected Literal litCaption;
 
         #endregion
@@ -192,7 +193,12 @@ namespace Micajah.Common.WebControls.AdminControls
             imgGoogleAppsLogo.ImageUrl = ResourceProvider.GetImageUrl(typeof(GoogleIntegrationControl), "GoogleApps.jpg", true);
 
             hlGoogleAppsForBusiness.Text = Resources.GoogleIntegrationControl_GoogleAppsForBusiness_Text;
-            hlAddSherpaDesk.Text = Resources.GoogleIntegrationControl_AddSherpaDesk_Text;
+
+            GoogleIntegrationElement settings = FrameworkConfiguration.Current.WebApplication.Integration.Google;
+
+            hlAddApplication.Text = string.Format(CultureInfo.InvariantCulture, Resources.GoogleIntegrationControl_AddApplication_Text, settings.ApplicationName);
+            hlAddApplication.NavigateUrl = settings.ApplicationListingUrl;
+
             litCaption.Text = Resources.GoogleIntegrationControl_Caption_Text;
 
             BaseControl.LoadResources(EditForm, typeof(OrganizationLdapSettingsControl).Name);

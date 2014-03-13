@@ -2264,7 +2264,7 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
     <value>Icon URL</value>
   </data>
   <data name="OrganizationLdapSettingsControl_Description_Text" xml:space="preserve">
-    <value>To set up your system to replicate user data over LDAP please review the follow article. &lt;a style="font-size: medium;" href="http://app.bigwebapps.com/portal/KBArticleView.aspx?dept=6f5bg5&amp;org=rn062f&amp;tkt=fvegqv" target="_blank"&gt;Setup LDAP Integration&lt;/a&gt;</value>
+    <value>To set up your system to replicate user data over LDAP please review the follow article. &lt;a href="{0}" target="_blank"&gt;Setup LDAP Integration&lt;/a&gt;</value>
   </data>
   <data name="OrganizationLdapSettingsControl_LdapSetupStep1_Text" xml:space="preserve">
     <value>Step 1</value>
@@ -2503,7 +2503,7 @@ Do you want to link email "{1}" to this account?</value>
     <value>Import/update these users</value>
   </data>
   <data name="GoogleIntegrationControl_ImportUsers_Result_Text" xml:space="preserve">
-    <value>Import/update was successfull for {0} users. &lt;br/&gt; Import/update was failed for {1} users.</value>
+    <value>Import/update was successful for {0} users. &lt;br/&gt; Import/update was failed for {1} users.</value>
   </data>
   <data name="SignupOrganizationControl_HowYouHearAboutUs_Text" xml:space="preserve">
     <value>Google Apps Marketplace</value>
@@ -2544,8 +2544,8 @@ Do you want to link email "{1}" to this account?</value>
   <data name="OAuthControl_VerificationCodeLiteral_Text" xml:space="preserve">
     <value>You must enter this verification code at the Consumer: {0}</value>
   </data>
-  <data name="GoogleIntegrationControl_AddSherpaDesk_Text" xml:space="preserve">
-    <value>Add Sherpadesk to your existing Google Apps Account</value>
+  <data name="GoogleIntegrationControl_AddApplication_Text" xml:space="preserve">
+    <value>Add {0} to your existing Google Apps Account</value>
   </data>
   <data name="GoogleIntegrationControl_Caption_Text" xml:space="preserve">
     <value>Manual Replication without full Google Apps Integration</value>

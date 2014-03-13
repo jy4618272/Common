@@ -60,6 +60,16 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets or sets the URL of the application listing in Google Apps Marketplace.
+        /// </summary>
+        [ConfigurationProperty("applicationListingUrl")]
+        public string ApplicationListingUrl
+        {
+            get { return (string)this["applicationListingUrl"]; }
+            set { this["applicationListingUrl"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the client ID.
         /// </summary>
         [ConfigurationProperty("clientId")]

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Handlers;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.LdapAdapter;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
+using Micajah.Common.WebControls.SetupControls;
+using System;
 using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll.Handlers;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.LdapAdapter;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
-using Micajah.Common.WebControls.SetupControls;
 
 namespace Micajah.Common.WebControls.AdminControls
 {
@@ -407,7 +408,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     ldapProcess.Message = string.Empty;
                     ldapProcess.Data = null;
                     LdapInfoProvider.LdapProcesses.Add(ldapProcess);
-                    
+
                     ldapServerAddress = (EditForm.Rows[0].Cells[1].Controls[0] as TextBox).Text;
                     if (string.IsNullOrEmpty((EditForm.Rows[1].Cells[1].Controls[0] as TextBox).Text) == true)
                     {
@@ -851,7 +852,7 @@ namespace Micajah.Common.WebControls.AdminControls
                             rtsRealReplicationProcess.Tabs[1].Enabled = false;
                             rtsRealReplicationProcess.SelectedIndex = 0;
                             RealADReplicationViewProcessResultLabel.Text = "";
-                            
+
                             foreach (LdapProcessLog log in ldapProcess.Logs)
                             {
                                 RealADReplicationViewProcessResultLabel.Text += string.Format(CultureInfo.CurrentCulture, "{0} - {1}<br/>", log.Date, log.Message);
@@ -979,7 +980,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             CheckLdapServerAddressErrorTextHidden.Value = Resources.OrganizationLdapSettingsControl_CheckLdapServerAddress_ErrorText;
 
-            DescriptionLabel.Text = Resources.OrganizationLdapSettingsControl_Description_Text;
+            DescriptionLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.OrganizationLdapSettingsControl_Description_Text, FrameworkConfiguration.Current.WebApplication.Integration.Ldap.SetupUrl);
             LdapSetupLabel.Text = Resources.OrganizationLdapSettingsControl_LdapSetup_Text;
             Step1Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep1_Text;
             Step2Label.Text = Resources.OrganizationLdapSettingsControl_LdapSetupStep2_Text;
@@ -1015,7 +1016,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);           
+            base.OnLoad(e);
 
             if (!IsPostBack)
             {

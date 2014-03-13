@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.AdminControls.GoogleIntegrationControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 <!--
     var instance = Sys.WebForms.PageRequestManager.getInstance();
     instance.add_beginRequest(BeginRequestHandler);
@@ -32,7 +32,7 @@
 <br />
 <asp:HyperLink ID="hlGoogleAppsForBusiness" runat="server" NavigateUrl="https://www.google.com/enterprise/apps/business/" Font-Size="Medium" />
 <br /><br />
-<asp:HyperLink ID="hlAddSherpaDesk" runat="server" NavigateUrl="https://www.google.com/enterprise/marketplace/viewListing?productListingId=23437+1149902435229588599" Font-Size="Medium"/>
+<asp:HyperLink ID="hlAddApplication" runat="server" Font-Size="Medium"/>
 <br /><br /><br />
 <h1 style="text-decoration:underline;"><asp:Literal ID="litCaption" runat="server" /></h1>
 <asp:Label ID="lblDescription" runat="server" Font-Size="Medium" />

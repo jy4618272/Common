@@ -1986,11 +1986,11 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Sherpadesk to your existing Google Apps Account.
+        ///   Looks up a localized string similar to Add {0} to your existing Google Apps Account.
         /// </summary>
-        internal static string GoogleIntegrationControl_AddSherpaDesk_Text {
+        internal static string GoogleIntegrationControl_AddApplication_Text {
             get {
-                return ResourceManager.GetString("GoogleIntegrationControl_AddSherpaDesk_Text", resourceCulture);
+                return ResourceManager.GetString("GoogleIntegrationControl_AddApplication_Text", resourceCulture);
             }
         }
         
@@ -2130,7 +2130,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import/update was successfull for {0} users. &lt;br/&gt; Import/update was failed for {1} users..
+        ///   Looks up a localized string similar to Import/update was successful for {0} users. &lt;br/&gt; Import/update was failed for {1} users..
         /// </summary>
         internal static string GoogleIntegrationControl_ImportUsers_Result_Text {
             get {
@@ -4397,7 +4397,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To set up your system to replicate user data over LDAP please review the follow article. &lt;a style=&quot;font-size: medium;&quot; href=&quot;http://app.bigwebapps.com/portal/KBArticleView.aspx?dept=6f5bg5&amp;org=rn062f&amp;tkt=fvegqv&quot; target=&quot;_blank&quot;&gt;Setup LDAP Integration&lt;/a&gt;.
+        ///   Looks up a localized string similar to To set up your system to replicate user data over LDAP please review the follow article. &lt;a style=&quot;font-size: medium;&quot; href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;Setup LDAP Integration&lt;/a&gt;.
         /// </summary>
         internal static string OrganizationLdapSettingsControl_Description_Text {
             get {

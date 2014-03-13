@@ -2,17 +2,18 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" %>
 
+<style type="text/css">
 <% if (Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Micajah.Common.Pages.MasterPageTheme.Modern)
    {%>
-<style type="text/css">
-    .RadTabStrip .rtsLevel, .RadTabStrip:after, .RadTabStripVertical:after, .RadTabStrip .rtsLevel:after, .RadTabStripVertical .rtsLevel:after, .RadTabStrip .rtsScroll:after, .RadTabStripVertical .rtsScroll:after, .RadTabStrip .rtsUL:after, .RadTabStripVertical .rtsUL:after, .RadTabStrip .rtsLI:after, .RadTabStripVertical .rtsLI:after
-    {
-     clear: none;
-    }
-
-</style>
+     .RadTabStrip .rtsLevel, .RadTabStrip:after, .RadTabStripVertical:after, .RadTabStrip .rtsLevel:after, .RadTabStripVertical .rtsLevel:after, .RadTabStrip .rtsScroll:after, .RadTabStripVertical .rtsScroll:after, .RadTabStrip .rtsUL:after, .RadTabStripVertical .rtsUL:after, .RadTabStrip .rtsLI:after, .RadTabStripVertical .rtsLI:after {
+        clear: none;
+     }
 <% } %>
-<script language="javascript" type="text/javascript">
+     .medium, .medium a, .medium a:hover {
+         font-size: medium;
+     }
+</style>
+<script type="text/javascript">
 <!--
     var instance = Sys.WebForms.PageRequestManager.getInstance();
     instance.add_beginRequest(BeginRequestHandler);
@@ -49,7 +50,7 @@
 // -->
 </script>
 <br />
-<asp:Label ID="DescriptionLabel" runat="server" Font-Size="Medium" />
+<asp:Label ID="DescriptionLabel" runat="server" CssClass="medium" />
 <br /><br /><br />
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>

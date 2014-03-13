@@ -35,6 +35,16 @@ namespace Micajah.Common.Configuration
             set { this["enabled"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the URL of the article how to setup LDAP.
+        /// </summary>
+        [ConfigurationProperty("setupUrl")]
+        public string SetupUrl
+        {
+            get { return (string)this["setupUrl"]; }
+            set { this["setupUrl"] = value; }
+        }
+
         #endregion
     }
 }
