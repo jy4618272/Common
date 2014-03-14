@@ -26,7 +26,7 @@ namespace Micajah.Common.WebControls.SecurityControls
     {
         #region Members
 
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
         protected Table SearchTable;
         protected Literal CaptionLiteral;
         protected Label OrganizationListLabel;
@@ -105,8 +105,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                     List.SelectedIndex = -1;
                     List.Visible = false;
 
-                    ErrorDiv.InnerHtml = ex.Message;
-                    ErrorDiv.Visible = true;
+                    ErrorPanel.InnerHtml = ex.Message;
+                    ErrorPanel.Visible = true;
                 }
             }
         }
@@ -292,15 +292,15 @@ namespace Micajah.Common.WebControls.SecurityControls
                         }
                         catch (AuthenticationException ex)
                         {
-                            ErrorDiv.InnerHtml = ex.Message;
-                            ErrorDiv.Visible = true;
+                            ErrorPanel.InnerHtml = ex.Message;
+                            ErrorPanel.Visible = true;
                             return;
                         }
                     }
                 }
 
-                ErrorDiv.InnerHtml = Resources.LoginElement_FailureText;
-                ErrorDiv.Visible = true;
+                ErrorPanel.InnerHtml = Resources.LoginElement_FailureText;
+                ErrorPanel.Visible = true;
             }
         }
 

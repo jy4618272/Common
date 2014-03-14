@@ -61,7 +61,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// The div to display an error message, if an error occured.
         /// </summary>
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
 
         protected HtmlGenericControl LogoImagePanel;
         protected Image LogoImage;
@@ -355,7 +355,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void InitializeControls()
         {
-            ErrorDiv.EnableViewState = false;
+            ErrorPanel.EnableViewState = false;
 
             LoginTextBox.Required = true;
             LoginTextBox.ShowRequired = false;
@@ -884,7 +884,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (TitleLabel != null)
                 TitleContainer.Visible = (!string.IsNullOrEmpty(TitleLabel.Text));
-            ErrorDiv.Visible = (!string.IsNullOrEmpty(ErrorDiv.InnerHtml));
+            ErrorPanel.Visible = (!string.IsNullOrEmpty(ErrorPanel.InnerHtml));
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
@@ -922,7 +922,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         public void ShowErrorMessage(string message)
         {
-            ErrorDiv.InnerHtml = message;
+            ErrorPanel.InnerHtml = message;
         }
 
         /// <summary>

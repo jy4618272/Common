@@ -23,7 +23,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// The div to display an error message, if an error occured.
         /// </summary>
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
 
         /// <summary>
         /// The container control for controls related to organization selection process.
@@ -174,7 +174,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, action);
 
                 if (string.Compare(Request.QueryString["ao"], "1", StringComparison.OrdinalIgnoreCase) == 0)
-                    ActiveInstanceControl.ShowError(Resources.ActiveOrganizationControl_YouAreLoggedIntoAnotherOrganization, ErrorDiv);
+                    ActiveInstanceControl.ShowError(Resources.ActiveOrganizationControl_YouAreLoggedIntoAnotherOrganization, ErrorPanel);
 
                 LogOffLink.Text = Resources.ActiveOrganizationControl_LogoffLink_Text;
 
@@ -228,14 +228,14 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 if (count == 0)
                 {
-                    ActiveInstanceControl.ShowError(Resources.UserContext_ErrorMessage_YouAreNotAssociatedWithOrganizations, ErrorDiv);
+                    ActiveInstanceControl.ShowError(Resources.UserContext_ErrorMessage_YouAreNotAssociatedWithOrganizations, ErrorPanel);
                 }
                 else if ((count == 1) && (!user.CanLogOnAsUser))
                 {
                     OrganizationArea.Visible = false;
                     OrLabel3.Visible = false;
-                    ErrorDiv.Style.Add(HtmlTextWriterStyle.PaddingBottom, "7px");
-                    SelectOrganization(coll[0].OrganizationId, Request.QueryString["returnurl"], true, ErrorDiv);
+                    ErrorPanel.Style.Add(HtmlTextWriterStyle.PaddingBottom, "7px");
+                    SelectOrganization(coll[0].OrganizationId, Request.QueryString["returnurl"], true, ErrorPanel);
                 }
                 else
                 {
@@ -264,7 +264,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorDiv);
+                SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorPanel);
         }
 
         protected void LogOffLink_Click(object sender, EventArgs e)

@@ -83,7 +83,7 @@
                 </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
-                        <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                        <div id="ErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                     </ItemTemplate>
                 </mits:TemplateField>
             </fields>

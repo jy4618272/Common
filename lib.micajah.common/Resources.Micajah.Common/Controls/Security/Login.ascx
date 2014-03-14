@@ -13,7 +13,7 @@
     <div id="LogoImagePanel" runat="server" style="text-align: center; padding-bottom: 5px;">
         <asp:Image ID="LogoImage" runat="server" />
     </div>
-    <div id="ErrorDiv" runat="server" class="ErrorMessage" style="text-align: center;
+    <div id="ErrorPanel" runat="server" class="ErrorMessage" style="text-align: center;
         padding-bottom: 5px;" />
     <table id="FormTable" class="FormTable" runat="server" align="center" cellspacing="10">
         <tr id="TitleContainer" runat="server" class="Caption">

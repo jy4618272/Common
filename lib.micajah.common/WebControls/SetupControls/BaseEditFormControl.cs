@@ -15,19 +15,19 @@ namespace Micajah.Common.WebControls.SetupControls
         protected MagicForm EditForm;
         protected ObjectDataSource EntityDataSource;
 
-        private HtmlGenericControl m_ErrorDiv;
+        private HtmlGenericControl m_ErrorPanel;
         private bool m_IsModernTheme;
 
         #endregion
 
         #region Protected Properties
 
-        protected HtmlGenericControl ErrorDiv
+        protected HtmlGenericControl ErrorPanel
         {
             get
             {
-                if (m_ErrorDiv == null) m_ErrorDiv = EditForm.FindControl("ErrorDiv") as HtmlGenericControl;
-                return m_ErrorDiv;
+                if (m_ErrorPanel == null) m_ErrorPanel = EditForm.FindControl("ErrorPanel") as HtmlGenericControl;
+                return m_ErrorPanel;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Micajah.Common.WebControls.SetupControls
             if (e == null) return;
 
             e.KeepInEditMode = true;
-            if (BaseControl.ShowError(e.Exception, ErrorDiv))
+            if (BaseControl.ShowError(e.Exception, ErrorPanel))
                 e.ExceptionHandled = true;
             else if (m_IsModernTheme)
             {

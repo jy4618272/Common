@@ -46,7 +46,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// The div to display an error message, if an error occured.
         /// </summary>
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
 
         protected PlaceHolder InstanceArea;
         protected Label InstanceDescriptionLabel;
@@ -156,7 +156,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                ActiveInstanceControl.SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorDiv);
+                ActiveInstanceControl.SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorPanel);
         }
 
         protected void OrganizationList_ItemDataBound(object sender, DataListItemEventArgs e)
@@ -174,7 +174,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                ActiveOrganizationControl.SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorDiv);
+                ActiveOrganizationControl.SelectOrganization((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), null, false, ErrorPanel);
         }
 
         #endregion

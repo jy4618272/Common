@@ -31,7 +31,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected MagicForm EditUserActiveForm;
         protected CommonGridView InvitedUsersList;
         protected ObjectDataSource InvitedUsersListDataSource;
-        protected HtmlGenericControl InvitedUsersDiv;
+        protected HtmlGenericControl InvitedUsersPanel;
         protected ObjectDataSource GroupDataSource;
 
         private ComboBox m_CountryList;
@@ -167,7 +167,7 @@ namespace Micajah.Common.WebControls.AdminControls
         private void BackToDetailMenu()
         {
             List.Visible = false;
-            InvitedUsersDiv.Visible = false;
+            InvitedUsersPanel.Visible = false;
             EditForm.Visible = false;
             PasswordForm.Visible = false;
             EditUserGroupsForm.Visible = false;
@@ -238,8 +238,8 @@ namespace Micajah.Common.WebControls.AdminControls
                 {
                     if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.OrganizationId))
                     {
-                        ErrorDiv.InnerHtml = Resources.UsersControl_ErrorMessage_UserInOrganizationExists;
-                        ErrorDiv.Visible = true;
+                        ErrorPanel.InnerHtml = Resources.UsersControl_ErrorMessage_UserInOrganizationExists;
+                        ErrorPanel.Visible = true;
 
                         return;
                     }
@@ -329,7 +329,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 MagicForm form = (sender as MagicForm);
                 if (form != null)
                 {
-                    HtmlGenericControl errorDiv = form.FindControl(form.ID + "ErrorDiv") as HtmlGenericControl;
+                    HtmlGenericControl errorDiv = form.FindControl(form.ID + "ErrorPanel") as HtmlGenericControl;
                     if (errorDiv != null)
                     {
                         errorDiv.InnerHtml = e.Exception.GetBaseException().Message;
@@ -567,7 +567,7 @@ namespace Micajah.Common.WebControls.AdminControls
             }
             EditForm_ShowDetails(false);
             UserChecked = false;
-            InvitedUsersDiv.Visible = true;
+            InvitedUsersPanel.Visible = true;
         }
 
         protected override void EditFormInitialize()
@@ -620,13 +620,13 @@ namespace Micajah.Common.WebControls.AdminControls
                 case CommandActions.Add:
                     PwdFormReset();
                     base.List_Action(sender, e);
-                    InvitedUsersDiv.Visible = false;
+                    InvitedUsersPanel.Visible = false;
                     break;
                 case CommandActions.Edit:
                     PwdFormReset();
                     List.SelectedIndex = e.RowIndex;
                     List.Visible = false;
-                    InvitedUsersDiv.Visible = false;
+                    InvitedUsersPanel.Visible = false;
                     UserDetailMenu.Visible = true;
                     UserDetailMenu.Title = string.Format(CultureInfo.CurrentUICulture, Resources.UsersControl_UserDetailMenu_TitleFormatString, WebApplication.LoginProvider.GetEmail(this.SelectedUserId));
                     UserDetailMenu.ObjectId = this.SelectedUserId.ToString();
@@ -654,8 +654,8 @@ namespace Micajah.Common.WebControls.AdminControls
                     e.ExceptionHandled = true;
                     e.KeepInEditMode = true;
 
-                    ErrorDiv.InnerHtml = e.Exception.GetBaseException().Message;
-                    ErrorDiv.Visible = true;
+                    ErrorPanel.InnerHtml = e.Exception.GetBaseException().Message;
+                    ErrorPanel.Visible = true;
                 }
                 else
                 {
@@ -685,10 +685,10 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             base.OnPreRender(e);
 
-            if ((ErrorDiv != null) && ErrorDiv.Visible)
+            if ((ErrorPanel != null) && ErrorPanel.Visible)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "ClientScripts",
-                     string.Concat("window.setTimeout(\"document.getElementById('", ErrorDiv.ClientID, "').style.display = 'none'\", 10000);\r\n"),
+                     string.Concat("window.setTimeout(\"document.getElementById('", ErrorPanel.ClientID, "').style.display = 'none'\", 10000);\r\n"),
                      true);
             }
         }

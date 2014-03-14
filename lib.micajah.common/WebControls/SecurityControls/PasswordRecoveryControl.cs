@@ -53,7 +53,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// The div to display an error message, if an error occured.
         /// </summary>
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
 
         protected HtmlTable ResultTable;
         protected HtmlTableRow SuccessTableRow;
@@ -160,8 +160,8 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 SuccessTableRow.Visible = false;
 
-                ErrorDiv.Visible = true;
-                ErrorDiv.InnerHtml = Resources.PasswordRecoveryControl_TitleLabel_FailureText;
+                ErrorPanel.Visible = true;
+                ErrorPanel.InnerHtml = Resources.PasswordRecoveryControl_TitleLabel_FailureText;
             }
 
             FormTable.Visible = false;

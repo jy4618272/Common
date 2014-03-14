@@ -1055,13 +1055,13 @@ namespace Micajah.Common.Security
 
         #region Public Methods
 
-        public void Initialize(Guid userId, Guid organizationId, Guid instanceId, bool setAuthCookie, bool? isPersistent)
+        public void Initialize(Guid userId, Guid organizationId, Guid instanceId, bool setAuthenticationCookie, bool? isPersistent)
         {
             this.UserId = userId;
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
-                if (setAuthCookie)
+                if (setAuthenticationCookie)
                 {
                     if (FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled)
                         LoginProvider.SetAuthCookie(userId, organizationId, instanceId, isPersistent);
@@ -1072,8 +1072,8 @@ namespace Micajah.Common.Security
 
             if (organizationId != Guid.Empty)
             {
-                this.SelectOrganization(organizationId, setAuthCookie, isPersistent, instanceId);
-                this.SelectInstance(instanceId, setAuthCookie, isPersistent);
+                this.SelectOrganization(organizationId, setAuthenticationCookie, isPersistent, instanceId);
+                this.SelectInstance(instanceId, setAuthenticationCookie, isPersistent);
             }
         }
 

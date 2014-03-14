@@ -21,8 +21,8 @@ namespace Micajah.Common.WebControls.SetupControls
             string errorMessage = string.Empty;
             if (!DatabaseProvider.DatabaseExists(values["Name"].ToString(), values["UserName"].ToString(), values["Password"].ToString(), (Guid)Support.ConvertStringToType(values["DatabaseServerId"].ToString(), typeof(Guid)), out errorMessage))
             {
-                this.ErrorDiv.InnerHtml = errorMessage;
-                this.ErrorDiv.Visible = true;
+                this.ErrorPanel.InnerHtml = errorMessage;
+                this.ErrorPanel.Visible = true;
 
                 return false;
             }

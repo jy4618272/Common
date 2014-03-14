@@ -12,7 +12,7 @@
 </script>
 <div id="MainContainer" runat="server" style="position: absolute; top: 50%; height: 220px;
     margin-top: -110px; width: 100%; text-align: center;">
-    <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="ErrorMessage"
+    <div id="ErrorPanel" runat="server" visible="false" enableviewstate="false" class="ErrorMessage"
         style="padding-bottom: 7px;" />
     <asp:Label ID="TitleLabel" runat="server" CssClass="Caption" />
     <br />

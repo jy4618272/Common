@@ -65,7 +65,7 @@
                 <mits:CheckBoxField DataField="Active" InsertVisible="false" />
                 <mits:TemplateField>
                     <itemtemplate>
-                        <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                        <div id="ErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                     </itemtemplate>
                 </mits:TemplateField>
             </fields>

@@ -23,9 +23,9 @@
     </asp:TableFooterRow>
 </asp:Table>
 <div style="display: none;">
-    <mits:TreeView ID="Atv" runat="server" CheckBoxes="true" Enabled="False" DataFieldID="ActionId"
+    <mits:TreeView ID="ActionsTree" runat="server" CheckBoxes="true" Enabled="False" DataFieldID="ActionId"
         DataValueField="ActionId" DataFieldParentID="ParentActionId" DataTextField="Name"
-        OnNodeDataBound="Atv_NodeDataBound" />
+        OnNodeDataBound="ActionsTree_NodeDataBound" />
 </div>
 <asp:ObjectDataSource ID="EntityDataSource" runat="server" SelectMethod="GetRoleRow"
     TypeName="Micajah.Common.Bll.Providers.RoleProvider">

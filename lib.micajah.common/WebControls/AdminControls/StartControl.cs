@@ -16,7 +16,7 @@ namespace Micajah.Common.WebControls.AdminControls
     {
         #region Members
 
-        protected HtmlGenericControl VideoDiv;
+        protected HtmlGenericControl VideoPanel;
         protected DetailMenu StartMenu;
         protected LinkButton HideLink;
 
@@ -158,9 +158,9 @@ namespace Micajah.Common.WebControls.AdminControls
             if (!this.IsPostBack)
             {
                 if (!string.IsNullOrEmpty(this.MasterPage.ActiveAction.VideoUrl))
-                    VideoDiv.InnerHtml = GetObjectTag(386, 220, this.MasterPage.ActiveAction.VideoUrl);
+                    VideoPanel.InnerHtml = GetObjectTag(386, 220, this.MasterPage.ActiveAction.VideoUrl);
                 else
-                    VideoDiv.Visible = false;
+                    VideoPanel.Visible = false;
 
                 this.RegisterFancyBoxInitScript();
             }

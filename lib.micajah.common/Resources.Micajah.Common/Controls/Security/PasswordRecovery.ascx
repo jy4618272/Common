@@ -2,7 +2,7 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <div id="MainContainer" runat="server" style="position: absolute; top: 50%; height: 240px;
     margin-top: -120px; width: 100%; text-align: center;">
-    <div id="ErrorDiv" runat="server" class="ErrorMessage" enableviewstate="false" style="text-align: center;" />
+    <div id="ErrorPanel" runat="server" class="ErrorMessage" enableviewstate="false" style="text-align: center;" />
     <table id="ResultTable" runat="server" align="center" cellspacing="10" class="FormTable">
         <tr id="SuccessTableRow" runat="server" class="Caption">
             <td colspan="2" style="text-align: center;">

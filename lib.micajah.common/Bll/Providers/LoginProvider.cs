@@ -653,34 +653,34 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Signs out the current user.
         /// </summary>
-        /// <param name="removeAuthInfo">true to remove the authentication information from the browser.</param>
-        public void SignOut(bool removeAuthInfo)
+        /// <param name="clearAuthenticationCookie">true to remove the authentication information from the browser.</param>
+        public void SignOut(bool clearAuthenticationCookie)
         {
-            this.SignOut(removeAuthInfo, true);
+            this.SignOut(clearAuthenticationCookie, true);
         }
 
         /// <summary>
         /// Signs out the current user.
         /// </summary>
-        /// <param name="removeAuthInfo">true to remove the authentication information from the browser.</param>
+        /// <param name="clearAuthenticationCookie">true to remove the authentication information from the browser.</param>
         /// <param name="redirectToLogOnPage">true to redirect the browser to the login URL.</param>
-        public void SignOut(bool removeAuthInfo, bool redirectToLogOnPage)
+        public void SignOut(bool clearAuthenticationCookie, bool redirectToLogOnPage)
         {
-            SignOut(removeAuthInfo, redirectToLogOnPage, false);
+            SignOut(clearAuthenticationCookie, redirectToLogOnPage, false);
         }
 
         /// <summary>
         /// Signs out the current user.
         /// </summary>
-        /// <param name="removeAuthInfo">true to remove the authentication information from the browser.</param>
+        /// <param name="clearAuthenticationCookie">true to remove the authentication information from the browser.</param>
         /// <param name="redirectToLogOnPage">true to redirect the browser to the login URL.</param>
         /// <param name="sessionIsNotValid">true, if the session is not valid (when an user is logged from another computer).</param>
-        public void SignOut(bool removeAuthInfo, bool redirectToLogOnPage, bool sessionIsNotValid)
+        public void SignOut(bool clearAuthenticationCookie, bool redirectToLogOnPage, bool sessionIsNotValid)
         {
             if (redirectToLogOnPage)
-                SignOut(removeAuthInfo, GetLoginUrl(false) + (sessionIsNotValid ? "?ac=1" : string.Empty));
+                SignOut(clearAuthenticationCookie, GetLoginUrl(false) + (sessionIsNotValid ? "?ac=1" : string.Empty));
             else
-                SignOut(removeAuthInfo, null);
+                SignOut(clearAuthenticationCookie, null);
         }
 
         /// <summary>
@@ -695,9 +695,9 @@ namespace Micajah.Common.Bll.Providers
         /// <summary>
         /// Signs out the current user.
         /// </summary>
-        /// <param name="removeAuthInfo">true to remove the authentication information from the browser.</param>
+        /// <param name="clearAuthenticationCookie">true to remove the authentication information from the browser.</param>
         /// <param name="redirectUrl">The URL to navigate.</param>
-        public virtual void SignOut(bool removeAuthInfo, string redirectUrl)
+        public virtual void SignOut(bool clearAuthenticationCookie, string redirectUrl)
         {
             HttpContext http = HttpContext.Current;
             if (http == null) return;
@@ -707,7 +707,7 @@ namespace Micajah.Common.Bll.Providers
 
             if (FrameworkConfiguration.Current.WebApplication.AuthenticationMode == AuthenticationMode.Forms)
             {
-                if (removeAuthInfo)
+                if (clearAuthenticationCookie)
                     ClearAuthCookie();
             }
 
@@ -916,7 +916,7 @@ namespace Micajah.Common.Bll.Providers
         {
             string firstName = null;
             string lastName = null;
-            if (details.Length > 0)
+            if ((details != null) && (details.Length > 0))
             {
                 firstName = (string)details[0];
                 if (details.Length > 1)

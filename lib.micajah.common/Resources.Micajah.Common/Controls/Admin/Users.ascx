@@ -29,7 +29,7 @@
                 </mits:TemplateField>
             </columns>
         </mits:CommonGridView>
-        <div id="InvitedUsersDiv" runat="server" style="padding-top: 40px;">
+        <div id="InvitedUsersPanel" runat="server" style="padding-top: 40px;">
             <mits:CommonGridView ID="InvitedUsersList" runat="server" DataKeyNames="InvitedLoginId"
                 DataSourceID="InvitedUsersListDataSource" Width="700px" AutoGenerateColumns="false"
                 AllowSorting="true">
@@ -87,7 +87,7 @@
                 </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
-                        <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                        <div id="ErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                     </ItemTemplate>
                 </mits:TemplateField>
             </fields>
@@ -107,7 +107,7 @@
                 </mits:TemplateField>
                 <mits:TemplateField ShowHeader="False">
                     <ItemTemplate>
-                        <div id="EditUserGroupsFormErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                        <div id="EditUserGroupsFormErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                     </ItemTemplate>
                 </mits:TemplateField>
             </fields>
@@ -124,7 +124,7 @@
                 </mits:TemplateField>
                 <mits:TemplateField ShowHeader="False">
                     <ItemTemplate>
-                        <div id="EditUserActiveFormErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                        <div id="EditUserActiveFormErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                     </ItemTemplate>
                 </mits:TemplateField>
             </fields>

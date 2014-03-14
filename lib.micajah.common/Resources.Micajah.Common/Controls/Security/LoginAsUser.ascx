@@ -46,7 +46,7 @@
                 <asp:TableCell>
                 </asp:TableCell>
                 <asp:TableCell>
-                    <div id="ErrorDiv" runat="server" class="Error Block" enableviewstate="false"
+                    <div id="ErrorPanel" runat="server" class="Error Block" enableviewstate="false"
                         visible="false">
                     </div>
                 </asp:TableCell>

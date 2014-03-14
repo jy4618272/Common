@@ -35,7 +35,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected TextBox VanityUrlTextbox;
         protected Label VanityUrlDomainLabel;
         protected Button SimpleViewSaveButton;
-        protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorDiv;
+        protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorPanel;
         protected CustomValidator SimpleViewCustomValidator;
 
         private ComboBox m_InstanceList;
@@ -323,7 +323,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 }
                 catch (Exception ex)
                 {
-                    BaseControl.ShowError(ex, SimpleErrorDiv);
+                    BaseControl.ShowError(ex, SimpleErrorPanel);
                 }
             }
         }

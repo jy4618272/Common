@@ -36,7 +36,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         private Guid m_StartActionId;
         private ArrayList m_ActionIdList;
-        private HtmlGenericControl m_ErrorDiv;
+        private HtmlGenericControl m_ErrorPanel;
 
         #endregion
 
@@ -66,12 +66,12 @@ namespace Micajah.Common.WebControls.AdminControls
             }
         }
 
-        protected HtmlGenericControl ErrorDiv
+        protected HtmlGenericControl ErrorPanel
         {
             get
             {
-                if (m_ErrorDiv == null) m_ErrorDiv = EditForm.FindControl("ErrorDiv") as HtmlGenericControl;
-                return m_ErrorDiv;
+                if (m_ErrorPanel == null) m_ErrorPanel = EditForm.FindControl("ErrorPanel") as HtmlGenericControl;
+                return m_ErrorPanel;
             }
         }
 
@@ -308,10 +308,10 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 Exception ex = e.Exception.GetBaseException();
                 if (ex is ConstraintException)
-                    ErrorDiv.InnerHtml = Resources.GroupsInstancesRolesControl_EditForm_InsertErrorMessage;
+                    ErrorPanel.InnerHtml = Resources.GroupsInstancesRolesControl_EditForm_InsertErrorMessage;
                 else
-                    ErrorDiv.InnerHtml = ex.Message;
-                ErrorDiv.Visible = true;
+                    ErrorPanel.InnerHtml = ex.Message;
+                ErrorPanel.Visible = true;
             }
             else
             {

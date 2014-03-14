@@ -30,7 +30,7 @@
         </asp:UpdatePanel>
     </td>
     <td style="padding: 50px 0 0 20px; vertical-align: top;">
-        <div id="VideoDiv" runat="server" style="border: 1px solid #e2e2e2; padding: 2px;">
+        <div id="VideoPanel" runat="server" style="border: 1px solid #e2e2e2; padding: 2px;">
         </div>
     </td>
 </table>

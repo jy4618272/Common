@@ -32,7 +32,7 @@
                     <tr>
                         <td colspan="2">
                             <asp:CustomValidator ID="SimpleViewCustomValidator" runat="server" CssClass="Error Block" Display="Dynamic" ValidateEmptyText="true" ValidationGroup="<%# SimpleView.ClientID %>" ClientValidationFunction="ValidateCustomUrls"></asp:CustomValidator>
-                            <div id="SimpleErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                            <div id="SimpleErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                         </td>
                     </tr>     
                     <tr>
@@ -88,7 +88,7 @@
                             <ItemTemplate>
                                 <asp:CustomValidator ID="CustomUrlsValidator" runat="server" CssClass="Error Block" Display="Dynamic" ErrorMessage="<%# CustomUrlsValidatorErrorMessage %>"
                                     ValidateEmptyText="true" ValidationGroup="<%# EditForm.ClientID %>" ClientValidationFunction="ValidateCustomUrls"></asp:CustomValidator>
-                                <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                                <div id="ErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                             </ItemTemplate>
                         </mits:TemplateField>
                     </fields>

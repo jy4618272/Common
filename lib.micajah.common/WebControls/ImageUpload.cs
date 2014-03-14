@@ -93,7 +93,7 @@ namespace Micajah.Common.WebControls
         private FileUpload FileFromMyComputer;
         private Panel FileFromWebPanel;
         private System.Web.UI.WebControls.TextBox FileFromWeb;
-        private HtmlGenericControl ErrorDiv;
+        private HtmlGenericControl ErrorPanel;
         private Button UploadButton;
         private Panel UploadedImageViewPanel;
         private Image UploadedImage;
@@ -354,8 +354,8 @@ namespace Micajah.Common.WebControls
             FileFromWeb.CssClass = "iuFromWeb";
             FileFromWebPanel.Controls.Add(FileFromWeb);
 
-            ErrorDiv = CreateErrorDiv("iuError ErrorMessage Block");
-            td.Controls.Add(ErrorDiv);
+            ErrorPanel = CreateErrorPanel("iuError ErrorMessage Block");
+            td.Controls.Add(ErrorPanel);
 
             UploadButton = new Button();
             UploadButton.ID = "UploadButton";
@@ -415,10 +415,10 @@ namespace Micajah.Common.WebControls
             this.Controls.Add(table);
         }
 
-        private static HtmlGenericControl CreateErrorDiv(string cssClass)
+        private static HtmlGenericControl CreateErrorPanel(string cssClass)
         {
             HtmlGenericControl div = new HtmlGenericControl("div");
-            div.ID = "ErrorDiv";
+            div.ID = "ErrorPanel";
             div.EnableViewState = false;
             div.Style[HtmlTextWriterStyle.Display] = "none";
             if (!string.IsNullOrEmpty(cssClass)) div.Attributes["class"] = cssClass;
@@ -437,8 +437,8 @@ namespace Micajah.Common.WebControls
             this.EnsureUploadedImageViewPanel();
             OpenLink.Controls.Add(UploadedImageViewPanel);
 
-            ErrorDiv = CreateErrorDiv("iuError ErrorMessage Block");
-            this.Controls.Add(ErrorDiv);
+            ErrorPanel = CreateErrorPanel("iuError ErrorMessage Block");
+            this.Controls.Add(ErrorPanel);
 
             PopupWindow = new RadWindow();
             PopupWindow.ID = "PopupWindow";
@@ -654,8 +654,8 @@ namespace Micajah.Common.WebControls
 
             if (this.ShowErrorMessage && this.ErrorOccurred)
             {
-                ErrorDiv.InnerHtml = m_ErrorMessage;
-                ErrorDiv.Style.Remove(HtmlTextWriterStyle.Display);
+                ErrorPanel.InnerHtml = m_ErrorMessage;
+                ErrorPanel.Style.Remove(HtmlTextWriterStyle.Display);
             }
         }
 

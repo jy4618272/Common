@@ -16,7 +16,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         #region Members
 
         protected HtmlGenericControl MainContainer;
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
         protected Label TitleLabel;
         protected Label DescriptionLabel;
         protected HtmlTable FormTable;
@@ -87,8 +87,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void ShowErrorMessage(string message)
         {
-            ErrorDiv.InnerHtml = message;
-            ErrorDiv.Visible = true;
+            ErrorPanel.InnerHtml = message;
+            ErrorPanel.Visible = true;
         }
 
         private void ValidateResetPasswordRequest()

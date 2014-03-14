@@ -23,7 +23,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <summary>
         /// The div to display an error message, if an error occured.
         /// </summary>
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
 
         /// <summary>
         /// The container control for controls related to instance selection process.
@@ -53,7 +53,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// </summary>
         /// <param name="instanceId">The instance identifier to select.</param>
         /// <param name="redirectUrl">The URL to redirect to.</param>
-        internal static void SelectInstance(Guid instanceId, string redirectUrl, bool validateRedirectUrl, HtmlGenericControl errorDiv)
+        internal static void SelectInstance(Guid instanceId, string redirectUrl, bool validateRedirectUrl, HtmlGenericControl errorPanel)
         {
             try
             {
@@ -64,9 +64,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                     if (validateRedirectUrl)
                         ValidateRedirectUrl(ref redirectUrl, true);
 
-                    errorDiv.Page.Session.Clear();
+                    errorPanel.Page.Session.Clear();
 
-                    errorDiv.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(user.OrganizationId, instanceId, redirectUrl));
+                    errorPanel.Page.Response.Redirect(CustomUrlProvider.GetVanityUri(user.OrganizationId, instanceId, redirectUrl));
                 }
                 else
                 {
@@ -76,12 +76,12 @@ namespace Micajah.Common.WebControls.SecurityControls
                     ValidateRedirectUrl(ref redirectUrl, true);
 
                     if (!string.IsNullOrEmpty(redirectUrl))
-                        errorDiv.Page.Response.Redirect(redirectUrl);
+                        errorPanel.Page.Response.Redirect(redirectUrl);
                 }
             }
             catch (AuthenticationException ex)
             {
-                ShowError(ex.Message, errorDiv);
+                ShowError(ex.Message, errorPanel);
             }
         }
 
@@ -168,7 +168,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 Micajah.Common.Pages.MasterPage.SetPageTitle(this.Page, action);
 
                 if (string.Compare(Request.QueryString["ai"], "1", StringComparison.OrdinalIgnoreCase) == 0)
-                    ShowError(Resources.ActiveInstanceControl_YouAreLoggedIntoAnotherInstance, ErrorDiv);
+                    ShowError(Resources.ActiveInstanceControl_YouAreLoggedIntoAnotherInstance, ErrorPanel);
 
                 LogOffLink.Text = Resources.ActiveInstanceControl_LogoffLink_Text;
 
@@ -193,13 +193,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                             ? Resources.UserContext_ErrorMessage_YouAreNotAssociatedWithInstances + "<br />"
                                 + string.Format(CultureInfo.InvariantCulture, Resources.ActiveInstanceControl_ConfigureOrganization, url)
                             : Resources.UserContext_ErrorMessage_YouAreNotAssociatedWithInstances)
-                        , ErrorDiv);
+                        , ErrorPanel);
                 }
                 else if (count == 1)
                 {
                     InstanceArea.Visible = false;
                     LogOffDescriptionLabel.Visible = false;
-                    SelectInstance(coll[0].InstanceId, Request.QueryString["returnurl"], true, ErrorDiv);
+                    SelectInstance(coll[0].InstanceId, Request.QueryString["returnurl"], true, ErrorPanel);
                 }
                 else
                 {
@@ -221,7 +221,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (e == null) return;
             if (e.CommandName.Equals("Select"))
-                SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorDiv);
+                SelectInstance((Guid)Support.ConvertStringToType(e.CommandArgument.ToString(), typeof(Guid)), Request.QueryString["returnurl"], true, ErrorPanel);
         }
 
         #endregion

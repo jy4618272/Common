@@ -2,7 +2,7 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <div id="MainContainer" runat="server" style="position: absolute; width: 100%; text-align: center;
     margin-top: 35px;">
-    <div id="ErrorDiv" runat="server" class="ErrorMessage" enableviewstate="false" visible="false" />
+    <div id="ErrorPanel" runat="server" class="ErrorMessage" enableviewstate="false" visible="false" />
     <p>
         <asp:Label ID="TitleLabel" runat="server" Font-Bold="true" /></p>
     <asp:Button ID="LogOffLink" runat="server" CssClass="Btn" OnClick="LogOffLink_Click" />

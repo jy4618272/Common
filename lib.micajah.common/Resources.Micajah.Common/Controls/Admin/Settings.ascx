@@ -35,7 +35,7 @@
             </asp:Repeater>
         </ItemTemplate>
     </asp:Repeater>
-    <div id="CommandBarDiv" runat="server" class="Mf_B" style="border: none;">
+    <div id="CommandBar" runat="server" class="Mf_B" style="border: none;">
         <asp:Button ID="UpdateButton" runat="server" OnClick="UpdateButton_Click" />
         <asp:PlaceHolder ID="ButtonsSeparator" runat="server" Visible="false" />
         <asp:HyperLink ID="CancelLink" runat="server" CssClass="Mf_Cb" Visible="false" />

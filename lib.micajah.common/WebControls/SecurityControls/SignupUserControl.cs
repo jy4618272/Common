@@ -18,7 +18,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         #region Members
 
         protected HtmlGenericControl MainContainer;
-        protected HtmlGenericControl ErrorDiv;
+        protected HtmlGenericControl ErrorPanel;
         protected CustomValidator PasswordCompareValidator;
         protected Label TitleLabel;
         protected Panel DescriptionPanel;
@@ -168,8 +168,8 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void ShowErrorMessage(string message)
         {
-            ErrorDiv.InnerHtml = message;
-            ErrorDiv.Visible = true;
+            ErrorPanel.InnerHtml = message;
+            ErrorPanel.Visible = true;
         }
 
         private void ShowDescription(string description)

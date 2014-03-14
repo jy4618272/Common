@@ -76,7 +76,7 @@
                 </mits:TemplateField>
                 <mits:TemplateField>
                     <ItemTemplate>
-                        <div id="ErrorDiv" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
+                        <div id="ErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                         <asp:Label id="OldPassword" runat="server" Visible="False" Text='<%# Eval("LdapPassword") %>'></asp:Label>
                     </ItemTemplate>
                 </mits:TemplateField>

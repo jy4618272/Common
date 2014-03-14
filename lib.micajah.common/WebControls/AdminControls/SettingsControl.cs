@@ -32,7 +32,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected PlaceHolder ButtonsSeparator;
         protected HyperLink CancelLink;
         protected DetailMenu DetailMenu1;
-        protected HtmlGenericControl CommandBarDiv;
+        protected HtmlGenericControl CommandBar;
 
         private SettingCollection m_Settings;
         private Micajah.Common.Bll.Action m_Action;
@@ -760,7 +760,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
                 if (this.DiagnoseConflictingSettings)
                 {
-                    CommandBarDiv.Visible = false;
+                    CommandBar.Visible = false;
                 }
             }
 
@@ -842,7 +842,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "ToggleOnOffSwitchClientScript", this.ToggleOnOffSwitchClientScript, true);
 
             if (this.DisplayedSettingLevel != SettingLevels.Group)
-                CommandBarDiv.Visible = (this.Settings.Count > 1);
+                CommandBar.Visible = (this.Settings.Count > 1);
         }
 
         public override Control FindControl(string id)
