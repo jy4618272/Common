@@ -479,11 +479,19 @@ namespace Micajah.Common.Bll
 
         public static bool operator <(Action action1, Action action2)
         {
+            if (action1 == null)
+            {
+                return (action2 != null);
+            }
             return (action1.CompareTo(action2) < 0);
         }
 
         public static bool operator >(Action action1, Action action2)
         {
+            if (action1 == null)
+            {
+                return false;
+            }
             return (action1.CompareTo(action2) > 0);
         }
 

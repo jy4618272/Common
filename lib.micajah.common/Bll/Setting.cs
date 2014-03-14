@@ -428,11 +428,19 @@ namespace Micajah.Common.Bll
 
         public static bool operator <(Setting setting1, Setting setting2)
         {
+            if (setting1 == null)
+            {
+                return (setting2 != null);
+            }
             return (setting1.CompareTo(setting2) < 0);
         }
 
         public static bool operator >(Setting setting1, Setting setting2)
         {
+            if (setting1 == null)
+            {
+                return false;
+            }
             return (setting1.CompareTo(setting2) > 0);
         }
 
