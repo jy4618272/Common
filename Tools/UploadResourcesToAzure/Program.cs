@@ -60,7 +60,7 @@ namespace Micajah.Common.Tools.UploadResourcesToAzure
 
                         try
                         {
-                            // Download the file from File Service.
+                            // Get the file from database.
                             Console.WriteLine("Resource #{0} \"{1}\" (resourceId = {2:N}).", fileIndex, row.Name, row.ResourceId);
                             Console.Write("Getting from database...");
 
