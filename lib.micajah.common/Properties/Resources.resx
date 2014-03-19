@@ -627,9 +627,6 @@
   <data name="ActiveOrganizationControl_LogoffLink_Text" xml:space="preserve">
     <value>Click here to log out.</value>
   </data>
-  <data name="OrganizationsControl_EditForm_LogoImageField_HeaderText" xml:space="preserve">
-    <value>Logo</value>
-  </data>
   <data name="OrganizationsControl_EditForm_WebSiteUrlField_HeaderText" xml:space="preserve">
     <value>Website URL</value>
   </data>
@@ -1432,54 +1429,6 @@
   <data name="EntityTreeView_Unselect" xml:space="preserve">
     <value>Unselect</value>
   </data>
-  <data name="ImageUpload_ClosePopupWindowButton_Text" xml:space="preserve">
-    <value>Close</value>
-  </data>
-  <data name="ImageUpload_DeletingConfirmationText" xml:space="preserve">
-    <value>Do you really want to delete it?</value>
-  </data>
-  <data name="ImageUpload_FileNotExists" xml:space="preserve">
-    <value>File not exists</value>
-  </data>
-  <data name="ImageUpload_FilePathIsEmpty" xml:space="preserve">
-    <value>File path is empty</value>
-  </data>
-  <data name="ImageUpload_InvalidFileExtension" xml:space="preserve">
-    <value>Invalid file extension</value>
-  </data>
-  <data name="ImageUpload_InvalidFileSize" xml:space="preserve">
-    <value>Invalid file size</value>
-  </data>
-  <data name="ImageUpload_InvalidUrl" xml:space="preserve">
-    <value>Invalid URL</value>
-  </data>
-  <data name="ImageUpload_NoImageLabel_Text" xml:space="preserve">
-    <value>No Image</value>
-  </data>
-  <data name="ImageUpload_OpenLink_ToolTip" xml:space="preserve">
-    <value>Click here to attach an image</value>
-  </data>
-  <data name="ImageUpload_PopupWindow_Title" xml:space="preserve">
-    <value>Attach Image</value>
-  </data>
-  <data name="ImageUpload_UploadButton_Text" xml:space="preserve">
-    <value>Upload Selected Image</value>
-  </data>
-  <data name="ImageUpload_UploadTypeList_FromMyComputerItem_Text" xml:space="preserve">
-    <value>Get a file from &lt;b&gt;my computer&lt;/b&gt;</value>
-  </data>
-  <data name="ImageUpload_UploadTypeList_FromWebItem_Text" xml:space="preserve">
-    <value>Get a file from &lt;b&gt;the web&lt;/b&gt;</value>
-  </data>
-  <data name="ImageUpload_UrlIsEmpty" xml:space="preserve">
-    <value>URL is empty</value>
-  </data>
-  <data name="ImageUpload_DeleteText" xml:space="preserve">
-    <value>delete</value>
-  </data>
-  <data name="ImageUpload_FileIsNotSaved" xml:space="preserve">
-    <value>File is not saved to the repository</value>
-  </data>
   <data name="InstanceProfileControl_EditForm_ObjectName" xml:space="preserve">
     <value>Instance Profile</value>
   </data>
@@ -1575,9 +1524,6 @@
   </data>
   <data name="OrganizationLdapSettingsControl_EditForm_LdapUpdatePassword_HeaderText" xml:space="preserve">
     <value>Update Password</value>
-  </data>
-  <data name="ImageUpload_ButtonSeparator_Text" xml:space="preserve">
-    <value>&amp;nbsp;&amp;nbsp;or&amp;nbsp;&amp;nbsp;</value>
   </data>
   <data name="LdapGroupMappingsControl_ActionsTable_Caption" xml:space="preserve">
     <value>Add Group to Mappings</value>
@@ -2036,27 +1982,6 @@ Parent groups of user groups are marked as normal text&lt;br/&gt;</value>
   </data>
   <data name="SignupUserControl_CaptchaControl_ErrorMessage" xml:space="preserve">
     <value>The code you entered is not valid</value>
-  </data>
-  <data name="LogosControl_List_InstanceType_Text" xml:space="preserve">
-    <value>Instance</value>
-  </data>
-  <data name="LogosControl_List_LogoColumn_HeaderText" xml:space="preserve">
-    <value>Logo</value>
-  </data>
-  <data name="LogosControl_List_NameColumn_HeaderText" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="LogosControl_List_OrganisationType_Text" xml:space="preserve">
-    <value>Organization</value>
-  </data>
-  <data name="LogosControl_List_TypeColumn_HeaderText" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="LogosControl_EditForm_ObjectName_Organzation" xml:space="preserve">
-    <value>Organization logo</value>
-  </data>
-  <data name="LogosControl_EditForm_ObjectName_Instance" xml:space="preserve">
-    <value>Instance logo</value>
   </data>
   <data name="LoginProvider_ErrorMessage_PasswordTooShort" xml:space="preserve">
     <value>Password must be alphanumeric with at least {0} characters.</value>
@@ -2552,9 +2477,6 @@ Do you want to link email "{1}" to this account?</value>
   </data>
   <data name="GoogleIntegrationControl_GoogleAppsForBusiness_Text" xml:space="preserve">
     <value>Sign up for a new Google Apps for Business Account</value>
-  </data>
-  <data name="LogosControl_EditForm_ObjectName" xml:space="preserve">
-    <value>logo</value>
   </data>
   <data name="OAuthControl_TitleLiteral_Text" xml:space="preserve">
     <value>Connect Your Account</value>

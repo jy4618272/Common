@@ -256,7 +256,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 string msg = null;
                 if (string.IsNullOrEmpty(CurrentPassword.Text))
                     msg = Resources.ChangePasswordControl_CurrentPasswordRequired;
-                else if (!WebApplication.LoginProvider.ValidateLogin(this.LoginId, CurrentPassword.Text))
+                else if (!LoginProvider.Current.ValidateLogin(this.LoginId, CurrentPassword.Text))
                     msg = Resources.ChangePasswordControl_CurrentPasswordIsNotValid;
 
                 if (msg != null)

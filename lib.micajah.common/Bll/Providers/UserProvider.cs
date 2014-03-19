@@ -107,12 +107,12 @@ namespace Micajah.Common.Bll.Providers
             , string timeZoneId, int? timeFormat, int? dateFormat
             , string groupId, Guid organizationId, bool organizationAdministrator, bool sendEmailNotification)
         {
-            WebApplication.LoginProvider.ChangeLoginName(loginId, email, sendEmailNotification);
+            LoginProvider.Current.ChangeLoginName(loginId, email, sendEmailNotification);
 
             bool orgAdmin = organizationAdministrator;
             if (groupId != null) orgAdmin = organizationAdministrator || string.Concat(",", groupId, ",").Contains("," + Guid.Empty.ToString() + ",");
 
-            WebApplication.LoginProvider.AddLoginToOrganization(loginId, organizationId, orgAdmin);
+            LoginProvider.Current.AddLoginToOrganization(loginId, organizationId, orgAdmin);
 
             ClientDataSet.UserRow row = GetUserRow(loginId, organizationId);
             if (row == null)
@@ -205,7 +205,7 @@ namespace Micajah.Common.Bll.Providers
 
                 if (isOrganizationAdministratorModified)
                 {
-                    WebApplication.LoginProvider.UpdateLoginInOrganization(userId, organizationId, isOrganizationAdministrator, null);
+                    LoginProvider.Current.UpdateLoginInOrganization(userId, organizationId, isOrganizationAdministrator, null);
 
                     UpdateUserInOrganization(userId, organizationId, isOrganizationAdministrator, null);
                 }
@@ -247,8 +247,8 @@ namespace Micajah.Common.Bll.Providers
             ClientDataSet.UserRow row = GetUserRow(userId, organizationId);
             if (row != null)
             {
-                WebApplication.LoginProvider.ChangeLoginName(userId, email, sendEmailNotification);
-                WebApplication.LoginProvider.UpdateLogin(userId, null, null, firstName, lastName);
+                LoginProvider.Current.ChangeLoginName(userId, email, sendEmailNotification);
+                LoginProvider.Current.UpdateLogin(userId, null, null, firstName, lastName);
 
                 using (UserTableAdapter adapter = new UserTableAdapter(OrganizationProvider.GetConnectionString(organizationId)))
                 {
@@ -314,11 +314,11 @@ namespace Micajah.Common.Bll.Providers
         {
             password = null;
             Guid loginId = Guid.Empty;
-            DataRowView drv = WebApplication.LoginProvider.GetLogin(email);
+            DataRowView drv = LoginProvider.Current.GetLogin(email);
             if (drv != null)
             {
                 loginId = (Guid)drv["LoginId"];
-                if (WebApplication.LoginProvider.LoginInOrganization(loginId, organizationId))
+                if (LoginProvider.Current.LoginInOrganization(loginId, organizationId))
                 {
                     UpdateUser(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department
@@ -328,7 +328,7 @@ namespace Micajah.Common.Bll.Providers
                 }
                 else
                 {
-                    WebApplication.LoginProvider.UpdateLogin(loginId, null, null, firstName, lastName);
+                    LoginProvider.Current.UpdateLogin(loginId, null, null, firstName, lastName);
 
                     InsertUserIntoOrganization(loginId, email, firstName, lastName, middleName
                         , phone, mobilePhone, fax, title, department
@@ -369,7 +369,7 @@ namespace Micajah.Common.Bll.Providers
                     list.Add(row.InstanceId);
             }
 
-            if (!WebApplication.LoginProvider.LoginIsActiveInOrganization(userId, organizationId))
+            if (!LoginProvider.Current.LoginIsActiveInOrganization(userId, organizationId))
                 list.Add(Guid.Empty);
 
             return list;
@@ -569,7 +569,7 @@ namespace Micajah.Common.Bll.Providers
             body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_YourNewLogin, email);
             body.AppendLine();
             body.AppendLine();
-            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
+            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, LoginProvider.Current.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
 
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, null, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
@@ -624,7 +624,7 @@ namespace Micajah.Common.Bll.Providers
             body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_YourNewPassword, password);
             body.AppendLine();
             body.AppendLine();
-            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
+            body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, LoginProvider.Current.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
 
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, null, subject, body.ToString(), false
                 , new EmailSendingEventArgs()
@@ -723,7 +723,7 @@ namespace Micajah.Common.Bll.Providers
                             body.AppendLine();
                         }
                         body.AppendLine();
-                        body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, organizationId, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
+                        body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, LoginProvider.Current.GetLoginUrl(email, null, organizationId, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
 
                         return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, bcc, subject, body.ToString(), false
                             , new EmailSendingEventArgs()
@@ -746,7 +746,7 @@ namespace Micajah.Common.Bll.Providers
                     body.AppendLine();
                 }
                 body.AppendLine();
-                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, organizationId, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
+                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, LoginProvider.Current.GetLoginUrl(email, null, organizationId, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
             }
             else
             {
@@ -761,7 +761,7 @@ namespace Micajah.Common.Bll.Providers
                 body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_YourPassword, password);
                 body.AppendLine();
                 body.AppendLine();
-                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, WebApplication.LoginProvider.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
+                body.AppendFormat(CultureInfo.InvariantCulture, Resources.EmailNotification_LoginLink, LoginProvider.Current.GetLoginUrl(email, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.ApplicationUri));
             }
 
             return Support.SendEmail(FrameworkConfiguration.Current.WebApplication.Support.Email, modifiedByEmail, email, bcc, subject, body.ToString(), false
@@ -867,7 +867,7 @@ namespace Micajah.Common.Bll.Providers
         /// <returns>The collection that contains the groups identifiers list which the specified user belong to in the specified organization.</returns>
         public static ArrayList GetUserGroupIdList(Guid organizationId, Guid userId)
         {
-            return GetUserGroupIdList(organizationId, userId, WebApplication.LoginProvider.LoginIsOrganizationAdministrator(userId, organizationId));
+            return GetUserGroupIdList(organizationId, userId, LoginProvider.Current.LoginIsOrganizationAdministrator(userId, organizationId));
         }
 
         /// <summary>
@@ -1021,7 +1021,7 @@ namespace Micajah.Common.Bll.Providers
             ClientDataSet.UserRow row = null;
             if (!string.IsNullOrEmpty(email))
             {
-                foreach (Organization org in WebApplication.LoginProvider.GetOrganizationsByLoginName(email))
+                foreach (Organization org in LoginProvider.Current.GetOrganizationsByLoginName(email))
                 {
                     row = GetUserRow(email, org.OrganizationId);
                     if (row != null)
@@ -1189,10 +1189,10 @@ namespace Micajah.Common.Bll.Providers
             , string groupId, Guid organizationId
             , string password, bool validatePassword, bool sendEmailNotification)
         {
-            if (validatePassword) WebApplication.LoginProvider.ValidatePassword(password);
+            if (validatePassword) LoginProvider.Current.ValidatePassword(password);
 
             Guid loginId = Guid.Empty;
-            DataRow dr = WebApplication.LoginProvider.CreateLogin(loginName, password, firstName, lastName);
+            DataRow dr = LoginProvider.Current.CreateLogin(loginName, password, firstName, lastName);
             if (dr != null)
             {
                 loginId = (Guid)dr["LoginId"];
@@ -1278,12 +1278,12 @@ namespace Micajah.Common.Bll.Providers
             , int minRequiredPasswordLength, int minRequiredNonAlphanumericCharacters, out string password)
         {
             if (minRequiredPasswordLength > 0)
-                password = WebApplication.LoginProvider.GeneratePassword(minRequiredPasswordLength, minRequiredNonAlphanumericCharacters);
+                password = LoginProvider.Current.GeneratePassword(minRequiredPasswordLength, minRequiredNonAlphanumericCharacters);
             else
-                password = WebApplication.LoginProvider.GeneratePassword();
+                password = LoginProvider.Current.GeneratePassword();
 
             Guid loginId = Guid.Empty;
-            DataRow dr = WebApplication.LoginProvider.CreateLogin(email, password, firstName, lastName);
+            DataRow dr = LoginProvider.Current.CreateLogin(email, password, firstName, lastName);
             if (dr != null)
             {
                 loginId = (Guid)dr["LoginId"];
@@ -1588,11 +1588,11 @@ namespace Micajah.Common.Bll.Providers
             , string password, bool validatePassword, bool sendEmailNotification)
         {
             Guid loginId = Guid.Empty;
-            DataRowView drv = WebApplication.LoginProvider.GetLogin(loginName);
+            DataRowView drv = LoginProvider.Current.GetLogin(loginName);
             if (drv != null)
             {
                 loginId = (Guid)drv["LoginId"];
-                bool loginInOrganization = WebApplication.LoginProvider.LoginInOrganization(loginId, organizationId);
+                bool loginInOrganization = LoginProvider.Current.LoginInOrganization(loginId, organizationId);
 
                 if (loginInOrganization)
                 {
@@ -1613,7 +1613,7 @@ namespace Micajah.Common.Bll.Providers
                         SendUserEmail(email, string.Empty, organizationId, groupId, false, false, true);
                 }
 
-                WebApplication.LoginProvider.ChangePassword(loginId, password, sendEmailNotification, validatePassword);
+                LoginProvider.Current.ChangePassword(loginId, password, sendEmailNotification, validatePassword);
             }
             else
             {
@@ -1781,7 +1781,7 @@ namespace Micajah.Common.Bll.Providers
 
             if (userId == Guid.Empty) userId = user.UserId;
 
-            LoginProvider loginProvider = WebApplication.LoginProvider;
+            LoginProvider loginProvider = LoginProvider.Current;
             bool needEmailUpdate = loginProvider.ChangeLoginName(userId, email);
 
             ClientDataSet.UserRow row = null;
@@ -2142,7 +2142,7 @@ namespace Micajah.Common.Bll.Providers
         /// <param name="active">true, if the user is active in the specified organization; otherwise, false.</param>
         public static void UpdateUserActive(Guid userId, Guid organizationId, bool active)
         {
-            WebApplication.LoginProvider.UpdateLoginInOrganization(userId, organizationId, null, active);
+            LoginProvider.Current.UpdateLoginInOrganization(userId, organizationId, null, active);
             UpdateUserInOrganization(userId, organizationId, null, active);
         }
 
@@ -2264,7 +2264,7 @@ namespace Micajah.Common.Bll.Providers
                 adapter.Delete(organizationId, userId);
             }
 
-            WebApplication.LoginProvider.RemoveLoginFromOrganization(userId, organizationId);
+            LoginProvider.Current.RemoveLoginFromOrganization(userId, organizationId);
         }
 
         #endregion

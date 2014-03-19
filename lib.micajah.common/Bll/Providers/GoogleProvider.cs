@@ -117,7 +117,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static string GetLoginUrl(Guid organizationId, Guid instanceId)
         {
-            string url = WebApplication.LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, null, CustomUrlProvider.GetVanityUri(Guid.Empty, Guid.Empty));
+            string url = LoginProvider.Current.GetLoginUrl(null, null, organizationId, instanceId, null, CustomUrlProvider.GetVanityUri(Guid.Empty, Guid.Empty));
             if (url.IndexOf("?", StringComparison.OrdinalIgnoreCase) > -1)
             {
                 url += "&provider=google";
@@ -131,7 +131,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static string GetLoginUrl(string domain)
         {
-            return WebApplication.LoginProvider.GetLoginUrl(false) + "?provider=google" + (string.IsNullOrEmpty(domain) ? string.Empty : "&domain=" + domain);
+            return LoginProvider.Current.GetLoginUrl(false) + "?provider=google" + (string.IsNullOrEmpty(domain) ? string.Empty : "&domain=" + domain);
         }
 
         internal static void ParseAuthorizationRequestState(HttpRequest request, ref string domain, ref string returnUrl)
@@ -481,7 +481,7 @@ namespace Micajah.Common.Bll.Providers
                             , null, null, null, null, null
                             , null, null, null, null, null, null
                             , groups, organizationId
-                            , WebApplication.LoginProvider.GeneratePassword(), false, true);
+                            , LoginProvider.Current.GeneratePassword(), false, true);
 
                         UserProvider.RaiseUserInserted(loginId, organizationId, null, Support.ConvertStringToGuidList(groups));
                     }

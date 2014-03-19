@@ -403,7 +403,7 @@ namespace Micajah.Common.Bll.Providers
                 action.Handle = row.Handle;
 
                 if (action.ActionId == LoginGlobalNavigationLinkActionId)
-                    action.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(false);
+                    action.NavigateUrl = LoginProvider.Current.GetLoginUrl(false);
                 else if (action.ActionId == MyAccountGlobalNavigationLinkActionId)
                 {
                     if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Micajah.Common.Pages.MasterPageTheme.Modern)

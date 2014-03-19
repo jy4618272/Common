@@ -816,7 +816,7 @@ namespace Micajah.Common.Bll.Providers
                 {
                     Dictionary<Guid, GroupListItemValue> ldapGroups = null;
 
-                    DataView dv = WebApplication.LoginProvider.GetUserLdapInfo(organizationId, userId);
+                    DataView dv = LoginProvider.Current.GetUserLdapInfo(organizationId, userId);
                     if (dv == null || dv.Table.Rows.Count == 0 || (dv.Table.Rows[0]["LdapUserId"]).GetType() != typeof(Guid) || (Guid)dv.Table.Rows[0]["LdapUserId"] == Guid.Empty)
                     {
                         ClientDataSet.UserRow userRow = UserProvider.GetUserRow(userId, organizationId);
@@ -827,7 +827,7 @@ namespace Micajah.Common.Bll.Providers
                             ldapGroups = server.GetUserGroupsByEmail(userRow.Email);
                         else
                         {
-                            DataRowView drv = WebApplication.LoginProvider.GetLogin(userRow.UserId);
+                            DataRowView drv = LoginProvider.Current.GetLogin(userRow.UserId);
                             ldapGroups = server.GetUserGroupsByPrincipalName((string)drv["LoginName"]);
                         }
                     }

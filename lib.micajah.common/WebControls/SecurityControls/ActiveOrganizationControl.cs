@@ -198,7 +198,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     if (action != null) LogOnAsAnotherUserLink.NavigateUrl = action.AbsoluteNavigateUrl;
                 }
 
-                OrganizationCollection coll = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
+                OrganizationCollection coll = LoginProvider.Current.GetOrganizationsByLoginId(user.UserId);
                 int count = 0;
                 if (coll != null)
                 {
@@ -269,7 +269,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected void LogOffLink_Click(object sender, EventArgs e)
         {
-            WebApplication.LoginProvider.SignOut();
+            LoginProvider.Current.SignOut();
         }
 
         #endregion

@@ -142,7 +142,7 @@ namespace Micajah.Common.Security
         // Return hashed via MD5 or HA1 methods passord or plain text password
         public string GetHashedPassword(string password)
         {
-            return WebApplication.LoginProvider.EncryptPassword(password);
+            return LoginProvider.Current.EncryptPassword(password);
         }
 
         public DataSet GetSortedListOfRolesGroupsById(Guid organizationId)
@@ -177,7 +177,7 @@ namespace Micajah.Common.Security
                 {
                     string localGroupId = LdapInfoProvider.GetAppGroupsByLdapGroups(user.OrganizationId, groupId);
                     loginId = UserProvider.AddUserToOrganization((string.IsNullOrEmpty(user.EmailAddress) == true) ? user.LdapUserPrinciple : user.EmailAddress, user.EmailAddress, user.FirstName, user.LastName, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, localGroupId, user.OrganizationId, user.Password, false, false);
-                    WebApplication.LoginProvider.UpdateUserLdapInfo(user.OrganizationId, loginId, user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
+                    LoginProvider.Current.UpdateUserLdapInfo(user.OrganizationId, loginId, user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
                 }
             }
             return loginId;
@@ -190,14 +190,14 @@ namespace Micajah.Common.Security
             if (user != null)
             {
                 if (user.LocalLoginId != Guid.Empty)
-                    drv = WebApplication.LoginProvider.GetLogin(user.LocalLoginId);
+                    drv = LoginProvider.Current.GetLogin(user.LocalLoginId);
                 else if (!string.IsNullOrEmpty(user.EmailAddress))
-                    drv = WebApplication.LoginProvider.GetLogin(user.EmailAddress);
+                    drv = LoginProvider.Current.GetLogin(user.EmailAddress);
                 else if (!string.IsNullOrEmpty(user.LdapUserPrinciple))
-                    drv = WebApplication.LoginProvider.GetLogin(user.LdapUserPrinciple);
+                    drv = LoginProvider.Current.GetLogin(user.LdapUserPrinciple);
 
                 if (drv != null)
-                    WebApplication.LoginProvider.UpdateUserLdapInfo(user.OrganizationId, (Guid)drv["LoginId"], user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
+                    LoginProvider.Current.UpdateUserLdapInfo(user.OrganizationId, (Guid)drv["LoginId"], user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
             }
 
             return true;
@@ -254,11 +254,11 @@ namespace Micajah.Common.Security
             if (user != null && altEmails.Count > 0)
             {
                 if (user.LocalLoginId != Guid.Empty)
-                    drv = WebApplication.LoginProvider.GetLogin(user.LocalLoginId);
+                    drv = LoginProvider.Current.GetLogin(user.LocalLoginId);
                 else if (!string.IsNullOrEmpty(user.EmailAddress))
-                    drv = WebApplication.LoginProvider.GetLogin(user.EmailAddress);
+                    drv = LoginProvider.Current.GetLogin(user.EmailAddress);
                 else if (!string.IsNullOrEmpty(user.LdapUserPrinciple))
-                    drv = WebApplication.LoginProvider.GetLogin(user.LdapUserPrinciple);
+                    drv = LoginProvider.Current.GetLogin(user.LdapUserPrinciple);
 
                 if (drv != null)
                 {

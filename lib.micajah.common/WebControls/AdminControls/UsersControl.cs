@@ -234,9 +234,9 @@ namespace Micajah.Common.WebControls.AdminControls
                 string middleName = string.Empty;
                 string lastName = string.Empty;
 
-                if (WebApplication.LoginProvider.LoginNameExists(loginName))
+                if (LoginProvider.Current.LoginNameExists(loginName))
                 {
-                    if (WebApplication.LoginProvider.LoginInOrganization(loginName, m_UserContext.OrganizationId))
+                    if (LoginProvider.Current.LoginInOrganization(loginName, m_UserContext.OrganizationId))
                     {
                         ErrorPanel.InnerHtml = Resources.UsersControl_ErrorMessage_UserInOrganizationExists;
                         ErrorPanel.Visible = true;
@@ -432,7 +432,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void InvitedUsersListDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
             if (e == null) return;
-            e.ObjectInstance = WebApplication.LoginProvider;
+            e.ObjectInstance = LoginProvider.Current;
         }
 
         protected void InvitedUsersListDataSource_Selecting(object sender, ObjectDataSourceMethodEventArgs e)
@@ -628,7 +628,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     List.Visible = false;
                     InvitedUsersPanel.Visible = false;
                     UserDetailMenu.Visible = true;
-                    UserDetailMenu.Title = string.Format(CultureInfo.CurrentUICulture, Resources.UsersControl_UserDetailMenu_TitleFormatString, WebApplication.LoginProvider.GetEmail(this.SelectedUserId));
+                    UserDetailMenu.Title = string.Format(CultureInfo.CurrentUICulture, Resources.UsersControl_UserDetailMenu_TitleFormatString, LoginProvider.Current.GetEmail(this.SelectedUserId));
                     UserDetailMenu.ObjectId = this.SelectedUserId.ToString();
                     this.AddBreadCrumbs(null, null);
                     break;

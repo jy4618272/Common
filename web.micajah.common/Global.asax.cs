@@ -1,4 +1,5 @@
 ﻿using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
 using System;
 using System.Web;
 
@@ -12,7 +13,7 @@ namespace Micajah.Common.TestSite
 
             Micajah.Common.Bll.Handlers.ActionHandler.Current = new ActionCustomHandler();
             Micajah.Common.Bll.Handlers.SettingHandler.Current = new SettingCustomHandler();
-            LoginProvider = new CustomLoginProvider();
+            LoginProvider.Current = new CustomLoginProvider();
 
             EmailSending += new EventHandler<EmailSendingEventArgs>(Global_EmailSending);
 

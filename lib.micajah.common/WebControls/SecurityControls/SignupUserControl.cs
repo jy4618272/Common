@@ -92,7 +92,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     }
                     else
                     {
-                        WebApplication.LoginProvider.DeleteExpiredInvitation();
+                        LoginProvider.Current.DeleteExpiredInvitation();
                         MasterDataSet.InvitedLoginDataTable table = LoginProvider.GetInvitedLogin(this.InvitedLoginId);
                         if (table.Count == 1)
                         {
@@ -188,9 +188,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             int returnValue = 0;
             ConfirmPasswordRow.Visible = true;
-            if (WebApplication.LoginProvider.LoginNameExists(loginName))
+            if (LoginProvider.Current.LoginNameExists(loginName))
             {
-                if (WebApplication.LoginProvider.LoginInOrganization(loginName, this.OrganizationId))
+                if (LoginProvider.Current.LoginInOrganization(loginName, this.OrganizationId))
                 {
                     this.ShowErrorMessage(string.Format(CultureInfo.CurrentCulture, Resources.SignupUserControl_ErrorMessage_LoginInOrganizationExists, m_Organization.Name));
                     return 1;
@@ -251,7 +251,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             if (!IsPostBack)
             {
-                string url = WebApplication.LoginProvider.GetLoginUrl(false);
+                string url = LoginProvider.Current.GetLoginUrl(false);
                 if (this.InvitedLoginId == Guid.Empty)
                 {
                     if (!string.IsNullOrEmpty(Request.Url.Query))
@@ -312,7 +312,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                         userId = UserProvider.AddUserToOrganization(loginName, FirstNameTextBox.Text, LastNameTextBox.Text, string.Empty, this.GroupId, this.OrganizationId, password);
                     else
                     {
-                        if (WebApplication.LoginProvider.ValidateLogin(loginName, password))
+                        if (LoginProvider.Current.ValidateLogin(loginName, password))
                             userId = UserProvider.AddUserToOrganization(loginName, FirstNameTextBox.Text, LastNameTextBox.Text, string.Empty, this.GroupId, this.OrganizationId);
                         else
                             throw new ArgumentException(Resources.SignupUserControl_ErrorMessage_PasswordSuppliedDoesNotMatchCurrentPassword);
@@ -321,10 +321,10 @@ namespace Micajah.Common.WebControls.SecurityControls
                     UserProvider.RaiseUserInserted(userId, this.OrganizationId, this.InstanceId, Support.ConvertStringToGuidList(this.GroupId));
 
                     if (this.InvitedLoginId != Guid.Empty)
-                        WebApplication.LoginProvider.CancelInvitation(this.InvitedLoginId);
+                        LoginProvider.Current.CancelInvitation(this.InvitedLoginId);
 
                     LogOnPageLink3.Text = Resources.SignupUserControl_LoginPageLink_Text_ClickHereToLogin;
-                    LogOnPageLink3.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(loginName, false);
+                    LogOnPageLink3.NavigateUrl = LoginProvider.Current.GetLoginUrl(loginName, false);
                     LogOnPageLink3.Visible = true;
 
                     TitleLabel.Text = Resources.SignupUserControl_TitleLabel_SuccessText;

@@ -276,7 +276,7 @@ namespace Micajah.Common.Security
             {
                 string str = (string)base[LoginNameKey];
                 if (string.IsNullOrEmpty(str))
-                    base[LoginNameKey] = str = WebApplication.LoginProvider.GetLoginName(this.UserId);
+                    base[LoginNameKey] = str = LoginProvider.Current.GetLoginName(this.UserId);
                 return str;
             }
             set { base[LoginNameKey] = value; }
@@ -513,14 +513,6 @@ namespace Micajah.Common.Security
         }
 
         /// <summary>
-        /// Gets the logo image URL of the selected organization.
-        /// </summary>
-        public string OrganizationLogoImageUrl
-        {
-            get { return ((this.OrganizationId == Guid.Empty) ? string.Empty : ResourceProvider.GetOrganizationLogoImageUrlFromCache(this.OrganizationId)); }
-        }
-
-        /// <summary>
         /// Gets the unique identifier of the selected organization.
         /// </summary>
         public Guid OrganizationId
@@ -539,14 +531,6 @@ namespace Micajah.Common.Security
                     return InstanceProvider.GetInstanceFromCache(this.InstanceId, this.OrganizationId, true);
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Gets the logo image URL of the selected instance.
-        /// </summary>
-        public string InstanceLogoImageUrl
-        {
-            get { return ((this.InstanceId == Guid.Empty) ? string.Empty : ResourceProvider.GetInstanceLogoImageUrlFromCache(this.InstanceId)); }
         }
 
         /// <summary>
@@ -845,7 +829,7 @@ namespace Micajah.Common.Security
                     returnUrl = null;
                 }
 
-                string url = WebApplication.LoginProvider.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl);
+                string url = LoginProvider.Current.GetLoginUrl(this.UserId, organizationId, instanceId.GetValueOrDefault(), returnUrl);
 
                 LoginProvider loginProvider = new LoginProvider();
                 loginProvider.SignOut(false, url);
@@ -920,12 +904,12 @@ namespace Micajah.Common.Security
             Guid userId = this.UserId;
             bool active = false;
             bool isOrganizationAdministrator = false;
-            bool loginInOrganization = WebApplication.LoginProvider.LoginInOrganization(userId, organizationId, out active, out isOrganizationAdministrator);
+            bool loginInOrganization = LoginProvider.Current.LoginInOrganization(userId, organizationId, out active, out isOrganizationAdministrator);
 
             if (!(loginInOrganization && active))
             {
                 throw new AuthenticationException(string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountInOrganizationIsInactivated
-                    , newOrganization.Name, CustomUrlProvider.CreateApplicationUri(WebApplication.LoginProvider.GetLoginUrl(false))));
+                    , newOrganization.Name, CustomUrlProvider.CreateApplicationUri(LoginProvider.Current.GetLoginUrl(false))));
             }
 
             ArrayList userGroupIdList = null;

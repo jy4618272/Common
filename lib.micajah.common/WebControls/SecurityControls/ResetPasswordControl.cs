@@ -82,7 +82,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void RedirectToLoginPage()
         {
-            Response.Redirect(WebApplication.LoginProvider.GetLoginUrl(false));
+            Response.Redirect(LoginProvider.Current.GetLoginUrl(false));
         }
 
         private void ShowErrorMessage(string message)
@@ -95,14 +95,14 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             if (this.ResetPasswordRequestId != Guid.Empty)
             {
-                WebApplication.LoginProvider.DeleteExpiredResetPasswordRequests();
+                LoginProvider.Current.DeleteExpiredResetPasswordRequests();
 
                 MasterDataSet.ResetPasswordRequestDataTable table = LoginProvider.GetResetPasswordRequest(this.ResetPasswordRequestId);
                 if (table.Count == 1)
                 {
                     MasterDataSet.ResetPasswordRequestRow row = table[0];
                     this.LoginId = row.LoginId;
-                    LoginTextBox.Text = WebApplication.LoginProvider.GetLoginName(row.LoginId);
+                    LoginTextBox.Text = LoginProvider.Current.GetLoginName(row.LoginId);
 
                     return;
                 }
@@ -158,7 +158,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             bool success = false;
             try
             {
-                success = WebApplication.LoginProvider.ChangePassword(this.LoginId, PasswordTextBox.Text);
+                success = LoginProvider.Current.ChangePassword(this.LoginId, PasswordTextBox.Text);
             }
             catch (ArgumentException ex)
             {
@@ -172,7 +172,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 TitleLabel.Text = Resources.ResetPasswordControl_TitleLabel_SuccessText;
                 DescriptionLabel.Text = Resources.ResetPasswordControl_DescriptionLabel_SuccessText;
 
-                WebApplication.LoginProvider.CancelResetPasswordRequest(this.ResetPasswordRequestId);
+                LoginProvider.Current.CancelResetPasswordRequest(this.ResetPasswordRequestId);
             }
             else
             {
@@ -191,9 +191,9 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             string url = null;
             if (!string.IsNullOrEmpty(LoginTextBox.Text))
-                url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
+                url = LoginProvider.Current.GetLoginUrl(LoginTextBox.Text, false);
             else
-                url = WebApplication.LoginProvider.GetLoginUrl(false);
+                url = LoginProvider.Current.GetLoginUrl(false);
             Response.Redirect(url);
         }
 

@@ -72,7 +72,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         private void ListDataBind()
         {
-            InjectButton.Visible = (!WebApplication.LoginProvider.LoginIsOrganizationAdministrator(m_UserContext.UserId, m_OrgId));
+            InjectButton.Visible = (!LoginProvider.Current.LoginIsOrganizationAdministrator(m_UserContext.UserId, m_OrgId));
 
             List.SelectedIndex = -1;
             List.Visible = true;
@@ -214,7 +214,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected void InjectButton_Click(object sender, EventArgs e)
         {
-            if (!WebApplication.LoginProvider.LoginIsOrganizationAdministrator(m_UserContext.UserId, m_OrgId))
+            if (!LoginProvider.Current.LoginIsOrganizationAdministrator(m_UserContext.UserId, m_OrgId))
             {
                 ArrayList list = GroupProvider.GetGroupIdList(m_OrgId, Guid.Empty, RoleProvider.InstanceAdministratorRoleId);
                 list.Add(Guid.Empty);
@@ -274,7 +274,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     string loginName = string.Empty;
                     string password = string.Empty;
-                    DataRowView drv = WebApplication.LoginProvider.GetLogin(userId);
+                    DataRowView drv = LoginProvider.Current.GetLogin(userId);
                     if (drv != null)
                     {
                         loginName = drv["LoginName"].ToString();
@@ -282,7 +282,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                         try
                         {
-                            WebApplication.LoginProvider.Authenticate(loginName, password, false, false, m_OrgId, m_InstanceId);
+                            LoginProvider.Current.Authenticate(loginName, password, false, false, m_OrgId, m_InstanceId);
 
                             string redirectUrl = null;
                             ActiveInstanceControl.ValidateRedirectUrl(ref redirectUrl, true);

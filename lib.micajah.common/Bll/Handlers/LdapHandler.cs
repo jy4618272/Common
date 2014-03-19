@@ -233,7 +233,7 @@ namespace Micajah.Common.Bll.Handlers
                 if (users != null)
                 {
                     // Get all local users
-                    localLogins = WebApplication.LoginProvider.GetLoginsByOrganizationId(organizationId);
+                    localLogins = LoginProvider.Current.GetLoginsByOrganizationId(organizationId);
                     localLogins.Columns.Add("Name", typeof(string));
                     foreach (DataRow dataRow in localLogins.Rows)
                         dataRow["Name"] = string.Concat(dataRow["FirstName"], " ", dataRow["LastName"]);
@@ -563,7 +563,7 @@ namespace Micajah.Common.Bll.Handlers
                                             user = LdapInfoProvider.GetLdapUser(organizationId, ldapUser);
                                             if (user != null)
                                             {
-                                                WebApplication.LoginProvider.UpdateUserLdapInfo(organizationId, loginId, user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
+                                                LoginProvider.Current.UpdateUserLdapInfo(organizationId, loginId, user.FirstName, user.LastName, user.LdapDomain, user.LdapDomainFull, user.LdapUserAlias, user.LdapUserPrinciple, user.UserSid, user.UserId, user.LdapOUPath);
                                                 foreach (string altEmail in altEmails)
                                                 {
                                                     if (!EmailProvider.IsEmailExists(altEmail))
@@ -694,7 +694,7 @@ namespace Micajah.Common.Bll.Handlers
                                 ldapUser = (User)LdapInfoProvider.GetLdapUser(organizationId, ldapDomainUser);
                                 if (ldapUser != null)
                                 {
-                                    WebApplication.LoginProvider.UpdateUserLdapInfo(organizationId, (Guid)dr["LoginId"], ldapUser.FirstName, ldapUser.LastName, ldapUser.LdapDomain, ldapUser.LdapDomainFull, ldapUser.LdapUserAlias, ldapUser.LdapUserPrinciple, ldapUser.UserSid, ldapUser.UserId, ldapUser.LdapOUPath);
+                                    LoginProvider.Current.UpdateUserLdapInfo(organizationId, (Guid)dr["LoginId"], ldapUser.FirstName, ldapUser.LastName, ldapUser.LdapDomain, ldapUser.LdapDomainFull, ldapUser.LdapUserAlias, ldapUser.LdapUserPrinciple, ldapUser.UserSid, ldapUser.UserId, ldapUser.LdapOUPath);
 
                                     if (string.IsNullOrEmpty(ldapUser.EmailAddress) == false && string.Compare(userRow.Email, ldapUser.EmailAddress, StringComparison.CurrentCultureIgnoreCase) != 0)
                                     {

@@ -2535,159 +2535,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;nbsp;&amp;nbsp;or&amp;nbsp;&amp;nbsp;.
-        /// </summary>
-        internal static string ImageUpload_ButtonSeparator_Text {
-            get {
-                return ResourceManager.GetString("ImageUpload_ButtonSeparator_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Close.
-        /// </summary>
-        internal static string ImageUpload_ClosePopupWindowButton_Text {
-            get {
-                return ResourceManager.GetString("ImageUpload_ClosePopupWindowButton_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to delete.
-        /// </summary>
-        internal static string ImageUpload_DeleteText {
-            get {
-                return ResourceManager.GetString("ImageUpload_DeleteText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do you really want to delete it?.
-        /// </summary>
-        internal static string ImageUpload_DeletingConfirmationText {
-            get {
-                return ResourceManager.GetString("ImageUpload_DeletingConfirmationText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File is not saved to the repository.
-        /// </summary>
-        internal static string ImageUpload_FileIsNotSaved {
-            get {
-                return ResourceManager.GetString("ImageUpload_FileIsNotSaved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File not exists.
-        /// </summary>
-        internal static string ImageUpload_FileNotExists {
-            get {
-                return ResourceManager.GetString("ImageUpload_FileNotExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File path is empty.
-        /// </summary>
-        internal static string ImageUpload_FilePathIsEmpty {
-            get {
-                return ResourceManager.GetString("ImageUpload_FilePathIsEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid file extension.
-        /// </summary>
-        internal static string ImageUpload_InvalidFileExtension {
-            get {
-                return ResourceManager.GetString("ImageUpload_InvalidFileExtension", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid file size.
-        /// </summary>
-        internal static string ImageUpload_InvalidFileSize {
-            get {
-                return ResourceManager.GetString("ImageUpload_InvalidFileSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid URL.
-        /// </summary>
-        internal static string ImageUpload_InvalidUrl {
-            get {
-                return ResourceManager.GetString("ImageUpload_InvalidUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No Image.
-        /// </summary>
-        internal static string ImageUpload_NoImageLabel_Text {
-            get {
-                return ResourceManager.GetString("ImageUpload_NoImageLabel_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Click here to attach an image.
-        /// </summary>
-        internal static string ImageUpload_OpenLink_ToolTip {
-            get {
-                return ResourceManager.GetString("ImageUpload_OpenLink_ToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attach Image.
-        /// </summary>
-        internal static string ImageUpload_PopupWindow_Title {
-            get {
-                return ResourceManager.GetString("ImageUpload_PopupWindow_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Upload Selected Image.
-        /// </summary>
-        internal static string ImageUpload_UploadButton_Text {
-            get {
-                return ResourceManager.GetString("ImageUpload_UploadButton_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Get a file from &lt;b&gt;my computer&lt;/b&gt;.
-        /// </summary>
-        internal static string ImageUpload_UploadTypeList_FromMyComputerItem_Text {
-            get {
-                return ResourceManager.GetString("ImageUpload_UploadTypeList_FromMyComputerItem_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Get a file from &lt;b&gt;the web&lt;/b&gt;.
-        /// </summary>
-        internal static string ImageUpload_UploadTypeList_FromWebItem_Text {
-            get {
-                return ResourceManager.GetString("ImageUpload_UploadTypeList_FromWebItem_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to URL is empty.
-        /// </summary>
-        internal static string ImageUpload_UrlIsEmpty {
-            get {
-                return ResourceManager.GetString("ImageUpload_UrlIsEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to MM/dd/yyyy.
         /// </summary>
         internal static string InstanceProfileControl_DateFormat_0 {
@@ -3698,78 +3545,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to logo.
-        /// </summary>
-        internal static string LogosControl_EditForm_ObjectName {
-            get {
-                return ResourceManager.GetString("LogosControl_EditForm_ObjectName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Instance logo.
-        /// </summary>
-        internal static string LogosControl_EditForm_ObjectName_Instance {
-            get {
-                return ResourceManager.GetString("LogosControl_EditForm_ObjectName_Instance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Organization logo.
-        /// </summary>
-        internal static string LogosControl_EditForm_ObjectName_Organzation {
-            get {
-                return ResourceManager.GetString("LogosControl_EditForm_ObjectName_Organzation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Instance.
-        /// </summary>
-        internal static string LogosControl_List_InstanceType_Text {
-            get {
-                return ResourceManager.GetString("LogosControl_List_InstanceType_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logo.
-        /// </summary>
-        internal static string LogosControl_List_LogoColumn_HeaderText {
-            get {
-                return ResourceManager.GetString("LogosControl_List_LogoColumn_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Name.
-        /// </summary>
-        internal static string LogosControl_List_NameColumn_HeaderText {
-            get {
-                return ResourceManager.GetString("LogosControl_List_NameColumn_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Organization.
-        /// </summary>
-        internal static string LogosControl_List_OrganisationType_Text {
-            get {
-                return ResourceManager.GetString("LogosControl_List_OrganisationType_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type.
-        /// </summary>
-        internal static string LogosControl_List_TypeColumn_HeaderText {
-            get {
-                return ResourceManager.GetString("LogosControl_List_TypeColumn_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         internal static string MagicForm_Caption_EditMode {
@@ -4397,7 +4172,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To set up your system to replicate user data over LDAP please review the follow article. &lt;a style=&quot;font-size: medium;&quot; href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;Setup LDAP Integration&lt;/a&gt;.
+        ///   Looks up a localized string similar to To set up your system to replicate user data over LDAP please review the follow article. &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;Setup LDAP Integration&lt;/a&gt;.
         /// </summary>
         internal static string OrganizationLdapSettingsControl_Description_Text {
             get {
@@ -4933,15 +4708,6 @@ namespace Micajah.Common.Properties {
         internal static string OrganizationsControl_EditForm_LdapDomainsField_HeaderText {
             get {
                 return ResourceManager.GetString("OrganizationsControl_EditForm_LdapDomainsField_HeaderText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logo.
-        /// </summary>
-        internal static string OrganizationsControl_EditForm_LogoImageField_HeaderText {
-            get {
-                return ResourceManager.GetString("OrganizationsControl_EditForm_LogoImageField_HeaderText", resourceCulture);
             }
         }
         

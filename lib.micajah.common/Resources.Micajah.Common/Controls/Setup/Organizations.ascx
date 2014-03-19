@@ -49,12 +49,6 @@
                     TextMode="MultiLine" />
                 <mits:TextBoxField DataField="WebSiteUrl" MaxLength="2048" Columns="65" ControlStyle-Width="350px" ValidationType="RegularExpression"
                     ValidationExpression="http(s)?://([\w-]+(\.)?)+[\w-]+(/[\w- ./?%&=]*)?" />
-                <mits:TemplateField>
-                    <ItemTemplate>
-                        <mits:ImageUpload ID="LogoImageUpload" runat="server" LocalObjectType="OrganizationLogo" 
-                            LocalObjectId='<%# Eval("OrganizationId", "{0:N}") %>' />
-                    </ItemTemplate>
-                </mits:TemplateField>
                 <mits:TemplateField PaddingLeft="false">
                     <ItemTemplate>
                         <mits:ComboBox ID="DatabaseList" runat="server" DataSourceID="DatabaseListDataSource" 
@@ -100,8 +94,7 @@
         </asp:ObjectDataSource>
         <asp:ObjectDataSource ID="EntityDataSource" runat="server" DeleteMethod="DeleteOrganization"
             InsertMethod="InsertOrganization" SelectMethod="GetOrganization" TypeName="Micajah.Common.Bll.Providers.OrganizationProvider"
-            UpdateMethod="UpdateOrganization" OnInserting="EntityDataSource_Inserting" OnUpdating="EntityDataSource_Inserting"
-            OnInserted="EntityDataSource_Inserted" OnSelected="EntityDataSource_Selected">
+            UpdateMethod="UpdateOrganization" OnInserting="EntityDataSource_Inserting" OnUpdating="EntityDataSource_Inserting" OnSelected="EntityDataSource_Selected">
             <DeleteParameters>
                 <asp:Parameter Name="organizationId" Type="Object" />
             </DeleteParameters>

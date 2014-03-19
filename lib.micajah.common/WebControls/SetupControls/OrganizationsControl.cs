@@ -25,7 +25,6 @@ namespace Micajah.Common.WebControls.SetupControls
 
         private ComboBox m_DatabaseList;
         private ComboBox m_ParentOrgsList;
-        private ImageUpload m_LogoImageUpload;
         private DatePicker m_ExpirationTime;
         private DatePicker m_CanceledTime;
         private UserContext m_UserContext;
@@ -52,20 +51,11 @@ namespace Micajah.Common.WebControls.SetupControls
             }
         }
 
-        private ImageUpload LogoImageUpload
-        {
-            get
-            {
-                if (m_LogoImageUpload == null) m_LogoImageUpload = EditForm.FindControl("LogoImageUpload") as ImageUpload;
-                return m_LogoImageUpload;
-            }
-        }
-
         private DatePicker ExpirationTime
         {
             get
             {
-                if (m_ExpirationTime == null) m_ExpirationTime = EditForm.Rows[7].Cells[1].Controls[0] as DatePicker;
+                if (m_ExpirationTime == null) m_ExpirationTime = EditForm.Rows[6].Cells[1].Controls[0] as DatePicker;
                 return m_ExpirationTime;
             }
         }
@@ -74,7 +64,7 @@ namespace Micajah.Common.WebControls.SetupControls
         {
             get
             {
-                if (m_CanceledTime == null) m_CanceledTime = EditForm.Rows[9].Cells[1].Controls[0] as DatePicker;
+                if (m_CanceledTime == null) m_CanceledTime = EditForm.Rows[8].Cells[1].Controls[0] as DatePicker;
                 return m_CanceledTime;
             }
         }
@@ -178,13 +168,6 @@ namespace Micajah.Common.WebControls.SetupControls
                 e.ExceptionHandled = true;
             else
                 EditFormReset();
-        }
-
-        protected void EntityDataSource_Inserted(object sender, ObjectDataSourceStatusEventArgs e)
-        {
-            if (e == null) return;
-
-            this.LogoImageUpload.LocalObjectId = string.Format(CultureInfo.InvariantCulture, "{0:N}", e.ReturnValue);
         }
 
         protected void List_DataBound(object sender, EventArgs e)
@@ -347,13 +330,14 @@ namespace Micajah.Common.WebControls.SetupControls
         protected override void LoadResources()
         {
             base.LoadResources();
+
             List.Columns[0].HeaderText = Resources.OrganizationsControl_List_NameColumn_HeaderText;
             List.Columns[1].HeaderText = Resources.OrganizationsControl_List_ParentColumn_HeaderText;
             List.Columns[2].HeaderText = Resources.OrganizationsControl_List_ExpirationColumn_HeaderText;
-            EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_LogoImageField_HeaderText;
-            EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_DatabaseIdField_HeaderText;
-            EditForm.Fields[5].HeaderText = Resources.OrganizationsControl_EditForm_ParentOrganizationField_HeaderText;
-            EditForm.Fields[12].HeaderText = Resources.OrganizationsControl_EditForm_CreatedTimeField_HeaderText;
+
+            EditForm.Fields[3].HeaderText = Resources.OrganizationsControl_EditForm_DatabaseIdField_HeaderText;
+            EditForm.Fields[4].HeaderText = Resources.OrganizationsControl_EditForm_ParentOrganizationField_HeaderText;
+            EditForm.Fields[11].HeaderText = Resources.OrganizationsControl_EditForm_CreatedTimeField_HeaderText;
         }
 
         protected override void ListInitialize()
@@ -379,19 +363,8 @@ namespace Micajah.Common.WebControls.SetupControls
 
             if (e.CommandName.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
             {
-                this.LogoImageUpload.RejectChanges();
                 SearchPanel.Visible = true;
             }
-        }
-
-        protected override void EditForm_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
-        {
-            base.EditForm_ItemInserted(sender, e);
-
-            if (e == null) return;
-
-            if (e.Exception == null)
-                this.LogoImageUpload.AcceptChanges();
         }
 
         protected override void EditForm_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
@@ -402,7 +375,6 @@ namespace Micajah.Common.WebControls.SetupControls
 
             if (e.Exception == null)
             {
-                this.LogoImageUpload.AcceptChanges();
                 this.Redirect();
             }
         }
@@ -410,7 +382,8 @@ namespace Micajah.Common.WebControls.SetupControls
         protected override void EditFormReset()
         {
             base.EditFormReset();
-            EditForm.Fields[6].Visible = true;
+
+            EditForm.Fields[5].Visible = true;
         }
 
         protected override void List_Action(object sender, CommonGridViewActionEventArgs e)
@@ -422,7 +395,7 @@ namespace Micajah.Common.WebControls.SetupControls
             switch (e.Action)
             {
                 case CommandActions.Edit:
-                    EditForm.Fields[6].Visible = false;
+                    EditForm.Fields[5].Visible = false;
                     break;
             }
         }

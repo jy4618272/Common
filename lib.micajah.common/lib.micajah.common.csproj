@@ -333,9 +333,6 @@
     <Compile Include="WebControls\AdminControls\LdapLogsControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebControls\AdminControls\LogosControl.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="WebControls\AdminControls\StartControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -429,7 +426,6 @@
     <Compile Include="WebControls\EntityTreeView.cs" />
     <Compile Include="WebControls\HyperLinkField.cs" />
     <Compile Include="WebControls\ImageField.cs" />
-    <Compile Include="WebControls\ImageUpload.cs" />
     <Compile Include="WebControls\LogOn.cs" />
     <Compile Include="WebControls\MessageList.cs" />
     <Compile Include="WebControls\NoticeMessageBox.cs" />
@@ -1775,9 +1771,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\spacer.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ImageUpload.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\ImageUpload.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\StyleSheetLoader.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\InstanceProfile.ascx">
       <SubType>ASPXCodeBehind</SubType>
@@ -1833,12 +1826,6 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicForm.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.Pages.MasterPage\Overlay.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Decorated.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\Logos.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\Logos.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\AccountSettings.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -1951,6 +1938,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\CustomStyleSheetEdit.ascx">
       <SubType>ASPXCodeBehind</SubType>

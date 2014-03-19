@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Micajah.Common.Bll.Providers;
+using Micajah.Common.Properties;
+using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -28,7 +28,7 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 ViewState["LoginId"] = value;
 
-                TokenTextBox.Text = WebApplication.LoginProvider.GetToken(value);
+                TokenTextBox.Text = LoginProvider.Current.GetToken(value);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected void ResetTokenButton_Click(object sender, EventArgs e)
         {
-            TokenTextBox.Text = WebApplication.LoginProvider.ResetToken(this.LoginId);
+            TokenTextBox.Text = LoginProvider.Current.ResetToken(this.LoginId);
         }
 
         #endregion

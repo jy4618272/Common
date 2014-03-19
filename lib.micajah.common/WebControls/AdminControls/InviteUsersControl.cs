@@ -70,7 +70,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void SendButton_Click(object sender, EventArgs e)
         {
             UserContext user = UserContext.Current;
-            WebApplication.LoginProvider.Invite(user.UserId, user.FirstName + " " + user.LastName, user.Email, EmailTextBox.Text, user.OrganizationId, GroupList.SelectedValue, MessageTextBox.Text);
+            LoginProvider.Current.Invite(user.UserId, user.FirstName + " " + user.LastName, user.Email, EmailTextBox.Text, user.OrganizationId, GroupList.SelectedValue, MessageTextBox.Text);
             Response.Redirect(ResourceProvider.UsersPageVirtualPath);
         }
 

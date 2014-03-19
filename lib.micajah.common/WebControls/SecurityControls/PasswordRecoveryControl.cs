@@ -149,10 +149,10 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected void SubmitButton_Click(object sender, EventArgs e)
         {
             string loginName = LoginTextBox.Text;
-            DataRowView drv = WebApplication.LoginProvider.GetLogin(loginName);
+            DataRowView drv = LoginProvider.Current.GetLogin(loginName);
             if (drv != null)
             {
-                WebApplication.LoginProvider.ResetPassword((Guid)drv["LoginId"]);
+                LoginProvider.Current.ResetPassword((Guid)drv["LoginId"]);
 
                 SuccessTableRow.Visible = true;
             }
@@ -181,9 +181,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             else
             {
                 if (!string.IsNullOrEmpty(LoginTextBox.Text))
-                    url = WebApplication.LoginProvider.GetLoginUrl(LoginTextBox.Text, false);
+                    url = LoginProvider.Current.GetLoginUrl(LoginTextBox.Text, false);
                 else
-                    url = WebApplication.LoginProvider.GetLoginUrl(false);
+                    url = LoginProvider.Current.GetLoginUrl(false);
             }
             Response.Redirect(url);
         }

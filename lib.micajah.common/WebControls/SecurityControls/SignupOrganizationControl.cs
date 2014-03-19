@@ -1,5 +1,4 @@
 ﻿using Google.GData.Client;
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -174,13 +173,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (string.Compare(user.Email, Email.Text, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        url = WebApplication.LoginProvider.GetLoginUrl(user.Email, true, user.OrganizationId, user.InstanceId, null);
+                        url = LoginProvider.Current.GetLoginUrl(user.Email, true, user.OrganizationId, user.InstanceId, null);
 
                         Response.Redirect(url);
                     }
                 }
 
-                url = WebApplication.LoginProvider.GetLoginUrl();
+                url = LoginProvider.Current.GetLoginUrl();
 
                 Response.Redirect(url);
             }
@@ -206,7 +205,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     howYouHearAboutUs = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
                 }
 
-                string password = Micajah.Common.Application.WebApplication.LoginProvider.GeneratePassword(3, 0).ToLowerInvariant();
+                string password = LoginProvider.Current.GeneratePassword(3, 0).ToLowerInvariant();
 
                 Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName.Text, null, null
                     , null, null, null, null, null, null, string.Empty, howYouHearAboutUs
@@ -227,7 +226,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                     GoogleProvider.ProcessAuthorization(this.Context, ref parameters, ref returnUrl);
                 }
 
-                string url = WebApplication.LoginProvider.GetLoginUrl(Email.Text, true, orgId, inst.InstanceId, null);
+                string url = LoginProvider.Current.GetLoginUrl(Email.Text, true, orgId, inst.InstanceId, null);
 
                 Response.Redirect(url);
             }
@@ -458,9 +457,9 @@ namespace Micajah.Common.WebControls.SecurityControls
             if (!Page.IsValid)
                 return;
 
-            if (WebApplication.LoginProvider.ValidateLogin(Email.Text, null))
+            if (LoginProvider.Current.ValidateLogin(Email.Text, null))
             {
-                ModalLoginLink.NavigateUrl = WebApplication.LoginProvider.GetLoginUrl(Email.Text, false);
+                ModalLoginLink.NavigateUrl = LoginProvider.Current.GetLoginUrl(Email.Text, false);
 
                 ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryScript", ResourceProvider.JQueryScriptUrl);
                 ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryEasyModalScript", ResourceProvider.GetResourceUrl("Scripts.jquery.easyModal.js", true));

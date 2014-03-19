@@ -79,8 +79,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                 OrganizationArea.Visible = false;
                 InstanceArea.Visible = false;
 
-                InstanceCollection instances = WebApplication.LoginProvider.GetLoginInstances(user.UserId, user.OrganizationId);
-                OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginId(user.UserId);
+                InstanceCollection instances = LoginProvider.Current.GetLoginInstances(user.UserId, user.OrganizationId);
+                OrganizationCollection orgs = LoginProvider.Current.GetOrganizationsByLoginId(user.UserId);
                 int instCount = instances.Count;
                 int orgsCount = 0;
                 if (orgs != null)
@@ -126,7 +126,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 }
                 else if (!InstanceArea.Visible)
                 {
-                    WebApplication.LoginProvider.SignOut();
+                    LoginProvider.Current.SignOut();
 
                     return;
                 }
@@ -149,7 +149,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void LogOffLink_Click(object sender, EventArgs e)
         {
-            WebApplication.LoginProvider.SignOut();
+            LoginProvider.Current.SignOut();
         }
 
         protected void InstanceList_ItemCommand(object source, CommandEventArgs e)

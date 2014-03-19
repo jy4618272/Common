@@ -107,7 +107,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected void LogOnPageButton_Click(object sender, EventArgs e)
         {
-            WebApplication.LoginProvider.SignOut();
+            LoginProvider.Current.SignOut();
         }
 
         #endregion

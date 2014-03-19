@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -284,7 +283,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                 try
                 {
-                    WebApplication.LoginProvider.Authenticate(loginName, Support.Decrypt(password), false, isPersistent, organizationId, instanceId);
+                    LoginProvider.Current.Authenticate(loginName, Support.Decrypt(password), false, isPersistent, organizationId, instanceId);
 
                     this.RedirectAfterLogOn();
                 }
@@ -324,7 +323,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                                 EmailSuffixProvider.ParseEmailSuffixName(domain, ref organizationId, ref instanceId);
                             }
 
-                            if (WebApplication.LoginProvider.Authenticate(loginName, null, false, true, organizationId, instanceId))
+                            if (LoginProvider.Current.Authenticate(loginName, null, false, true, organizationId, instanceId))
                             {
                                 this.RedirectAfterLogOn();
                             }
@@ -336,7 +335,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                         if (!string.IsNullOrEmpty(message))
                         {
-                            if (WebApplication.LoginProvider.GetLogin(loginName) == null)
+                            if (LoginProvider.Current.GetLogin(loginName) == null)
                             {
                                 message = string.Format(CultureInfo.InvariantCulture, Resources.UserContext_ErrorMessage_YourAccountIsNotFound, loginName);
                             }
@@ -611,13 +610,13 @@ namespace Micajah.Common.WebControls.SecurityControls
                 {
                     if (inst != null)
                     {
-                        headerLogoImageUrl = ResourceProvider.GetInstanceLogoImageUrlFromCache(inst.InstanceId);
+                        headerLogoImageUrl = InstanceProvider.GetInstanceLogoImageUrlFromCache(inst.InstanceId, inst.OrganizationId);
                         headerLogoText = inst.Name;
                     }
                 }
 
                 if (string.IsNullOrEmpty(headerLogoImageUrl))
-                    headerLogoImageUrl = ResourceProvider.GetOrganizationLogoImageUrlFromCache(org.OrganizationId);
+                    headerLogoImageUrl = OrganizationProvider.GetOrganizationLogoImageUrlFromCache(org.OrganizationId);
 
                 if (string.IsNullOrEmpty(headerLogoText))
                     headerLogoText = org.Name;
@@ -665,14 +664,14 @@ namespace Micajah.Common.WebControls.SecurityControls
             }
             else
             {
-                string url = WebApplication.LoginProvider.GetPasswordRecoveryUrl(((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null), false);
+                string url = LoginProvider.Current.GetPasswordRecoveryUrl(((!string.IsNullOrEmpty(LoginTextBox.Text)) ? LoginTextBox.Text : null), false);
                 Response.Redirect(url);
             }
         }
 
         private void LinkEmailButton_Click(object sender, EventArgs e)
         {
-            EmailProvider.InsertEmail(m_EmailToLink, WebApplication.LoginProvider.GetLoginId(LoginTextBox.Text));
+            EmailProvider.InsertEmail(m_EmailToLink, LoginProvider.Current.GetLoginId(LoginTextBox.Text));
 
             this.RedirectAfterLogOn();
         }
@@ -720,7 +719,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             try
             {
-                if (WebApplication.LoginProvider.Authenticate(LoginTextBox.Text, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
+                if (LoginProvider.Current.Authenticate(LoginTextBox.Text, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
                 {
                     if (!string.IsNullOrEmpty(m_EmailToLink))
                     {
@@ -751,7 +750,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
                     if (org == null)
                     {
-                        OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginName(LoginTextBox.Text);
+                        OrganizationCollection orgs = LoginProvider.Current.GetOrganizationsByLoginName(LoginTextBox.Text);
                         if (orgs != null && orgs.Count > 0)
                             org = orgs[0];
                     }
@@ -813,7 +812,7 @@ namespace Micajah.Common.WebControls.SecurityControls
 
         protected void LogOffLink_Click(object sender, EventArgs e)
         {
-            WebApplication.LoginProvider.SignOut();
+            LoginProvider.Current.SignOut();
         }
 
         #endregion

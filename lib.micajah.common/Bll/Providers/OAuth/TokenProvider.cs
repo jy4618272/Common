@@ -167,14 +167,17 @@ namespace Micajah.Common.Bll.Providers.OAuth
 
         public void StoreNewRequestToken(UnauthorizedTokenRequest request, ITokenSecretContainingMessage response)
         {
-            string callback = string.Empty;
-            if (request.Callback != null)
-                callback = request.Callback.AbsoluteUri;
-
-            using (OAuthTokenTableAdapter adapter = new OAuthTokenTableAdapter())
+            if ((request != null) && (response != null))
             {
-                adapter.Insert(Guid.NewGuid(), response.Token, response.TokenSecret, (int)OAuthTokenType.UnauthorizedRequestToken
-                    , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), string.Empty, null, string.Empty, callback, DateTime.UtcNow, null, null, null);
+                string callback = string.Empty;
+                if (request.Callback != null)
+                    callback = request.Callback.AbsoluteUri;
+
+                using (OAuthTokenTableAdapter adapter = new OAuthTokenTableAdapter())
+                {
+                    adapter.Insert(Guid.NewGuid(), response.Token, response.TokenSecret, (int)OAuthTokenType.UnauthorizedRequestToken
+                        , GetConsumerId(request.ConsumerKey), ((IMessage)request).Version.ToString(), string.Empty, null, string.Empty, callback, DateTime.UtcNow, null, null, null);
+                }
             }
         }
 
@@ -200,14 +203,17 @@ namespace Micajah.Common.Bll.Providers.OAuth
 
         public void UpdateToken(IServiceProviderRequestToken token)
         {
-            OAuthDataSet.OAuthTokenRow row = GetOAuthTokenRow(token.Token);
-            if (row != null)
+            if (token != null)
             {
-                row.RequestTokenVerifier = token.VerificationCode;
-
-                using (OAuthTokenTableAdapter adapter = new OAuthTokenTableAdapter())
+                OAuthDataSet.OAuthTokenRow row = GetOAuthTokenRow(token.Token);
+                if (row != null)
                 {
-                    adapter.Update(row);
+                    row.RequestTokenVerifier = token.VerificationCode;
+
+                    using (OAuthTokenTableAdapter adapter = new OAuthTokenTableAdapter())
+                    {
+                        adapter.Update(row);
+                    }
                 }
             }
         }

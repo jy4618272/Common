@@ -1,6 +1,6 @@
 ﻿using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
-using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
 using Micajah.Common.Bll.Providers.OAuth;
 using System;
 using System.Security.Cryptography.X509Certificates;
@@ -78,7 +78,7 @@ namespace Micajah.Common.Dal
 
             string IServiceProviderAccessToken.Username
             {
-                get { return WebApplication.LoginProvider.GetLoginName(this.LoginId); }
+                get { return LoginProvider.Current.GetLoginName(this.LoginId); }
             }
 
             #endregion

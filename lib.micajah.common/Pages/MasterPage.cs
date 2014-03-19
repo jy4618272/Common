@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
@@ -1004,7 +1003,7 @@ namespace Micajah.Common.Pages
                 if (FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
                 {
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
-                        m_HeaderLogoImageUrl = m_UserContext.InstanceLogoImageUrl;
+                        m_HeaderLogoImageUrl = InstanceProvider.GetInstanceLogoImageUrlFromCache(m_UserContext.InstanceId, m_UserContext.OrganizationId);
 
                     if (string.IsNullOrEmpty(m_HeaderLogoText))
                         m_HeaderLogoText = m_UserContext.Instance.Name;
@@ -1013,7 +1012,7 @@ namespace Micajah.Common.Pages
                 if (m_UserContext.OrganizationId != Guid.Empty)
                 {
                     if (string.IsNullOrEmpty(m_HeaderLogoImageUrl))
-                        m_HeaderLogoImageUrl = m_UserContext.OrganizationLogoImageUrl;
+                        m_HeaderLogoImageUrl = OrganizationProvider.GetOrganizationLogoImageUrlFromCache(m_UserContext.OrganizationId);
                     if (string.IsNullOrEmpty(m_HeaderLogoText))
                         m_HeaderLogoText = m_UserContext.Organization.Name;
                     else
@@ -1335,7 +1334,7 @@ namespace Micajah.Common.Pages
                 if (isAuthenticated)
                     throw new HttpException(403, Resources.Error_403);
                 else
-                    redirectUrl = WebApplication.LoginProvider.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncode(returnUrl);
+                    redirectUrl = LoginProvider.Current.GetLoginUrl(false) + "?returnurl=" + HttpUtility.UrlEncode(returnUrl);
             }
 
             if (!string.IsNullOrEmpty(redirectUrl))

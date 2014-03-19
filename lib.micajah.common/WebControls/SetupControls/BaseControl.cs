@@ -197,7 +197,10 @@ namespace Micajah.Common.WebControls.SetupControls
             }
             catch { }
 
-            EntityListDataSource.Selected += new ObjectDataSourceStatusEventHandler(EntityListDataSource_Selected);
+            if (EntityListDataSource != null)
+            {
+                EntityListDataSource.Selected += new ObjectDataSourceStatusEventHandler(EntityListDataSource_Selected);
+            }
 
             ListInitialize();
             EditFormInitialize();
@@ -222,7 +225,7 @@ namespace Micajah.Common.WebControls.SetupControls
 
         #region Internal Methods
 
-        internal static void HideControls(ControlCollection controls)
+        protected internal static void HideControls(ControlCollection controls)
         {
             foreach (Control control in controls)
             {
@@ -230,47 +233,74 @@ namespace Micajah.Common.WebControls.SetupControls
             }
         }
 
-        internal static void LoadResources(CommonGridView grid, string className)
+        protected internal static void LoadResources(CommonGridView grid, string className)
         {
             LoadResources(grid, className, grid.ID);
         }
 
-        internal static void LoadResources(CommonGridView grid, string className, string gridId)
+        protected internal static void LoadResources(CommonGridView grid, string className, string gridId)
         {
             if (grid == null) return;
 
             string listResourceName = string.Concat(className, "_", gridId, "_");
 
-            grid.Caption = Resources.ResourceManager.GetString(listResourceName + "Caption");
+            string value = Resources.ResourceManager.GetString(listResourceName + "Caption");
+            if (value != null)
+            {
+                grid.Caption = value;
+            }
+
             foreach (DataControlField field in grid.Columns)
             {
                 BoundField boundField = field as BoundField;
                 if (boundField != null)
-                    boundField.HeaderText = Resources.ResourceManager.GetString(string.Concat(listResourceName, boundField.DataField, "Column_HeaderText"));
+                {
+                    value = Resources.ResourceManager.GetString(string.Concat(listResourceName, boundField.DataField, "Column_HeaderText"));
+                    if (value != null)
+                    {
+                        boundField.HeaderText = Resources.ResourceManager.GetString(string.Concat(listResourceName, boundField.DataField, "Column_HeaderText"));
+                    }
+                }
             }
         }
 
-        internal static void LoadResources(MagicForm form, string className)
+        protected internal static void LoadResources(MagicForm form, string className)
         {
             if (form == null) return;
 
             string editFormResourceName = string.Concat(className, "_", form.ID, "_");
 
-            form.ObjectName = Resources.ResourceManager.GetString(editFormResourceName + "ObjectName");
+            string value = Resources.ResourceManager.GetString(editFormResourceName + "ObjectName");
+            if (value != null)
+            {
+                form.ObjectName = value;
+            }
+
             foreach (DataControlField field in form.Fields)
             {
                 BoundField boundField = field as BoundField;
                 if (boundField != null)
                 {
-                    boundField.HeaderText = Resources.ResourceManager.GetString(string.Concat(editFormResourceName, boundField.DataField, "Field_HeaderText"));
+                    value = Resources.ResourceManager.GetString(string.Concat(editFormResourceName, boundField.DataField, "Field_HeaderText"));
+                    if (value != null)
+                    {
+                        boundField.HeaderText = value;
+                    }
+
                     CheckBoxField checkBoxField = field as CheckBoxField;
                     if (checkBoxField != null)
-                        checkBoxField.Text = Resources.ResourceManager.GetString(string.Concat(editFormResourceName, checkBoxField.DataField, "Field_Text"));
+                    {
+                        value = Resources.ResourceManager.GetString(string.Concat(editFormResourceName, checkBoxField.DataField, "Field_Text"));
+                        if (value != null)
+                        {
+                            checkBoxField.Text = value;
+                        }
+                    }
                 }
             }
         }
 
-        internal static void Initialize(CommonGridView grid)
+        protected internal static void Initialize(CommonGridView grid)
         {
             if (grid == null) return;
 
@@ -283,7 +313,7 @@ namespace Micajah.Common.WebControls.SetupControls
             grid.AddLinkCssClass = "Gray";
         }
 
-        internal static void Initialize(MagicForm form)
+        protected internal static void Initialize(MagicForm form)
         {
             if (form == null) return;
 
@@ -294,7 +324,7 @@ namespace Micajah.Common.WebControls.SetupControls
             form.Visible = false;
         }
 
-        internal static void ListAllowPaging(CommonGridView grid, object dataSource)
+        protected internal static void ListAllowPaging(CommonGridView grid, object dataSource)
         {
             int count = 0;
             if (dataSource == null)
@@ -317,7 +347,7 @@ namespace Micajah.Common.WebControls.SetupControls
             grid.AllowPaging = (count > grid.PageSize);
         }
 
-        internal static bool ShowError(Exception exception, HtmlGenericControl errorPanel)
+        protected internal static bool ShowError(Exception exception, HtmlGenericControl errorPanel)
         {
             if (exception != null)
             {

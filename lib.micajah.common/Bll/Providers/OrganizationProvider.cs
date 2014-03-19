@@ -16,7 +16,7 @@ namespace Micajah.Common.Bll.Providers
     /// The class provides the methods to work with organizations.
     /// </summary>
     [DataObjectAttribute(true)]
-    public static class OrganizationProvider
+    public class OrganizationProvider
     {
         #region Memebers
 
@@ -34,7 +34,10 @@ namespace Micajah.Common.Bll.Providers
         private const string ConnectionStringKeyFormat = "mc.ConnectionString.{0:N}";
         private const string OrganizationKeyFormat = "mc.Organization.{0:N}";
         private const string OrganizationByPseudoIdKeyFormat = "mc.Organization.{0}";
+        private const string OrganizationLogoImageUrlKeyFormat = "mc.OrganizationLogoImageUrl.{0:N}";
         private const string WebsiteIdKeyFormat = "mc.WebsiteId.{0:N}";
+
+        private static OrganizationProvider s_Current;
 
         #endregion
 
@@ -53,6 +56,25 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the instance of the class.
+        /// </summary>
+        public static OrganizationProvider Current
+        {
+            get
+            {
+                if (s_Current == null)
+                {
+                    s_Current = new OrganizationProvider();
+                }
+                return s_Current;
+            }
+            set
+            {
+                s_Current = value;
+            }
+        }
 
         public static Organization TemplateOrganization
         {
@@ -575,6 +597,36 @@ namespace Micajah.Common.Bll.Providers
 
         #region Public Methods
 
+        #region Static Methods
+
+        #region Cache Methods
+
+        public static string GetOrganizationLogoImageUrlFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationLogoImageUrlKeyFormat, organizationId);
+            string url = CacheManager.Current.Get(key, true) as string;
+
+            if (url == null)
+            {
+                url = Current.GetOrganizationLogoImageUrl(organizationId);
+
+                if (url != null)
+                {
+                    CacheManager.Current.PutWithDefaultTimeout(key, url);
+                }
+            }
+
+            return url;
+        }
+
+        public static void RemoveOrganizationLogoImageUrlFromCache(Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, OrganizationLogoImageUrlKeyFormat, organizationId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
+
         /// <summary>
         /// Gets the organizations, excluding marked as deleted.
         /// </summary>
@@ -937,11 +989,6 @@ namespace Micajah.Common.Bll.Providers
             return Guid.Empty;
         }
 
-        public static string GetOrganizationLogoImageUrl(Guid organizationId)
-        {
-            return ResourceProvider.GetOrganizationLogoImageUrl(organizationId);
-        }
-
         /// <summary>
         /// Creates new organization with specified details and send a notification e-mail to administrator.
         /// </summary>
@@ -1223,12 +1270,19 @@ namespace Micajah.Common.Bll.Providers
 
                 RemoveConnectionStringFromCache(organizationId);
                 RemoveWebsiteIdFromCache(organizationId);
+                RemoveOrganizationLogoImageUrlFromCache(organizationId);
                 RemoveOrganizationFromCache(organizationId);
                 SettingProvider.RemoveOrganizationSettingsValuesFromCache(organizationId);
                 SettingProvider.RemoveOrganizationEmailSettingsFromCache(organizationId);
                 CustomUrlProvider.RemoveOrganizationCustomUrlFromCache(organizationId);
-                ResourceProvider.RemoveOrganizationLogoImageUrlFromCache(organizationId);
             }
+        }
+
+        #endregion
+
+        public virtual string GetOrganizationLogoImageUrl(Guid organizationId)
+        {
+            return null;
         }
 
         #endregion

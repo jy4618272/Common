@@ -23,12 +23,6 @@ namespace Micajah.Common.Application
     /// </summary>
     public class WebApplication : HttpApplication
     {
-        #region Members
-
-        private static LoginProvider s_LoginProvider;
-
-        #endregion
-
         #region Events
 
         /// <summary>
@@ -67,19 +61,6 @@ namespace Micajah.Common.Application
                 return ((HttpContext.Current.Request.ApplicationPath == "/")
                     ? string.Empty : HttpContext.Current.Request.ApplicationPath);
             }
-        }
-
-        /// <summary>
-        /// Gets or sets the login provider.
-        /// </summary>
-        public static LoginProvider LoginProvider
-        {
-            get
-            {
-                if (s_LoginProvider == null) s_LoginProvider = new LoginProvider();
-                return s_LoginProvider;
-            }
-            set { s_LoginProvider = value; }
         }
 
         #endregion
@@ -238,7 +219,7 @@ namespace Micajah.Common.Application
                 {
                     user = UserContext.Current;
                     if (user != null)
-                        LoginProvider.UpdateSession(user.UserId, http.Session.SessionID);
+                        LoginProvider.Current.UpdateSession(user.UserId, http.Session.SessionID);
                 }
 
                 if (!http.SkipAuthorization)
@@ -252,13 +233,13 @@ namespace Micajah.Common.Application
                         if (action != null)
                         {
                             if (action.AuthenticationRequired)
-                                LoginProvider.SignOut(true, Request.Url.PathAndQuery);
+                                LoginProvider.Current.SignOut(true, Request.Url.PathAndQuery);
                         }
                     }
                     else if (!customUrlSettings.Enabled)
                     {
-                        if (!LoginProvider.ValidateSession(user.UserId, http.Session.SessionID))
-                            LoginProvider.SignOut(true, true, true);
+                        if (!LoginProvider.Current.ValidateSession(user.UserId, http.Session.SessionID))
+                            LoginProvider.Current.SignOut(true, true, true);
                     }
                 }
             }
@@ -330,7 +311,7 @@ namespace Micajah.Common.Application
                             }
                             catch (AuthenticationException)
                             {
-                                redirectUrl = LoginProvider.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.CreateApplicationUri(host, null));
+                                redirectUrl = LoginProvider.Current.GetLoginUrl(null, null, Guid.Empty, Guid.Empty, null, CustomUrlProvider.CreateApplicationUri(host, null));
                             }
                         }
                     }
@@ -357,7 +338,7 @@ namespace Micajah.Common.Application
                     if (user.OrganizationId != Guid.Empty)
                     {
                         if (user.OrganizationId != organizationId)
-                            redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, null);
+                            redirectUrl = LoginProvider.Current.GetLoginUrl(null, null, organizationId, instanceId, null);
                         else
                         {
                             if (instanceId == Guid.Empty)
@@ -370,16 +351,16 @@ namespace Micajah.Common.Application
                                     }
                                     catch (AuthenticationException)
                                     {
-                                        redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, Guid.Empty, null);
+                                        redirectUrl = LoginProvider.Current.GetLoginUrl(null, null, organizationId, Guid.Empty, null);
                                     }
                                 }
                             }
                             else if (user.InstanceId != instanceId)
-                                redirectUrl = LoginProvider.GetLoginUrl(null, null, organizationId, instanceId, null);
+                                redirectUrl = LoginProvider.Current.GetLoginUrl(null, null, organizationId, instanceId, null);
                         }
                     }
                     else if (organizationId != Guid.Empty)
-                        redirectUrl = LoginProvider.GetLoginUrl(Guid.Empty, organizationId);
+                        redirectUrl = LoginProvider.Current.GetLoginUrl(Guid.Empty, organizationId);
                 }
             }
 

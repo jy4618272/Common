@@ -65,7 +65,7 @@ namespace Micajah.Common.Bll.Handlers
                 AuthorizedTokenResponse response = m_Provider.PrepareAccessTokenMessage(requestAccessToken);
 
                 OAuthDataSet.OAuthTokenRow row = (OAuthDataSet.OAuthTokenRow)m_Provider.TokenManager.GetAccessToken(response.AccessToken);
-                response.ExtraData.Add(new KeyValuePair<string, string>("api_token", WebApplication.LoginProvider.GetToken(row.LoginId)));
+                response.ExtraData.Add(new KeyValuePair<string, string>("api_token", LoginProvider.Current.GetToken(row.LoginId)));
 
                 if (!row.IsOrganizationIdNull())
                 {

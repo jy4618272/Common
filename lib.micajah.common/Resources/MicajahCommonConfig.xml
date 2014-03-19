@@ -122,8 +122,6 @@
                 <action id="7D20C2C0-09DC-4399-89D0-FE16757FF169" type="Page" name="Tree" description="Manage the Tree" navigateUrl="/mc/admin/tree.aspx" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin"/>
               </actions>
             </action>
-            <action id="EC76EC60-F654-49DD-88FA-84472B9B5727" type="Page" name="Logos" description="Manage the organisation and all instances logos" navigateUrl="/mc/admin/logos.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin,InstAdmin">
-            </action>
             <action id="00000000-0000-0000-0000-000000000012" type="Page" name="Users" description="Manage the Users" navigateUrl="/mc/admin/user.aspx" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin">
               <actions>
                 <action id="C2D9FFFB-9588-494F-8B8B-4A84D61EACE1" type="Page" name="Invite Users" description="Invite Users" navigateUrl="/mc/admin/inviteusers.aspx" instanceRequired="false" visible="false" roles="OrgAdmin">

@@ -17,7 +17,7 @@ namespace Micajah.Common.Bll.Providers
     /// The class provides the methods to work with instances.
     /// </summary>
     [DataObjectAttribute(true)]
-    public static class InstanceProvider
+    public class InstanceProvider
     {
         #region Members
 
@@ -30,6 +30,9 @@ namespace Micajah.Common.Bll.Providers
 
         private const string InstanceKeyFormat = "mc.Instance.{0:N}";
         private const string InstanceByPseudoIdKeyFormat = "mc.Instance.{0}.{1:N}";
+        private const string InstanceLogoImageUrlKeyFormat = "mc.InstanceLogoImageUrl.{0:N}";
+
+        private static InstanceProvider s_Current;
 
         #endregion
 
@@ -44,6 +47,29 @@ namespace Micajah.Common.Bll.Providers
         /// Occurs when an instance is updated.
         /// </summary>
         public static event EventHandler<InstanceProviderEventArgs> InstanceUpdated;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the instance of the class.
+        /// </summary>
+        public static InstanceProvider Current
+        {
+            get
+            {
+                if (s_Current == null)
+                {
+                    s_Current = new InstanceProvider();
+                }
+                return s_Current;
+            }
+            set
+            {
+                s_Current = value;
+            }
+        }
 
         #endregion
 
@@ -242,37 +268,6 @@ namespace Micajah.Common.Bll.Providers
 
         #region Internal Methods
 
-        internal static Instance CreateInstance(ClientDataSet.InstanceRow row)
-        {
-            if (row != null)
-            {
-                Instance instance = new Instance();
-
-                instance.InstanceId = row.InstanceId;
-                instance.PseudoId = row.PseudoId;
-                instance.OrganizationId = row.OrganizationId;
-                instance.Name = row.Name;
-                instance.Description = row.Description;
-                instance.EnableSignupUser = row.EnableSignUpUser;
-                instance.ExternalId = row.ExternalId;
-                instance.TimeZoneId = row.TimeZoneId;
-                instance.TimeFormat = row.TimeFormat;
-                instance.DateFormat = row.DateFormat;
-                instance.WorkingDays = row.WorkingDays;
-                instance.Active = row.Active;
-                if (!row.IsCanceledTimeNull()) instance.CanceledTime = new DateTime?(row.CanceledTime);
-                instance.Trial = row.Trial;
-                instance.Beta = row.Beta;
-                if (!row.IsCreatedTimeNull()) instance.CreatedTime = new DateTime?(row.CreatedTime);
-                instance.BillingPlan = (BillingPlan)row.BillingPlan;
-                instance.CreditCardStatus = (CreditCardStatus)row.CreditCardStatus;
-
-                return instance;
-            }
-
-            return null;
-        }
-
         #region Cache Methods
 
         internal static Instance GetInstanceFromCache(Guid instanceId, Guid organizationId)
@@ -328,6 +323,37 @@ namespace Micajah.Common.Bll.Providers
         }
 
         #endregion
+
+        internal static Instance CreateInstance(ClientDataSet.InstanceRow row)
+        {
+            if (row != null)
+            {
+                Instance instance = new Instance();
+
+                instance.InstanceId = row.InstanceId;
+                instance.PseudoId = row.PseudoId;
+                instance.OrganizationId = row.OrganizationId;
+                instance.Name = row.Name;
+                instance.Description = row.Description;
+                instance.EnableSignupUser = row.EnableSignUpUser;
+                instance.ExternalId = row.ExternalId;
+                instance.TimeZoneId = row.TimeZoneId;
+                instance.TimeFormat = row.TimeFormat;
+                instance.DateFormat = row.DateFormat;
+                instance.WorkingDays = row.WorkingDays;
+                instance.Active = row.Active;
+                if (!row.IsCanceledTimeNull()) instance.CanceledTime = new DateTime?(row.CanceledTime);
+                instance.Trial = row.Trial;
+                instance.Beta = row.Beta;
+                if (!row.IsCreatedTimeNull()) instance.CreatedTime = new DateTime?(row.CreatedTime);
+                instance.BillingPlan = (BillingPlan)row.BillingPlan;
+                instance.CreditCardStatus = (CreditCardStatus)row.CreditCardStatus;
+
+                return instance;
+            }
+
+            return null;
+        }
 
         internal static Guid InsertFirstInstance(string timeZoneId, Guid? templateInstanceId, Guid organizationId
             , string adminEmail, string adminPassword, string partialCustomUrl
@@ -417,6 +443,36 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Public Methods
+
+        #region Static Methods
+
+        #region Cache Methods
+
+        public static string GetInstanceLogoImageUrlFromCache(Guid instanceId, Guid organizationId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceLogoImageUrlKeyFormat, instanceId);
+            string url = CacheManager.Current.Get(key, true) as string;
+
+            if (url == null)
+            {
+                url = Current.GetInstanceLogoImageUrl(instanceId, organizationId);
+
+                if (url != null)
+                {
+                    CacheManager.Current.PutWithDefaultTimeout(key, url);
+                }
+            }
+
+            return url;
+        }
+
+        public static void RemoveInstanceLogoImageUrlFromCache(Guid instanceId)
+        {
+            string key = string.Format(CultureInfo.InvariantCulture, InstanceLogoImageUrlKeyFormat, instanceId);
+            CacheManager.Current.Remove(key);
+        }
+
+        #endregion
 
         /// <summary>
         /// Configures the specified instance: creates the groups and roles of these groups in this instance which are based on non built-in roles.
@@ -702,11 +758,6 @@ namespace Micajah.Common.Bll.Providers
             return ((inst == null) ? Guid.Empty : inst.InstanceId);
         }
 
-        public static string GetInstanceLogoImageUrl(Guid instanceId)
-        {
-            return ResourceProvider.GetInstanceLogoImageUrl(instanceId);
-        }
-
         /// <summary>
         /// Creates new instance with specified details in selected organization.
         /// </summary>
@@ -985,10 +1036,10 @@ namespace Micajah.Common.Bll.Providers
 
                 EmailSuffixProvider.DeleteEmailSuffixes(user.OrganizationId, instanceId);
 
+                RemoveInstanceLogoImageUrlFromCache(instanceId);
                 RemoveInstanceFromCache(instanceId);
                 SettingProvider.RemoveInstanceSettingsValuesFromCache(instanceId);
                 CustomUrlProvider.RemoveInstanceCustomUrlFromCache(instanceId);
-                ResourceProvider.RemoveInstanceLogoImageUrlFromCache(instanceId);
             }
         }
 
@@ -1001,6 +1052,13 @@ namespace Micajah.Common.Bll.Providers
         public static bool InstanceExists(string organizationName, string instanceName)
         {
             return (GetInstanceIdByName(organizationName, instanceName) != Guid.Empty);
+        }
+
+        #endregion
+
+        public virtual string GetInstanceLogoImageUrl(Guid instanceId, Guid organizationId)
+        {
+            return null;
         }
 
         #endregion

@@ -71,7 +71,7 @@ namespace Micajah.Common.WebControls.AdminControls
         {
             if (!IsPostBack)
             {
-                OrganizationCollection orgs = WebApplication.LoginProvider.GetOrganizationsByLoginId(this.UserId).FindAllVisible();
+                OrganizationCollection orgs = LoginProvider.Current.GetOrganizationsByLoginId(this.UserId).FindAllVisible();
                 if (orgs.Count > 1)
                     EditForm.Fields[11].Visible = true;
                 else
@@ -222,7 +222,7 @@ namespace Micajah.Common.WebControls.AdminControls
             UserContext user = UserContext.Current;
             if (user != null)
             {
-                WebApplication.LoginProvider.UpdateUserLdapInfo(user.OrganizationId, this.UserId, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Guid.Empty, string.Empty);
+                LoginProvider.Current.UpdateUserLdapInfo(user.OrganizationId, this.UserId, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Guid.Empty, string.Empty);
                 EmailProvider.DeleteEmails(this.UserId, string.Empty);
                 EditForm.DataBind();
             }
@@ -277,12 +277,12 @@ namespace Micajah.Common.WebControls.AdminControls
 
                     log = new ApplicationLogger();
                     ldap = new LdapIntegration(log);
-                    loginName = WebApplication.LoginProvider.GetLoginName(this.UserId);
+                    loginName = LoginProvider.Current.GetLoginName(this.UserId);
                     ldapUser = LdapInfoProvider.GetLdapUser(userContext.OrganizationId, loginName);
                     if (ldapUser != null)
                     {
                         ldap.CreateUserEmails(LdapInfoProvider.GetLdapUserAltEmails(userContext.OrganizationId, ldapUser.UserId, false), ldapUser);
-                        WebApplication.LoginProvider.UpdateUserLdapInfo(userContext.OrganizationId, this.UserId, ldapUser.FirstName, ldapUser.LastName, ldapUser.LdapDomain, ldapUser.LdapDomainFull, ldapUser.LdapUserAlias, ldapUser.LdapUserPrinciple, ldapUser.UserSid, ldapUser.UserId, ldapUser.LdapOUPath);
+                        LoginProvider.Current.UpdateUserLdapInfo(userContext.OrganizationId, this.UserId, ldapUser.FirstName, ldapUser.LastName, ldapUser.LdapDomain, ldapUser.LdapDomainFull, ldapUser.LdapUserAlias, ldapUser.LdapUserPrinciple, ldapUser.UserSid, ldapUser.UserId, ldapUser.LdapOUPath);
                     }
                     ldapProcess.ThreadStateType = Bll.ThreadStateType.Finished;
                 }

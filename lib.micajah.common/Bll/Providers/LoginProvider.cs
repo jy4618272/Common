@@ -27,6 +27,12 @@ namespace Micajah.Common.Bll.Providers
     [DataObjectAttribute(true)]
     public class LoginProvider
     {
+        #region Members
+
+        private static LoginProvider s_Current;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -57,6 +63,26 @@ namespace Micajah.Common.Bll.Providers
                 return isPersistent;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the instance of the class.
+        /// </summary>
+        public static LoginProvider Current
+        {
+            get
+            {
+                if (s_Current == null)
+                {
+                    s_Current = new LoginProvider();
+                }
+                return s_Current;
+            }
+            set
+            {
+                s_Current = value;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -464,7 +490,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static bool IsLoginUrl(string url)
         {
-            string loginUrl = WebApplication.LoginProvider.GetLoginUrl(false);
+            string loginUrl = LoginProvider.Current.GetLoginUrl(false);
             return ((loginUrl.IndexOf(url, StringComparison.OrdinalIgnoreCase) > -1) || (url.IndexOf(loginUrl, StringComparison.OrdinalIgnoreCase) > -1));
         }
 
