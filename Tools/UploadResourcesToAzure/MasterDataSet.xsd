@@ -4,7 +4,6 @@
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
       <DataSource DefaultConnectionIndex="1" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="FileService_MetaDataConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="FileService_MetaDataConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Tools.UploadResourcesToAzure.Properties.Settings.GlobalReference.Default.FileService_MetaDataConnectionString" Provider="System.Data.SqlClient" />
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="Mc_MasterConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="Mc_MasterConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Tools.UploadResourcesToAzure.Properties.Settings.GlobalReference.Default.Mc_MasterConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
