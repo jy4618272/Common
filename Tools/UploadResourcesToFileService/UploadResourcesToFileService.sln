@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadResourcesToFileService", "UploadResourcesToFileService\UploadResourcesToFileService.csproj", "{0F76D4D7-F90A-4AD7-93D8-3D5B9107308E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin Shared", "bin Shared", "{6EEA1CB2-E3C8-449D-83C0-FE0F8271A425}"
+	ProjectSection(SolutionItems) = preProject
+		bin Shared\Micajah.Common3.dll = bin Shared\Micajah.Common3.dll
+		bin Shared\Micajah.Common3.pdb = bin Shared\Micajah.Common3.pdb
+		bin Shared\Micajah.FileService.dll = bin Shared\Micajah.FileService.dll
+		bin Shared\Micajah.FileService.pdb = bin Shared\Micajah.FileService.pdb
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F76D4D7-F90A-4AD7-93D8-3D5B9107308E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F76D4D7-F90A-4AD7-93D8-3D5B9107308E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F76D4D7-F90A-4AD7-93D8-3D5B9107308E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F76D4D7-F90A-4AD7-93D8-3D5B9107308E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
