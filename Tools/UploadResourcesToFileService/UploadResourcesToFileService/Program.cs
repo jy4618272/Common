@@ -11,25 +11,6 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
 {
     class Program
     {
-        private static Instance GetInstance(Guid instanceId)
-        {
-            Instance instance = null;
-
-            using (Micajah.Common.Dal.MasterDataSet.OrganizationDataTable table = OrganizationProvider.GetOrganizations(true))
-            {
-                foreach (Micajah.Common.Dal.MasterDataSet.OrganizationRow row in table)
-                {
-                    instance = InstanceProvider.GetInstance(instanceId, row.OrganizationId);
-                    if (instance != null)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return instance;
-        }
-
         static void Main(string[] args)
         {
             Console.WriteLine("Tool to upload the files from Mc_Resource table to File Service.\r\n");
@@ -44,14 +25,14 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
             {
                 adapter = new ResourceTableAdapter();
 
-                // Read configuration.
+                // Reads configuration.
                 List<string> objectTypesWithPublicAccess = new List<string>(ConfigurationManager.AppSettings["ObjectTypesWithPublicAccess"].Split(','));
                 string applicationId = Micajah.FileService.Client.Properties.Settings.Default.ApplicationId.ToString();
 
                 int fileIndex = 0;
                 int rowsCount = 0;
 
-                // Get top 1000 files from the database.
+                // Gets top 1000 files from the database.
                 table = adapter.GetResources();
                 rowsCount = table.Count;
 
@@ -66,7 +47,7 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
 
                         try
                         {
-                            // Get the file from database.
+                            // Gets the file from database.
                             Console.WriteLine("Resource #{0} \"{1}\" (resourceId = {2:N}).", fileIndex, row.Name, row.ResourceId);
                             Console.Write("Getting from database...");
 
@@ -83,7 +64,8 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
                             switch (row.LocalObjectType)
                             {
                                 case "InstanceLogo":
-                                    Instance instance = GetInstance(objectId);
+                                    // Looks for the instance in all organization through all databases.
+                                    Instance instance = InstanceProvider.GetInstance(objectId, Guid.Empty);
                                     if (instance == null)
                                     {
                                         throw new ApplicationException(string.Format(CultureInfo.InvariantCulture, "Instance with Id = {0:N} not found.", objectId));
@@ -102,7 +84,7 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
 
                             bool publicAccess = objectTypesWithPublicAccess.Contains(objectType);
 
-                            // Upload to File Service.
+                            // Uploads to File Service.
                             string checksum = null;
                             string organizationId = objectId.ToString("N");
                             string departmentId = objectId.ToString("N");
@@ -125,11 +107,11 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
                             Console.WriteLine(" Failed.\r\n{0}\r\n", ex.ToString());
                         }
 
-                        // Update upload status of the file in the database.
+                        // Updates upload status of the file in the database.
                         adapter.UpdateUploadStatus(row.ResourceId, uploadStatus);
                     }
 
-                    // Get next 1000 files from the database.
+                    // Gets next 1000 files from the database.
                     table = adapter.GetResources();
                     rowsCount = table.Count;
                 }
