@@ -100,34 +100,6 @@ namespace Micajah.Common.Bll.Providers
         #region Internal Methods
 
         /// <summary>
-        /// Returns the connection string to database with specified details.
-        /// </summary>
-        /// <param name="name">The database name.</param>
-        /// <param name="userName">The user name to connect to database.</param>
-        /// <param name="password">The password of the user.</param>
-        /// <param name="serverName">The name of the SQL-server where database is placed.</param>
-        /// <param name="serverInstanceName">The instance name of the SQL-server.</param>
-        /// <param name="port">The port of the SQL-server.</param>
-        /// <returns>A System.String that represents the connection string to database.</returns>
-        internal static string CreateConnectionString(string name, string userName, string password,
-            string serverName, string serverInstanceName, int port)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendFormat("Data Source={0}", serverName);
-            if (serverInstanceName.Trim().Length > 0) sb.AppendFormat("\\{0}", serverInstanceName);
-            if (port > 0) sb.AppendFormat(",{0}", port);
-            sb.AppendFormat(";Initial Catalog={0};", name);
-            if (userName.Trim().Length > 0 && password.Trim().Length > 0)
-                sb.AppendFormat("User ID={0};Password={1};", userName, password);
-            else
-                sb.Append("Integrated Security=SSPI;");
-            sb.Append("Persist Security Info=True;");
-
-            return sb.ToString();
-        }
-
-        /// <summary>
         /// Checks if the database exists.
         /// </summary>
         /// <param name="name">The database name.</param>
@@ -200,6 +172,48 @@ namespace Micajah.Common.Bll.Providers
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Returns the connection string to database with specified details.
+        /// </summary>
+        /// <param name="name">The database name.</param>
+        /// <param name="userName">The user name to connect to database.</param>
+        /// <param name="password">The password of the user.</param>
+        /// <param name="serverName">The name of the SQL-server where database is placed.</param>
+        /// <param name="serverInstanceName">The instance name of the SQL-server.</param>
+        /// <param name="port">The port of the SQL-server.</param>
+        /// <returns>A System.String that represents the connection string to database.</returns>
+        public static string CreateConnectionString(string name, string userName, string password, string serverName, string serverInstanceName, int port)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("Data Source={0}", serverName);
+
+            if (!string.IsNullOrWhiteSpace(serverInstanceName))
+            {
+                sb.AppendFormat("\\{0}", serverInstanceName);
+            }
+
+            if (port > 0)
+            {
+                sb.AppendFormat(",{0}", port);
+            }
+
+            sb.AppendFormat(";Initial Catalog={0};", name);
+
+            if ((!string.IsNullOrWhiteSpace(userName)) && (!string.IsNullOrWhiteSpace(password)))
+            {
+                sb.AppendFormat("User ID={0};Password={1};", userName, password);
+            }
+            else
+            {
+                sb.Append("Integrated Security=SSPI;");
+            }
+
+            sb.Append("Persist Security Info=True;");
+
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Gets the databases, excluding marked as deleted.
