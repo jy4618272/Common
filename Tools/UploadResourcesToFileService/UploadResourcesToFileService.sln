@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadResourcesToFileServic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin Shared", "bin Shared", "{6EEA1CB2-E3C8-449D-83C0-FE0F8271A425}"
 	ProjectSection(SolutionItems) = preProject
-		bin Shared\Micajah.Common3.dll = bin Shared\Micajah.Common3.dll
-		bin Shared\Micajah.Common3.pdb = bin Shared\Micajah.Common3.pdb
 		bin Shared\Micajah.FileService.dll = bin Shared\Micajah.FileService.dll
 		bin Shared\Micajah.FileService.pdb = bin Shared\Micajah.FileService.pdb
 	EndProjectSection

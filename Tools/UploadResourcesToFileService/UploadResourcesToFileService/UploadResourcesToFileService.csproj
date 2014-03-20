@@ -35,9 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Micajah.Common3">
-      <HintPath>..\bin Shared\Micajah.Common3.dll</HintPath>
-    </Reference>
     <Reference Include="Micajah.FileService">
       <HintPath>..\bin Shared\Micajah.FileService.dll</HintPath>
     </Reference>
@@ -54,6 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MasterDataSet.cs">
+      <DependentUpon>MasterDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MasterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

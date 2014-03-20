@@ -2,9 +2,10 @@
 <xs:schema id="MasterDataSet" targetNamespace="http://tempuri.org/MainDataSet.xsd" xmlns:mstns="http://tempuri.org/MainDataSet.xsd" xmlns="http://tempuri.org/MainDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="1" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="1" FunctionsComponentName="QueriesTableAdapter" GeneratorFunctionsComponentClassName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="QueriesTableAdapter" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="Mc_MasterConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="Mc_MasterConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Tools.UploadResourcesToFileService.Properties.Settings.GlobalReference.Default.Mc_MasterConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="Mc_ClientConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="Mc_ClientConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Micajah.Common.Tools.UploadResourcesToFileService.Properties.Settings.GlobalReference.Default.Mc_ClientConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ResourceTableAdapter" GeneratorDataComponentClassName="ResourceTableAdapter" Name="Resource" UserDataComponentName="ResourceTableAdapter">
@@ -86,15 +87,124 @@ WHERE        (ResourceId = @ResourceId)</CommandText>
               </DbSource>
             </Sources>
           </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="DatabaseTableAdapter" GeneratorDataComponentClassName="DatabaseTableAdapter" Name="Database" UserDataComponentName="DatabaseTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="Mc_MasterConnectionString (Settings)" DbObjectType="Unknown" GenerateMethods="Get" GenerateShortCommands="false" GeneratorGetMethodName="GetDatabases" GetMethodModifier="Public" GetMethodName="GetDatabases" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDatabases" UserSourceName="GetDatabases">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        db.Name AS DatabaseName, db.UserName, db.Password, dbs.Name AS ServerName, dbs.InstanceName AS ServerInstanceName, dbs.Port
+FROM            Mc_DatabaseServer AS dbs INNER JOIN
+                         Mc_Database AS db ON dbs.DatabaseServerId = db.DatabaseServerId
+ORDER BY db.Deleted, dbs.Deleted</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="DatabaseName" DataSetColumn="DatabaseName" />
+              <Mapping SourceColumn="UserName" DataSetColumn="UserName" />
+              <Mapping SourceColumn="Password" DataSetColumn="Password" />
+              <Mapping SourceColumn="ServerName" DataSetColumn="ServerName" />
+              <Mapping SourceColumn="ServerInstanceName" DataSetColumn="ServerInstanceName" />
+              <Mapping SourceColumn="Port" DataSetColumn="Port" />
+            </Mappings>
+            <Sources>
+              <DbSource ConnectionRef="Mc_MasterConnectionString (Settings)" DbObjectType="Unknown" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetDatabaseByOrganizationId" GetMethodModifier="Public" GetMethodName="GetDatabaseByOrganizationId" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDatabaseByOrganizationId" UserSourceName="GetDatabaseByOrganizationId">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        db.Name AS DatabaseName, db.UserName, db.Password, dbs.Name AS ServerName, dbs.InstanceName AS ServerInstanceName, dbs.Port
+FROM            Mc_Organization AS o INNER JOIN
+                         Mc_Database AS db ON o.DatabaseId = db.DatabaseId INNER JOIN
+                         Mc_DatabaseServer AS dbs ON dbs.DatabaseServerId = db.DatabaseServerId
+WHERE        (o.OrganizationId = @OrganizationId)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="OrganizationId" ColumnName="OrganizationId" DataSourceName="Mc_Master.dbo.Mc_Organization" DataTypeServer="uniqueidentifier" DbType="Guid" Direction="Input" ParameterName="@OrganizationId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="16" SourceColumn="OrganizationId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="InstanceTableAdapter" GeneratorDataComponentClassName="InstanceTableAdapter" Name="Instance" UserDataComponentName="InstanceTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="Mc_ClientConnectionString (Settings)" DbObjectName="Mc_Client.dbo.Mc_Instance" DbObjectType="Table" GenerateMethods="Get" GenerateShortCommands="false" GeneratorGetMethodName="GetInstance" GetMethodModifier="Public" GetMethodName="GetInstance" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetInstance" UserSourceName="GetInstance">
+                <DeleteCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>DELETE FROM [Mc_Instance] WHERE (([InstanceId] = @Original_InstanceId) AND ([OrganizationId] = @Original_OrganizationId) AND ([Name] = @Original_Name))</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_InstanceId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="InstanceId" SourceColumnNullMapping="false" SourceVersion="Original" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_OrganizationId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="OrganizationId" SourceColumnNullMapping="false" SourceVersion="Original" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="String" Direction="Input" ParameterName="@Original_Name" Precision="0" ProviderType="NVarChar" Scale="0" Size="0" SourceColumn="Name" SourceColumnNullMapping="false" SourceVersion="Original" />
+                    </Parameters>
+                  </DbCommand>
+                </DeleteCommand>
+                <InsertCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>INSERT INTO [Mc_Instance] ([InstanceId], [OrganizationId], [Name]) VALUES (@InstanceId, @OrganizationId, @Name);
+SELECT InstanceId, OrganizationId, Name FROM Mc_Instance WHERE (InstanceId = @InstanceId)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@InstanceId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="InstanceId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@OrganizationId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="OrganizationId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="String" Direction="Input" ParameterName="@Name" Precision="0" ProviderType="NVarChar" Scale="0" Size="0" SourceColumn="Name" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </InsertCommand>
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        InstanceId, OrganizationId, Name
+FROM            Mc_Instance
+WHERE        (InstanceId = @InstanceId)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="InstanceId" ColumnName="InstanceId" DataSourceName="Mc_Client.dbo.Mc_Instance" DataTypeServer="uniqueidentifier" DbType="Guid" Direction="Input" ParameterName="@InstanceId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="16" SourceColumn="InstanceId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+                <UpdateCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>UPDATE [Mc_Instance] SET [InstanceId] = @InstanceId, [OrganizationId] = @OrganizationId, [Name] = @Name WHERE (([InstanceId] = @Original_InstanceId) AND ([OrganizationId] = @Original_OrganizationId) AND ([Name] = @Original_Name));
+SELECT InstanceId, OrganizationId, Name FROM Mc_Instance WHERE (InstanceId = @InstanceId)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@InstanceId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="InstanceId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@OrganizationId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="OrganizationId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="String" Direction="Input" ParameterName="@Name" Precision="0" ProviderType="NVarChar" Scale="0" Size="0" SourceColumn="Name" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_InstanceId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="InstanceId" SourceColumnNullMapping="false" SourceVersion="Original" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_OrganizationId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="OrganizationId" SourceColumnNullMapping="false" SourceVersion="Original" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="String" Direction="Input" ParameterName="@Original_Name" Precision="0" ProviderType="NVarChar" Scale="0" Size="0" SourceColumn="Name" SourceColumnNullMapping="false" SourceVersion="Original" />
+                    </Parameters>
+                  </DbCommand>
+                </UpdateCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="InstanceId" DataSetColumn="InstanceId" />
+              <Mapping SourceColumn="OrganizationId" DataSetColumn="OrganizationId" />
+              <Mapping SourceColumn="Name" DataSetColumn="Name" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
         </Tables>
-        <Sources />
+        <Sources>
+          <DbSource ConnectionRef="Mc_MasterConnectionString (Settings)" DbObjectName="Mc_Master.dbo.Mc_Organization" DbObjectType="Table" GenerateShortCommands="true" GeneratorSourceName="GetOrganiationName" MethodsParameterType="CLR" Modifier="Public" Name="GetOrganiationName" QueryType="Scalar" ScalarCallRetval="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="GetOrganiationName">
+            <SelectCommand>
+              <DbCommand CommandType="Text" ModifiedByUser="true">
+                <CommandText>SELECT        Name
+FROM          Mc_Organization
+WHERE        (OrganizationId = @OrganizationId)</CommandText>
+                <Parameters>
+                  <Parameter AllowDbNull="false" AutogeneratedName="OrganizationId" ColumnName="OrganizationId" DataSourceName="Mc_Master.dbo.Mc_Organization" DataTypeServer="uniqueidentifier" DbType="Guid" Direction="Input" ParameterName="@OrganizationId" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="16" SourceColumn="OrganizationId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                </Parameters>
+              </DbCommand>
+            </SelectCommand>
+          </DbSource>
+        </Sources>
       </DataSource>
     </xs:appinfo>
   </xs:annotation>
   <xs:element name="MasterDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="MasterDataSet" msprop:Generator_UserDSName="MasterDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Resource" msprop:Generator_TableClassName="ResourceDataTable" msprop:Generator_TableVarName="tableResource" msprop:Generator_RowChangedName="ResourceRowChanged" msprop:Generator_TablePropName="Resource" msprop:Generator_RowDeletingName="ResourceRowDeleting" msprop:Generator_RowChangingName="ResourceRowChanging" msprop:Generator_RowEvHandlerName="ResourceRowChangeEventHandler" msprop:Generator_RowDeletedName="ResourceRowDeleted" msprop:Generator_RowClassName="ResourceRow" msprop:Generator_UserTableName="Resource" msprop:Generator_RowEvArgName="ResourceRowChangeEvent">
+        <xs:element name="Resource" msprop:Generator_TableClassName="ResourceDataTable" msprop:Generator_TableVarName="tableResource" msprop:Generator_TablePropName="Resource" msprop:Generator_RowDeletingName="ResourceRowDeleting" msprop:Generator_RowChangingName="ResourceRowChanging" msprop:Generator_RowEvHandlerName="ResourceRowChangeEventHandler" msprop:Generator_RowDeletedName="ResourceRowDeleted" msprop:Generator_UserTableName="Resource" msprop:Generator_RowChangedName="ResourceRowChanged" msprop:Generator_RowEvArgName="ResourceRowChangeEvent" msprop:Generator_RowClassName="ResourceRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ResourceId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnResourceId" msprop:Generator_ColumnPropNameInRow="ResourceId" msprop:Generator_ColumnPropNameInTable="ResourceIdColumn" msprop:Generator_UserColumnName="ResourceId" type="xs:string" />
@@ -130,11 +240,72 @@ WHERE        (ResourceId = @ResourceId)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="Database" msprop:Generator_TableClassName="DatabaseDataTable" msprop:Generator_TableVarName="tableDatabase" msprop:Generator_TablePropName="Database" msprop:Generator_RowDeletingName="DatabaseRowDeleting" msprop:Generator_RowChangingName="DatabaseRowChanging" msprop:Generator_RowEvHandlerName="DatabaseRowChangeEventHandler" msprop:Generator_RowDeletedName="DatabaseRowDeleted" msprop:Generator_UserTableName="Database" msprop:Generator_RowChangedName="DatabaseRowChanged" msprop:Generator_RowEvArgName="DatabaseRowChangeEvent" msprop:Generator_RowClassName="DatabaseRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DatabaseName" msprop:Generator_ColumnVarNameInTable="columnDatabaseName" msprop:Generator_ColumnPropNameInRow="DatabaseName" msprop:Generator_ColumnPropNameInTable="DatabaseNameColumn" msprop:Generator_UserColumnName="DatabaseName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="UserName" msprop:Generator_ColumnVarNameInTable="columnUserName" msprop:Generator_ColumnPropNameInRow="UserName" msprop:Generator_ColumnPropNameInTable="UserNameColumn" msprop:Generator_UserColumnName="UserName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Password" msprop:Generator_ColumnVarNameInTable="columnPassword" msprop:Generator_ColumnPropNameInRow="Password" msprop:Generator_ColumnPropNameInTable="PasswordColumn" msprop:Generator_UserColumnName="Password">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ServerName" msprop:Generator_ColumnVarNameInTable="columnServerName" msprop:Generator_ColumnPropNameInRow="ServerName" msprop:Generator_ColumnPropNameInTable="ServerNameColumn" msprop:Generator_UserColumnName="ServerName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ServerInstanceName" msprop:Generator_ColumnVarNameInTable="columnServerInstanceName" msprop:Generator_ColumnPropNameInRow="ServerInstanceName" msprop:Generator_ColumnPropNameInTable="ServerInstanceNameColumn" msprop:Generator_UserColumnName="ServerInstanceName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Port" msprop:Generator_ColumnVarNameInTable="columnPort" msprop:Generator_ColumnPropNameInRow="Port" msprop:Generator_ColumnPropNameInTable="PortColumn" msprop:Generator_UserColumnName="Port" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Instance" msprop:Generator_TableClassName="InstanceDataTable" msprop:Generator_TableVarName="tableInstance" msprop:Generator_TablePropName="Instance" msprop:Generator_RowDeletingName="InstanceRowDeleting" msprop:Generator_RowChangingName="InstanceRowChanging" msprop:Generator_RowEvHandlerName="InstanceRowChangeEventHandler" msprop:Generator_RowDeletedName="InstanceRowDeleted" msprop:Generator_UserTableName="Instance" msprop:Generator_RowChangedName="InstanceRowChanged" msprop:Generator_RowEvArgName="InstanceRowChangeEvent" msprop:Generator_RowClassName="InstanceRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="InstanceId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnInstanceId" msprop:Generator_ColumnPropNameInRow="InstanceId" msprop:Generator_ColumnPropNameInTable="InstanceIdColumn" msprop:Generator_UserColumnName="InstanceId" type="xs:string" />
+              <xs:element name="OrganizationId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnOrganizationId" msprop:Generator_ColumnPropNameInRow="OrganizationId" msprop:Generator_ColumnPropNameInTable="OrganizationIdColumn" msprop:Generator_UserColumnName="OrganizationId" type="xs:string" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:Resource" />
       <xs:field xpath="mstns:ResourceId" />
+    </xs:unique>
+    <xs:unique name="Instance_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Instance" />
+      <xs:field xpath="mstns:InstanceId" />
     </xs:unique>
   </xs:element>
 </xs:schema>

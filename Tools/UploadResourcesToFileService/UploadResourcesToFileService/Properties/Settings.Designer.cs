@@ -32,5 +32,15 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService.Properties {
                 return ((string)(this["Mc_MasterConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local);Initial Catalog=Mc_Client;Integrated Security=True")]
+        public string Mc_ClientConnectionString {
+            get {
+                return ((string)(this["Mc_ClientConnectionString"]));
+            }
+        }
     }
 }
