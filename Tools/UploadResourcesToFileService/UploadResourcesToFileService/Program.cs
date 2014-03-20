@@ -39,7 +39,7 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
                         foreach (MasterDataSet.DatabaseRow row in table)
                         {
                             string connStr = CreateConnectionString(row.DatabaseName, row.UserName, row.Password, row.ServerName, row.ServerInstanceName, row.Port);
-                            if (s_ConnectionStrings.Contains(connStr))
+                            if (!s_ConnectionStrings.Contains(connStr))
                             {
                                 s_ConnectionStrings.Add(connStr);
                             }
