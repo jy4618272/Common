@@ -241,7 +241,7 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
                                     MasterDataSet.InstanceRow instanceRow = GetInstance(objectId);
                                     if (instanceRow == null)
                                     {
-                                        throw new ApplicationException(string.Format(CultureInfo.InvariantCulture, "Instance with Id = {0:N} not found.", objectId));
+                                        throw new ApplicationException(string.Format(CultureInfo.InvariantCulture, "Instance with Id = {0} not found.", objectId));
                                     }
 
                                     name = instanceRow.Name;
