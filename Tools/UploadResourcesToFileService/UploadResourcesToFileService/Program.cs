@@ -262,7 +262,7 @@ namespace Micajah.Common.Tools.UploadResourcesToFileService
                             string organizationId = objectId.ToString("N");
                             string departmentId = objectId.ToString("N");
 
-                            string result = Access.PutFileAsByteArray(applicationId, name, ref organizationId, name, ref departmentId, row.Name, ref content, publicAccess, ref checksum
+                            string result = Access.PutFileAsByteArray(applicationId, name, ref organizationId, name, ref departmentId, row.Name, ref content, (!publicAccess), ref checksum
                                 , objectId.ToString("N"), objectType, string.Empty, connectionString);
 
                             if (!Access.StringIsFileUniqueId(result))
