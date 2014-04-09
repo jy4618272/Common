@@ -1,5 +1,4 @@
-﻿html
-{
+﻿html {
     font-size: 100%;
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -7,127 +6,99 @@
     -ms-text-size-adjust: 100%;
 }
 
-html, body, form
-{
+html, body, form {
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
-body
-{
+body {
     font: 13px/1.231 Arial, Sans-serif;
     color: #555;
 }
 
-h1
-{
+h1 {
     font-size: 25px;
     font-weight: normal;
 }
 
-h2
-{
+h2 {
     font-size: 23px;
     font-weight: normal;
 }
 
-h3
-{
+h3 {
     font-size: 21px;
     font-weight: normal;
 }
 
-h4
-{
+h4 {
     font-size: 19px;
     font-weight: normal;
 }
 
-h5
-{
+h5 {
     font-size: 17px;
     font-weight: normal;
 }
 
-h6
-{
+h6 {
     font-size: 15px;
     font-weight: normal;
 }
 
-/*
-* Commented by Jon request Eugene 
-* p, dl, hr, h1, h2, h3, h4, h5, h6, pre, address, fieldset, figure
-* {
-*     margin-bottom: 20px;
-* }
-*/
-
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section
-{
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
     display: block;
 }
 
-audio[controls], canvas, video
-{
-    display: inline-block; 
+audio[controls], canvas, video {
+    display: inline-block;
     *display: inline;
     *zoom: 1;
 }
 
-::-moz-selection
-{
+::-moz-selection {
     background: #127ee9;
     color: #fff;
     text-shadow: none;
 }
 
-::selection
-{
+::selection {
     background: #127ee9;
     color: #fff;
     text-shadow: none;
 }
 
-a
-{
+a {
     font-family: Arial, Sans-Serif;
     color: #333;
 }
 
-a:focus
-{
-    outline: thin dotted;
-}
+    a:focus {
+        outline: thin dotted;
+    }
 
-a:hover, a:active
-{
-    outline: 0;
-}
+    a:hover, a:active {
+        outline: 0;
+    }
 
-abbr[title]
-{
+abbr[title] {
     border-bottom: 1px dotted;
 }
 
-b, strong
-{
+b, strong {
     font-weight: bold;
 }
 
-blockquote
-{
+blockquote {
     margin: 13px 40px;
 }
 
-dfn
-{
+dfn {
     font-style: italic;
 }
 
-hr
-{
+hr {
     display: block;
     height: 1px;
     border: 0;
@@ -138,120 +109,101 @@ hr
     height: 0;
 }
 
-ins
-{
+ins {
     background: #ff9;
     color: #000;
     text-decoration: none;
 }
 
-mark
-{
+mark {
     background: #ff0;
     color: #000;
     font-style: italic;
     font-weight: bold;
 }
 
-pre, code, kbd, samp
-{
+pre, code, kbd, samp {
     font-family: monospace, monospace;
-    _font-family: 'courier new' , monospace;
+    _font-family: 'courier new', monospace;
     font-size: 13px;
 }
 
-pre
-{
+pre {
     white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 
-q
-{
+q {
     quotes: none;
 }
 
-q:before, q:after
-{
-    content: "";
-    content: none;
-}
+    q:before, q:after {
+        content: "";
+        content: none;
+    }
 
-small
-{
+small {
     font-size: 85%;
 }
 
-sub, sup
-{
+sub, sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
     vertical-align: baseline;
 }
 
-sup
-{
+sup {
     top: -7px;
 }
 
-sub
-{
+sub {
     bottom: -4px;
 }
 
-ul, ol
-{
+ul, ol {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-dd
-{
+dd {
     margin: 0;
 }
 
-img
-{
+img {
     border: 0;
     -ms-interpolation-mode: bicubic;
 }
 
-svg:not(:root)
-{
+svg:not(:root) {
     overflow: hidden;
 }
 
-figure
-{
+figure {
     margin: 0;
 }
 
-fieldset
-{
+fieldset {
     border: 0;
     margin: 0;
     padding: 0;
 }
 
-legend
-{
+legend {
     border: 0;
     padding: 0;
     *margin-left: -7px;
 }
 
 /* Errors */
-.ErrorMessage, .ErrorMessage a, .ErrorMessage a:hover, a.ErrorMessage, a.ErrorMessage:hover
-{
+.ErrorMessage, .ErrorMessage a, .ErrorMessage a:hover, a.ErrorMessage, a.ErrorMessage:hover {
     font-size: 14px;
     color: Red;
 }
 
-.Error
-{
+.Error {
     color: #665252 !important;
     font-size: 14px;
     background-color: transparent;
@@ -265,29 +217,25 @@ legend
     position: absolute;
 }
 
-.Error.Large
-{
-    background-position: left 15px !important;
-    padding-top: 15px !important;
-}
+    .Error.Large {
+        background-position: left 15px !important;
+        padding-top: 15px !important;
+    }
 
-.Error, .Error a, .Error a:hover
-{
-    color: #665252 !important;
-    font-size: 14px;
-    background-color: transparent;
-    font-weight: normal;
-    line-height: normal;
-}
+    .Error, .Error a, .Error a:hover {
+        color: #665252 !important;
+        font-size: 14px;
+        background-color: transparent;
+        font-weight: normal;
+        line-height: normal;
+    }
 
-.Error.Block
-{
-    position: static !important;
-}
+        .Error.Block {
+            position: static !important;
+        }
 
 /* Inputs */
-input[type=text], input[type=password], select, textarea
-{
+input[type=text], input[type=password], select, textarea {
     background-color: White;
     border: solid 1px #CCC !important;
     border-radius: 5px;
@@ -302,59 +250,49 @@ input[type=text], input[type=password], select, textarea
     *overflow: visible;
 }
 
-input[type=text], input[type=password], textarea
-{
+input[type=text], input[type=password], textarea {
     padding: 6px 10px !important;
 }
 
-select
-{
+select {
     padding: 5px 10px !important;
 }
 
-textarea
-{
+textarea {
     overflow: auto;
     vertical-align: top;
 }
 
-input[type=text]:hover, input[type=password]:hover, select:hover, textarea:hover
-{
-    border-color: #80BFFF !important;
-}
+    input[type=text]:hover, input[type=password]:hover, select:hover, textarea:hover {
+        border-color: #80BFFF !important;
+    }
 
-input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus
-{
-    border-color: #0053A6 !important;
-}
+    input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
+        border-color: #0053A6 !important;
+    }
 
-input[type=text].Large, input[type=password].Large, textarea.Large
-{
-    font-size: 18px !important;
-    padding: 12px 10px !important;
-}
+    input[type=text].Large, input[type=password].Large, textarea.Large {
+        font-size: 18px !important;
+        padding: 12px 10px !important;
+    }
 
-select.Large
-{
+select.Large {
     font-size: 18px !important;
     padding: 11px 10px !important;
 }
 
-input[type=text].Invalid, input[type=password].Invalid, select.Invalid, textarea.Invalid, .Invalid
-{
+input[type=text].Invalid, input[type=password].Invalid, select.Invalid, textarea.Invalid, .Invalid {
     background-color: #ffcece !important;
     border-color: #df8f8f !important;
     color: #665252;
 }
 
-select.Invalid option
-{
-    background-color: #ffcece !important;
-    color: #665252;
-}
+    select.Invalid option {
+        background-color: #ffcece !important;
+        color: #665252;
+    }
 
-input[type=checkbox], input[type=radio], input[type=image]
-{
+input[type=checkbox], input[type=radio], input[type=image] {
     box-sizing: border-box;
     border: none;
     width: auto;
@@ -372,8 +310,7 @@ input[type=checkbox], input[type=radio], input[type=image]
 /* Buttons */
 input[type=button], input[type=reset], input[type=submit], button, .Button,
 input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus,
-input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover
-{
+input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover {
     cursor: pointer;
     outline: none !important;
     font-weight: bold;
@@ -398,204 +335,194 @@ input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, but
     *overflow: visible;
 }
 
-.Button, .Button:hover, .Button:focus
-{
-    display: inline-block;
-    *padding: 10.84px 29.46px;
-}
+    .Button, .Button:hover, .Button:focus {
+        display: inline-block;
+        *padding: 10.84px 29.46px;
+    }
 
-input[type=button], input[type=reset], input[type=submit], button, .Button
-{
+input[type=button], input[type=reset], input[type=submit], button, .Button {
     color: #333;
     border: 1px solid #d4d4d4;
     background-color: #d3d3d3;
 }
 
-input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus,
-input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover
-{
-	color: #fff;
-	border-left-color: #3072b3;
-    border-right-color: #3072b3;
-    border-top-color: #3072b3;
-    border-bottom-color: #2a65a0;
-	background-color: #3072b3;
-}
+    input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, button:focus, .Button:focus,
+    input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover, .Button:hover {
+        color: White;
+        border-left-color: #3072b3;
+        border-right-color: #3072b3;
+        border-top-color: #3072b3;
+        border-bottom-color: #2a65a0;
+        background-color: #3072b3;
+    }
 
-input[type=button].Small, input[type=reset].Small, input[type=submit].Small, button.Small, .Button.Small
-{
-    font-size: 12.6px !important;
-    padding: 7.56px 25.2px !important;
-}
+    input[type=button].Small, input[type=reset].Small, input[type=submit].Small, button.Small, .Button.Small {
+        font-size: 12.6px !important;
+        padding: 7.56px 25.2px !important;
+    }
 
-.Button.Small, .Button.Small:hover, .Button.Small:focus
-{
-    *padding: 8.99px 25.2px !important;
-}
+        .Button.Small, .Button.Small:hover, .Button.Small:focus {
+            *padding: 8.99px 25.2px !important;
+        }
 
-input[type=button].Large, input[type=reset].Large, input[type=submit].Large, button.Large, .Button.Large
-{
-    font-size: 18.2px !important;
-    padding: 10.92px 36.4px !important;
-}
+    input[type=button].Large, input[type=reset].Large, input[type=submit].Large, button.Large, .Button.Large {
+        font-size: 18.2px !important;
+        padding: 10.92px 36.4px !important;
+    }
 
-.Button.Large, .Button.Large:hover, .Button.Large:focus
-{
-    *padding: 13.92px 36.4px !important;
-}
+        .Button.Large, .Button.Large:hover, .Button.Large:focus {
+            *padding: 13.92px 36.4px !important;
+        }
 
-input[type=button].X-Large, input[type=reset].X-Large, input[type=submit].X-Large, button.X-Large, .Button.X-Large
-{
-    font-size: 21px !important;
-    padding: 12.6px 42px !important;
-}
+    input[type=button].X-Large, input[type=reset].X-Large, input[type=submit].X-Large, button.X-Large, .Button.X-Large {
+        font-size: 21px !important;
+        padding: 12.6px 42px !important;
+    }
 
-.Button.X-Large, .Button.X-Large:hover, .Button.X-Large:focus
-{
-    *padding: 16.6px 42px !important;
-}
+        .Button.X-Large, .Button.X-Large:hover, .Button.X-Large:focus {
+            *padding: 16.6px 42px !important;
+        }
 
-/* Green Buttons */
-input[type=button].Green, input[type=reset].Green, input[type=submit].Green, button.Green, .Button.Green
-{
-    color: White;
-    border: 1px solid #79a541;
-    background-color: #92c74f;
-}
+    /* Gray Buttons */
+    input[type=button].Gray, input[type=reset].Gray, input[type=submit].Gray, button.Gray, .Button.Gray {
+        color: #333;
+        border: 1px solid #d4d4d4;
+        background-color: #d3d3d3;
+    }
 
-input[type=button].Green:focus, input[type=reset].Green:focus, input[type=submit].Green:focus, button.Green:focus, .Button.Green:focus,
-input[type=button].Green:hover, input[type=reset].Green:hover, input[type=submit].Green:hover, button.Green:hover, .Button.Green:hover,
-input[type=button].Green:active, input[type=reset].Green:active, input[type=submit].Green:active, button.Green:active, .Button.Green:active
-{
-    color: White;
-    background-color: #39f;
-    border: 1px solid #39f;
-}
+        input[type=button].Gray:focus, input[type=reset].Gray:focus, input[type=submit].Gray:focus, button.Gray:focus, .Button.Gray:focus,
+        input[type=button].Gray:hover, input[type=reset].Gray:hover, input[type=submit].Gray:hover, button.Gray:hover, .Button.Gray:hover,
+        input[type=button].Gray:active, input[type=reset].Gray:active, input[type=submit].Gray:active, button.Gray:active, .Button.Gray:active {
+            color: White;
+            border-left-color: #3072b3;
+            border-right-color: #3072b3;
+            border-top-color: #3072b3;
+            border-bottom-color: #2a65a0;
+            background-color: #3072b3;
+        }
 
-/* Blue Buttons */
-input[type=button].Blue, input[type=reset].Blue, input[type=submit].Blue, button.Blue, .Button.Blue
-{
-    color: White;
-    border: 1px solid #058dc7;
-    background-color: #058dc7;
-}
+    /* Green Buttons */
+    input[type=button].Green, input[type=reset].Green, input[type=submit].Green, button.Green, .Button.Green {
+        color: White;
+        border: 1px solid #79a541;
+        background-color: #92c74f;
+    }
 
-input[type=button].Blue:focus, input[type=reset].Blue:focus, input[type=submit].Blue:focus, button.Blue:focus, .Button.Blue:focus,
-input[type=button].Blue:hover, input[type=reset].Blue:hover, input[type=submit].Blue:hover, button.Blue:hover, .Button.Blue:hover,
-input[type=button].Blue:active, input[type=reset].Blue:active, input[type=submit].Blue:active, button.Blue:active, .Button.Blue:active
-{
-    color: White;
-    background-color: #09a0e1;
-    border: 1px solid #09a0e1;
-}
+        input[type=button].Green:focus, input[type=reset].Green:focus, input[type=submit].Green:focus, button.Green:focus, .Button.Green:focus,
+        input[type=button].Green:hover, input[type=reset].Green:hover, input[type=submit].Green:hover, button.Green:hover, .Button.Green:hover,
+        input[type=button].Green:active, input[type=reset].Green:active, input[type=submit].Green:active, button.Green:active, .Button.Green:active {
+            color: White;
+            background-color: #39f;
+            border: 1px solid #39f;
+        }
 
-/* Red Buttons */
-input[type=button].Red, input[type=reset].Red, input[type=submit].Red, button.Red, .Button.Red
-{
-    color: White;
-    border: 1px solid #ab2222;
-    background-color: #d74040;
-}
+    /* Blue Buttons */
+    input[type=button].Blue, input[type=reset].Blue, input[type=submit].Blue, button.Blue, .Button.Blue {
+        color: White;
+        border: 1px solid #058dc7;
+        background-color: #058dc7;
+    }
 
-input[type=button].Red:focus, input[type=reset].Red:focus, input[type=submit].Red:focus, button.Red:focus, .Button.Red:focus,
-input[type=button].Red:hover, input[type=reset].Red:hover, input[type=submit].Red:hover, button.Red:hover, .Button.Red:hover,
-input[type=button].Red:active, input[type=reset].Red:active, input[type=submit].Red:active, button.Red:active, .Button.Red:active
-{
-    color: White;
-    background-color: #ad2323;
-    border: 1px solid #a0302a;
-}
+        input[type=button].Blue:focus, input[type=reset].Blue:focus, input[type=submit].Blue:focus, button.Blue:focus, .Button.Blue:focus,
+        input[type=button].Blue:hover, input[type=reset].Blue:hover, input[type=submit].Blue:hover, button.Blue:hover, .Button.Blue:hover,
+        input[type=button].Blue:active, input[type=reset].Blue:active, input[type=submit].Blue:active, button.Blue:active, .Button.Blue:active {
+            color: White;
+            background-color: #09a0e1;
+            border: 1px solid #09a0e1;
+        }
 
-button::-moz-focus-inner, input::-moz-focus-inner
-{
-    border: 0;
-    padding: 0;
-}
+    /* Red Buttons */
+    input[type=button].Red, input[type=reset].Red, input[type=submit].Red, button.Red, .Button.Red {
+        color: White;
+        border: 1px solid #ab2222;
+        background-color: #d74040;
+    }
+
+        input[type=button].Red:focus, input[type=reset].Red:focus, input[type=submit].Red:focus, button.Red:focus, .Button.Red:focus,
+        input[type=button].Red:hover, input[type=reset].Red:hover, input[type=submit].Red:hover, button.Red:hover, .Button.Red:hover,
+        input[type=button].Red:active, input[type=reset].Red:active, input[type=submit].Red:active, button.Red:active, .Button.Red:active {
+            color: White;
+            background-color: #ad2323;
+            border: 1px solid #a0302a;
+        }
+
+    button::-moz-focus-inner, input::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
 
 /* Button drop menu */
-li.Button.DropMenu
-{
+li.Button.DropMenu {
     float: left;
     *float: none;
 }
 
-li.Button.DropMenu.AddNew
-{
-    background-image: url($AddNew.png$);
-    background-repeat: no-repeat;
-    background-position: center center;
-    text-align: center;
-    width: 96px;
-}
+    li.Button.DropMenu.AddNew {
+        background-image: url($AddNew.png$);
+        background-repeat: no-repeat;
+        background-position: center center;
+        text-align: center;
+        width: 96px;
+    }
 
-li.Button.DropMenu ul
-{
-    min-width: 115px;
-    position: absolute;
-    margin: 27px 0 0 -24px;
-    border-radius: 0px 0px 4px 4px;
-    padding: 4px 15px;
-    z-index: 999999999;
-    display: none;
-    *margin-left: -42px;
-}
+    li.Button.DropMenu ul {
+        min-width: 115px;
+        position: absolute;
+        margin: 27px 0 0 -24px;
+        border-radius: 0px 0px 4px 4px;
+        padding: 4px 15px;
+        z-index: 999999999;
+        display: none;
+        *margin-left: -42px;
+    }
 
-li.Button.DropMenu:hover ul
-{
-    display: block;
-}
+    li.Button.DropMenu:hover ul {
+        display: block;
+    }
 
-li.Button.DropMenu ul li 
-{
-    float: none;
-    display: block;
-    margin: 0 -9px;
-    font-size: 14px;
-    border-right: none;
-    border-left: none;
-    height: auto;
-}
+    li.Button.DropMenu ul li {
+        float: none;
+        display: block;
+        margin: 0 -9px;
+        font-size: 14px;
+        border-right: none;
+        border-left: none;
+        height: auto;
+    }
 
-li.Button.DropMenu ul li:last-child
-{
-    border: none;
-}
+        li.Button.DropMenu ul li:last-child {
+            border: none;
+        }
 
-li.Button.DropMenu ul li a
-{
-    font-weight: normal;
-    text-decoration: none;
-    padding: 8px;
-    font-size: 14px;
-    display: block;
-}
+        li.Button.DropMenu ul li a {
+            font-weight: normal;
+            text-decoration: none;
+            padding: 8px;
+            font-size: 14px;
+            display: block;
+        }
 
 /* Green */
-li.Green.DropMenu ul
-{
+li.Green.DropMenu ul {
     background-color: #058dc7;
 }
 
-li.Green.DropMenu ul li 
-{
-    color: White;
-    background-color: #058dc7;
-    border-bottom: 1px solid #09a0e1;
-}
+    li.Green.DropMenu ul li {
+        color: White;
+        background-color: #058dc7;
+        border-bottom: 1px solid #09a0e1;
+    }
 
-li.Green.DropMenu ul li:hover 
-{
-    background-color: #09A0E1;
-}
+        li.Green.DropMenu ul li:hover {
+            background-color: #09A0E1;
+        }
 
-li.Green.DropMenu ul li a
-{
-    color: White;
-}
+        li.Green.DropMenu ul li a {
+            color: White;
+        }
 
 /* Links */
-a.Link
-{
+a.Link {
     font-family: Arial, Sans-Serif;
     font-size: 17px;
     padding: 7px;
@@ -603,14 +530,12 @@ a.Link
     outline: none !important;
 }
 
-a.Link:focus, a.Link:hover
-{
-    color: White !important;
-    background-color: #28597a !important;
-}
+    a.Link:focus, a.Link:hover {
+        color: White !important;
+        background-color: #28597a !important;
+    }
 
-a.Delete
-{
+a.Delete {
     font-family: Arial, Sans-Serif;
     font-size: 17px;
     padding: 7px;
@@ -618,14 +543,12 @@ a.Delete
     outline: none !important;
 }
 
-a.Delete:focus, a.Delete:hover
-{
-    color: White !important;
-    background-color: Maroon !important;
-}
+    a.Delete:focus, a.Delete:hover {
+        color: White !important;
+        background-color: Maroon !important;
+    }
 
-a.Cancel
-{
+a.Cancel {
     font-family: Arial, Sans-Serif;
     font-size: 17px;
     padding: 7px;
@@ -633,95 +556,81 @@ a.Cancel
     outline: none !important;
 }
 
-a.Cancel:focus, a.Cancel:hover
-{
-    background-color: Gray !important;
-    color: White !important;
-}
+    a.Cancel:focus, a.Cancel:hover {
+        background-color: Gray !important;
+        color: White !important;
+    }
 
 /*-- Pills --*/
-.Pill
-{
-	padding: 3px 8px;
-	margin: 0 5px;	
-	text-decoration: none !important;
-	font-weight: normal;
-	-webkit-border-radius: 8px;
-	-moz-border-radius:8px;
-	border-radius: 8px 8px 8px 8px;
-	text-transform: uppercase;
-	font-size: 10px;
-	font-weight: bold;
-	text-align: center;
+.Pill {
+    padding: 3px 8px;
+    margin: 0 5px;
+    text-decoration: none !important;
+    font-weight: normal;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px 8px 8px 8px;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
 }
 
-.Pill.Red
-{
-	background-color: #910003;
-	color: #fff !important;
+    .Pill.Red {
+        background-color: #910003;
+        color: #fff !important;
+    }
+
+a.Pill.Red:hover {
+    background-color: #cb2226;
 }
 
-a.Pill.Red:hover
-{
-	background-color: #cb2226;
+.Pill.Green {
+    background-color: #61a319;
+    color: #fff !important;
 }
 
-.Pill.Green
-{
-	background-color: #61a319;
-	color: #fff !important;
-}
-
-a.Pill.Green:hover
-{
+a.Pill.Green:hover {
     background-color: #a0c874;
 }
 
-.Pill.Gray
-{
-	background-color: #4f5970;
-	color: #fff !important;
+.Pill.Gray {
+    background-color: #4f5970;
+    color: #fff !important;
 }
 
-a.Pill.Gray:hover
-{
+a.Pill.Gray:hover {
     background-color: #9cbbe6;
 }
 
-.Pill.LightGray
-{
-	background-color: #dadbdf;
-	color: #555555 !important;
+.Pill.LightGray {
+    background-color: #dadbdf;
+    color: #555555 !important;
 }
 
-a.Pill.LightGray:hover
-{
-	background-color: #bbc2d3;
+a.Pill.LightGray:hover {
+    background-color: #bbc2d3;
 }
 
-.Pill.Blue
-{
+.Pill.Blue {
     background-color: #058DC7;
     color: white !important;
 }
 
-.Pill.DarkBlue
-{
+.Pill.DarkBlue {
     background-color: #004174;
     color: white !important;
 }
 
 /* DateTimePicker */
-.DatePicker_Modern input[type=text].rdfd_
-{
+.DatePicker_Modern input[type=text].rdfd_ {
     padding: 0 !important;
     height: 0 !important;
     width: 0 !important;
 }
 
 /* TreeView */
-.RadTreeView input[type=text]
-{
+.RadTreeView input[type=text] {
     border: 0 none !important;
     border-radius: 0 !important;
     -moz-border-radius: 0 !important;
