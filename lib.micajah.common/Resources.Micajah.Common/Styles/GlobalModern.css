@@ -356,6 +356,19 @@ input[type=button], input[type=reset], input[type=submit], button, .Button {
         background-color: #3072b3;
     }
 
+    input.Square, button.Square {
+        border-radius: 3px 3px 3px 3px !important;
+    }
+
+    input[type=button].Smaller, input[type=reset].Smaller, input[type=submit].Smaller, button.Smaller, .Button.Smaller {
+        font-size: 12px !important;
+        padding: 5px 10px !important;
+    }
+
+        .Button.Smaller, .Button.Smaller:hover, .Button.Smaller:focus {
+            *padding: 6.99px 10px !important;
+        }
+
     input[type=button].Small, input[type=reset].Small, input[type=submit].Small, button.Small, .Button.Small {
         font-size: 12.6px !important;
         padding: 7.56px 25.2px !important;
@@ -450,6 +463,21 @@ input[type=button], input[type=reset], input[type=submit], button, .Button {
         border: 0;
         padding: 0;
     }
+
+    /* Yellow Buttons */
+    input[type=button].Yellow, input[type=reset].Yellow, input[type=submit].Yellow, button.Yellow, .Button.Yellow {
+        color: #633c16;
+        background-color: #f9d08b;
+        border: 1px solid #f9d08b;
+    }
+
+        input[type=button].Yellow:focus, input[type=reset].Yellow:focus, input[type=submit].Yellow:focus, button.Yellow:focus, .Button.Yellow:focus,
+        input[type=button].Yellow:hover, input[type=reset].Yellow:hover, input[type=submit].Yellow:hover, button.Yellow:hover, .Button.Yellow:hover,
+        input[type=button].Yellow:active, input[type=reset].Yellow:active, input[type=submit].Yellow:active, button.Yellow:active, .Button.Yellow:active {
+            color: #633c16;
+            background-color: #ffdea7;
+            border: 1px solid #ffdea7;
+        }
 
 /* Button drop menu */
 li.Button.DropMenu {
