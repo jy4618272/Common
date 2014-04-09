@@ -356,7 +356,7 @@ input[type=button], input[type=reset], input[type=submit], button, .Button {
         background-color: #3072b3;
     }
 
-    input.Square, button.Square {
+    input.Square, button.Square, .Button.Square {
         border-radius: 3px 3px 3px 3px !important;
     }
 
