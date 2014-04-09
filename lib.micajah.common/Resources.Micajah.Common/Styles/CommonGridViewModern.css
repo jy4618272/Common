@@ -184,7 +184,7 @@ tr.Cgv_P td table td {
 }
 
 .Cgv_CptCtrls a, .Cgv_CptCtrls a:hover {
-    margin: 0 5px 0 4px !important;
+    margin: 0 5px;
 }
 
 .Cgv_CptCtrls .Button, .Cgv_CptCtrls .Button:hover {
