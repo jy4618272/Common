@@ -771,7 +771,8 @@ namespace Micajah.Common.WebControls.SecurityControls
                             }
                         }
                     }
-                    else
+
+                    if (domains == null)
                     {
                         domains = FrameworkConfiguration.Current.WebApplication.Integration.Google.MailDomains;
                     }
