@@ -1,6 +1,5 @@
 ﻿using Google.GData.Apps;
 using Google.GData.Client;
-using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using Newtonsoft.Json.Linq;
@@ -18,6 +17,9 @@ namespace Micajah.Common.Bll.Providers
     {
         #region Constants
 
+        internal const string ProviderName = "google";
+
+        private const string ProviderParameter = "provider=google";
         private const string EmailScope = "email";
         private const string ProfileScope = "profile";
         private const string UsersScope = "https://apps-apis.google.com/a/feeds/user/";
@@ -28,7 +30,8 @@ namespace Micajah.Common.Bll.Providers
 
         private static string CreateGoogleProvderRequestUrl(string url)
         {
-            return url.Split('?')[0] + "?provider=google";
+            string url2 = url.Split('?')[0];
+            return string.Format(CultureInfo.InvariantCulture, "{0}?{1}", url2, ProviderParameter);
         }
 
         private static OAuth2Parameters CreateAuthorizationParameters(string scope)
@@ -120,18 +123,18 @@ namespace Micajah.Common.Bll.Providers
             string url = LoginProvider.Current.GetLoginUrl(null, null, organizationId, instanceId, null, CustomUrlProvider.GetVanityUri(Guid.Empty, Guid.Empty));
             if (url.IndexOf("?", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                url += "&provider=google";
+                url += string.Format(CultureInfo.InvariantCulture, "&{0}", ProviderParameter);
             }
             else
             {
-                url += "?provider=google";
+                url += string.Format(CultureInfo.InvariantCulture, "?{0}", ProviderParameter);
             }
             return url;
         }
 
         internal static string GetLoginUrl(string domain)
         {
-            return LoginProvider.Current.GetLoginUrl(false) + "?provider=google" + (string.IsNullOrEmpty(domain) ? string.Empty : "&domain=" + domain);
+            return LoginProvider.Current.GetLoginUrl(false) + string.Format(CultureInfo.InvariantCulture, "?{0}", ProviderParameter) + (string.IsNullOrEmpty(domain) ? string.Empty : "&domain=" + domain);
         }
 
         internal static void ParseAuthorizationRequestState(HttpRequest request, ref string domain, ref string returnUrl)
@@ -165,7 +168,7 @@ namespace Micajah.Common.Bll.Providers
                 string provider = GetProviderName(request);
                 if (!string.IsNullOrEmpty(provider))
                 {
-                    if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                    if ((string.Compare(provider, ProviderName, StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
                         return true;
                 }
             }
@@ -185,7 +188,7 @@ namespace Micajah.Common.Bll.Providers
                     string provider = query["provider"];
                     if (!string.IsNullOrEmpty(provider))
                     {
-                        if ((string.Compare(provider, "google", StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                        if ((string.Compare(provider, ProviderName, StringComparison.OrdinalIgnoreCase) == 0) && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
                             return true;
                     }
                 }

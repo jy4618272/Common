@@ -254,15 +254,8 @@ namespace Micajah.Common.Bll.Providers
             if (request != null)
             {
                 string providerName = GoogleProvider.GetProviderName(request);
-                if (!string.IsNullOrEmpty(providerName))
-                {
-                    setting = SettingProvider.GetSettingByShortName("ProviderName");
-                    if (setting != null)
-                    {
-                        setting.Value = providerName;
-                        SettingProvider.UpdateSettingValue(setting, organizationId, null, null);
-                    }
-                }
+
+                SettingProvider.UpdateOrganizationProvider(organizationId, providerName);
             }
 
             return organizationId;

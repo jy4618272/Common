@@ -3,6 +3,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Security.Authentication;
 using System.Text;
@@ -717,15 +718,17 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void LogOnButton_Click(object sender, EventArgs e)
         {
+            string loginName = LoginTextBox.Text;
+
             try
             {
-                if (LoginProvider.Current.Authenticate(LoginTextBox.Text, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
+                if (LoginProvider.Current.Authenticate(loginName, PasswordTextBox.Text, true, true, this.OrganizationId, this.InstanceId))
                 {
                     if (!string.IsNullOrEmpty(m_EmailToLink))
                     {
                         if (!EmailProvider.IsEmailExists(m_EmailToLink))
                         {
-                            LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, LoginTextBox.Text, m_EmailToLink);
+                            LinkEmailLabel.Text = string.Format(CultureInfo.InvariantCulture, Resources.LogOnControl_LinkEmailLabel_Text, loginName, m_EmailToLink);
 
                             LinkEmailPanel.Visible = true;
                             FormTable.Visible = false;
@@ -744,33 +747,43 @@ namespace Micajah.Common.WebControls.SecurityControls
             catch (AuthenticationException ex)
             {
                 string message = ex.Message;
-                if (string.Compare(ex.Message, FrameworkConfiguration.Current.WebApplication.Login.FailureText, StringComparison.OrdinalIgnoreCase) == 0 && FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
-                {
-                    Organization org = OrganizationProvider.GetOrganization(this.OrganizationId);
 
-                    if (org == null)
+                if (FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled)
+                {
+                    IList domains = null;
+
+                    if (string.Compare(ex.Message, FrameworkConfiguration.Current.WebApplication.Login.FailureText, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        OrganizationCollection orgs = LoginProvider.Current.GetOrganizationsByLoginName(LoginTextBox.Text);
-                        if (orgs != null && orgs.Count > 0)
-                            org = orgs[0];
+                        Organization org = OrganizationProvider.GetOrganization(this.OrganizationId);
+
+                        if (org == null)
+                        {
+                            OrganizationCollection orgs = LoginProvider.Current.GetOrganizationsByLoginName(loginName);
+                            if ((orgs != null) && (orgs.Count > 0))
+                                org = orgs[0];
+                        }
+
+                        if (org != null)
+                        {
+                            if (SettingProvider.OrganizationProviderIsGoogle(org.OrganizationId))
+                            {
+                                domains = EmailSuffixProvider.GetEmailSuffixesList(org.OrganizationId);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        domains = FrameworkConfiguration.Current.WebApplication.Integration.Google.MailDomains;
                     }
 
-                    if (org != null)
+                    if (domains != null)
                     {
-                        Setting setting = SettingProvider.GetSettingByShortName("ProviderName");
-                        if (setting != null)
+                        foreach (string domain in domains)
                         {
-                            setting = SettingProvider.GetOrganizationSetting(org.OrganizationId, setting.SettingId);
-                            if (setting != null && (string.Compare(setting.Value, "google", StringComparison.OrdinalIgnoreCase) == 0))
+                            if (loginName.IndexOf(domain, StringComparison.OrdinalIgnoreCase) != -1)
                             {
-                                foreach (string domain in EmailSuffixProvider.GetEmailSuffixesList(org.OrganizationId))
-                                {
-                                    if (LoginTextBox.Text.IndexOf(domain, StringComparison.OrdinalIgnoreCase) != -1)
-                                    {
-                                        message = Resources.LoginElement_GoogleFailureText;
-                                        break;
-                                    }
-                                }
+                                message = Resources.LoginElement_GoogleFailureText;
+                                break;
                             }
                         }
                     }

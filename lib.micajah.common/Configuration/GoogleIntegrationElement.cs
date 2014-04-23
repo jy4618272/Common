@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Configuration;
 using System.Xml.XPath;
 
 namespace Micajah.Common.Configuration
@@ -91,6 +93,16 @@ namespace Micajah.Common.Configuration
         public TextConfigurationElement<string> AnalyticsCode
         {
             get { return (TextConfigurationElement<string>)this["analyticsCode"]; }
+        }
+
+        /// <summary>
+        /// Gets or sets the domains of mail from Google.
+        /// </summary>
+        [ConfigurationProperty("mailDomains")]
+        [TypeConverter(typeof(CommaDelimitedStringCollectionConverter))]
+        public StringCollection MailDomains
+        {
+            get { return (StringCollection)this["mailDomains"]; }
         }
 
         #endregion
