@@ -75,7 +75,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string StyleSheetLoader = "Scripts.StyleSheetLoader.js";
         internal const string ComboBoxModernStyleSheet = "Styles.ComboBoxModern.css";
         internal const string CustomStyleSheet = "Styles.Custom.css";
-        internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-1.3.4.css";
+        internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-2.1.5.css";
         internal const string CommonGridViewModernStyleSheet = "Styles.CommonGridViewModern.css";
         internal const string AccountSettingsStyleSheet = "Styles.AccountSettings.css";
         internal const string CreditCardRegistrationStyleSheet = "Styles.CreditCardRegistration.css";
@@ -101,12 +101,12 @@ namespace Micajah.Common.Bll.Providers
 
         public static string FancyBoxScriptUrl
         {
-            get { return GetResourceUrl("Scripts.jquery.fancybox-1.3.4.pack.js", true); }
+            get { return GetResourceUrl("Scripts.jquery.fancybox-2.1.5.pack.js", true); }
         }
 
         public static string JQueryScriptUrl
         {
-            get { return GetResourceUrl("Scripts.jquery-1.7.2.min.js", true); }
+            get { return GetResourceUrl("Scripts.jquery-1.11.0.min.js", true); }
         }
 
         #endregion
@@ -253,10 +253,7 @@ namespace Micajah.Common.Bll.Providers
         private static string ProcessFancyBoxStyleSheet(string styleSheetContent)
         {
             return ProcessStyleSheet(styleSheetContent
-                , new string[] { "blank.gif", "fancy_close.png", "fancy_loading.png", "fancy_nav_left.png" , "fancy_nav_right.png"
-                    , "fancy_shadow_e.png", "fancy_shadow_n.png", "fancy_shadow_ne.png", "fancy_shadow_nw.png", "fancy_shadow_s.png", "fancy_shadow_se.png", "fancy_shadow_sw.png", "fancy_shadow_w.png"
-                    , "fancy_title_left.png", "fancy_title_main.png", "fancy_title_over.png", "fancy_title_right.png"
-                    , "fancybox.png", "fancybox-x.png", "fancybox-y.png"}
+                , new string[] { "blank.gif", "fancybox_loading.gif", "fancybox_loading@2x.gif", "fancybox_overlay.png", "fancybox_sprite.png", "fancybox_sprite@2x.png" }
                 , "Images.FancyBox.{0}");
         }
 

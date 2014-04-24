@@ -1,18 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.CreditCardRegistrationControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
-<script type="text/javascript">
-
-    // Override $.fancybox.init to fix ASP.NET PostBack bug;
-    var fancyboxInitOld = $.fancybox.init;
-    $.fancybox.init = function () {
-        fancyboxInitOld.apply(arguments);
-        $("#fancybox-tmp, #fancybox-loading, #fancybox-overlay, #fancybox-wrap").appendTo("form:first");
-    };
-
-    // Your code ...
-
-</script>
-<!-- Pop ups from here down -->
 <div style="display: none;">
     <div id="credit_card_form">    
         <asp:Panel ID="pnlMissingCard" CssClass="header cc-nag" runat="server" Visible="false">
