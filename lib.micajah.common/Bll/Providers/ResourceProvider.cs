@@ -439,7 +439,8 @@ namespace Micajah.Common.Bll.Providers
 
         internal static string GetImageUrl(Type type, string name, bool createApplicationAbsoluteUrl)
         {
-            return GetResourceUrl(string.Format(CultureInfo.InvariantCulture, "Images.{0}.{1}", type.FullName.Replace("Micajah.Common.WebControls.", string.Empty), name), createApplicationAbsoluteUrl);
+            string path = type.FullName.Replace("Micajah.Common.WebControls.", string.Empty).Replace("Micajah.Common.Pages.", string.Empty);
+            return GetResourceUrl(string.Format(CultureInfo.InvariantCulture, "Images.{0}.{1}", path, name), createApplicationAbsoluteUrl);
         }
 
         internal static void RegisterScriptResource(Control ctl, string key, string resourceName)

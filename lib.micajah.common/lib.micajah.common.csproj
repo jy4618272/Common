@@ -1824,7 +1824,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\CommonGridView.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MagicForm.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.Pages.MasterPage\Overlay.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPage\Overlay.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Decorated.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\AccountSettings.aspx">
       <SubType>ASPXCodeBehind</SubType>
