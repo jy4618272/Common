@@ -262,34 +262,34 @@ namespace Micajah.Common.Bll.Providers
 
         private static string ProcessOnOffSwitchStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "On.png", "Off.png", "SliderLeft.png", "SliderRight.png", "SliderCenter.png" }, "Images.Micajah.Common.WebControls.CheckBox.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "On.png", "Off.png", "SliderLeft.png", "SliderRight.png", "SliderCenter.png" }, "Images.CheckBox.{0}");
         }
 
         private static string ProcessNoticeMessageBoxStyleSheet(string styleSheetContent)
         {
             return ProcessStyleSheet(styleSheetContent
                 , new string[] { "Close.png", "Error.png", "Information.png", "Success.png", "Warning.png", "ErrorSmall.png", "InformationSmall.png", "SuccessSmall.png", "WarningSmall.png" }
-                , "Images.Micajah.Common.WebControls.NoticeMessageBox.{0}");
+                , "Images.NoticeMessageBox.{0}");
         }
 
         private static string ProcessCommonGridViewModernStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "Search.png", "DropMenu.png", "Gear.png", "Cross.png" }, "Images.Micajah.Common.WebControls.CommonGridView.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "Search.png", "DropMenu.png", "Gear.png", "Cross.png" }, "Images.CommonGridView.{0}");
         }
 
         private static string ProcessAccountSettingsStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "assets.png", "billing.png", "credit_card.png", "email.png", "help.png", "ldap.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "fancy_close.png" }, "Images.Micajah.Common.WebControls.AdminControls.AccountSettings.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "assets.png", "billing.png", "credit_card.png", "email.png", "help.png", "ldap.png", "paypal.png", "phone.png", "remote.png", "ssl.png", "fancy_close.png" }, "Images.AdminControls.AccountSettings.{0}");
         }
 
         private static string ProcessCreditCardRegistrationStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "discover.png", "mastercard.png", "visa.png" }, "Images.Micajah.Common.WebControls.CreditCardRegistration.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "amex.png", "discover.png", "mastercard.png", "visa.png" }, "Images.CreditCardRegistration.{0}");
         }
 
         private static string ProcessComboBoxModernStyleSheet(string styleSheetContent)
         {
-            return ProcessStyleSheet(styleSheetContent, new string[] { "Modern.png" }, "Images.Micajah.Common.WebControls.ComboBox.{0}");
+            return ProcessStyleSheet(styleSheetContent, new string[] { "Modern.png" }, "Images.ComboBox.{0}");
         }
 
         #endregion
@@ -439,7 +439,7 @@ namespace Micajah.Common.Bll.Providers
 
         internal static string GetImageUrl(Type type, string name, bool createApplicationAbsoluteUrl)
         {
-            return GetResourceUrl(string.Format(CultureInfo.InvariantCulture, "Images.{0}.{1}", type.FullName, name), createApplicationAbsoluteUrl);
+            return GetResourceUrl(string.Format(CultureInfo.InvariantCulture, "Images.{0}.{1}", type.FullName.Replace("Micajah.Common.WebControls.", string.Empty), name), createApplicationAbsoluteUrl);
         }
 
         internal static void RegisterScriptResource(Control ctl, string key, string resourceName)

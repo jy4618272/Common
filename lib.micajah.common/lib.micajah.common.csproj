@@ -637,7 +637,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.GoogleIntegrationControl\GoogleApps.jpg" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\GoogleIntegrationControl\GoogleApps.jpg" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.easyModal.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientRed.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemLeft.gif" />
@@ -700,13 +700,13 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\RecurrenceScheduleControl.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\Control.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\Folder.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\HyperLink.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.ActionsControl\Page.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.EntitiesControl\Entity.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.EntitiesControl\Event.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SetupControls.EntitiesControl\Field.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\ActionsControl\Control.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\ActionsControl\Folder.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\ActionsControl\HyperLink.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\ActionsControl\Page.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\EntitiesControl\Entity.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\EntitiesControl\Event.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SetupControls\EntitiesControl\Field.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\accept.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\add.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\Icons\16x16\anchor.png" />
@@ -1769,7 +1769,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\OrganizationProfile.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\spacer.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\EntityTreeView\spacer.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\ImageUpload.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\StyleSheetLoader.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\InstanceProfile.ascx">
@@ -1778,8 +1778,8 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\InstanceProfile.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\checked.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.EntityTreeView\unchecked.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\EntityTreeView\checked.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\EntityTreeView\unchecked.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\ImageUpload.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\OrganizationLdapSettings.aspx" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\OrganizationLdapSettings.ascx">
@@ -1833,7 +1833,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\NotificationCross.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.SecurityControls.SignupOrganizationControl\Tick.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\SecurityControls\SignupOrganizationControl\Tick.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\blank.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.fancybox-1.3.4.pack.js" />
@@ -1864,40 +1864,40 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\LogOnModern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\OnOffSwitch.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\OnOffSwitch.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\Off.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\On.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CheckBox\Off.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CheckBox\On.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery-1.7.2.min.js" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\SliderCenter.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\SliderLeft.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CheckBox\SliderRight.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Search.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CheckBox\SliderCenter.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CheckBox\SliderLeft.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CheckBox\SliderRight.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\Search.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Scripts\TextBox.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\NoticeMessageBox.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Close.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Error.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Information.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Success.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\Warning.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\ErrorSmall.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\InformationSmall.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\SuccessSmall.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.NoticeMessageBox\WarningSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\Close.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\Error.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\Information.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\Success.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\Warning.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\ErrorSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\InformationSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\SuccessSmall.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\NoticeMessageBox\WarningSmall.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\DropMenu.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropMenu.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\DropMenu.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\AddNew.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\ComboBoxModern.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.ComboBox\Modern.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Cross.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Gear.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\Modern.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\ComboBox\Modern.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\Cross.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\Gear.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\TreeView\Modern.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Token.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\credit_card.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\email.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\help.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\paypal.png" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.AdminControls.AccountSettings\phone.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\AccountSettings\credit_card.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\AccountSettings\email.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\AccountSettings\help.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\AccountSettings\paypal.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\AccountSettings\phone.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\AccountSettings.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\GoogleIntegration.aspx">
       <SubType>ASPXCodeBehind</SubType>
@@ -2004,13 +2004,13 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Setup\Websites.ascx" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.TreeView\DropArrow.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\DropDownList.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.UpdateProgress\Loader.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\TreeView\DropArrow.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\DropDownList.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\UpdateProgress\Loader.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientBlue\MainMenuItemLeft.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientBlue\MainMenuItemRight.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Minus.gif" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CommonGridView\Plus.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\Minus.gif" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CommonGridView\Plus.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\CustomStyleSheetEdit.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
@@ -2133,16 +2133,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\amex.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CreditCardRegistration\amex.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\discover.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CreditCardRegistration\discover.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\mastercard.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CreditCardRegistration\mastercard.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\Micajah.Common.WebControls.CreditCardRegistration\visa.png" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\CreditCardRegistration\visa.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\CreditCardRegistration.css" />
