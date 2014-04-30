@@ -147,10 +147,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             ErrorContinueLabel.Text = Resources.SignupOrganizationControl_ErrorContinueLabel_Text;
             ErrorContinueLink.Text = Resources.SignupOrganizationControl_ErrorContinueLink_Text;
 
-            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
+            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MobileLogoImageUrl))
                 LogoImage.Visible = LogoImage3.Visible = false;
             else
-                LogoImage.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                LogoImage.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.MobileLogoImageUrl;
         }
 
         private static bool ValidateEmail(string email, out string errorMessage)

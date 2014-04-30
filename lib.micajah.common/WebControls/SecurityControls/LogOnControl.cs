@@ -507,7 +507,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 }
             }
 
-            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
+            if ((FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != Pages.MasterPageTheme.Modern) || string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MobileLogoImageUrl))
             {
                 if (LogoImagePanel != null) LogoImagePanel.Visible = false;
             }
@@ -518,9 +518,9 @@ namespace Micajah.Common.WebControls.SecurityControls
                     LogoImagePanel.Visible = true;
                     if (LogoImage != null)
                     {
-                        LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                        LogoImage.ImageUrl = FrameworkConfiguration.Current.WebApplication.MobileLogoImageUrl;
                         if (FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight > 0)
-                            m_MainContainerHeight += FrameworkConfiguration.Current.WebApplication.BigLogoImageHeight;
+                            m_MainContainerHeight += FrameworkConfiguration.Current.WebApplication.MobileLogoImageHeight;
                     }
                 }
             }
