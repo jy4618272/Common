@@ -103,7 +103,7 @@ namespace Micajah.Common.WebControls.AdminControls
     transitionOut: 'none'
 });
 "
-, true);
+                , true);
         }
 
         #endregion
