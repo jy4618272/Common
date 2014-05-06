@@ -290,7 +290,7 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
 /* Mobile view */
 @media (max-width: 768px) {
     .Mp_Hdr .S {
-        width: 90%;
+        width: 75%;
     }
 
     .Mp_Hdr .nav.pull-right {
