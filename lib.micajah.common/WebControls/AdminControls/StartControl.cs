@@ -92,14 +92,15 @@ namespace Micajah.Common.WebControls.AdminControls
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInitScript", @"$(""a[rel=WatchVideo]"").fancybox({
     type: 'swf',
     swf: {
-        allowfullscreen: 'true',
-        allowscriptaccess: 'true'
+        allowfullscreen: true,
+        allowscriptaccess: true
     },
     width: 800,
     height: 450,
-    arrows: false,
-    openEffect: 'none',
-    closeEffect: 'none'
+    showNavArrows: false,
+    titlePosition: 'inside',
+    transitionIn: 'none',
+    transitionOut: 'none'
 });
 "
 , true);
