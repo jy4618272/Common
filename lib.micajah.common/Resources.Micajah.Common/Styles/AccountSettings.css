@@ -79,7 +79,7 @@
 
     #support{margin-bottom: 40px;}
     #emailsupport h4 {padding-left: 40px; background: url('$help.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
-    .email-emailsupport {float: right; margin-top: 8px;}
+    .email-emailsupport {float: right; margin-top: 8px; margin-right: 10px;}
     .phonesupport-label {padding-left: 40px; background: url('$phone.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
     #phone-service {display: none; color: #006792;}
     #phone-service h4 {background: none;}
