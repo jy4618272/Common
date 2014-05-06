@@ -104,6 +104,16 @@ namespace Micajah.Common.Configuration
         }
 
         /// <summary>
+        /// Gets or sets the URL of the mobile application logo's image.
+        /// </summary>
+        [ConfigurationProperty("mobileLogoImageUrl")]
+        public string MobileLogoImageUrl
+        {
+            get { return (string)this["mobileLogoImageUrl"]; }
+            set { this["mobileLogoImageUrl"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the URL of the small application logo's image.
         /// </summary>
         [ConfigurationProperty("smallLogoImageUrl")]
@@ -121,6 +131,16 @@ namespace Micajah.Common.Configuration
         {
             get { return (int)this["bigLogoImageHeight"]; }
             set { this["bigLogoImageHeight"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the mobile application logo's image.
+        /// </summary>
+        [ConfigurationProperty("mobileLogoImageHeight", DefaultValue = 100)]
+        public int MobileLogoImageHeight
+        {
+            get { return (int)this["mobileLogoImageHeight"]; }
+            set { this["mobileLogoImageHeight"] = value; }
         }
 
         /// <summary>
