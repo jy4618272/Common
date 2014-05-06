@@ -459,7 +459,6 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 ModalLoginLink.NavigateUrl = LoginProvider.Current.GetLoginUrl(Email.Text, false);
 
-                ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryScript", ResourceProvider.JQueryScriptUrl);
                 ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryEasyModalScript", ResourceProvider.GetResourceUrl("Scripts.jquery.easyModal.js", true));
 
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ModalWindowScript", @"Sys.Application.add_load(function() {
