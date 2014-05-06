@@ -261,6 +261,7 @@ namespace Micajah.Common.WebControls
                 txt.Style[HtmlTextWriterStyle.VerticalAlign] = "middle";
                 txt.CausesValidation = false;
                 txt.ValidationGroup = "Mp_Search";
+                txt.Attributes["onkeypress"] = "if (event.keyCode == 13) {" + searchButtonOnClientClick + "}";
                 if (m_MasterPage.SearchTextBoxMaxLength > 0)
                 {
                     txt.MaxLength = m_MasterPage.SearchTextBoxMaxLength;
@@ -284,7 +285,6 @@ namespace Micajah.Common.WebControls
                     txt.Columns = m_MasterPage.SearchTextBoxColumns;
                     txt.Attributes["onfocus"] = "Mp_SearchTextBox_OnFocus(this);";
                     txt.Attributes["onblur"] = "Mp_SearchTextBox_OnBlur(this);";
-                    txt.Attributes["onkeypress"] = "if (event.keyCode == 13) {" + searchButtonOnClientClick + "}";
                     txt.Attributes["EmptyText"] = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
 
                     string searchText = m_MasterPage.SearchText;
