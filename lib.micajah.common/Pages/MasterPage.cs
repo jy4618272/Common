@@ -1034,6 +1034,15 @@ namespace Micajah.Common.Pages
                     else
                         m_HeaderLogoText = m_UserContext.Organization.Name + " " + m_HeaderLogoText;
                 }
+                else if (this.IsSetupPage || ((this.ActiveAction != null) && (this.ActiveAction.ActionId == ActionProvider.LoginAsUserGlobalNavigationLinkActionId)))
+                {
+                    Micajah.Common.Bll.Action action = ActionProvider.FindAction(ActionProvider.SetupPageActionId);
+                    m_HeaderLogoNavigateUrl = action.AbsoluteNavigateUrl;
+                }
+            }
+            else
+            {
+                m_HeaderLogoNavigateUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl("~/");
             }
 
             m_LogoIsLoaded = true;
