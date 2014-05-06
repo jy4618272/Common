@@ -293,8 +293,8 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
         width: 75%;
     }
 
-    .Mp_Hdr .nav.pull-right {
-        display: none;
+    .Mp_Hdr .col-sm-8 {
+        clear: both;
     }
 
     .Mp_Mm ul, .Mp_Smt {
