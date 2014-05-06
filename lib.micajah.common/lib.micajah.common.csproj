@@ -640,7 +640,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Images\AdminControls\GoogleIntegrationControl\GoogleApps.jpg" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\jquery.easyModal.js" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\GradientRed.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemLeft.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\GradientRed\MainMenuItemRight.gif" />

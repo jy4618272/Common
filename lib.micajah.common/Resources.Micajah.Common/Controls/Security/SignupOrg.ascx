@@ -55,26 +55,28 @@
                 <asp:Literal ID="AgreeLabel" runat="server"></asp:Literal>
             </div>
         </div>
-        <div id="ModalWindow" class="modal-window" style="display: none;">
-            <div id="ModalWindowHeader" runat="server" class="header">
-                <h2>
-                    <asp:Literal ID="ModalTitleLiteral" runat="server"></asp:Literal></h2>
+        <div style="display: none;">
+            <div id="ModalWindow" class="modal-window">
+                <div id="ModalWindowHeader" runat="server" class="header">
+                    <h2>
+                        <asp:Literal ID="ModalTitleLiteral" runat="server"></asp:Literal></h2>
+                    <p>
+                        <asp:Literal ID="ModalMessageLiteral" runat="server"></asp:Literal>
+                    </p>
+                </div>
                 <p>
-                    <asp:Literal ID="ModalMessageLiteral" runat="server"></asp:Literal>
+                    <asp:Literal ID="ModalSelectActionLiteral" runat="server"></asp:Literal>
+                </p>
+                <p>
+                    <asp:HyperLink ID="ModalLoginLink" runat="server" CssClass="Button Green Large" Target="_parent"></asp:HyperLink>
+                </p>
+                <p>
+                    <asp:Literal ID="ModalSelectActionSeparatorLiteral" runat="server"></asp:Literal>
+                </p>
+                <p>
+                    <asp:Button ID="CreateMyAccountModalButton" runat="server" CssClass="Green Large" ValidationGroup="ModalWindow" OnClick="CreateMyAccountModalButton_Click"></asp:Button>
                 </p>
             </div>
-            <p>
-                <asp:Literal ID="ModalSelectActionLiteral" runat="server"></asp:Literal>
-            </p>
-            <p>
-                <asp:HyperLink ID="ModalLoginLink" runat="server" CssClass="Button Green Large" Target="_parent"></asp:HyperLink>
-            </p>
-            <p>
-                <asp:Literal ID="ModalSelectActionSeparatorLiteral" runat="server"></asp:Literal>
-            </p>
-            <p>
-                <asp:Button ID="CreateMyAccountModalButton" runat="server" CssClass="Green Large" ValidationGroup="ModalWindow" OnClick="CreateMyAccountModalButton_Click"></asp:Button>
-            </p>
         </div>
         <div id="ErrorPanel" runat="server">
             <div class="Logo">
@@ -96,7 +98,7 @@
             </div>
         </div>
     </contenttemplate>
-    <Triggers>
+    <triggers>
         <asp:PostBackTrigger ControlID="CreateMyAccountButton" />
-    </Triggers>
+    </triggers>
 </asp:UpdatePanel>

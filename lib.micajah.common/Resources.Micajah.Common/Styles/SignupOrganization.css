@@ -223,14 +223,10 @@ small {
 .modal-window {
     background-color: #ffffff;
     color: #222;
-    padding: 20px;
-    border-radius: 10px;
     text-align: center;
 }
 
     .modal-window .header {
-        border-radius: 10px 10px 0 0;
-        margin: -20px -20px 10px;
         padding: 25px 20px 20px 20px;
         color: #fff;
         text-shadow: -1px -1px 1px rgba(0,0,0,0.3);
@@ -243,11 +239,10 @@ small {
             padding-left: 100px;
         }
 
-    .modal-window h2 {
-        margin: 0;
-    }
+        .modal-window .header h2 {
+            margin: 0;
+        }
 
     .modal-window p {
-        margin: 0 0 10px;
         font-size: 18px;
     }

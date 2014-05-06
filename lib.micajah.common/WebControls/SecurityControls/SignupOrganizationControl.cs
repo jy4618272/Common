@@ -239,7 +239,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             base.OnPreRender(e);
 
-            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false, true, true, true, true, false);
+            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false, true, true, true, true, true);
 
             if (!this.IsPostBack)
             {
@@ -459,21 +459,24 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 ModalLoginLink.NavigateUrl = LoginProvider.Current.GetLoginUrl(Email.Text, false);
 
-                ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryEasyModalScript", ResourceProvider.GetResourceUrl("Scripts.jquery.easyModal.js", true));
-
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ModalWindowScript", @"Sys.Application.add_load(function() {
-    $('#ModalWindow').easyModal({
-        top: 40,
-        overlay: 0.2,
-        overlayClose: false,
-        closeOnEscape: false
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInitScript", @"Sys.Application.add_load(function() {
+    $.fancybox({
+        type: 'inline',
+        href: '#ModalWindow',
+        width: 430,
+        height: 335,
+        showNavArrows: false,
+        titlePosition: 'inside',
+        transitionIn: 'none',
+        transitionOut: 'none',
+        modal: true,
+        padding: 0,
+        autoDimensions: false
     });
-
-    $('#ModalWindow').trigger('openModal');
 });
 
 "
-                    , true);
+    , true);
 
                 return;
             }
