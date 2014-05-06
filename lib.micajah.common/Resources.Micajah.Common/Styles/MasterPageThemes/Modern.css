@@ -142,10 +142,6 @@ div.Mp_B {
     padding-top: 15px;
 }
 
-    .Mp_Pmc .Notification {
-        margin-bottom: 15px;
-    }
-
 /* Main menu */
 .Mp_Mm {
     background: none repeat scroll 0 0 #f1f1f1;
@@ -293,6 +289,10 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
 
 /* Mobile view */
 @media (max-width: 768px) {
+    .Mp_Hdr .S {
+        width: 90%;
+    }
+
     .Mp_Hdr .nav.pull-right {
         display: none;
     }
