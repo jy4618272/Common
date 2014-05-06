@@ -2,12 +2,12 @@ using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 
 namespace Micajah.Common.WebControls
 {
@@ -35,6 +35,32 @@ namespace Micajah.Common.WebControls
             m_ActionIdList = actionIdList;
             m_IsFrameworkAdmin = isFrameworkAdmin;
             m_IsAuthenticated = isAuthenticated;
+        }
+
+        #endregion
+
+        #region Private Properties
+
+        private Guid SelectedActionId
+        {
+            get
+            {
+                Guid mainMenuItemId = Guid.Empty;
+
+                if (m_MasterPage != null)
+                {
+                    if (m_MasterPage.ActiveAction != null)
+                    {
+                        Micajah.Common.Bll.Action mainItem = ActionProvider.PagesAndControls.FindMainMenuActionByActionId(m_MasterPage.ActiveAction.ActionId);
+                        if (mainItem != null)
+                        {
+                            mainMenuItemId = mainItem.ActionId;
+                        }
+                    }
+                }
+
+                return mainMenuItemId;
+            }
         }
 
         #endregion
@@ -87,74 +113,127 @@ namespace Micajah.Common.WebControls
 
             if (this.Items.Count == 0) return;
 
-            HtmlGenericControl div1 = null;
-            HtmlGenericControl div2 = null;
+            HtmlGenericControl mainContainer = null;
+            HtmlGenericControl container = null;
+            HtmlGenericControl innerContainer = null;
+            HtmlGenericControl bar = null;
             HtmlGenericControl ul = null;
-            HtmlGenericControl li = null;
-            HyperLink link = null;
-            ControlList ctrl = null;
-            Control itemCtl = null;
-            Guid mainMenuItemId = Guid.Empty;
-
-            if (m_MasterPage != null)
-            {
-                if (m_MasterPage.ActiveAction != null)
-                {
-                    Micajah.Common.Bll.Action mainItem = ActionProvider.PagesAndControls.FindMainMenuActionByActionId(m_MasterPage.ActiveAction.ActionId);
-                    if (mainItem != null)
-                        mainMenuItemId = mainItem.ActionId;
-                }
-            }
+            HtmlGenericControl p = null;
+            ControlList controlList = null;
+            Control itemLink = null;
+            Guid mainMenuItemId = this.SelectedActionId;
 
             try
             {
-                div1 = new HtmlGenericControl("div");
-                div1.Attributes["class"] = "Mp_Mm";
-                this.Controls.Add(div1);
+                mainContainer = new HtmlGenericControl("div");
+                mainContainer.Attributes["class"] = "Mp_Mm";
+                this.Controls.Add(mainContainer);
 
-                switch (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme)
+                MasterPageTheme theme = FrameworkConfiguration.Current.WebApplication.MasterPage.Theme;
+
+                switch (theme)
                 {
                     case MasterPageTheme.Gradient:
                     case MasterPageTheme.StandardTabs:
                     case MasterPageTheme.Modern:
                         ul = new HtmlGenericControl("ul");
-                        div1.Controls.Add(ul);
+
+                        string cssClass = null;
+
+                        if (theme == MasterPageTheme.Modern)
+                        {
+                            p = new HtmlGenericControl("p");
+                            p.Attributes["class"] = "mobile-nav";
+                            p.InnerHtml = Resources.MainMenu_MenuLink_Text;
+
+                            innerContainer = new HtmlGenericControl("div");
+                            innerContainer.Attributes["class"] = "col-sm-12";
+                            innerContainer.Controls.Add(p);
+                            innerContainer.Controls.Add(ul);
+
+                            container = new HtmlGenericControl("div");
+                            container.Attributes["class"] = "container";
+                            container.Controls.Add(innerContainer);
+
+                            mainContainer.Controls.Add(container);
+
+                            cssClass = "active";
+                        }
+                        else
+                        {
+                            mainContainer.Controls.Add(ul);
+
+                            cssClass = "S";
+                        }
 
                         foreach (Micajah.Common.Bll.Action item in this.Items)
                         {
-                            ul.Controls.Add(CreateLinkAsListItem(item, ((item.ActionId == mainMenuItemId) ? "S" : null)));
+                            ul.Controls.Add(CreateLinkAsListItem(item, ((item.ActionId == mainMenuItemId) ? cssClass : null)));
                         }
 
-                        if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                        if (theme != MasterPageTheme.Modern)
                         {
-                            div2 = new HtmlGenericControl("div");
-                            div2.Attributes["class"] = "Mp_Mmb";
-                            this.Controls.Add(div2);
+                            bar = new HtmlGenericControl("div");
+                            bar.Attributes["class"] = "Mp_Mmb";
+
+                            this.Controls.Add(bar);
                         }
                         break;
                     case MasterPageTheme.Standard:
-                        ctrl = new ControlList();
-                        ctrl.Delimiter = " &nbsp; | &nbsp; ";
+                        controlList = new ControlList();
+                        controlList.Delimiter = " &nbsp; | &nbsp; ";
 
                         foreach (Micajah.Common.Bll.Action item in this.Items)
                         {
-                            itemCtl = Submenu.CreateLink(item, ((item.ActionId == mainMenuItemId) ? "S" : null), false);
-                            ctrl.Add(itemCtl);
+                            itemLink = Submenu.CreateLink(item, ((item.ActionId == mainMenuItemId) ? "S" : null), false);
+                            controlList.Add(itemLink);
                         }
 
-                        div1.Controls.Add(ctrl);
+                        mainContainer.Controls.Add(controlList);
                         break;
                 }
             }
             finally
             {
-                if (link != null) link.Dispose();
-                if (li != null) li.Dispose();
-                if (ul != null) ul.Dispose();
-                if (div1 != null) div1.Dispose();
-                if (div2 != null) div2.Dispose();
-                if (ctrl != null) ctrl.Dispose();
-                if (itemCtl != null) itemCtl.Dispose();
+                if (ul != null)
+                {
+                    ul.Dispose();
+                }
+
+                if (mainContainer != null)
+                {
+                    mainContainer.Dispose();
+                }
+
+                if (bar != null)
+                {
+                    bar.Dispose();
+                }
+
+                if (container != null)
+                {
+                    container.Dispose();
+                }
+
+                if (innerContainer != null)
+                {
+                    innerContainer.Dispose();
+                }
+
+                if (p != null)
+                {
+                    p.Dispose();
+                }
+
+                if (controlList != null)
+                {
+                    controlList.Dispose();
+                }
+
+                if (itemLink != null)
+                {
+                    itemLink.Dispose();
+                }
             }
         }
 

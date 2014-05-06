@@ -183,7 +183,7 @@ tr.Cgv_P td table td {
     padding-bottom: 13px;
 }
 
-.Cgv_CptCtrls a, .Cgv_CptCtrls a:hover {
+.Cgv_CptCtrls a, .Cgv_CptCtrls a:hover, .Cgv_CptCtrls a:focus {
     margin: 0 5px;
 }
 

@@ -1,4 +1,5 @@
 using Micajah.Common.Application;
+using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Properties;
 using System;
@@ -14,7 +15,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Compilation;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -144,6 +144,16 @@ namespace Micajah.Common.Bll
                 link.Attributes.Add("type", "text/css");
                 link.Href = styleSheetUrl;
                 return link;
+            }
+        }
+
+        internal static Literal CreateJavaScriptLiteral(string scriptUrl, string id)
+        {
+            using (Literal script = new Literal())
+            {
+                script.ID = id;
+                script.Text = ResourceProvider.GetJavaScript(scriptUrl);
+                return script;
             }
         }
 

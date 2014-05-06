@@ -1,173 +1,148 @@
 /* ------------ Detail menu ------------------------------------------------------------------------------------------------------------------------------------*/
-table.Mp_Dm
-{
+table.Mp_Dm {
     position: relative;
     left: -2px;
     background-color: White;
+    border-spacing: 2px;
+    border-collapse: separate;
 }
 
-table.Mp_Dm a, table.Mp_Dm a:hover
-{
-    font-size: 15px;
-}
+    table.Mp_Dm a, table.Mp_Dm a:hover {
+        font-size: 15px;
+    }
 
-table.Mp_Dm td
-{
-    vertical-align: top;
-    overflow: hidden;
-    text-align: left;
-}
+    table.Mp_Dm td {
+        vertical-align: top;
+        overflow: hidden;
+        text-align: left;
+    }
 
-table.Mp_Dm td table
-{
-    width: 100%;
-    height: 100%;
-}
+        table.Mp_Dm td table {
+            width: 100%;
+            height: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
 
-table.Mp_Dm td table td
-{
-    vertical-align: middle;
-}
+            table.Mp_Dm td table td {
+                vertical-align: middle;
+            }
 
-table.Mp_Dm td div div
-{
-    padding: 5px 0 0 0;
-    font-size: 11px;
-}
+        table.Mp_Dm td div div {
+            padding: 5px 0 0 0;
+            font-size: 11px;
+        }
 
-table.Mp_Dm td td
-{
-    padding: 13px 10px 13px 10px;
-}
+        table.Mp_Dm td td {
+            padding: 13px 10px 13px 10px;
+        }
 
-table.Mp_Dm td td.D
-{
-    background-color: #f3f3f3;
-    color: #333333;
-    padding-right: 10px;
-    padding-left: 10px;
-}
+            table.Mp_Dm td td.D {
+                background-color: #f3f3f3;
+                color: #333333;
+                padding-right: 10px;
+                padding-left: 10px;
+            }
 
-p.Mp_Dm_T
-{
+p.Mp_Dm_T {
     font-size: 22px;
     font-weight: bold;
     margin: 0;
 }
 
 /* ------------ Detail menu group ------------ */
-table.Mp_Dm td.G
-{
+table.Mp_Dm td.G {
     padding-bottom: 10px;
 }
 
-table.Mp_Dm td.G td
-{
-    padding-left: 0;
-}
+    table.Mp_Dm td.G td {
+        padding-left: 0;
+    }
 
-table.Mp_Dm td.G div
-{
-    color: #898989;
-}
+    table.Mp_Dm td.G div {
+        color: #898989;
+    }
 
-table.Mp_Dm td.G span
-{
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #333333;
-}
+    table.Mp_Dm td.G span {
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333333;
+    }
 
-table.Mp_Dm td.G a:hover
-{
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-    color: Gray;
-}
+    table.Mp_Dm td.G a:hover {
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        color: Gray;
+    }
 
 /* ------------ Detail menu item ------------ */
-table.Mp_Dm td.I div div
-{
+table.Mp_Dm td.I div div {
     color: #898989;
 }
 
-table.Mp_Dm td.I div
-{
+table.Mp_Dm td.I div {
     background-color: #fbfacc;
 }
 
-table.Mp_Dm td.I a
-{
+table.Mp_Dm td.I a {
     color: #333333;
 }
 
-table.Mp_Dm td.I a:hover
-{
-    color: Blue;
-}
+    table.Mp_Dm td.I a:hover {
+        color: Blue;
+    }
 
 /* ------------ Detail menu alternated item ------------ */
-table.Mp_Dm td.A div div
-{
+table.Mp_Dm td.A div div {
     color: #898989;
 }
 
-table.Mp_Dm td.A div
-{
+table.Mp_Dm td.A div {
     background-color: #fbfacc;
 }
 
-table.Mp_Dm td.A a
-{
+table.Mp_Dm td.A a {
     color: #333333;
 }
 
-table.Mp_Dm td.A a:hover
-{
-    color: Blue;
-}
+    table.Mp_Dm td.A a:hover {
+        color: Blue;
+    }
 
 /* ------------ Detail menu highlighted item ------------ */
-table.Mp_Dm td.H div div
-{
+table.Mp_Dm td.H div div {
     color: #898989;
 }
 
-table.Mp_Dm td.H a
-{
+table.Mp_Dm td.H a {
     font-weight: bold;
     color: #333333;
 }
 
-table.Mp_Dm td.H a:hover
-{
-    font-weight: bold;
-    color: Gray;
-}
+    table.Mp_Dm td.H a:hover {
+        font-weight: bold;
+        color: Gray;
+    }
 
 /* ------------ Detail menu child item ------------ */
-table.Mp_Dm div.C
-{
+table.Mp_Dm div.C {
     padding: 5px 0 0 0;
 }
 
-table.Mp_Dm div.C a, table.Mp_Dm div.C a:hover
-{
-    font-size: 11px;
-    font-weight: normal;
-}
+    table.Mp_Dm div.C a, table.Mp_Dm div.C a:hover {
+        font-size: 11px;
+        font-weight: normal;
+    }
 
 /* ------------ Other links ------------ */
-table.Mp_Om a
-{
+table.Mp_Om a {
     font-size: 11px;
     color: Gray;
 }
 
-table.Mp_Om a:hover
-{
-    font-size: 11px;
-    color: #333333;
-}
+    table.Mp_Om a:hover {
+        font-size: 11px;
+        color: #333333;
+    }

@@ -75,6 +75,7 @@ namespace Micajah.Common.Bll.Providers
         internal const string StyleSheetLoader = "Scripts.StyleSheetLoader.js";
         internal const string ComboBoxModernStyleSheet = "Styles.ComboBoxModern.css";
         internal const string CustomStyleSheet = "Styles.Custom.css";
+        internal const string BootstrapStyleSheet = "Styles.bootstrap.min.css";
         internal const string FancyBoxStyleSheet = "Styles.jquery.fancybox-2.1.5.css";
         internal const string CommonGridViewModernStyleSheet = "Styles.CommonGridViewModern.css";
         internal const string AccountSettingsStyleSheet = "Styles.AccountSettings.css";
@@ -94,6 +95,11 @@ namespace Micajah.Common.Bll.Providers
 
         #region Public Properties
 
+        public static string BootstrapStyleSheetUrl
+        {
+            get { return GetResourceUrl(BootstrapStyleSheet, true); }
+        }
+
         public static string FancyBoxStyleSheetUrl
         {
             get { return GetResourceUrl(FancyBoxStyleSheet, true); }
@@ -107,6 +113,11 @@ namespace Micajah.Common.Bll.Providers
         public static string JQueryScriptUrl
         {
             get { return GetResourceUrl("Scripts.jquery-1.11.0.min.js", true); }
+        }
+
+        public static string BootstrapScriptUrl
+        {
+            get { return GetResourceUrl("Scripts.bootstrap.min.js", true); }
         }
 
         #endregion
@@ -146,27 +157,53 @@ namespace Micajah.Common.Bll.Providers
                     content = new byte[] { };
             }
             else if (resourceName.EndsWith(ComboBoxModernStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessComboBoxModernStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (IsMasterPageThemeColorStyleSheet(resourceName, out masterPageTheme, out masterPageThemeColor))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(GetManifestResourceString(resourceName), masterPageTheme, masterPageThemeColor));
+            }
             else if (IsDetailMenuThemeStyleSheet(resourceName, out detailMenuTheme))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(GetManifestResourceString(resourceName), detailMenuTheme));
+            }
+            else if (resourceName.EndsWith(BootstrapStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
+                content = UnicodeEncoding.UTF8.GetBytes(ProcessBootstrapStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (resourceName.EndsWith(FancyBoxStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessFancyBoxStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (resourceName.EndsWith(GlobalModernStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessStyleSheet(GetManifestResourceString(resourceName), MasterPageTheme.Modern, MasterPageThemeColor.NotSet));
+            }
             else if (resourceName.EndsWith(CommonGridViewModernStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessCommonGridViewModernStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (resourceName.EndsWith(AccountSettingsStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessAccountSettingsStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (resourceName.EndsWith(CreditCardRegistrationStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessCreditCardRegistrationStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (resourceName.EndsWith(OnOffSwitchStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessOnOffSwitchStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else if (resourceName.EndsWith(NoticeMessageBoxStyleSheet, StringComparison.OrdinalIgnoreCase))
+            {
                 content = UnicodeEncoding.UTF8.GetBytes(ProcessNoticeMessageBoxStyleSheet(GetManifestResourceString(resourceName)));
+            }
             else
+            {
                 content = GetManifestResourceBytes(resourceName);
+            }
         }
 
         private static string GetResourceName(string resourceName)
@@ -229,7 +266,7 @@ namespace Micajah.Common.Bll.Providers
             string[] keyNames = null;
             if (masterPageTheme == MasterPageTheme.Modern)
             {
-                keyNames = new string[] { "NotificationCross.png", "AddNew.png", "DropMenu.png" };
+                keyNames = new string[] { "NotificationCross.png", "AddNew.png", "DropMenu.png", "SearchLense.png" };
             }
             else if (masterPageTheme == MasterPageTheme.Gradient)
             {
@@ -248,6 +285,13 @@ namespace Micajah.Common.Bll.Providers
             if (theme == DetailMenuTheme.Modern)
                 return ProcessStyleSheet(styleSheetContent, new string[] { "Arrow.png", "CheckBox.png", "CheckBoxChecked.png" }, ResourceProvider.GetDetailMenuThemeResource(theme, "{0}"));
             return styleSheetContent;
+        }
+
+        private static string ProcessBootstrapStyleSheet(string styleSheetContent)
+        {
+            return ProcessStyleSheet(styleSheetContent
+                , new string[] { "glyphicons-halflings-regular.eot", "glyphicons-halflings-regular.svg", "glyphicons-halflings-regular.ttf", "glyphicons-halflings-regular.woff" }
+                , "Fonts.{0}");
         }
 
         private static string ProcessFancyBoxStyleSheet(string styleSheetContent)
@@ -454,7 +498,7 @@ namespace Micajah.Common.Bll.Providers
         {
             Page page = ctl.Page;
             bool useStyleSheetLoader = false;
-            string resourceUrl = ResourceProvider.GetResourceUrl(resourceName, true);
+            string resourceUrl = GetResourceUrl(resourceName, true);
 
             ScriptManager sm = ScriptManager.GetCurrent(ctl.Page);
             if (sm != null)

@@ -1,3 +1,7 @@
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
+using Micajah.Common.Properties;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -6,10 +10,6 @@ using System.Globalization;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Properties;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls
@@ -414,7 +414,7 @@ namespace Micajah.Common.WebControls
         {
             if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
                 System.Web.HttpContext.Current.Session["DateRange_SelectedValue"] = m_DateRange.SelectedValue;
-            
+
             if (this.SelectedIndexChanged != null) SelectedIndexChanged(sender, e);
         }
 
@@ -542,8 +542,8 @@ namespace Micajah.Common.WebControls
                   = string.Empty;
 
                 m_DateStartPicker.CssClass = m_DateEndPicker.CssClass = "DatePicker_Modern";
-
                 m_DateStartPicker.DateInput.InvalidStyle.CssClass = m_DateEndPicker.DateInput.InvalidStyle.CssClass = "Invalid";
+                m_DateStartPicker.DateInput.Width = m_DateEndPicker.DateInput.Width = Unit.Percentage(100);
             }
 
             m_StartLabel.Text = Resources.DateRange_StartDateLabel_Text;

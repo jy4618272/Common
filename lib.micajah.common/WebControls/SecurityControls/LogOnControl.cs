@@ -1,6 +1,7 @@
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using System;
 using System.Collections;
@@ -890,8 +891,10 @@ namespace Micajah.Common.WebControls.SecurityControls
                 LogOnViaGoogleLink.NavigateUrl = GoogleProvider.GetLoginUrl(this.OrganizationId, this.InstanceId);
             }
 
+            bool modernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
+
             if (this.EnableEmbeddedStyleSheets)
-                Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, this.EnableClientCaching, true, false, false, true);
+                Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, this.EnableClientCaching, true, true, modernTheme, modernTheme, false);
             else if (!this.EnableClientCaching)
                 Micajah.Common.Pages.MasterPage.DisableClientCaching(this.Page);
 
@@ -899,7 +902,7 @@ namespace Micajah.Common.WebControls.SecurityControls
                 TitleContainer.Visible = (!string.IsNullOrEmpty(TitleLabel.Text));
             ErrorPanel.Visible = (!string.IsNullOrEmpty(ErrorPanel.InnerHtml));
 
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == Pages.MasterPageTheme.Modern)
+            if (modernTheme)
                 ResourceProvider.RegisterValidatorScriptResource(this.Page);
 
             if (m_MainContainerHeight > 0 && (MainContainer != null))

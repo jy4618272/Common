@@ -610,8 +610,14 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleApplicationLogo
         {
-            get { return (m_VisibleApplicationLogo.HasValue ? m_VisibleApplicationLogo.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.VisibleApplicationLogo); }
-            set { m_VisibleApplicationLogo = value; }
+            get
+            {
+                return (m_VisibleApplicationLogo.HasValue ? m_VisibleApplicationLogo.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.VisibleApplicationLogo);
+            }
+            set
+            {
+                m_VisibleApplicationLogo = value;
+            }
         }
 
         /// <summary>
@@ -628,8 +634,14 @@ namespace Micajah.Common.Pages
         /// </summary>
         public bool VisibleFooter
         {
-            get { return (m_VisibleFooter.HasValue ? m_VisibleFooter.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.Visible); }
-            set { m_VisibleFooter = value; }
+            get
+            {
+                return (m_VisibleFooter.HasValue ? m_VisibleFooter.Value : FrameworkConfiguration.Current.WebApplication.MasterPage.Footer.Visible);
+            }
+            set
+            {
+                m_VisibleFooter = value;
+            }
         }
 
         /// <summary>
@@ -912,7 +924,7 @@ namespace Micajah.Common.Pages
 
         private void CreateMenus()
         {
-            if (VisibleMainMenu)
+            if (this.VisibleMainMenu)
             {
                 m_MainMenu = new MainMenu(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 Controls.Add(m_MainMenu);
@@ -971,7 +983,9 @@ namespace Micajah.Common.Pages
 
         private void CreatePageHeader()
         {
-            CreatePageHeader(this.Page, this.EnableClientCaching, this.EnableGlobalStyleSheet, this.EnableJQuery, this.EnableFancyBox, this.EnableClientEncoding);
+            bool modernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
+
+            CreatePageHeader(this.Page, this.EnableClientCaching, this.EnableClientEncoding, this.EnableGlobalStyleSheet, (this.EnableJQuery || modernTheme), modernTheme, this.EnableFancyBox);
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.EnableCustomStyleSheet)
             {
@@ -980,7 +994,9 @@ namespace Micajah.Common.Pages
                     if ((m_UserContext != null) && (m_UserContext.OrganizationId != Guid.Empty))
                     {
                         if (!string.IsNullOrEmpty(SettingProvider.GetCustomStyleSheet(m_UserContext.OrganizationId)))
+                        {
                             this.Page.Header.Controls.Add(Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.CustomStyleSheet + "?" + m_UserContext.OrganizationId.ToString("N"), true)));
+                        }
                     }
                 }
             }
@@ -1063,18 +1079,6 @@ namespace Micajah.Common.Pages
         }
 
         /// <summary>
-        /// Renders the top submenu.
-        /// </summary>
-        /// <param name="writer">The HtmlTextWriter to render content to.</param>
-        private void RenderTopSubmenu(HtmlTextWriter writer)
-        {
-            if (writer == null || m_TopSubmenu == null) return;
-            if ((m_TopSubmenu != null) && (m_TopSubmenu.Items != null) && (m_TopSubmenu.Items.Count == 0)) return;
-
-            RenderControl(writer, m_TopSubmenu);
-        }
-
-        /// <summary>
         /// Renders the left area.
         /// </summary>
         /// <param name="writer">The HtmlTextWriter to render content to.</param>
@@ -1124,34 +1128,45 @@ namespace Micajah.Common.Pages
             if (writer == null) return;
 
             if (this.ShowLeftArea)
+            {
                 writer.AddStyleAttribute(HtmlTextWriterStyle.MarginLeft, FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Width.ToString(CultureInfo.InvariantCulture) + "px");
+            }
 
-            string cssClass = "Mp_Pc";
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+            MasterPageTheme theme = FrameworkConfiguration.Current.WebApplication.MasterPage.Theme;
+
+            if (theme != MasterPageTheme.Modern)
             {
-                if (this.VisibleFooter)
-                    cssClass += " Mp_PcSlgOnFtrOn";
-            }
-            else
-            {
+                string cssClass = "Mp_Pc";
                 if (this.VisibleFooter || this.VisibleApplicationLogo)
+                {
                     cssClass += " Mp_PcSlgOnFtrOn";
+                }
                 else
+                {
                     cssClass += " Mp_PcSlgOn";
+                }
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, cssClass);
             }
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, cssClass);
+
             writer.RenderBeginTag(HtmlTextWriterTag.Div); // Page's content
 
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+            if (theme != MasterPageTheme.Modern)
+            {
                 this.RenderHelpLink(writer);
+            }
 
             if (m_UpdateBreadcrumbs)
             {
                 if (this.IsInAsyncPostBack)
+                {
                     this.RegisterUpdateScript("Mp_B", m_BreadCrumbs.RenderContent());
+                }
             }
             else
+            {
                 m_BreadCrumbs.RenderControl(writer);
+            }
             m_BreadCrumbs.Visible = false;
 
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_Pmc");
@@ -1187,8 +1202,22 @@ namespace Micajah.Common.Pages
         {
             if (writer == null) return;
 
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+            MasterPageTheme theme = FrameworkConfiguration.Current.WebApplication.MasterPage.Theme;
+            bool renderHeaderTag = false;
+            bool renderTopSubmenu = false;
+
+            if (m_TopSubmenu != null)
+            {
+                if ((m_TopSubmenu.Items != null) && (m_TopSubmenu.Items.Count > 0))
+                {
+                    renderTopSubmenu = true;
+                }
+            }
+
+            if (theme != MasterPageTheme.Modern)
+            {
                 this.RenderLeftAreaLayer(writer);
+            }
 
             if (m_HeaderMessageBox != null)
             {
@@ -1196,14 +1225,28 @@ namespace Micajah.Common.Pages
                 RenderControl(writer, m_HeaderMessageBox);
             }
 
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_NnFtr"); // Non-footer
-            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            if (theme == MasterPageTheme.Modern)
+            {
+                renderHeaderTag = ((m_Header != null) || (m_MainMenu != null) || renderTopSubmenu);
+
+                if (renderHeaderTag)
+                {
+                    writer.RenderBeginTag("header"); // Header tag
+                }
+            }
+            else
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_NnFtr"); // Non-footer
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            }
 
             if (m_Header != null)
+            {
                 RenderControl(writer, m_Header);
+            }
             else if (this.VisibleMainMenu)
             {
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+                if (theme != MasterPageTheme.Modern)
                 {
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_HdrOff"); // Top padding
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
@@ -1212,17 +1255,40 @@ namespace Micajah.Common.Pages
             }
 
             RenderControl(writer, m_MainMenu);
-            this.RenderTopSubmenu(writer);
 
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_Pm"); // Middle part of the page
-            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            if (renderTopSubmenu)
+            {
+                RenderControl(writer, m_TopSubmenu);
+            }
 
-            if (this.ShowLeftArea) RenderControl(writer, m_LeftSubmenu);
+            if (renderHeaderTag)
+            {
+                writer.RenderEndTag(); // Header tag
+            }
+
+            if (theme == MasterPageTheme.Modern)
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "container");
+            }
+            else
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "Mp_Pm");
+            }
+            writer.RenderBeginTag(HtmlTextWriterTag.Div); // Middle part of the page
+
+            if (this.ShowLeftArea)
+            {
+                RenderControl(writer, m_LeftSubmenu);
+            }
+
             this.RenderContent(writer, container);
 
             writer.RenderEndTag(); // Middle part of the page
 
-            writer.RenderEndTag(); // Non-footer
+            if (theme != MasterPageTheme.Modern)
+            {
+                writer.RenderEndTag(); // Non-footer
+            }
 
             RenderControl(writer, m_SoftwareLogo);
             RenderControl(writer, m_Footer);
@@ -1415,9 +1481,11 @@ namespace Micajah.Common.Pages
         /// </summary>
         /// <param name="page">The page to create header for.</param>
         /// <param name="enableClientCaching">The value indicating whether the client caching of the page should be enabled or not.</param>
-        internal static void CreatePageHeader(Page page, bool enableClientCaching)
+        internal static void CreatePageHeader(Page page, bool enableClientCaching, bool enableClientEncoding)
         {
-            CreatePageHeader(page, enableClientCaching, true, false, false, false);
+            bool modernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
+
+            CreatePageHeader(page, enableClientCaching, enableClientEncoding, true, modernTheme, modernTheme, false);
         }
 
         /// <summary>
@@ -1429,46 +1497,61 @@ namespace Micajah.Common.Pages
         /// <param name="enableJQuery">The value indicating whether the jQuery JavaScript Library should be added into page's header.</param>
         /// <param name="enableFancyBox">The value indicating whether the FancyBox jQuery Plugin should be added into page's header.</param>
         /// <param name="enableFancyBox">The value indicating whether the encoding for the text inputs should be enabled or not on client.</param>
-        internal static void CreatePageHeader(Page page, bool enableClientCaching, bool enableGlobalStyleSheet, bool enableJQuery, bool enableFancyBox, bool enableClientEncoding)
+        internal static void CreatePageHeader(Page page, bool enableClientCaching, bool enableClientEncoding, bool enableGlobalStyleSheet, bool enableJQuery, bool enableBootstrap, bool enableFancyBox)
         {
             if (page != null && page.Header != null)
             {
+                MasterPageTheme theme = FrameworkConfiguration.Current.WebApplication.MasterPage.Theme;
+                MasterPageThemeColor themeColor = FrameworkConfiguration.Current.WebApplication.MasterPage.ThemeColor;
+
+                if (!enableClientCaching)
+                {
+                    DisableClientCaching(page);
+                }
+
+                // Registers scripts.
+                if (enableClientEncoding)
+                {
+                    RegisterClientEncodingScript(page);
+                }
+
                 if (enableFancyBox)
                 {
-                    using (Literal fancyBoxScript = new Literal())
-                    {
-                        fancyBoxScript.ID = "FancyBoxScript";
-                        fancyBoxScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.FancyBoxScriptUrl);
-                        page.Header.Controls.AddAt(0, fancyBoxScript);
-                    }
+                    page.Header.Controls.AddAt(0, Support.CreateJavaScriptLiteral(ResourceProvider.FancyBoxScriptUrl, "FancyBoxScript"));
+                }
+
+                if (enableBootstrap)
+                {
+                    page.Header.Controls.AddAt(0, Support.CreateJavaScriptLiteral(ResourceProvider.BootstrapScriptUrl, "BootstrapScript"));
                 }
 
                 if (enableJQuery)
                 {
-                    using (Literal jQueryScript = new Literal())
-                    {
-                        jQueryScript.ID = "JQueryScript";
-                        jQueryScript.Text = ResourceProvider.GetJavaScript(ResourceProvider.JQueryScriptUrl);
-                        page.Header.Controls.AddAt(0, jQueryScript);
-                    }
+                    page.Header.Controls.AddAt(0, Support.CreateJavaScriptLiteral(ResourceProvider.JQueryScriptUrl, "JQueryScript"));
+                }
+
+                // Registers style sheets.
+                if (theme != MasterPageTheme.Modern)
+                {
+                    page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorStyleSheet(theme, themeColor), true)));
+                }
+
+                page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeBaseStyleSheet(theme), true)));
+
+                if (enableGlobalStyleSheet)
+                {
+                    RegisterGlobalStyleSheet(page, theme);
                 }
 
                 if (enableFancyBox)
+                {
                     page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.FancyBoxStyleSheetUrl));
+                }
 
-                MasterPageTheme theme = FrameworkConfiguration.Current.WebApplication.MasterPage.Theme;
-                MasterPageThemeColor themeColor = FrameworkConfiguration.Current.WebApplication.MasterPage.ThemeColor;
-
-                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
-                    page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorStyleSheet(theme, themeColor), true)));
-                page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeBaseStyleSheet(theme), true)));
-
-                if (enableGlobalStyleSheet) RegisterGlobalStyleSheet(page);
-
-                if (!enableClientCaching) DisableClientCaching(page);
-
-                if (enableClientEncoding)
-                    RegisterClientEncodingScript(page);
+                if (enableBootstrap)
+                {
+                    page.Header.Controls.AddAt(0, Support.CreateStyleSheetLink(ResourceProvider.BootstrapStyleSheetUrl));
+                }
             }
         }
 
@@ -1594,9 +1677,14 @@ namespace Micajah.Common.Pages
 
             // Finds the content place holder on the current master page.
             if (ContentPlaceHolders.Count > 0)
+            {
                 m_ContentPlaceHolder = FindControl("PageBody") as ContentPlaceHolder;
+            }
+
             if (m_ContentPlaceHolder != null)
+            {
                 m_ContentPlaceHolder.SetRenderMethodDelegate(this.RenderContentPlaceHolder);
+            }
 
             this.CreateDefaultPageContent();
 
@@ -1605,7 +1693,9 @@ namespace Micajah.Common.Pages
                 PageTitle = m_ActiveAction.CustomName;
 
                 if (m_ContentPlaceHolder != null)
+                {
                     SetAccessToControls(m_ActiveAction, m_ContentPlaceHolder);
+                }
             }
 
             SetPageTitle();
@@ -1623,20 +1713,22 @@ namespace Micajah.Common.Pages
             this.CreateNoticeMessageBox();
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
+            {
                 this.CreateApplicationLogo();
 
-            if (this.VisibleFooter)
-            {
-                m_Footer = new Footer(this, m_UserContext);
-                Controls.Add(m_Footer);
+                if (this.VisibleFooter)
+                {
+                    m_Footer = new Footer(this, m_UserContext);
+                    Controls.Add(m_Footer);
+                }
             }
-
-            if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+            else
             {
                 CustomValidator val = new CustomValidator();
                 val.ID = "ValidatorScriptFix";
                 val.Display = ValidatorDisplay.Dynamic;
                 val.Enabled = false;
+                val.ForeColor = System.Drawing.Color.Empty;
                 this.Page.Form.Controls.Add(val);
             }
         }

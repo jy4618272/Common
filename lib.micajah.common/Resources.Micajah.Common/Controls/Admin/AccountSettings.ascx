@@ -10,7 +10,7 @@
         </div>
         <div class="payment-set">
             <div class="payment-update" id="divPaymentUpdate" runat="server">
-                <a id="aBtnCCUpdate" class="buttons" rel="facebox" href="#credit_card_form">Update credit card</a>
+                <a id="aBtnCCUpdate" class="Button Green" rel="facebox" href="#credit_card_form">Update credit card</a>
             </div>
             <div class="payment-status">
                 <h4><asp:Literal ID="lCCStatus" runat="server" Text="No Credit Card on File."></asp:Literal></h4><small class="plandescsm" ID="smallNextBillDate" runat="server" Visible="False">Next billed on 8 October 2011</small>
@@ -91,7 +91,7 @@
     </asp:Repeater>
     <div class="account-heading" id="divFreeUsageHeader" runat="server" Visible="False">
         <h2>Free Usage
-            <a id="aBtnCCUpdate2" class="buttons" style="margin-left: 10px; font-size: 12px" rel="facebox" href="#credit_card_form">Upgrade</a>
+            <a id="aBtnCCUpdate2" class="Button Green" style="margin-left: 10px; font-size: 12px" rel="facebox" href="#credit_card_form">Upgrade</a>
             <a id="aPriceList" href='<%= Micajah.Common.Configuration.FrameworkConfiguration.Current.WebApplication.Copyright.CompanyWebsiteUrl %>pricing' target="_blank" style="float: right; font-size: 15px; margin-top: 10px">Price List</a>
         </h2>
     </div>
@@ -132,7 +132,7 @@
     <div class="account-heading"><h2>Support Options</h2></div>
     <div id="support">
         <div id="emailsupport">
-            <div class="email-emailsupport"><asp:HyperLink runat="server" NavigateUrl="~/support" CssClass="buttons" Text="Submit a Ticket"></asp:HyperLink></div>
+            <div class="email-emailsupport"><asp:HyperLink runat="server" NavigateUrl="~/support" CssClass="Button Green" Text="Submit a Ticket"></asp:HyperLink></div>
             <h4>Online Support</h4>
         </div>
         <div id="divPhoneSupport" class="accsettings phonesupport" runat="server">

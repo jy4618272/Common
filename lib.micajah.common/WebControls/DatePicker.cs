@@ -428,15 +428,7 @@ namespace Micajah.Common.WebControls
 
                 m_RadDateTimePicker.CssClass = "DatePicker_Modern";
                 m_RadDateTimePicker.DateInput.InvalidStyle.CssClass = "Invalid";
-
-                switch (this.Type)
-                {
-                    case DatePickerType.DatePicker:
-                    case DatePickerType.TimePicker:
-                    case DatePickerType.DateTimePicker:
-                        this.RequiredFieldValidator.Style[HtmlTextWriterStyle.MarginLeft] = "27px !important";
-                        break;
-                }
+                m_RadDateTimePicker.DateInput.Width = Unit.Percentage(100);
             }
 
             base.Render(writer);

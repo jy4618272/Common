@@ -1,15 +1,14 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Globalization;
 using System.Security.Authentication;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Properties;
-using Micajah.Common.Security;
 
 namespace Micajah.Common.WebControls.SecurityControls
 {
@@ -155,7 +154,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         /// <param name="e">An EventArgs that contains no event data.</param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false);
+            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false, false);
 
             if (!IsPostBack)
             {

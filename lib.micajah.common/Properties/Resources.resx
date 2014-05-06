@@ -2544,4 +2544,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="SignupOrganizationControl_NoActiveTemplateInstances" xml:space="preserve">
     <value>No Active Template Instances found to create new organization.</value>
   </data>
+  <data name="MainMenu_MenuLink_Text" xml:space="preserve">
+    <value>Menu</value>
+  </data>
 </root>

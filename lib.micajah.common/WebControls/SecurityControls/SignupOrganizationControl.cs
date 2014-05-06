@@ -2,7 +2,6 @@
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
@@ -240,8 +239,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             base.OnPreRender(e);
 
-            Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
-            Micajah.Common.Pages.MasterPage.RegisterClientEncodingScript(this.Page);
+            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false, true, true, true, true, false);
 
             if (!this.IsPostBack)
             {

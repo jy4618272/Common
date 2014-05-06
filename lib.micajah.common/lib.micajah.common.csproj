@@ -558,7 +558,6 @@
     <Compile Include="WebControls\RadioButtonList.cs" />
     <Compile Include="WebControls\RadioButtonListField.cs" />
     <Compile Include="WebControls\TextBox.cs" />
-    <Compile Include="WebControls\Link.cs" />
     <Compile Include="WebControls\MagicForm.cs" />
     <Compile Include="WebControls\TextBoxField.cs" />
     <Compile Include="WebControls\TextEditor.cs" />
@@ -632,6 +631,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Resources.Micajah.Common\Fonts\glyphicons-halflings-regular.eot" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Fonts\glyphicons-halflings-regular.ttf" />
+    <EmbeddedResource Include="Resources.Micajah.Common\Fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\OAuth.ascx">
@@ -2142,6 +2144,18 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\blank.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox_loading%402x.gif" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\FancyBox\fancybox_loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Styles\bootstrap.min.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Fonts\glyphicons-halflings-regular.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Scripts\bootstrap.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\SearchLense.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

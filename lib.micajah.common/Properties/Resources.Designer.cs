@@ -3581,6 +3581,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Menu.
+        /// </summary>
+        internal static string MainMenu_MenuLink_Text {
+            get {
+                return ResourceManager.GetString("MainMenu_MenuLink_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page Help [?].
         /// </summary>
         internal static string MasterPage_HelpLink_Text1 {
@@ -3910,8 +3919,7 @@ namespace Micajah.Common.Properties {
         ///    &lt;role id=&quot;00000000-0000-0000-0000-000000000001&quot; name=&quot;Organization Administrator&quot; description=&quot;Built-in Role for administering the Organization&quot; shortName=&quot;OrgAdmin&quot; rank=&quot;1&quot; startPageId=&quot;00000000-0000-0000-0000-000000000009&quot; /&gt;
         ///    &lt;role id=&quot;00000000-0000-0000-0000-000000000002&quot; name=&quot;Instance Administrator&quot; description=&quot;Built-in Role for administering the Instance&quot; shortName=&quot;InstAdmin&quot; rank=&quot;2&quot; startPageId=&quot;00000000-0000-0000-0000-000000000015&quot; /&gt;
         ///  &lt;/roles&gt;
-        ///  &lt;actions&gt;
-        ///    [rest of string was truncated]&quot;;.
+        ///  &lt;actions [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MicajahCommonConfig {
             get {

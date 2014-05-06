@@ -119,26 +119,6 @@ dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3
     * html .clearfix {height: 1%;}
     .clearfix {display: block;}
     .feature-toggle {float: right; margin-top: 5px;}
-
-/* -- Green Buttons  Here on Down -- */
-    .buttons, input[type="submit"].buttons 
-    { 
-	    background-color: #92C74F;
-        border: 1px solid #79A541;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px 5px 5px 5px;
-        color: #FFFFFF !important;
-        cursor: pointer;
-        font-size: 1.05em;
-        font-weight: bold;
-        overflow: visible;
-        padding: 0.6em 2em;
-        text-decoration: none;
-        width: auto;
-    }
-    
-    .buttons:hover, input[type="submit"].buttons:hover {color: #fff; border-color: #39F; background: #39F;}
     
     /*-----------------------  Progress Bars ------------------------------*/
 

@@ -146,8 +146,6 @@ function Mp_SafeCharsConvert(val) {
     val = val.replace(new RegExp('-amp;', 'g'), '&amp;');
     val = val.replace(new RegExp('-lt;', 'g'), '&lt;');
     val = val.replace(new RegExp('-gt;', 'g'), '&gt;');
-    //val = val.replace(new RegExp('&(?!\#?[a-z0-9]+;)', 'g'), '&amp;');
-    //val = val.replace(new RegExp('"', 'g'), '&quot;');
     return val;
 }
 
@@ -209,4 +207,17 @@ if (typeof (Sys) !== "undefined") {
         if (Sys.WebForms.PageRequestManager)
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(Mp_EndRequestHandler);
     }
+}
+
+if (typeof ($) !== "undefined") {
+    $(function () {
+        $('.Mp_Mm p.mobile-nav, .Mp_Mm ul li a').on('click', function () {
+            var elem = $('.Mp_Mm ul, .Mp_Smt');
+            if (elem.is(":visible")) {
+                elem.removeAttr("style");
+            } else {
+                elem.slideDown();
+            }
+        });
+    })
 }
