@@ -109,14 +109,22 @@ namespace Micajah.Common.WebControls
                     if (this.ParentAction != null)
                     {
                         ActionCollection actions = m_ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
-                        m_Items = new ActionCollection();
 
-                        foreach (Action action in actions)
+                        if (m_Position == SubmenuPosition.Top)
                         {
-                            if (!action.GroupInDetailMenu)
+                            m_Items = new ActionCollection();
+
+                            foreach (Action action in actions)
                             {
-                                m_Items.Add(action);
+                                if (!action.GroupInDetailMenu)
+                                {
+                                    m_Items.Add(action);
+                                }
                             }
+                        }
+                        else
+                        {
+                            m_Items = actions;
                         }
 
                         m_ItemsIsLoaded = true;
