@@ -185,6 +185,7 @@ input[type=text], input[type=password], select, textarea {
     outline: 0 !important;
     font-weight: normal;
     font-size: 14px;
+    font-family: Verdana, Tahoma, sans-serif;
     line-height: 14px;
     color: #222;
     margin: 0;
