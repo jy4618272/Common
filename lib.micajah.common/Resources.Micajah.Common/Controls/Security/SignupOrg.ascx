@@ -16,14 +16,14 @@
                         <mits:TextBox ID="OrganizationName" runat="server" Required="true" ValidationGroup="MainForm" CssClass="Large" TabIndex="1" AutoPostBack="true" OnTextChanged="OrganizationName_TextChanged" />
                         <asp:Image ID="OrganizationNameTick" runat="server" Visible="false" ImageAlign="AbsMiddle" />
                 </div>
-                <div class="clear"></div>
+                <div class="clearfix"></div>
                 <div class="row">
                     <asp:Label ID="EmailLabel" runat="server" CssClass="Large Title"></asp:Label>                
                     <mits:TextBox ID="Email" runat="server" Required="true" ValidationGroup="MainForm" CssClass="Large" TabIndex="2" AutoPostBack="true" OnTextChanged="Email_TextChanged" />
                     <asp:Image ID="EmailTick" runat="server" Visible="false" ImageAlign="AbsMiddle" />
                     <asp:CustomValidator ID="EmailValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="MainForm" CssClass="Error" OnServerValidate="EmailValidator_ServerValidate" />
                 </div>
-                <div class="clear"></div>
+                <div class="clearfix"></div>
                 <div id="OrganizationUrlRow" runat="server" class="row">
                     <asp:Label ID="OrganizationUrlLabel" runat="server" CssClass="Large Title"></asp:Label>
                     <div class="LightBlue">
@@ -40,13 +40,13 @@
                     <asp:Image ID="OrganizationUrlTick" runat="server" Visible="false" ImageAlign="AbsMiddle" CssClass="LightBlueImg" />
                     <asp:CustomValidator ID="OrganizationUrlValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="MainForm" CssClass="Error" Style="margin-top: 8px;" OnServerValidate="OrganizationUrlValidator_ServerValidate" />
                 </div>
-                <div class="clear"></div>
+                <div class="clearfix"></div>
                 <div class="row">
                     <asp:Label ID="CaptchaLabel" runat="server" CssClass="Large Title"></asp:Label>
-                    <telerik:RadCaptcha id="Captcha" runat="server" ImageStorageLocation="Session" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="" ErrorMessage="" ValidationGroup="MainForm" />
+                    <telerik:RadCaptcha id="Captcha" runat="server" ImageStorageLocation="Session" captchaimage-textlength="4" captchatextboxlabel="" captchatextboxcssclass="Large" ErrorMessage="" ValidationGroup="MainForm" />
                     <asp:CustomValidator ID="CaptchaValidator" runat="server" Display="Dynamic" EnableClientScript="false" ValidationGroup="MainForm" CssClass="Error" OnServerValidate="CaptchaValidator_ServerValidate" />
                 </div>
-                <div class="clear"></div>
+                <div class="clearfix"></div>
                 <div class="row">
                     <asp:Button ID="CreateMyAccountButton" runat="server" CssClass="Green Large" TabIndex="4" ValidationGroup="MainForm" OnClick="CreateMyAccountButton_Click"></asp:Button>
                 </div>

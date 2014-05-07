@@ -186,6 +186,7 @@ input[type=text], input[type=password], select, textarea {
     font: normal 14px/14px;
     color: #222;
     margin: 0;
+    line-height: normal;
     vertical-align: baseline;
     *vertical-align: middle;
     *overflow: visible;
@@ -246,6 +247,22 @@ input[type=checkbox], input[type=radio], input[type=image] {
     background-color: transparent;
     vertical-align: middle\9;
     vertical-align: middle/;
+}
+
+::-webkit-input-placeholder {
+    color: #d4d4d4;
+}
+
+:-moz-placeholder {
+    color: #d4d4d4;
+}
+
+::-moz-placeholder {
+    color: #d4d4d4;
+}
+
+:-ms-input-placeholder {
+    color: #d4d4d4;
 }
 
 /* Buttons */
