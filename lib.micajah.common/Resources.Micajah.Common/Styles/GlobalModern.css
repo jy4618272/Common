@@ -183,7 +183,9 @@ input[type=text], input[type=password], select, textarea {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     outline: 0 !important;
-    font: normal 14px/14px;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
     color: #222;
     margin: 0;
     line-height: normal;
