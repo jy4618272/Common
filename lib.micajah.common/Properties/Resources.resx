@@ -2544,4 +2544,25 @@ Do you want to link email "{1}" to this account?</value>
   <data name="SignupOrganizationControl_NoActiveTemplateInstances" xml:space="preserve">
     <value>No Active Template Instances found to create new organization.</value>
   </data>
+  <data name="GoogleIntegrationControl_ChangTokenButton_Text" xml:space="preserve">
+    <value>Change Google admin authentication token</value>
+  </data>
+  <data name="GoogleIntegrationControl_SaveTokenButton_Text" xml:space="preserve">
+    <value>Create Google admin authentication token</value>
+  </data>
+  <data name="GoogleIntegrationControl_TokenDescription_Text" xml:space="preserve">
+    <value>Google admin authentication token was created for your organization and will be used for Google authentification. If you want to re-create it, please click button below.</value>
+  </data>
+  <data name="GoogleIntegrationControl_DomainMisingError_Text" xml:space="preserve">
+    <value>Google domain is missing. Please add it on "Change Google admin authentication token" page.</value>
+  </data>
+  <data name="GoogleIntegrationControl_YourGoogleDomain_Text" xml:space="preserve">
+    <value>Your google domain:</value>
+  </data>
+  <data name="GoogleIntegrationControl_DomainError_Text" xml:space="preserve">
+    <value>&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google domain is wrong. Please change it or add new domain on "Organization Profile" page in "Email Suffixes" field.</value>
+  </data>
+  <data name="GoogleIntegrationControl_TokenError_Text" xml:space="preserve">
+    <value>&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google admin authentication token is wrong or expired. Please change it by clicking on "Change Google admin authentication token" button.</value>
+  </data>
 </root>

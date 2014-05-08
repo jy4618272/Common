@@ -391,7 +391,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>22006</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:21772/</IISUrl>
+          <IISUrl>http://localhost:22006/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
           <CustomServerUrl>http://app.localhost.com</CustomServerUrl>

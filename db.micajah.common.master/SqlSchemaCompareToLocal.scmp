@@ -9,7 +9,7 @@
   </SourceModelProvider>
   <TargetModelProvider>
     <ConnectionBasedModelProvider>
-      <ConnectionString>Data Source=(local);Initial Catalog=Mc_Master;Integrated Security=True;Pooling=False</ConnectionString>
+      <ConnectionString>Data Source=COM_03;Initial Catalog=BWA_Beta_SherpaDesk_Master;Persist Security Info=True;User ID=sa;Pooling=False</ConnectionString>
     </ConnectionBasedModelProvider>
   </TargetModelProvider>
   <SchemaCompareSettingsService>

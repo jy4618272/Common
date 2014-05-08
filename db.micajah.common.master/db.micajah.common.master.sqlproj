@@ -677,6 +677,10 @@
     <None Include="Sql Scripts\Change Scripts\Common\post.sql" />
     <None Include="Sql Scripts\Change Scripts\Common\pre.sql" />
     <None Include="Sql Scripts\Change Scripts\Common\v.sql" />
+    <Build Include="Stored Procedures\Mc_UpdateOrganizationGoogleAdminAuthToken.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompareToLocal.scmp" />

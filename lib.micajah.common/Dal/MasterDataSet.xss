@@ -19,7 +19,7 @@
     <Shape ID="DesignTable:Database" ZOrder="4" X="622" Y="-319" Height="151" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="178" SplitterPosition="25" />
     <Shape ID="DesignTable:DatabaseServer" ZOrder="3" X="621" Y="-442" Height="113" Width="294" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="178" SplitterPosition="24" />
     <Shape ID="DesignTable:Website" ZOrder="1" X="616" Y="-563" Height="113" Width="296" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="140" SplitterPosition="24" />
-    <Shape ID="DesignTable:Organization" ZOrder="2" X="623" Y="-159" Height="189" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="655" SplitterPosition="24" />
+    <Shape ID="DesignTable:Organization" ZOrder="2" X="623" Y="-159" Height="209" Width="301" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="24" OldDataTableHeight="254" SplitterPosition="25" />
     <Shape ID="DesignTable:Login" ZOrder="6" X="312" Y="-562" Height="170" Width="289" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="24" OldDataTableHeight="197" SplitterPosition="24" />
     <Shape ID="DesignTable:OrganizationsLogins" ZOrder="5" X="312" Y="-381" Height="132" Width="300" AdapterExpanded="true" DataTableExpanded="false" OldAdapterHeight="0" OldDataTableHeight="235" SplitterPosition="24" />
   </Shapes>

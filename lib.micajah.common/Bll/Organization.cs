@@ -47,6 +47,7 @@ namespace Micajah.Common.Bll
         private string m_PostalCode;
         private string m_Country;
         private string m_Currency;
+        private string m_GoogleAdminAuthToken;
 
         #endregion
 
@@ -78,6 +79,7 @@ namespace Micajah.Common.Bll
             m_Country = string.Empty;
             m_Currency = string.Empty;
             HowYouHearAboutUs = string.Empty;
+            m_GoogleAdminAuthToken = string.Empty;
         }
 
         #endregion
@@ -426,6 +428,15 @@ namespace Micajah.Common.Bll
         /// Gets or sets the value for how this organization hear about us.
         /// </summary>
         public string HowYouHearAboutUs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the google admin auth token. This token is needed for google replication.
+        /// </summary>
+        public string GoogleAdminAuthToken
+        {
+            get { return m_GoogleAdminAuthToken; }
+            set { m_GoogleAdminAuthToken = value; }
+        }
 
         #endregion
 

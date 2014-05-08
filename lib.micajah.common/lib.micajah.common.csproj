@@ -1791,9 +1791,7 @@
     <EmbeddedResource Include="Resources.Micajah.Common\Pages\Admin\LdapGroupMappings.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\LdapGroupMappings.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.Micajah.Common\Controls\Admin\LdapGroupMappings.ascx" />
     <EmbeddedResource Include="Resources.Micajah.Common\Controls\Security\Support.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
