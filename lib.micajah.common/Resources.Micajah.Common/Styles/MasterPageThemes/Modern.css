@@ -294,7 +294,7 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
         width: 75%;
     }
 
-    .Mp_Hdr .col-sm-8.clear {
+    .Mp_Hdr .col-sm-8-clearfix {
         clear: both;
     }
 
