@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="CommonGridViewTestPage" Codebehind="CommonGridView.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" Inherits="CommonGridViewTestPage" CodeBehind="CommonGridView.aspx.cs" %>
 
 <%@ MasterType TypeName="Micajah.Common.Pages.MasterPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
@@ -8,8 +8,7 @@
         <br />
         <br />
     </asp:PlaceHolder>
-    <h1>
-        Hierarchical grid</h1>
+    <h1>Hierarchical grid</h1>
     <%--<asp:ObjectDataSource ID="ObjectDataSource6" runat="server" SelectMethod="GetRoles"
         TypeName="Micajah.Common.Bll.Providers.RoleProvider"></asp:ObjectDataSource>
     <asp:DropDownList ID="DropDownList2" runat="server">
@@ -30,10 +29,8 @@
         ShowStatusList="true" ShowFooter="true" OnSelectedStatusChanged="CommonGridView1_SelectedStatusChanged">
         <CaptionControls>
             <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="http://www.google.com"
-                Target="_blank" Text="Google search"></asp:HyperLink>
-            <%--            <asp:LinkButton ID="ShowInactiveButton" runat="server" Text="Show Inactive" OnClick="ShowInactiveButton_Click"></asp:LinkButton>
-            <asp:LinkButton ID="ShowActiveButton" runat="server" CausesValidation="false" Text="Show Active"
-                OnClick="ShowActiveButton_Click"></asp:LinkButton>--%>
+                Target="_blank" Text="Google search"></asp:HyperLink><asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="http://www.bing.com"
+                    Target="_blank" Text="Bing search"></asp:HyperLink><%--<asp:LinkButton ID="ShowInactiveButton" runat="server" Text="Show Inactive" OnClick="ShowInactiveButton_Click"></asp:LinkButton><asp:LinkButton ID="ShowActiveButton" runat="server" CausesValidation="false" Text="Show Active" OnClick="ShowActiveButton_Click"></asp:LinkButton>--%>
         </CaptionControls>
         <Filter>
             <table cellpadding="0" cellspacing="0" width="100%">
@@ -65,7 +62,8 @@
                                     </li>
                                 </ItemTemplate>
                                 <FooterTemplate>
-                                    </ul></FooterTemplate>
+                                    </ul>
+                                </FooterTemplate>
                             </asp:Repeater>
                             <asp:HyperLink ID="ColSettingLink" runat="server" NavigateUrl="#">Columns &amp; Orders</asp:HyperLink>
                         </li>
@@ -182,33 +180,27 @@
     </p>
     <table id="Table1" runat="server" style="width: 100%;">
         <tr class="Caption">
-            <td colspan="4">
-                This is HtmlTable control that looks like CommonGridView
+            <td colspan="4">This is HtmlTable control that looks like CommonGridView
             </td>
         </tr>
         <tr class="Header">
             <th>
                 <a href="#">Column 1</a>
             </th>
-            <th>
-                Column 2
+            <th>Column 2
             </th>
-            <th>
-                Column 3
+            <th>Column 3
             </th>
-            <th>
-                Column 4
+            <th>Column 4
             </th>
         </tr>
         <tr>
             <td>
                 <a href="#">Row 1 Cell 1</a>
             </td>
-            <td>
-                Row 1 Cell 2
+            <td>Row 1 Cell 2
             </td>
-            <td>
-                Row 1 Cell 3
+            <td>Row 1 Cell 3
             </td>
             <td>
                 <a href="#" class="Edit">Edit</a><a href="#" class="Delete">Delete</a>
@@ -218,42 +210,33 @@
             <td>
                 <a href="#">Row 2 Cell 1</a>
             </td>
-            <td>
-                Row 2 Cell 2
+            <td>Row 2 Cell 2
             </td>
-            <td>
-                Row 2 Cell 3
+            <td>Row 2 Cell 3
             </td>
-            <td>
-                Row 2 Cell 4
+            <td>Row 2 Cell 4
             </td>
         </tr>
         <tr>
             <td>
                 <a href="#">Row 3 Cell 1</a>
             </td>
-            <td>
-                Row 3 Cell 2
+            <td>Row 3 Cell 2
             </td>
-            <td>
-                Row 3 Cell 3
+            <td>Row 3 Cell 3
             </td>
-            <td>
-                Row 3 Cell 4
+            <td>Row 3 Cell 4
             </td>
         </tr>
         <tr>
             <td>
                 <a href="#">Row 4 Cell 1</a>
             </td>
-            <td>
-                Row 4 Cell 2
+            <td>Row 4 Cell 2
             </td>
-            <td>
-                Row 4 Cell 3
+            <td>Row 4 Cell 3
             </td>
-            <td>
-                Row 4 Cell 4
+            <td>Row 4 Cell 4
             </td>
         </tr>
     </table>

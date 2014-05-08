@@ -56,13 +56,18 @@
 }
 
 #fancybox-wrap {
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding: 20px;
-	z-index: 11010;
-	outline: none;
-	display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    z-index: 11010;
+    outline: none;
+    display: none;
+}
+
+#fancybox-wrap * {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 #fancybox-outer {

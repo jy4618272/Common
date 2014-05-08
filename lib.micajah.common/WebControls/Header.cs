@@ -59,7 +59,9 @@ namespace Micajah.Common.WebControls
         private Control CreateHeaderLinks()
         {
             if (!(m_MasterPage.VisibleHeaderLinks || m_MasterPage.VisibleSearchControl))
+            {
                 return null;
+            }
 
             HtmlGenericControl rightContainer = null;
             Control links = null;
@@ -70,13 +72,21 @@ namespace Micajah.Common.WebControls
             try
             {
                 rightContainer = new HtmlGenericControl("div");
-                rightContainer.Attributes["class"] = "G";
 
                 if (m_MasterPage.VisibleHeaderLinks)
+                {
                     links = CreateGlobalNavigation(this.Page.Request.IsSecureConnection);
+                }
 
                 if (m_ModernTheme)
                 {
+                    rightContainer.Attributes["class"] = "col-sm-8";
+
+                    if (m_MasterPage.VisibleSearchControl)
+                    {
+                        rightContainer.Attributes["class"] += " col-sm-8-clearfix";
+                    }
+
                     HtmlGenericControl ul = (HtmlGenericControl)links;
 
                     if (m_MasterPage.VisibleHelpLink)
@@ -95,6 +105,8 @@ namespace Micajah.Common.WebControls
                 }
                 else
                 {
+                    rightContainer.Attributes["class"] = "G";
+
                     string paddindTop = null;
 
                     if (links != null)
@@ -108,7 +120,9 @@ namespace Micajah.Common.WebControls
                     }
 
                     if (m_MasterPage.VisibleSearchControl)
+                    {
                         rightContainer.Controls.Add(CreateSearchControl(paddindTop));
+                    }
                 }
 
                 return rightContainer;
@@ -125,9 +139,6 @@ namespace Micajah.Common.WebControls
 
         private Control CreateApplicationLogo()
         {
-            if (!m_ModernTheme)
-                return null;
-
             if (string.IsNullOrEmpty(m_MasterPageSettings.Header.LogoImageUrl))
                 return null;
 
@@ -142,7 +153,6 @@ namespace Micajah.Common.WebControls
                 div.Attributes["class"] = "Al";
 
                 ul = new HtmlGenericControl("ul");
-                ul.Attributes["class"] = "Mm";
                 div.Controls.Add(ul);
 
                 li = new HtmlGenericControl("li");
@@ -241,7 +251,6 @@ namespace Micajah.Common.WebControls
         {
             HtmlGenericControl div = null;
             System.Web.UI.WebControls.TextBox txt = null;
-            Button btn = null;
 
             try
             {
@@ -254,54 +263,57 @@ namespace Micajah.Common.WebControls
 
                 txt = new System.Web.UI.WebControls.TextBox();
                 txt.ID = SearchTextBoxId;
-                txt.Columns = m_MasterPage.SearchTextBoxColumns;
-                if (m_MasterPage.SearchTextBoxMaxLength > 0) txt.MaxLength = m_MasterPage.SearchTextBoxMaxLength;
                 txt.Style[HtmlTextWriterStyle.VerticalAlign] = "middle";
                 txt.CausesValidation = false;
                 txt.ValidationGroup = "Mp_Search";
-                txt.Attributes["onfocus"] = "Mp_SearchTextBox_OnFocus(this);";
-                txt.Attributes["onblur"] = "Mp_SearchTextBox_OnBlur(this);";
                 txt.Attributes["onkeypress"] = "if (event.keyCode == 13) {" + searchButtonOnClientClick + "}";
-                txt.Attributes["EmptyText"] = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
-
-                string searchText = m_MasterPage.SearchText;
-                if (searchText == null)
+                if (m_MasterPage.SearchTextBoxMaxLength > 0)
                 {
-                    txt.Text = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
-                    txt.Style[HtmlTextWriterStyle.Color] = "Gray";
+                    txt.MaxLength = m_MasterPage.SearchTextBoxMaxLength;
+                }
+
+                if (m_ModernTheme)
+                {
+                    txt.CssClass = "form-control";
+                    txt.Attributes["placeholder"] = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
+
+                    string searchText = m_MasterPage.SearchText;
+                    if (searchText != null)
+                    {
+                        txt.Text = searchText;
+                    }
+
+                    div.Attributes["class"] = "S";
                 }
                 else
                 {
-                    txt.Text = searchText;
-                    txt.Style[HtmlTextWriterStyle.Color] = "Black";
+                    txt.Columns = m_MasterPage.SearchTextBoxColumns;
+                    txt.Attributes["onfocus"] = "Mp_SearchTextBox_OnFocus(this);";
+                    txt.Attributes["onblur"] = "Mp_SearchTextBox_OnBlur(this);";
+                    txt.Attributes["EmptyText"] = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
+
+                    string searchText = m_MasterPage.SearchText;
+                    if (searchText == null)
+                    {
+                        txt.Text = HttpUtility.HtmlAttributeEncode(m_MasterPage.SearchTextBoxEmptyText);
+                        txt.Style[HtmlTextWriterStyle.Color] = "Gray";
+                    }
+                    else
+                    {
+                        txt.Text = searchText;
+                        txt.Style[HtmlTextWriterStyle.Color] = "Black";
+                    }
+
+                    div.Style["clear"] = "both";
+                    div.Style[HtmlTextWriterStyle.WhiteSpace] = "nowrap";
+                    if (!string.IsNullOrEmpty(paddindTop))
+                    {
+                        div.Style[HtmlTextWriterStyle.PaddingTop] = paddindTop;
+                    }
                 }
 
                 div.Controls.Add(txt);
                 div.Controls.Add(new LiteralControl("&nbsp;"));
-
-                btn = new Button();
-                btn.ID = SearchButtonId;
-                btn.OnClientClick = searchButtonOnClientClick;
-                btn.CausesValidation = false;
-                btn.ValidationGroup = "Mp_Search";
-                btn.Text = m_MasterPage.SearchButtonText;
-                btn.ToolTip = m_MasterPage.SearchButtonToolTip;
-
-                if (m_ModernTheme)
-                {
-                    div.Attributes["class"] = "S";
-                    btn.CssClass = "Green";
-                }
-                else
-                {
-                    div.Style["clear"] = "both";
-                    div.Style[HtmlTextWriterStyle.WhiteSpace] = "nowrap";
-                    if (!string.IsNullOrEmpty(paddindTop)) div.Style[HtmlTextWriterStyle.PaddingTop] = paddindTop;
-
-                    btn.Style.Add(HtmlTextWriterStyle.VerticalAlign, "middle");
-                }
-
-                div.Controls.Add(btn);
 
                 return div;
             }
@@ -309,7 +321,6 @@ namespace Micajah.Common.WebControls
             {
                 if (div != null) div.Dispose();
                 if (txt != null) txt.Dispose();
-                if (btn != null) btn.Dispose();
             }
         }
 
@@ -321,74 +332,131 @@ namespace Micajah.Common.WebControls
         private Control CreateGlobalNavigation(bool isSecureConnection)
         {
             ControlList links = null;
-            Link link = null;
-            Link link2 = null;
+            HyperLink link = null;
+            HyperLink link2 = null;
             HtmlGenericControl ul = null;
             HtmlGenericControl ul2 = null;
             HtmlGenericControl li = null;
             HtmlGenericControl li2 = null;
-            bool modernTheme = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern);
 
-            if (modernTheme)
+            if (m_ModernTheme)
             {
                 ul = new HtmlGenericControl("ul");
-                ul.Attributes["class"] = "Mm";
+                ul.Attributes["class"] = "nav pull-right";
             }
             else
+            {
                 links = new ControlList();
+            }
 
             try
             {
                 foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
                 {
-                    link = new Link(item.CustomName, item.CustomAbsoluteNavigateUrl, item.Description);
+                    link = new HyperLink();
+                    link.NavigateUrl = item.CustomAbsoluteNavigateUrl;
+                    link.ToolTip = item.Description;
 
-                    if (modernTheme)
+                    if (m_ModernTheme)
                     {
                         li = new HtmlGenericControl("li");
 
+                        string iconUrl = null;
+                        string text = null;
+                        string cssClass = "Icon";
+
                         if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
                         {
-                            HyperLink usernameLink = new HyperLink();
-                            li.Controls.Add(usernameLink);
-
-                            Image avatarImg = new Image();
-                            avatarImg.CssClass = "Avtr";
-                            avatarImg.ImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}www.gravatar.com/avatar/{2}?s=24"
+                            iconUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}www.gravatar.com/avatar/{2}?s=24"
                                 , (isSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp), Uri.SchemeDelimiter, Support.CalculateMD5Hash(m_UserContext.Email.ToLowerInvariant()));
-                            usernameLink.Controls.Add(avatarImg);
 
-                            string name = m_UserContext.FirstName + Html32TextWriter.SpaceChar + m_UserContext.LastName;
+                            text = m_UserContext.FirstName + Html32TextWriter.SpaceChar + m_UserContext.LastName;
+                            if (string.IsNullOrWhiteSpace(text))
+                            {
+                                text = m_UserContext.LoginName;
+                            }
 
-                            LiteralControl literal = new LiteralControl();
-                            literal.Text = ((name.Trim().Length > 0) ? name : m_UserContext.LoginName);
-                            usernameLink.Controls.Add(literal);
+                            cssClass += " Avtr";
                         }
                         else
                         {
                             if (!string.IsNullOrEmpty(item.IconUrl))
-                                link.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(item.IconUrl);
-                            li.Controls.Add(link);
+                            {
+                                iconUrl = item.IconUrl;
+                                if (iconUrl.IndexOf("glyphicon", StringComparison.OrdinalIgnoreCase) == -1)
+                                {
+                                    iconUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(iconUrl);
+                                }
+                                else
+                                {
+                                    using (Label label = new Label())
+                                    {
+                                        label.CssClass = "glyphicon " + iconUrl;
+                                        link.Controls.Add(label);
+                                    }
+
+                                    iconUrl = null;
+                                }
+                            }
+
+                            text = item.CustomName;
                         }
 
+                        if (string.IsNullOrEmpty(iconUrl))
+                        {
+                            using (LiteralControl literal = new LiteralControl(text))
+                            {
+                                link.Controls.Add(literal);
+                            }
+                        }
+                        else
+                        {
+                            using (Image image = new Image())
+                            {
+                                image.ImageUrl = iconUrl;
+                                image.CssClass = cssClass;
+
+                                link.Controls.Add(image);
+                            }
+
+                            using (LiteralControl literal = new LiteralControl(text))
+                            {
+                                link.Controls.Add(literal);
+                            }
+                        }
+
+                        li.Controls.Add(link);
                         ul.Controls.Add(li);
 
                         ActionCollection childActions = item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                         if (childActions.Count > 0)
                         {
-                            li.Attributes["class"] = "Dm";
+                            link.CssClass = "dropdown-toggle";
+                            link.Attributes["data-toggle"] = "dropdown";
+
+                            using (Label label = new Label())
+                            {
+                                label.CssClass = "caret";
+                                link.Controls.Add(label);
+                            }
 
                             ul2 = new HtmlGenericControl("ul");
-                            ul2.Attributes["class"] = "Sm";
+                            ul2.Attributes["class"] = "dropdown-menu blue";
 
                             foreach (Micajah.Common.Bll.Action item2 in childActions)
                             {
                                 li2 = new HtmlGenericControl("li");
-                                link2 = new Link(item2.CustomName, item2.CustomAbsoluteNavigateUrl, item2.Description);
+
+                                link2 = new HyperLink();
+                                link2.Text = item2.CustomName;
+                                link2.NavigateUrl = item2.CustomAbsoluteNavigateUrl;
+                                link2.ToolTip = item2.Description;
+
                                 li2.Controls.Add(link2);
                                 ul2.Controls.Add(li2);
                             }
 
+                            li.Attributes["class"] = "dropdown";
                             li.Controls.Add(ul2);
                         }
                     }
@@ -398,19 +466,30 @@ namespace Micajah.Common.WebControls
                         {
                             foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
                             {
-                                link2 = new Link(item2.CustomName, item2.CustomAbsoluteNavigateUrl, item2.Description);
+                                link2 = new HyperLink();
+                                link2.Text = item2.CustomName;
+                                link2.NavigateUrl = item2.CustomAbsoluteNavigateUrl;
+                                link2.ToolTip = item2.Description;
+
                                 links.Add(link2);
                             }
                         }
                         else
+                        {
+                            link.Text = item.CustomName;
                             links.Add(link);
+                        }
                     }
                 }
 
-                if (modernTheme)
+                if (m_ModernTheme)
+                {
                     return ul;
+                }
                 else
+                {
                     return ((links.Count > 0) ? links : null);
+                }
             }
             finally
             {
@@ -418,6 +497,119 @@ namespace Micajah.Common.WebControls
                 if (ul != null) ul.Dispose();
                 if (link != null) link.Dispose();
                 if (links != null) links.Dispose();
+            }
+        }
+
+        private void CreateChildControlsStandard()
+        {
+            HtmlGenericControl container = null;
+            Control ctrl = null;
+
+            try
+            {
+                container = new HtmlGenericControl("div");
+
+                ctrl = this.CreateLogo();
+                if (ctrl != null)
+                {
+                    container.Controls.Add(ctrl);
+                }
+
+                ctrl = this.CreateHeaderLinks();
+                if (ctrl != null)
+                {
+                    container.Controls.Add(ctrl);
+                }
+
+                if (container.HasControls())
+                {
+                    container.Attributes["class"] = "Mp_Hdr";
+
+                    this.Controls.Add(container);
+                }
+            }
+            finally
+            {
+                if (container != null)
+                {
+                    container.Dispose();
+                }
+
+                if (ctrl != null)
+                {
+                    ctrl.Dispose();
+                }
+            }
+        }
+
+        private void CreateChildControlsModern()
+        {
+            HtmlGenericControl mainContainer = null;
+            HtmlGenericControl container = null;
+            HtmlGenericControl leftContainer = null;
+            Control ctrl = null;
+
+            try
+            {
+                container = new HtmlGenericControl("div");
+                leftContainer = new HtmlGenericControl("div");
+
+                ctrl = this.CreateApplicationLogo();
+                if (ctrl != null)
+                {
+                    leftContainer.Controls.Add(ctrl);
+                }
+
+                if (m_MasterPage.VisibleSearchControl)
+                {
+                    leftContainer.Controls.Add(CreateSearchControl(null));
+                }
+
+                if (leftContainer.HasControls())
+                {
+                    leftContainer.Attributes["class"] = "col-sm-4";
+
+                    container.Controls.Add(leftContainer);
+                }
+
+                ctrl = this.CreateHeaderLinks();
+                if (ctrl != null)
+                {
+                    container.Controls.Add(ctrl);
+                }
+
+                if (container.HasControls())
+                {
+                    container.Attributes["class"] = "container";
+
+                    mainContainer = new HtmlGenericControl("div");
+                    mainContainer.Attributes["class"] = "Mp_Hdr";
+                    mainContainer.Controls.Add(container);
+
+                    this.Controls.Add(mainContainer);
+                }
+            }
+            finally
+            {
+                if (mainContainer != null)
+                {
+                    mainContainer.Dispose();
+                }
+
+                if (container != null)
+                {
+                    container.Dispose();
+                }
+
+                if (leftContainer != null)
+                {
+                    leftContainer.Dispose();
+                }
+
+                if (ctrl != null)
+                {
+                    ctrl.Dispose();
+                }
             }
         }
 
@@ -432,39 +624,13 @@ namespace Micajah.Common.WebControls
         {
             this.Controls.Clear();
 
-            HtmlGenericControl headerContainer = null;
-            Control ctrl = null;
-
-            try
+            if (m_ModernTheme)
             {
-                headerContainer = new HtmlGenericControl("div");
-                headerContainer.Attributes["class"] = "Mp_Hdr";
-
-                ctrl = this.CreateApplicationLogo();
-                if (ctrl != null)
-                    headerContainer.Controls.Add(ctrl);
-
-                ctrl = this.CreateLogo();
-                if (ctrl != null)
-                    headerContainer.Controls.Add(ctrl);
-
-                if (m_ModernTheme)
-                {
-                    if (m_MasterPage.VisibleSearchControl)
-                        headerContainer.Controls.Add(CreateSearchControl(null));
-                }
-
-                ctrl = this.CreateHeaderLinks();
-                if (ctrl != null)
-                    headerContainer.Controls.Add(ctrl);
-
-                if (headerContainer.HasControls())
-                    this.Controls.Add(headerContainer);
+                CreateChildControlsModern();
             }
-            finally
+            else
             {
-                if (headerContainer != null) headerContainer.Dispose();
-                if (ctrl != null) ctrl.Dispose();
+                CreateChildControlsStandard();
             }
         }
 

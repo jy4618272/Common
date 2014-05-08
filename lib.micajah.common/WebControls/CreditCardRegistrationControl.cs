@@ -67,12 +67,12 @@ namespace Micajah.Common.WebControls
 
         private void RegisterFancyBoxInputScript()
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInputScript", "$(\"input[value=" + FancyboxInputValue + "]\").fancybox({'type': 'inline', 'href': '#credit_card_form', 'width': '400', 'height': 'auto', 'showNavArrows': false, 'titlePosition': 'inside', 'transitionIn': 'none', 'transitionOut': 'none'});", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInputScript", "$(\"input[value=" + FancyboxInputValue + "]\").fancybox({type: 'inline', href: '#credit_card_form', width: 400, height: 'auto', showNavArrows: false, titlePosition: 'inside', transitionIn: 'none', transitionOut: 'none'});", true);
         }
 
         private void RegisterFancyBoxHyperLinkScript()
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxHyperLinkScript", "$(\"a[rel=" + FancyboxHyperlinkRel + "]\").fancybox({'type': 'inline','width': '400', 'height': 'auto', 'showNavArrows': false, 'titlePosition': 'inside', 'transitionIn': 'none', 'transitionOut': 'none'});", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxHyperLinkScript", "$(\"a[rel=" + FancyboxHyperlinkRel + "]\").fancybox({type: 'inline', href: '#credit_card_form', width: 400, height: 'auto', showNavArrows: false, titlePosition: 'inside', transitionIn: 'none', transitionOut: 'none'});", true);
         }
 
         #endregion

@@ -28,7 +28,7 @@ namespace Micajah.Common.WebControls
         private bool m_IsAuthenticated;
         private ActionCollection m_Items;
         private bool m_ItemsIsLoaded;
-        private HtmlGenericControl m_Container;
+        private HtmlGenericControl m_MainContainer;
         private System.Guid? m_SelectedItemId;
         private bool m_ModernTheme;
 
@@ -108,7 +108,25 @@ namespace Micajah.Common.WebControls
                 {
                     if (this.ParentAction != null)
                     {
-                        m_Items = m_ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+                        ActionCollection actions = m_ParentAction.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+
+                        if (m_Position == SubmenuPosition.Top)
+                        {
+                            m_Items = new ActionCollection();
+
+                            foreach (Action action in actions)
+                            {
+                                if (!action.GroupInDetailMenu)
+                                {
+                                    m_Items.Add(action);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            m_Items = actions;
+                        }
+
                         m_ItemsIsLoaded = true;
                     }
                 }
@@ -184,7 +202,7 @@ namespace Micajah.Common.WebControls
 
                 ulMain = new HtmlGenericControl("ul");
                 ulMain.Attributes["class"] = "Mp_Sm";
-                m_Container.Controls.Add(ulMain);
+                m_MainContainer.Controls.Add(ulMain);
 
                 if (!m_ModernTheme)
                     secondLevelItemCssClass = "S";
@@ -287,23 +305,35 @@ namespace Micajah.Common.WebControls
         {
             Label lbl = null;
             HtmlGenericControl ul = null;
+            HtmlGenericControl container = null;
+            HtmlGenericControl innerContainer = null;
 
             try
             {
                 if (m_ModernTheme)
                 {
-                    m_Container.Attributes["class"] = "Mp_Smt";
-
                     ul = new HtmlGenericControl("ul");
 
-                    m_Container.Controls.Add(ul);
+                    innerContainer = new HtmlGenericControl("div");
+                    innerContainer.Attributes["class"] = "col-sm-12";
+                    innerContainer.Controls.Add(ul);
+
+                    container = new HtmlGenericControl("div");
+                    container.Attributes["class"] = "container";
+                    container.Controls.Add(innerContainer);
+
+                    m_MainContainer.Attributes["class"] = "Mp_Smt";
+                    m_MainContainer.Controls.Add(container);
 
                     foreach (Action item in Items)
                     {
                         using (HtmlGenericControl li = new HtmlGenericControl("li"))
                         {
                             if (item.ActionId == this.SelectedItemId)
-                                li.Attributes["class"] = "S";
+                            {
+                                li.Attributes["class"] = "active";
+                            }
+
                             li.Controls.Add(CreateLink(item, m_ModernTheme));
                             ul.Controls.Add(li);
                         }
@@ -311,7 +341,7 @@ namespace Micajah.Common.WebControls
                 }
                 else
                 {
-                    m_Container.Attributes["class"] = "Mp_Sm";
+                    m_MainContainer.Attributes["class"] = "Mp_Sm";
 
                     foreach (Action item in Items)
                     {
@@ -320,12 +350,15 @@ namespace Micajah.Common.WebControls
                             lbl = new Label();
                             lbl.CssClass = "F";
                             lbl.Text = item.CustomName;
-                            m_Container.Controls.Add(lbl);
+
+                            m_MainContainer.Controls.Add(lbl);
                         }
                         else
-                            m_Container.Controls.Add(CreateLink(item, "F", m_ModernTheme));
+                        {
+                            m_MainContainer.Controls.Add(CreateLink(item, "F", m_ModernTheme));
+                        }
 
-                        m_Container.Controls.Add(new LiteralControl("&nbsp;:&nbsp;"));
+                        m_MainContainer.Controls.Add(new LiteralControl("&nbsp;:&nbsp;"));
 
                         if (item.IsDetailMenuPage)
                         {
@@ -334,11 +367,11 @@ namespace Micajah.Common.WebControls
                             {
                                 foreach (Action item2 in availableChildActions)
                                 {
-                                    m_Container.Controls.Add(CreateLink(item2, "S", m_ModernTheme));
-                                    m_Container.Controls.Add(new LiteralControl("&nbsp;|&nbsp;"));
+                                    m_MainContainer.Controls.Add(CreateLink(item2, "S", m_ModernTheme));
+                                    m_MainContainer.Controls.Add(new LiteralControl("&nbsp;|&nbsp;"));
                                 }
 
-                                m_Container.Controls.Add(new LiteralControl("<br/>"));
+                                m_MainContainer.Controls.Add(new LiteralControl("<br/>"));
                             }
                         }
                     }
@@ -346,7 +379,20 @@ namespace Micajah.Common.WebControls
             }
             finally
             {
-                if (lbl != null) lbl.Dispose();
+                if (lbl != null)
+                {
+                    lbl.Dispose();
+                }
+
+                if (container != null)
+                {
+                    container.Dispose();
+                }
+
+                if (innerContainer != null)
+                {
+                    innerContainer.Dispose();
+                }
             }
         }
 
@@ -390,40 +436,64 @@ namespace Micajah.Common.WebControls
             if (action == null) return null;
             if (cssClass == null) cssClass = string.Empty;
 
-            HtmlInputButton btn = null;
-            Link hl = null;
+            HtmlInputButton button = null;
+            HyperLink link = null;
 
             try
             {
                 if ((action.SubmenuItemType == SubmenuItemType.Button) && (!modernTheme))
                 {
-                    btn = new HtmlInputButton("button");
-                    btn.Attributes["value"] = action.CustomName;
-                    btn.Attributes["class"] = cssClass;
+                    button = new HtmlInputButton("button");
+                    button.Attributes["value"] = action.CustomName;
+                    button.Attributes["class"] = cssClass;
+                    button.Attributes["onclick"] = string.Format(CultureInfo.InvariantCulture, "location.href=\"{0}\";return false;", action.CustomAbsoluteNavigateUrl);
+
                     string descr = action.CustomDescription;
                     if (!string.IsNullOrEmpty(descr))
-                        btn.Attributes["title"] = descr;
+                    {
+                        button.Attributes["title"] = descr;
+                    }
+
                     if (action.SubmenuItemWidth > 0)
-                        btn.Style[HtmlTextWriterStyle.Width] = action.SubmenuItemWidth.ToString(CultureInfo.InvariantCulture) + "px";
-                    btn.Attributes["onclick"] = string.Format(CultureInfo.InvariantCulture, "location.href=\"{0}\";return false;", action.CustomAbsoluteNavigateUrl);
-                    return btn;
+                    {
+                        button.Style[HtmlTextWriterStyle.Width] = action.SubmenuItemWidth.ToString(CultureInfo.InvariantCulture) + "px";
+                    }
+
+                    return button;
                 }
                 else
                 {
-                    hl = new Link();
-                    hl.CssClass = cssClass;
-                    hl.Text = action.CustomName;
-                    hl.NavigateUrl = action.CustomAbsoluteNavigateUrl;
-                    hl.ToolTip = action.CustomDescription;
+                    link = new HyperLink();
+                    link.CssClass = cssClass;
+                    link.NavigateUrl = action.CustomAbsoluteNavigateUrl;
+                    link.ToolTip = action.CustomDescription;
+
                     if (showIcon && (action.SubmenuItemType == SubmenuItemType.ImageButton))
-                        hl.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(action.SubmenuItemImageUrl);
-                    return hl;
+                    {
+                        using (Image image = new Image())
+                        {
+                            image.ImageUrl = CustomUrlProvider.CreateApplicationAbsoluteUrl(action.SubmenuItemImageUrl);
+                            image.ToolTip = action.CustomDescription;
+                            link.Controls.Add(image);
+                        }
+
+                        using (LiteralControl literal = new LiteralControl(action.CustomName))
+                        {
+                            link.Controls.Add(literal);
+                        }
+                    }
+                    else
+                    {
+                        link.Text = action.CustomName;
+                    }
+
+                    return link;
                 }
             }
             finally
             {
-                if (btn != null) btn.Dispose();
-                if (hl != null) hl.Dispose();
+                if (button != null) button.Dispose();
+                if (link != null) link.Dispose();
             }
         }
 
@@ -442,7 +512,7 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                m_Container = new HtmlGenericControl("div");
+                m_MainContainer = new HtmlGenericControl("div");
 
                 switch (m_Position)
                 {
@@ -452,22 +522,22 @@ namespace Micajah.Common.WebControls
                         if (width > decrement)
                             width -= decrement;
 
-                        m_Container.Style[HtmlTextWriterStyle.Width] = width.ToString(CultureInfo.InvariantCulture) + "px";
-                        m_Container.Attributes["class"] = "Mp_L";
+                        m_MainContainer.Style[HtmlTextWriterStyle.Width] = width.ToString(CultureInfo.InvariantCulture) + "px";
+                        m_MainContainer.Attributes["class"] = "Mp_L";
 
                         if ((this.Items != null) && (m_Items.Count > 0))
                             this.CreateLeftSubmenu();
 
-                        if (m_Container.HasControls())
+                        if (m_MainContainer.HasControls())
                         {
                             if (!string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Html))
                             {
-                                m_Container.Controls.Add(new LiteralControl("<br /><br />"));
+                                m_MainContainer.Controls.Add(new LiteralControl("<br /><br />"));
 
                                 htmlContainer = new HtmlGenericControl("div");
                                 htmlContainer.Attributes["class"] = "Mp_Lah";
                                 htmlContainer.InnerHtml = FrameworkConfiguration.Current.WebApplication.MasterPage.LeftArea.Html;
-                                m_Container.Controls.Add(htmlContainer);
+                                m_MainContainer.Controls.Add(htmlContainer);
                             }
                         }
                         break;
@@ -477,13 +547,13 @@ namespace Micajah.Common.WebControls
                         break;
                 }
 
-                if (m_Container.HasControls())
-                    this.Controls.Add(m_Container);
+                if (m_MainContainer.HasControls())
+                    this.Controls.Add(m_MainContainer);
             }
             finally
             {
                 if (htmlContainer != null) htmlContainer.Dispose();
-                if (m_Container != null) m_Container.Dispose();
+                if (m_MainContainer != null) m_MainContainer.Dispose();
             }
         }
 

@@ -1080,6 +1080,39 @@ namespace Micajah.Common.Bll.Providers
             RemoveSettingsValuesFromCache(organizationId, instanceId, groupId);
         }
 
+        internal static bool OrganizationProviderIsGoogle(Guid organizationId)
+        {
+            Setting setting = GetSettingByShortName("ProviderName");
+
+            if (setting != null)
+            {
+                setting = GetOrganizationSetting(organizationId, setting.SettingId);
+
+                if (setting != null)
+                {
+                    if (string.Compare(setting.Value, GoogleProvider.ProviderName, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        internal static void UpdateOrganizationProvider(Guid organizationId, string providerName)
+        {
+            if (!string.IsNullOrEmpty(providerName))
+            {
+                Setting setting = GetSettingByShortName("ProviderName");
+                if (setting != null)
+                {
+                    setting.Value = providerName;
+                    UpdateSettingValue(setting, organizationId, null, null);
+                }
+            }
+        }
+
         #endregion
 
         #region Public Methods

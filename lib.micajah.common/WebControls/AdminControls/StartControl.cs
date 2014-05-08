@@ -90,20 +90,20 @@ namespace Micajah.Common.WebControls.AdminControls
         private void RegisterFancyBoxInitScript()
         {
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInitScript", @"$(""a[rel=WatchVideo]"").fancybox({
-    'type': 'swf',
-    'swf': {
-        'allowfullscreen': 'true',
-        'allowscriptaccess': 'true'
+    type: 'swf',
+    swf: {
+        allowfullscreen: true,
+        allowscriptaccess: true
     },
-    'width': '800',
-    'height': '450',
-    'showNavArrows': false,
-    'titlePosition': 'inside',
-    'transitionIn': 'none',
-    'transitionOut': 'none'
+    width: 800,
+    height: 450,
+    showNavArrows: false,
+    titlePosition: 'inside',
+    transitionIn: 'none',
+    transitionOut: 'none'
 });
 "
-, true);
+                , true);
         }
 
         #endregion
@@ -146,8 +146,6 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page);
-
             this.MasterPage.VisibleSubmenu = false;
             this.MasterPage.VisibleLeftArea = false;
             this.MasterPage.EnableJQuery = true;

@@ -79,7 +79,7 @@
 
     #support{margin-bottom: 40px;}
     #emailsupport h4 {padding-left: 40px; background: url('$help.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
-    .email-emailsupport {float: right; margin-top: 8px;}
+    .email-emailsupport {float: right; margin-top: 8px; margin-right: 10px;}
     .phonesupport-label {padding-left: 40px; background: url('$phone.png$') top left no-repeat; line-height: 32px; padding-top: 2px; float: left;}
     #phone-service {display: none; color: #006792;}
     #phone-service h4 {background: none;}
@@ -92,24 +92,7 @@
     .training strong {font-size: 1.2em; margin-right: 20px;}
     .training p span {font-size: 1.4em;}
     #training-consulting td p {padding: 15px 0 0;}
-    .purchase {float: right;}
-
-/* --  CC Update Pop -- */
-
-#credit_card_form .content .cards_select {margin: 0 74px;}
-#credit_card_form {min-width: 350px; overflow: hidden; padding: 10px;}
-#credit_card_form .content {color: #333333; font-size: 12px; width: 380px;}
-#credit_card_form .content h2 {border-bottom: 1px solid #DDDDDD !important; font-size: 16px; margin: 0 0 10px -10px; padding: 0 10px 10px; width: 100%;}  
-ul.cards {height: 32px; margin: 0 0 25px !important;}
-ul.cards li {float: left; list-style-type: none; margin: 0 7px 0 0 !important;}
-ul.cards .card.visa {background-image: url("$visa.png$");}
-ul.cards .card.master {background-image: url("$mastercard.png$");}
-ul.cards .card.american-express {background-image: url("$amex.png$");}
-ul.cards .card.discover {background-image: url("$discover.png$");}
-ul.cards .card {background-position: 0 0; background-repeat: no-repeat; float: left; height: 32px; text-indent: -9999px; width: 51px;}
-ul.cards li.text {color: #999999; font-size: 11px; position: relative; top: 9px;}
-dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3px;}
-    
+    .purchase {float: right;} 
 
 /* Clear Floated Elements
 ----------------------------------------------------------------------------------------------------*/
@@ -119,26 +102,6 @@ dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3
     * html .clearfix {height: 1%;}
     .clearfix {display: block;}
     .feature-toggle {float: right; margin-top: 5px;}
-
-/* -- Green Buttons  Here on Down -- */
-    .buttons, input[type="submit"].buttons 
-    { 
-	    background-color: #92C74F;
-        border: 1px solid #79A541;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px 5px 5px 5px;
-        color: #FFFFFF !important;
-        cursor: pointer;
-        font-size: 1.05em;
-        font-weight: bold;
-        overflow: visible;
-        padding: 0.6em 2em;
-        text-decoration: none;
-        width: auto;
-    }
-    
-    .buttons:hover, input[type="submit"].buttons:hover {color: #fff; border-color: #39F; background: #39F;}
     
     /*-----------------------  Progress Bars ------------------------------*/
 

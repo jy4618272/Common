@@ -3644,6 +3644,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Menu.
+        /// </summary>
+        internal static string MainMenu_MenuLink_Text {
+            get {
+                return ResourceManager.GetString("MainMenu_MenuLink_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page Help [?].
         /// </summary>
         internal static string MasterPage_HelpLink_Text1 {

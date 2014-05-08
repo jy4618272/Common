@@ -1,36 +1,4 @@
-﻿* {
-    -webkit-appearance: none;
-}
-
-body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-::-webkit-input-placeholder {
-    color: #d4d4d4; /* WebKit browsers */
-}
-
-:-moz-placeholder {
-    color: #d4d4d4; /* Mozilla Firefox 4 to 18 */
-}
-
-::-moz-placeholder {
-    color: #d4d4d4; /* Mozilla Firefox 19+ */
-}
-
-:-ms-input-placeholder {
-    color: #d4d4d4; /* Internet Explorer 10+ */
-}
-
-ul, li {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-form {
+﻿form {
     max-width: 450px;
     margin: 0 auto;
 }
@@ -50,18 +18,7 @@ select {
 }
 
 input {
-    -webkit-appearance: none;
     width: 90%;
-    box-sizing: border-box;
-    padding: 12px;
-    margin: 0;
-    border: 1px solid #a7a7a7;
-    border-radius: 5px 5px 5px 5px;
-    font-size: 18px;
-    padding: 12px 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
 }
 
 .row {
@@ -69,17 +26,13 @@ input {
     float: left;
     width: 100%;
     text-align: left;
+    margin: 0;
 }
 
     .row small {
         text-align: left;
         font-size: 11px;
     }
-
-.clear {
-    float: none;
-    clear: both;
-}
 
 span.Title {
     font-size: 14px;
@@ -156,7 +109,7 @@ div.SectionTitle {
 }
 
 .Agree {
-    padding: 40px 0 50px 0;
+    padding: 40px 7px 50px 7px;
     font-family: Calibri, Arial, Sans-Serif;
     font-size: 14px;
     color: #999999;
@@ -197,7 +150,7 @@ small {
 }
 
     .RadCaptcha_Default img {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
 .Summary {
@@ -223,14 +176,10 @@ small {
 .modal-window {
     background-color: #ffffff;
     color: #222;
-    padding: 20px;
-    border-radius: 10px;
     text-align: center;
 }
 
     .modal-window .header {
-        border-radius: 10px 10px 0 0;
-        margin: -20px -20px 10px;
         padding: 25px 20px 20px 20px;
         color: #fff;
         text-shadow: -1px -1px 1px rgba(0,0,0,0.3);
@@ -243,11 +192,10 @@ small {
             padding-left: 100px;
         }
 
-    .modal-window h2 {
-        margin: 0;
-    }
+        .modal-window .header h2 {
+            margin: 0;
+        }
 
     .modal-window p {
-        margin: 0 0 10px;
         font-size: 18px;
     }

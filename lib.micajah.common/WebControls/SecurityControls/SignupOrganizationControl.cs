@@ -2,7 +2,6 @@
 using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
@@ -147,10 +146,10 @@ namespace Micajah.Common.WebControls.SecurityControls
             ErrorContinueLabel.Text = Resources.SignupOrganizationControl_ErrorContinueLabel_Text;
             ErrorContinueLink.Text = Resources.SignupOrganizationControl_ErrorContinueLink_Text;
 
-            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl))
+            if (string.IsNullOrEmpty(FrameworkConfiguration.Current.WebApplication.MobileLogoImageUrl))
                 LogoImage.Visible = LogoImage3.Visible = false;
             else
-                LogoImage.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.BigLogoImageUrl;
+                LogoImage.ImageUrl = LogoImage3.ImageUrl = FrameworkConfiguration.Current.WebApplication.MobileLogoImageUrl;
         }
 
         private static bool ValidateEmail(string email, out string errorMessage)
@@ -240,8 +239,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         {
             base.OnPreRender(e);
 
-            Micajah.Common.Pages.MasterPage.RegisterGlobalStyleSheet(this.Page, MasterPageTheme.Modern);
-            Micajah.Common.Pages.MasterPage.RegisterClientEncodingScript(this.Page);
+            Micajah.Common.Pages.MasterPage.CreatePageHeader(this.Page, false, true, true, true, true, true);
 
             if (!this.IsPostBack)
             {
@@ -461,22 +459,24 @@ namespace Micajah.Common.WebControls.SecurityControls
             {
                 ModalLoginLink.NavigateUrl = LoginProvider.Current.GetLoginUrl(Email.Text, false);
 
-                ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryScript", ResourceProvider.JQueryScriptUrl);
-                ScriptManager.RegisterClientScriptInclude(this.Page, this.Page.GetType(), "JQueryEasyModalScript", ResourceProvider.GetResourceUrl("Scripts.jquery.easyModal.js", true));
-
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ModalWindowScript", @"Sys.Application.add_load(function() {
-    $('#ModalWindow').easyModal({
-        top: 40,
-        overlay: 0.2,
-        overlayClose: false,
-        closeOnEscape: false
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "FancyBoxInitScript", @"Sys.Application.add_load(function() {
+    $.fancybox({
+        type: 'inline',
+        href: '#ModalWindow',
+        width: 430,
+        height: 335,
+        showNavArrows: false,
+        titlePosition: 'inside',
+        transitionIn: 'none',
+        transitionOut: 'none',
+        modal: true,
+        padding: 0,
+        autoDimensions: false
     });
-
-    $('#ModalWindow').trigger('openModal');
 });
 
 "
-                    , true);
+    , true);
 
                 return;
             }

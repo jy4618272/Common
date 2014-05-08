@@ -2565,4 +2565,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="GoogleIntegrationControl_TokenError_Text" xml:space="preserve">
     <value>&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google admin authentication token is wrong or expired. Please change it by clicking on "Change Google admin authentication token" button.</value>
   </data>
+  <data name="MainMenu_MenuLink_Text" xml:space="preserve">
+    <value>Menu</value>
+  </data>
 </root>

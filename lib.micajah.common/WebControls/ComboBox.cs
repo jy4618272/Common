@@ -1,3 +1,7 @@
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
+using Micajah.Common.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -5,10 +9,6 @@ using System.Globalization;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Properties;
 using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls
@@ -254,7 +254,6 @@ namespace Micajah.Common.WebControls
                 if (m_Validator != null)
                 {
                     m_Validator.Attributes["controltovalidate2"] = this.ClientID + "_Input";
-                    m_Validator.Style[HtmlTextWriterStyle.MarginLeft] = "17px !important";
                     m_Validator.RenderControl(writer);
                 }
             }

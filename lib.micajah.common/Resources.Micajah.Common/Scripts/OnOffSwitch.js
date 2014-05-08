@@ -35,9 +35,7 @@
             return this.handle = $("<div class='" + this.handleClass + "'>\n  <div class='" + this.handleRightClass + "'>\n    <div class='" + this.handleCenterClass + "' />\n  </div>\n</div>").appendTo(this.container);
         };
         iOSCheckbox.prototype.disableTextSelection = function () {
-            if ($.browser.msie) {
-                return $([this.handle, this.offLabel, this.onLabel, this.container]).attr("unselectable", "on");
-            }
+            return $([this.handle, this.offLabel, this.onLabel, this.container]).attr("unselectable", "on");
         };
         iOSCheckbox.prototype._getDimension = function (elem, dimension) {
             if ($.fn.actual != null) {
@@ -179,10 +177,7 @@
             this.offLabel.css({
                 width: containerWidth - this.containerRadius
             });
-            offset = this.containerRadius + 1;
-            if ($.browser.msie && $.browser.version < 7) {
-                offset -= 3;
-            }
+            offset = this.containerRadius + 1 - 3;
             this.rightSide = containerWidth - this._getDimension(this.handle, "width") - offset;
             if (this.elem.is(':checked')) {
                 this.handle.css({

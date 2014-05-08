@@ -1,15 +1,16 @@
-<%@ Master Language="C#" AutoEventWireup="true" Inherits="MasterPage" Codebehind="MasterPage.master.cs" %>
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="MasterPage" CodeBehind="MasterPage.master.cs" %>
 
 <!DOCTYPE html>
 <html>
 <head runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title></title>
 </head>
 <body>
     <form id="form1" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" AsyncPostBackTimeout="5000" />
-    <asp:ContentPlaceHolder ID="PageBody" runat="server">
-    </asp:ContentPlaceHolder>
+        <asp:ScriptManager ID="ScriptManager1" runat="server" AsyncPostBackTimeout="5000" />
+        <asp:ContentPlaceHolder ID="PageBody" runat="server">
+        </asp:ContentPlaceHolder>
     </form>
 </body>
 </html>

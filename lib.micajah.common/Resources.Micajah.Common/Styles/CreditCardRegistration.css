@@ -1,6 +1,4 @@
-﻿
-/* --  CC Update Pop -- */
-.header.cc-nag {
+﻿.header.cc-nag {
     background: none repeat scroll 0 0 #3399FF;
     color: #FFFFFF;
     margin: -10px -10px 10px;
@@ -9,18 +7,84 @@
     width: 400px;
     font-family: Arial,sans-serif;
 }
-.header.cc-nag h2 {margin: 0;}
-#credit_card_form .content .cards_select {margin: 0 74px;}
-#credit_card_form {min-width: 380px; overflow: hidden; padding: 10px;}
-#credit_card_form .content {color: #333333; font-size: 12px; width: 380px;}
-#credit_card_form .content h2 {border-bottom: 1px solid #DDDDDD !important; font-size: 16px; margin: 0 0 10px -10px; padding: 0 10px 10px; width: 100%;}  
-ul.cards {height: 32px; margin: 0 0 25px !important;}
-ul.cards li {float: left; list-style-type: none; margin: 0 7px 0 0 !important;}
-ul.cards .card.visa {background-image: url("$visa.png$");}
-ul.cards .card.master {background-image: url("$mastercard.png$");}
-ul.cards .card.american-express {background-image: url("$amex.png$");}
-ul.cards .card.discover {background-image: url("$discover.png$");}
-ul.cards .card {background-position: 0 0; background-repeat: no-repeat; float: left; height: 32px; text-indent: -9999px; width: 51px;}
-ul.cards li.text {color: #999999; font-size: 11px; position: relative; top: 9px;}
-dl.form dt {color: #333333; font-size: 14px; font-weight: bold; margin-bottom: 3px;}
-.ccformsubmit {text-align: center;}
+
+    .header.cc-nag h2 {
+        margin: 0;
+    }
+
+#credit_card_form .content .cards_select {
+    margin: 0 50px;
+}
+
+#credit_card_form {
+    overflow: hidden;
+    padding: 10px;
+}
+
+    #credit_card_form .content {
+        color: #333333;
+        font-size: 12px;
+        width: 380px;
+    }
+
+        #credit_card_form .content h2 {
+            border-bottom: 1px solid #DDDDDD !important;
+            font-size: 16px;
+            margin: 0 0 10px -10px;
+            padding: 0 10px 10px;
+            width: 100%;
+        }
+
+ul.cards {
+    height: 32px;
+    margin: 0 0 25px !important;
+}
+
+    ul.cards li {
+        float: left;
+        list-style-type: none;
+        margin: 0 7px 0 0 !important;
+    }
+
+    ul.cards .card.visa {
+        background-image: url("$visa.png$");
+    }
+
+    ul.cards .card.master {
+        background-image: url("$mastercard.png$");
+    }
+
+    ul.cards .card.american-express {
+        background-image: url("$amex.png$");
+    }
+
+    ul.cards .card.discover {
+        background-image: url("$discover.png$");
+    }
+
+    ul.cards .card {
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        float: left;
+        height: 32px;
+        text-indent: -9999px;
+        width: 51px;
+    }
+
+    ul.cards li.text {
+        color: #999999;
+        font-size: 11px;
+        position: relative;
+        top: 9px;
+    }
+
+dl.form dt {
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.ccformsubmit {
+    text-align: center;
+}

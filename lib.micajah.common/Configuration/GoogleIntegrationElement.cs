@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Configuration;
 using System.Xml.XPath;
 
 namespace Micajah.Common.Configuration
@@ -33,20 +35,6 @@ namespace Micajah.Common.Configuration
         {
             get { return (bool)this["enabled"]; }
             set { this["enabled"] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the value endpoint address of Google OpenID Provider.
-        /// </summary>
-        [ConfigurationProperty("openIdProviderEndpointAddress")]
-        public string OpenIdProviderEndpointAddress
-        {
-            get
-            {
-                string value = (string)this["openIdProviderEndpointAddress"];
-                return (string.IsNullOrEmpty(value) ? "https://www.google.com/accounts/o8/id" : value);
-            }
-            set { this["openIdProviderEndpointAddress"] = value; }
         }
 
         /// <summary>
@@ -105,6 +93,16 @@ namespace Micajah.Common.Configuration
         public TextConfigurationElement<string> AnalyticsCode
         {
             get { return (TextConfigurationElement<string>)this["analyticsCode"]; }
+        }
+
+        /// <summary>
+        /// Gets or sets the domains of mail from Google.
+        /// </summary>
+        [ConfigurationProperty("mailDomains")]
+        [TypeConverter(typeof(CommaDelimitedStringCollectionConverter))]
+        public StringCollection MailDomains
+        {
+            get { return (StringCollection)this["mailDomains"]; }
         }
 
         #endregion
