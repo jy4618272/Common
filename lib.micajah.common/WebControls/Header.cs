@@ -82,6 +82,11 @@ namespace Micajah.Common.WebControls
                 {
                     rightContainer.Attributes["class"] = "col-sm-8";
 
+                    if (m_MasterPage.VisibleSearchControl)
+                    {
+                        rightContainer.Attributes["class"] += " clear";
+                    }
+
                     HtmlGenericControl ul = (HtmlGenericControl)links;
 
                     if (m_MasterPage.VisibleHelpLink)

@@ -26,7 +26,7 @@
     /* Search */
     .Mp_Hdr .S {
         float: left;
-        height: 30px;
+        height: 50px;
         padding: 7px;
         width: 65%;
     }
@@ -294,7 +294,7 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
         width: 75%;
     }
 
-    .Mp_Hdr .col-sm-8 {
+    .Mp_Hdr .col-sm-8.clear {
         clear: both;
     }
 
