@@ -476,6 +476,7 @@ namespace Micajah.Common.WebControls
                         }
                         else
                         {
+                            link.Text = item.CustomName;
                             links.Add(link);
                         }
                     }
