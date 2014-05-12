@@ -266,7 +266,7 @@ namespace Micajah.Common.Bll.Providers
             string[] keyNames = null;
             if (masterPageTheme == MasterPageTheme.Modern)
             {
-                keyNames = new string[] { "NotificationCross.png", "AddNew.png", "DropMenu.png", "SearchLense.png" };
+                keyNames = new string[] { "AddNew.png", "NotificationCross.png", "SearchLense.png" };
             }
             else if (masterPageTheme == MasterPageTheme.Gradient)
             {
