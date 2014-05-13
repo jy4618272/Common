@@ -93,14 +93,19 @@ namespace Micajah.Common.WebControls
                     }
                     else
                     {
-                        HyperLink link = new HyperLink();
-                        link.Text = item.CustomName;
-                        link.NavigateUrl = item.CustomAbsoluteNavigateUrl;
-                        link.ToolTip = item.CustomDescription;
+                        using (HyperLink link = new HyperLink())
+                        {
+                            link.Text = item.CustomName;
+                            link.NavigateUrl = item.CustomAbsoluteNavigateUrl;
+                            link.ToolTip = item.CustomDescription;
 
-                        td.Controls.Add(link);
+                            td.Controls.Add(link);
+                        }
 
-                        td.Controls.Add(new LiteralControl("&nbsp;&nbsp;|&nbsp;&nbsp;"));
+                        using (LiteralControl literal = new LiteralControl("&nbsp;&nbsp;|&nbsp;&nbsp;"))
+                        {
+                            td.Controls.Add(literal);
+                        }
                     }
                     i++;
                 }

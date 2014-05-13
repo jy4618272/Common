@@ -442,3 +442,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Login", Scope = "member", Target = "Micajah.Common.Application.EmailSendingReason.#CreateNewLogin")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Login", Scope = "member", Target = "Micajah.Common.Application.EmailSendingReason.#ChangeLogin")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "login", Scope = "member", Target = "Micajah.Common.Bll.Providers.LoginProvider.#GetPasswordRecoveryUrl(System.String,System.Boolean)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope = "member", Target = "Micajah.Common.WebControls.ComboBox.#ApplyStyle(Telerik.Web.UI.RadComboBox)")]
