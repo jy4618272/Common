@@ -158,7 +158,6 @@
     <Content Include="Pages1\Schedule.aspx" />
     <Content Include="Pages1\SmallerIcons.aspx" />
     <Content Include="Pages1\UpdateProgress.aspx" />
-    <Content Include="Pages2\AdvancedGridView.aspx" />
     <Content Include="Pages2\CommonStyles.aspx" />
     <Content Include="Pages2\HtmlEditor.aspx" />
     <Content Include="Pages2\TreeViewExtended.aspx" />
@@ -308,13 +307,6 @@
     </Compile>
     <Compile Include="Pages1\UpdateProgress.aspx.designer.cs">
       <DependentUpon>UpdateProgress.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages2\AdvancedGridView.aspx.cs">
-      <DependentUpon>AdvancedGridView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages2\AdvancedGridView.aspx.designer.cs">
-      <DependentUpon>AdvancedGridView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages2\CommonStyles.aspx.cs">
       <DependentUpon>CommonStyles.aspx</DependentUpon>
