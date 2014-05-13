@@ -193,9 +193,13 @@ namespace Micajah.Common.WebControls
                 EnsureChildControls();
                 m_RadDateTimePicker.DateInput.DateFormat = value;
                 m_RadDateTimePicker.DateInput.DisplayDateFormat = value;
-                int idx = value.IndexOf("h", StringComparison.OrdinalIgnoreCase);
-                if (idx > -1)
-                    m_RadDateTimePicker.TimeView.TimeFormat = value.Substring(idx);
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    int idx = value.IndexOf("h", StringComparison.OrdinalIgnoreCase);
+                    if (idx > -1)
+                        m_RadDateTimePicker.TimeView.TimeFormat = value.Substring(idx);
+                }
             }
         }
 
