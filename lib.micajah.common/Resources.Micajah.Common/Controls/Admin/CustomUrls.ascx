@@ -13,7 +13,7 @@
     {
         position: static !important;
     }
-    #ctl00_PageBody_Cu_VanityUrlTextbox_rgxp
+    #ctl00_PageBody_Cu_VanityUrlTextBox_rgxp
     {
         position: static !important;
     }
@@ -26,7 +26,7 @@
                 <h1><asp:Literal ID="SimpleViewTitleLabel" runat="server"/></h1>                
                 <table>                    
                     <tr>
-                        <td style="width:110px"><mits:TextBox ID="VanityUrlTextbox" runat="server" MaxLength="1024" Columns="16" Width="110px" ValidationGroup="<%# SimpleView.ClientID %>" ValidationType="RegularExpression" ValidationExpression="[\w-]+" /> </td>
+                        <td style="width:110px"><mits:TextBox ID="VanityUrlTextBox" runat="server" MaxLength="1024" Columns="16" Width="110px" ValidationGroup="<%# SimpleView.ClientID %>" ValidationType="RegularExpression" ValidationExpression="[\w-]+" /> </td>
                         <td style="padding-top: 7px;" valign="top"><asp:Label ID="VanityUrlDomainLabel" runat="server" Font-Size="14px" /></td>
                     </tr>               
                     <tr>

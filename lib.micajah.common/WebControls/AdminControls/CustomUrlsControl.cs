@@ -6,6 +6,7 @@ using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
 using System;
+using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Web.UI;
@@ -32,7 +33,7 @@ namespace Micajah.Common.WebControls.AdminControls
         protected LinkButton ChangeViewButton;
 
         protected Literal SimpleViewTitleLabel;
-        protected TextBox VanityUrlTextbox;
+        protected TextBox VanityUrlTextBox;
         protected Label VanityUrlDomainLabel;
         protected Button SimpleViewSaveButton;
         protected System.Web.UI.HtmlControls.HtmlGenericControl SimpleErrorPanel;
@@ -65,7 +66,7 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (CustomUrlsMultiView.ActiveViewIndex == 0)
                 {
                     sb.Append("function ValidateCustomUrls(source, arguments) { arguments.IsValid = true; ");
-                    sb.AppendFormat("var elem1 = document.getElementById('{0}_txt'); ", VanityUrlTextbox.ClientID);
+                    sb.AppendFormat("var elem1 = document.getElementById('{0}_txt'); ", VanityUrlTextBox.ClientID);
                     sb.Append("if (elem1) { arguments.IsValid = (!StringIsEmpty(elem1.value)); } }\r\n");
                 }
                 else
@@ -282,14 +283,14 @@ namespace Micajah.Common.WebControls.AdminControls
                 else
                     e.InputParameters["instanceId"] = null;
 
-                e.InputParameters["partialCustomUrl"] = VanityUrlTextbox.Text.ToLowerInvariant();
+                e.InputParameters["partialCustomUrl"] = VanityUrlTextBox.Text.ToLowerInvariant();
             }
         }
 
         protected void EntityDataSourceSimpleView_Updating(object sender, ObjectDataSourceMethodEventArgs e)
         {
             if (e != null)
-                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(VanityUrlTextbox.Text) ? null : VanityUrlTextbox.Text.ToLowerInvariant();
+                e.InputParameters["partialCustomUrl"] = string.IsNullOrEmpty(VanityUrlTextBox.Text) ? null : VanityUrlTextBox.Text.ToLowerInvariant();
         }
 
         protected void SimpleViewSaveButton_Click(object sender, EventArgs e)
@@ -312,16 +313,16 @@ namespace Micajah.Common.WebControls.AdminControls
                         row = CustomUrlProvider.GetCustomUrlByOrganizationId(orgId);
 
                     if (row != null)
-                        CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextbox.Text.ToLowerInvariant());
+                        CustomUrlProvider.UpdateCustomUrl(row.CustomUrlId, null, VanityUrlTextBox.Text.ToLowerInvariant());
                     else
-                        CustomUrlProvider.InsertCustomUrl(orgId, instId, null, VanityUrlTextbox.Text.ToLowerInvariant());
+                        CustomUrlProvider.InsertCustomUrl(orgId, instId, null, VanityUrlTextBox.Text.ToLowerInvariant());
 
                     SimpleViewTitleLabel.Text = Resources.CustomUrlsControl_SimpleViewMessageLabel_Text;
 
                     if (SaveButtonClick != null)
                         SaveButtonClick(sender, e);
                 }
-                catch (Exception ex)
+                catch (ConstraintException ex)
                 {
                     BaseControl.ShowError(ex, SimpleErrorPanel);
                 }
@@ -402,7 +403,7 @@ namespace Micajah.Common.WebControls.AdminControls
                     row = CustomUrlProvider.GetCustomUrlByOrganizationId(m_UserContext.OrganizationId);
 
                 if (row != null)
-                    VanityUrlTextbox.Text = row.PartialCustomUrl.ToLowerInvariant();
+                    VanityUrlTextBox.Text = row.PartialCustomUrl.ToLowerInvariant();
             }
         }
 
