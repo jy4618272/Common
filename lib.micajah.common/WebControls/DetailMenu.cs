@@ -779,9 +779,11 @@ namespace Micajah.Common.WebControls
 
                     for (var idx = 0; idx < (this.RepeatColumnsInternal - cellsCount); idx++)
                     {
-                        TableCell td = new TableCell();
-                        td.Text = Resources.NonBreakingSpace;
-                        row.Cells.Add(td);
+                        using (TableCell td = new TableCell())
+                        {
+                            td.Text = Resources.NonBreakingSpace;
+                            row.Cells.Add(td);
+                        }
                     }
 
                     if ((!widthAssigned) && (row.Cells.Count == this.RepeatColumnsInternal))
@@ -799,60 +801,68 @@ namespace Micajah.Common.WebControls
         private List<HtmlGenericControl> CreateDetailMenuItems(ActionCollection items, bool root)
         {
             List<HtmlGenericControl> list = new List<HtmlGenericControl>();
-            HtmlGenericControl h = null;
             HtmlGenericControl li = null;
             HtmlGenericControl p = null;
             HtmlGenericControl span = null;
-            HyperLink link = null;
 
             try
             {
                 foreach (Micajah.Common.Bll.Action action in items)
                 {
                     li = new HtmlGenericControl("li");
+                    list.Add(li);
 
                     if (root && action.GroupInDetailMenu)
                     {
                         li.Attributes["class"] = "G";
-                        h = new HtmlGenericControl("h1");
-                        li.Controls.Add(h);
+
+                        using (HtmlGenericControl h = new HtmlGenericControl("h1"))
+                        {
+                            h.InnerHtml = action.CustomName;
+                            li.Controls.Add(h);
+                        }
                     }
                     else
                     {
-                        h = new HtmlGenericControl("h2");
-                        li.Controls.Add(this.CreateItemLink(action, null, false, h, false));
-                    }
+                        using (HtmlGenericControl h = new HtmlGenericControl("h2"))
+                        {
+                            h.InnerHtml = action.CustomName;
 
-                    h.InnerHtml = action.CustomName;
-                    list.Add(li);
+                            li.Controls.Add(this.CreateItemLink(action, null, false, h, false));
+                        }
+                    }
 
                     if (root && action.GroupInDetailMenu)
                         list.AddRange(this.CreateDetailMenuItems(action.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated), false));
 
                     if (!string.IsNullOrEmpty(action.VideoUrl))
                     {
-                        link = new HyperLink();
-                        link.NavigateUrl = action.VideoUrl;
-                        link.Target = "_blank";
-                        link.Text = Resources.DetailMenu_VideoLink_Text;
-
                         span = new HtmlGenericControl("span");
-                        span.Controls.Add(link);
-
                         li.Controls.Add(span);
+
+                        using (HyperLink link = new HyperLink())
+                        {
+                            link.NavigateUrl = action.VideoUrl;
+                            link.Target = "_blank";
+                            link.Text = Resources.DetailMenu_VideoLink_Text;
+
+                            span.Controls.Add(link);
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(action.LearnMoreUrl))
                     {
-                        link = new HyperLink();
-                        link.NavigateUrl = action.LearnMoreUrl;
-                        link.Target = "_blank";
-                        link.Text = Resources.DetailMenu_LearnMoreLink_Text;
-
                         span = new HtmlGenericControl("span");
-                        span.Controls.Add(link);
-
                         li.Controls.Add(span);
+
+                        using (HyperLink link = new HyperLink())
+                        {
+                            link.NavigateUrl = action.LearnMoreUrl;
+                            link.Target = "_blank";
+                            link.Text = Resources.DetailMenu_LearnMoreLink_Text;
+
+                            span.Controls.Add(link);
+                        }
                     }
 
                     string customDescription = action.CustomDescription;
@@ -869,7 +879,6 @@ namespace Micajah.Common.WebControls
             }
             finally
             {
-                if (h != null) h.Dispose();
                 if (li != null) li.Dispose();
                 if (p != null) p.Dispose();
                 if (span != null) span.Dispose();
