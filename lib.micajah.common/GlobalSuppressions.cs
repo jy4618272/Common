@@ -446,3 +446,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Scope = "member", Target = "Micajah.Common.WebControls.AdminControls.CustomUrlsControl.#CustomUrlsMultiView")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiView", Scope = "member", Target = "Micajah.Common.WebControls.AdminControls.CustomUrlsControl.#CustomUrlsMultiView")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "login", Scope = "member", Target = "Micajah.Common.Bll.Providers.EmailProvider.#DeleteEmails(System.Guid,System.String)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Auth", Scope = "type", Target = "Micajah.Common.Bll.OAuthTokenType")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Scope = "type", Target = "Micajah.Common.WebControls.CommonGridViewStatus")]
