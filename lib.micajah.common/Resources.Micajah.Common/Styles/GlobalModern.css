@@ -450,11 +450,11 @@ li.Button.DropMenu {
         background-repeat: no-repeat;
         background-position: center center;
         text-align: center;
-        width: 96px;
+        width: 150px;
     }
 
     li.Button.DropMenu ul {
-        min-width: 115px;
+        min-width: 136px;
         position: absolute;
         margin: 27px 0 0 -24px;
         border-radius: 0px 0px 4px 4px;
