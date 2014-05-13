@@ -32,6 +32,7 @@
     [Country]              NVARCHAR (255)   CONSTRAINT [DF_Mc_Organization_Country] DEFAULT (N'') NOT NULL,
     [Currency]             CHAR (3)         CONSTRAINT [DF_Mc_Organization_Currency] DEFAULT ('') NOT NULL,
     [HowYouHearAboutUs]    NVARCHAR (255)   CONSTRAINT [DF_Mc_Organization_HowYouHearAboutUs] DEFAULT ('') NOT NULL,
+	[GoogleAdminAuthToken] NVARCHAR (500)   NULL,
     CONSTRAINT [PK_Mc_Organization] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
     CONSTRAINT [FK_Mc_Organization_Mc_Database] FOREIGN KEY ([DatabaseId]) REFERENCES [dbo].[Mc_Database] ([DatabaseId]),
     CONSTRAINT [FK_Mc_Organization_Mc_Organization] FOREIGN KEY ([ParentOrganizationId]) REFERENCES [dbo].[Mc_Organization] ([OrganizationId])

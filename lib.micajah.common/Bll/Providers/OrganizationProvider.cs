@@ -552,6 +552,7 @@ namespace Micajah.Common.Bll.Providers
                 organization.Country = row.Country;
                 organization.Currency = row.Currency;
                 organization.HowYouHearAboutUs = row.HowYouHearAboutUs;
+                if (!row.IsGoogleAdminAuthTokenNull()) organization.GoogleAdminAuthToken = row.GoogleAdminAuthToken;
 
                 return organization;
             }
@@ -1269,6 +1270,28 @@ namespace Micajah.Common.Bll.Providers
                 SettingProvider.RemoveOrganizationEmailSettingsFromCache(organizationId);
                 CustomUrlProvider.RemoveOrganizationCustomUrlFromCache(organizationId);
             }
+        }
+
+        /// <summary>
+        /// Updates the Google Admin Auth token of the specified organization.
+        /// </summary>
+        /// <param name="organizationId">The identifier of the organization.</param>
+        /// <param name="googleAdminAuthToken">The Google Admin Auth token.</param>
+        public static void UpdateOrganizationGoogleAdminAuthToken(Guid organizationId, string googleAdminAuthToken)
+        {
+            using (OrganizationTableAdapter adapter = new OrganizationTableAdapter())
+            {
+                adapter.UpdateOrganizationGoogleAdminAuthToken(organizationId, googleAdminAuthToken);
+            }
+
+            MasterDataSet.OrganizationRow row = GetOrganizationRow(organizationId);
+            Organization organization = CreateOrganization(row);
+
+            RemoveConnectionStringFromCache(organizationId);
+            RemoveWebsiteIdFromCache(organizationId);
+            PutOrganizationToCache(organization);
+
+            RaiseOrganizationUpdated(organization);
         }
 
         #endregion

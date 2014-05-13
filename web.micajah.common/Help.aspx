@@ -3,4 +3,7 @@
 <%@ MasterType TypeName="Micajah.Common.Pages.MasterPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="PageBody" runat="Server">
     This is a help page.
+
+    
+
 </asp:Content>
