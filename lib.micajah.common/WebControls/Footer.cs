@@ -1,6 +1,5 @@
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
 using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using Micajah.Common.WebControls.SetupControls;
@@ -20,16 +19,14 @@ namespace Micajah.Common.WebControls
     {
         #region Members
 
-        private Micajah.Common.Pages.MasterPage m_MasterPage;
         private UserContext m_UserContext;
 
         #endregion
 
         #region Constructors
 
-        public Footer(Micajah.Common.Pages.MasterPage masterPage, UserContext user)
+        public Footer(UserContext user)
         {
-            m_MasterPage = masterPage;
             m_UserContext = user;
         }
 
@@ -64,9 +61,6 @@ namespace Micajah.Common.WebControls
             HtmlGenericControl footerDiv = null;
             HtmlGenericControl leftDiv = null;
             HtmlGenericControl copyrightDiv = null;
-            HtmlGenericControl ul1 = null;
-            HtmlGenericControl ul2 = null;
-            HtmlGenericControl li = null;
 
             try
             {
@@ -75,117 +69,37 @@ namespace Micajah.Common.WebControls
 
                 WebApplicationElement webAppSettings = FrameworkConfiguration.Current.WebApplication;
 
-                if (webAppSettings.MasterPage.Theme == MasterPageTheme.Modern)
+                if (m_UserContext != null)
                 {
-                    if (m_UserContext != null)
+                    leftDiv = new HtmlGenericControl("div");
+                    StringBuilder sb = new StringBuilder();
+
+                    if (m_UserContext.OrganizationId != Guid.Empty)
+                        sb.Append(m_UserContext.Organization.Name);
+
+                    if (webAppSettings.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
                     {
-                        leftDiv = new HtmlGenericControl("div");
-                        ul1 = new HtmlGenericControl("ul");
-
-                        if (m_UserContext.OrganizationId != Guid.Empty)
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.InnerHtml = m_UserContext.Organization.Name;
-                            ul1.Controls.Add(li);
-                        }
-
-                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.InnerHtml = "|";
-                            ul1.Controls.Add(li);
-
-                            li = new HtmlGenericControl("li");
-                            li.InnerHtml = m_UserContext.Instance.Name;
-                            ul1.Controls.Add(li);
-                        }
-
-                        string roleName = RoleProvider.GetRoleName(m_UserContext.RoleId);
-                        if (!string.IsNullOrEmpty(roleName))
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.InnerHtml = "|";
-                            ul1.Controls.Add(li);
-
-                            li = new HtmlGenericControl("li");
-                            li.InnerHtml = roleName;
-                            ul1.Controls.Add(li);
-                        }
-
-                        leftDiv.Controls.Add(ul1);
+                        if (sb.Length > 0) sb.Append("<br />");
+                        sb.Append(m_UserContext.Instance.Name);
                     }
 
-                    if (leftDiv != null) leftDiv.Attributes["class"] = "L";
-                    copyrightDiv.Attributes["class"] = "R";
-
-                    if (webAppSettings.MasterPage.Theme == MasterPageTheme.Modern)
+                    string roleName = RoleProvider.GetRoleName(m_UserContext.RoleId);
+                    if (!string.IsNullOrEmpty(roleName))
                     {
-                        if (m_MasterPage.VisibleApplicationLogo)
-                            copyrightDiv.Controls.Add(MasterPage.ApplicationLogo);
-                    }
-                    else
-                    {
-                        ul2 = new HtmlGenericControl("ul");
-
-                        if (m_MasterPage.VisibleApplicationLogo)
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.Controls.Add(MasterPage.ApplicationLogo);
-                            ul2.Controls.Add(li);
-                        }
-
-                        li = new HtmlGenericControl("li");
-                        li.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.UtcNow.Year, GetCompanyName(webAppSettings.Copyright));
-                        ul2.Controls.Add(li);
-
-                        if (webAppSettings.MasterPage.Footer.VisibleEngineeredBy)
-                        {
-                            li = new HtmlGenericControl("li");
-                            li.Attributes["class"] = "Cpy";
-                            li.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_EngineeredByFormatString, BaseControl.GetHyperlink("http://www.micajah.com", Resources.Footer_MicajahCompanyName));
-                            ul2.Controls.Add(li);
-                        }
-
-                        copyrightDiv.Controls.Add(ul2);
+                        if (sb.Length > 0) sb.Append("<br />");
+                        sb.Append(roleName);
                     }
 
-                    if (leftDiv != null) footerDiv.Controls.Add(leftDiv);
-                    footerDiv.Controls.Add(copyrightDiv);
+                    leftDiv.Attributes["class"] = "L";
+                    leftDiv.InnerHtml = sb.ToString();
                 }
-                else
-                {
-                    if (m_UserContext != null)
-                    {
-                        leftDiv = new HtmlGenericControl("div");
-                        StringBuilder sb = new StringBuilder();
 
-                        if (m_UserContext.OrganizationId != Guid.Empty)
-                            sb.Append(m_UserContext.Organization.Name);
+                copyrightDiv.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.UtcNow.Year, GetCompanyName(webAppSettings.Copyright));
+                if (webAppSettings.MasterPage.Footer.VisibleEngineeredBy)
+                    copyrightDiv.InnerHtml += "<br />" + string.Format(CultureInfo.InvariantCulture, Resources.Footer_EngineeredByFormatString, BaseControl.GetHyperlink("http://www.micajah.com", Resources.Footer_MicajahCompanyName));
 
-                        if (webAppSettings.EnableMultipleInstances && (m_UserContext.InstanceId != Guid.Empty))
-                        {
-                            if (sb.Length > 0) sb.Append("<br />");
-                            sb.Append(m_UserContext.Instance.Name);
-                        }
-
-                        string roleName = RoleProvider.GetRoleName(m_UserContext.RoleId);
-                        if (!string.IsNullOrEmpty(roleName))
-                        {
-                            if (sb.Length > 0) sb.Append("<br />");
-                            sb.Append(roleName);
-                        }
-
-                        leftDiv.Attributes["class"] = "L";
-                        leftDiv.InnerHtml = sb.ToString();
-                    }
-
-                    copyrightDiv.InnerHtml = string.Format(CultureInfo.InvariantCulture, Resources.Footer_CopyrightInformationFormatString, DateTime.UtcNow.Year, GetCompanyName(webAppSettings.Copyright));
-                    if (webAppSettings.MasterPage.Footer.VisibleEngineeredBy)
-                        copyrightDiv.InnerHtml += "<br />" + string.Format(CultureInfo.InvariantCulture, Resources.Footer_EngineeredByFormatString, BaseControl.GetHyperlink("http://www.micajah.com", Resources.Footer_MicajahCompanyName));
-
-                    if (leftDiv != null) footerDiv.Controls.Add(leftDiv);
-                    footerDiv.Controls.Add(copyrightDiv);
-                }
+                if (leftDiv != null) footerDiv.Controls.Add(leftDiv);
+                footerDiv.Controls.Add(copyrightDiv);
 
                 footerDiv.Attributes["class"] = "Mp_Ftr";
 
@@ -193,9 +107,6 @@ namespace Micajah.Common.WebControls
             }
             finally
             {
-                if (li != null) li.Dispose();
-                if (ul1 != null) ul1.Dispose();
-                if (ul2 != null) ul2.Dispose();
                 if (leftDiv != null) leftDiv.Dispose();
                 if (copyrightDiv != null) copyrightDiv.Dispose();
                 if (footerDiv != null) footerDiv.Dispose();

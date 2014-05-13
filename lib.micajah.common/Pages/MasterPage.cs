@@ -1727,7 +1727,7 @@ namespace Micajah.Common.Pages
 
                 if (this.VisibleFooter)
                 {
-                    m_Footer = new Footer(this, m_UserContext);
+                    m_Footer = new Footer(m_UserContext);
                     Controls.Add(m_Footer);
                 }
             }
