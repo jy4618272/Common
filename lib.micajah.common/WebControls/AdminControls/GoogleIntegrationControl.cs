@@ -230,6 +230,8 @@ namespace Micajah.Common.WebControls.AdminControls
 
         protected void btnCancel_Click(object sender, EventArgs e)
         {
+            mvStep1.ActiveViewIndex = -1;
+            mvStep2.ActiveViewIndex = -1;
             mvConnectionSettings.SetActiveView(vwToken);
         }
 
@@ -244,6 +246,8 @@ namespace Micajah.Common.WebControls.AdminControls
         protected void btnSaveToken_Click(object sender, EventArgs e)
         {
             trFormError.Visible = false;
+            mvStep1.ActiveViewIndex = -1;
+            mvStep2.ActiveViewIndex = -1;
             try
             {
                 Service service = new Service(AppsNameTable.GAppsService, "sherpadesk");
@@ -252,24 +256,17 @@ namespace Micajah.Common.WebControls.AdminControls
                 if (trGoogleDomain.Visible)
                 {
                     string googleDomain = txtGoogleDomain.Text;
-                    AppsService appService = new AppsService(googleDomain, txtGoogleEmail.Text, txtGooglePassword.Text);
-                    UserFeed userFeed = appService.RetrieveAllUsers();
+                    AppsService appService = new AppsService(googleDomain, txtGoogleEmail.Text, txtGooglePassword.Text);                    
+                    GroupFeed groups = appService.Groups.RetrieveAllGroups();
 
                     EmailSuffixProvider.InsertEmailSuffixName(UserContext.Current.OrganizationId, null, ref googleDomain);
                     FillDomains();
+                }                
 
-                    service.setUserCredentials(txtGoogleEmail.Text, txtGooglePassword.Text);
-                    token = service.QueryClientLoginToken();
-                    OrganizationProvider.UpdateOrganizationGoogleAdminAuthToken(UserContext.Current.OrganizationId, token);
-                    mvConnectionSettings.SetActiveView(vwToken);
-                }
-                else
-                {
-                    service.setUserCredentials(txtGoogleEmail.Text, txtGooglePassword.Text);
-                    token = service.QueryClientLoginToken();
-                    OrganizationProvider.UpdateOrganizationGoogleAdminAuthToken(UserContext.Current.OrganizationId, token);
-                    mvConnectionSettings.SetActiveView(vwToken);
-                }
+                service.setUserCredentials(txtGoogleEmail.Text, txtGooglePassword.Text);
+                token = service.QueryClientLoginToken();
+                OrganizationProvider.UpdateOrganizationGoogleAdminAuthToken(UserContext.Current.OrganizationId, token);                    
+                mvConnectionSettings.SetActiveView(vwToken);
             }
             catch (AppsException a)
             {
@@ -322,7 +319,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             if (lbl.Text.Contains("403"))
             {
-                lbl.Text += Resources.GoogleIntegrationControl_DomainError_Text;
+                lbl.Text += string.Format(Resources.GoogleIntegrationControl_DomainError_Text, ResolveUrl("~/mc/admin/organizationprofile.aspx"));
             }
         }
 

@@ -2560,7 +2560,7 @@ Do you want to link email "{1}" to this account?</value>
     <value>Your google domain:</value>
   </data>
   <data name="GoogleIntegrationControl_DomainError_Text" xml:space="preserve">
-    <value>&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google domain is wrong. Please change it or add new domain on "Organization Profile" page in "Email Suffixes" field.</value>
+    <value>&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google domain is wrong. Please change it or add new domain on &lt;a href="{0}"&gt;"Organization Profile"&lt;/a&gt; page in "Email Suffixes" field.</value>
   </data>
   <data name="GoogleIntegrationControl_TokenError_Text" xml:space="preserve">
     <value>&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google admin authentication token is wrong or expired. Please change it by clicking on "Change Google admin authentication token" button.</value>

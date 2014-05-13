@@ -2049,7 +2049,7 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google domain is wrong. Please change it or add new domain on &quot;Organization Profile&quot; page in &quot;Email Suffixes&quot; field..
+        ///   Looks up a localized string similar to &lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;It looks like your Google domain is wrong. Please change it or add new domain on &lt;a href=&quot;{0}&quot;&gt;&quot;Organization Profile&quot;&lt;/a&gt; page in &quot;Email Suffixes&quot; field..
         /// </summary>
         internal static string GoogleIntegrationControl_DomainError_Text {
             get {
