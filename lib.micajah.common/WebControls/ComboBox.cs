@@ -271,7 +271,10 @@ namespace Micajah.Common.WebControls
         /// <param name="comboBox">The Telerik.Web.UI.RadComboBox object to apply the styles to.</param>
         public static void ApplyStyle(RadComboBox comboBox)
         {
-            comboBox.PreRender += new EventHandler(ComboBox_PreRender);
+            if (comboBox != null)
+            {
+                comboBox.PreRender += new EventHandler(ComboBox_PreRender);
+            }
         }
 
         #endregion
