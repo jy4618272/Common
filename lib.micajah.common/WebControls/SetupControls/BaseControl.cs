@@ -227,15 +227,21 @@ namespace Micajah.Common.WebControls.SetupControls
 
         protected internal static void HideControls(ControlCollection controls)
         {
-            foreach (Control control in controls)
+            if (controls != null)
             {
-                control.Visible = false;
+                foreach (Control control in controls)
+                {
+                    control.Visible = false;
+                }
             }
         }
 
         protected internal static void LoadResources(CommonGridView grid, string className)
         {
-            LoadResources(grid, className, grid.ID);
+            if (grid != null)
+            {
+                LoadResources(grid, className, grid.ID);
+            }
         }
 
         protected internal static void LoadResources(CommonGridView grid, string className, string gridId)
@@ -324,8 +330,10 @@ namespace Micajah.Common.WebControls.SetupControls
             form.Visible = false;
         }
 
-        protected internal static void ListAllowPaging(CommonGridView grid, object dataSource)
+        protected internal static void ListAllowPaging(GridView grid, object dataSource)
         {
+            if (grid == null) return;
+
             int count = 0;
             if (dataSource == null)
                 dataSource = grid.DataSource;
@@ -347,7 +355,7 @@ namespace Micajah.Common.WebControls.SetupControls
             grid.AllowPaging = (count > grid.PageSize);
         }
 
-        protected internal static bool ShowError(Exception exception, HtmlGenericControl errorPanel)
+        protected internal static bool ShowError(Exception exception, HtmlContainerControl errorPanel)
         {
             if (exception != null)
             {
