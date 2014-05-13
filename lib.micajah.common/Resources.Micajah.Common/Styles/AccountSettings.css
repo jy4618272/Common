@@ -35,7 +35,7 @@
     .account-type {width: 90px; max-width: 150px; border-right: 1px solid #417da6; overflow: hidden; float: left; padding: 7px 0;}
     .planinfo h2, .payment-set h4 {margin: 0; padding: 0; line-height: 1em;}
     .payment-set {float: left; width: 500px; margin:0;}
-    .payment-update {float: right; margin-top: 15px;}
+    .payment-update {float: right; margin-top: 10px;}
     .payment-status {margin-top: 10px; padding-left: 50px; background: url($credit_card.png$) 10px -5px no-repeat; min-height: 32px;}
     .account-heading {margin: 40px 0 20px; padding: 10px 15px 10px 0; border-bottom: 2px solid #417da6;}
     .cancel-account
