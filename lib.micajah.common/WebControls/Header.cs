@@ -80,13 +80,6 @@ namespace Micajah.Common.WebControls
 
                 if (m_ModernTheme)
                 {
-                    rightContainer.Attributes["class"] = "col-sm-8";
-
-                    if (m_MasterPage.VisibleSearchControl)
-                    {
-                        rightContainer.Attributes["class"] += " col-sm-8-clearfix";
-                    }
-
                     HtmlGenericControl ul = (HtmlGenericControl)links;
 
                     if (m_MasterPage.VisibleHelpLink)
@@ -98,10 +91,17 @@ namespace Micajah.Common.WebControls
 
                         li = new HtmlGenericControl("li");
                         li.Controls.Add(link);
+
+                        if (ul == null)
+                        {
+                            ul = new HtmlGenericControl("ul");
+                            ul.Attributes["class"] = "nav pull-right";
+                        }
+
                         ul.Controls.Add(li);
                     }
 
-                    rightContainer.Controls.Add(links);
+                    rightContainer.Controls.Add(ul);
                 }
                 else
                 {
@@ -560,15 +560,21 @@ namespace Micajah.Common.WebControls
                     leftContainer.Controls.Add(ctrl);
                 }
 
+                ctrl = this.CreateLogo();
+                if (ctrl != null)
+                {
+                    leftContainer.Controls.Add(ctrl);
+                }
+
                 if (m_MasterPage.VisibleSearchControl)
                 {
-                    leftContainer.Controls.Add(CreateSearchControl(null));
+                    ctrl = CreateSearchControl(null);
+
+                    leftContainer.Controls.Add(ctrl);
                 }
 
                 if (leftContainer.HasControls())
                 {
-                    leftContainer.Attributes["class"] = "col-sm-4";
-
                     container.Controls.Add(leftContainer);
                 }
 
