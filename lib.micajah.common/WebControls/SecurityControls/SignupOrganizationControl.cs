@@ -204,12 +204,10 @@ namespace Micajah.Common.WebControls.SecurityControls
                     howYouHearAboutUs = Resources.SignupOrganizationControl_HowYouHearAboutUs_Text;
                 }
 
-                string password = LoginProvider.Current.GeneratePassword(3, 0).ToLowerInvariant();
-
                 Guid orgId = OrganizationProvider.InsertOrganization(OrganizationName.Text, null, null
                     , null, null, null, null, null, null, string.Empty, howYouHearAboutUs
                     , templateInstance.TimeZoneId, templateInstance.InstanceId
-                    , Email.Text, password, this.UserFirstName, this.UserLastName, null, null, null
+                    , Email.Text, null, this.UserFirstName, this.UserLastName, null, null, null
                     , OrganizationUrl.Text, this.Request
                     , true);
 
