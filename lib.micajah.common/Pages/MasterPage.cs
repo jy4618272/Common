@@ -1523,6 +1523,10 @@ namespace Micajah.Common.Pages
                 {
                     RegisterClientEncodingScript(page);
                 }
+                else
+                {
+                    ResourceProvider.RegisterMasterPageScript(page);
+                }
 
                 if (enableFancyBox)
                 {
@@ -1791,7 +1795,7 @@ namespace Micajah.Common.Pages
             if (script.IndexOf("Mp_EncodeTextBoxes", StringComparison.OrdinalIgnoreCase) == -1)
                 page.Form.Attributes["onsubmit"] += " Mp_EncodeTextBoxes();";
 
-            ScriptManager.RegisterClientScriptInclude(page, page.GetType(), "MasterPageScripts", ResourceProvider.GetResourceUrl("Scripts.MasterPage.js", true));
+            ResourceProvider.RegisterMasterPageScript(page);
         }
 
         public void UpdateBreadcrumbs()

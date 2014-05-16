@@ -1,13 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="Micajah.Common.WebControls.CreditCardRegistrationControl" %>
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
-<script type="text/javascript">
-    // Override $.fancybox.init to fix ASP.NET PostBack bug;
-    var fancyboxInitOriginal = $.fancybox.init;
-    $.fancybox.init = function () {
-        fancyboxInitOriginal.apply(arguments);
-        $("#fancybox-tmp, #fancybox-loading, #fancybox-overlay, #fancybox-wrap").appendTo("form:first");
-    };
-</script>
 <div style="display: none;">
     <div id="credit_card_form">
         <asp:Panel ID="pnlMissingCard" CssClass="header cc-nag" runat="server" Visible="false">
@@ -16,7 +8,7 @@
         </asp:Panel>
         <div class="content">
             <asp:UpdatePanel runat="server" ID="UpdatePanel3">
-                <ContentTemplate>
+                <contenttemplate>
                     <mits:NoticeMessageBox runat="server" ID="msgStatus" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
                     <div class="cards_select">  
                         <ul class="cards">
@@ -50,7 +42,7 @@
                     <div class="ccformsubmit">
                         <asp:Button runat="server" ID="btnUpdateCC" CssClass="Large Green" Text="Update Credit Card" OnClick="btnUpdateCC_Click"/>
 	                </div>
-                </ContentTemplate>
+                </contenttemplate>
             </asp:UpdatePanel>
         </div>
     </div>

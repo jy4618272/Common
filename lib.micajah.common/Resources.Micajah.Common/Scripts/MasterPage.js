@@ -210,6 +210,14 @@ if (typeof (Sys) !== "undefined") {
 }
 
 if (typeof ($) !== "undefined") {
+    if (typeof ($.fancybox) == "function") {
+        var originalInit = $.fancybox.init;
+        $.fancybox.init = function () {
+            originalInit.apply(arguments);
+            $("#fancybox-tmp, #fancybox-loading, #fancybox-overlay, #fancybox-wrap").appendTo("form:first");
+        };
+    }
+
     $(function () {
         $('.Mp_Mm p.mobile-nav, .Mp_Mm ul li a').on('click', function () {
             var elem = $('.Mp_Mm ul, .Mp_Smt');
@@ -219,5 +227,5 @@ if (typeof ($) !== "undefined") {
                 elem.slideDown();
             }
         });
-    })
+    });
 }
