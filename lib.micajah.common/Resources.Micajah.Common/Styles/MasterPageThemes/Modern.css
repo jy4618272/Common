@@ -92,6 +92,7 @@
         border-top: 5px solid;
         border-right: 5px solid transparent;
         border-left: 5px solid transparent;
+        height: 6px;
     }
 
     .Mp_Hdr .nav {
@@ -152,6 +153,7 @@
     .Mp_Hdr ul.nav li .glyphicon {
         margin-right: 7px;
         font-size: 14px;
+        line-height: 45px;
     }
 
         .Mp_Hdr ul.nav li .glyphicon.no-margin {
