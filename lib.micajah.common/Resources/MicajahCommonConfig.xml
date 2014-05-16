@@ -159,7 +159,7 @@
       </settings>
     </action>
     <action id="00000000-0000-0000-0000-000000000043" type="GlobalNavigationLink" name="Log In" description="Log In" navigateUrl="/web.micajah.common/mc/login.aspx" orderNumber="1000" instanceRequired="false" handle="true" />
-    <action id="CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE" type="GlobalNavigationLink" name="Full Name of User" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" orderNumber="10001" authenticationRequired="true" instanceRequired="false" handle="true">
+    <action id="CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE" type="GlobalNavigationLink" name="Full Name of User" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000021" orderNumber="10001" authenticationRequired="true" instanceRequired="false" handle="true" roles="*">
       <actions>
         <action id="00000000-0000-0000-0000-000000000042" type="GlobalNavigationLink" name="MC Setup" description="Micajah.Common Setup" navigateUrl="/mc/detailmenu.aspx?pageid=00000000000000000000000000000027" orderNumber="10202" authenticationRequired="true" instanceRequired="false" />
         <action id="67E444B9-1D77-4F59-BC03-93308E71CBF9" type="GlobalNavigationLink" name="Getting Started" navigateUrl="" orderNumber="10203" handle="true" authenticationRequired="true" instanceRequired="false" roles="OrgAdmin" />

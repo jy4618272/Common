@@ -1,3 +1,4 @@
+using Micajah.Common.Bll.Handlers;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.WebControls;
@@ -427,9 +428,7 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                return (this.Handle
-                    ? (this.BuiltIn ? Handlers.ActionHandler.Instance.GetDescription(this)
-                    : Handlers.ActionHandler.Current.GetDescription(this)) : this.Description);
+                return (this.Handle ? ActionHandler.Current.GetDescription(this) : this.Description);
             }
         }
 
@@ -437,9 +436,7 @@ namespace Micajah.Common.Bll
         {
             get
             {
-                return (this.Handle
-                    ? (this.BuiltIn ? Handlers.ActionHandler.Instance.GetName(this) : Handlers.ActionHandler.Current.GetName(this))
-                    : this.Name);
+                return (this.Handle ? Handlers.ActionHandler.Current.GetName(this) : this.Name);
             }
         }
 
@@ -449,7 +446,7 @@ namespace Micajah.Common.Bll
             {
                 if (this.Handle)
                 {
-                    string navigateUrl = this.BuiltIn ? Handlers.ActionHandler.Instance.GetNavigateUrl(this) : Handlers.ActionHandler.Current.GetNavigateUrl(this);
+                    string navigateUrl = ActionHandler.Current.GetNavigateUrl(this);
                     bool isDetailMenu = ((this.ActionType == ActionType.Page) && (string.Compare(navigateUrl, string.Empty, StringComparison.OrdinalIgnoreCase) == 0));
                     return isDetailMenu ? ResourceProvider.GetDetailMenuPageUrl(this.ActionId) : CustomUrlProvider.CreateApplicationAbsoluteUrl(navigateUrl);
                 }
@@ -523,9 +520,7 @@ namespace Micajah.Common.Bll
         /// <returns>true, if the access to the action is denied; otherwise, false.</returns>
         internal bool AccessDenied()
         {
-            return (this.Handle
-                ? (this.BuiltIn ? Handlers.ActionHandler.Instance.AccessDenied(this) : Handlers.ActionHandler.Current.AccessDenied(this))
-                : false);
+            return (this.Handle ? ActionHandler.Current.AccessDenied(this) : false);
         }
 
         /// <summary>
