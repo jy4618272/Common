@@ -1891,7 +1891,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\MasterPageThemes\Modern.css" />
-    <EmbeddedResource Include="Resources.Micajah.Common\Images\MasterPageThemes\Modern\Help.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Styles\DetailMenuThemes\Modern.css" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\Arrow.png" />
     <EmbeddedResource Include="Resources.Micajah.Common\Images\DetailMenuThemes\Modern\CheckBox.png" />

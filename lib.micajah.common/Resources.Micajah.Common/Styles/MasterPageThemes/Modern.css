@@ -154,6 +154,10 @@
         font-size: 14px;
     }
 
+        .Mp_Hdr ul.nav li .glyphicon.no-margin {
+            margin: 0;
+        }
+
 /* Bread crumbs */
 div.Mp_B {
     padding: 15px 0 0 0;

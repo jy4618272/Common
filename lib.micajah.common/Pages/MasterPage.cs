@@ -926,7 +926,7 @@ namespace Micajah.Common.Pages
         {
             if (this.VisibleMainMenu)
             {
-                m_MainMenu = new MainMenu(this, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+                m_MainMenu = new MainMenu(this, m_UserContext, m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
                 Controls.Add(m_MainMenu);
             }
 

@@ -2,7 +2,6 @@ using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
-using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
 using System.Collections;
@@ -80,28 +79,7 @@ namespace Micajah.Common.WebControls
 
                 if (m_ModernTheme)
                 {
-                    HtmlGenericControl ul = (HtmlGenericControl)links;
-
-                    if (m_MasterPage.VisibleHelpLink)
-                    {
-                        link = new HyperLink();
-                        link.ToolTip = Resources.MasterPage_HelpLink_Text2;
-                        link.ImageUrl = ResourceProvider.GetResourceUrl(ResourceProvider.GetMasterPageThemeColorResource(MasterPageTheme.Modern, MasterPageThemeColor.NotSet, "Help.png"), true);
-                        link.Attributes["onclick"] = m_MasterPage.HelpLinkOnClick;
-
-                        li = new HtmlGenericControl("li");
-                        li.Controls.Add(link);
-
-                        if (ul == null)
-                        {
-                            ul = new HtmlGenericControl("ul");
-                            ul.Attributes["class"] = "nav pull-right";
-                        }
-
-                        ul.Controls.Add(li);
-                    }
-
-                    rightContainer.Controls.Add(ul);
+                    rightContainer.Controls.Add(links);
                 }
                 else
                 {
@@ -351,7 +329,23 @@ namespace Micajah.Common.WebControls
 
             try
             {
-                foreach (Micajah.Common.Bll.Action item in ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
+                Micajah.Common.Bll.ActionCollection items = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+
+                if (!m_ModernTheme)
+                {
+                    Micajah.Common.Bll.Action item = items.FindByActionId(ActionProvider.MyAccountMenuGlobalNavigationLinkActionId);
+
+                    if (item != null)
+                    {
+                        Micajah.Common.Bll.ActionCollection items2 = item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
+
+                        items.AddRange(items2);
+
+                        items.Sort();
+                    }
+                }
+
+                foreach (Micajah.Common.Bll.Action item in items)
                 {
                     link = new HyperLink();
                     link.NavigateUrl = item.CustomAbsoluteNavigateUrl;
@@ -362,7 +356,7 @@ namespace Micajah.Common.WebControls
                         li = new HtmlGenericControl("li");
 
                         string iconUrl = null;
-                        string text = null;
+                        string text = item.CustomName;
                         string cssClass = "Icon";
 
                         if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
@@ -370,16 +364,20 @@ namespace Micajah.Common.WebControls
                             iconUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}www.gravatar.com/avatar/{2}?s=24"
                                 , (isSecureConnection ? Uri.UriSchemeHttps : Uri.UriSchemeHttp), Uri.SchemeDelimiter, Support.CalculateMD5Hash(m_UserContext.Email.ToLowerInvariant()));
 
-                            text = m_UserContext.FirstName + Html32TextWriter.SpaceChar + m_UserContext.LastName;
-                            if (string.IsNullOrWhiteSpace(text))
-                            {
-                                text = m_UserContext.LoginName;
-                            }
-
                             cssClass += " Avtr";
                         }
                         else
                         {
+                            if (item.ActionId == ActionProvider.PageHelpGlobalNavigationLinkActionId)
+                            {
+                                if (!m_MasterPage.VisibleHelpLink)
+                                {
+                                    continue;
+                                }
+
+                                link.Attributes["onclick"] = m_MasterPage.HelpLinkOnClick;
+                            }
+
                             if (!string.IsNullOrEmpty(item.IconUrl))
                             {
                                 iconUrl = item.IconUrl;
@@ -392,24 +390,21 @@ namespace Micajah.Common.WebControls
                                     using (Label label = new Label())
                                     {
                                         label.CssClass = "glyphicon " + iconUrl;
+
+                                        if (string.IsNullOrEmpty(text))
+                                        {
+                                            label.CssClass += " no-margin";
+                                        }
+
                                         link.Controls.Add(label);
                                     }
 
                                     iconUrl = null;
                                 }
                             }
-
-                            text = item.CustomName;
                         }
 
-                        if (string.IsNullOrEmpty(iconUrl))
-                        {
-                            using (LiteralControl literal = new LiteralControl(text))
-                            {
-                                link.Controls.Add(literal);
-                            }
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(iconUrl))
                         {
                             using (Image image = new Image())
                             {
@@ -418,7 +413,10 @@ namespace Micajah.Common.WebControls
 
                                 link.Controls.Add(image);
                             }
+                        }
 
+                        if (!string.IsNullOrEmpty(text))
+                        {
                             using (LiteralControl literal = new LiteralControl(text))
                             {
                                 link.Controls.Add(literal);
@@ -464,21 +462,15 @@ namespace Micajah.Common.WebControls
                     {
                         if (item.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
                         {
-                            foreach (Micajah.Common.Bll.Action item2 in item.GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated))
+                            if ((m_UserContext != null) && (m_UserContext.OrganizationId == Guid.Empty))
                             {
-                                link2 = new HyperLink();
-                                link2.Text = item2.CustomName;
-                                link2.NavigateUrl = item2.CustomAbsoluteNavigateUrl;
-                                link2.ToolTip = item2.Description;
-
-                                links.Add(link2);
+                                continue;
                             }
                         }
-                        else
-                        {
-                            link.Text = item.CustomName;
-                            links.Add(link);
-                        }
+
+                        link.Text = item.CustomName;
+
+                        links.Add(link);
                     }
                 }
 

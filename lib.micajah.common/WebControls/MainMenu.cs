@@ -3,6 +3,7 @@ using Micajah.Common.Bll.Providers;
 using Micajah.Common.Configuration;
 using Micajah.Common.Pages;
 using Micajah.Common.Properties;
+using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -20,6 +21,7 @@ namespace Micajah.Common.WebControls
         #region Members
 
         private Micajah.Common.Pages.MasterPage m_MasterPage;
+        private UserContext m_UserContext;
         private IList m_ActionIdList;
         private bool m_IsFrameworkAdmin;
         private bool m_IsAuthenticated;
@@ -29,9 +31,10 @@ namespace Micajah.Common.WebControls
 
         #region Constructors
 
-        public MainMenu(Micajah.Common.Pages.MasterPage masterPage, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
+        public MainMenu(Micajah.Common.Pages.MasterPage masterPage, UserContext user, IList actionIdList, bool isFrameworkAdmin, bool isAuthenticated)
         {
             m_MasterPage = masterPage;
+            m_UserContext = user;
             m_ActionIdList = actionIdList;
             m_IsFrameworkAdmin = isFrameworkAdmin;
             m_IsAuthenticated = isAuthenticated;
@@ -168,6 +171,18 @@ namespace Micajah.Common.WebControls
 
                         foreach (Micajah.Common.Bll.Action item in this.Items)
                         {
+                            if (item.ActionId == ActionProvider.StartPageActionId)
+                            {
+                                bool redirect = false;
+
+                                Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(m_UserContext, out redirect);
+
+                                if (redirect)
+                                {
+                                    continue;
+                                }
+                            }
+
                             ul.Controls.Add(CreateLinkAsListItem(item, ((item.ActionId == mainMenuItemId) ? cssClass : null)));
                         }
 
@@ -185,7 +200,20 @@ namespace Micajah.Common.WebControls
 
                         foreach (Micajah.Common.Bll.Action item in this.Items)
                         {
+                            if (item.ActionId == ActionProvider.StartPageActionId)
+                            {
+                                bool redirect = false;
+
+                                Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(m_UserContext, out redirect);
+
+                                if (redirect)
+                                {
+                                    continue;
+                                }
+                            }
+
                             itemLink = Submenu.CreateLink(item, ((item.ActionId == mainMenuItemId) ? "S" : null), false);
+
                             controlList.Add(itemLink);
                         }
 

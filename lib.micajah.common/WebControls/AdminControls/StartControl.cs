@@ -52,9 +52,13 @@ namespace Micajah.Common.WebControls.AdminControls
         private void LoadStartMenuCheckedItems()
         {
             bool redirect = false;
+
             m_StartMenuCheckedItems = GetStartMenuCheckedItems(UserContext.Current, out redirect);
+
             if (redirect)
-                Redirect();
+            {
+                HideLink.Visible = false;
+            }
         }
 
         private static void SaveStartMenuCheckedItems(string value)

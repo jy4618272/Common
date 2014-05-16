@@ -1,4 +1,3 @@
-using Micajah.Common.Application;
 using Micajah.Common.Configuration;
 using Micajah.Common.Dal;
 using Micajah.Common.WebControls;
@@ -24,7 +23,14 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid GlobalNavigationLinksActionId = new Guid("00000000-0000-0000-0000-000000000001");
         internal readonly static Guid ConfigurationGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000002");
         internal readonly static Guid MyAccountGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000005");
+        internal readonly static Guid SetupGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000042");
+        internal readonly static Guid LoginGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000043");
+        internal readonly static Guid LoginAsUserGlobalNavigationLinkActionId = new Guid("709A6B39-36A2-43FC-AF18-24C2E3332D7A");
         internal readonly static Guid LogOffGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000006");
+        internal readonly static Guid StartGlobalNavigationLinkActionId = new Guid("67E444B9-1D77-4F59-BC03-93308E71CBF9");
+        internal readonly static Guid MyAccountMenuGlobalNavigationLinkActionId = new Guid("CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE");
+        internal readonly static Guid PageHelpGlobalNavigationLinkActionId = new Guid("58772BF8-1F1F-439E-A27B-6EE641DE21F2");
+
         internal readonly static Guid PagesAndControlsActionId = new Guid("00000000-0000-0000-0000-000000000007");
         internal readonly static Guid SetupEntitiesPageActionId = new Guid("00000000-0000-0000-0000-000000000008");
         internal readonly static Guid ConfigurationPageActionId = new Guid("00000000-0000-0000-0000-000000000009");
@@ -39,11 +45,8 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid UserActivateInactivatePageActionId = new Guid("97BE82B7-48B7-4A9C-BD14-6A2494EF2AA7");
         internal readonly static Guid UserAssociateToOrganizationStructurePageActionId = new Guid("DAB9B65E-0358-408E-A2F1-2D616FCA33EC");
         internal readonly static Guid SetupPageActionId = new Guid("00000000-0000-0000-0000-000000000027");
-        internal readonly static Guid LoginAsUserGlobalNavigationLinkActionId = new Guid("709A6B39-36A2-43FC-AF18-24C2E3332D7A");
         internal readonly static Guid OrganizationsPageActionId = new Guid("00000000-0000-0000-0000-000000000040");
         internal readonly static Guid TreesPageActionId = new Guid("B3CCC73F-7194-4F0A-AABB-77AE91E31CE9");
-        internal readonly static Guid SetupGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000042");
-        internal readonly static Guid LoginGlobalNavigationLinkActionId = new Guid("00000000-0000-0000-0000-000000000043");
         internal readonly static Guid TreePageActionId = new Guid("7D20C2C0-09DC-4399-89D0-FE16757FF169");
         internal readonly static Guid EntitiesFieldsPageActionId = new Guid("5A25507B-F8B2-4D5C-AC70-71A0DD5C8729");
         internal readonly static Guid EntityFieldsPageActionId = new Guid("6E03B1C3-7AD0-460B-BF73-E3F9055A71DE");
@@ -53,16 +56,15 @@ namespace Micajah.Common.Bll.Providers
         internal readonly static Guid RulesPageActionId = new Guid("BB0239EC-6259-4D7A-B392-FA22ED8FEF65");
         internal readonly static Guid RuleParametersPageActionId = new Guid("CD1EBE2B-C229-421C-847A-6FF560665D1A");
         internal readonly static Guid CustomUrlsPageActionId = new Guid("291F64C6-EF01-4D22-864D-AE3B4FF92D38");
-        internal readonly static Guid LdapIntegrationPageActionId = new Guid("A3223AB8-D9E7-437A-AE0E-14164C0F90B7");        
+        internal readonly static Guid LdapIntegrationPageActionId = new Guid("A3223AB8-D9E7-437A-AE0E-14164C0F90B7");
         internal readonly static Guid LdapServerSettingsPageActionId = new Guid("F53C5189-BD4D-47E5-88EF-58B81178F7EF");
         internal readonly static Guid LdapGroupMappingsPageActionId = new Guid("72B411D0-FB81-4444-B217-AFC4416A5319");
         internal readonly static Guid LdapUserInfoPageActionId = new Guid("5749FF70-4592-4B91-8579-5E7E203C0410");
-        internal readonly static Guid LdapLogsPageActionId = new Guid("B39050DE-9B13-43D2-8382-48E92435C46A");                
+        internal readonly static Guid LdapLogsPageActionId = new Guid("B39050DE-9B13-43D2-8382-48E92435C46A");
         internal readonly static Guid SignUpOrganizationPageActionId = new Guid("3E9E3609-7F2A-4DF2-92DF-DFFBD6978E84");
         internal readonly static Guid StartPageActionId = new Guid("4CB3BB95-A829-4DF7-BAD8-05FB38FF019A");
         internal readonly static Guid GoogleIntegrationPageActionId = new Guid("D79FFA5D-54C2-4EB0-AB47-42DDA41C1380");
         internal readonly static Guid ActivityReportActionId = new Guid("7062A21C-BA40-4A8F-9F33-DA68751E4F0D");
-        internal readonly static Guid MyAccountMenuGlobalNavigationLinkActionId = new Guid("CFDBB5D3-0A4E-41BB-B7BB-4C47781806DE");
         internal readonly static Guid OAuthPageActionId = new Guid("5900F3EF-F423-4AC8-BAA5-828B746E3F43");
 
         // The objects which are used to synchronize access to the cached collections and lists.
