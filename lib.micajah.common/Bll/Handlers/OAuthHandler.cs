@@ -1,6 +1,5 @@
 ﻿using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth.Messages;
-using Micajah.Common.Application;
 using Micajah.Common.Bll.Providers;
 using Micajah.Common.Bll.Providers.OAuth;
 using Micajah.Common.Dal;
@@ -10,7 +9,7 @@ using System.Web;
 
 namespace Micajah.Common.Bll.Handlers
 {
-    public class OAuthHandler : IHttpHandler
+    public class OAuthHandler : IHttpHandler, IDisposable
     {
         #region Members
 
@@ -32,6 +31,22 @@ namespace Micajah.Common.Bll.Handlers
         public OAuthHandler()
         {
             m_Provider = new ServiceProvider();
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (m_Provider != null)
+                {
+                    m_Provider.Dispose();
+                    m_Provider = null;
+                }
+            }
         }
 
         #endregion
@@ -58,6 +73,11 @@ namespace Micajah.Common.Bll.Handlers
 
                 TokenProvider.SetTokenCookie(token);
 
+                if (context == null)
+                {
+                    throw new ArgumentNullException("context");
+                }
+
                 context.Response.Redirect(ActionProvider.FindAction(ActionProvider.OAuthPageActionId).AbsoluteNavigateUrl);
             }
             else if ((requestAccessToken = request as AuthorizedTokenRequest) != null)
@@ -80,6 +100,13 @@ namespace Micajah.Common.Bll.Handlers
             {
                 throw new InvalidOperationException();
             }
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         #endregion
