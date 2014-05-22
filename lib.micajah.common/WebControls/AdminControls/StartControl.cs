@@ -165,7 +165,28 @@ namespace Micajah.Common.WebControls.AdminControls
                     VideoPanel.Visible = false;
 
                 this.RegisterFancyBoxInitScript();
+
+                FindWarningMessage(StartMenu.ParentAction);
             }
+        }
+
+        private bool FindWarningMessage(Micajah.Common.Bll.Action action)
+        {
+            ActionCollection accColl = action.GetAvailableChildActions(Micajah.Common.Security.UserContext.Current.ActionIdList, false, true);
+            foreach (Micajah.Common.Bll.Action act in accColl)
+            {
+                if (act.Description == "DispayAsWarningMessage")
+                {
+                    if ((m_StartMenuCheckedItems != null) && m_StartMenuCheckedItems.Contains(act.ActionId))
+                    {
+                        ((Micajah.Common.Pages.MasterPage)Page.Master).MessageType = NoticeMessageType.Warning;
+                        ((Micajah.Common.Pages.MasterPage)Page.Master).Message = act.CustomName;
+                    }
+                    return true;
+                }
+                if (FindWarningMessage(act)) return true;
+            }
+            return false;
         }
 
         protected void StartMenu_ItemDataBound(object sender, CommandEventArgs e)
@@ -177,7 +198,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
             Micajah.Common.Bll.Action action = (Micajah.Common.Bll.Action)e.CommandArgument;
 
-            if (string.IsNullOrEmpty(action.Name))
+            if (string.IsNullOrEmpty(action.Name) || action.Description == "DispayAsWarningMessage")
             {
                 li.Visible = false;
                 return;
