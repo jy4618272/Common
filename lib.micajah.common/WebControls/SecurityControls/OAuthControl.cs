@@ -133,18 +133,20 @@ namespace Micajah.Common.WebControls.SecurityControls
 
             MainMultiView.ActiveViewIndex = 1;
 
-            ServiceProvider provider = new ServiceProvider();
-            UserAuthorizationResponse response = provider.PrepareAuthorizationResponse(m_PendingRequest);
-            if (response != null)
+            using (ServiceProvider provider = new ServiceProvider())
             {
-                provider.Channel.Send(response);
-            }
-            else
-            {
-                if (m_PendingRequest.IsUnsafeRequest)
-                    VerifierMultiView.ActiveViewIndex = 1;
+                UserAuthorizationResponse response = provider.PrepareAuthorizationResponse(m_PendingRequest);
+                if (response != null)
+                {
+                    provider.Channel.Send(response);
+                }
                 else
-                    VerificationCodeLiteral.Text = string.Format(CultureInfo.InvariantCulture, Resources.OAuthControl_VerificationCodeLiteral_Text, TokenProvider.Current.UpdateRequestTokenVerifier(token));
+                {
+                    if (m_PendingRequest.IsUnsafeRequest)
+                        VerifierMultiView.ActiveViewIndex = 1;
+                    else
+                        VerificationCodeLiteral.Text = string.Format(CultureInfo.InvariantCulture, Resources.OAuthControl_VerificationCodeLiteral_Text, TokenProvider.Current.UpdateRequestTokenVerifier(token));
+                }
             }
         }
 

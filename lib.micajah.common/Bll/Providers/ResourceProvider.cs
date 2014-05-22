@@ -530,6 +530,11 @@ namespace Micajah.Common.Bll.Providers
             RegisterScriptResource(ctl, "ValidatorScript", "Scripts.Validator.js");
         }
 
+        internal static void RegisterMasterPageScript(Page page)
+        {
+            ScriptManager.RegisterClientScriptInclude(page, page.GetType(), "MasterPageScript", GetResourceUrl("Scripts.MasterPage.js", true));
+        }
+
         #endregion
 
         #region Public Methods

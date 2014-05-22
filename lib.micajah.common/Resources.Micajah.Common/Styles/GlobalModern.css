@@ -127,7 +127,8 @@ ul.dropdown-menu.blue {
             }
 
 li.dropdown a {
-    font-size: 18px;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 li.dropdown .caret {

@@ -83,6 +83,21 @@ namespace Micajah.Common.Security
 
         #region Internal Properties
 
+        internal string FullOrLoginName
+        {
+            get
+            {
+                string name = this.FirstName + System.Web.UI.Html32TextWriter.SpaceChar + this.LastName;
+
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    name = this.LoginName;
+                }
+
+                return name;
+            }
+        }
+
         /// <summary>
         /// Gets a collection of the actions identifiers that the user has access to.
         /// </summary>

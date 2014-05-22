@@ -84,10 +84,12 @@ namespace Micajah.Common.Bll.Handlers
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.EnableMultipleInstances);
                 else if (action.ActionId == ActionProvider.CustomUrlsPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.CustomUrl.Enabled);
-                else if (action.ActionId == ActionProvider.StartPageActionId)
-                    Micajah.Common.WebControls.AdminControls.StartControl.GetStartMenuCheckedItems(UserContext.Current, out accessDenied);
+                else if ((action.ActionId == ActionProvider.StartPageActionId) || (action.ActionId == ActionProvider.StartGlobalNavigationLinkActionId))
+                {
+                    accessDenied = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern);
+                }
                 else if ((action.ActionId == ActionProvider.LdapIntegrationPageActionId)
-                    || (action.ActionId == ActionProvider.LdapGroupMappingsPageActionId)                    
+                    || (action.ActionId == ActionProvider.LdapGroupMappingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapServerSettingsPageActionId)
                     || (action.ActionId == ActionProvider.LdapUserInfoPageActionId))
                 {
@@ -95,10 +97,17 @@ namespace Micajah.Common.Bll.Handlers
                 }
                 else if (action.ActionId == ActionProvider.CustomStyleSheetPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.MasterPage.EnableCustomStyleSheet);
-                else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId || action.ActionId == ActionProvider.MyAccountPageActionId)
+                else if (action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId)
                 {
-                    UserContext user = UserContext.Current;
-                    accessDenied = ((user != null) && (user.OrganizationId == Guid.Empty));
+                    if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                    {
+                        UserContext user = UserContext.Current;
+                        accessDenied = ((user != null) && (user.OrganizationId == Guid.Empty));
+                    }
+                    else
+                    {
+                        accessDenied = true;
+                    }
                 }
                 else if (action.ActionId == ActionProvider.GoogleIntegrationPageActionId)
                     accessDenied = (!FrameworkConfiguration.Current.WebApplication.Integration.Google.Enabled);
@@ -119,6 +128,10 @@ namespace Micajah.Common.Bll.Handlers
                     UserContext user = UserContext.Current;
                     accessDenied = (!((user != null) && user.IsFrameworkAdministrator && (user.OrganizationId == Guid.Empty)));
                 }
+                else if (action.ActionId == ActionProvider.PageHelpGlobalNavigationLinkActionId)
+                {
+                    accessDenied = (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern);
+                }
             }
 
             return accessDenied;
@@ -136,14 +149,30 @@ namespace Micajah.Common.Bll.Handlers
 
             if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme != MasterPageTheme.Modern)
             {
-                if ((action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId) || (action.ActionId == ActionProvider.MyAccountPageActionId))
+                if ((action.ActionId == ActionProvider.MyAccountGlobalNavigationLinkActionId) ||
+                    (action.ActionId == ActionProvider.MyAccountPageActionId) ||
+                    (action.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId))
                 {
                     UserContext user = UserContext.Current;
                     if (user != null)
                     {
-                        string name = user.FirstName + System.Web.UI.Html32TextWriter.SpaceChar + user.LastName;
-                        return ((name.Trim().Length > 0) ? name : user.LoginName);
+                        return user.FullOrLoginName;
                     }
+                }
+            }
+            else
+            {
+                if (action.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
+                {
+                    UserContext user = UserContext.Current;
+                    if (user != null)
+                    {
+                        return user.FullOrLoginName;
+                    }
+                }
+                else if (action.ActionId == ActionProvider.ConfigurationGlobalNavigationLinkActionId)
+                {
+                    return string.Empty;
                 }
             }
 
@@ -181,6 +210,19 @@ namespace Micajah.Common.Bll.Handlers
                 UserContext user = UserContext.Current;
                 if ((user != null) && (user.OrganizationId == Guid.Empty))
                     return CustomUrlProvider.CreateApplicationAbsoluteUrl(ResourceProvider.ActiveOrganizationPageVirtualPath);
+            }
+            else if (action.ActionId == ActionProvider.MyAccountMenuGlobalNavigationLinkActionId)
+            {
+                if (FrameworkConfiguration.Current.WebApplication.MasterPage.Theme == MasterPageTheme.Modern)
+                {
+                    return string.Empty;
+                }
+            }
+            else if (action.ActionId == ActionProvider.StartGlobalNavigationLinkActionId)
+            {
+                Action page = ActionProvider.FindAction(ActionProvider.StartPageActionId);
+
+                return page.AbsoluteNavigateUrl;
             }
 
             return action.NavigateUrl;

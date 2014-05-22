@@ -16,19 +16,37 @@
 
     .Mp_Hdr a, .Mp_Hdr a:hover {
         text-decoration: none;
+        cursor: pointer;
     }
 
     /* Logo */
     .Mp_Hdr .Al {
         float: left;
+        padding-right: 15px;
     }
+
+    .Mp_Hdr .A {
+        overflow: hidden;
+        max-width: 300px;
+        float: left;
+        height: 50px;
+        line-height: 50px;
+        color: #ffffff;
+        font-size: 21px;
+        padding-right: 15px;
+    }
+
+        .Mp_Hdr .A a, .Mp_Hdr .A a:hover {
+            color: #ffffff;
+            font-size: 21px;
+            margin: 12px 0;
+        }
 
     /* Search */
     .Mp_Hdr .S {
         float: left;
         height: 50px;
-        padding: 7px;
-        width: 65%;
+        padding: 7px 15px 7px 7px;
     }
 
         .Mp_Hdr .S input {
@@ -63,6 +81,18 @@
         margin: 0;
         padding: 0;
         float: left;
+        border-left: 1px solid #245d89;
+    }
+
+        .Mp_Hdr ul li:last-child {
+            border-right: 1px solid #245d89;
+        }
+
+    .Mp_Hdr .caret {
+        border-top: 5px solid;
+        border-right: 5px solid transparent;
+        border-left: 5px solid transparent;
+        height: 6px;
     }
 
     .Mp_Hdr .nav {
@@ -76,7 +106,8 @@
         }
 
     .Mp_Hdr ul.nav li {
-        font-size: 18px;
+        font-size: 13px;
+        font-weight: bold;
     }
 
         .Mp_Hdr ul.nav li a {
@@ -96,6 +127,18 @@
         background-color: transparent;
     }
 
+    .Mp_Hdr ul.dropdown-menu {
+        top: 40px;
+    }
+
+        .Mp_Hdr ul.dropdown-menu li {
+            border-left: 0 none;
+        }
+
+            .Mp_Hdr ul.dropdown-menu li:last-child {
+                border-right: 0 none;
+            }
+
     .Mp_Hdr ul.nav li img.Icon {
         margin-right: 10px;
     }
@@ -109,7 +152,13 @@
 
     .Mp_Hdr ul.nav li .glyphicon {
         margin-right: 7px;
+        font-size: 14px;
+        line-height: 45px;
     }
+
+        .Mp_Hdr ul.nav li .glyphicon.no-margin {
+            margin: 0;
+        }
 
 /* Bread crumbs */
 div.Mp_B {
@@ -153,6 +202,10 @@ div.Mp_B {
     margin: 0;
     padding: 0;
 }
+
+    .Mp_Mm .col-sm-12 {
+        padding: 0;
+    }
 
     .Mp_Mm p.mobile-nav {
         display: none;
@@ -258,6 +311,10 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
     padding: 0;
 }
 
+    .Mp_Smt .col-sm-12 {
+        padding: 0;
+    }
+
     .Mp_Smt ul li {
         display: inline-block;
     }
@@ -290,14 +347,6 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
 
 /* Mobile view */
 @media (max-width: 768px) {
-    .Mp_Hdr .S {
-        width: 75%;
-    }
-
-    .Mp_Hdr .col-sm-8-clearfix {
-        clear: both;
-    }
-
     .Mp_Mm ul, .Mp_Smt {
         display: none;
     }

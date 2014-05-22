@@ -87,8 +87,21 @@ namespace Micajah.Common.Dal
 
             Uri IServiceProviderRequestToken.Callback
             {
-                get { return string.IsNullOrEmpty(this.RequestTokenCallback) ? null : new Uri(this.RequestTokenCallback); }
-                set { this.RequestTokenCallback = value.AbsoluteUri; }
+                get
+                {
+                    return string.IsNullOrEmpty(this.RequestTokenCallback) ? null : new Uri(this.RequestTokenCallback);
+                }
+                set
+                {
+                    if (value != null)
+                    {
+                        this.RequestTokenCallback = value.AbsoluteUri;
+                    }
+                    else
+                    {
+                        this.RequestTokenCallback = null;
+                    }
+                }
             }
 
             string IServiceProviderRequestToken.ConsumerKey
@@ -98,8 +111,21 @@ namespace Micajah.Common.Dal
 
             Version IServiceProviderRequestToken.ConsumerVersion
             {
-                get { return new Version(this.ConsumerVersion); }
-                set { this.ConsumerVersion = value.ToString(); }
+                get
+                {
+                    return new Version(this.ConsumerVersion);
+                }
+                set
+                {
+                    if (value != null)
+                    {
+                        this.ConsumerVersion = value.ToString();
+                    }
+                    else
+                    {
+                        this.ConsumerVersion = null;
+                    }
+                }
             }
 
             DateTime IServiceProviderRequestToken.CreatedOn

@@ -2551,7 +2551,7 @@ Do you want to link email "{1}" to this account?</value>
     <value>Create Google admin authentication token</value>
   </data>
   <data name="GoogleIntegrationControl_TokenDescription_Text" xml:space="preserve">
-    <value>Google admin authentication token was created for your organization and will be used for Google authentification. If you want to re-create it, please click button below.</value>
+    <value>Google admin authentication token was created for your organization and will be used for Google authentication. If you want to re-create it, please click button below.</value>
   </data>
   <data name="GoogleIntegrationControl_DomainMisingError_Text" xml:space="preserve">
     <value>Google domain is missing. Please add it on "Change Google admin authentication token" page.</value>
