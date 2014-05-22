@@ -649,9 +649,23 @@ namespace Micajah.Common.Bll.Handlers
                     sb.Append("(");
                     sb.AppendFormat("(LdapUserId='{0}') ", ldapDomainUser.ObjectGuid);
                     if (!string.IsNullOrEmpty(ldapDomainUser.PrincipalName))
+                    {
                         sb.AppendFormat(" OR (LoginName = '{0}')", ldapDomainUser.PrincipalName.Replace("'", "''"));
+                    }
+                    else 
+                    {
+                        ldapDomainUser.PrincipalName = string.Empty;
+                    }
+
                     if (!string.IsNullOrEmpty(ldapDomainUser.EmailAddress))
+                    {
                         sb.AppendFormat(" OR (LoginName = '{0}')", ldapDomainUser.EmailAddress.Replace("'", "''"));
+                    }
+                    else
+                    {
+                        ldapDomainUser.EmailAddress = string.Empty;
+                    }
+
                     sb.Append(")");
 
                     foreach (DataRow dr in localMappedLogins.Select(sb.ToString()))
