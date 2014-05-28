@@ -20,9 +20,13 @@
     }
 
     /* Logo */
-    .Mp_Hdr .Al {
+    .Mp_Hdr div.Al {
         float: left;
         padding-right: 15px;
+    }
+
+    .Mp_Hdr li.Al {
+        display: none;
     }
 
     .Mp_Hdr .A {
@@ -345,8 +349,23 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
             border: 1px solid #39f;
         }
 
-/* Mobile view */
+@media (max-width: 992px) {
+    .Mp_Hdr .A {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
+    .Mp_Hdr div.Al {
+        padding-right: 7px;
+    }
+
+    .Mp_Hdr .S {
+        width: 165px;
+        padding-left: 0;
+        padding-right: 7px;
+    }
+
     .Mp_Mm ul, .Mp_Smt {
         display: none;
     }
@@ -365,4 +384,29 @@ ul.Mp_Sm li.F a, ul.Mp_Sm li.F a:hover {
         .Mp_Mm p.mobile-nav:hover {
             cursor: pointer;
         }
+}
+
+@media (max-width: 570px) {
+    .Mp_Hdr div.Al {
+        display: none;
+    }
+
+    .Mp_Hdr li.Al {
+        display: block;
+    }
+
+        .Mp_Hdr li.Al a {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+    .Mp_Hdr .S {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .Mp_Hdr ul.nav {
+        float: left !important;
+    }
 }

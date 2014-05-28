@@ -122,8 +122,6 @@ namespace Micajah.Common.WebControls
 
             HtmlGenericControl div = null;
             HtmlGenericControl ul = null;
-            HtmlGenericControl li = null;
-            HyperLink link = null;
 
             try
             {
@@ -133,13 +131,8 @@ namespace Micajah.Common.WebControls
                 ul = new HtmlGenericControl("ul");
                 div.Controls.Add(ul);
 
-                li = new HtmlGenericControl("li");
+                Control li = CreateApplicationLogoListItem(null);
                 ul.Controls.Add(li);
-
-                link = new HyperLink();
-                link.ImageUrl = m_MasterPageSettings.Header.LogoImageUrl;
-                link.NavigateUrl = m_MasterPage.HeaderLogoNavigateUrl;
-                li.Controls.Add(link);
 
                 return div;
             }
@@ -147,6 +140,34 @@ namespace Micajah.Common.WebControls
             {
                 if (div != null) div.Dispose();
                 if (ul != null) ul.Dispose();
+            }
+        }
+
+        private Control CreateApplicationLogoListItem(string cssClass)
+        {
+            if (string.IsNullOrEmpty(m_MasterPageSettings.Header.LogoImageUrl))
+                return null;
+
+            HtmlGenericControl li = null;
+            HyperLink link = null;
+
+            try
+            {
+                li = new HtmlGenericControl("li");
+                if (!string.IsNullOrEmpty(cssClass))
+                {
+                    li.Attributes["class"] = cssClass;
+                }
+
+                link = new HyperLink();
+                link.ImageUrl = m_MasterPageSettings.Header.LogoImageUrl;
+                link.NavigateUrl = m_MasterPage.HeaderLogoNavigateUrl;
+                li.Controls.Add(link);
+
+                return li;
+            }
+            finally
+            {
                 if (li != null) li.Dispose();
                 if (link != null) link.Dispose();
             }
@@ -331,7 +352,12 @@ namespace Micajah.Common.WebControls
             {
                 Micajah.Common.Bll.ActionCollection items = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
 
-                if (!m_ModernTheme)
+                if (m_ModernTheme)
+                {
+                    li = (HtmlGenericControl)CreateApplicationLogoListItem("Al");
+                    ul.Controls.Add(li);
+                }
+                else
                 {
                     Micajah.Common.Bll.Action item = items.FindByActionId(ActionProvider.MyAccountMenuGlobalNavigationLinkActionId);
 

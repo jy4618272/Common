@@ -7,6 +7,8 @@ public partial class MasterPage : Micajah.Common.Pages.MasterPage
     protected override void OnInit(EventArgs e)
     {
         this.SearchButtonClick += new CommandEventHandler(MasterPage_SearchButtonClick);
+        this.SearchTextBoxEmptyText = "Search Tickets";
+
         base.OnInit(e);
     }
 
