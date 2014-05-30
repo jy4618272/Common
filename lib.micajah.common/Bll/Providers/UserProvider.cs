@@ -7,6 +7,7 @@ using Micajah.Common.Security;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -403,6 +404,42 @@ namespace Micajah.Common.Bll.Providers
                 list.Add(Guid.Empty);
 
             return list;
+        }
+
+        internal static ClientDataSet.UserRow GetOrganizationAdministratorUserRow(Guid organizationId)
+        {
+            ClientDataSet.UserDataTable table = UserProvider.GetUsers(organizationId, Guid.Empty, RoleProvider.OrganizationAdministratorRoleId);
+            ClientDataSet.UserRow row = null;
+
+            if (table.Count == 1)
+                row = table[0];
+            else
+            {
+                Collection<string> emailSuffixes = EmailSuffixProvider.GetEmailSuffixesList(organizationId);
+                if (emailSuffixes.Count > 0)
+                {
+                    foreach (ClientDataSet.UserRow admin in table)
+                    {
+                        if (string.IsNullOrEmpty(admin.Email))
+                            continue;
+
+                        string[] arr = admin.Email.Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries);
+                        string eSuffix = arr.Length > 1 ? arr[1] : arr[0];
+
+                        if (emailSuffixes.Contains(eSuffix))
+                        {
+                            row = admin;
+                            break;
+                        }
+                    }
+                    if (row == null && table.Count > 0)
+                        row = table[0];
+                }
+                else if (table.Count > 0)
+                    row = table[0];
+            }
+
+            return row;
         }
 
         internal static bool UserIsInstanceAdministrator(Guid organizationId, Guid instanceId, Guid userId)

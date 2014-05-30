@@ -2568,4 +2568,37 @@ Do you want to link email "{1}" to this account?</value>
   <data name="MainMenu_MenuLink_Text" xml:space="preserve">
     <value>Menu</value>
   </data>
+  <data name="ActivityReportControl_List_CreditCardStatusColumn_HeaderText" xml:space="preserve">
+    <value>Credit Card Status</value>
+  </data>
+  <data name="ActivityReportControl_List_HowYouHearAboutUsColumn_HeaderText" xml:space="preserve">
+    <value>How'd You Hear About Us</value>
+  </data>
+  <data name="ActivityReportControl_List_MonthlyBillableColumn_HeaderText" xml:space="preserve">
+    <value>Monthly Billable</value>
+  </data>
+  <data name="ActivityReportControl_ExportLink_Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ActivityReportControl_List_AdminEmailColumn_HeaderText" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="ActivityReportControl_List_AdminFullNameColumn_HeaderText" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="ActivityReportControl_List_AdminPhoneColumn_HeaderText" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="ActivityReportControl_List_CreationDateColumn_HeaderText" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="ActivityReportControl_List_InstanceNameColumn_HeaderText" xml:space="preserve">
+    <value>Instance Name</value>
+  </data>
+  <data name="ActivityReportControl_MasterPage_CustomName" xml:space="preserve">
+    <value>Activity Report for Now</value>
+  </data>
+  <data name="ActivityReportControl_MasterPage_CustomName_Format" xml:space="preserve">
+    <value>Activity Report on {0:dd-MMM-yyyy}</value>
+  </data>
 </root>
