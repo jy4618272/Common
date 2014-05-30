@@ -256,7 +256,7 @@ namespace Micajah.Common.Pages
 
                 if (target != null && argument != null)
                 {
-                    if (target.Equals(ClientID, StringComparison.Ordinal) && argument.Equals(Header.SearchButtonId, StringComparison.Ordinal))
+                    if (target.Equals(UniqueID, StringComparison.Ordinal) && argument.Equals(Header.SearchButtonId, StringComparison.Ordinal))
                     {
                         string searchText = Request.Form[string.Concat(ClientID, "$", Header.SearchTextBoxId)];
                         if (string.Compare(searchText, this.SearchTextBoxEmptyText, StringComparison.Ordinal) == 0) searchText = null;
