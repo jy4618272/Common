@@ -799,6 +799,15 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, input correct data..
+        /// </summary>
+        internal static string CreditCardRegistrationControl_StatusMessageBox_Description {
+            get {
+                return ResourceManager.GetString("CreditCardRegistrationControl_StatusMessageBox_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to StyleSheet.
         /// </summary>
         internal static string CustomStyleSheetEditControl_FormTable_ObjectName {

@@ -2601,4 +2601,7 @@ Do you want to link email "{1}" to this account?</value>
   <data name="ActivityReportControl_MasterPage_CustomName_Format" xml:space="preserve">
     <value>Activity Report on {0:dd-MMM-yyyy}</value>
   </data>
+  <data name="CreditCardRegistrationControl_StatusMessageBox_Description" xml:space="preserve">
+    <value>Please, input correct data.</value>
+  </data>
 </root>

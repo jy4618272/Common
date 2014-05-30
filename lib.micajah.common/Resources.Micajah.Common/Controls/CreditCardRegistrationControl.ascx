@@ -2,14 +2,14 @@
 <%@ Register Namespace="Micajah.Common.WebControls" TagPrefix="mits" %>
 <div style="display: none;">
     <div id="credit_card_form">
-        <asp:Panel ID="pnlMissingCard" CssClass="header cc-nag" runat="server" Visible="false">
+        <asp:Panel ID="MissingCardPanel" CssClass="header cc-nag" runat="server" Visible="false">
             <h2>Looks like we are<br />
                 missing your credit card.</h2>
         </asp:Panel>
         <div class="content">
             <asp:UpdatePanel runat="server" ID="UpdatePanel3">
                 <contenttemplate>
-                    <mits:NoticeMessageBox runat="server" ID="msgStatus" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
+                    <mits:NoticeMessageBox runat="server" ID="StatusMessageBox" MessageType="Success" Visible="False"></mits:NoticeMessageBox>
                     <div class="cards_select">  
                         <ul class="cards">
                             <li>
@@ -29,18 +29,18 @@
                     <br />
                     <dl class="form">
                     <dt><label>Card Number</label></dt>
-                    <dd><mits:TextBox runat="server" ID="txtCCNumber" Required="True" Width="300"/></dd>
+                    <dd><mits:TextBox runat="server" ID="NumberTextBox" Required="True" Width="300"/></dd>
                     </dl>
                     <dl class="form expiration">
                     <dt><label>Expiration</label></dt>
                     <dd>
-                        <mits:TextBox runat="server" ID="txtCCExpMonth" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
+                        <mits:TextBox runat="server" ID="ExpirationMonthTextBox" ValidationType="Integer" MinimumValue="1" MaximumValue="12" ToolTip="Month MM" Columns="2" MaxLength="2" Required="True"/>
                         <span>&nbsp;/&nbsp;</span>
-                        <mits:TextBox runat="server" ID="txtCCExpYear" ValidationType="Integer" MinimumValue="13" MaximumValue="23" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
+                        <mits:TextBox runat="server" ID="ExpirationYearTextBox" ValidationType="Integer" MinimumValue="13" MaximumValue="23" ToolTip="Year YY" Columns="2" MaxLength="2" Required="True"/>
                     </dd>
                     </dl>
                     <div class="ccformsubmit">
-                        <asp:Button runat="server" ID="btnUpdateCC" CssClass="Large Green" Text="Update Credit Card" OnClick="btnUpdateCC_Click"/>
+                        <asp:Button runat="server" ID="UpdateButton" CssClass="Large Green" Text="Update Credit Card" OnClick="UpdateButton_Click"/>
 	                </div>
                 </contenttemplate>
             </asp:UpdatePanel>

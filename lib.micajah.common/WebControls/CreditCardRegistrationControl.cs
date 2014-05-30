@@ -1,22 +1,17 @@
-﻿using ChargifyNET;
-using Micajah.Common.Application;
-using Micajah.Common.Bll;
+﻿using Micajah.Common.Bll;
 using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
+using Micajah.Common.Properties;
 using Micajah.Common.Security;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Telerik.Web.UI;
 
 namespace Micajah.Common.WebControls
 {
     public class CreditCardRegistrationControl : Micajah.Common.WebControls.SetupControls.MasterControl
     {
+        #region Members
+
         public enum CreditCardRegistrationStatus
         {
             Ok,
@@ -24,22 +19,25 @@ namespace Micajah.Common.WebControls
             Error
         }
 
-        #region Members
+        protected TextBox NumberTextBox;
+        protected TextBox ExpirationMonthTextBox;
+        protected TextBox ExpirationYearTextBox;
+        protected NoticeMessageBox StatusMessageBox;
+        protected Panel MissingCardPanel;
+        protected Button UpdateButton;
 
-        protected TextBox txtCCNumber;
-        protected TextBox txtCCExpMonth;
-        protected TextBox txtCCExpYear;
-        protected NoticeMessageBox msgStatus;
-        protected CreditCardRegistrationStatus ccrStatus=CreditCardRegistrationStatus.Ok;
-        protected Panel pnlMissingCard;
+        private CreditCardRegistrationStatus m_Status = CreditCardRegistrationStatus.Ok;
 
         #endregion
 
-        #region Private Methods
+        #region Events
 
         public event EventHandler UpdateClick;
 
+        #endregion
+
         #region Public Properties
+
         public string FancyboxInputValue
         {
             get { return ViewState["FancyboxInputValue"] != null ? (string)ViewState["FancyboxInputValue"] : string.Empty; }
@@ -54,16 +52,18 @@ namespace Micajah.Common.WebControls
 
         public CreditCardRegistrationStatus Status
         {
-            get { return ccrStatus; }
+            get { return m_Status; }
         }
 
         public bool ShowMissingCardTitle
         {
-            get { return pnlMissingCard.Visible; }
-            set { pnlMissingCard.Visible = value; }
+            get { return MissingCardPanel.Visible; }
+            set { MissingCardPanel.Visible = value; }
         }
 
         #endregion
+
+        #region Private Methods
 
         private void RegisterFancyBoxInputScript()
         {
@@ -79,35 +79,56 @@ namespace Micajah.Common.WebControls
 
         #region Protected Methods
 
-        protected void btnUpdateCC_Click(object sender, EventArgs e)
+        protected void UpdateButton_Click(object sender, EventArgs e)
         {
-            msgStatus.Visible = true;
-            msgStatus.MessageType = NoticeMessageType.Error;
-            UserContext _uctx = UserContext.Current;
-            string err=string.Empty;
-            ccrStatus = CreditCardRegistrationStatus.Ok;
+            m_Status = CreditCardRegistrationStatus.Ok;
+            string error = string.Empty;
+            UserContext user = UserContext.Current;
 
-            if (!ChargifyProvider.RegisterCreditCard(ChargifyProvider.CreateChargify(), _uctx.OrganizationId, _uctx.InstanceId, _uctx.Organization.Name, _uctx.Instance.Name, _uctx.Email, _uctx.FirstName, _uctx.LastName, txtCCNumber.Text, txtCCExpMonth.Text, txtCCExpYear.Text, 1, out err))
+            StatusMessageBox.Visible = true;
+            StatusMessageBox.MessageType = NoticeMessageType.Error;
+
+            if (!ChargifyProvider.RegisterCreditCard(ChargifyProvider.CreateChargify()
+                , user.OrganizationId, user.InstanceId, user.Organization.Name, user.Instance.Name, user.Email, user.FirstName, user.LastName
+                , NumberTextBox.Text, ExpirationMonthTextBox.Text, ExpirationYearTextBox.Text, 1
+                , out error))
             {
-                if (txtCCNumber.Text.Contains("XXXX"))
+                if (NumberTextBox.Text.Contains("XXXX"))
                 {
-                    txtCCNumber.Text = string.Empty;
-                    txtCCExpMonth.Text = string.Empty;
-                    txtCCExpYear.Text = string.Empty;
-                    msgStatus.Description = "Please, input correct data.";
+                    NumberTextBox.Text = string.Empty;
+                    ExpirationMonthTextBox.Text = string.Empty;
+                    ExpirationYearTextBox.Text = string.Empty;
+
+                    StatusMessageBox.Description = Resources.CreditCardRegistrationControl_StatusMessageBox_Description;
                 }
-                msgStatus.Message = err;
-                ccrStatus = CreditCardRegistrationStatus.Error;
-                if (UpdateClick != null) UpdateClick(this, e);
-                return;
+
+                StatusMessageBox.Message = error;
+
+                m_Status = CreditCardRegistrationStatus.Error;
+
+                if (UpdateClick != null)
+                {
+                    UpdateClick(this, e);
+                }
             }
+            else
+            {
+                InstanceProvider.UpdateInstance(user.Instance, CreditCardStatus.Registered);
 
-            InstanceProvider.UpdateInstance(_uctx.Instance, CreditCardStatus.Registered);
+                if (NumberTextBox.Text.Contains("XXXX"))
+                {
+                    m_Status = CreditCardRegistrationStatus.Reactivated;
+                }
 
-            if (txtCCNumber.Text.Contains("XXXX")) ccrStatus=CreditCardRegistrationStatus.Reactivated;
-
-            if (UpdateClick != null) UpdateClick(this, e);
-            else Response.Redirect(Request.Path);
+                if (UpdateClick != null)
+                {
+                    UpdateClick(this, e);
+                }
+                else
+                {
+                    Response.Redirect(Request.Path);
+                }
+            }
         }
 
         #endregion
@@ -121,8 +142,16 @@ namespace Micajah.Common.WebControls
             if (this.Visible)
             {
                 this.MasterPage.EnableFancyBox = true;
-                if (!string.IsNullOrEmpty(FancyboxHyperlinkRel)) RegisterFancyBoxHyperLinkScript();
-                if (!string.IsNullOrEmpty(FancyboxInputValue)) RegisterFancyBoxInputScript();
+
+                if (!string.IsNullOrEmpty(FancyboxHyperlinkRel))
+                {
+                    RegisterFancyBoxHyperLinkScript();
+                }
+
+                if (!string.IsNullOrEmpty(FancyboxInputValue))
+                {
+                    RegisterFancyBoxInputScript();
+                }
             }
         }
 
@@ -130,16 +159,23 @@ namespace Micajah.Common.WebControls
         {
             base.OnPreRender(e);
 
-            if (this.Visible) ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.CreditCardRegistrationStyleSheet, "CreditCardRegistrationStyleSheet", false);
+            if (this.Visible)
+            {
+                ResourceProvider.RegisterStyleSheetResource(this, ResourceProvider.CreditCardRegistrationStyleSheet, "CreditCardRegistrationStyleSheet", false);
+            }
         }
 
         #endregion
 
-        public void SetCreditCardInformation(string CreditCardNumber, string ExpirationMonth, string ExpirationYear)
+        #region Public Methods
+
+        public void SetCreditCardInformation(string creditCardNumber, string expirationMonth, string expirationYear)
         {
-            txtCCNumber.Text = CreditCardNumber;
-            txtCCExpMonth.Text = ExpirationMonth;
-            txtCCExpYear.Text = ExpirationYear;
+            NumberTextBox.Text = creditCardNumber;
+            ExpirationMonthTextBox.Text = expirationMonth;
+            ExpirationYearTextBox.Text = expirationYear;
         }
+
+        #endregion
     }
 }
