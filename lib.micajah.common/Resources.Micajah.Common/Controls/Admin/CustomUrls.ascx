@@ -26,17 +26,27 @@
                 <h1><asp:Literal ID="SimpleViewTitleLabel" runat="server"/></h1>                
                 <table>                    
                     <tr>
+                        <td style="text-align:right;"><asp:Label ID="PartialVanityUrlTitle" runat="server" Visible="false" Text="Partial Custom URL"></asp:Label></td>
                         <td style="width:110px"><mits:TextBox ID="VanityUrlTextBox" runat="server" MaxLength="1024" Columns="16" Width="110px" ValidationGroup="<%# SimpleView.ClientID %>" ValidationType="RegularExpression" ValidationExpression="[\w-]+" /> </td>
                         <td style="padding-top: 7px;" valign="top"><asp:Label ID="VanityUrlDomainLabel" runat="server" Font-Size="14px" /></td>
-                    </tr>               
-                    <tr>
+                    </tr>     
+                    <tr id="TrFullCustomURL" runat="server" visible="false">
+                        <td style="text-align:right;">
+                            Full Custom URL
+                        </td>
                         <td colspan="2">
+                            <mits:TextBox ID="FullVanityUrlTextBox" runat="server" MaxLength="1024" Columns="50" Width="350px" ValidationGroup="<%# SimpleView.ClientID %>" ValidationType="RegularExpression" 
+                                ErrorMessage="<%# CustomUrlsValidatorErrorMessage %>" ValidationExpression="[\w-\.]+\.\w+" />
+                        </td>
+                    </tr>          
+                    <tr>
+                        <td colspan="3">
                             <asp:CustomValidator ID="SimpleViewCustomValidator" runat="server" CssClass="Error Block" Display="Dynamic" ValidateEmptyText="true" ValidationGroup="<%# SimpleView.ClientID %>" ClientValidationFunction="ValidateCustomUrls"></asp:CustomValidator>
                             <div id="SimpleErrorPanel" runat="server" visible="false" enableviewstate="false" class="Error Block"></div>
                         </td>
                     </tr>     
                     <tr>
-                        <td colspan="2"><br /><asp:Button ID="SimpleViewSaveButton" runat="server" OnClick="SimpleViewSaveButton_Click" CausesValidation="true"  ValidationGroup="<%# SimpleView.ClientID %>" /></td>
+                        <td colspan="3"><br /><asp:Button ID="SimpleViewSaveButton" runat="server" OnClick="SimpleViewSaveButton_Click" CausesValidation="true"  ValidationGroup="<%# SimpleView.ClientID %>" /></td>
                     </tr>
                 </table>                          
             </asp:View>
