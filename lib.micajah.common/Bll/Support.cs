@@ -1472,6 +1472,11 @@ namespace Micajah.Common.Bll
                         msg.From = new MailAddress(from);
                 }
             }
+            else
+            {
+                msg.From = msg.Sender;
+            }
+
             msg.To.Add(to);
             msg.Subject = subject;
             msg.Body = body;

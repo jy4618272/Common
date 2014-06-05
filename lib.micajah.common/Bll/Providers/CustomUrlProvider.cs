@@ -572,15 +572,22 @@ namespace Micajah.Common.Bll.Providers
                 url = FrameworkConfiguration.Current.WebApplication.Url;
             else
             {
-                HttpRequest request = HttpContext.Current.Request;
-
-                url = request.Url.Scheme + Uri.SchemeDelimiter + RemoveSchemeFormUri(host);
-
-                if (FrameworkConfiguration.Current.WebApplication.AddPort)
+                if (HttpContext.Current != null)
                 {
-                    int port = request.Url.Port;
-                    if ((!request.Url.IsDefaultPort) && (port > -1))
-                        url += ":" + port;
+                    HttpRequest request = HttpContext.Current.Request;
+
+                    url = request.Url.Scheme + Uri.SchemeDelimiter + RemoveSchemeFormUri(host);
+
+                    if (FrameworkConfiguration.Current.WebApplication.AddPort)
+                    {
+                        int port = request.Url.Port;
+                        if ((!request.Url.IsDefaultPort) && (port > -1))
+                            url += ":" + port;
+                    }
+                }
+                else
+                {
+                    url = Uri.UriSchemeHttp + Uri.SchemeDelimiter + RemoveSchemeFormUri(host);
                 }
             }
 

@@ -58,8 +58,15 @@ namespace Micajah.Common.Application
         {
             get
             {
-                return ((HttpContext.Current.Request.ApplicationPath == "/")
-                    ? string.Empty : HttpContext.Current.Request.ApplicationPath);
+                if (HttpContext.Current != null)
+                {
+                    return ((HttpContext.Current.Request.ApplicationPath == "/")
+                        ? string.Empty : HttpContext.Current.Request.ApplicationPath);
+                }
+                else
+                {
+                    return string.Empty;
+                }
             }
         }
 

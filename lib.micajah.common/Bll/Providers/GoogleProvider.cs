@@ -441,57 +441,79 @@ namespace Micajah.Common.Bll.Providers
                 try
                 {
                     UserEntry userEntry = userFeed.Entries[i] as UserEntry;
-                    if (userEntry != null)
-                    {
-                        Guid instanceId = InstanceProvider.GetFirstInstanceId(organizationId);
-                        SortedList list = GroupProvider.GetGroupIdRoleIdList(organizationId, instanceId);
-                        Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(list);
-
-                        string groups = groupId.ToString();
-
-                        if (userEntry.Login.Admin)
-                        {
-                            groups = Guid.Empty.ToString();
-
-                            System.Collections.IList roleIdList = list.GetValueList();
-                            if (roleIdList != null)
-                            {
-                                Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
-                                if (roleId != Guid.Empty)
-                                {
-                                    int idx = list.IndexOfValue(roleId);
-                                    if (idx > -1)
-                                    {
-                                        groupId = (Guid)list.GetKey(idx);
-                                        groups = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", groups, groupId.ToString());
-                                    }
-                                }
-
-                                roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
-                                if (roleId != Guid.Empty)
-                                {
-                                    int idx = list.IndexOfValue(roleId);
-                                    if (idx > -1)
-                                    {
-                                        groupId = (Guid)list.GetKey(idx);
-                                        groups = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", groups, groupId.ToString());
-                                    }
-                                }
-                            }
-                        }
-
-                        Guid loginId = UserProvider.AddUserToOrganization(string.Format(CultureInfo.InvariantCulture, "{0}@{1}", userEntry.Login.UserName, service.Domain), userEntry.Name.GivenName, userEntry.Name.FamilyName, null
-                            , null, null, null, null, null
-                            , null, null, null, null, null, null
-                            , groups, organizationId
-                            , LoginProvider.Current.GeneratePassword(), false, true);
-
-                        UserProvider.RaiseUserInserted(loginId, organizationId, null, Support.ConvertStringToGuidList(groups));
-                    }
+                    ImportUser(userEntry, organizationId, service.Domain);
                 }
                 catch
                 {
                     failedCount++;
+                }
+            }
+        }
+
+        public static void ImportUser(UserEntry userEntry, Guid organizationId, string domain)
+        {
+            if (userEntry != null)
+            {
+                Guid instanceId = InstanceProvider.GetFirstInstanceId(organizationId);
+                SortedList list = GroupProvider.GetGroupIdRoleIdList(organizationId, instanceId);
+                Guid groupId = GroupProvider.GetGroupIdOfLowestRoleInInstance(list);
+
+                string groups = groupId.ToString();
+
+                if (userEntry.Login.Admin)
+                {
+                    groups = Guid.Empty.ToString();
+
+                    System.Collections.IList roleIdList = list.GetValueList();
+                    if (roleIdList != null)
+                    {
+                        Guid roleId = RoleProvider.GetHighestNonBuiltInRoleId(roleIdList);
+                        if (roleId != Guid.Empty)
+                        {
+                            int idx = list.IndexOfValue(roleId);
+                            if (idx > -1)
+                            {
+                                groupId = (Guid)list.GetKey(idx);
+                                groups = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", groups, groupId.ToString());
+                            }
+                        }
+
+                        roleId = RoleProvider.GetHighestBuiltInRoleId(roleIdList);
+                        if (roleId != Guid.Empty)
+                        {
+                            int idx = list.IndexOfValue(roleId);
+                            if (idx > -1)
+                            {
+                                groupId = (Guid)list.GetKey(idx);
+                                groups = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", groups, groupId.ToString());
+                            }
+                        }
+                    }
+                }
+
+                string loginName = string.Format(CultureInfo.InvariantCulture, "{0}@{1}", userEntry.Login.UserName, domain);
+                string password = null;
+
+                var drv = LoginProvider.Current.GetLogin(loginName);
+                
+                if (drv == null)
+                {
+                    password = LoginProvider.Current.GeneratePassword();
+                }
+
+                Guid loginId = UserProvider.AddUserToOrganization(loginName, userEntry.Name.GivenName, userEntry.Name.FamilyName, null
+                    , null, null, null, null, null
+                    , null, null, null, null, null, null
+                    , groups, organizationId
+                    , password, false, true);
+
+                if (string.IsNullOrEmpty(password))
+                {
+                    UserProvider.RaiseUserUpdated(loginId, organizationId, Support.ConvertStringToGuidList(groups), loginName);
+                }
+                else
+                {
+                    UserProvider.RaiseUserInserted(loginId, organizationId, null, Support.ConvertStringToGuidList(groups));
                 }
             }
         }
