@@ -465,9 +465,16 @@ namespace Micajah.Common.Bll.Providers
                     }
                     else
                     {
-                        customUrl = (!string.IsNullOrEmpty(row.FullCustomUrl))
-                            ? row.FullCustomUrl
-                            : row.PartialCustomUrl + "." + customUrlSettings.PartialCustomUrlRootAddressesFirst;
+                        if (customUrlSettings.PartialCustomUrlIsPrimary)
+                        {
+                            customUrl = row.PartialCustomUrl + "." + customUrlSettings.PartialCustomUrlRootAddressesFirst;
+                        }
+                        else
+                        {
+                            customUrl = (!string.IsNullOrEmpty(row.FullCustomUrl))
+                                ? row.FullCustomUrl
+                                : row.PartialCustomUrl + "." + customUrlSettings.PartialCustomUrlRootAddressesFirst;
+                        }
 
                         if (row.IsInstanceIdNull())
                             PutOrganizationCustomUrlToCache(organizationId, customUrl);

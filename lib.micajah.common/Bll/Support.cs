@@ -1382,6 +1382,13 @@ namespace Micajah.Common.Bll
             return Regex.Replace(value, HtmlTagsRegularExpression, string.Empty);
         }
 
+        public static string SplitCamelCase(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+            return Regex.Replace(value, "([A-Z])", " $1", RegexOptions.Compiled).Trim();
+        }
+
         /// <summary>
         /// Trims the specified string to specified length.
         /// </summary>

@@ -221,27 +221,38 @@ namespace Micajah.Common.WebControls
         /// <param name="rowState">One of the System.Web.UI.WebControls.DataControlRowState values.</param>
         protected override void InitializeDataCell(DataControlFieldCell cell, DataControlRowState rowState)
         {
+            DatePicker picker = null;
             Control ctrl = null;
 
-            if (this.EditMode || this.InsertMode)
+            try
             {
-                DatePicker control = new DatePicker();
-                CopyProperties(control);
-                control.Init += OnControlInit;
+                if (this.EditMode || this.InsertMode)
+                {
+                    picker = new DatePicker();
+                    CopyProperties(picker);
+                    picker.Init += OnControlInit;
 
-                if (cell != null)
-                    cell.Controls.Add(control);
+                    if (cell != null)
+                        cell.Controls.Add(picker);
 
-                ctrl = control;
+                    ctrl = picker;
+                }
+                else
+                {
+                    if (cell != null)
+                        cell.Style[HtmlTextWriterStyle.PaddingLeft] = "3px";
+                    ctrl = cell;
+                }
+
+                if (ctrl != null && base.Visible) ctrl.DataBinding += new EventHandler(this.OnBindingField);
             }
-            else
+            finally
             {
-                if (cell != null)
-                    cell.Style[HtmlTextWriterStyle.PaddingLeft] = "3px";
-                ctrl = cell;
+                if (picker != null)
+                {
+                    picker.Dispose();
+                }
             }
-
-            if (ctrl != null && base.Visible) ctrl.DataBinding += new EventHandler(this.OnBindingField);
         }
 
         #endregion

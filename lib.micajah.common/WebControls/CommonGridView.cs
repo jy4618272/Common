@@ -1,3 +1,8 @@
+using Micajah.Common.Bll;
+using Micajah.Common.Bll.Providers;
+using Micajah.Common.Configuration;
+using Micajah.Common.Pages;
+using Micajah.Common.Properties;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -8,11 +13,6 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Micajah.Common.Bll;
-using Micajah.Common.Bll.Providers;
-using Micajah.Common.Configuration;
-using Micajah.Common.Pages;
-using Micajah.Common.Properties;
 
 namespace Micajah.Common.WebControls
 {
@@ -28,18 +28,6 @@ namespace Micajah.Common.WebControls
 
         internal EventHandler<CommonGridViewActionEventArgs> ActionInternal;
 
-        private WebControl oPagesTop; //current page (top)
-        private WebControl oPagesBottom; //current page (bottom)
-        private Literal oLabel1Top;  //pages: (top)
-        private Literal oLabel2Top; //from 1000 (top)
-        private WebControl oButton2Top; //< (top)
-        private WebControl oButton3Top; //> (top)
-        private Literal oLabel1Bottom; //pages: (bottom)
-        private Literal oLabel2Bottom; //from 1000 (bottom)
-        private WebControl oButton2Bottom; //< (bottom)
-        private WebControl oButton3Bottom; //> (bottom)
-        private Table oTableTop; //top line state
-        private Table oTableBottom; //bottom line state
         private CustomPagerSettings m_CustomPagerSettings;
         private SchemeColorSet m_SchemeColorSet;
         private int? m_MaxColSpan;
@@ -806,46 +794,11 @@ namespace Micajah.Common.WebControls
 
                 if (theme == MasterPageTheme.Modern)
                 {
-                    foreach (TableCell cell in row.Cells)
-                    {
-                        DataControlFieldCell fieldCell = cell as DataControlFieldCell;
-                        if (fieldCell != null)
-                        {
-                            DataControlField field = fieldCell.ContainingField;
-                            if (field != null)
-                            {
-                                if (field.Visible)
-                                {
-                                    if (field is BoundField || field is System.Web.UI.WebControls.TemplateField || field is System.Web.UI.WebControls.HyperLinkField)
-                                    {
-                                        cell.CssClass += " Bold";
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    ApplyStyle(row);
                 }
             }
 
-            if (grid.HeaderRow != null)
-                ProcessRowCells(grid.HeaderRow, grid.HeaderStyle.CssClass, borderColor);
-
-            if (grid.TopPagerRow != null)
-            {
-                grid.TopPagerRow.BorderColor = borderColor;
-                ProcessRowCells(grid.TopPagerRow, grid.PagerStyle.CssClass, borderColor);
-            }
-
-            if (grid.BottomPagerRow != null)
-            {
-                grid.BottomPagerRow.BorderColor = borderColor;
-                ProcessRowCells(grid.BottomPagerRow, grid.PagerStyle.CssClass, borderColor);
-            }
-
-            if (grid.FooterRow != null)
-                grid.FooterRow.ApplyStyle(grid.FooterStyle);
+            ProcessRows(grid, borderColor);
 
             RegisterStyleSheet(grid, theme);
         }
@@ -971,6 +924,30 @@ namespace Micajah.Common.WebControls
             }
 
             RegisterStyleSheet(table, theme);
+        }
+
+        private static void ApplyStyle(GridViewRow row)
+        {
+            foreach (TableCell cell in row.Cells)
+            {
+                DataControlFieldCell fieldCell = cell as DataControlFieldCell;
+                if (fieldCell != null)
+                {
+                    DataControlField field = fieldCell.ContainingField;
+                    if (field != null)
+                    {
+                        if (field.Visible)
+                        {
+                            if (field is BoundField || field is System.Web.UI.WebControls.TemplateField || field is System.Web.UI.WebControls.HyperLinkField)
+                            {
+                                cell.CssClass += " Bold";
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private static void ProcessRowCells(TableRow row, string cssClass, System.Drawing.Color borderColor)
@@ -1100,28 +1077,6 @@ namespace Micajah.Common.WebControls
             return lnkBtn;
         }
 
-        /// <summary>
-        /// Creates the buttons for custom pager depending on button style.
-        /// </summary>
-        private void CreateCustomPagerButtons()
-        {
-            switch (m_CustomPagerSettings.ButtonsStyle)
-            {
-                case PagerButtonsStyle.Image:
-                    oButton2Top = CreatePreviousImageButton("PreviousTopButton");
-                    oButton3Top = CreateNextImageButton("NextTopButton");
-                    oButton2Bottom = CreatePreviousImageButton("PreviousBottomButton");
-                    oButton3Bottom = CreateNextImageButton("NextBottomButton");
-                    break;
-                case PagerButtonsStyle.Link:
-                    oButton2Top = CreatePreviousLinkButton("PreviousTopButton");
-                    oButton3Top = CreateNextLinkButton("NextTopButton");
-                    oButton2Bottom = CreatePreviousLinkButton("PreviousBottomButton");
-                    oButton3Bottom = CreateNextLinkButton("NextBottomButton");
-                    break;
-            }
-        }
-
         private DropDownList CreatePageList(string id)
         {
             DropDownList dropdown = new DropDownList();
@@ -1149,24 +1104,6 @@ namespace Micajah.Common.WebControls
             textBox.TextChanged += new EventHandler(PageTextBox_TextChanged);
 
             return textBox;
-        }
-
-        /// <summary>
-        /// Creates a selector of the custom pager depending on mode.
-        /// </summary>
-        private void CreateCustomPagerSelector()
-        {
-            switch (m_CustomPagerSettings.Mode)
-            {
-                case PagingMode.TextBox:
-                    oPagesTop = this.CreatePageTextBox("PageTopTextBox");
-                    oPagesBottom = this.CreatePageTextBox("PageBottomTextBox");
-                    break;
-                case PagingMode.DropDownList:
-                    oPagesTop = CreatePageList("PageTopList");
-                    oPagesBottom = CreatePageList("PageBottomList");
-                    break;
-            }
         }
 
         private GridViewRow CreateHeaderRow(bool dataBind, TableRowCollection rows)
@@ -1321,16 +1258,18 @@ namespace Micajah.Common.WebControls
 
             Table table = null;
             if (position == PagerPosition.Top)
-                table = oTableTop;
+            {
+                table = this.CreatePagerTopTable();
+            }
             else if (position == PagerPosition.Bottom)
             {
                 if (this.ShowStatusList)
                     this.EnsureStatusList();
 
                 TableCell statusListCell = null;
-                if (this.ShowBottomPagerRow && (oTableBottom != null))
+                if (this.ShowBottomPagerRow)
                 {
-                    table = oTableBottom;
+                    table = this.CreatePagerBottomTable();
                     statusListCell = table.Rows[0].Cells[table.Rows[0].Cells.Count - 1];
                 }
                 else
@@ -1352,6 +1291,310 @@ namespace Micajah.Common.WebControls
             }
 
             return row;
+        }
+
+        private Table CreatePagerTopTable()
+        {
+            TableCell oCell1Top = null;
+            TableCell oCell2Top = null;
+            TableCell oCell3Top = null;
+            TableCell oCell4Top = null;
+            TableCell oCell5Top = null;
+            TableCell oCell6Top = null;
+            TableCell oCell7Top = null;
+            TableCell oCell8Top = null;
+            TableRow oRowTop = null;
+            WebControl oPagesTop = null;
+            Literal oLabel1Top = null;
+            Literal oLabel2Top = null;
+            WebControl oButton2Top = null;
+            WebControl oButton3Top = null;
+            Table oTableTop = null;
+
+            try
+            {
+                oLabel1Top = new Literal();
+                oLabel2Top = new Literal();
+                oTableTop = new Table();
+                oCell1Top = new TableCell();
+                oCell2Top = new TableCell();
+                oCell3Top = new TableCell();
+                oCell4Top = new TableCell();
+                oCell5Top = new TableCell();
+                oCell6Top = new TableCell();
+                oCell7Top = new TableCell();
+                oCell8Top = new TableCell();
+
+                oTableTop.HorizontalAlign = m_CustomPagerSettings.HorizontalAlign;
+                oTableTop.ID = "oTableTop";
+                if (m_CustomPagerSettings.FirstTitle.Length > 0) oLabel1Top.Text = m_CustomPagerSettings.FirstTitle + HtmlTextWriter.SpaceChar;
+                if (m_CustomPagerSettings.LastTitle.Length > 0)
+                    oLabel2Top.Text = string.Concat(HtmlTextWriter.SpaceChar, m_CustomPagerSettings.LastTitle, HtmlTextWriter.SpaceChar, PageCount.ToString(CultureInfo.CurrentCulture));
+
+                oCell1Top.Wrap = false;
+                oCell5Top.Wrap = false;
+                oCell7Top.Wrap = false;
+                oCell8Top.Width = Unit.Percentage(100);
+
+                switch (m_CustomPagerSettings.ButtonsStyle)
+                {
+                    case PagerButtonsStyle.Image:
+                        oButton2Top = CreatePreviousImageButton("PreviousTopButton");
+                        oButton3Top = CreateNextImageButton("NextTopButton");
+                        break;
+                    case PagerButtonsStyle.Link:
+                        oButton2Top = CreatePreviousLinkButton("PreviousTopButton");
+                        oButton3Top = CreateNextLinkButton("NextTopButton");
+                        break;
+                }
+
+                if (oLabel1Top.Text.Length > 0) oCell1Top.Controls.Add(oLabel1Top);
+                if (oButton2Top != null) oCell3Top.Controls.Add(oButton2Top);
+
+                switch (m_CustomPagerSettings.Mode)
+                {
+                    case PagingMode.TextBox:
+                        oPagesTop = this.CreatePageTextBox("PageTopTextBox");
+                        break;
+                    case PagingMode.DropDownList:
+                        oPagesTop = CreatePageList("PageTopList");
+                        break;
+                }
+                oPagesTop.Style.Add(HtmlTextWriterStyle.TextAlign, "center");
+                oCell4Top.Controls.Add(oPagesTop);
+
+                if (oLabel2Top.Text.Length > 0) oCell5Top.Controls.Add(oLabel2Top);
+                if (oButton3Top != null) oCell6Top.Controls.Add(oButton3Top);
+
+                oRowTop = new TableRow();
+                oRowTop.HorizontalAlign = HorizontalAlign.Center;
+                oRowTop.Cells.Add(oCell1Top);
+                oRowTop.Cells.Add(oCell2Top);
+                oRowTop.Cells.Add(oCell3Top);
+                oRowTop.Cells.Add(oCell4Top);
+                oRowTop.Cells.Add(oCell5Top);
+                oRowTop.Cells.Add(oCell6Top);
+                oRowTop.Cells.Add(oCell7Top);
+                if (m_CustomPagerSettings.Width.IsEmpty && (!Width.IsEmpty)) oRowTop.Cells.Add(oCell8Top);
+                oTableTop.Rows.Add(oRowTop);
+                oTableTop.Width = Width;
+
+                return oTableTop;
+            }
+            finally
+            {
+                if (oCell1Top != null)
+                {
+                    oCell1Top.Dispose();
+                }
+
+                if (oCell2Top != null)
+                {
+                    oCell2Top.Dispose();
+                }
+
+                if (oCell3Top != null)
+                {
+                    oCell3Top.Dispose();
+                }
+
+                if (oCell4Top != null)
+                {
+                    oCell4Top.Dispose();
+                }
+
+                if (oCell5Top != null)
+                {
+                    oCell5Top.Dispose();
+                }
+
+                if (oCell6Top != null)
+                {
+                    oCell6Top.Dispose();
+                }
+
+                if (oCell7Top != null)
+                {
+                    oCell7Top.Dispose();
+                }
+
+                if (oCell8Top != null)
+                {
+                    oCell8Top.Dispose();
+                }
+
+                if (oRowTop != null)
+                {
+                    oRowTop.Dispose();
+                }
+
+                if (oLabel1Top != null)
+                {
+                    oLabel1Top.Dispose();
+                }
+
+                if (oLabel2Top != null)
+                {
+                    oLabel2Top.Dispose();
+                }
+
+                if (oTableTop != null)
+                {
+                    oTableTop.Dispose();
+                }
+            }
+        }
+
+        private Table CreatePagerBottomTable()
+        {
+            TableCell oCell1Bottom = null;
+            TableCell oCell2Bottom = null;
+            TableCell oCell3Bottom = null;
+            TableCell oCell4Bottom = null;
+            TableCell oCell5Bottom = null;
+            TableCell oCell6Bottom = null;
+            TableCell oCell7Bottom = null;
+            TableCell oCell8Bottom = null;
+            TableRow oRowBottom = null;
+            WebControl oPagesBottom = null;
+            Literal oLabel1Bottom = null;
+            Literal oLabel2Bottom = null;
+            WebControl oButton2Bottom = null;
+            WebControl oButton3Bottom = null;
+            Table oTableBottom = null;
+
+            try
+            {
+                oLabel1Bottom = new Literal();
+                oLabel2Bottom = new Literal();
+                oTableBottom = new Table();
+                oCell1Bottom = new TableCell();
+                oCell2Bottom = new TableCell();
+                oCell3Bottom = new TableCell();
+                oCell4Bottom = new TableCell();
+                oCell5Bottom = new TableCell();
+                oCell6Bottom = new TableCell();
+                oCell7Bottom = new TableCell();
+                oCell8Bottom = new TableCell();
+
+                oTableBottom.HorizontalAlign = m_CustomPagerSettings.HorizontalAlign;
+                oTableBottom.ID = "oTableBottom";
+                if (m_CustomPagerSettings.FirstTitle.Length > 0)
+                    oLabel1Bottom.Text = m_CustomPagerSettings.FirstTitle + HtmlTextWriter.SpaceChar;
+                if (m_CustomPagerSettings.LastTitle.Length > 0)
+                    oLabel2Bottom.Text = string.Concat(HtmlTextWriter.SpaceChar, m_CustomPagerSettings.LastTitle, HtmlTextWriter.SpaceChar, PageCount.ToString(CultureInfo.CurrentCulture));
+                oCell1Bottom.Wrap = false;
+                oCell5Bottom.Wrap = false;
+                oCell7Bottom.Wrap = false;
+                oCell8Bottom.Width = Unit.Percentage(100);
+
+                switch (m_CustomPagerSettings.ButtonsStyle)
+                {
+                    case PagerButtonsStyle.Image:
+                        oButton2Bottom = CreatePreviousImageButton("PreviousBottomButton");
+                        oButton3Bottom = CreateNextImageButton("NextBottomButton");
+                        break;
+                    case PagerButtonsStyle.Link:
+                        oButton2Bottom = CreatePreviousLinkButton("PreviousBottomButton");
+                        oButton3Bottom = CreateNextLinkButton("NextBottomButton");
+                        break;
+                }
+
+                if (oLabel1Bottom.Text.Length > 0) oCell1Bottom.Controls.Add(oLabel1Bottom);
+                if (oButton2Bottom != null) oCell3Bottom.Controls.Add(oButton2Bottom);
+
+                switch (m_CustomPagerSettings.Mode)
+                {
+                    case PagingMode.TextBox:
+                        oPagesBottom = this.CreatePageTextBox("PageBottomTextBox");
+                        break;
+                    case PagingMode.DropDownList:
+                        oPagesBottom = CreatePageList("PageBottomList");
+                        break;
+                }
+                oPagesBottom.Style.Add(HtmlTextWriterStyle.TextAlign, "center");
+                oCell4Bottom.Controls.Add(oPagesBottom);
+
+                if (oLabel2Bottom.Text.Length > 0) oCell5Bottom.Controls.Add(oLabel2Bottom);
+                if (oButton3Bottom != null) oCell6Bottom.Controls.Add(oButton3Bottom);
+
+                oRowBottom = new TableRow();
+                oRowBottom.HorizontalAlign = HorizontalAlign.Center;
+                oRowBottom.Cells.Add(oCell1Bottom);
+                oRowBottom.Cells.Add(oCell2Bottom);
+                oRowBottom.Cells.Add(oCell3Bottom);
+                oRowBottom.Cells.Add(oCell4Bottom);
+                oRowBottom.Cells.Add(oCell5Bottom);
+                oRowBottom.Cells.Add(oCell6Bottom);
+                oRowBottom.Cells.Add(oCell7Bottom);
+                if (m_CustomPagerSettings.Width.IsEmpty && (!Width.IsEmpty)) oRowBottom.Cells.Add(oCell8Bottom);
+                oTableBottom.Rows.Add(oRowBottom);
+                oTableBottom.Width = Width;
+
+                return oTableBottom;
+            }
+            finally
+            {
+                if (oCell1Bottom != null)
+                {
+                    oCell1Bottom.Dispose();
+                }
+
+                if (oCell2Bottom != null)
+                {
+                    oCell2Bottom.Dispose();
+                }
+
+                if (oCell3Bottom != null)
+                {
+                    oCell3Bottom.Dispose();
+                }
+
+                if (oCell4Bottom != null)
+                {
+                    oCell4Bottom.Dispose();
+                }
+
+                if (oCell5Bottom != null)
+                {
+                    oCell5Bottom.Dispose();
+                }
+
+                if (oCell6Bottom != null)
+                {
+                    oCell6Bottom.Dispose();
+                }
+
+                if (oCell7Bottom != null)
+                {
+                    oCell7Bottom.Dispose();
+                }
+
+                if (oCell8Bottom != null)
+                {
+                    oCell8Bottom.Dispose();
+                }
+
+                if (oRowBottom != null)
+                {
+                    oRowBottom.Dispose();
+                }
+
+                if (oLabel1Bottom != null)
+                {
+                    oLabel1Bottom.Dispose();
+                }
+
+                if (oLabel2Bottom != null)
+                {
+                    oLabel2Bottom.Dispose();
+                }
+
+                if (oTableBottom != null)
+                {
+                    oTableBottom.Dispose();
+                }
+            }
         }
 
         private void EnsureSearch()
@@ -1492,106 +1735,6 @@ namespace Micajah.Common.WebControls
             }
         }
 
-        /// <summary>
-        /// Initialize custom pager child controls.
-        /// </summary>
-        private void InitCustomPager()
-        {
-            //top
-            oLabel1Top = new Literal();
-            oLabel2Top = new Literal();
-            oLabel1Bottom = new Literal();
-            oLabel2Bottom = new Literal();
-            oTableTop = new Table();
-            oTableBottom = new Table();
-            oTableTop.HorizontalAlign = m_CustomPagerSettings.HorizontalAlign;
-            oTableBottom.HorizontalAlign = m_CustomPagerSettings.HorizontalAlign;
-
-            this.CreateCustomPagerSelector();
-
-            oTableTop.Rows.Clear();
-            oTableTop.ID = "oTableTop";
-            if (m_CustomPagerSettings.FirstTitle.Length > 0) oLabel1Top.Text = m_CustomPagerSettings.FirstTitle + HtmlTextWriter.SpaceChar;
-            if (m_CustomPagerSettings.LastTitle.Length > 0)
-                oLabel2Top.Text = string.Concat(HtmlTextWriter.SpaceChar, m_CustomPagerSettings.LastTitle, HtmlTextWriter.SpaceChar, PageCount.ToString(CultureInfo.CurrentCulture));
-            TableCell oCell1Top = new TableCell();
-            TableCell oCell2Top = new TableCell();
-            TableCell oCell3Top = new TableCell();
-            TableCell oCell4Top = new TableCell();
-            TableCell oCell5Top = new TableCell();
-            TableCell oCell6Top = new TableCell();
-            TableCell oCell7Top = new TableCell();
-            TableCell oCell8Top = new TableCell();
-            oCell1Top.Wrap = false;
-            oCell5Top.Wrap = false;
-            oCell7Top.Wrap = false;
-            oCell8Top.Width = Unit.Percentage(100);
-            if (oLabel1Top.Text.Length > 0) oCell1Top.Controls.Add(oLabel1Top);
-
-            this.CreateCustomPagerButtons();
-
-            if (oButton2Top != null) oCell3Top.Controls.Add(oButton2Top);
-
-            oCell4Top.Controls.Add(oPagesTop);
-            if (oLabel2Top.Text.Length > 0) oCell5Top.Controls.Add(oLabel2Top);
-            if (oButton3Top != null) oCell6Top.Controls.Add(oButton3Top);
-
-            TableRow oRowTop = new TableRow();
-            oRowTop.HorizontalAlign = HorizontalAlign.Center;
-            oRowTop.Cells.Add(oCell1Top);
-            oRowTop.Cells.Add(oCell2Top);
-            oRowTop.Cells.Add(oCell3Top);
-            oRowTop.Cells.Add(oCell4Top);
-            oRowTop.Cells.Add(oCell5Top);
-            oRowTop.Cells.Add(oCell6Top);
-            oRowTop.Cells.Add(oCell7Top);
-            if (m_CustomPagerSettings.Width.IsEmpty && (!Width.IsEmpty)) oRowTop.Cells.Add(oCell8Top);
-            oTableTop.Rows.Add(oRowTop);
-            oTableTop.Width = Width;
-
-            //bottom
-            oTableBottom.Rows.Clear();
-            oTableBottom.ID = "oTableBottom";
-            if (m_CustomPagerSettings.FirstTitle.Length > 0)
-                oLabel1Bottom.Text = m_CustomPagerSettings.FirstTitle + HtmlTextWriter.SpaceChar;
-            if (m_CustomPagerSettings.LastTitle.Length > 0)
-                oLabel2Bottom.Text = string.Concat(HtmlTextWriter.SpaceChar, m_CustomPagerSettings.LastTitle, HtmlTextWriter.SpaceChar, PageCount.ToString(CultureInfo.CurrentCulture));
-            TableCell oCell1Bottom = new TableCell();
-            TableCell oCell2Bottom = new TableCell();
-            TableCell oCell3Bottom = new TableCell();
-            TableCell oCell4Bottom = new TableCell();
-            TableCell oCell5Bottom = new TableCell();
-            TableCell oCell6Bottom = new TableCell();
-            TableCell oCell7Bottom = new TableCell();
-            TableCell oCell8Bottom = new TableCell();
-            oCell1Bottom.Wrap = false;
-            oCell5Bottom.Wrap = false;
-            oCell7Bottom.Wrap = false;
-            oCell8Bottom.Width = Unit.Percentage(100);
-            if (oLabel1Bottom.Text.Length > 0) oCell1Bottom.Controls.Add(oLabel1Bottom);
-            if (oButton2Bottom != null) oCell3Bottom.Controls.Add(oButton2Bottom);
-
-            oCell4Bottom.Controls.Add(oPagesBottom);
-            if (oLabel2Bottom.Text.Length > 0) oCell5Bottom.Controls.Add(oLabel2Bottom);
-            if (oButton3Bottom != null) oCell6Bottom.Controls.Add(oButton3Bottom);
-
-            TableRow oRowBottom = new TableRow();
-            oRowBottom.HorizontalAlign = HorizontalAlign.Center;
-            oRowBottom.Cells.Add(oCell1Bottom);
-            oRowBottom.Cells.Add(oCell2Bottom);
-            oRowBottom.Cells.Add(oCell3Bottom);
-            oRowBottom.Cells.Add(oCell4Bottom);
-            oRowBottom.Cells.Add(oCell5Bottom);
-            oRowBottom.Cells.Add(oCell6Bottom);
-            oRowBottom.Cells.Add(oCell7Bottom);
-            if (m_CustomPagerSettings.Width.IsEmpty && (!Width.IsEmpty)) oRowBottom.Cells.Add(oCell8Bottom);
-            oTableBottom.Rows.Add(oRowBottom);
-            oTableBottom.Width = Width;
-
-            oPagesTop.Style.Add(HtmlTextWriterStyle.TextAlign, "center");
-            oPagesBottom.Style.Add(HtmlTextWriterStyle.TextAlign, "center");
-        }
-
         private static bool NeedCreateNewRow(TableCell cell)
         {
             return NeedCreateNewRow(cell as DataControlFieldCell);
@@ -1640,6 +1783,29 @@ namespace Micajah.Common.WebControls
             if (this.LastColumnIsAutoGenerated) colSpan++;
             if (colSpan > 1)
                 cell.ColumnSpan = colSpan;
+        }
+
+        private static void ProcessRows(GridView grid, System.Drawing.Color borderColor)
+        {
+            if (grid.HeaderRow != null)
+                ProcessRowCells(grid.HeaderRow, grid.HeaderStyle.CssClass, borderColor);
+
+            if (grid.TopPagerRow != null)
+            {
+                grid.TopPagerRow.BorderColor = borderColor;
+                ProcessRowCells(grid.TopPagerRow, grid.PagerStyle.CssClass, borderColor);
+            }
+
+            if (grid.BottomPagerRow != null)
+            {
+                grid.BottomPagerRow.BorderColor = borderColor;
+                ProcessRowCells(grid.BottomPagerRow, grid.PagerStyle.CssClass, borderColor);
+            }
+
+            if (grid.FooterRow != null)
+            {
+                grid.FooterRow.ApplyStyle(grid.FooterStyle);
+            }
         }
 
         private void RegisterClientScripts()
@@ -2108,9 +2274,6 @@ namespace Micajah.Common.WebControls
                         if (!this.ShowHeader)
                             this.HeaderRow.Visible = false;
                     }
-
-                    if (this.ShowTopPagerRow || this.ShowBottomPagerRow)
-                        this.InitCustomPager();
 
                     if (this.ShowTopPagerRow)
                     {

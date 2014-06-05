@@ -96,6 +96,15 @@ namespace Micajah.Common.Configuration
             get { return (string)this["dnsAddress"]; }
         }
 
+        /// <summary>
+        /// Gets the value indicating whether the Partial custom URLs is primary.
+        /// </summary>
+        [ConfigurationProperty("partialCustomUrlIsPrimary")]
+        public bool PartialCustomUrlIsPrimary
+        {
+            get { return (bool)this["partialCustomUrlIsPrimary"]; }
+        }
+
         #endregion
     }
 }

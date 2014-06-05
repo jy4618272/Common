@@ -38,6 +38,7 @@ namespace Micajah.Common.WebControls.AdminControls
 
         public bool ShowSwitchViewButton { get; set; }
         public bool ShowSavedMessage { get; set; }
+        public bool ShowFullVanityUrl { get; set; }
 
         public event EventHandler SaveButtonClick;
 
@@ -56,6 +57,7 @@ namespace Micajah.Common.WebControls.AdminControls
             m_InnerControl = this.Page.LoadControl(ResourceProvider.CustomUrlsControlVirtualPath) as CustomUrlsControl;
             m_InnerControl.ID = "CustomUrls";
             m_InnerControl.ShowSwitchViewButton = this.ShowSwitchViewButton;
+            m_InnerControl.ShowFullVanityUrl = this.ShowFullVanityUrl;
             if (SaveButtonClick != null)
                 m_InnerControl.SaveButtonClick += SaveButtonClick;
             m_InnerControl.ShowSavedMessage = ShowSavedMessage;

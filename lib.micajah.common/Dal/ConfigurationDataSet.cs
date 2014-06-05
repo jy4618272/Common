@@ -24,13 +24,14 @@ namespace Micajah.Common.Dal
                     {
                         if (s_Current == null)
                         {
-                            ConfigurationDataSet ds = new ConfigurationDataSet();
+                            using (ConfigurationDataSet ds = new ConfigurationDataSet())
+                            {
+                                SettingProvider.Fill(ds);
+                                RoleProvider.Fill(ds);
+                                ActionProvider.Fill(ds);
 
-                            SettingProvider.Fill(ds);
-                            RoleProvider.Fill(ds);
-                            ActionProvider.Fill(ds);
-
-                            s_Current = ds;
+                                s_Current = ds;
+                            }
                         }
                     }
                 }

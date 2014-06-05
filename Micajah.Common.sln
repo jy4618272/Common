@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib.micajah.common", "lib.micajah.common\lib.micajah.common.csproj", "{10D2CA35-30D2-4291-9133-4F675C8B3B29}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "db.micajah.common.master", "db.micajah.common.master\db.micajah.common.master.sqlproj", "{E8220301-5D09-4198-A343-D7A806700558}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "db.micajah.common.client", "db.micajah.common.client\db.micajah.common.client.sqlproj", "{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web.micajah.common", "web.micajah.common\web.micajah.common.csproj", "{D782F7DD-A397-4846-B1D4-D5543C86AFE6}"
 EndProject
@@ -39,8 +37,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin Shared", "bin Shared", 
 		bin Shared\Telerik.Web.UI.Skins.dll = bin Shared\Telerik.Web.UI.Skins.dll
 	EndProjectSection
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "azure.micajah.common", "azure.micajah.common\azure.micajah.common.ccproj", "{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,24 +47,10 @@ Global
 		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10D2CA35-30D2-4291-9133-4F675C8B3B29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8220301-5D09-4198-A343-D7A806700558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8220301-5D09-4198-A343-D7A806700558}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8220301-5D09-4198-A343-D7A806700558}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8220301-5D09-4198-A343-D7A806700558}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8220301-5D09-4198-A343-D7A806700558}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EF15BA9-2DAD-4D02-89FC-9F13D8904B30}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D782F7DD-A397-4846-B1D4-D5543C86AFE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8AB7CAA-1B60-4D6A-BBDA-3C5983E04EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

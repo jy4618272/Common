@@ -44,6 +44,11 @@ namespace Micajah.Common.Bll
         /// </summary>
         public const string OctetStream = "application/octet-stream";
 
+        /// <summary>
+        /// application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        /// </summary>
+        public const string OpenXmlSpreadsheet = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
         #endregion
 
         #region Public Methods
