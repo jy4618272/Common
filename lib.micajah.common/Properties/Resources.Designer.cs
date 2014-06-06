@@ -6538,15 +6538,6 @@ namespace Micajah.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3.
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The E-mail supplied is invalid..
         /// </summary>
         internal static string Support_InvalidEmail {
@@ -6603,9 +6594,9 @@ namespace Micajah.Common.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt; Return back.
         /// </summary>
-        internal static string SupportControl_ReturnBackLink_Text {
+        internal static string SupportControl_ReturnLink_Text {
             get {
-                return ResourceManager.GetString("SupportControl_ReturnBackLink_Text", resourceCulture);
+                return ResourceManager.GetString("SupportControl_ReturnLink_Text", resourceCulture);
             }
         }
         
