@@ -338,23 +338,24 @@ namespace Micajah.Common.WebControls
             HtmlGenericControl li = null;
             HtmlGenericControl li2 = null;
 
-            if (m_ModernTheme)
-            {
-                ul = new HtmlGenericControl("ul");
-                ul.Attributes["class"] = "nav pull-right";
-            }
-            else
-            {
-                links = new ControlList();
-            }
-
             try
             {
+                if (m_ModernTheme)
+                {
+                    ul = new HtmlGenericControl("ul");
+                    ul.Attributes["class"] = "nav pull-right";
+                }
+                else
+                {
+                    links = new ControlList();
+                }
+
                 Micajah.Common.Bll.ActionCollection items = ActionProvider.GlobalNavigationLinks.FindByActionId(ActionProvider.GlobalNavigationLinksActionId).GetAvailableChildActions(m_ActionIdList, m_IsFrameworkAdmin, m_IsAuthenticated);
 
                 if (m_ModernTheme)
                 {
                     li = (HtmlGenericControl)CreateApplicationLogoListItem("Al");
+
                     ul.Controls.Add(li);
                 }
                 else
@@ -512,7 +513,9 @@ namespace Micajah.Common.WebControls
             finally
             {
                 if (ul2 != null) ul2.Dispose();
+                if (li2 != null) li2.Dispose();
                 if (ul != null) ul.Dispose();
+                if (li != null) li.Dispose();
                 if (link != null) link.Dispose();
                 if (links != null) links.Dispose();
             }
