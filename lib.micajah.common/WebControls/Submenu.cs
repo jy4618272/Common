@@ -384,6 +384,11 @@ namespace Micajah.Common.WebControls
                     lbl.Dispose();
                 }
 
+                if (ul != null)
+                {
+                    ul.Dispose();
+                }
+
                 if (container != null)
                 {
                     container.Dispose();
