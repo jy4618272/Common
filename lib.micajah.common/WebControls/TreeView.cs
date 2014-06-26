@@ -202,7 +202,11 @@ namespace Micajah.Common.WebControls
                 writer.AddStyleAttribute(HtmlTextWriterStyle.Cursor, "default");
                 writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "100%");
                 writer.AddStyleAttribute(HtmlTextWriterStyle.BackgroundColor, "Transparent");
-                if (this.Theme != MasterPageTheme.Modern)
+                if (this.Theme == MasterPageTheme.Modern)
+                {
+                    writer.AddStyleAttribute(HtmlTextWriterStyle.PaddingRight, "36px !important");
+                }
+                else
                 {
                     writer.AddStyleAttribute(HtmlTextWriterStyle.VerticalAlign, "middle");
                     writer.AddStyleAttribute(HtmlTextWriterStyle.PaddingTop, "2px");
