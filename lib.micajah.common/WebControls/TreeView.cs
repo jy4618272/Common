@@ -20,6 +20,14 @@ namespace Micajah.Common.WebControls
     {
         #region Private Properties
 
+        private string NodeCheckedHandler
+        {
+            get
+            {
+                return string.Concat("function ", ClientID, "_NodeChecked(sender, eventArgs) { TreeView_NodeChecked(sender, eventArgs); ", NodeCheckedOriginalHandler, "(sender, eventArgs); }\r\n");
+            }
+        }
+
         private string NodeClickedHandler
         {
             get
@@ -34,6 +42,16 @@ namespace Micajah.Common.WebControls
             {
                 return string.Concat("function ", ClientID, "_NodeDropping(sender, eventArgs) { TreeView_NodeDropping(sender, eventArgs); if (!eventArgs.get_cancel()) { ", NodeDroppingOriginalHandler, "(sender, eventArgs); } }\r\n");
             }
+        }
+
+        private string NodeCheckedOriginalHandler
+        {
+            get
+            {
+                object obj = base.ViewState["NodeCheckedOriginalHandler"];
+                return (obj == null) ? string.Empty : (string)obj;
+            }
+            set { base.ViewState["NodeCheckedOriginalHandler"] = value; }
         }
 
         private string NodeClickedOriginalHandler
@@ -134,24 +152,61 @@ namespace Micajah.Common.WebControls
             {
                 if (this.ComboBoxMode)
                 {
-                    if (!string.IsNullOrEmpty(base.OnClientNodeClicked) && (!base.OnClientNodeClicked.Equals("TreeView_NodeClicked")))
+                    if (base.CheckBoxes)
                     {
-                        if (!Page.IsPostBack) NodeClickedOriginalHandler = base.OnClientNodeClicked;
-                        sb.Append(NodeClickedHandler);
-                        base.OnClientNodeClicked = string.Concat(ClientID, "_NodeClicked");
+                        if (!string.IsNullOrEmpty(base.OnClientNodeChecked) && (!base.OnClientNodeChecked.Equals("TreeView_NodeChecked")))
+                        {
+                            if (!Page.IsPostBack)
+                            {
+                                NodeCheckedOriginalHandler = base.OnClientNodeChecked;
+                            }
+
+                            sb.Append(NodeCheckedHandler);
+
+                            base.OnClientNodeChecked = string.Concat(ClientID, "_NodeChecked");
+                        }
+                        else
+                        {
+                            base.OnClientNodeChecked = "TreeView_NodeChecked";
+                        }
                     }
-                    else base.OnClientNodeClicked = "TreeView_NodeClicked";
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(base.OnClientNodeClicked) && (!base.OnClientNodeClicked.Equals("TreeView_NodeClicked")))
+                        {
+                            if (!Page.IsPostBack)
+                            {
+                                NodeClickedOriginalHandler = base.OnClientNodeClicked;
+                            }
+
+                            sb.Append(NodeClickedHandler);
+
+                            base.OnClientNodeClicked = string.Concat(ClientID, "_NodeClicked");
+                        }
+                        else
+                        {
+                            base.OnClientNodeClicked = "TreeView_NodeClicked";
+                        }
+                    }
                 }
 
                 if (base.EnableDragAndDrop)
                 {
                     if (!string.IsNullOrEmpty(base.OnClientNodeDropping) && (!base.OnClientNodeDropping.Equals("TreeView_NodeDropping")))
                     {
-                        if (!Page.IsPostBack) NodeDroppingOriginalHandler = base.OnClientNodeDropping;
+                        if (!Page.IsPostBack)
+                        {
+                            NodeDroppingOriginalHandler = base.OnClientNodeDropping;
+                        }
+
                         sb.Append(NodeDroppingHandler);
+
                         base.OnClientNodeDropping = string.Concat(ClientID, "_NodeDropping");
                     }
-                    else base.OnClientNodeDropping = "TreeView_NodeDropping";
+                    else
+                    {
+                        base.OnClientNodeDropping = "TreeView_NodeDropping";
+                    }
                 }
             }
 
