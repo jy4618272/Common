@@ -26,7 +26,7 @@ function TreeView_UpdateText(sender, node, selected, multipleSelect) {
 
 function TreeView_NodeChecked(sender, eventArgs) {
     var node = eventArgs.get_node();
-    TreeView_UpdateText(sender, node, node.get_checked(), sender.get_multipleSelect());
+    TreeView_UpdateText(sender, node, node.get_checked(), true);
 }
 
 function TreeView_NodeClicked(sender, eventArgs) {

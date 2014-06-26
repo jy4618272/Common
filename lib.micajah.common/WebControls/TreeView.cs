@@ -79,11 +79,27 @@ namespace Micajah.Common.WebControls
             get
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (RadTreeNode node in this.SelectedNodes)
+                IList<RadTreeNode> nodes = null;
+
+                if (base.CheckBoxes)
+                {
+                    nodes = this.CheckedNodes;
+                }
+                else
+                {
+                    nodes = this.SelectedNodes;
+                }
+
+                foreach (RadTreeNode node in nodes)
                 {
                     sb.AppendFormat(", {0}", node.Text);
                 }
-                if (sb.Length > 1) sb.Remove(0, 2);
+
+                if (sb.Length > 1)
+                {
+                    sb.Remove(0, 2);
+                }
+
                 return sb.ToString();
             }
         }
@@ -148,65 +164,63 @@ namespace Micajah.Common.WebControls
 
             StringBuilder sb = new StringBuilder();
 
-            if (this.ComboBoxMode || base.EnableDragAndDrop)
+
+            if (this.ComboBoxMode)
             {
-                if (this.ComboBoxMode)
+                if (base.CheckBoxes)
                 {
-                    if (base.CheckBoxes)
-                    {
-                        if (!string.IsNullOrEmpty(base.OnClientNodeChecked) && (!base.OnClientNodeChecked.Equals("TreeView_NodeChecked")))
-                        {
-                            if (!Page.IsPostBack)
-                            {
-                                NodeCheckedOriginalHandler = base.OnClientNodeChecked;
-                            }
-
-                            sb.Append(NodeCheckedHandler);
-
-                            base.OnClientNodeChecked = string.Concat(ClientID, "_NodeChecked");
-                        }
-                        else
-                        {
-                            base.OnClientNodeChecked = "TreeView_NodeChecked";
-                        }
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(base.OnClientNodeClicked) && (!base.OnClientNodeClicked.Equals("TreeView_NodeClicked")))
-                        {
-                            if (!Page.IsPostBack)
-                            {
-                                NodeClickedOriginalHandler = base.OnClientNodeClicked;
-                            }
-
-                            sb.Append(NodeClickedHandler);
-
-                            base.OnClientNodeClicked = string.Concat(ClientID, "_NodeClicked");
-                        }
-                        else
-                        {
-                            base.OnClientNodeClicked = "TreeView_NodeClicked";
-                        }
-                    }
-                }
-
-                if (base.EnableDragAndDrop)
-                {
-                    if (!string.IsNullOrEmpty(base.OnClientNodeDropping) && (!base.OnClientNodeDropping.Equals("TreeView_NodeDropping")))
+                    if (!string.IsNullOrEmpty(base.OnClientNodeChecked) && (!base.OnClientNodeChecked.Equals("TreeView_NodeChecked")))
                     {
                         if (!Page.IsPostBack)
                         {
-                            NodeDroppingOriginalHandler = base.OnClientNodeDropping;
+                            NodeCheckedOriginalHandler = base.OnClientNodeChecked;
                         }
 
-                        sb.Append(NodeDroppingHandler);
+                        sb.Append(NodeCheckedHandler);
 
-                        base.OnClientNodeDropping = string.Concat(ClientID, "_NodeDropping");
+                        base.OnClientNodeChecked = string.Concat(ClientID, "_NodeChecked");
                     }
                     else
                     {
-                        base.OnClientNodeDropping = "TreeView_NodeDropping";
+                        base.OnClientNodeChecked = "TreeView_NodeChecked";
                     }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(base.OnClientNodeClicked) && (!base.OnClientNodeClicked.Equals("TreeView_NodeClicked")))
+                    {
+                        if (!Page.IsPostBack)
+                        {
+                            NodeClickedOriginalHandler = base.OnClientNodeClicked;
+                        }
+
+                        sb.Append(NodeClickedHandler);
+
+                        base.OnClientNodeClicked = string.Concat(ClientID, "_NodeClicked");
+                    }
+                    else
+                    {
+                        base.OnClientNodeClicked = "TreeView_NodeClicked";
+                    }
+                }
+            }
+
+            if (base.EnableDragAndDrop)
+            {
+                if (!string.IsNullOrEmpty(base.OnClientNodeDropping) && (!base.OnClientNodeDropping.Equals("TreeView_NodeDropping")))
+                {
+                    if (!Page.IsPostBack)
+                    {
+                        NodeDroppingOriginalHandler = base.OnClientNodeDropping;
+                    }
+
+                    sb.Append(NodeDroppingHandler);
+
+                    base.OnClientNodeDropping = string.Concat(ClientID, "_NodeDropping");
+                }
+                else
+                {
+                    base.OnClientNodeDropping = "TreeView_NodeDropping";
                 }
             }
 
@@ -224,7 +238,7 @@ namespace Micajah.Common.WebControls
 
             Unit width = Width;
 
-            if (ComboBoxMode)
+            if (this.ComboBoxMode)
             {
                 if ((Width.Type == UnitType.Percentage) || Width.IsEmpty) Width = Unit.Pixel(200);
 
