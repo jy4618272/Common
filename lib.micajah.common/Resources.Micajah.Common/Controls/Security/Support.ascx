@@ -32,7 +32,7 @@
             <td colspan="2" style="text-align: center;">
                 <br />
                 <br />
-                <asp:HyperLink ID="ReturnBackLink" runat="server" Visible="false" CssClass="Return" />
+                <asp:HyperLink ID="ReturnLink" runat="server" Visible="false" CssClass="Return" />
             </td>
         </tr>
     </table>

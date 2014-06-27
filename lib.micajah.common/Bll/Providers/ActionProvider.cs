@@ -489,7 +489,7 @@ namespace Micajah.Common.Bll.Providers
                 list.AddRange(GetActionIdListByRoleId(RoleProvider.InstanceAdministratorRoleId));
 
             if (removeDuplicates)
-                Support.RemoveDuplicates(ref list);
+                list = Support.RemoveDuplicates(list);
 
             return list;
         }

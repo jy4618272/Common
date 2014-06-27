@@ -9,7 +9,10 @@ namespace Micajah.Common.Configuration
 
         protected override void DeserializeElement(XmlReader reader, bool serializeCollectionKey)
         {
-            m_Value = (T)reader.ReadElementContentAs(typeof(T), null);
+            if (reader != null)
+            {
+                m_Value = (T)reader.ReadElementContentAs(typeof(T), null);
+            }
         }
 
         public T Value

@@ -188,7 +188,9 @@ namespace Micajah.Common.Bll.Providers
                 }
 
                 if (roleIdList.Count > 0)
-                    Support.RemoveDuplicates(ref list);
+                {
+                    list = Support.RemoveDuplicates(list);
+                }
 
                 SortedList list2 = GetGroupsInstanceActionIdList(organizationId, groupIdList, instanceId);
 
@@ -210,7 +212,7 @@ namespace Micajah.Common.Bll.Providers
             if (isOrgAdmin)
                 list.AddRange(ActionProvider.GetActionIdListByRoleId(RoleProvider.OrganizationAdministratorRoleId));
 
-            Support.RemoveDuplicates(ref list);
+            list = Support.RemoveDuplicates(list);
 
             return list;
         }

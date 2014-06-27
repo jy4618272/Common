@@ -455,3 +455,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Scope = "member", Target = "Micajah.Common.WebControls.SecurityControls.OAuthControl.#VerifierMultiView")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiView", Scope = "member", Target = "Micajah.Common.WebControls.SecurityControls.OAuthControl.#VerifierMultiView")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Auth", Scope = "type", Target = "Micajah.Common.Bll.Handlers.OAuthHandler")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Scope = "member", Target = "Micajah.Common.Configuration.ValidationElement.#Type")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", MessageId = "dd-MMM-yyyy", Scope = "resource", Target = "Micajah.Common.Properties.Resources.resources")]

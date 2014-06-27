@@ -605,6 +605,30 @@ namespace Micajah.Common.WebControls
             if (this.TextChanged != null) this.TextChanged(this, e);
         }
 
+        private void RenderValidators(HtmlTextWriter writer)
+        {
+            if (Required && Enabled && (!ReadOnly))
+            {
+                if (!DesignMode && string.IsNullOrEmpty(ErrorMessage))
+                    base.RequiredFieldValidator.ErrorMessage = Resources.TextBox_RequiredValidator_ErrorMessage;
+                base.RequiredFieldValidator.RenderControl(writer);
+            }
+
+            if (RangeValidationEnabled)
+            {
+                if (!DesignMode && string.IsNullOrEmpty(m_RangeValidator.ErrorMessage))
+                    m_RangeValidator.ErrorMessage = Resources.TextBox_RangeValidator_ErrorMessage;
+                m_RangeValidator.RenderControl(writer);
+            }
+
+            if (RegularExpressionValidationEnabled)
+            {
+                if (!DesignMode && string.IsNullOrEmpty(m_RegularExpressionValidator.ErrorMessage))
+                    m_RegularExpressionValidator.ErrorMessage = Resources.TextBox_RegularExpressionValidator_ErrorMessage;
+                m_RegularExpressionValidator.RenderControl(writer);
+            }
+        }
+
         #endregion
 
         #region Overriden Methods
@@ -861,26 +885,7 @@ namespace Micajah.Common.WebControls
             if (this.Theme != MasterPageTheme.Modern)
                 BaseValidatedControl.RenderValidatedControlMiddleTag(renderSecondRow, writer);
 
-            if (Required && Enabled && (!ReadOnly))
-            {
-                if (!DesignMode && string.IsNullOrEmpty(ErrorMessage))
-                    base.RequiredFieldValidator.ErrorMessage = Resources.TextBox_RequiredValidator_ErrorMessage;
-                base.RequiredFieldValidator.RenderControl(writer);
-            }
-
-            if (RangeValidationEnabled)
-            {
-                if (!DesignMode && string.IsNullOrEmpty(m_RangeValidator.ErrorMessage))
-                    m_RangeValidator.ErrorMessage = Resources.TextBox_RangeValidator_ErrorMessage;
-                m_RangeValidator.RenderControl(writer);
-            }
-
-            if (RegularExpressionValidationEnabled)
-            {
-                if (!DesignMode && string.IsNullOrEmpty(m_RegularExpressionValidator.ErrorMessage))
-                    m_RegularExpressionValidator.ErrorMessage = Resources.TextBox_RegularExpressionValidator_ErrorMessage;
-                m_RegularExpressionValidator.RenderControl(writer);
-            }
+            this.RenderValidators(writer);
 
             if (this.Theme != MasterPageTheme.Modern)
                 BaseValidatedControl.RenderValidatedControlEndTag(renderSecondRow, writer);

@@ -3,13 +3,11 @@ function TreeView_ToggleTreeView(treeViewId) {
     treeView.style.display = (treeView.style.display == "none" ? "block" : "none");
 }
 
-function TreeView_NodeClicked(sender, eventArgs) {
-    var node = eventArgs.get_node();
-    var domEvent = eventArgs.get_domEvent();
+function TreeView_UpdateText(sender, node, selected, multipleSelect) {
     var textBox = document.getElementById(sender.get_id() + "_txt");
     var text = textBox.value;
-    if (node.get_selected()) {
-        if (sender.get_multipleSelect() && domEvent.ctrlKey)
+    if (selected) {
+        if (multipleSelect)
             text += ", " + node.get_text();
         else {
             text = node.get_text();
@@ -24,6 +22,17 @@ function TreeView_NodeClicked(sender, eventArgs) {
     if (index == (text.length - 2)) text = text.substr(0, index);
     textBox.value = text;
     textBox.title = text;
+}
+
+function TreeView_NodeChecked(sender, eventArgs) {
+    var node = eventArgs.get_node();
+    TreeView_UpdateText(sender, node, node.get_checked(), true);
+}
+
+function TreeView_NodeClicked(sender, eventArgs) {
+    var node = eventArgs.get_node();
+    var domEvent = eventArgs.get_domEvent();
+    TreeView_UpdateText(sender, node, node.get_selected(), (sender.get_multipleSelect() && domEvent.ctrlKey));
 }
 
 function TreeView_DestNodeIsChild(sourceNode, destNodeValue) {

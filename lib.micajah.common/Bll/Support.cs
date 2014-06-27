@@ -157,27 +157,6 @@ namespace Micajah.Common.Bll
             }
         }
 
-        internal static void LoadProperties(object obj, string value)
-        {
-            if ((obj == null) || string.IsNullOrEmpty(value)) return;
-
-            Hashtable table = Deserialize(value) as Hashtable;
-
-            if (table != null)
-            {
-                foreach (PropertyInfo p in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
-                {
-                    if (table.ContainsKey(p.Name) && p.CanWrite)
-                        p.SetValue(obj, table[p.Name], null);
-                }
-            }
-        }
-
-        internal static string SaveProperties(Hashtable table)
-        {
-            return Serialize(table);
-        }
-
         internal static void SetPropertyValueSafe(PropertyInfo p, object obj, object value, object[] index)
         {
             if (p != null)
@@ -675,9 +654,13 @@ namespace Micajah.Common.Bll
         /// <returns>The computed hash code.</returns>
         public static string CalculateMD5Hash(string value)
         {
-            MD5 md5 = MD5.Create();
             byte[] inputBytes = Encoding.ASCII.GetBytes(value);
-            byte[] hash = md5.ComputeHash(inputBytes);
+            byte[] hash = null;
+
+            using (MD5 md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(inputBytes);
+            }
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hash.Length; i++)
@@ -971,12 +954,14 @@ namespace Micajah.Common.Bll
         /// <returns>An System.String object that represents the password with specified parameters.</returns>
         public static string GeneratePassword(int length, int numberOfNonAlphanumericCharacters)
         {
-            RandomNumberGenerator rng = RandomNumberGenerator.Create();
             byte[] pass_bytes = new byte[length];
             int i;
             int num_nonalpha = 0;
 
-            rng.GetBytes(pass_bytes);
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(pass_bytes);
+            }
 
             for (i = 0; i < length; i++)
             {
@@ -1093,9 +1078,12 @@ namespace Micajah.Common.Bll
         public static string GeneratePseudoUnique(int length)
         {
             //"abcdefghijkmnopqrstuvwxyz0123456789"
-            RandomNumberGenerator rng = RandomNumberGenerator.Create();
             byte[] pass_bytes = new byte[length];
-            rng.GetBytes(pass_bytes);
+
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(pass_bytes);
+            }
 
             for (int i = 0; i < length; i++)
             {
@@ -1319,16 +1307,24 @@ namespace Micajah.Common.Bll
             return value;
         }
 
-        public static void RemoveDuplicates(ref ArrayList value)
+        public static ArrayList RemoveDuplicates(ArrayList value)
         {
-            ArrayList list = new ArrayList(value);
-            value.Clear();
+            ArrayList list = null;
 
-            foreach (object obj in list)
+            if (value != null)
             {
-                if (!value.Contains(obj))
-                    value.Add(obj);
+                list = new ArrayList();
+
+                foreach (object obj in value)
+                {
+                    if (!list.Contains(obj))
+                    {
+                        list.Add(obj);
+                    }
+                }
             }
+
+            return list;
         }
 
         /// <summary>

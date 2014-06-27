@@ -54,18 +54,36 @@ namespace Micajah.Common.Bll.Providers
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         Pair statePair = null;
-                        StreamReader sr = null;
                         MemoryStream stream = null;
+                        StreamReader sr = null;
 
-                        if (reader.Read()) stream = new MemoryStream(reader[0] as byte[]);
-
-                        if (stream != null)
+                        try
                         {
-                            sr = new StreamReader(stream);
-                            statePair = (stateFormatter.Deserialize(sr.ReadToEnd()) as Pair);
-                        }
+                            if (reader.Read())
+                            {
+                                stream = new MemoryStream(reader[0] as byte[]);
+                            }
 
-                        return statePair;
+                            if (stream != null)
+                            {
+                                sr = new StreamReader(stream);
+
+                                statePair = (stateFormatter.Deserialize(sr.ReadToEnd()) as Pair);
+                            }
+
+                            return statePair;
+                        }
+                        finally
+                        {
+                            if (sr != null)
+                            {
+                                sr.Dispose();
+                            }
+                            else if (stream != null)
+                            {
+                                stream.Dispose();
+                            }
+                        }
                     }
                 }
             }

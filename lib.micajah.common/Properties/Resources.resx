@@ -1564,7 +1564,7 @@
   <data name="SupportControl_TitleLabel_Text" xml:space="preserve">
     <value>Contact {0} for assistance.</value>
   </data>
-  <data name="SupportControl_ReturnBackLink_Text" xml:space="preserve">
+  <data name="SupportControl_ReturnLink_Text" xml:space="preserve">
     <value>&lt; Return back</value>
   </data>
   <data name="SupportControl_GracePeriodText" xml:space="preserve">
@@ -2531,9 +2531,6 @@ Do you want to link email "{1}" to this account?</value>
   </data>
   <data name="OrganizationsControl_List_ParentColumn_HeaderText" xml:space="preserve">
     <value>Parent</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="NonBreakingSpace" xml:space="preserve">
     <value>&amp;nbsp;</value>

@@ -22,7 +22,7 @@ namespace Micajah.Common.WebControls.SecurityControls
         protected HyperLink EmailLink;
         protected Label PhoneLabel;
         protected Literal PhoneValueLabel;
-        protected HyperLink ReturnBackLink;
+        protected HyperLink ReturnLink;
 
         #endregion
 
@@ -69,11 +69,11 @@ namespace Micajah.Common.WebControls.SecurityControls
             EmailLink.NavigateUrl = "mailto:" + EmailLink.Text;
             PhoneValueLabel.Text = FrameworkConfiguration.Current.WebApplication.Support.Phone;
 
-            ReturnBackLink.Text = Resources.SupportControl_ReturnBackLink_Text;
+            ReturnLink.Text = Resources.SupportControl_ReturnLink_Text;
             if (Request.UrlReferrer != null)
             {
-                ReturnBackLink.NavigateUrl = Request.UrlReferrer.ToString();
-                ReturnBackLink.Visible = true;
+                ReturnLink.NavigateUrl = Request.UrlReferrer.ToString();
+                ReturnLink.Visible = true;
             }
         }
 
