@@ -511,41 +511,65 @@ li.Green.DropMenu ul {
         }
 
 /* Links */
-a.Link {
+.Link {
     font-size: 17px;
-    padding: 7px;
+    padding: 7px 7px 9px 7px;
     color: #28597a;
     outline: none !important;
 }
 
-    a.Link:focus, a.Link:hover {
+    .Link:focus, .Link:hover {
         color: White !important;
         background-color: #28597a !important;
     }
 
-a.Delete {
-    font-size: 17px;
-    padding: 7px;
-    color: Maroon !important;
-    outline: none !important;
-}
-
-    a.Delete:focus, a.Delete:hover {
-        color: White !important;
-        background-color: Maroon !important;
+    .Link.Smaller {
+        font-size: 12px !important;
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
     }
 
-a.Cancel {
-    font-size: 17px;
-    padding: 7px;
-    color: Gray !important;
-    outline: none !important;
-}
-
-    a.Cancel:focus, a.Cancel:hover {
-        background-color: Gray !important;
-        color: White !important;
+    .Link.Small {
+        font-size: 12.6px !important;
+        padding-top: 9px !important;
+        padding-bottom: 9px !important;
     }
+
+    .Link.Large {
+        font-size: 18.2px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+    }
+
+    .Link.X-Large {
+        font-size: 21px !important;
+        padding-top: 14px !important;
+        padding-bottom: 13px !important;
+    }
+
+    .Link.Delete, .Delete {
+        font-size: 17px;
+        padding: 7px;
+        color: Maroon !important;
+        outline: none !important;
+    }
+
+        .Link.Delete:focus, .Link.Delete:hover, .Delete:focus, .Delete:hover {
+            color: White !important;
+            background-color: Maroon !important;
+        }
+
+    .Link.Cancel, .Cancel {
+        font-size: 17px;
+        padding: 7px;
+        color: Gray !important;
+        outline: none !important;
+    }
+
+        .Link.Cancel:focus, .Link.Cancel:hover, .Cancel:focus, .Cancel:hover {
+            background-color: Gray !important;
+            color: White !important;
+        }
 
 /*-- Pills --*/
 .Pill {

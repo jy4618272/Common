@@ -11,6 +11,7 @@
     <input type="reset" value="Reset" class="Smaller" />
     <asp:Button ID="Button35" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Smaller" />
     <asp:LinkButton ID="LinkButton19" runat="server" Text="Link" CssClass="Button Smaller" />
+    <asp:LinkButton ID="LinkButton40" runat="server" Text="Link" CssClass="Link Smaller" />
     <p>
         Small
     </p>
@@ -18,6 +19,7 @@
     <input type="reset" value="Reset" class="Small" />
     <asp:Button ID="Button5" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Small" />
     <asp:LinkButton ID="LinkButton1" runat="server" Text="Link" CssClass="Button Small" />
+    <asp:LinkButton ID="LinkButton41" runat="server" Text="Link" CssClass="Link Small" />
     <p>
         Standard
     </p>
@@ -25,6 +27,7 @@
     <input type="reset" value="Reset" />
     <asp:Button ID="Button3" runat="server" UseSubmitBehavior="true" Text="Sumit" />
     <asp:LinkButton ID="Button2" runat="server" Text="Link" CssClass="Button" />
+    <asp:LinkButton ID="LinkButton42" runat="server" Text="Link" CssClass="Link" />
     <p>
         Large
     </p>
@@ -32,6 +35,7 @@
     <input type="reset" value="Reset" class="Large" />
     <asp:Button ID="Button7" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="Large" />
     <asp:LinkButton ID="LinkButton2" runat="server" Text="Link" CssClass="Button Large" />
+    <asp:LinkButton ID="LinkButton43" runat="server" Text="Link" CssClass="Link Large" />
     <p>
         X-Large
     </p>
@@ -39,6 +43,7 @@
     <input type="reset" value="Reset" class="X-Large" />
     <asp:Button ID="Button9" runat="server" UseSubmitBehavior="true" Text="Sumit" CssClass="X-Large" />
     <asp:LinkButton ID="LinkButton3" runat="server" Text="Link" CssClass="Button X-Large" />
+    <asp:LinkButton ID="LinkButton44" runat="server" Text="Link" CssClass="Link X-Large" />
     <h1>Green Buttons
     </h1>
     <p>
@@ -209,9 +214,36 @@
     <br />
     <h1>Links
     </h1>
+    <p>
+        Smaller
+    </p>
+    <asp:LinkButton ID="LinkButton28" runat="server" Text="Link" CssClass="Link Smaller" />
+    <asp:LinkButton ID="LinkButton29" runat="server" Text="Cancel" CssClass="Link Smaller Cancel" />
+    <asp:LinkButton ID="LinkButton30" runat="server" Text="Delete" CssClass="Link Smaller Delete" />
+    <p>
+        Small
+    </p>
+    <asp:LinkButton ID="LinkButton31" runat="server" Text="Link" CssClass="Link Small" />
+    <asp:LinkButton ID="LinkButton32" runat="server" Text="Cancel" CssClass="Link Small Cancel" />
+    <asp:LinkButton ID="LinkButton33" runat="server" Text="Delete" CssClass="Link Small Delete" />
+    <p>
+        Standard
+    </p>
     <asp:LinkButton ID="LinkButton18" runat="server" Text="Link" CssClass="Link" />
-    <asp:LinkButton ID="LinkButton16" runat="server" Text="Cancel" CssClass="Cancel" />
-    <asp:LinkButton ID="LinkButton17" runat="server" Text="Delete" CssClass="Delete" />
+    <asp:LinkButton ID="LinkButton16" runat="server" Text="Cancel" CssClass="Link Cancel" />
+    <asp:LinkButton ID="LinkButton17" runat="server" Text="Delete" CssClass="Link Delete" />
+    <p>
+        Large
+    </p>
+    <asp:LinkButton ID="LinkButton34" runat="server" Text="Link" CssClass="Link Large" />
+    <asp:LinkButton ID="LinkButton35" runat="server" Text="Cancel" CssClass="Link Large Cancel" />
+    <asp:LinkButton ID="LinkButton36" runat="server" Text="Delete" CssClass="Link Large Delete" />
+    <p>
+        X-Large
+    </p>
+    <asp:LinkButton ID="LinkButton37" runat="server" Text="Link" CssClass="Link X-Large" />
+    <asp:LinkButton ID="LinkButton38" runat="server" Text="Cancel" CssClass="Link X-Large Cancel" />
+    <asp:LinkButton ID="LinkButton39" runat="server" Text="Delete" CssClass="Link X-Large Delete" />
     <br />
     <br />
     <h1>Pills
