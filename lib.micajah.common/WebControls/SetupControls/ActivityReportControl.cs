@@ -177,6 +177,11 @@ namespace Micajah.Common.WebControls.SetupControls
 
                                 if (setting.Paid)
                                 {
+                                    if ((setting.ShortName == "PhoneSupport") || (setting.ShortName == "Training1Hour") || (setting.ShortName == "Training3Hours") || (setting.ShortName == "Training8Hours"))
+                                    {
+                                        continue;
+                                    }
+
                                     bool enabled = false;
                                     if (!Boolean.TryParse(setting.Value, out enabled))
                                     {
