@@ -96,6 +96,16 @@ namespace Micajah.Common.Bll.Handlers
                     Micajah.Common.Bll.Providers.CounterSettingProvider.CalculateCounterSettingsValues();
                     context.Response.Write("Finished Counter Settings Calculation.\r\n");
                 }
+                else if (webhookId == 4) //run google replication
+                {
+                    if (HttpContext.Current == null)
+                    {
+                        HttpContext.Current = context;
+                    }
+                    context.Response.Write("Executing Google replication.\r\n");
+                    Micajah.Common.Bll.Providers.GoogleProvider.ReplicateAllOrganizations();
+                    context.Response.Write("Finished Google replication.\r\n");
+                }
                 else throw new HttpException(400, "Unknown Webhook ID. ID=" + webhookId.ToString());
             }
             catch (Exception ex)

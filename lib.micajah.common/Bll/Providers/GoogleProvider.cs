@@ -24,6 +24,8 @@ namespace Micajah.Common.Bll.Providers
         private const string ProfileScope = "profile";
         private const string UsersScope = "https://apps-apis.google.com/a/feeds/user/";
 
+        private const int TIME_ROUND_DIGITS = 2;
+
         #endregion
 
         #region Private Methods
@@ -505,7 +507,7 @@ namespace Micajah.Common.Bll.Providers
                     , null, null, null, null, null
                     , null, null, null, null, null, null
                     , groups, organizationId
-                    , password, false, true);
+                    , password, false, !string.IsNullOrEmpty(password));
 
                 if (string.IsNullOrEmpty(password))
                 {
@@ -528,6 +530,131 @@ namespace Micajah.Common.Bll.Providers
                     setting.Value = refreshToken;
                     SettingProvider.UpdateSettingValue(setting, organizationId, null, null);
                 }
+            }
+        }
+
+        public static void ReplicateAllOrganizations()
+        {
+            int failed = 0;
+            int success = 0;
+
+            DateTime startDate = DateTime.UtcNow;
+            WriteResponseLog(string.Format("GoogleReplicator started replication process at {0}.", startDate));
+
+            try
+            {
+                OrganizationCollection organizationCollection = OrganizationProvider.GetOrganizations(false, false);
+
+                foreach (Organization org in organizationCollection)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrWhiteSpace(org.GoogleAdminAuthToken))
+                        {
+                            var domains = EmailSuffixProvider.GetEmailSuffixesList(org.OrganizationId);
+
+                            if (domains != null)
+                            {
+                                WriteResponseLog(string.Format("Organization '{0}' is setup for Google Replication and has {1} Google domains.", org.Name, domains.Count));
+
+                                foreach (string domain in domains)
+                                {
+                                    bool isSuccess = false;
+
+                                    try
+                                    {
+                                        WriteResponseLog(string.Format("Receiving users of Organization '{0}' from Google domain '{1}'.", org.Name, domain));
+
+                                        AppsService service = new AppsService(domain, org.GoogleAdminAuthToken);
+                                        UserFeed userFeed = service.RetrieveAllUsers();
+
+                                        if (userFeed != null && userFeed.Entries != null)
+                                        {
+                                            int totalUsers = userFeed.Entries.Count;
+                                            int failedUsers = 0;
+                                            DateTime start = DateTime.UtcNow;                                            
+                                            WriteResponseLog(string.Format("Received {0} users from Google.", totalUsers));
+                                            WriteResponseLog(string.Format("Replication for Organization '{0}' is started at {1}.", org.Name, start));
+
+                                            totalUsers = userFeed.Entries.Count;
+                                            for (int i = 0; i < totalUsers; i++)
+                                            {
+                                                UserEntry userEntry = userFeed.Entries[i] as UserEntry;
+                                                try
+                                                {
+                                                    GoogleProvider.ImportUser(userEntry, org.OrganizationId, service.Domain);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    failedUsers++;                                                    
+                                                    WriteResponseLog(string.Format("Replication failed for Organization: {0}; Google domain: {1}; UserName: {2}. Error message: {3}.", org.Name, domain, userEntry.Login.UserName, ex.Message));
+                                                    WriteResponseLog(string.Format("Full error: {0}.", ex.ToString()));                                                    
+                                                }
+                                            }
+
+                                            DateTime end = DateTime.UtcNow;
+                                            WriteResponseLog(string.Format("Replication for Organization '{0}' is finished at {1}. Replication takes {2} minutes.", org.Name, end, Math.Round((end - start).TotalMinutes, TIME_ROUND_DIGITS)));
+                                            WriteResponseLog(string.Format("Number of successfully replicated users: {0}.", totalUsers - failedUsers));
+                                            WriteResponseLog(string.Format("Number of not successfully replicated users: {0}.", failedUsers));
+                                            isSuccess = true;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteResponseLog(string.Format("GoogleReplicator replication process is failed for Organization '{0}' for Google domain '{1}'. Error message: {2}.", org.Name, domain, ex.Message));
+                                        WriteResponseLog(string.Format("Full error: {0}.", ex.ToString()));
+                                    }
+
+                                    if (!isSuccess)
+                                    {
+                                        failed++;
+                                    }
+                                    else
+                                    {
+                                        success++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                WriteResponseLog(string.Format("Organization '{0}' is not configured for Google replication. Google domain is missing.", org.Name));
+                            }
+                        }                        
+                    }
+                    catch (Exception ex)
+                    {
+                        failed++;
+                        WriteResponseLog(string.Format("GoogleReplicator replication process failed for Organization '{0}'. Error: {1}.", org.Name, ex.ToString()));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteResponseLog(string.Format("GoogleReplicator error: {0}.", ex.ToString()));
+            }
+
+            DateTime endDate = DateTime.UtcNow;
+            WriteResponseLog(string.Format("GoogleReplicator finished replication process at {0}. Process was run for {1} minutes.", endDate, Math.Round((endDate - startDate).TotalMinutes, TIME_ROUND_DIGITS)));
+            WriteResponseLog(string.Format("Number of successful replications: {0}.", success));
+            WriteResponseLog(string.Format("Number of failed replications: {0}.", failed));
+        }
+
+        private static void WriteResponseLog(string message)
+        {
+            bool writeToConcole = false;
+
+            if (HttpContext.Current == null || HttpContext.Current.Response == null)
+            {
+                writeToConcole = true;
+            }
+
+            if (writeToConcole)
+            {
+                Console.WriteLine(string.Format(message));
+            }
+            else
+            {
+                HttpContext.Current.Response.Write(string.Format("{0}<br/>", message));
             }
         }
 
